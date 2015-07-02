@@ -4,9 +4,9 @@
 # The end result of this file is the 'robot2015' target
 # building this target ouputs an MBED-runnable file at run/robot2015.bin, which can be copied onto the MBED
 
-include_directories(drivers drivers/CC1101 drivers/CC1201 drivers/CC1201/cfg)
-include_directories(modules modules/CommLink modules/CommModule)
-include_directories(utils utils/FirmwareCheck utils/Logger utils/RTOS_Management utils/Watchdog)
+#include_directories(drivers drivers/CC1101)
+#include_directories(modules modules/CommLink modules/CommModule)
+#include_directories(utils utils/FirmwareCheck utils/Logger utils/RTOS_Management utils/Watchdog)
 
 # set the arm toolchain
 set(CMAKE_TOOLCHAIN_FILE arm_toolchain.cmake)
@@ -27,14 +27,14 @@ include(arm_mbed.cmake)
 
 #all official libraries pulled with/by the build tools
 include(ExternalProject)
-ExternalProject_Add(mbed_lib_build_tools
+ExternalProject_Add(mbed_lib_build_tools-base
     GIT_REPOSITORY https://github.com/mbedmicro/mbed.git
     CONFIGURE_COMMAND ""
     BUILD_COMMAND ""
     INSTALL_COMMAND ""
     UPDATE_COMMAND ""
 )
-set(PREBUILD_DEPS ${PREBUILD_DEPS} mbed_lib_build_tools)
+set(PREBUILD_DEPS ${PREBUILD_DEPS} mbed_lib_build_tools-base)
 
 #pull DIO breakout
 if(${BUILD_MCP23017} STREQUAL "true")
@@ -50,26 +50,26 @@ if(${BUILD_MCP23017} STREQUAL "true")
 endif()
 
 # don't get the external project unless it's required
-set_target_properties(mbed_lib_build_tools PROPERTIES EXCLUDE_FROM_ALL TRUE)
+set_target_properties(mbed_lib_build_tools-base PROPERTIES EXCLUDE_FROM_ALL TRUE)
 
 # firmware source files
-file(GLOB_RECURSE robot2015_SRC
+file(GLOB_RECURSE base2015_SRC
     "*.cpp"
 )
 
-add_executable(robot2015_elf ${robot2015_SRC} ${CMAKE_BINARY_DIR}/common/git_version.cpp ${MBED_OBJECTS})
-target_link_libraries(robot2015_elf ${MBED_LIBS})
+add_executable(base2015_elf ${base2015_SRC} ${CMAKE_BINARY_DIR}/common/git_version.cpp ${MBED_OBJECTS})
+target_link_libraries(base2015_elf ${MBED_LIBS})
 
 # the final product is the .bin file, not the elf one.  We hide this away in the build dir
-set_target_properties(robot2015_elf PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+set_target_properties(base2015_elf PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 
 # only build robot firmware if specifically instructed
-set_target_properties(robot2015_elf PROPERTIES EXCLUDE_FROM_ALL TRUE)
+set_target_properties(base2015_elf PROPERTIES EXCLUDE_FROM_ALL TRUE)
 
 #pre-build target will pull and compile mbed libs
 #this is added as a dependency for standard builds, forcing the python script to
 #run at the correct time
-add_custom_target(pre-build
+add_custom_target(pre-build-base
     COMMAND python2 ${PY_TOOLS_DIR}/workspace_tools/build.py --mcu=${PY_MCU_OPT} --tool=${PY_TOOLCHAIN_OPT} ${PY_LIBS}
     DEPENDS ${PREBUILD_DEPS})
 set_target_properties(pre-build PROPERTIES EXCLUDE_FROM_ALL TRUE)
@@ -79,24 +79,24 @@ set_target_properties(pre-build PROPERTIES EXCLUDE_FROM_ALL TRUE)
 foreach(mbed_obj ${MBED_OBJECTS})
     add_custom_command(
         OUTPUT ${mbed_obj}
-	DEPENDS pre-build
+	DEPENDS pre-build-base
         COMMAND "")
 endforeach()
 
 # custom target for creating a .bin file from an elf binary
-add_custom_target(robot2015
-    arm-none-eabi-objcopy -O binary robot2015_elf robot2015.bin
-    COMMAND cp ${CMAKE_CURRENT_BINARY_DIR}/robot2015.bin ${PROJECT_SOURCE_DIR}/run/
-    DEPENDS robot2015_elf
+add_custom_target(base2015
+    arm-none-eabi-objcopy -O binary base2015_elf base2015.bin
+    COMMAND cp ${CMAKE_CURRENT_BINARY_DIR}/base2015.bin ${PROJECT_SOURCE_DIR}/run/
+    DEPENDS base2015_elf
     COMMENT "objcopying to make MBED-compatible executable"
 )
-set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES ${PROJECT_SOURCE_DIR}/run/robot2015.bin)
+set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES ${PROJECT_SOURCE_DIR}/run/base2015.bin)
 
-add_custom_target(robot2015-prog
-    arm-none-eabi-objcopy -O binary robot2015_elf robot2015.bin
-    COMMAND ${PROJECT_SOURCE_DIR}/util/robot2015-prog.sh ${PROJECT_SOURCE_DIR}/run/robot2015.bin
-    DEPENDS robot2015
-    COMMENT "Copies the files created by robot2015 into a single mbed"
+add_custom_target(base2015-prog
+    arm-none-eabi-objcopy -O binary base2015_elf base2015.bin
+    COMMAND ${PROJECT_SOURCE_DIR}/util/base2015-prog.sh ${PROJECT_SOURCE_DIR}/run/base2015.bin
+    DEPENDS base2015
+    COMMENT "Copies the files created by base2015 into a single mbed"
 )
 
 
