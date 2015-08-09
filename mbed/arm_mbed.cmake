@@ -9,10 +9,10 @@ set(PY_LIBS)
 
 # ------------------------------------------------------------------------------
 # git checkout and build location of mbed libraries
-set(PY_TOOLS_DIR ${CMAKE_CURRENT_BINARY_DIR}/mbed_lib_build_tools-base-prefix/src/mbed_lib_build_tools-base)
-set(MCP23017_DIR ${CMAKE_CURRENT_BINARY_DIR}/mcp23017-prefix/src/mcp23017)
+# ExternalProject_Get_Property(PY_TOOLS_DIR )
+set(PY_TOOLS_DIR ${CMAKE_CURRENT_BINARY_DIR}/mbed/mbed_libraries-prefix/src/mbed_libraries)
 
-#library roots
+# library roots
 set(MBED_PATH          ${PY_TOOLS_DIR}/build/mbed)
 set(MBED_NET_PATH      ${PY_TOOLS_DIR}/build/net/eth)
 set(MBED_RTOS_PATH     ${PY_TOOLS_DIR}/build/rtos)
@@ -81,18 +81,19 @@ SET(MBED_DEFINES "${MBED_DEFINES} -DTARGET_${MBED_VENDOR}")
 SET(MBED_DEFINES "${MBED_DEFINES} -DTOOLCHAIN_GCC_ARM")
 SET(MBED_DEFINES "${MBED_DEFINES} -DTOOLCHAIN_GCC")
 
-SET(CMAKE_CXX_FLAGS "${COMMON_FLAGS} ${MBED_DEFINES} -std=gnu++0x")
-SET(CMAKE_C_FLAGS "${COMMON_FLAGS} ${MBED_DEFINES} -std=gnu99")
+SET(MBED_CMAKE_CXX_FLAGS "${COMMON_FLAGS} ${MBED_DEFINES} -std=c++11")
+SET(MBED_CMAKE_C_FLAGS "${COMMON_FLAGS} ${MBED_DEFINES} -std=gnu99")
 
 
 # ------------------------------------------------------------------------------
 # setup precompiled mbed files which will be needed for all projects
+# MESSAGE(STATUS "mbed path: ${MBED_PATH}")
 set(MBED_OBJECTS
-  ${MBED_PATH}/TARGET_${MBED_TARGET}/${TOOLCHAIN}/${MBED_STARTUP}
-  ${MBED_PATH}/TARGET_${MBED_TARGET}/${TOOLCHAIN}/${MBED_SYSTEM}
-  ${MBED_PATH}/TARGET_${MBED_TARGET}/${TOOLCHAIN}/cmsis_nvic.o
-  ${MBED_PATH}/TARGET_${MBED_TARGET}/${TOOLCHAIN}/retarget.o
-  ${MBED_PATH}/TARGET_${MBED_TARGET}/${TOOLCHAIN}/board.o
+  ${MBED_PATH}/TARGET_${MBED_TARGET}/${MBED_TOOLCHAIN}/${MBED_STARTUP}
+  ${MBED_PATH}/TARGET_${MBED_TARGET}/${MBED_TOOLCHAIN}/${MBED_SYSTEM}
+  ${MBED_PATH}/TARGET_${MBED_TARGET}/${MBED_TOOLCHAIN}/cmsis_nvic.o
+  ${MBED_PATH}/TARGET_${MBED_TARGET}/${MBED_TOOLCHAIN}/retarget.o
+  ${MBED_PATH}/TARGET_${MBED_TARGET}/${MBED_TOOLCHAIN}/board.o
 )
 
 # ------------------------------------------------------------------------------
@@ -101,21 +102,20 @@ set(MBED_LIBS mbed stdc++ supc++ m gcc g c nosys rdimon)
 
 # ------------------------------------------------------------------------------
 # linker settings
-set(CMAKE_EXE_LINKER_FLAGS "-Wl,--gc-sections -Wl,--wrap,main --specs=nano.specs  -u _printf_float -u _scanf_float")
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} \"-T${MBED_PATH}/TARGET_${MBED_TARGET}/${TOOLCHAIN}/${MBED_LINK_TARGET}.ld\" -static")
+set(MBED_CMAKE_EXE_LINKER_FLAGS "-Wl,--gc-sections -Wl,--wrap,main --specs=nano.specs  -u _printf_float -u _scanf_float")
+set(MBED_CMAKE_EXE_LINKER_FLAGS "${MBED_CMAKE_EXE_LINKER_FLAGS} \"-T${MBED_PATH}/TARGET_${MBED_TARGET}/${MBED_TOOLCHAIN}/${MBED_LINK_TARGET}.ld\" -static")
 
 # ------------------------------------------------------------------------------
 # mbed
 include_directories("${MBED_PATH}/")
 include_directories("${MBED_PATH}/TARGET_${MBED_TARGET}/")
-include_directories("${MBED_PATH}/TARGET_${MBED_TARGET}/${TOOLCHAIN}")
+include_directories("${MBED_PATH}/TARGET_${MBED_TARGET}/${MBED_TOOLCHAIN}")
 include_directories("${MBED_PATH}/TARGET_${MBED_TARGET}/TARGET_${MBED_VENDOR}/TARGET_${MBED_FAMILY}/")
 include_directories("${MBED_PATH}/TARGET_${MBED_TARGET}/TARGET_${MBED_VENDOR}/TARGET_${MBED_FAMILY}/TARGET_${MBED_CPU}")
 
-link_directories("${MBED_PATH}/TARGET_${MBED_TARGET}/${TOOLCHAIN}")
 
 # add networking
-if(${USE_NET} STREQUAL "true")
+if(${MBED_USE_NET} STREQUAL "true")
   #net
   include_directories("${MBED_NET_PATH}")
   include_directories("${MBED_NET_PATH}/EthernetInterface")
@@ -132,19 +132,19 @@ if(${USE_NET} STREQUAL "true")
   #library dir
   set(PY_NET_LIB_DIR ${MBED_NET_PATH}/TARGET_${MBED_TARGET}/TOOLCHAIN_${PY_TOOLCHAIN_OPT})
   #add static
-  set(MBED_LIBS ${MBED_LIBS} ${PY_NET_LIB_DIR}/libeth.a)
+  set(MBED_LIBS ${MBED_LIBS} libeth.a)
   #add build arg to py script command
   set(PY_LIBS ${PY_LIBS} --eth)
 
   # supress lwip warnings with 0x11
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-literal-suffix")
+  set(MBED_CMAKE_CXX_FLAGS "${MBED_CMAKE_CXX_FLAGS} -Wno-literal-suffix")
 
   #force rtos
-  set(USE_RTOS true)
+  set(MBED_USE_RTOS true)
 endif()
 
 # add rtos
-if(${USE_RTOS} STREQUAL "true")
+if(${MBED_USE_RTOS} STREQUAL "true")
   include_directories("${MBED_RTOS_PATH}")
   include_directories("${MBED_RTOS_PATH}/TARGET_${MBED_CORE_GENERIC}")
 
@@ -154,7 +154,7 @@ if(${USE_RTOS} STREQUAL "true")
 endif()
 
 # add usb
-if(${USE_USB} STREQUAL "true")
+if(${MBED_USE_USB} STREQUAL "true")
   #usb
   include_directories("${MBED_USB_PATH}/USBAudio")
   include_directories("${MBED_USB_PATH}/USBDevice")
@@ -176,24 +176,25 @@ if(${USE_USB} STREQUAL "true")
   set(PY_USB_LIB_DIR      ${MBED_USB_PATH}/TARGET_${MBED_TARGET}/TOOLCHAIN_${PY_TOOLCHAIN_OPT})
   set(PY_USB_HOST_LIB_DIR ${MBED_USB_HOST_PATH}/TARGET_${MBED_TARGET}/TOOLCHAIN_${PY_TOOLCHAIN_OPT})
   #add statics
-  set(MBED_LIBS ${MBED_LIBS} ${PY_USB_LIB_DIR}/libUSBDevice.a ${PY_USB_HOST_LIB_DIR}/libUSBHost.a)
+  set(MBED_LIBS ${MBED_LIBS} libUSBDevice.a libUSBHost.a)
   #add build arg to py script command
   set(PY_LIBS ${PY_LIBS} --usb --usb_host)
 endif()
 
 # add dsp
-if(${USE_DSP} STREQUAL "true")
+if(${MBED_USE_DSP} STREQUAL "true")
   #dsp
   include_directories("${MBED_DSP_PATH}")
 
   #library dir
   set(PY_DSP_LIB_DIR ${MBED_DSP_PATH}/TARGET_${MBED_TARGET}/TOOLCHAIN_${PY_TOOLCHAIN_OPT})
   #add static
-  set(MBED_LIBS ${MBED_LIBS} ${PY_DSP_LIB_DIR}/libcmsis_dsp.a ${PY_DSP_LIB_DIR}/libdsp.a)
+  set(MBED_LIBS ${MBED_LIBS} libcmsis_dsp.a libdsp.a)
   #add build arg to py script command
   set(PY_LIBS ${PY_LIBS} --dsp)
 endif()
 
-if(${BUILD_MCP23017} STREQUAL "true")
-  include_directories("${MCP23017_DIR}")
-endif()
+set(MBED_LINK_DIRS "${MBED_PATH}/TARGET_${MBED_TARGET}/${MBED_TOOLCHAIN}")
+link_directories(${MBED_LINK_DIRS})
+
+include_directories(${MBED_PATH})
