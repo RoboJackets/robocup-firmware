@@ -1,0 +1,6 @@
+[submodule "common"]
+	path = common
+	url = https://github.com/RoboJackets/robocup-common.git
+[submodule "external/mbed_lib_build_tools"]
+	path = external/mbed_lib_build_tools
+	url = https://github.com/mbedmicro/mbed.git
