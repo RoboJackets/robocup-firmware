@@ -4,3 +4,6 @@
 [submodule "external/mbed_lib_build_tools"]
 	path = external/mbed_lib_build_tools
 	url = https://github.com/mbedmicro/mbed.git
+[submodule "external/googletest"]
+	path = external/googletest
+	url = https://github.com/google/googletest
