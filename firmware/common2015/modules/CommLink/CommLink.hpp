@@ -8,7 +8,7 @@
 #include "helper-funcs.hpp"
 #include "rj-macros.hpp"
 #include "rtos-mgmt/mail-helper.hpp"
-#include "rtp.hpp"
+#include "firmware-common/common2015/utils/rtp.hpp"
 
 #define FOREACH_COMM_ERR(ERR) \
     ERR(COMM_SUCCESS)         \

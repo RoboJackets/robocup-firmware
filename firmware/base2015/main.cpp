@@ -7,7 +7,7 @@
 #include "SharedSPI.hpp"
 #include "logger.hpp"
 #include "pins.hpp"
-#include "usb-interface.hpp"
+#include "firmware-common/base2015/usb-interface.hpp"
 #include "watchdog.hpp"
 #include "logger.hpp"
 
