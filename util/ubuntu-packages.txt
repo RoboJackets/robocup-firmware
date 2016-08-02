@@ -51,6 +51,9 @@ avrdude
 libsdl2-dev
 libsdl1.2-dev
 
+# QT
+qt5-default
+
 # Python stuff
 python-pip
 python-dev
