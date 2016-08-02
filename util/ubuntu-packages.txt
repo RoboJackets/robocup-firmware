@@ -47,6 +47,10 @@ graphviz
 avr-libc
 avrdude
 
+# SDL
+libsdl2-dev
+libsdl1.2-dev
+
 # Python stuff
 python-pip
 python-dev
