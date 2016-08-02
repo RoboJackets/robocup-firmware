@@ -1,0 +1,10 @@
+# python requirements
+jinja2   # A dependency for the mbed build library
+colorama # A dependency for the mbed build library
+
+# firmware - required
+git+https://github.com/robojackets/mbed-ls@robojackets
+pyserial
+
+# firmware - optional
+pyocd

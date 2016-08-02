@@ -86,6 +86,8 @@ SETUP_SHA_FILES+=("./.gitmodules")
 SETUP_SHA_FILES+=("./config.docif")
 SETUP_SHA_FILES+=("./util/ubuntu-setup")
 SETUP_SHA_FILES+=("./util/ubuntu-packages.txt")
+SETUP_SHA_FILES+=("./util/requirements3.txt")
+SETUP_SHA_FILES+=("./util/requirements2.txt")
 SETUP_SHA_FILES+=("./util/docker/baseimage/Dockerfile")
 
 # @REQUIRED
