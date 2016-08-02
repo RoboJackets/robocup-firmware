@@ -8,12 +8,6 @@ ninja-build
 cmake
 ccache
 
-# QT
-qt5-default
-qttools5-dev-tools
-libqt5opengl5-dev
-libqt5svg5-dev
-
 # required for compiling gcc
 libgmp3-dev
 libmpfr-dev
@@ -27,9 +21,6 @@ doxygen
 
 # linear algebra library
 libeigen3-dev
-
-# Bullet physics library - used in the robocup simulator
-libbullet-dev
 
 # C/C++ compiler
 # tends to be faster and have more helpful error messages than gcc
@@ -66,17 +57,6 @@ python3-setuptools
 python3-pyqt5
 python-serial
 
-# required to use SpaceNavigator 3d mouse to drive robots
-libspnav-dev
-spacenavd
-
-# for the high-level python interface for soccer
-libboost-python-dev
-
-# for joystick
-libsdl2-dev
-libsdl1.2-dev
-
 # everything else...
 build-essential
 libusb-1.0-0-dev
@@ -92,7 +72,6 @@ autoconf
 libtool
 autopoint
 flex
-bison
 openocd
 iverilog
 gtkwave

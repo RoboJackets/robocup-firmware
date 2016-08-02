@@ -1,5 +1,5 @@
-# GT RoboJackets RoboCup SSL
-[![Build Status](https://circleci.com/gh/RoboJackets/robocup-firmware.svg?&style=shield)](https://circleci.com/gh/RoboJackets/robocup-software) 
+# GT RoboJackets RoboCup SSL - Firmware
+[![Build Status](https://circleci.com/gh/RoboJackets/robocup-firmware.svg?&style=shield)](https://circleci.com/gh/RoboJackets/robocup-firmware) 
 
 The Georgia Tech RoboJackets team competes in the annual RoboCup Small Size League (SSL) competition.  This repository contains all of the firmware that we run on our robots. More information on how our software works can be found on our [documentation page](http://robojackets.github.io/robocup-firmware/), our [wiki](http://wiki.robojackets.org/w/RoboCup_Software) or on our [website](http://www.robojackets.org/).
 Also, check out our [2014 qualification video](https://www.youtube.com/watch?v=H3F9HexPLT0) to see our robots in action!
@@ -33,7 +33,7 @@ Here's a quick guide to getting this RoboCup project setup on your computer.  We
 1) Clone the repository
 
 ```
-git clone git://github.com/RoboJackets/robocup-software
+git clone git://github.com/RoboJackets/robocup-firmware
 ```
 
 
@@ -42,7 +42,7 @@ git clone git://github.com/RoboJackets/robocup-software
 There are a few setup scripts in the util directory for installing required packages, setting up udev rules, etc.  See `ubuntu-setup`, `arch-setup`, and `osx-setup` for more info.
 
 ```
-$ cd robocup-software
+$ cd robocup-firmware
 $ util/<SYSTEM>-setup
 ```
 
@@ -62,6 +62,7 @@ After running `make`, several programs will be placed in the **run** folder.  Se
 We use [Doxygen](www.doxygen.org) for documentation.  This allows us to convert specially-formatted comments within code files into a nifty website that lets us easily see how things are laid out.  Our compiled doxygen documentation can be found here:
 
 http://robojackets.github.io/robocup-software/
+http://robojackets.github.io/robocup-firmware/
 
 Note: The doxygen documentation site above is updated automacally using circle-ci.  See our autoupdate-docs.sh file for more info.
 
