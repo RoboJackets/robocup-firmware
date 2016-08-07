@@ -1,0 +1,3 @@
+
+stylize>=0.3.0 # code reformatting and checkstyling
+pylint #static checker for python
