@@ -117,6 +117,6 @@ ENV_VARS+=("CIRCLE_SHA1")
 
 # Command to run when deploying. Leave blank for no deploy.
 # Make sure any secrets these commands need are added to ENV_VARS
-# DEPLOY_COMMAND="./autoupdate-docs.sh"
+DEPLOY_COMMAND="./util/autoupdate-docs.sh"
 
 ################################################################################
