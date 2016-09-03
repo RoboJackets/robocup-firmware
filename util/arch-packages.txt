@@ -50,6 +50,11 @@ libspnav
 # joystick library
 sdl
 
+# arm compiler suite
+arm-none-eabi-gcc
+arm-none-eabi-newlib
+arm-none-eabi-gdb
+
 # debugger for MBED code
 arm-none-eabi-gdb
 
