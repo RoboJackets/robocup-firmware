@@ -8,7 +8,7 @@
 #include "TimeoutLED.hpp"
 #include "helper-funcs.hpp"
 #include "rtos-mgmt/mail-helper.hpp"
-#include "rtp.hpp"
+#include "firmware-common/common2015/utils/rtp.hpp"
 
 #include <algorithm>
 #include <functional>

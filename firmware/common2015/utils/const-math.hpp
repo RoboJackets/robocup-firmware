@@ -8,9 +8,7 @@
 
 #include <limits>  // nan
 
-#define M_PI 3.141592653589793
-#define M_PI_2 1.570796326794897
-#define M_E 2.718281828459045
+#include <Geometry2d/Util.hpp>
 
 constexpr double tol = 0.001;
 
