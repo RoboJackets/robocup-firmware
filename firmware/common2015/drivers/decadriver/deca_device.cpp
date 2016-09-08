@@ -11,6 +11,7 @@
  */
 
 #include "mbed.h"
+#include <logger.hpp>
 
 #include "deca_types.h"
 #include "deca_param_types.h"
@@ -127,8 +128,13 @@ int dwt_initialise(uint16 config)
     dw1000local.cbRxErr = NULL;
 
     // Read and validate device ID return -1 if not recognised
-    if (DWT_DEVICE_ID != dwt_readdevid()) // MP IC ONLY (i.e. DW1000) FOR THIS CODE
+    uint32_t chip_version = dwt_readdevid();
+    if (DWT_DEVICE_ID != chip_version) // MP IC ONLY (i.e. DW1000) FOR THIS CODE
     {
+        LOG(FATAL,
+            "Decawave part number error:\r\n"
+            "    Found:\t0x%02X (expected 0x%02X)",
+            chip_version, DWT_DEVICE_ID);
         return DWT_ERROR ;
     }
 

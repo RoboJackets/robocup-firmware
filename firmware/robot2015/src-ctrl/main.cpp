@@ -11,7 +11,8 @@
 #include <watchdog.hpp>
 
 #include "BallSense.hpp"
-#include "CC1201.cpp"
+// #include "CC1201.cpp"
+#include "Decawave.cpp"
 #include "KickerBoard.hpp"
 #include "RadioProtocol.hpp"
 #include "RobotModel.hpp"
@@ -131,6 +132,8 @@ int main() {
             KickerBoard::Instance->kick(kickStrength);
         }
     };
+    // uintptr_t p = (uintptr_t)(void*)&sharedSPI;
+    // LOG(INIT, "test 0 %p %d",(int)&sharedSPI, *reinterpret_cast<char *>((void*)&sharedSPI));
 
     // Initialize and configure the fpga with the given bitfile
     FPGA::Instance = new FPGA(sharedSPI, RJ_FPGA_nCS, RJ_FPGA_INIT_B,
@@ -188,16 +191,22 @@ int main() {
     // though this is multi-threaded code, that dosen't mean it's
     // a multi-core system.
 
+    // LOG(INIT, "test 1");
+
     // Start the thread task for the on-board control loop
     Thread controller_task(Task_Controller, mainID, osPriorityHigh,
                            DEFAULT_STACK_SIZE / 2);
     Thread::signal_wait(MAIN_TASK_CONTINUE, osWaitForever);
+
+    // LOG(INIT, "test 2");
 
 #ifdef RJ_ENABLE_ROBOT_CONSOLE
     // Start the thread task for the serial console
     Thread console_task(Task_SerialConsole, mainID, osPriorityBelowNormal);
     Thread::signal_wait(MAIN_TASK_CONTINUE, osWaitForever);
 #endif
+
+    LOG(INIT, "test 3 %p %d",(int)&sharedSPI, *reinterpret_cast<char *>((void*)&sharedSPI));
 
     // Initialize the CommModule and CC1201 radio
     InitializeCommModule(sharedSPI);
@@ -215,9 +224,9 @@ int main() {
     RtosTimerHelper radioTimeoutTimer(
         [&]() {
             // reset radio
-            global_radio->strobe(CC1201_STROBE_SIDLE);
-            global_radio->strobe(CC1201_STROBE_SFRX);
-            global_radio->strobe(CC1201_STROBE_SRX);
+            //global_radio->strobe(CC1201_STROBE_SIDLE);
+            //global_radio->strobe(CC1201_STROBE_SFRX);
+            //global_radio->strobe(CC1201_STROBE_SRX);
 
             radioTimeoutTimer.start(RADIO_TIMEOUT);
         },
@@ -362,7 +371,7 @@ int main() {
         // update radio channel
         uint8_t newRadioChannel = radioChannelSwitch.read();
         if (newRadioChannel != currentRadioChannel) {
-            global_radio->setChannel(newRadioChannel);
+            // global_radio->setChannel(newRadioChannel);
             currentRadioChannel = newRadioChannel;
             LOG(INIT, "Changed radio channel to %u", newRadioChannel);
         }

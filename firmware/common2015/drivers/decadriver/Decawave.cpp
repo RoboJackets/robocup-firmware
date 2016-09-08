@@ -1,9 +1,10 @@
+#include "deca_device_api.h"
 #include "Decawave.hpp"
 
-//#include "assert.hpp"
-//#include "logger.hpp"
+#include "assert.hpp"
+#include "logger.hpp"
 
-Decawave* global_radio_2 = nullptr;
+Decawave* global_radio = nullptr;
 
 static dwt_config_t config = {
     1,               /* Channel number. */
@@ -28,9 +29,7 @@ static dwt_txconfig_t txconfig = {
 
 Decawave::Decawave(shared_ptr<SharedSPI> sharedSPI, PinName nCs, PinName intPin)
     : CommLink(sharedSPI, nCs, intPin) {
-
-    //TODO: Don't forget to fix SPI
-
+    global_radio = this; // TODO: This is very not good
     if (dwt_initialise(DWT_LOADNONE) == DWT_ERROR) {
         LOG(FATAL,"Decawave not initialized");
         _isInit = false;
@@ -46,6 +45,8 @@ Decawave::Decawave(shared_ptr<SharedSPI> sharedSPI, PinName nCs, PinName intPin)
 
         dwt_setrxaftertxdelay(TX_TO_RX_DELAY_UUS);
         dwt_setrxtimeout(RX_RESP_TO_UUS);
+
+        setLED(true);
         dwt_rxenable(DWT_START_RX_IMMEDIATE);
 
         CommLink::ready();
@@ -66,8 +67,9 @@ int32_t Decawave::sendPacket(const rtp::packet* pkt){
         tx_buffer[i] = byte;
     }
 
-    dwt_writetxdata(sizeof(tx_buffer), tx_buffer, 0); /* Zero offset in TX buffer. */
-    dwt_writetxfctrl(sizeof(tx_buffer), 0, 0); /* Zero offset in TX buffer, no ranging. */
+    // Write data to TX buffer in decawave and configure TX frame control reg
+    dwt_writetxdata(sizeof(tx_buffer), tx_buffer, 0);
+    dwt_writetxfctrl(sizeof(tx_buffer), 0, 0);
     if (DWT_SUCCESS == dwt_starttx(DWT_START_TX_IMMEDIATE | DWT_RESPONSE_EXPECTED)) return COMM_SUCCESS;
 
     return COMM_DEV_BUF_ERR;
@@ -176,12 +178,15 @@ int Decawave::readfromspi(uint16 headerLength, const uint8 *headerBuffer,
   return 0;
 }
 
+void Decawave::logSPI(int num) {
+    LOG(INIT, "spi %d %p %p", num, (int)&_spi, *reinterpret_cast<char *>((void*)&_spi));
+}
 int readfromspi(uint16 headerLength, const uint8 *headerBuffer,
                         uint32 readlength, uint8 *readBuffer) {
-    return global_radio_2->readfromspi(headerLength, headerBuffer, readlength, readBuffer);
+    return global_radio->readfromspi(headerLength, headerBuffer, readlength, readBuffer);
 }
 
 int writetospi(uint16 headerLength, const uint8 *headerBuffer,
                         uint32 bodylength, const uint8 *bodyBuffer) {
-    return global_radio_2->writetospi(headerLength, headerBuffer, bodylength, bodyBuffer);
+    return global_radio->writetospi(headerLength, headerBuffer, bodylength, bodyBuffer);
 }

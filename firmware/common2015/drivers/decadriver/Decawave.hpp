@@ -7,7 +7,7 @@
 #include "deca_device_api.h"
 #include "deca_regs.h"
 
-#define FRAME_LEN_MAX 127
+#define FRAME_LEN_MAX 40
 
 class Decawave : public CommLink {
 public:
@@ -25,11 +25,24 @@ public:
                         uint32 bodylength, const uint8 *bodyBuffer);
     int readfromspi(uint16 headerLength, const uint8 *headerBuffer,
                         uint32 readlength, uint8 *readBuffer);
+    void logSPI(int num);
 private:
     uint32_t _chip_version;
-    static uint8 rx_buffer[FRAME_LEN_MAX];
-    static uint8 tx_buffer[FRAME_LEN_MAX];
+    uint8 rx_buffer[FRAME_LEN_MAX]; //TODO: better tx and rx buffer
+    uint8 tx_buffer[FRAME_LEN_MAX];
     bool _isInit;
 };
 
-extern Decawave* global_radio_2;
+// int readfromspi(uint16 headerLength, const uint8 *headerBuffer,
+//                         uint32 readlength, uint8 *readBuffer) {
+//     LOG(INIT, "spi 1");
+//     return global_radio->readfromspi(headerLength, headerBuffer, readlength, readBuffer);
+// }
+//
+// int writetospi(uint16 headerLength, const uint8 *headerBuffer,
+//                         uint32 bodylength, const uint8 *bodyBuffer) {
+//     return global_radio->writetospi(headerLength, headerBuffer, bodylength, bodyBuffer);
+// }
+
+extern Decawave* global_radio;
+// Decawave& global_radio() {static Decawave radio; return radio}

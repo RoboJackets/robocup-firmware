@@ -3,7 +3,8 @@
 #include <memory>
 #include <vector>
 
-#include <CC1201Radio.hpp>
+// #include <CC1201Radio.hpp>
+#include "Decawave.hpp"
 #include <CommModule.hpp>
 #include <CommPort.hpp>
 #include <assert.hpp>
@@ -91,8 +92,7 @@ void InitializeCommModule(shared_ptr<SharedSPI> sharedSPI) {
     // TODO(justin): make this non-global
     // Create a new physical hardware communication link
     global_radio =
-        new CC1201(sharedSPI, RJ_RADIO_nCS, RJ_RADIO_INT, preferredSettings,
-                   sizeof(preferredSettings) / sizeof(registerSetting_t));
+        new Decawave(sharedSPI, RJ_RADIO_nCS, RJ_RADIO_INT);
 
     // Open a socket for running tests across the link layer
     // The LINK port handlers are always active, regardless of whether or not a
@@ -105,7 +105,8 @@ void InitializeCommModule(shared_ptr<SharedSPI> sharedSPI) {
      * according to its port number when using the console.
      */
     if (global_radio->isConnected() == true) {
-        LOG(INIT, "Radio interface ready on %3.2fMHz!", global_radio->freq());
+        // LOG(INIT, "Radio interface ready on %3.2fMHz!", global_radio->freq());
+        LOG(INIT, "Radio interface ready");
 
         // Legacy port
         commModule->setTxHandler((CommLink*)global_radio, &CommLink::sendPacket,

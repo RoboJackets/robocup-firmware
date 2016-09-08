@@ -2,6 +2,7 @@
 
 #include <rtos.h>
 #include "CC1201.hpp"
+#include "Decawave.hpp"
 #include "CommModule.hpp"
 #include "RtosTimerHelper.hpp"
 
@@ -17,7 +18,7 @@ public:
     /// base station, we are considered "disconnected"
     static const uint32_t TIMEOUT_INTERVAL = 2000;
 
-    RadioProtocol(std::shared_ptr<CommModule> commModule, CC1201* radio,
+    RadioProtocol(std::shared_ptr<CommModule> commModule, Decawave* radio,
                   uint8_t uid = rtp::INVALID_ROBOT_UID)
         : _commModule(commModule),
           _radio(radio),
@@ -27,7 +28,7 @@ public:
           _timeoutTimer(this, &RadioProtocol::_timeout, osTimerOnce) {
         ASSERT(commModule != nullptr);
         ASSERT(radio != nullptr);
-        _radio->setAddress(rtp::ROBOT_ADDRESS);
+        // _radio->setAddress(rtp::ROBOT_ADDRESS);
     }
 
     ~RadioProtocol() { stop(); }
@@ -124,7 +125,7 @@ private:
     void _timeout() { _state = DISCONNECTED; }
 
     std::shared_ptr<CommModule> _commModule;
-    CC1201* _radio;
+    Decawave* _radio;
 
     uint32_t _lastReceiveTime = 0;
 
