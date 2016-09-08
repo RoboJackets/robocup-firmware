@@ -21,6 +21,10 @@ public:
     bool isConnected() const;
 
     void setLED(bool ledOn);
+    int writetospi(uint16 headerLength, const uint8 *headerBuffer,
+                        uint32 bodylength, const uint8 *bodyBuffer);
+    int readfromspi(uint16 headerLength, const uint8 *headerBuffer,
+                        uint32 readlength, uint8 *readBuffer);
 private:
     uint32_t _chip_version;
     static uint8 rx_buffer[FRAME_LEN_MAX];

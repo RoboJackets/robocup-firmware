@@ -136,3 +136,52 @@ bool Decawave::isConnected() const {
 void Decawave::setLED(bool ledOn) {
     dwt_setleds(ledOn);
 }
+
+
+int Decawave::writetospi(uint16 headerLength, const uint8 *headerBuffer,
+                        uint32 bodylength, const uint8 *bodyBuffer) {
+  //_spi.format(8,0);
+  //_spi.frequency(2000000);
+
+  chipSelect();
+
+  for (size_t i = 0; i < headerLength; i++)
+    _spi->write(headerBuffer[i]);
+
+  for (size_t i = 0; i < bodylength; i++)
+    _spi->write(bodyBuffer[i]);
+
+  chipDeselect();
+
+  return 0;
+}
+
+int Decawave::readfromspi(uint16 headerLength, const uint8 *headerBuffer,
+                        uint32 readlength, uint8 *readBuffer) {
+  //_spi.format(8,0);
+  //_spi.frequency(2000000);
+
+  chipSelect();
+
+  for (size_t i = 0; i < headerLength; i++) {
+    readBuffer[0] = _spi->write(headerBuffer[i]);
+  }
+
+  for (size_t i = 0; i < readlength; i++) {
+    readBuffer[i] = _spi->write(0);
+  }
+
+  chipDeselect();
+
+  return 0;
+}
+
+int readfromspi(uint16 headerLength, const uint8 *headerBuffer,
+                        uint32 readlength, uint8 *readBuffer) {
+    return global_radio_2->readfromspi(headerLength, headerBuffer, readlength, readBuffer);
+}
+
+int writetospi(uint16 headerLength, const uint8 *headerBuffer,
+                        uint32 bodylength, const uint8 *bodyBuffer) {
+    return global_radio_2->writetospi(headerLength, headerBuffer, bodylength, bodyBuffer);
+}
