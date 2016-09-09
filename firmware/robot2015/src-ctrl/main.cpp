@@ -202,7 +202,6 @@ int main() {
         return replyBuf;
     };
 
-
     kickerBoard.charge();
     LOG(INIT, "Starged charging kicker board");
     uint8_t kickerVoltage = 0;
