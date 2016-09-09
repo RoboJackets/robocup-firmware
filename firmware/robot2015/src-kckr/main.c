@@ -4,7 +4,6 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-// TODO: Make this path less explicit!
 #include "kicker_commands.h"
 #include "pins.h"
 
@@ -62,39 +61,35 @@ void main() {
     // make sure we're not kicking/chipping right off the start
     PORTA &= ~(_BV(KICK_PIN) | _BV(CHIP_PIN));
 
-    /* Port direction - setting outputs */
+    // ensure KICK_PIN, CHIP_PIN, and CHARGE_PIN are outputs
     DDRA |= _BV(KICK_PIN) | _BV(CHIP_PIN) |
             _BV(CHARGE_PIN);  // MISO is handled by CS interrupt
 
     // ensure N_KICK_CS & MISO are inputs
-    DDRA &= ~(_BV(N_KICK_CS_PIN) | _BV(MISO_PIN));
+    DDRA &= ~(_BV(N_KICK_CS_PIN) | _BV(KCKR_MISO_PIN));
 
-    // nop to sync things up
-    // _NOP();
+    // when DDRB = 0 and PORTB = 1, these are configured as pull-up inputs,
+    // when a button is pressed, these pins are driven towards ground
 
-    // Which DDRB = 0 and PORTB = 1, these are configured as pull-up inputs
+    // PORTB refers to pull-up or not
     PORTB |= _BV(DB_KICK_PIN) | _BV(DB_CHIP_PIN) | _BV(DB_CHG_PIN);
 
     // ensure debug buttons are inputs
     DDRB &= ~_BV(DB_KICK_PIN) & ~_BV(DB_CHIP_PIN) & ~_BV(DB_CHG_PIN);
 
-    // nop to sync things up
-    // _NOP();
-
-    // Enable interrupts for PCINT0-PCINT7
+    // enable interrupts for PCINT0-PCINT7
     GIMSK |= _BV(PCIE0);
 
-    // == Debug Button Interrupts ==
-    // Enable interrupts for PCINT8-PCINT11
+    // enable interrupts for PCINT8-PCINT11
     GIMSK |= _BV(PCIE1);
 
-    // Only have the N_KICK_CS interrupt enabled
+    // only have the N_KICK_CS interrupt enabled
     PCMSK0 = _BV(INT_N_KICK_CS);
 
-    // Enable interrupts on debug buttons
+    // enable interrupts on debug buttons
     PCMSK1 = _BV(INT_DB_KICK) | _BV(INT_DB_CHIP) | _BV(INT_DB_CHG);
 
-    // Hard-coded for PA1, check datasheet before changing
+    // hard-coded for PA1, check datasheet before changing
     // Set lower three bits to value of pin we read from
     ADMUX |= V_MONITOR_PIN;
 
@@ -118,10 +113,10 @@ void main() {
     PRR &= ~_BV(PRADC);    // disable power reduction - Pg. 133
     ADCSRA |= _BV(ADEN);   // enable the ADC - Pg. 133
     ADCSRB |= _BV(ADLAR);  // present left adjusted
-                           // because we left adjusted and only need
-                           // 8 bit precision, we can now read ADCH directly
+    // because we left adjusted and only need 8 bit precision,
+    // we can now read ADCH directly
 
-    // Enable Global Interrupts
+    // enable global interrupts
     sei();
 
     const uint8_t kalpha = 32;
@@ -139,35 +134,30 @@ void main() {
 }
 
 /*
- * SPI Starting Interrupt
+ * SPI Start Interrupt
  *
  * NOTE: This is intentionally not done with an overflow interrupt,
  * as the software chip select interrupt will be triggered almost at
  * the same time as an SPI overflow, causing the SPI interrupt to not be
  * handled.
- *
- * ISR for the USI
  */
-ISR(USI_STR_vect) {
+ISR(USI_STR_vect, ISR_BLOCK) {
     // check if the start condition interrupt is set
-    if ((USISR & _BV(USISIF))) {
+    if (USISR & _BV(USISIF)) {
         // clear the SPI start flag
         USISR |= _BV(USISIF);
 
         // only respond if we're being addressed
         if (!is_chip_selected()) return;
- 
-        // disable global interrupts
-        cli();
 
-        // // Wait for overflow flag to become 1
+        // wait for overflow flag to become 1
         while (!(USISR & _BV(USIOIF)))
             ;
 
-        // Get data from USIDR
+        // get data from USIDR
         uint8_t recv_data = USIDR;
 
-        // Clear the overflow flagS
+        // clear the overflow flag
         USISR |= _BV(USIOIF);
 
         // increment our received byte count and take appropiate action
@@ -187,9 +177,6 @@ ISR(USI_STR_vect) {
         } else {
             USIDR = 0x11;
         }
-
-        // enable global interrupts back
-        sei();
     }
 }
 
@@ -199,23 +186,17 @@ ISR(USI_STR_vect) {
  * ISR for PCINT0 - PCINT7
  */
 ISR(PCINT0_vect) {
-    // disable global interrupts
-    cli();
-
     cur_command_ = NO_COMMAND;
     byte_cnt = 0;
 
     if (is_chip_selected()) {
         // set the slave data out pin as an output
-        DDRA |= _BV(MISO_PIN);
+        DDRA |= _BV(KCKR_MISO_PIN);
     } else {
         // set the slave data out pin as an input
-        DDRA &= ~_BV(MISO_PIN);
+        DDRA &= ~_BV(KCKR_MISO_PIN);
         USIDR = is_charging() << 7;
     }
-
-    // enable global interrupts back
-    sei();
 }
 
 /*
@@ -278,7 +259,7 @@ ISR(TIM0_COMPA_vect) {
  * Executes a command that can come from SPI or a debug button
  *
  * WARNING: This will be called from an interrupt service routines, keep it
- *short!
+ * short!
  */
 uint8_t execute_cmd(uint8_t cmd, uint8_t arg) {
     uint8_t ret_val = 0;
