@@ -12,7 +12,7 @@
 
 #include "BallSense.hpp"
 // #include "CC1201.cpp"
-#include "Decawave.cpp"
+#include "Decawave.hpp"
 #include "KickerBoard.hpp"
 #include "RadioProtocol.hpp"
 #include "RobotModel.hpp"

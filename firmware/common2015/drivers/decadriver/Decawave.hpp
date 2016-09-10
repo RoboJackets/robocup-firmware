@@ -7,7 +7,7 @@
 #include "deca_device_api.h"
 #include "deca_regs.h"
 
-#define FRAME_LEN_MAX 40
+#define FRAME_LEN_MAX 127
 
 class Decawave : public CommLink {
 public:
@@ -28,8 +28,8 @@ public:
     void logSPI(int num);
 private:
     uint32_t _chip_version;
-    uint8 rx_buffer[FRAME_LEN_MAX]; //TODO: better tx and rx buffer
-    uint8 tx_buffer[FRAME_LEN_MAX];
+    uint8 rx_buffer[12]; //TODO: better tx and rx buffer
+    uint8 tx_buffer[12];
     bool _isInit;
 };
 
