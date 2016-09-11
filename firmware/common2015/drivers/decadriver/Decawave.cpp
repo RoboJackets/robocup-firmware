@@ -38,19 +38,16 @@ Decawave::Decawave(shared_ptr<SharedSPI> sharedSPI, PinName nCs, PinName intPin)
 
     reset();
     selfTest();
-// _isInit=true;
+
     if (_isInit) {
         dwt_configure(&config);
         dwt_configuretxrf(&txconfig);
 
         dwt_setrxaftertxdelay(TX_TO_RX_DELAY_UUS);
-        // dwt_setrxtimeout(RX_RESP_TO_UUS); // TODO: stops tranmission?
         dwt_setinterrupt(DWT_INT_TFRS | DWT_INT_RPHE | DWT_INT_RFCG | DWT_INT_RFCE | DWT_INT_RFSL | DWT_INT_RFTO | DWT_INT_SFDT | DWT_INT_RXPTO | DWT_INT_ARFE, 1);
 
         setLED(true);
         dwt_rxenable(DWT_START_RX_IMMEDIATE);
-        // while(true){};
-        // dwt_write32bitreg(SYS_STATUS_ID, SYS_STATUS_RXFCG | SYS_STATUS_ALL_RX_TO | SYS_STATUS_ALL_RX_ERR);
 
         LOG(INIT, "Decawave ready!");
         CommLink::ready();
@@ -62,50 +59,32 @@ int32_t Decawave::sendPacket(const rtp::packet* pkt){
     if (!_isInit) return COMM_FAILURE;
     dwt_rxreset();
     dwt_forcetrxoff();
+
     // Copy header and payload of packet to buffer
-    size_t i;
+
+    tx_buffer[0] = 0xC5;
+    tx_buffer[1] = 0;
+
+    int i;
+    uint8_t* headerData = (uint8_t*)&pkt->header;
     for (i = 0; i < sizeof(pkt->header); ++i) {
-        tx_buffer[i] = ((uint8_t*)&pkt->header)[i];
-        printf("%p ",tx_buffer[i]);
+        tx_buffer[i+2] = headerData[i];
     }
-    printf(" -- ");
+    i+=1;
     for (uint8_t byte : pkt->payload) {
         i++;
         tx_buffer[i] = byte;
-        printf("%p ",tx_buffer[i]);
     }
-    tx_buffer[0] = 0xC5;
-    // tx_buffer[1] = 0;
     tx_buffer[i + 1] = 0;
     tx_buffer[i + 2] = 0;
-    printf(" -- ");
 
-    // Write data to TX buffer in decawave and configure TX frame control reg
-    dwt_writetxdata(sizeof(tx_buffer), tx_buffer, 0);
-    dwt_writetxfctrl(sizeof(tx_buffer), 0, 0);
-    // dwt_rxreset();
-    // dwt_setrxaftertxdelay(TX_TO_RX_DELAY_UUS);
+    dwt_writetxdata(i+3, tx_buffer, 0);
+    dwt_writetxfctrl(i+3, 0, 0);
+
     if (DWT_SUCCESS == dwt_starttx(DWT_START_TX_IMMEDIATE | DWT_RESPONSE_EXPECTED)) {
-        // dwt_write32bitreg(SYS_STATUS_ID, SYS_STATUS_TXFRS);
-        // dwt_write32bitreg(SYS_STATUS_ID, 0xFFFFFFFFUL);
-        // dwt_rxreset();
-        // dwt_forcetrxoff();
-        // dwt_setrxaftertxdelay(TX_TO_RX_DELAY_UUS);
-        // dwt_rxenable(DWT_START_RX_IMMEDIATE);
-        // while (!(dwt_read32bitreg(SYS_STATUS_ID) & SYS_STATUS_TXFRS))
-        // { };
-        // dwt_write32bitreg(SYS_STATUS_ID, SYS_STATUS_TXFRS);
-        // dwt_rxreset();
-        // dwt_write32bitreg(SYS_STATUS_ID, 0xFFFFFFFFUL);
-        // dwt_forcetrxoff();
-        // dwt_rxenable(DWT_START_RX_IMMEDIATE);
         return COMM_SUCCESS;
     }
 
-    // dwt_rxreset();
-    printf("bad_send -- ");
-    // dwt_write32bitreg(SYS_STATUS_ID, 0xFFFFFFFFUL);
-    // dwt_rxenable(DWT_START_RX_IMMEDIATE);
     return COMM_DEV_BUF_ERR;
 }
 
@@ -124,26 +103,22 @@ int32_t Decawave::getData(std::vector<uint8_t>* buf){
         if (frame_len > FRAME_LEN_MAX) {
             LOG(WARN, "Frame recieved too large:\r\n"
                 "   Recieved: %u Max: %u", FRAME_LEN_MAX, frame_len);
-            // dwt_write32bitreg(SYS_STATUS_ID, SYS_STATUS_RXFCG);
-            dwt_forcetrxoff();
+            dwt_forcetrxoff(); // TODO: Better way than force off then reset?
             dwt_rxreset();
-            // dwt_write32bitreg(SYS_STATUS_ID, 0xFFFFFFFFUL);
             dwt_rxenable(DWT_START_RX_IMMEDIATE);
             return COMM_DEV_BUF_ERR;
         }
 
         // Read recived data and copy to vector
         dwt_readrxdata(rx_buffer, frame_len, 0);
-        for (uint8_t i = 0; i < frame_len; i++) {
+        for (uint8_t i = 2; i < frame_len - 2; i++) {
             buf->push_back(rx_buffer[i]);
-            // printf("%p\r\n", rx_buffer[i]);
+            // printf("?%p\r\n", rx_buffer[i]);
         }
 
         // Clear good RX frame event in the status register
-        // dwt_write32bitreg(SYS_STATUS_ID, SYS_STATUS_RXFCG);
         dwt_forcetrxoff();
         dwt_rxreset();
-        // dwt_write32bitreg(SYS_STATUS_ID, 0xFFFFFFFFUL);
         dwt_rxenable(DWT_START_RX_IMMEDIATE);
 
         return COMM_SUCCESS;
@@ -151,19 +126,14 @@ int32_t Decawave::getData(std::vector<uint8_t>* buf){
         // Radio RX error or timeout
 
         // Clear RX error/timeout events in the status register
-        // dwt_write32bitreg(SYS_STATUS_ID, SYS_STATUS_ALL_RX_TO | SYS_STATUS_ALL_RX_ERR);
         dwt_forcetrxoff();
         dwt_rxreset();
-        // dwt_write32bitreg(SYS_STATUS_ID, 0xFFFFFFFFUL);
         dwt_rxenable(DWT_START_RX_IMMEDIATE);
-        printf("some error\r\n");
         return COMM_DEV_BUF_ERR;
     }
 
-    // dwt_write32bitreg(SYS_STATUS_ID, SYS_STATUS_ALL_RX_GOOD);
     dwt_forcetrxoff();
     dwt_rxreset();
-    // dwt_write32bitreg(SYS_STATUS_ID, 0xFFFFFFFFUL);
     dwt_rxenable(DWT_START_RX_IMMEDIATE);
     return COMM_NO_DATA;
 }

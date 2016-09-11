@@ -113,7 +113,6 @@ public:
     /// deserialize a packet from a buffer
     void recv(const uint8_t* buffer, size_t size) {
         // check that the buffer is big enough
-        printf("Size: %d\r\n", size);
         if (size < sizeof(header)) return;
 
         // deserialize header

@@ -29,36 +29,16 @@ void CommLink::rxThread() {
     _int_in.rise(this, &CommLink::ISR);
 
     std::vector<uint8_t> buf;
-    buf.reserve(rtp::MAX_DATA_SZ);
-    printf("before");
+
     // Only continue past this point once the hardware link is initialized
     Thread::signal_wait(COMM_LINK_SIGNAL_START_THREAD);
-    printf("after");
+
     LOG(INIT, "RX communication link ready!\r\n    Thread ID: %u, Priority: %d",
         ((P_TCB)_rxThread.gettid())->task_id, threadPriority);
 
-    // dwt_setrxaftertxdelay(60);
-    // dwt_starttx(DWT_START_TX_IMMEDIATE | DWT_RESPONSE_EXPECTED);
-    // dwt_write32bitreg(SYS_STATUS_ID, SYS_STATUS_RXFCG | SYS_STATUS_ALL_RX_TO | SYS_STATUS_ALL_RX_ERR);
-    // dwt_write32bitreg(SYS_STATUS_ID,SYS_STATUS_ALL_TX);
-    // dwt_rxenable(DWT_START_RX_IMMEDIATE);
-    printf("after22");
     while (true) {
         // Wait until new data has arrived
         // this is triggered by CommLink::ISR()
-        // if (((dwt_read32bitreg(SYS_STATUS_ID)) & (SYS_STATUS_RXFCG | SYS_STATUS_ALL_RX_ERR))) {
-        //     printf("test\r\n");
-        // }
-        // printf("%p", (dwt_read32bitreg(SYS_STATUS_ID) & (SYS_STATUS_RXFCG | SYS_STATUS_ALL_RX_ERR)));
-        // static uint32 status_reg = 0;
-        // while (!((status_reg = dwt_read32bitreg(SYS_STATUS_ID)) & (SYS_STATUS_RXFCG | SYS_STATUS_ALL_RX_ERR))) {};
-        // printf("%p", status_reg);
-
-        // dwt_write32bitreg(SYS_STATUS_ID, SYS_STATUS_RXFCG | SYS_STATUS_ALL_RX_TO | SYS_STATUS_ALL_RX_ERR);
-        // dwt_rxenable(DWT_START_RX_IMMEDIATE);
-
-        // printf("before\r\n");
-        // printf("INTERRUPT: %d\r\n", _int_in.read());
         Thread::signal_wait(COMM_LINK_SIGNAL_RX_TRIGGER);
 
         LOG(INF3, "RX interrupt triggered");
@@ -66,12 +46,9 @@ void CommLink::rxThread() {
         // Get the received data from the external chip
         buf.clear();
         int32_t response = getData(&buf);
-        // dwt_write32bitreg(SYS_STATUS_ID, 0xFFFFFFFFUL);
-        // dwt_rxenable(DWT_START_RX_IMMEDIATE);
 
         if (response == COMM_SUCCESS) {
             // Write the data to the CommModule object's rxQueue
-            printf("got something\r\n");
             rtp::packet p;
             p.recv(buf);
             CommModule::Instance->receive(std::move(p));

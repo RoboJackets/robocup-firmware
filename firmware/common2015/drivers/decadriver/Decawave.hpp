@@ -28,8 +28,8 @@ public:
     void logSPI(int num);
 private:
     uint32_t _chip_version;
-    uint8 rx_buffer[12]; //TODO: better tx and rx buffer
-    uint8 tx_buffer[12];
+    uint8 rx_buffer[40]; //TODO: better tx and rx buffer
+    uint8 tx_buffer[40];
     bool _isInit;
 };
 

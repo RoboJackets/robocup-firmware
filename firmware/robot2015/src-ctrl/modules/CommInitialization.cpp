@@ -93,10 +93,6 @@ void InitializeCommModule(shared_ptr<SharedSPI> sharedSPI) {
     // Create a new physical hardware communication link
     global_radio =
         new Decawave(sharedSPI, RJ_RADIO_nCS, RJ_RADIO_INT);
-    // __disable_irq();
-    // dwt_setinterrupt(DWT_INT_RFCG | DWT_INT_RFCE | DWT_INT_RFCE | DWT_INT_ARFE, 1);
-    // __enable_irq();
-    // dwt_rxenable(DWT_START_RX_IMMEDIATE);
 
     // Open a socket for running tests across the link layer
     // The LINK port handlers are always active, regardless of whether or not a

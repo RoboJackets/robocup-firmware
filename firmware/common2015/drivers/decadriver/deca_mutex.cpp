@@ -61,7 +61,7 @@
  * returns the state of the DW1000 interrupt
  */
 decaIrqStatus_t decamutexon(void) {
-  // __disable_irq(); // This hard faults for some reason
+  // __disable_irq(); // TODO: This hard faults for some reason
 
   return 0;
 }
@@ -88,5 +88,5 @@ void decamutexoff(decaIrqStatus_t s) // put a function here that re-enables the
                                      // interrupt at the end of the critical
                                      // section
 {
-  // __enable_irq(); // This hard faults for some reason too
+  // __enable_irq(); // TODO: This hard faults for some reason too
 }
