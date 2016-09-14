@@ -55,9 +55,6 @@ bool is_charging() { return PORTA & _BV(CHARGE_PIN); }
 bool is_chip_selected() { return !(PINA & _BV(N_KICK_CS_PIN)); }
 
 void main() {
-    // disable global interrupts
-    cli();
-
     // make sure we're not kicking/chipping right off the start
     PORTA &= ~(_BV(KICK_PIN) | _BV(CHIP_PIN));
 
@@ -142,41 +139,37 @@ void main() {
  * handled.
  */
 ISR(USI_STR_vect, ISR_BLOCK) {
-    // check if the start condition interrupt is set
-    if (USISR & _BV(USISIF)) {
-        // clear the SPI start flag
-        USISR |= _BV(USISIF);
+    // only respond if we're being addressed
+    if (!is_chip_selected()) return;
 
-        // only respond if we're being addressed
-        if (!is_chip_selected()) return;
+    // wait for overflow flag to become 1
+    while (!(USISR & _BV(USIOIF)))
+        ;
 
-        // wait for overflow flag to become 1
-        while (!(USISR & _BV(USIOIF)))
-            ;
+    // get data from USIDR
+    uint8_t recv_data = USIDR;
 
-        // get data from USIDR
-        uint8_t recv_data = USIDR;
+    // clear the SPI start flag
+    USISR |= _BV(USISIF);
+    // clear the overflow flag
+    USISR |= _BV(USIOIF);
 
-        // clear the overflow flag
-        USISR |= _BV(USIOIF);
-
-        // increment our received byte count and take appropiate action
-        byte_cnt++;
-        if (byte_cnt == 1) {
-            // we don't have a command already, set the response
-            // buffer to the command we received to let the
-            // master confirm the given command if desired, top
-            // bit is set if currently charging
-            cur_command_ = recv_data;
-            USIDR = cur_command_;
-        } else if (byte_cnt == 2) {
-            // execute the currently set command with
-            // the newly given argument, set the response
-            // buffer to our return value
-            USIDR = execute_cmd(cur_command_, recv_data);
-        } else {
-            USIDR = 0x11;
-        }
+    // increment our received byte count and take appropiate action
+    byte_cnt++;
+    if (byte_cnt == 1) {
+        // we don't have a command already, set the response
+        // buffer to the command we received to let the
+        // master confirm the given command if desired, top
+        // bit is set if currently charging
+        cur_command_ = recv_data;
+        USIDR = cur_command_;
+    } else if (byte_cnt == 2) {
+        // execute the currently set command with
+        // the newly given argument, set the response
+        // buffer to our return value
+        USIDR = execute_cmd(cur_command_, recv_data);
+    } else {
+        USIDR = 0x11;
     }
 }
 
@@ -195,7 +188,12 @@ ISR(PCINT0_vect) {
     } else {
         // set the slave data out pin as an input
         DDRA &= ~_BV(KCKR_MISO_PIN);
-        USIDR = is_charging() << 7;
+        
+        if (is_charging()) {
+            USIDR = ISCHARGING;
+        } else {
+            USIDR = NOTCHARGING;
+        }
     }
 }
 
@@ -262,21 +260,22 @@ ISR(TIM0_COMPA_vect) {
  * short!
  */
 uint8_t execute_cmd(uint8_t cmd, uint8_t arg) {
-    uint8_t ret_val = 0;
+    // if we don't change ret_val by setting it to voltage or
+    // something, then we'll just return the command we got as
+    // an acknowledgement.
+    uint8_t ret_val = BLANK;
 
     switch (cmd) {
         case KICK_CMD:
             millis_left_ = arg;
             PORTA |= _BV(KICK_PIN);  // set KICK pin
             TCCR0B |= _BV(CS01);     // start timer /8 prescale
-            ret_val = KICK_ACK;
             break;
 
         case CHIP_CMD:
             millis_left_ = arg;
             PORTA |= _BV(CHIP_PIN);  // set CHIP pin
             TCCR0B |= _BV(CS01);     // start timer /8 prescale
-            ret_val = CHIP_ACK;
             break;
 
         case SET_CHARGE_CMD:
@@ -287,7 +286,6 @@ uint8_t execute_cmd(uint8_t cmd, uint8_t arg) {
                 PORTA &= ~(_BV(CHARGE_PIN));
             }
 
-            ret_val = SET_CHARGE_ACK;
             break;
 
         case GET_VOLTAGE_CMD:
@@ -295,7 +293,9 @@ uint8_t execute_cmd(uint8_t cmd, uint8_t arg) {
             break;
 
         case PING_CMD:
-            ret_val = PING_ACK;
+            // do nothing, ping is just a way to check if the kicker
+            // is connected by checking the returned command ack from
+            // earlier.
             break;
 
         case GET_BUTTON_STATE_CMD:

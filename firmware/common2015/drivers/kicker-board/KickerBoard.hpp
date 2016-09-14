@@ -90,8 +90,7 @@ public:
      * @brief Gets the state of the debug button
      * @return If the kick debug button is pressed
      */
-    uint8_t is_chip_debug_pressed();
-
+    uint8_t is_chip_debug_pressed(); 
     /**
      * @brief Gets the state of the debug button
      * @return If the kick debug button is pressed
@@ -116,7 +115,10 @@ protected:
                       bool verbose = false);
 
 private:
+    bool verbose;
+
     std::string _filename;
 
-    uint8_t send_to_kicker(const uint8_t cmd, const uint8_t arg);
+    uint8_t send_to_kicker(const uint8_t cmd, const uint8_t arg,
+                           bool verbose = false);
 };

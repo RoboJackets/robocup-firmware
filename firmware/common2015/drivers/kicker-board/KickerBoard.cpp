@@ -92,20 +92,24 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
 
 /* this function enforces the design choice that each cmd must have an arg
  * and return a value */
-uint8_t KickerBoard::send_to_kicker(const uint8_t cmd, const uint8_t arg) {
-    uint8_t val[2] = {0};
-    uint8_t ret = 0;
-
+uint8_t KickerBoard::send_to_kicker(const uint8_t cmd, const uint8_t arg,
+                                    bool verbose) {
     chipSelect();
-    val[0] = _spi->write(cmd);
-    val[1] = _spi->write(arg);
-    ret = _spi->write(NOP_ARG);
+    // Returns state (charging, not charging), but we don't care about that
+    uint8_t charge_resp = _spi->write(cmd);
+    // Should return the command we just sent
+    uint8_t command_resp = _spi->write(arg);
+    // Should return final response to full cmd, arg pair
+    uint8_t return_resp = _spi->write(BLANK);
     chipDeselect();
 
-    printf("\r%02X, %02X, %02X\r\n", val[0], val[1], ret);
-    fflush(stdout);
+    if (verbose) {
+        printf("Kicker: CHG:%02X, CMD:%02X, RET:%02X\r\n", 
+               charge_resp, command_resp, return_resp);
+        fflush(stdout);
+    }
 
-    return ret;
+    return return_resp;
 }
 
 uint8_t KickerBoard::kick(uint8_t time) {
@@ -117,19 +121,19 @@ uint8_t KickerBoard::chip(uint8_t time) {
 }
 
 uint8_t KickerBoard::read_voltage() {
-    return send_to_kicker(GET_VOLTAGE_CMD, NOP_ARG);
+    return send_to_kicker(GET_VOLTAGE_CMD, BLANK);
 }
 
 uint8_t KickerBoard::charge() {
-    return send_to_kicker(SET_CHARGE_CMD, ON_ARG) == SET_CHARGE_ACK;
+    return send_to_kicker(SET_CHARGE_CMD, ON_ARG);
 }
 
 uint8_t KickerBoard::stop_charging() {
-    return send_to_kicker(SET_CHARGE_CMD, OFF_ARG) == SET_CHARGE_ACK;
+    return send_to_kicker(SET_CHARGE_CMD, OFF_ARG);
 }
 
 uint8_t KickerBoard::is_pingable() {
-    return send_to_kicker(PING_CMD, NOP_ARG) == PING_ACK;
+    return send_to_kicker(PING_CMD, BLANK);
 }
 
 uint8_t KickerBoard::is_kick_debug_pressed() {
@@ -149,10 +153,10 @@ bool KickerBoard::is_charge_enabled() {
 
     chipSelect();
     ret = _spi->write(PING_CMD);
-    _spi->write(NOP_ARG);
-    _spi->write(NOP_ARG);
+    _spi->write(BLANK);
+    _spi->write(BLANK);
     chipDeselect();
 
     // boolean determined by MSB of 2nd byte
-    return ret & (1 << 7);
+    return ret == ISCHARGING;
 }
