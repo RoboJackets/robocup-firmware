@@ -126,6 +126,9 @@ void main() {
             (255 - kalpha) * last_voltage_ + kalpha * get_voltage();
         last_voltage_ = voltage_accum / 255;
 
+        // This value is totally made up TODO: set to reasonable value later
+        if (last_voltage_ > 100) execute_cmd(SET_CHARGE_CMD, OFF_ARG);
+
         _delay_ms(VOLTAGE_READ_DELAY_MS);
     }
 }
