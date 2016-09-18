@@ -90,7 +90,7 @@ public:
      * @brief Gets the state of the debug button
      * @return If the kick debug button is pressed
      */
-    uint8_t is_chip_debug_pressed(); 
+    uint8_t is_chip_debug_pressed();
     /**
      * @brief Gets the state of the debug button
      * @return If the kick debug button is pressed

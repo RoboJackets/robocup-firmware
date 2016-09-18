@@ -17,7 +17,7 @@ int main() {
         8, 0);  // 8 bits per transferrintf("About to flash kicker\r\n");
     KickerBoard kickerBoard(sharedSPI, RJ_KICKER_nCS, RJ_KICKER_nRESET,
                             "/local/rj-kickr.nib");  // nCs, nReset
-    bool kickerReady = kickerBoard.flash(true, true);
+    bool kickerReady = kickerBoard.flash(false, true);
     printf("Flashed kicker, success = %s\r\n", kickerReady ? "TRUE" : "FALSE");
 
     char getCmd = 'k';
@@ -34,22 +34,25 @@ int main() {
             pc.printf("%c: ", getCmd);
             switch (getCmd) {
                 case 'k':
-                    pc.printf("Resp: 0x%02X", kickerBoard.kick(240));
+                    pc.printf("Kicked, Resp: 0x%02X", kickerBoard.kick(240));
                     break;
                 case 'c':
-                    pc.printf("Resp: 0x%02X", kickerBoard.chip(240));
+                    pc.printf("Chipped, Resp: 0x%02X", kickerBoard.chip(240));
                     break;
                 case 'r':
-                    pc.printf("Volts: %d", kickerBoard.read_voltage());
+                    pc.printf("Read Volts: %d", kickerBoard.read_voltage());
                     break;
                 case 'h':
-                    pc.printf("Resp: 0x%02X", kickerBoard.charge());
+                    pc.printf("Set charging, Resp: 0x%02X",
+                              kickerBoard.charge());
                     break;
                 case 'j':
-                    pc.printf("Resp: 0x%02X", kickerBoard.stop_charging());
+                    pc.printf("Stop charging, Resp: 0x%02X",
+                              kickerBoard.stop_charging());
                     break;
                 case 'p':
-                    pc.printf("Resp: 0x%02X", kickerBoard.is_pingable());
+                    pc.printf("Pinged, Resp: 0x%02X",
+                              kickerBoard.is_pingable());
                     break;
                 case '1':
                     pc.printf("Kick Resp: 0x%02X",
@@ -77,11 +80,11 @@ int main() {
             //           "inactive");
             // }
 
-            if (!invalid) {
-                pc.printf("\t[charging %s]", kickerBoard.is_charge_enabled()
-                                                 ? "ACTIVE"
-                                                 : "inactive");
-            }
+            // if (!invalid) {
+            // pc.printf("\t[charging %s]", kickerBoard.is_charge_enabled()
+            //? "ACTIVE"
+            //: "inactive");
+            //}
 
             pc.printf("\r\n");
             fflush(stdout);

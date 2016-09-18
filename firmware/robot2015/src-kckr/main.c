@@ -188,7 +188,7 @@ ISR(PCINT0_vect) {
     } else {
         // set the slave data out pin as an input
         DDRA &= ~_BV(KCKR_MISO_PIN);
-        
+
         if (is_charging()) {
             USIDR = ISCHARGING;
         } else {

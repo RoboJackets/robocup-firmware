@@ -33,14 +33,14 @@
 #define GET_BUTTON_STATE_CMD 0x06
 
 /* Arguments */
-#define BLANK 0x00       // Used for clarity when passing useless arguments
+#define BLANK 0x00  // Used for clarity when passing useless arguments
 // Kick/Chip arguments
 #define MAX_TIME_ARG 0xFF  // Used if we want to wait max time
 #define DB_KICK_TIME 0x08  // Used for button press kick
 #define DB_CHIP_TIME 0x08  // Used for button press chip
 // Charge command arguments
-#define ON_ARG 0x38        // Used for setting charge high
-#define OFF_ARG 0x1A       // Used for setting charge low
+#define ON_ARG 0x38   // Used for setting charge high
+#define OFF_ARG 0x1A  // Used for setting charge low
 // GET_BUTTON_STATE_CMD args
 #define DB_CHIP_STATE 0x01
 #define DB_KICK_STATE 0x02

@@ -104,8 +104,8 @@ uint8_t KickerBoard::send_to_kicker(const uint8_t cmd, const uint8_t arg,
     chipDeselect();
 
     if (verbose) {
-        printf("Kicker: CHG:%02X, CMD:%02X, RET:%02X\r\n", 
-               charge_resp, command_resp, return_resp);
+        printf("Kicker: CHG:%02X, CMD:%02X, RET:%02X\r\n", charge_resp,
+               command_resp, return_resp);
         fflush(stdout);
     }
 
@@ -124,17 +124,13 @@ uint8_t KickerBoard::read_voltage() {
     return send_to_kicker(GET_VOLTAGE_CMD, BLANK);
 }
 
-uint8_t KickerBoard::charge() {
-    return send_to_kicker(SET_CHARGE_CMD, ON_ARG);
-}
+uint8_t KickerBoard::charge() { return send_to_kicker(SET_CHARGE_CMD, ON_ARG); }
 
 uint8_t KickerBoard::stop_charging() {
     return send_to_kicker(SET_CHARGE_CMD, OFF_ARG);
 }
 
-uint8_t KickerBoard::is_pingable() {
-    return send_to_kicker(PING_CMD, BLANK);
-}
+uint8_t KickerBoard::is_pingable() { return send_to_kicker(PING_CMD, BLANK); }
 
 uint8_t KickerBoard::is_kick_debug_pressed() {
     return send_to_kicker(GET_BUTTON_STATE_CMD, DB_KICK_STATE);
