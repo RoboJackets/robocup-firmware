@@ -47,16 +47,14 @@ void log(uint8_t logLevel, const char* source, int line, const char* func,
         time_t sys_time = time(NULL);
         strftime(time_buf, 25, "%H:%M:%S", localtime(&sys_time));
 
-        FILE* fp = fopen("/local/out.txt", "a");
-        int fileSize = ftell(fp);
-
+        FILE* fp = fopen("/local/log.txt", "a");
         fseek(fp, 0L, SEEK_END);
 
-        if (fileSize > 500000)  // Bytes
+        if (ftell(fp) > 500000)  // Bytes
         {
             // Deletes contents of file
             fclose(fp);
-            fp = fopen("/local/out.txt", "w");
+            fp = fopen("/local/log.txt", "w");
         } else {
             // Returns to the correct location
             fseek(fp, 0L, SEEK_SET);
