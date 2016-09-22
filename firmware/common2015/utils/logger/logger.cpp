@@ -46,24 +46,6 @@ void log(uint8_t logLevel, const char* source, int line, const char* func,
         char time_buf[25];
         time_t sys_time = time(NULL);
         strftime(time_buf, 25, "%H:%M:%S", localtime(&sys_time));
-		
-		FILE *fp = fopen("/local/out.txt", "a");
-		int fileSize  = ftell(fp);
-
-		fseek(fp, 0L, SEEK_END);
-		
-		if (fileSize > 500000)//Bytes
-		{
-			// Deletes contents of file
-			fclose(fp);
-			fp = fopen("/local/out.txt", "w");
-		}
-		else
-		{
-			// Returns to the correct location
-			fseek(fp, 0L, SEEK_SET);
-		}
-
 
         snprintf(newFormat, sizeof(newFormat),
                  "%s [%s] [%s:%d] <%s>\r\n  %s\r\n\r\n", time_buf,
@@ -73,11 +55,8 @@ void log(uint8_t logLevel, const char* source, int line, const char* func,
 
         fflush(stdout);
         vprintf(newFormat, args);
-		vfprintf(fp, newFormat, args);
         fflush(stdout);
-		fflush(fp);
 
-		fclose(fp);
         va_end(args);
         log_mutex.unlock();
     }
