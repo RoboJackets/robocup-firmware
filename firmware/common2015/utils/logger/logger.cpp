@@ -5,8 +5,13 @@
 
 #include <mbed.h>
 #include <rtos.h>
+#include <cstdio>
+#include <errno.h>
 
 const char* LOG_LEVEL_STRING[] = {FOREACH_LEVEL(GENERATE_STRING)};
+const char* LOG_FILE_NAMES[] = {"/local/LOG1.TXT", "/local/LOG2.TXT"};
+
+const int maxLogSize = 500000; //bytes
 
 /* The initial logging level shows startup info along with any
  * warning messages [but hopefully there's none of those :) ].
@@ -14,8 +19,12 @@ const char* LOG_LEVEL_STRING[] = {FOREACH_LEVEL(GENERATE_STRING)};
 bool isLogging;  // = RJ_LOGGING_EN;
 
 uint8_t rjLogLevel;
+uint8_t logNameInd = 255;
 
 Mutex log_mutex;
+
+void findSmallestLogFile();
+
 
 LogHelper::LogHelper(uint8_t logLevel, const char* source, int line,
                      const char* func) {
@@ -47,17 +56,28 @@ void log(uint8_t logLevel, const char* source, int line, const char* func,
         time_t sys_time = time(NULL);
         strftime(time_buf, 25, "%H:%M:%S", localtime(&sys_time));
 
-        FILE* fp = fopen("/local/log.txt", "a");
-        fseek(fp, 0L, SEEK_END);
+        // if first call to log, find the right file to edit
+        if (logNameInd > 1)
+        	findSmallestLogFile();
 
-        if (ftell(fp) > 500000)  // Bytes
-        {
-            // Deletes contents of file
-            fclose(fp);
-            fp = fopen("/local/log.txt", "w");
-        } else {
-            // Returns to the correct location
-            fseek(fp, 0L, SEEK_SET);
+        FILE* fp = fopen(LOG_FILE_NAMES[logNameInd], "a");
+
+        if (fp)
+		{
+            fseek(fp, 0L, SEEK_END);
+
+            if (ftell(fp) > maxLogSize)
+            {
+            	// Deletes contents of file
+            	fclose(fp);
+
+            	logNameInd = (logNameInd + 1) % 2;
+
+            	fp = fopen(LOG_FILE_NAMES[logNameInd], "w");
+	        } else {
+	            // Returns to the correct location
+	            fseek(fp, 0L, SEEK_SET);
+	        }
         }
 
         snprintf(newFormat, sizeof(newFormat),
@@ -68,11 +88,15 @@ void log(uint8_t logLevel, const char* source, int line, const char* func,
 
         fflush(stdout);
         vprintf(newFormat, args);
-        vfprintf(fp, newFormat, args);
         fflush(stdout);
-        fflush(fp);
 
-        fclose(fp);
+        if (fp)
+        {
+	        vfprintf(fp, newFormat, args); 
+ 	        fflush(fp);
+	        fclose(fp);
+        }
+
         va_end(args);
         log_mutex.unlock();
     }
@@ -85,4 +109,23 @@ int logLvlChange(const std::string& s) {
     n -= std::count(s.begin(), s.end(), '-');
 
     return n;
+}
+
+void findSmallestLogFile()
+{
+	FILE* fp = fopen(LOG_FILE_NAMES[0], "a");
+
+	if (fp)
+	{
+		fseek(fp, 0L, SEEK_END);
+
+        if (ftell(fp) <= maxLogSize)
+        {
+        	logNameInd = 0;
+        } else {
+        	logNameInd = 1;
+        }
+	}
+
+	fclose(fp);
 }
