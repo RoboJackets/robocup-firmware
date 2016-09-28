@@ -24,7 +24,6 @@
 #include "neostrip.hpp"
 #include "robot-devices.hpp"
 #include "task-signals.hpp"
-#include "HackedKickerBoard.hpp"
 
 #define RJ_ENABLE_ROBOT_CONSOLE
 
@@ -113,7 +112,10 @@ int main() {
 
     // flag fro kicking when the ball sense triggers
     bool kickOnBreakBeam = false;
-    uint8_t kickStrength = 0;
+    // Made up value right now, this is the amount of time in ms to
+    // allow the capacitor dump power into kicker. Will need to be
+    // adjusted once hardware is available.
+    uint8_t kickStrength = 5;
 
     // Initialize and start ball sensor
     BallSense ballSense(RJ_BALL_EMIT, RJ_BALL_DETECTOR);
