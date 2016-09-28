@@ -52,7 +52,7 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
                 "failed\r\nFailed to open binary. Check file path: "
                 "'%s'\r\n\r\n",
                 _filename.c_str());
-
+        exitProgramming();
         return false;
     } else {
         // Program it!

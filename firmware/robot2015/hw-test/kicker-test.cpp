@@ -5,32 +5,39 @@
 
 LocalFileSystem fs("local");
 
+Ticker lifeLight;
+DigitalOut ledOne(LED1);
+DigitalOut ledTwo(LED2);
+
 // DigitalOut cs(p8);
 Serial pc(USBTX, USBRX);  // tx and rx
-// DigitalOut n_kick(p9);
+                          // DigitalOut n_kick(p9);
+
+/**
+ * timer interrupt based light flicker
+ */
+void imAlive() { ledOne = !ledOne; }
 
 int main() {
+    lifeLight.attach(&imAlive, 0.25);
+
     pc.baud(57600);  // set up the serial
     shared_ptr<SharedSPI> sharedSPI =
         make_shared<SharedSPI>(RJ_SPI_MOSI, RJ_SPI_MISO, RJ_SPI_SCK);
-    sharedSPI->format(
-        8, 0);  // 8 bits per transferrintf("About to flash kicker\r\n");
+    sharedSPI->format(8, 0);
     KickerBoard kickerBoard(sharedSPI, RJ_KICKER_nCS, RJ_KICKER_nRESET,
                             "/local/rj-kickr.nib");  // nCs, nReset
     bool kickerReady = kickerBoard.flash(false, true);
     printf("Flashed kicker, success = %s\r\n", kickerReady ? "TRUE" : "FALSE");
 
-    char getCmd = 'k';
+    char getCmd;
 
     while (true) {
-        //    n_kick = !n_kick;
-        wait_ms(10);
+        ledTwo = !ledTwo;
+        Thread::wait(10);
         if (pc.readable()) {
             getCmd = pc.getc();
-            // if (getCmd == 'k') getCmd = 'c';
-            // else if (getCmd == 'c') getCmd = 'r';
-            // else if (getCmd == 'r') getCmd = 'k';
-            bool invalid = false;
+
             pc.printf("%c: ", getCmd);
             switch (getCmd) {
                 case 'k':
@@ -67,29 +74,14 @@ int main() {
                               kickerBoard.is_charge_debug_pressed());
                     break;
                 default:
-                    invalid = true;
                     pc.printf("Invalid command");
                     break;
             }
 
-            // wait_ms(2);
-
-            // if (!invalid) {
-            //    pc.printf("\t[charging %s]",
-            //           kickerBoard.is_charge_enabled() ? "ACTIVE" :
-            //           "inactive");
-            // }
-
-            // if (!invalid) {
-            // pc.printf("\t[charging %s]", kickerBoard.is_charge_enabled()
-            //? "ACTIVE"
-            //: "inactive");
-            //}
-
             pc.printf("\r\n");
             fflush(stdout);
 
-            wait_ms(2);
+            Thread::wait(2);
         }
     }
 }
