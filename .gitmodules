@@ -12,4 +12,4 @@
 	url = https://github.com/jgkamat/DoCIF.git
 [submodule "external/style-configs"]
 	path = external/style-configs
-	url = git@github.com:RoboJackets/style-configs.git
+	url = https://github.com/RoboJackets/style-configs.git
