@@ -81,7 +81,7 @@ int main() {
     // Setup the interrupt priorities before launching each subsystem's task
     // thread.
     setISRPriorities();
-    
+
     // Force off since the neopixel's hardware is stateless from previous
     // settings
     NeoStrip rgbLED(RJ_NEOPIXEL, 2);
@@ -135,9 +135,10 @@ int main() {
     // Initialize and configure the fpga with the given bitfile
     FPGA::Instance = new FPGA(sharedSPI, RJ_FPGA_nCS, RJ_FPGA_INIT_B,
                               RJ_FPGA_PROG_B, RJ_FPGA_DONE);
-    const bool fpgaInitialized = FPGA::Instance->configure("/local/rj-fpga.nib");
+    const bool fpgaInitialized =
+        FPGA::Instance->configure("/local/rj-fpga.nib");
     uint8_t fpgaLastStatus = 0;
-    bool fpgaError = false; // set based on status byte reading in main loop
+    bool fpgaError = false;  // set based on status byte reading in main loop
 
     if (fpgaInitialized) {
         rgbLED.brightness(3 * defaultBrightness);
@@ -211,14 +212,16 @@ int main() {
 
     // Radio timeout timer
     const uint32_t RADIO_TIMEOUT = 100;
-    RtosTimerHelper radioTimeoutTimer([&]() {
-        // reset radio
-        global_radio->strobe(CC1201_STROBE_SIDLE);
-        global_radio->strobe(CC1201_STROBE_SFRX);
-        global_radio->strobe(CC1201_STROBE_SRX);
+    RtosTimerHelper radioTimeoutTimer(
+        [&]() {
+            // reset radio
+            global_radio->strobe(CC1201_STROBE_SIDLE);
+            global_radio->strobe(CC1201_STROBE_SFRX);
+            global_radio->strobe(CC1201_STROBE_SRX);
 
-        radioTimeoutTimer.start(RADIO_TIMEOUT);
-    }, osTimerOnce);
+            radioTimeoutTimer.start(RADIO_TIMEOUT);
+        },
+        osTimerOnce);
     radioTimeoutTimer.start(RADIO_TIMEOUT);
 
     // Setup radio protocol handling
@@ -226,8 +229,8 @@ int main() {
     radioProtocol.setUID(robotShellID);
     radioProtocol.start();
     radioProtocol.rxCallback = [&](const rtp::ControlMessage* msg) {
-      // reset timeout
-      radioTimeoutTimer.start(RADIO_TIMEOUT);
+        // reset timeout
+        radioTimeoutTimer.start(RADIO_TIMEOUT);
 
         // update target velocity from packet
         Task_Controller_UpdateTarget({
@@ -255,7 +258,6 @@ int main() {
             }
         }
 
-
         rtp::RobotStatusMessage reply;
         reply.uid = robotShellID;
         reply.battVoltage = battVoltage;
@@ -274,7 +276,7 @@ int main() {
         } else if (fpgaError) {
             reply.fpgaStatus = 2;
         } else {
-            reply.fpgaStatus = 0; // good
+            reply.fpgaStatus = 0;  // good
         }
 
         vector<uint8_t> replyBuf;
@@ -351,7 +353,8 @@ int main() {
 
         // get kicker voltage
         kickerVoltage = kickerBoard.read_voltage();
-        LOG(INIT, "Kicker voltage: %u", kickerVoltage);
+        // Disabled this for now because it spams serial
+        // LOG(INIT, "Kicker voltage: %u", kickerVoltage);
 
         // update shell id
         robotShellID = rotarySelector.read();
