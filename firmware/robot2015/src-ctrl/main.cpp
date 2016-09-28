@@ -83,7 +83,7 @@ int main() {
     // Setup the interrupt priorities before launching each subsystem's task
     // thread.
     setISRPriorities();
-    
+
     // Initialize kicker board
     // TODO: clarify between kicker nCs and nReset
     // KickerBoard kickerBoard(sharedSPI, RJ_KICKER_nCS, RJ_KICKER_nRESET,
@@ -94,7 +94,6 @@ int main() {
     // wires...
     HackedKickerBoard kickerBoard(RJ_KICKER_nRESET);
     bool kickerReady = true;
-
 
     // flag fro kicking when the ball sense triggers
     bool kickOnBreakBeam = false;
@@ -139,9 +138,10 @@ int main() {
     // Initialize and configure the fpga with the given bitfile
     FPGA::Instance = new FPGA(sharedSPI, RJ_FPGA_nCS, RJ_FPGA_INIT_B,
                               RJ_FPGA_PROG_B, RJ_FPGA_DONE);
-    const bool fpgaInitialized = FPGA::Instance->configure("/local/rj-fpga.nib");
+    const bool fpgaInitialized =
+        FPGA::Instance->configure("/local/rj-fpga.nib");
     uint8_t fpgaLastStatus = 0;
-    bool fpgaError = false; // set based on status byte reading in main loop
+    bool fpgaError = false;  // set based on status byte reading in main loop
 
     if (fpgaInitialized) {
         rgbLED.brightness(3 * defaultBrightness);
@@ -230,8 +230,8 @@ int main() {
     radioProtocol.setUID(robotShellID);
     radioProtocol.start();
     radioProtocol.rxCallback = [&](const rtp::ControlMessage* msg) {
-      // reset timeout
-      radioTimeoutTimer.start(RADIO_TIMEOUT);
+        // reset timeout
+        radioTimeoutTimer.start(RADIO_TIMEOUT);
 
         // update target velocity from packet
         Task_Controller_UpdateTarget({
@@ -259,7 +259,6 @@ int main() {
             }
         }
 
-
         rtp::RobotStatusMessage reply;
         reply.uid = robotShellID;
         reply.battVoltage = battVoltage;
@@ -278,7 +277,7 @@ int main() {
         } else if (fpgaError) {
             reply.fpgaStatus = 2;
         } else {
-            reply.fpgaStatus = 0; // good
+            reply.fpgaStatus = 0;  // good
         }
 
         vector<uint8_t> replyBuf;

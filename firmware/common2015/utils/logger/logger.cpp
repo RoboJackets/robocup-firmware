@@ -15,8 +15,8 @@ const int maxLogSize = 250000;  // 250 KB each (500 KB total)
 /* The initial logging level shows startup info along with any
  * warning messages [but hopefully there's none of those :) ].
  */
-bool isLogging;     // = RJ_LOGGING_EN;
-bool isFileLogging; // = RJ_FILE_LOGGING_EN
+bool isLogging;      // = RJ_LOGGING_EN;
+bool isFileLogging;  // = RJ_FILE_LOGGING_EN
 
 uint8_t rjLogLevel;
 
@@ -62,36 +62,35 @@ void log(uint8_t logLevel, const char* source, int line, const char* func,
         vprintf(newFormat, args);
         fflush(stdout);
 
-        if (isFileLogging)
-        {
-	        // If it's the first call to log(), find the right file to edit
-	        static uint8_t logNameInd = 255;
-	        if (logNameInd > 1) {
-	            logNameInd = findSmallestLogFile();
-	        }
+        if (isFileLogging) {
+            // If it's the first call to log(), find the right file to edit
+            static uint8_t logNameInd = 255;
+            if (logNameInd > 1) {
+                logNameInd = findSmallestLogFile();
+            }
 
-	        FILE* fp = fopen(LOG_FILE_NAMES[logNameInd], "a");
+            FILE* fp = fopen(LOG_FILE_NAMES[logNameInd], "a");
 
-	        if (fp) {
-	            fseek(fp, 0L, SEEK_END);
+            if (fp) {
+                fseek(fp, 0L, SEEK_END);
 
-	            if (ftell(fp) > maxLogSize) {
-	                // Deletes contents of the other file, and switches to it
-	                fclose(fp);
+                if (ftell(fp) > maxLogSize) {
+                    // Deletes contents of the other file, and switches to it
+                    fclose(fp);
 
-	                logNameInd = (logNameInd + 1) % 2;
+                    logNameInd = (logNameInd + 1) % 2;
 
-	                fp = fopen(LOG_FILE_NAMES[logNameInd], "w");
-	            } else {
-	                // Returns to the correct location
-	                fseek(fp, 0L, SEEK_SET);
-	            }
+                    fp = fopen(LOG_FILE_NAMES[logNameInd], "w");
+                } else {
+                    // Returns to the correct location
+                    fseek(fp, 0L, SEEK_SET);
+                }
 
-	            vfprintf(fp, newFormat, args);
-	            fflush(fp);
-	            fclose(fp);
-	        }
-    	}
+                vfprintf(fp, newFormat, args);
+                fflush(fp);
+                fclose(fp);
+            }
+        }
 
         va_end(args);
         log_mutex.unlock();
