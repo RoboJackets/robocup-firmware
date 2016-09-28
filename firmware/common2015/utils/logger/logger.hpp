@@ -63,6 +63,11 @@ extern const char* LOG_LEVEL_STRING[];
 extern bool isLogging;
 
 /**
+ * Active file logging.
+ */
+extern bool isFileLogging;
+
+/**
  * Current log level.
  */
 extern uint8_t rjLogLevel;
