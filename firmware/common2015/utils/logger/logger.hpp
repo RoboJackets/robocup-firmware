@@ -96,3 +96,7 @@ void log(uint8_t logLevel, const char* source, int line, const char* func,
          const char* format, ...);
 
 int logLvlChange(const std::string& s);
+
+// Finds the smallest log file in terms of file size
+// Returns the index in reference to LOG_FILE_NAMES
+uint8_t findSmallestLogFile();
