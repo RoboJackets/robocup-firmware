@@ -1,7 +1,14 @@
+#include <mbed.h>
+#include <rtos.h>
+
 #include "KickerBoard.hpp"
 #include "SharedSPI.hpp"
-#include "mbed.h"
 #include "pins-ctrl-2015.hpp"
+
+using namespace std;
+
+const int BAUD_RATE = 57600;
+const float ALIVE_BLINK_RATE = 0.25;
 
 LocalFileSystem fs("local");
 
@@ -9,29 +16,31 @@ Ticker lifeLight;
 DigitalOut ledOne(LED1);
 DigitalOut ledTwo(LED2);
 
-// DigitalOut cs(p8);
 Serial pc(USBTX, USBRX);  // tx and rx
-                          // DigitalOut n_kick(p9);
 
 /**
  * timer interrupt based light flicker
  */
 void imAlive() { ledOne = !ledOne; }
 
-int main() {
-    lifeLight.attach(&imAlive, 0.25);
+std::string bool_to_string(bool b) { return b ? "true" : "false"; }
 
-    pc.baud(57600);  // set up the serial
+int main() {
+    lifeLight.attach(&imAlive, ALIVE_BLINK_RATE);
+
+    pc.baud(BAUD_RATE);  // set up the serial
     shared_ptr<SharedSPI> sharedSPI =
         make_shared<SharedSPI>(RJ_SPI_MOSI, RJ_SPI_MISO, RJ_SPI_SCK);
     sharedSPI->format(8, 0);
-    KickerBoard kickerBoard(sharedSPI, RJ_KICKER_nCS, RJ_KICKER_nRESET,
-                            "/local/rj-kickr.nib");  // nCs, nReset
-    bool kickerReady = kickerBoard.flash(false, true);
+    KickerBoard kicker(sharedSPI, RJ_KICKER_nCS, RJ_KICKER_nRESET,
+                       "/local/rj-kickr.nib");  // nCs, nReset
+    bool kickerReady = kicker.flash(false, true);
     printf("Flashed kicker, success = %s\r\n", kickerReady ? "TRUE" : "FALSE");
 
     char getCmd;
 
+    string response;
+    bool success = false;
     while (true) {
         ledTwo = !ledTwo;
         Thread::wait(10);
@@ -41,43 +50,38 @@ int main() {
             pc.printf("%c: ", getCmd);
             switch (getCmd) {
                 case 'k':
-                    pc.printf("Kicked, Resp: 0x%02X", kickerBoard.kick(240));
+                    response = "Kicked";
+                    success = kicker.kick(DB_KICK_TIME);
                     break;
                 case 'c':
-                    pc.printf("Chipped, Resp: 0x%02X", kickerBoard.chip(240));
+                    response = "Chipped";
+                    success = kicker.chip(DB_CHIP_TIME);
                     break;
                 case 'r':
-                    pc.printf("Read Volts: %d", kickerBoard.read_voltage());
+                    response = "Read Voltage";
+                    uint8_t volts;
+                    success = kicker.read_voltage(volts);
+                    response += ", voltage: " + to_string(volts);
                     break;
                 case 'h':
-                    pc.printf("Set charging, Resp: 0x%02X",
-                              kickerBoard.charge());
+                    response = "Set charging";
+                    success = kicker.charge();
                     break;
                 case 'j':
-                    pc.printf("Stop charging, Resp: 0x%02X",
-                              kickerBoard.stop_charging());
+                    response = "Stop charging";
+                    success = kicker.stop_charging();
                     break;
                 case 'p':
-                    pc.printf("Pinged, Resp: 0x%02X",
-                              kickerBoard.is_pingable());
-                    break;
-                case '1':
-                    pc.printf("Kick Resp: 0x%02X",
-                              kickerBoard.is_kick_debug_pressed());
-                    break;
-                case '2':
-                    pc.printf("Chip Resp: 0x%02X",
-                              kickerBoard.is_chip_debug_pressed());
-                    break;
-                case '3':
-                    pc.printf("Charge Resp: 0x%02X",
-                              kickerBoard.is_charge_debug_pressed());
+                    response = "Pinged";
+                    success = kicker.is_pingable();
                     break;
                 default:
-                    pc.printf("Invalid command");
+                    response = "Invalid command";
                     break;
             }
 
+            response += ", success: " + bool_to_string(success);
+            pc.printf(response.c_str());
             pc.printf("\r\n");
             fflush(stdout);
 

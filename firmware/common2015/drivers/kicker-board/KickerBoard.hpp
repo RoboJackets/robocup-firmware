@@ -3,6 +3,7 @@
 #include <mbed.h>
 #include <string>
 #include "AVR910.hpp"
+#include "kicker_commands.h"
 
 /**
  * @brief A class for interfacing with the kicker board, which is based on an
@@ -37,58 +38,43 @@ public:
      * @brief Sends the KickerBoard a command to kick for the allotted time in
      *     in milliseconds. This roughly corresponds to kick strength.
      *
-     * @param time Millisecond kick time, can only range from 0 to 16 ms
+     * @param time Millisecond kick time, can only range from 0 to 255 ms
+     * @return If the kick command was acknowledged
      */
-    uint8_t kick(uint8_t time);
+    bool kick(uint8_t time);
 
     /**
      * @brief Sends the KickerBoard a command to chip for the allotted time in
      *     in milliseconds. This roughly corresponds to chip strength.
-     * @param time Millisecond chip time, can only range from 0 to 16 ms
-     * @return If the kick command was acknowledged
+     * @param time Millisecond chip time, can only range from 0 to 255 ms
+     * @return If the chip command was acknowledged
      */
-    uint8_t chip(uint8_t time);
+    bool chip(uint8_t time);
 
     /**
      * @brief Reads the charge voltage back from the KickerBoard.
-     * @return Voltage between 0 (Kicker GND) and 255 (Kicker VD)
+     * @param voltage Output voltage 0 (GND) to 255 (Vd)
+     * @return If the read_voltage command was acknowledged
      */
-    uint8_t read_voltage();
+    bool read_voltage(uint8_t& voltage);
 
     /**
      * @brief Sets the charge pin (to high)
-     * @return If the charging command was acknowledged
+     * @return If the charge command was acknowledged
      */
-    uint8_t charge();
+    bool charge();
 
     /**
      * @brief Clears the charge pin
-     * @return If the charging command was acknowledged
+     * @return If the stop_charging command was acknowledged
      */
-    uint8_t stop_charging();
+    bool stop_charging();
 
     /**
      * @brief Sends a ping command and checks that we get the correct resposne
-     * @return If the kickerboard responded to the ping
+     * @return If the ping command was acknowledged
      */
-    uint8_t is_pingable();
-
-    /**
-     * @brief Gets the state of the debug button
-     * @return If the kick debug button is pressed
-     */
-    uint8_t is_kick_debug_pressed();
-
-    /**
-     * @brief Gets the state of the debug button
-     * @return If the kick debug button is pressed
-     */
-    uint8_t is_chip_debug_pressed();
-    /**
-     * @brief Gets the state of the debug button
-     * @return If the kick debug button is pressed
-     */
-    uint8_t is_charge_debug_pressed();
+    bool is_pingable();
 
     /**
      * @brief Gets the current charging state
@@ -112,6 +98,30 @@ private:
 
     std::string _filename;
 
-    uint8_t send_to_kicker(const uint8_t cmd, const uint8_t arg,
-                           bool verbose = false);
+    /**
+     * @brief Send a command to the kicker without needing a return argument.
+     *
+     * @param cmd Command to send
+     * @param arg Command argument, ignored by kicker if command doesn't require
+     * it.
+     * @param verbose Whether or not to print debug messages
+     * @return Whether the command was acknowledged by the kickerboard.
+     */
+    bool send_to_kicker(const uint8_t cmd, const uint8_t arg,
+                        bool verbose = false);
+
+    /**
+     * This function enforces the design choice that each cmd must have an arg
+     * and return a value
+     * @brief Send a command to the kicker.
+     *
+     * @param cmd Command to send
+     * @param arg Command argument, ignored by kicker if command doesn't require
+     * it.
+     * @param ret_val Value returned by kicker
+     * @param verbose Whether or not to print debug messages
+     * @return Whether the command was acknowledged by the kickerboard.
+     */
+    bool send_to_kicker(const uint8_t cmd, const uint8_t arg, uint8_t& ret_val,
+                        bool verbose = false);
 };

@@ -29,8 +29,6 @@
 #define SET_CHARGE_CMD 0x03
 #define GET_VOLTAGE_CMD 0x04
 #define PING_CMD 0x05
-// command to check state of buttons
-#define GET_BUTTON_STATE_CMD 0x06
 
 /* Arguments */
 #define BLANK 0x00  // Used for clarity when passing useless arguments
@@ -41,10 +39,6 @@
 // Charge command arguments
 #define ON_ARG 0x38   // Used for setting charge high
 #define OFF_ARG 0x1A  // Used for setting charge low
-// GET_BUTTON_STATE_CMD args
-#define DB_CHIP_STATE 0x01
-#define DB_KICK_STATE 0x02
-#define DB_CHARGE_STATE 0x03
 
 /* Response Codes, charging/not charging */
 // Charging state

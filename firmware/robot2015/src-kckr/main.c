@@ -116,12 +116,14 @@ void main() {
     // enable global interrupts
     sei();
 
-    const uint8_t kalpha = 32;
+    // needs to be int to force voltage_accum calculation to use ints
+    const int kalpha = 32;
 
     // We handle voltage readings here
     while (true) {
         // get a voltage reading by weighing in a new reading, same concept as
-        // TCP RTT estimates
+        // TCP RTT estimates (exponentially weighted sum)
+        last_voltage_ = get_voltage();
         int voltage_accum =
             (255 - kalpha) * last_voltage_ + kalpha * get_voltage();
         last_voltage_ = voltage_accum / 255;
@@ -301,7 +303,7 @@ uint8_t execute_cmd(uint8_t cmd, uint8_t arg) {
             // earlier.
             break;
 
-        case GET_BUTTON_STATE_CMD:
+        /*case GET_BUTTON_STATE_CMD:
             switch (arg) {
                 case DB_KICK_STATE:
                     ret_val = (PINB & _BV(DB_KICK_PIN)) != 0;
@@ -320,7 +322,7 @@ uint8_t execute_cmd(uint8_t cmd, uint8_t arg) {
                                      // recognized
                     break;
             }
-            break;
+            break;*/
 
         default:
             ret_val =

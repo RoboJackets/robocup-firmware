@@ -115,7 +115,7 @@ int main() {
     // Made up value right now, this is the amount of time in ms to
     // allow the capacitor dump power into kicker. Will need to be
     // adjusted once hardware is available.
-    uint8_t kickStrength = 5;
+    uint8_t kickStrength = DB_KICK_TIME;
 
     // Initialize and start ball sensor
     BallSense ballSense(RJ_BALL_EMIT, RJ_BALL_DETECTOR);
@@ -352,7 +352,7 @@ int main() {
         battVoltage = (batt.read_u16() >> 8);
 
         // get kicker voltage
-        kickerVoltage = kickerBoard.read_voltage();
+        kickerBoard.read_voltage(kickerVoltage);
         // Disabled this for now because it spams serial
         // LOG(INIT, "Kicker voltage: %u", kickerVoltage);
 

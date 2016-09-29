@@ -1,6 +1,5 @@
 #include "KickerBoard.hpp"
 #include <tuple>
-#include "kicker_commands.h"
 
 using namespace std;
 
@@ -90,59 +89,51 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
     return true;
 }
 
-/* this function enforces the design choice that each cmd must have an arg
- * and return a value */
-uint8_t KickerBoard::send_to_kicker(const uint8_t cmd, const uint8_t arg,
-                                    bool verbose) {
+bool KickerBoard::send_to_kicker(uint8_t cmd, uint8_t arg, uint8_t& ret_val,
+                                 bool verbose) {
     chipSelect();
     // Returns state (charging, not charging), but we don't care about that
     uint8_t charge_resp = _spi->write(cmd);
     // Should return the command we just sent
     uint8_t command_resp = _spi->write(arg);
     // Should return final response to full cmd, arg pair
-    uint8_t return_resp = _spi->write(BLANK);
+    ret_val = _spi->write(BLANK);
     chipDeselect();
 
+    bool command_acked = command_resp == cmd;
     if (verbose) {
+        if (!command_acked) {
+            printf("Kicker failed to ack command! -- ");
+        }
+
         printf("Kicker: CHG:%02X, CMD:%02X, RET:%02X\r\n", charge_resp,
-               command_resp, return_resp);
+               command_resp, ret_val);
         fflush(stdout);
     }
 
-    return return_resp;
+    return command_acked;
 }
 
-uint8_t KickerBoard::kick(uint8_t time) {
-    return send_to_kicker(KICK_CMD, time);
+bool KickerBoard::send_to_kicker(uint8_t cmd, uint8_t arg, bool verbose) {
+    uint8_t val;
+    return send_to_kicker(cmd, arg, val, false);
 }
 
-uint8_t KickerBoard::chip(uint8_t time) {
-    return send_to_kicker(CHIP_CMD, time);
+bool KickerBoard::kick(uint8_t time) { return send_to_kicker(KICK_CMD, time); }
+
+bool KickerBoard::chip(uint8_t time) { return send_to_kicker(CHIP_CMD, time); }
+
+bool KickerBoard::read_voltage(uint8_t& voltage) {
+    return send_to_kicker(GET_VOLTAGE_CMD, BLANK, voltage);
 }
 
-uint8_t KickerBoard::read_voltage() {
-    return send_to_kicker(GET_VOLTAGE_CMD, BLANK);
-}
+bool KickerBoard::charge() { return send_to_kicker(SET_CHARGE_CMD, ON_ARG); }
 
-uint8_t KickerBoard::charge() { return send_to_kicker(SET_CHARGE_CMD, ON_ARG); }
-
-uint8_t KickerBoard::stop_charging() {
+bool KickerBoard::stop_charging() {
     return send_to_kicker(SET_CHARGE_CMD, OFF_ARG);
 }
 
-uint8_t KickerBoard::is_pingable() { return send_to_kicker(PING_CMD, BLANK); }
-
-uint8_t KickerBoard::is_kick_debug_pressed() {
-    return send_to_kicker(GET_BUTTON_STATE_CMD, DB_KICK_STATE);
-}
-
-uint8_t KickerBoard::is_chip_debug_pressed() {
-    return send_to_kicker(GET_BUTTON_STATE_CMD, DB_CHIP_STATE);
-}
-
-uint8_t KickerBoard::is_charge_debug_pressed() {
-    return send_to_kicker(GET_BUTTON_STATE_CMD, DB_CHARGE_STATE);
-}
+bool KickerBoard::is_pingable() { return send_to_kicker(PING_CMD, BLANK); }
 
 bool KickerBoard::is_charge_enabled() {
     uint8_t ret = 0;
