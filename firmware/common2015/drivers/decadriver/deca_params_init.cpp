@@ -15,7 +15,7 @@
 #include <stdlib.h>
 
 #include "deca_regs.h"
-#include "deca_device_api.h"
+#include "deca_device_api.hpp"
 #include "deca_param_types.h"
 
 

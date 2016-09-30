@@ -1,4 +1,4 @@
-#include "deca_device_api.h"
+// #include "deca_device_api.h"
 #include "Decawave.hpp"
 
 #include "assert.hpp"
@@ -28,7 +28,8 @@ static dwt_txconfig_t txconfig = {
 #define RX_RESP_TO_UUS 5000
 
 Decawave::Decawave(shared_ptr<SharedSPI> sharedSPI, PinName nCs, PinName intPin)
-    : CommLink(sharedSPI, nCs, intPin) {
+    : CommLink(sharedSPI, nCs, intPin), dw1000_api() {
+    // dw1000_api();
     global_radio = this; // TODO: This is very not good
     if (dwt_initialise(DWT_LOADNONE) == DWT_ERROR) {
         LOG(FATAL,"Decawave not initialized");
@@ -44,15 +45,22 @@ Decawave::Decawave(shared_ptr<SharedSPI> sharedSPI, PinName nCs, PinName intPin)
         dwt_configuretxrf(&txconfig);
 
         dwt_setrxaftertxdelay(TX_TO_RX_DELAY_UUS);
-        dwt_setinterrupt(DWT_INT_TFRS | DWT_INT_RPHE | DWT_INT_RFCG | DWT_INT_RFCE | DWT_INT_RFSL | DWT_INT_RFTO | DWT_INT_SFDT | DWT_INT_RXPTO | DWT_INT_ARFE, 1);
+        // dwt_setinterrupt(DWT_INT_TFRS | DWT_INT_RPHE | DWT_INT_RFCG | DWT_INT_RFCE | DWT_INT_RFSL | DWT_INT_RFTO | DWT_INT_SFDT | DWT_INT_RXPTO | DWT_INT_ARFE, 1);
+        dwt_setcallbacks(NULL, static_cast<dwt_cb_t>(&Decawave::getData_success), NULL, static_cast<dwt_cb_t>(&Decawave::getData_fail));
+        dwt_setinterrupt(DWT_INT_RFCG | DWT_INT_RPHE | DWT_INT_RFCE | DWT_INT_RFSL | DWT_INT_SFDT, 1);
 
         setLED(true);
+        dwt_forcetrxoff(); // TODO: Better way than force off then reset?
+        dwt_rxreset();
         dwt_rxenable(DWT_START_RX_IMMEDIATE);
+
 
         LOG(INIT, "Decawave ready!");
         CommLink::ready();
     }
 }
+
+// Virtual functions from CommLink
 
 int32_t Decawave::sendPacket(const rtp::packet* pkt){
     // Return failutre if not initialized
@@ -65,7 +73,7 @@ int32_t Decawave::sendPacket(const rtp::packet* pkt){
     tx_buffer[0] = 0xC5;
     tx_buffer[1] = 0;
 
-    int i;
+    uint8_t i;
     uint8_t* headerData = (uint8_t*)&pkt->header;
     for (i = 0; i < sizeof(pkt->header); ++i) {
         tx_buffer[i+2] = headerData[i];
@@ -90,52 +98,21 @@ int32_t Decawave::sendPacket(const rtp::packet* pkt){
 
 int32_t Decawave::getData(std::vector<uint8_t>* buf){
     // Return failutre if not initialized
-    // printf("Getting data\r\n");
+    // LOG(INIT, "Getting data");
     if (!_isInit) return COMM_FAILURE;
 
-    uint32 status_reg = dwt_read32bitreg(SYS_STATUS_ID);
+    rx_status = COMM_NO_DATA;
+    rx_len = 0; // Probably not needed
 
-    if (status_reg & SYS_STATUS_RXFCG) { //TODO: correct status check?
-        // Radio recieved FCS good
+    // dwt_isr();
 
-        // Read recieved frame length from register
-        uint16 frame_len = dwt_read32bitreg(RX_FINFO_ID) & RX_FINFO_RXFL_MASK_1023;
-        if (frame_len > FRAME_LEN_MAX) {
-            LOG(WARN, "Frame recieved too large:\r\n"
-                "   Recieved: %u Max: %u", FRAME_LEN_MAX, frame_len);
-            dwt_forcetrxoff(); // TODO: Better way than force off then reset?
-            dwt_rxreset();
-            dwt_rxenable(DWT_START_RX_IMMEDIATE);
-            return COMM_DEV_BUF_ERR;
-        }
-
-        // Read recived data and copy to vector
-        dwt_readrxdata(rx_buffer, frame_len, 0);
-        for (uint8_t i = 2; i < frame_len - 2; i++) {
+    if (rx_status == COMM_SUCCESS) {
+        for (uint8_t i = 2; i < rx_len - 2; i++) {
             buf->push_back(rx_buffer[i]);
-            // printf("?%p\r\n", rx_buffer[i]);
         }
-
-        // Clear good RX frame event in the status register
-        dwt_forcetrxoff();
-        dwt_rxreset();
-        dwt_rxenable(DWT_START_RX_IMMEDIATE);
-
-        return COMM_SUCCESS;
-    } else if (status_reg & (SYS_STATUS_ALL_RX_TO| SYS_STATUS_ALL_RX_ERR)) {
-        // Radio RX error or timeout
-
-        // Clear RX error/timeout events in the status register
-        dwt_forcetrxoff();
-        dwt_rxreset();
-        dwt_rxenable(DWT_START_RX_IMMEDIATE);
-        return COMM_DEV_BUF_ERR;
     }
 
-    dwt_forcetrxoff();
-    dwt_rxreset();
-    dwt_rxenable(DWT_START_RX_IMMEDIATE);
-    return COMM_NO_DATA;
+    return rx_status;
 }
 
 void Decawave::reset(){
@@ -161,10 +138,8 @@ bool Decawave::isConnected() const {
     return _isInit;
 }
 
-void Decawave::setLED(bool ledOn) {
-    dwt_setleds(ledOn);
-}
 
+// Virtual functions from dw1000_api
 
 int Decawave::writetospi(uint16 headerLength, const uint8 *headerBuffer,
                         uint32 bodylength, const uint8 *bodyBuffer) {
@@ -204,15 +179,59 @@ int Decawave::readfromspi(uint16 headerLength, const uint8 *headerBuffer,
   return 0;
 }
 
+decaIrqStatus_t Decawave::decamutexon(void){ return 0;}
+void Decawave::decamutexoff(decaIrqStatus_t s){}
+void Decawave::deca_sleep(unsigned int time_ms){}
+
+
+// Callback functions for decawave interrupt
+
+void Decawave::getData_success(const dwt_cb_data_t *cb_data) {
+    // uint16 frame_len = dwt_read32bitreg(RX_FINFO_ID) & RX_FINFO_RXFL_MASK_1023;
+    if (cb_data->datalength <= FRAME_LEN_MAX) {
+        LOG(WARN, "Frame recieved too large:\r\n"
+            "   Recieved: %u Max: %u", FRAME_LEN_MAX, cb_data->datalength);
+
+        rx_status = COMM_DEV_BUF_ERR;
+    }
+    // Read recived data to rx_buffer array
+    dwt_readrxdata(rx_buffer, cb_data->datalength, 0);
+
+    rx_len = cb_data->datalength;
+    rx_status = COMM_SUCCESS;
+}
+
+void Decawave::getData_fail(const dwt_cb_data_t *cb_data) {
+    rx_status = COMM_DEV_BUF_ERR;
+}
+
+
+// Other functions
+
 void Decawave::logSPI(int num) {
     LOG(INIT, "spi %d %p %p", num, (int)&_spi, *reinterpret_cast<char *>((void*)&_spi));
 }
-int readfromspi(uint16 headerLength, const uint8 *headerBuffer,
+
+void Decawave::setLED(bool ledOn) {
+    dwt_setleds(ledOn);
+}
+
+/*
+// static void getData_success_cb(const dwt_cb_data_t *cb_data) {
+    global_radio->getData_success(cb_data);
+}
+
+// static void getData_fail_cb(const dwt_cb_data_t *cb_data) {
+    global_radio->getData_fail(cb_data);
+}
+
+// int readfromspi(uint16 headerLength, const uint8 *headerBuffer,
                         uint32 readlength, uint8 *readBuffer) {
     return global_radio->readfromspi(headerLength, headerBuffer, readlength, readBuffer);
 }
 
-int writetospi(uint16 headerLength, const uint8 *headerBuffer,
+// int writetospi(uint16 headerLength, const uint8 *headerBuffer,
                         uint32 bodylength, const uint8 *bodyBuffer) {
     return global_radio->writetospi(headerLength, headerBuffer, bodylength, bodyBuffer);
 }
+*/
