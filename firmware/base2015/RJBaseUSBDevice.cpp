@@ -29,6 +29,7 @@ bool RJBaseUSBDevice::USBCallback_request() {
         switch (transfer->setup.bRequest) {
             case Base2015ControlCommand::RadioWriteRegister:
                 LOG(INF3, "writeReg request");
+                return true;
                 if (writeRegisterCallback)
                     writeRegisterCallback(transfer->setup.wIndex,
                                           transfer->setup.wValue);
@@ -36,6 +37,7 @@ bool RJBaseUSBDevice::USBCallback_request() {
 
             case Base2015ControlCommand::RadioReadRegister:
                 LOG(INF3, "readReg request");
+                return true;
                 if (transfer->setup.wLength > 0 && readRegisterCallback) {
                     _controlTransferReplyValue =
                         readRegisterCallback(transfer->setup.wIndex);
@@ -52,11 +54,13 @@ bool RJBaseUSBDevice::USBCallback_request() {
 
             case Base2015ControlCommand::RadioStrobe:
                 LOG(INF3, "strobe request");
+                return true;
                 if (strobeCallback) strobeCallback(transfer->setup.wIndex);
                 return true;
 
             case Base2015ControlCommand::RadioSetChannel:
                 LOG(INF3, "set channel request");
+                return true;
                 if (setRadioChannelCallback)
                     setRadioChannelCallback(transfer->setup.wValue);
                 return true;

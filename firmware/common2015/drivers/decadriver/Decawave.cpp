@@ -64,6 +64,7 @@ Decawave::Decawave(shared_ptr<SharedSPI> sharedSPI, PinName nCs, PinName intPin)
 
 int32_t Decawave::sendPacket(const rtp::packet* pkt){
     // Return failutre if not initialized
+    // LOG(INIT,"SENDING");
     if (!_isInit) return COMM_FAILURE;
     dwt_rxreset();
     dwt_forcetrxoff();
@@ -77,12 +78,15 @@ int32_t Decawave::sendPacket(const rtp::packet* pkt){
     uint8_t* headerData = (uint8_t*)&pkt->header;
     for (i = 0; i < sizeof(pkt->header); ++i) {
         tx_buffer[i+2] = headerData[i];
+        // printf("%d ",tx_buffer[i]);
     }
     i+=1;
     for (uint8_t byte : pkt->payload) {
         i++;
         tx_buffer[i] = byte;
+        // printf("%d ",tx_buffer[i]);
     }
+    // printf("\r\n");
     tx_buffer[i + 1] = 0;
     tx_buffer[i + 2] = 0;
 
@@ -104,12 +108,16 @@ int32_t Decawave::getData(std::vector<uint8_t>* buf){
     rx_status = COMM_NO_DATA;
     rx_len = 0; // Probably not needed
 
-    // dwt_isr();
-
+    dwt_isr();
+    dwt_rxenable(DWT_START_RX_IMMEDIATE);
+    // LOG(INIT, "Something %u, want %u, not %u, len %u", rx_status, COMM_SUCCESS, COMM_DEV_BUF_ERR, rx_len);
     if (rx_status == COMM_SUCCESS) {
+        // LOG(INIT, "SUCCESS?");
         for (uint8_t i = 2; i < rx_len - 2; i++) {
+            // printf("%d ",rx_buffer[i]);
             buf->push_back(rx_buffer[i]);
         }
+        // printf("\r\n");
     }
 
     return rx_status;
@@ -188,9 +196,9 @@ void Decawave::deca_sleep(unsigned int time_ms){}
 
 void Decawave::getData_success(const dwt_cb_data_t *cb_data) {
     // uint16 frame_len = dwt_read32bitreg(RX_FINFO_ID) & RX_FINFO_RXFL_MASK_1023;
-    if (cb_data->datalength <= FRAME_LEN_MAX) {
+    if (FRAME_LEN_MAX <= cb_data->datalength) {
         LOG(WARN, "Frame recieved too large:\r\n"
-            "   Recieved: %u Max: %u", FRAME_LEN_MAX, cb_data->datalength);
+            "   Recieved: %u Max: %u", cb_data->datalength, FRAME_LEN_MAX);
 
         rx_status = COMM_DEV_BUF_ERR;
     }
@@ -199,10 +207,15 @@ void Decawave::getData_success(const dwt_cb_data_t *cb_data) {
 
     rx_len = cb_data->datalength;
     rx_status = COMM_SUCCESS;
+    // LOG(INIT,"almost success");
+    // dwt_rxenable(DWT_START_RX_IMMEDIATE);
 }
 
 void Decawave::getData_fail(const dwt_cb_data_t *cb_data) {
-    rx_status = COMM_DEV_BUF_ERR;
+    if (rx_status != COMM_SUCCESS) { //TODO: probably better way to do this
+        rx_status = COMM_DEV_BUF_ERR;
+    }
+    // dwt_rxenable(DWT_START_RX_IMMEDIATE);
 }
 
 

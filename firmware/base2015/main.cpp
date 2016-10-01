@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "CC1201Radio.hpp"
+#include "Decawave.hpp"
 #include "RJBaseUSBDevice.hpp"
 #include "SharedSPI.hpp"
 #include "logger.hpp"
@@ -33,9 +34,7 @@ bool initRadio() {
     CommModule::Instance = make_shared<CommModule>(rxTimeoutLED, txTimeoutLED);
 
     // Create a new physical hardware communication link
-    global_radio =
-        new CC1201(sharedSPI, RJ_RADIO_nCS, RJ_RADIO_INT, preferredSettings,
-                   sizeof(preferredSettings) / sizeof(registerSetting_t));
+    global_radio = new Decawave(sharedSPI, RJ_RADIO_nCS, RJ_RADIO_INT);
 
     return global_radio->isConnected();
 }
@@ -77,7 +76,7 @@ int main() {
     LOG(INIT, "Base station starting...");
 
     if (initRadio()) {
-        LOG(INIT, "Radio interface ready on %3.2fMHz!", global_radio->freq());
+        // LOG(INIT, "Radio interface ready on %3.2fMHz!", global_radio->freq());
 
         // register handlers for any ports we might use
         for (rtp::Port port :
@@ -90,21 +89,29 @@ int main() {
         LOG(FATAL, "No radio interface found!");
     }
 
-    global_radio->setAddress(rtp::BASE_STATION_ADDRESS);
+    // global_radio->setAddress(rtp::BASE_STATION_ADDRESS);
 
     DigitalOut radioStatusLed(LED4, global_radio->isConnected());
 
     // set callbacks for usb control transfers
     usbLink.writeRegisterCallback =
-        [](uint8_t reg, uint8_t val) { global_radio->writeReg(reg, val); };
-    usbLink.readRegisterCallback =
-        [](uint8_t reg) { return global_radio->readReg(reg); };
-    usbLink.strobeCallback =
-        [](uint8_t strobe) { global_radio->strobe(strobe); };
-    usbLink.setRadioChannelCallback = [](uint8_t chanNumber) {
-        global_radio->setChannel(chanNumber);
-        LOG(INIT, "Set radio channel to %u", chanNumber);
+        [](uint8_t reg, uint8_t val) { //global_radio->writeReg(reg, val);
+        LOG(INIT, "Trying to write");
     };
+    usbLink.readRegisterCallback =
+        [](uint8_t reg) { //return global_radio->readReg(reg);
+        LOG(INIT, "Tring to read"); return 0;
+    };
+    usbLink.strobeCallback =
+        [](uint8_t strobe) { //global_radio->strobe(strobe);
+        LOG(INIT, "trying to strobe");
+    };
+    usbLink.setRadioChannelCallback = [](uint8_t chanNumber) {
+        // global_radio->setChannel(chanNumber);
+        LOG(INIT, "(Not) Set radio channel to %u", chanNumber);
+    };
+
+
 
     LOG(INIT, "Initializing USB interface...");
     usbLink.connect();  // note: this blocks until the link is connected
@@ -123,7 +130,6 @@ int main() {
         // make sure we can always reach back to main by renewing the watchdog
         // timer periodically
         Watchdog::Renew();
-
         // attempt to read data from EPBULK_OUT
         // if data is available, write it into @pkt and send it
         if (usbLink.readEP_NB(EPBULK_OUT, buf, &bufSize,
