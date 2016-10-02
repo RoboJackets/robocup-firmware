@@ -104,11 +104,12 @@ int main() {
     sharedSPI->format(8, 0);  // 8 bits per transfer
 
     // Initialize kicker board
-    KickerBoard kickerBoard(sharedSPI, RJ_KICKER_nCS, RJ_KICKER_nRESET,
-                            "/local/rj-kickr.nib");
+    KickerBoard::Instance =
+        make_shared<KickerBoard>(sharedSPI, RJ_KICKER_nCS, RJ_KICKER_nRESET,
+                                            "/local/rj-kickr.nib");
     // Reprogramming each time (first arg of flash false) is actually
     // faster than checking the full memory to see if we need to reflash.
-    bool kickerReady = kickerBoard.flash(false, true);
+    bool kickerReady = KickerBoard::Instance->flash(false, true);
 
     // flag fro kicking when the ball sense triggers
     bool kickOnBreakBeam = false;
@@ -128,7 +129,7 @@ int main() {
 
         // kick!
         if (kickerReady && haveBall && kickOnBreakBeam) {
-            kickerBoard.kick(kickStrength);
+            KickerBoard::Instance->kick(kickStrength);
         }
     };
 
@@ -246,11 +247,11 @@ int main() {
         kickStrength = msg->kickStrength;
         if (msg->triggerMode == 1) {
             // kick immediate
-            kickerBoard.kick(kickStrength);
+            KickerBoard::Instance->kick(kickStrength);
         } else if (msg->triggerMode == 2) {
             // kick on break beam
             if (ballSense.have_ball()) {
-                kickerBoard.kick(kickStrength);
+                KickerBoard::Instance->kick(kickStrength);
                 kickOnBreakBeam = false;
             } else {
                 // set flag so that next break beam triggers a kick
@@ -285,8 +286,8 @@ int main() {
         return replyBuf;
     };
 
-    kickerBoard.charge();
-    LOG(INIT, "Starged charging kicker board");
+    KickerBoard::Instance->charge();
+    LOG(INIT, "Started charging kicker board");
     uint8_t kickerVoltage = 0;
 
     // Set the watdog timer's initial config
@@ -352,7 +353,7 @@ int main() {
         battVoltage = (batt.read_u16() >> 8);
 
         // get kicker voltage
-        kickerBoard.read_voltage(&kickerVoltage);
+        KickerBoard::Instance->read_voltage(&kickerVoltage);
         // Disabled this for now because it spams serial
         // LOG(INIT, "Kicker voltage: %u", kickerVoltage);
 

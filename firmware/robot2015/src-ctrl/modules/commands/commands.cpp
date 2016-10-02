@@ -8,6 +8,7 @@
 #include <rtos.h>
 #include <CC1201.hpp>
 #include <CommModule.hpp>
+#include <KickerBoard.hpp>
 #include <logger.hpp>
 #include <numparser.hpp>
 
@@ -109,6 +110,12 @@ static const vector<command_t> commands = {
      cmd_interface_check_conn,
      "determine the mbed interface's connectivity state.",
      "isconn"},
+
+    {{"kicker"},
+     false,
+     cmd_kicker,
+     "control the kicker board.",
+     "kicker {kick, chip, ping}"},
 
     {{"led"},
      false,
@@ -667,6 +674,38 @@ int cmd_console_hostname(cmd_args_t& args) {
 
     else {
         Console::Instance()->changeHostname(args[0]);
+    }
+
+    return 0;
+}
+
+int cmd_kicker(cmd_args_t& args) {
+    if (args.empty() || args.size() > 1) {
+        show_invalid_args(args);
+        return 1;
+    } else {
+        if (args[0] == "kick") {
+            if (KickerBoard::Instance->kick(DB_KICK_TIME)) {
+                printf("Kick success.\r\n");
+            } else {
+                printf("Kick failure.\r\n");
+            }
+        } else if (args[0] == "chip") {
+            if (KickerBoard::Instance->kick(DB_CHIP_TIME)) {
+                printf("Chip success.\r\n");
+            } else {
+                printf("Chip failure.\r\n");
+            }
+        } else if (args[0] == "ping") {
+            if (KickerBoard::Instance->is_pingable()) {
+                printf("Kicker ping success.\r\n");
+            } else {
+                printf("Kicker ping failure.\r\n");
+            }
+        } else {
+            show_invalid_args(args);
+            return 1;
+        }
     }
 
     return 0;

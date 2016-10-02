@@ -23,6 +23,8 @@ public:
     KickerBoard(std::shared_ptr<SharedSPI> sharedSPI, PinName nCs,
                 PinName nReset, const std::string& progFilename);
 
+    static std::shared_ptr<KickerBoard> Instance;
+
     /**
      * @brief Reflashes the program on the kicker board MCU with the file
      *     specified in the constructor.

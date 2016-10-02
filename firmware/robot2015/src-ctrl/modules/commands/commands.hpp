@@ -88,6 +88,7 @@ int cmd_info(cmd_args_t&);
 int cmd_interface_check_conn(cmd_args_t&);
 int cmd_interface_disconnect(cmd_args_t&);
 int cmd_interface_reset(cmd_args_t&);
+int cmd_kicker(cmd_args_t&);
 int cmd_led(cmd_args_t&);
 int cmd_log_level(cmd_args_t&);
 int cmd_ls(cmd_args_t&);

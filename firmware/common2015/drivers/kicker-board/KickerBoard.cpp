@@ -3,6 +3,9 @@
 
 using namespace std;
 
+
+std::shared_ptr<KickerBoard> KickerBoard::Instance;
+
 KickerBoard::KickerBoard(shared_ptr<SharedSPI> sharedSPI, PinName nCs,
                          PinName nReset, const string& progFilename)
     : AVR910(sharedSPI, nCs, nReset), _filename(progFilename) {}
@@ -81,6 +84,7 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
 }
 
 bool KickerBoard::send_to_kicker(uint8_t cmd, uint8_t arg, uint8_t* ret_val) {
+    LOG(INF2, "Sending: CMD:%02X, ARG:%02X", cmd, arg);
     chipSelect();
     // Returns state (charging, not charging), but we don't care about that
     uint8_t charge_resp = _spi->write(cmd);
