@@ -1,5 +1,6 @@
 #include <mbed.h>
 #include <rtos.h>
+#include <logger.hpp>
 
 #include "AVR910.hpp"
 #include "SharedSPI.hpp"
@@ -21,6 +22,9 @@ std::string filename("/local/rj.nib");
 void imAlive() { ledOne = !ledOne; }
 
 int main() {
+    isLogging = RJ_LOGGIN_EN;
+    rjLogLevel = INF2;
+
     lifeLight.attach(&imAlive, ALIVE_BLINK_RATE);
     pc.baud(BAUD_RATE);
 

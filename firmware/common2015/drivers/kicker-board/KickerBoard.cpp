@@ -42,21 +42,16 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
     }
 
     //  Open binary file to write to AVR.
-    if (verbose) printf("Opening kicker firmware file...");
     FILE* fp = fopen(_filename.c_str(), "r");
 
-    if (fp == NULL) {
-        if (verbose)
-            printf(
-                "failed\r\nFailed to open binary. Check file path: "
-                "'%s'\r\n\r\n",
-                _filename.c_str());
+    if (fp == nullptr) {
+        LOG(WARN, "Failed to open kicker binary, check path: '%s'",
+            _filename.c_str());
         exitProgramming();
         return false;
     } else {
         // Program it!
-        if (verbose) printf("done\r\n");
-
+        LOG(INIT, "Opened kicker binary, attempting to program kicker.");
         bool shouldProgram = true;
         if (onlyIfDifferent &&
             (checkMemory(ATTINY84A_PAGESIZE, ATTINY84A_NUM_PAGES, fp, false) ==
@@ -64,22 +59,18 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
             shouldProgram = false;
 
         if (!shouldProgram) {
-            if (verbose)
-                printf("kicker firmware is up-to-date, no need to flash\r\n");
+            LOG(INIT, "Kicker up-to-date, no need to flash.");
 
             // exit programming mode by bringing nReset high
             exitProgramming();
         } else {
-            if (verbose) printf("Starting device upload\r\n");
             bool nSuccess =
                 program(fp, ATTINY84A_PAGESIZE, ATTINY84A_NUM_PAGES);
 
-            if (verbose) printf("Device upload complete\r\n");
-
             if (nSuccess) {
-                if (verbose) printf("FAILED\r\n");
+                LOG(WARN, "Failed to program kicker.");
             } else {
-                if (verbose) printf("SUCCESS\r\n");
+                LOG(INIT, "Kicker successfully programmed.");
             }
         }
 
@@ -89,51 +80,50 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
     return true;
 }
 
-bool KickerBoard::send_to_kicker(uint8_t cmd, uint8_t arg, uint8_t& ret_val,
-                                 bool verbose) {
+bool KickerBoard::send_to_kicker(uint8_t cmd, uint8_t arg, uint8_t* ret_val) {
     chipSelect();
     // Returns state (charging, not charging), but we don't care about that
     uint8_t charge_resp = _spi->write(cmd);
     // Should return the command we just sent
     uint8_t command_resp = _spi->write(arg);
     // Should return final response to full cmd, arg pair
-    ret_val = _spi->write(BLANK);
+    uint8_t ret = _spi->write(BLANK);
     chipDeselect();
 
-    bool command_acked = command_resp == cmd;
-    if (verbose) {
-        if (!command_acked) {
-            printf("Kicker failed to ack command! -- ");
-        }
-
-        printf("Kicker: CHG:%02X, CMD:%02X, RET:%02X\r\n", charge_resp,
-               command_resp, ret_val);
-        fflush(stdout);
+    if (ret_val != nullptr) {
+        *ret_val = ret;
     }
+
+    bool command_acked = command_resp == cmd;
+    LOG(INF2, "ACK?:%s, CHG:%02X, CMD:%02X, RET:%02X",
+        command_acked ? "true" : "false", charge_resp, command_resp, ret);
 
     return command_acked;
 }
 
-bool KickerBoard::send_to_kicker(uint8_t cmd, uint8_t arg, bool verbose) {
-    uint8_t val;
-    return send_to_kicker(cmd, arg, val, false);
+bool KickerBoard::kick(uint8_t time) {
+    return send_to_kicker(KICK_CMD, time, nullptr);
 }
 
-bool KickerBoard::kick(uint8_t time) { return send_to_kicker(KICK_CMD, time); }
+bool KickerBoard::chip(uint8_t time) {
+    return send_to_kicker(CHIP_CMD, time, nullptr);
+}
 
-bool KickerBoard::chip(uint8_t time) { return send_to_kicker(CHIP_CMD, time); }
-
-bool KickerBoard::read_voltage(uint8_t& voltage) {
+bool KickerBoard::read_voltage(uint8_t* voltage) {
     return send_to_kicker(GET_VOLTAGE_CMD, BLANK, voltage);
 }
 
-bool KickerBoard::charge() { return send_to_kicker(SET_CHARGE_CMD, ON_ARG); }
-
-bool KickerBoard::stop_charging() {
-    return send_to_kicker(SET_CHARGE_CMD, OFF_ARG);
+bool KickerBoard::charge() {
+    return send_to_kicker(SET_CHARGE_CMD, ON_ARG, nullptr);
 }
 
-bool KickerBoard::is_pingable() { return send_to_kicker(PING_CMD, BLANK); }
+bool KickerBoard::stop_charging() {
+    return send_to_kicker(SET_CHARGE_CMD, OFF_ARG, nullptr);
+}
+
+bool KickerBoard::is_pingable() {
+    return send_to_kicker(PING_CMD, BLANK, nullptr);
+}
 
 bool KickerBoard::is_charge_enabled() {
     uint8_t ret = 0;

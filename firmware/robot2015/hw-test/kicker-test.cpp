@@ -26,6 +26,8 @@ void imAlive() { ledOne = !ledOne; }
 std::string bool_to_string(bool b) { return b ? "true" : "false"; }
 
 int main() {
+    isLogging = true;
+    rjLogLevel = INF2;
     lifeLight.attach(&imAlive, ALIVE_BLINK_RATE);
 
     pc.baud(BAUD_RATE);  // set up the serial
@@ -60,7 +62,7 @@ int main() {
                 case 'r':
                     response = "Read Voltage";
                     uint8_t volts;
-                    success = kicker.read_voltage(volts);
+                    success = kicker.read_voltage(&volts);
                     response += ", voltage: " + to_string(volts);
                     break;
                 case 'h':

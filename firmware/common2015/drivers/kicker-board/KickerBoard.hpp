@@ -1,6 +1,7 @@
 #pragma once
 
 #include <mbed.h>
+#include <logger.hpp>
 #include <string>
 #include "AVR910.hpp"
 #include "kicker_commands.h"
@@ -56,7 +57,7 @@ public:
      * @param voltage Output voltage 0 (GND) to 255 (Vd)
      * @return If the read_voltage command was acknowledged
      */
-    bool read_voltage(uint8_t& voltage);
+    bool read_voltage(uint8_t* voltage);
 
     /**
      * @brief Sets the charge pin (to high)
@@ -99,18 +100,6 @@ private:
     std::string _filename;
 
     /**
-     * @brief Send a command to the kicker without needing a return argument.
-     *
-     * @param cmd Command to send
-     * @param arg Command argument, ignored by kicker if command doesn't require
-     * it.
-     * @param verbose Whether or not to print debug messages
-     * @return Whether the command was acknowledged by the kickerboard.
-     */
-    bool send_to_kicker(const uint8_t cmd, const uint8_t arg,
-                        bool verbose = false);
-
-    /**
      * This function enforces the design choice that each cmd must have an arg
      * and return a value
      * @brief Send a command to the kicker.
@@ -122,6 +111,5 @@ private:
      * @param verbose Whether or not to print debug messages
      * @return Whether the command was acknowledged by the kickerboard.
      */
-    bool send_to_kicker(const uint8_t cmd, const uint8_t arg, uint8_t& ret_val,
-                        bool verbose = false);
+    bool send_to_kicker(const uint8_t cmd, const uint8_t arg, uint8_t* ret_val);
 };

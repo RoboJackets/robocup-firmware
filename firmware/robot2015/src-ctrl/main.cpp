@@ -127,7 +127,7 @@ int main() {
         ballStatusPin = !haveBall;
 
         // kick!
-        if (haveBall && kickOnBreakBeam) {
+        if (kickerReady && haveBall && kickOnBreakBeam) {
             kickerBoard.kick(kickStrength);
         }
     };
@@ -352,7 +352,7 @@ int main() {
         battVoltage = (batt.read_u16() >> 8);
 
         // get kicker voltage
-        kickerBoard.read_voltage(kickerVoltage);
+        kickerBoard.read_voltage(&kickerVoltage);
         // Disabled this for now because it spams serial
         // LOG(INIT, "Kicker voltage: %u", kickerVoltage);
 
