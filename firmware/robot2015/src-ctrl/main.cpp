@@ -109,7 +109,7 @@ int main() {
                                             "/local/rj-kickr.nib");
     // Reprogramming each time (first arg of flash false) is actually
     // faster than checking the full memory to see if we need to reflash.
-    bool kickerReady = KickerBoard::Instance->flash(false, true);
+    bool kickerReady = KickerBoard::Instance->flash(false, false);
 
     // flag fro kicking when the ball sense triggers
     bool kickOnBreakBeam = false;
@@ -287,7 +287,7 @@ int main() {
     };
 
     KickerBoard::Instance->charge();
-    LOG(INIT, "Started charging kicker board");
+    LOG(INIT, "Started charging kicker board.");
     uint8_t kickerVoltage = 0;
 
     // Set the watdog timer's initial config
@@ -354,8 +354,7 @@ int main() {
 
         // get kicker voltage
         KickerBoard::Instance->read_voltage(&kickerVoltage);
-        // Disabled this for now because it spams serial
-        // LOG(INIT, "Kicker voltage: %u", kickerVoltage);
+        LOG(INF1, "Kicker voltage: %u", kickerVoltage);
 
         // update shell id
         robotShellID = rotarySelector.read();

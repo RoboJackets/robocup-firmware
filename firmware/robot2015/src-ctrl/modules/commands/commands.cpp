@@ -115,7 +115,7 @@ static const vector<command_t> commands = {
      false,
      cmd_kicker,
      "control the kicker board.",
-     "kicker {kick, chip, ping}"},
+     "kicker {kick, chip, ping, volts, charge <on|off>}"},
 
     {{"led"},
      false,
@@ -680,7 +680,7 @@ int cmd_console_hostname(cmd_args_t& args) {
 }
 
 int cmd_kicker(cmd_args_t& args) {
-    if (args.empty() || args.size() > 1) {
+    if (args.empty() || args.size() > 2) {
         show_invalid_args(args);
         return 1;
     } else {
@@ -691,7 +691,7 @@ int cmd_kicker(cmd_args_t& args) {
                 printf("Kick failure.\r\n");
             }
         } else if (args[0] == "chip") {
-            if (KickerBoard::Instance->kick(DB_CHIP_TIME)) {
+            if (KickerBoard::Instance->chip(DB_CHIP_TIME)) {
                 printf("Chip success.\r\n");
             } else {
                 printf("Chip failure.\r\n");
@@ -701,6 +701,33 @@ int cmd_kicker(cmd_args_t& args) {
                 printf("Kicker ping success.\r\n");
             } else {
                 printf("Kicker ping failure.\r\n");
+            }
+        } else if (args[0] == "volts") {
+            uint8_t volts;
+            if (KickerBoard::Instance->read_voltage(&volts)) {
+                printf("Kicker volts success. Volts: %d\r\n", volts);
+            } else {
+                printf("Kicker voltage read success.\r\n");
+            }
+        } else if (args[0] == "charge") {
+            if (args.size() != 2) {
+                printf("Must specify <on|off>.\r\n");
+            } else {
+                if (args[1] == "on") {
+                    if (KickerBoard::Instance->charge()) {
+                        printf("Kicker charge on success.\r\n");
+                    } else {
+                        printf("Kicker charge on failure.\r\n");
+                    }
+                } else if (args[1] == "off") {
+                    if (KickerBoard::Instance->stop_charging()) {
+                        printf("Kicker charge off success.\r\n");
+                    } else {
+                        printf("Kicker charge off failure.\r\n");
+                    }
+                } else {
+                    show_invalid_args(args);
+                }
             }
         } else {
             show_invalid_args(args);

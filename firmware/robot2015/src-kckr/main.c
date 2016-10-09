@@ -11,14 +11,15 @@
 
 #define TIMING_CONSTANT 125
 #define VOLTAGE_READ_DELAY_MS 40
+#define VOLTAGE_CUTOFF 100
 
 // Used to time kick and chip durations
 volatile unsigned millis_left_ = 0;
 
 // Used to keep track of current button state
-volatile int kick_db_held_down_ = 0;
-volatile int chip_db_down_ = 0;
-volatile int charge_db_down_ = 0;
+/* volatile int kick_db_held_down_ = 0; */
+/* volatile int chip_db_down_ = 0; */
+/* volatile int charge_db_down_ = 0; */
 
 volatile uint8_t byte_cnt = 0;
 
@@ -26,6 +27,8 @@ volatile uint8_t cur_command_ = NO_COMMAND;
 
 // always up-to-date voltage so we don't have to get_voltage() inside interupts
 volatile uint8_t last_voltage_ = 0;
+
+volatile bool charge_allowed_ = false;
 
 // executes a command coming from SPI
 uint8_t execute_cmd(uint8_t, uint8_t);
@@ -63,16 +66,16 @@ void main() {
             _BV(CHARGE_PIN);  // MISO is handled by CS interrupt
 
     // ensure N_KICK_CS & MISO are inputs
-    DDRA &= ~(_BV(N_KICK_CS_PIN) | _BV(KCKR_MISO_PIN));
+    /* DDRA &= ~(_BV(N_KICK_CS_PIN) | _BV(KCKR_MISO_PIN)); */
 
     // when DDRB = 0 and PORTB = 1, these are configured as pull-up inputs,
     // when a button is pressed, these pins are driven towards ground
 
     // PORTB refers to pull-up or not
-    PORTB |= _BV(DB_KICK_PIN) | _BV(DB_CHIP_PIN) | _BV(DB_CHG_PIN);
+    /* PORTB |= _BV(DB_KICK_PIN) | _BV(DB_CHIP_PIN) | _BV(DB_CHG_PIN); */
 
     // ensure debug buttons are inputs
-    DDRB &= ~_BV(DB_KICK_PIN) & ~_BV(DB_CHIP_PIN) & ~_BV(DB_CHG_PIN);
+    /* DDRB &= ~_BV(DB_KICK_PIN) & ~_BV(DB_CHIP_PIN) & ~_BV(DB_CHG_PIN); */
 
     // enable interrupts for PCINT0-PCINT7
     GIMSK |= _BV(PCIE0);
@@ -89,11 +92,6 @@ void main() {
     // hard-coded for PA1, check datasheet before changing
     // Set lower three bits to value of pin we read from
     ADMUX |= V_MONITOR_PIN;
-
-    // SPI init - Pg. 120
-    USICR |= _BV(USIWM0)     // 3 Wire Mode MISO, DI, USCK - Pg. 124
-             | _BV(USICS1)   // External, negative edge clock - Pg. 125
-             | _BV(USISIE);  // Enable SPI start interrupt
 
     // Interrupt on TIMER 0
     TIMSK0 |= _BV(OCIE0A);
@@ -128,15 +126,18 @@ void main() {
             (255 - kalpha) * last_voltage_ + kalpha * get_voltage();
         last_voltage_ = voltage_accum / 255;
 
-        // This value is totally made up TODO: set to reasonable value later
-        if (last_voltage_ > 100) execute_cmd(SET_CHARGE_CMD, OFF_ARG);
+        if (charge_allowed_ && last_voltage_ < VOLTAGE_CUTOFF) {
+            PORTA |= _BV(CHARGE_PIN);
+        } else {
+            PORTA &= ~(_BV(CHARGE_PIN));
+        }
 
         _delay_ms(VOLTAGE_READ_DELAY_MS);
     }
 }
 
 /*
- * SPI Start Interrupt
+ * SPI Start Interrupt, this should never get called when chip select is high.
  *
  * NOTE: This is intentionally not done with an overflow interrupt,
  * as the software chip select interrupt will be triggered almost at
@@ -144,9 +145,6 @@ void main() {
  * handled.
  */
 ISR(USI_STR_vect, ISR_BLOCK) {
-    // only respond if we're being addressed
-    if (!is_chip_selected()) return;
-
     // wait for overflow flag to become 1
     while (!(USISR & _BV(USIOIF)))
         ;
@@ -179,7 +177,44 @@ ISR(USI_STR_vect, ISR_BLOCK) {
 }
 
 /*
+ * Clears the USISR to remove any previous SPI state.
+ */
+void clear_spi_state() {
+    USISR = 1 << USISIF
+        | (1 << USIOIF)
+        | (1 << USIPF)
+        | (1 << USIDC)
+        | (0 << USICNT3)
+        | (0 << USICNT2)
+        | (0 << USICNT1)
+        | (0 << USICNT0);
+}
+
+/*
+ * Initializes the USICR for three wire SPI.
+ */
+void turn_on_spi() {
+    USICR = (1 << USISIE)    // enable start condition interrupt enable
+        | (0 << USIOIE)    // disable overflow interrupt for now
+        | (0 << USIWM1)    // set to three wire mode (normal SPI)
+        | (1 << USIWM0)
+        | (1 << USICS1)    // next three bits define how clock works
+        | (0 << USICS0)    // counter triggered both edge
+        | (0 << USICLK)    // USIDR shifts on positive edge only
+        | (0 << USITC);
+}
+
+/*
+ * Disables SPI.
+ */
+void turn_off_spi() {
+    USICR = 0;
+}
+
+/*
  * Chip Select Interrupt
+ * Turns on SPI when we get selected, and turns off SPI when
+ * deselected.
  *
  * ISR for PCINT0 - PCINT7
  */
@@ -189,9 +224,12 @@ ISR(PCINT0_vect) {
 
     if (is_chip_selected()) {
         // set the slave data out pin as an output
+        turn_on_spi();
+        clear_spi_state();
         DDRA |= _BV(KCKR_MISO_PIN);
     } else {
         // set the slave data out pin as an input
+        turn_off_spi();
         DDRA &= ~_BV(KCKR_MISO_PIN);
 
         if (is_charging()) {
@@ -203,42 +241,44 @@ ISR(PCINT0_vect) {
 }
 
 /*
+ * NOTE: Debug button functionality has been removed until we finalize
+ * the hardware.
  * Interrupt if the state of any button has changed
  * Every time a button goes from LOW to HIGH, we will execute a command
  *
  * ISR for PCINT8 - PCINT11
  */
-// ISR(PCINT1_vect) {
-//     // First we get the current state of each button
-//     int kick_db_pressed = PINB & _BV(DB_KICK_PIN);
-//     int chip_db_pressed = PINB & _BV(DB_CHIP_PIN);
-//     int charge_db_pressed = PINB & _BV(DB_CHG_PIN);
+/* ISR(PCINT1_vect) { */
+/*     // First we get the current state of each button */
+/*     int kick_db_pressed = PINB & _BV(DB_KICK_PIN); */
+/*     int chip_db_pressed = PINB & _BV(DB_CHIP_PIN); */
+/*     int charge_db_pressed = PINB & _BV(DB_CHG_PIN); */
 
-//     // We only will execute commands when the user initially presses the
-//     button
-//     // So the old button state needs to be LOW and the new button state needs
-//     // to be HIGH
-//     if (!kick_db_held_down_ && kick_db_pressed)
-//         execute_cmd(KICK_CMD, DB_KICK_TIME);
+/*     // We only will execute commands when the user initially presses the */
+/*     button */
+/*     // So the old button state needs to be LOW and the new button state needs */
+/*     // to be HIGH */
+/*     if (!kick_db_held_down_ && kick_db_pressed) */
+/*         execute_cmd(KICK_CMD, DB_KICK_TIME); */
 
-//     if (!chip_db_down_ && chip_db_pressed) execute_cmd(CHIP_CMD,
-//     DB_CHIP_TIME);
+/*     if (!chip_db_down_ && chip_db_pressed) execute_cmd(CHIP_CMD, */
+/*     DB_CHIP_TIME); */
 
-//     // toggle charge
-//     if (!charge_db_down_ && charge_db_pressed) {
-//         // check if charge is on
-//         if (PINA & _BV(CHARGE_PIN)) {
-//             execute_cmd(SET_CHARGE_CMD, OFF_ARG);
-//         } else {
-//             execute_cmd(SET_CHARGE_CMD, ON_ARG);
-//         }
-//     }
+/*     // toggle charge */
+/*     if (!charge_db_down_ && charge_db_pressed) { */
+/*         // check if charge is on */
+/*         if (PINA & _BV(CHARGE_PIN)) { */
+/*             execute_cmd(SET_CHARGE_CMD, OFF_ARG); */
+/*         } else { */
+/*             execute_cmd(SET_CHARGE_CMD, ON_ARG); */
+/*         } */
+/*     } */
 
-//     // Now our last state becomes the current state of the buttons
-//     kick_db_held_down_ = kick_db_pressed;
-//     chip_db_down_ = chip_db_pressed;
-//     charge_db_down_ = charge_db_pressed;
-// }
+/*     // Now our last state becomes the current state of the buttons */
+/*     kick_db_held_down_ = kick_db_pressed; */
+/*     chip_db_down_ = chip_db_pressed; */
+/*     charge_db_down_ = charge_db_pressed; */
+/* } */
 
 /*
  * Timer interrupt for chipping/kicking - called every millisecond by timer
@@ -286,11 +326,10 @@ uint8_t execute_cmd(uint8_t cmd, uint8_t arg) {
         case SET_CHARGE_CMD:
             // set state based on argument
             if (arg == ON_ARG) {
-                PORTA |= _BV(CHARGE_PIN);
+                charge_allowed_ = true;
             } else if (arg == OFF_ARG) {
-                PORTA &= ~(_BV(CHARGE_PIN));
+                charge_allowed_ = false;
             }
-
             break;
 
         case GET_VOLTAGE_CMD:
@@ -302,27 +341,6 @@ uint8_t execute_cmd(uint8_t cmd, uint8_t arg) {
             // is connected by checking the returned command ack from
             // earlier.
             break;
-
-        /*case GET_BUTTON_STATE_CMD:
-            switch (arg) {
-                case DB_KICK_STATE:
-                    ret_val = (PINB & _BV(DB_KICK_PIN)) != 0;
-                    break;
-
-                case DB_CHIP_STATE:
-                    ret_val = (PINB & _BV(DB_CHIP_PIN)) != 0;
-                    break;
-
-                case DB_CHARGE_STATE:
-                    ret_val = (PINB & _BV(DB_CHG_PIN)) != 0;
-                    break;
-
-                default:
-                    ret_val = 0xAA;  // return a weird value to show arg wasn't
-                                     // recognized
-                    break;
-            }
-            break;*/
 
         default:
             ret_val =

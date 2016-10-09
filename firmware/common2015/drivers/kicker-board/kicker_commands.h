@@ -42,5 +42,5 @@
 
 /* Response Codes, charging/not charging */
 // Charging state
-#define ISCHARGING 0x81
-#define NOTCHARGING 0x80
+#define ISCHARGING 0x80
+#define NOTCHARGING 0x84
