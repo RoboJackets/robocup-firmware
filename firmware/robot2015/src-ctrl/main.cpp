@@ -104,9 +104,8 @@ int main() {
     sharedSPI->format(8, 0);  // 8 bits per transfer
 
     // Initialize kicker board
-    KickerBoard::Instance =
-        make_shared<KickerBoard>(sharedSPI, RJ_KICKER_nCS, RJ_KICKER_nRESET,
-                                            "/local/rj-kickr.nib");
+    KickerBoard::Instance = make_shared<KickerBoard>(
+        sharedSPI, RJ_KICKER_nCS, RJ_KICKER_nRESET, "/local/rj-kickr.nib");
     // Reprogramming each time (first arg of flash false) is actually
     // faster than checking the full memory to see if we need to reflash.
     bool kickerReady = KickerBoard::Instance->flash(false, false);

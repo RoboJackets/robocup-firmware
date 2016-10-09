@@ -1,14 +1,14 @@
 #pragma once
 
-#include <string>
-#include <array>
-#include <vector>
 #include <algorithm>
+#include <array>
 #include <memory>
+#include <string>
+#include <vector>
 
-#include "robot-devices.hpp"
-#include "motors.hpp"
 #include "SharedSPI.hpp"
+#include "motors.hpp"
+#include "robot-devices.hpp"
 
 // forward declaration of tasks
 void Task_SerialConsole(void const* args);

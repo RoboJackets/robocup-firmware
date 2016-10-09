@@ -180,14 +180,8 @@ ISR(USI_STR_vect, ISR_BLOCK) {
  * Clears the USISR to remove any previous SPI state.
  */
 void clear_spi_state() {
-    USISR = 1 << USISIF
-        | (1 << USIOIF)
-        | (1 << USIPF)
-        | (1 << USIDC)
-        | (0 << USICNT3)
-        | (0 << USICNT2)
-        | (0 << USICNT1)
-        | (0 << USICNT0);
+    USISR = 1 << USISIF | (1 << USIOIF) | (1 << USIPF) | (1 << USIDC) |
+            (0 << USICNT3) | (0 << USICNT2) | (0 << USICNT1) | (0 << USICNT0);
 }
 
 /*
@@ -195,21 +189,19 @@ void clear_spi_state() {
  */
 void turn_on_spi() {
     USICR = (1 << USISIE)    // enable start condition interrupt enable
-        | (0 << USIOIE)    // disable overflow interrupt for now
-        | (0 << USIWM1)    // set to three wire mode (normal SPI)
-        | (1 << USIWM0)
-        | (1 << USICS1)    // next three bits define how clock works
-        | (0 << USICS0)    // counter triggered both edge
-        | (0 << USICLK)    // USIDR shifts on positive edge only
-        | (0 << USITC);
+            | (0 << USIOIE)  // disable overflow interrupt for now
+            | (0 << USIWM1)  // set to three wire mode (normal SPI)
+            | (1 << USIWM0) |
+            (1 << USICS1)    // next three bits define how clock works
+            | (0 << USICS0)  // counter triggered both edge
+            | (0 << USICLK)  // USIDR shifts on positive edge only
+            | (0 << USITC);
 }
 
 /*
  * Disables SPI.
  */
-void turn_off_spi() {
-    USICR = 0;
-}
+void turn_off_spi() { USICR = 0; }
 
 /*
  * Chip Select Interrupt
@@ -256,7 +248,8 @@ ISR(PCINT0_vect) {
 
 /*     // We only will execute commands when the user initially presses the */
 /*     button */
-/*     // So the old button state needs to be LOW and the new button state needs */
+/*     // So the old button state needs to be LOW and the new button state needs
+ */
 /*     // to be HIGH */
 /*     if (!kick_db_held_down_ && kick_db_pressed) */
 /*         execute_cmd(KICK_CMD, DB_KICK_TIME); */

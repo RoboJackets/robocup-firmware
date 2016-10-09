@@ -3,7 +3,6 @@
 
 using namespace std;
 
-
 std::shared_ptr<KickerBoard> KickerBoard::Instance;
 
 KickerBoard::KickerBoard(shared_ptr<SharedSPI> sharedSPI, PinName nCs,
