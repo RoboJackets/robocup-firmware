@@ -38,7 +38,8 @@
 
 #pragma once
 
-#include "mbed.h"
+#include <mbed.h>
+#include <rtos.h>
 
 #include "SharedSPI.hpp"
 
@@ -51,6 +52,13 @@
 #define READ_LOW_BYTE 0x20
 #define WRITE_HIGH_FLASH_BYTE 0x68
 #define WRITE_LOW_FLASH_BYTE 0x60
+
+// ATtiny84a
+#define AVR_FAMILY_MASK 0xF0
+#define AVR_FAMILY_ID 0x90
+#define ATTINY84A_DEVICE_ID 0x0C
+#define ATTINY84A_PAGESIZE 32  // Size in words (word = 2 bytes)
+#define ATTINY84A_NUM_PAGES 128
 
 /**
  * @brief AVR910 ISP
@@ -130,14 +138,14 @@ protected:
      * @return boolean indicating success
      */
     bool checkMemory(int numPages, int pageSize, FILE* binary,
-                     bool verbose = true);
+                     bool verbose = false);
 
     /**
      * Brings the reset line high to exit programming mode.  The program()
      * method does this automatically, but this can be called instead of
      * program() to return the AVR to its normal state.
      */
-    void exitProgramming() { nReset_ = 1; }
+    void exitProgramming();
 
 private:
     /**

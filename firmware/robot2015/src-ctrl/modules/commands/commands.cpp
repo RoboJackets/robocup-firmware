@@ -8,6 +8,7 @@
 #include <rtos.h>
 #include <CC1201.hpp>
 #include <CommModule.hpp>
+#include <KickerBoard.hpp>
 #include <logger.hpp>
 #include <numparser.hpp>
 
@@ -109,6 +110,12 @@ static const vector<command_t> commands = {
      cmd_interface_check_conn,
      "determine the mbed interface's connectivity state.",
      "isconn"},
+
+    {{"kicker"},
+     false,
+     cmd_kicker,
+     "control the kicker board.",
+     "kicker {kick, chip, ping, volts, charge <on|off>}"},
 
     {{"led"},
      false,
@@ -672,6 +679,65 @@ int cmd_console_hostname(cmd_args_t& args) {
     return 0;
 }
 
+int cmd_kicker(cmd_args_t& args) {
+    if (args.empty() || args.size() > 2) {
+        show_invalid_args(args);
+        return 1;
+    } else {
+        if (args[0] == "kick") {
+            if (KickerBoard::Instance->kick(DB_KICK_TIME)) {
+                printf("Kick success.\r\n");
+            } else {
+                printf("Kick failure.\r\n");
+            }
+        } else if (args[0] == "chip") {
+            if (KickerBoard::Instance->chip(DB_CHIP_TIME)) {
+                printf("Chip success.\r\n");
+            } else {
+                printf("Chip failure.\r\n");
+            }
+        } else if (args[0] == "ping") {
+            if (KickerBoard::Instance->is_pingable()) {
+                printf("Kicker ping success.\r\n");
+            } else {
+                printf("Kicker ping failure.\r\n");
+            }
+        } else if (args[0] == "volts") {
+            uint8_t volts;
+            if (KickerBoard::Instance->read_voltage(&volts)) {
+                printf("Kicker volts success. Volts: %d\r\n", volts);
+            } else {
+                printf("Kicker voltage read success.\r\n");
+            }
+        } else if (args[0] == "charge") {
+            if (args.size() != 2) {
+                printf("Must specify <on|off>.\r\n");
+            } else {
+                if (args[1] == "on") {
+                    if (KickerBoard::Instance->charge()) {
+                        printf("Kicker charge on success.\r\n");
+                    } else {
+                        printf("Kicker charge on failure.\r\n");
+                    }
+                } else if (args[1] == "off") {
+                    if (KickerBoard::Instance->stop_charging()) {
+                        printf("Kicker charge off success.\r\n");
+                    } else {
+                        printf("Kicker charge off failure.\r\n");
+                    }
+                } else {
+                    show_invalid_args(args);
+                }
+            }
+        } else {
+            show_invalid_args(args);
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
 int cmd_log_level(cmd_args_t& args) {
     if (args.size() > 1) {
         show_invalid_args(args);
@@ -1036,9 +1102,11 @@ int cmd_pong(cmd_args_t& args) {
 
     // Any packets received on the PING port are placed in a queue.
     Queue<rtp::packet, 2> pings;
-    CommModule::Instance->setRxHandler([&pings](rtp::packet pkt) {
-        pings.put(new rtp::packet(std::move(pkt)));
-    }, rtp::Port::PING);
+    CommModule::Instance->setRxHandler(
+        [&pings](rtp::packet pkt) {
+            pings.put(new rtp::packet(std::move(pkt)));
+        },
+        rtp::Port::PING);
 
     while (true) {
         // Check for a ping packet.  If we got one, print a message and reply
@@ -1073,9 +1141,9 @@ int cmd_ping(cmd_args_t& args) {
 
     // Any packets received on the PING port are placed in a queue
     Queue<rtp::packet, 2> acks;
-    CommModule::Instance->setRxHandler([&acks](rtp::packet pkt) {
-        acks.put(new rtp::packet(std::move(pkt)));
-    }, rtp::Port::PING);
+    CommModule::Instance->setRxHandler(
+        [&acks](rtp::packet pkt) { acks.put(new rtp::packet(std::move(pkt))); },
+        rtp::Port::PING);
 
     uint8_t pingCount = 0;
     int lastPingTime = 0;

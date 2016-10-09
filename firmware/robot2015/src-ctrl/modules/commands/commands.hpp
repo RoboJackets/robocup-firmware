@@ -1,14 +1,14 @@
 #pragma once
 
-#include <string>
-#include <array>
-#include <vector>
 #include <algorithm>
+#include <array>
 #include <memory>
+#include <string>
+#include <vector>
 
-#include "robot-devices.hpp"
-#include "motors.hpp"
 #include "SharedSPI.hpp"
+#include "motors.hpp"
+#include "robot-devices.hpp"
 
 // forward declaration of tasks
 void Task_SerialConsole(void const* args);
@@ -88,6 +88,7 @@ int cmd_info(cmd_args_t&);
 int cmd_interface_check_conn(cmd_args_t&);
 int cmd_interface_disconnect(cmd_args_t&);
 int cmd_interface_reset(cmd_args_t&);
+int cmd_kicker(cmd_args_t&);
 int cmd_led(cmd_args_t&);
 int cmd_log_level(cmd_args_t&);
 int cmd_ls(cmd_args_t&);
