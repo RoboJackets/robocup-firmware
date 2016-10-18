@@ -105,6 +105,10 @@ void InitializeCommModule(shared_ptr<SharedSPI> sharedSPI) {
      * according to its port number when using the console.
      */
     if (global_radio->isConnected() == true) {
+        // Disable file logging as the bkpt may cause timing errors with
+        // recieving packets
+        isFileLogging = false;
+
         LOG(INIT, "Radio interface ready on %3.2fMHz!", global_radio->freq());
 
         // Legacy port
