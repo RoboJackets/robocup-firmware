@@ -213,16 +213,14 @@ int main() {
 
     // Radio timeout timer
     const uint32_t RADIO_TIMEOUT = 100;
-    RtosTimerHelper radioTimeoutTimer(
-        [&]() {
-            // reset radio
-            global_radio->strobe(CC1201_STROBE_SIDLE);
-            global_radio->strobe(CC1201_STROBE_SFRX);
-            global_radio->strobe(CC1201_STROBE_SRX);
+    RtosTimerHelper radioTimeoutTimer([&]() {
+        // reset radio
+        global_radio->strobe(CC1201_STROBE_SIDLE);
+        global_radio->strobe(CC1201_STROBE_SFRX);
+        global_radio->strobe(CC1201_STROBE_SRX);
 
-            radioTimeoutTimer.start(RADIO_TIMEOUT);
-        },
-        osTimerOnce);
+        radioTimeoutTimer.start(RADIO_TIMEOUT);
+    }, osTimerOnce);
     radioTimeoutTimer.start(RADIO_TIMEOUT);
 
     // Setup radio protocol handling
