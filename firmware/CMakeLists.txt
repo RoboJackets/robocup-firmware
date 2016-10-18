@@ -37,7 +37,7 @@ set(MBED_CMAKE_CXX_FLAGS "${MBED_CMAKE_CXX_FLAGS} -std=c++14")
 # Enable logging for the common2015 library
 set(MBED_CMAKE_CXX_FLAGS "${MBED_CMAKE_CXX_FLAGS} -DRJ_LOGGING_EN")
 # Enable file logging for the mbed
-set(MBED_CMAKE_CXX_FLAGS "${MBED_CMAKE_CXX_FLAGS} -DRJ_FILE_LOGGING_EN")
+set(MBED_CMAKE_CXX_FLAGS "${MBED_CMAKE_CXX_FLAGS} -DRJ_FILE_LOGGING_EN=false")
 # ignore formatting flags for printf
 set(MBED_CMAKE_CXX_FLAGS "${MBED_CMAKE_CXX_FLAGS} -Wno-format -Wno-switch -Wno-unused-parameter -Wno-missing-field-initializers")
 # generate debugging information for gdb
