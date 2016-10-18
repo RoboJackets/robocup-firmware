@@ -24,7 +24,6 @@
 #include "neostrip.hpp"
 #include "robot-devices.hpp"
 #include "task-signals.hpp"
-#include "HackedKickerBoard.hpp"
 
 #define RJ_ENABLE_ROBOT_CONSOLE
 
@@ -84,36 +83,6 @@ int main() {
     // thread.
     setISRPriorities();
 
-    // Initialize kicker board
-    // TODO: clarify between kicker nCs and nReset
-    // KickerBoard kickerBoard(sharedSPI, RJ_KICKER_nCS, RJ_KICKER_nRESET,
-    //                         "/local/rj-kickr.nib");
-    // bool kickerReady = kickerBoard.flash(true, true);
-
-    // Hacked kicker board - using this since we replaced the attiny with two
-    // wires...
-    HackedKickerBoard kickerBoard(RJ_KICKER_nRESET);
-    bool kickerReady = true;
-
-    // flag fro kicking when the ball sense triggers
-    bool kickOnBreakBeam = false;
-    uint8_t kickStrength = 0;
-
-    // Initialize and start ball sensor
-    BallSense ballSense(RJ_BALL_EMIT, RJ_BALL_DETECTOR);
-    ballSense.start(10);
-    ballSense.senseChangeCallback = [&](bool haveBall) {
-        // invert value due to active-low wiring of led
-        // set ball indicator led.
-        static DigitalOut ballStatusPin(RJ_BALL_LED);
-        ballStatusPin = !haveBall;
-
-        // kick!
-        if (haveBall && kickOnBreakBeam) {
-            kickerBoard.kick(kickStrength);
-        }
-    };
-
     // Force off since the neopixel's hardware is stateless from previous
     // settings
     NeoStrip rgbLED(RJ_NEOPIXEL, 2);
@@ -134,6 +103,35 @@ int main() {
     shared_ptr<SharedSPI> sharedSPI =
         make_shared<SharedSPI>(RJ_SPI_MOSI, RJ_SPI_MISO, RJ_SPI_SCK);
     sharedSPI->format(8, 0);  // 8 bits per transfer
+
+    // Initialize kicker board
+    KickerBoard::Instance = make_shared<KickerBoard>(
+        sharedSPI, RJ_KICKER_nCS, RJ_KICKER_nRESET, "/local/rj-kickr.nib");
+    // Reprogramming each time (first arg of flash false) is actually
+    // faster than checking the full memory to see if we need to reflash.
+    bool kickerReady = KickerBoard::Instance->flash(false, false);
+
+    // flag fro kicking when the ball sense triggers
+    bool kickOnBreakBeam = false;
+    // Made up value right now, this is the amount of time in ms to
+    // allow the capacitor dump power into kicker. Will need to be
+    // adjusted once hardware is available.
+    uint8_t kickStrength = DB_KICK_TIME;
+
+    // Initialize and start ball sensor
+    BallSense ballSense(RJ_BALL_EMIT, RJ_BALL_DETECTOR);
+    ballSense.start(10);
+    ballSense.senseChangeCallback = [&](bool haveBall) {
+        // invert value due to active-low wiring of led
+        // set ball indicator led.
+        static DigitalOut ballStatusPin(RJ_BALL_LED);
+        ballStatusPin = !haveBall;
+
+        // kick!
+        if (kickerReady && haveBall && kickOnBreakBeam) {
+            KickerBoard::Instance->kick(kickStrength);
+        }
+    };
 
     // Initialize and configure the fpga with the given bitfile
     FPGA::Instance = new FPGA(sharedSPI, RJ_FPGA_nCS, RJ_FPGA_INIT_B,
@@ -215,14 +213,16 @@ int main() {
 
     // Radio timeout timer
     const uint32_t RADIO_TIMEOUT = 100;
-    RtosTimerHelper radioTimeoutTimer([&]() {
-        // reset radio
-        global_radio->strobe(CC1201_STROBE_SIDLE);
-        global_radio->strobe(CC1201_STROBE_SFRX);
-        global_radio->strobe(CC1201_STROBE_SRX);
+    RtosTimerHelper radioTimeoutTimer(
+        [&]() {
+            // reset radio
+            global_radio->strobe(CC1201_STROBE_SIDLE);
+            global_radio->strobe(CC1201_STROBE_SFRX);
+            global_radio->strobe(CC1201_STROBE_SRX);
 
-        radioTimeoutTimer.start(RADIO_TIMEOUT);
-    }, osTimerOnce);
+            radioTimeoutTimer.start(RADIO_TIMEOUT);
+        },
+        osTimerOnce);
     radioTimeoutTimer.start(RADIO_TIMEOUT);
 
     // Setup radio protocol handling
@@ -247,11 +247,11 @@ int main() {
         kickStrength = msg->kickStrength;
         if (msg->triggerMode == 1) {
             // kick immediate
-            kickerBoard.kick(kickStrength);
+            KickerBoard::Instance->kick(kickStrength);
         } else if (msg->triggerMode == 2) {
             // kick on break beam
             if (ballSense.have_ball()) {
-                kickerBoard.kick(kickStrength);
+                KickerBoard::Instance->kick(kickStrength);
                 kickOnBreakBeam = false;
             } else {
                 // set flag so that next break beam triggers a kick
@@ -285,6 +285,10 @@ int main() {
 
         return replyBuf;
     };
+
+    KickerBoard::Instance->charge();
+    LOG(INIT, "Started charging kicker board.");
+    uint8_t kickerVoltage = 0;
 
     // Set the watdog timer's initial config
     Watchdog::Set(RJ_WATCHDOG_TIMER_VALUE);
@@ -347,6 +351,10 @@ int main() {
 
         // get the battery voltage
         battVoltage = (batt.read_u16() >> 8);
+
+        // get kicker voltage
+        KickerBoard::Instance->read_voltage(&kickerVoltage);
+        LOG(INF1, "Kicker voltage: %u", kickerVoltage);
 
         // update shell id
         robotShellID = rotarySelector.read();

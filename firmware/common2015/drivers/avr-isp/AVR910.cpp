@@ -39,15 +39,13 @@ using namespace std;
 
 AVR910::AVR910(shared_ptr<SharedSPI> spi, PinName nCs, PinName nReset)
     : SharedSPIDevice(spi, nCs, true), nReset_(nReset) {
-    // Slow frequency as default to ensure no errors from
-    // trying to run it too fast. Increase as appropriate.
     setSPIFrequency(32000);
 
     // Enter serial programming mode by pulling reset line low.
     nReset_ = 0;
 
     // Wait 20ms before issuing first command.
-    wait_ms(20);
+    Thread::wait(20);
 
     // Enable programming mode on the chip
     // It's possible for it to fail, so try it a few times.
@@ -58,9 +56,9 @@ AVR910::AVR910(shared_ptr<SharedSPI> spi, PinName nCs, PinName nReset)
 
         // Give nReset a positive pulse.
         nReset_ = 1;
-        wait_ms(20);
+        Thread::wait(20);
         nReset_ = 0;
-        wait_ms(20);
+        Thread::wait(20);
     }
 
     if (!enabled) {
@@ -144,9 +142,7 @@ bool AVR910::program(FILE* binary, int pageSize, int numPages) {
     bool success = checkMemory(pageNumber, pageSize, binary);
 
     // Leave serial programming mode by toggling reset
-    nReset_ = 0;
-    wait_ms(20);
-    nReset_ = 1;
+    exitProgramming();
 
     return success;
 }
@@ -311,4 +307,10 @@ bool AVR910::checkMemory(int pageSize, int numPages, FILE* binary,
     }
 
     return success;
+}
+
+void AVR910::exitProgramming() {
+    nReset_ = 0;
+    Thread::wait(20);
+    nReset_ = 1;
 }
