@@ -22,7 +22,7 @@ std::string filename("/local/rj.nib");
 void imAlive() { ledOne = !ledOne; }
 
 int main() {
-    isLogging = RJ_LOGGIN_EN;
+    isLogging = RJ_LOGGING_EN;
     rjLogLevel = INF2;
 
     lifeLight.attach(&imAlive, ALIVE_BLINK_RATE);
