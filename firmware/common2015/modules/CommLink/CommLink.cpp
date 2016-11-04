@@ -46,6 +46,7 @@ void CommLink::rxThread() {
         // Get the received data from the external chip
         buf.clear();
         int32_t response = getData(&buf);
+        Thread::yield();
 
         if (response == COMM_SUCCESS) {
             // Write the data to the CommModule object's rxQueue

@@ -53,7 +53,7 @@ Decawave::Decawave(shared_ptr<SharedSPI> sharedSPI, PinName nCs, PinName intPin)
         dwt_forcetrxoff(); // TODO: Better way than force off then reset?
         dwt_rxreset();
         dwt_rxenable(DWT_START_RX_IMMEDIATE);
-
+        setSPIFrequency(10000000); // 10 MHz
 
         LOG(INIT, "Decawave ready!");
         CommLink::ready();
@@ -189,7 +189,9 @@ int Decawave::readfromspi(uint16 headerLength, const uint8 *headerBuffer,
 
 decaIrqStatus_t Decawave::decamutexon(void){ return 0;}
 void Decawave::decamutexoff(decaIrqStatus_t s){}
-void Decawave::deca_sleep(unsigned int time_ms){}
+void Decawave::deca_sleep(unsigned int time_ms) {
+    wait_ms(time_ms);
+}
 
 
 // Callback functions for decawave interrupt
