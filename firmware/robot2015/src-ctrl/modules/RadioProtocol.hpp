@@ -46,7 +46,7 @@ public:
      * @param msg A pointer to the start of the message addressed to this robot
      * @return formatted reply buffer
      */
-    std::function<std::vector<uint8_t>(const rtp::ControlMessage* msg)>
+    std::function<std::vector<uint8_t>(const rtp::ControlMessage* msg, const bool addresed)>
         rxCallback;
 
     void start() {
@@ -95,23 +95,20 @@ public:
         // TODO(justin): double-check this
         const uint32_t SLOT_DELAY = 2;
 
-        if (addressed) {
-            _state = CONNECTED;
+        _state = CONNECTED;
 
-            // reset timeout whenever we receive a packet
-            _timeoutTimer.stop();
-            _timeoutTimer.start(TIMEOUT_INTERVAL);
+        // reset timeout whenever we receive a packet
+        _timeoutTimer.stop();
+        _timeoutTimer.start(TIMEOUT_INTERVAL);
 
-            _replyTimer.start(1 + SLOT_DELAY * slot);
+        _replyTimer.start(1 + SLOT_DELAY * slot);
 
-            if (rxCallback) {
-                _reply = std::move(rxCallback(msg));
-            } else {
-                LOG(WARN, "no callback set");
-            }
+        if (rxCallback) {
+            _reply = std::move(rxCallback(msg, addressed));
         } else {
-            // TODO(justin): reply in an available slot
+            LOG(WARN, "no callback set");
         }
+
     }
 
 private:

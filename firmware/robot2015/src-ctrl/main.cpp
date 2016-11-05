@@ -239,42 +239,37 @@ int main() {
     RadioProtocol radioProtocol(CommModule::Instance, global_radio);
     radioProtocol.setUID(robotShellID);
     radioProtocol.start();
-    radioProtocol.rxCallback = [&](const rtp::ControlMessage* msg) {
+    radioProtocol.rxCallback = [&](const rtp::ControlMessage* msg, const bool addressed) {
         // reset timeout
         radioTimeoutTimer.start(RADIO_TIMEOUT);
 
-        // static uint8 soOften = 0;
-        // if (soOften >= 15) {
-        //     LOG(INIT, "X: %d, Y: %d, W: %d, D: %d", msg->bodyX, msg->bodyY, msg->bodyW, msg->dribbler);
-        //     soOften = 0;
-        // } else {
-        //     soOften++;
-        // }
+        if (addressed) {
 
-        // update target velocity from packet
-        Task_Controller_UpdateTarget({
-            (float)msg->bodyX / rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
-            (float)msg->bodyY / rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
-            (float)msg->bodyW / rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
-        });
+            // update target velocity from packet
+            Task_Controller_UpdateTarget({
+                (float)msg->bodyX / rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
+                (float)msg->bodyY / rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
+                (float)msg->bodyW / rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
+            });
 
-        // dribbler
-        Task_Controller_UpdateDribbler(msg->dribbler);
+            // dribbler
+            Task_Controller_UpdateDribbler(msg->dribbler);
 
-        // kick!
-        kickStrength = msg->kickStrength;
-        // kickStrength = 50;
-        if (msg->triggerMode == 1) {
-            // kick immediate
-            kick_hack.kick(kickStrength);
-        } else if (msg->triggerMode == 2) {
-            // kick on break beam
-            if (ballSense.have_ball()) {
+            // kick!
+            kickStrength = msg->kickStrength;
+            // kickStrength = 50;
+            if (msg->triggerMode == 1) {
+                // kick immediate
                 kick_hack.kick(kickStrength);
-                kickOnBreakBeam = false;
-            } else {
-                // set flag so that next break beam triggers a kick
-                kickOnBreakBeam = true;
+            } else if (msg->triggerMode == 2) {
+                // kick on break beam
+                if (ballSense.have_ball()) {
+                    kick_hack.kick(kickStrength);
+                    kickOnBreakBeam = false;
+                } else {
+                    // set flag so that next break beam triggers a kick
+                    kickOnBreakBeam = true;
+                }
             }
         }
 
