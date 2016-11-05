@@ -243,6 +243,14 @@ int main() {
         // reset timeout
         radioTimeoutTimer.start(RADIO_TIMEOUT);
 
+        // static uint8 soOften = 0;
+        // if (soOften >= 15) {
+        //     LOG(INIT, "X: %d, Y: %d, W: %d, D: %d", msg->bodyX, msg->bodyY, msg->bodyW, msg->dribbler);
+        //     soOften = 0;
+        // } else {
+        //     soOften++;
+        // }
+
         // update target velocity from packet
         Task_Controller_UpdateTarget({
             (float)msg->bodyX / rtp::ControlMessage::VELOCITY_SCALE_FACTOR,

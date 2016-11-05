@@ -28,6 +28,7 @@ public:
     void decamutexoff(decaIrqStatus_t s);
     void deca_sleep(unsigned int time_ms);
 
+    void setAddress(uint16_t addr);
     void logSPI(int num);
     void setLED(bool ledOn);
 private:
@@ -38,6 +39,7 @@ private:
 
     uint32_t rx_status;
     uint8_t rx_len;
+    uint8_t _addr = rtp::INVALID_ROBOT_UID;
 
     void getData_success(const dwt_cb_data_t *cb_data);
     void getData_fail(const dwt_cb_data_t *cb_data);

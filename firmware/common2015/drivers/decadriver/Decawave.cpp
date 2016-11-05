@@ -47,7 +47,7 @@ Decawave::Decawave(shared_ptr<SharedSPI> sharedSPI, PinName nCs, PinName intPin)
         dwt_setrxaftertxdelay(TX_TO_RX_DELAY_UUS);
         // dwt_setinterrupt(DWT_INT_TFRS | DWT_INT_RPHE | DWT_INT_RFCG | DWT_INT_RFCE | DWT_INT_RFSL | DWT_INT_RFTO | DWT_INT_SFDT | DWT_INT_RXPTO | DWT_INT_ARFE, 1);
         dwt_setcallbacks(NULL, static_cast<dwt_cb_t>(&Decawave::getData_success), NULL, static_cast<dwt_cb_t>(&Decawave::getData_fail));
-        dwt_setinterrupt(DWT_INT_RFCG | DWT_INT_RPHE | DWT_INT_RFCE | DWT_INT_RFSL | DWT_INT_SFDT, 1);
+        dwt_setinterrupt(DWT_INT_RFCG | DWT_INT_RPHE | DWT_INT_RFCE | DWT_INT_RFSL | DWT_INT_SFDT | DWT_INT_ARFE, 1);
 
         setLED(true);
         dwt_forcetrxoff(); // TODO: Better way than force off then reset?
@@ -71,16 +71,30 @@ int32_t Decawave::sendPacket(const rtp::packet* pkt){
 
     // Copy header and payload of packet to buffer
 
+    //0x8841
+    tx_buffer[0] = 0x41;
+    tx_buffer[1] = 0x88;
+    tx_buffer[2] = 0;
+    tx_buffer[3] = 0xCA;
+    tx_buffer[4] = 0xDE;
+    tx_buffer[5] = pkt->header.address;
+    tx_buffer[6] = 0;
+    tx_buffer[7] = _addr;
+    tx_buffer[8] = 0;
+
+
+    /*
     tx_buffer[0] = 0xC5;
     tx_buffer[1] = 0;
+    */
 
     uint8_t i;
     uint8_t* headerData = (uint8_t*)&pkt->header;
     for (i = 0; i < sizeof(pkt->header); ++i) {
-        tx_buffer[i+2] = headerData[i];
+        tx_buffer[i+9] = headerData[i];
         // printf("%d ",tx_buffer[i]);
     }
-    i+=1;
+    i+=8;
     for (uint8_t byte : pkt->payload) {
         i++;
         tx_buffer[i] = byte;
@@ -113,7 +127,7 @@ int32_t Decawave::getData(std::vector<uint8_t>* buf){
     // LOG(INIT, "Something %u, want %u, not %u, len %u", rx_status, COMM_SUCCESS, COMM_DEV_BUF_ERR, rx_len);
     if (rx_status == COMM_SUCCESS) {
         // LOG(INIT, "SUCCESS?");
-        for (uint8_t i = 2; i < rx_len - 2; i++) {
+        for (uint8_t i = 9; i < rx_len - 2; i++) {
             // printf("%d ",rx_buffer[i]);
             buf->push_back(rx_buffer[i]);
         }
@@ -146,6 +160,12 @@ bool Decawave::isConnected() const {
     return _isInit;
 }
 
+void Decawave::setAddress(uint16_t addr) {
+    _addr = addr;
+    dwt_setpanid(0xDECA);
+    dwt_setaddress16(addr);
+    dwt_enableframefilter(DWT_FF_DATA_EN);
+}
 
 // Virtual functions from dw1000_api
 

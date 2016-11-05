@@ -28,7 +28,7 @@ public:
           _timeoutTimer(this, &RadioProtocol::_timeout, osTimerOnce) {
         ASSERT(commModule != nullptr);
         ASSERT(radio != nullptr);
-        // _radio->setAddress(rtp::ROBOT_ADDRESS);
+        _radio->setAddress(rtp::ROBOT_ADDRESS);
     }
 
     ~RadioProtocol() { stop(); }
@@ -77,15 +77,19 @@ public:
         bool addressed = false;
         const rtp::ControlMessage* msg;
         size_t slot;
+        // printf("UUIDs: ");
         for (slot = 0; slot < 6; slot++) {
             size_t offset = slot * sizeof(rtp::ControlMessage);
             msg = (const rtp::ControlMessage*)(pkt.payload.data() + offset);
 
+            // printf("%d:%d ", slot, msg->uid);
             if (msg->uid == _uid) {
+                // LOG(INIT, "")
                 addressed = true;
                 break;
             }
         }
+        // printf("\r\n");
 
         /// time, in ms, for each reply slot
         // TODO(justin): double-check this

@@ -89,7 +89,7 @@ int main() {
         LOG(FATAL, "No radio interface found!");
     }
 
-    // global_radio->setAddress(rtp::BASE_STATION_ADDRESS);
+    global_radio->setAddress(rtp::BASE_STATION_ADDRESS);
 
     DigitalOut radioStatusLed(LED4, global_radio->isConnected());
 
