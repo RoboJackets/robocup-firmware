@@ -2177,7 +2177,7 @@ void dw1000_api::dwt_isr(void)
     }
 
     // Handle RX errors events
-    if(status & SYS_STATUS_ALL_RX_ERR)
+    if(status & (SYS_STATUS_ALL_RX_ERR | 0x00002000))
     {
         dwt_write32bitreg(SYS_STATUS_ID, SYS_STATUS_ALL_RX_ERR); // Clear RX error event bits
 
@@ -3193,6 +3193,49 @@ uint8 dw1000_api::dwt_readwakeupvbat(void)
     return dwt_read8bitoffsetreg(TX_CAL_ID, TC_SARL_SAR_LVBAT_OFFSET);
 }
 
+// void dw1000_api::dwt_rxautoreenable(bool enable) {
+//     if(enable) {
+//         dw1000local.sysCFGreg |= SYS_CFG_RXAUTR;
+//     }
+//     else {
+//         dw1000local.sysCFGreg &= ~SYS_CFG_RXAUTR;
+//     }
+//
+//     dwt_write32bitreg(SYS_CFG_ID,dw1000local.sysCFGreg);
+// }
+
+/*! ------------------------------------------------------------------------------------------------------------------
+ * @fn dwt_setautorxreenable()
+ *
+ *  @brief This call enables the auto rx re-enable feature
+ *
+ * input parameters
+ * @param enable - 1 to enable, 0 to disable the feature
+ *
+ * output parameters
+ *
+ * no return value
+ */
+void dw1000_api::dwt_setautorxreenable(int enable)
+{
+	// uint8 byte = 0;
+    //
+    // if(enable)
+    // {
+    //     //enable auto re-enable of the receiver
+    //     dw1000local.sysCFGreg |= SYS_CFG_RXAUTR;
+    // }
+    // else
+    // {
+    //     //disable auto re-enable of the receiver
+    //     dw1000local.sysCFGreg &= ~SYS_CFG_RXAUTR;
+    // }
+    //
+	// byte = dw1000local.sysCFGreg >> 24;
+    dw1000local.sysCFGreg |= (1 << 29);
+
+    dwt_write32bitreg(SYS_CFG_ID, dw1000local.sysCFGreg);
+}
 
 /* ===============================================================================================
    List of expected (known) device ID handled by this software

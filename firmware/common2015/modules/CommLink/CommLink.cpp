@@ -39,6 +39,7 @@ void CommLink::rxThread() {
     while (true) {
         // Wait until new data has arrived
         // this is triggered by CommLink::ISR()
+        Thread::yield();
         Thread::signal_wait(COMM_LINK_SIGNAL_RX_TRIGGER);
 
         LOG(INF3, "RX interrupt triggered");

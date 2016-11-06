@@ -7,21 +7,21 @@
 Decawave* global_radio = nullptr;
 
 static dwt_config_t config = {
-    1,               /* Channel number. */
+    4,               /* Channel number. */
     DWT_PRF_64M,     /* Pulse repetition frequency. */
-    DWT_PLEN_1024,   /* Preamble length. Used in TX only. */
-    DWT_PAC32,       /* Preamble acquisition chunk size. Used in RX only. */
-    9,               /* TX preamble code. Used in TX only. */
-    9,               /* RX preamble code. Used in RX only. */
+    DWT_PLEN_128,   /* Preamble length. Used in TX only. */
+    DWT_PAC8,       /* Preamble acquisition chunk size. Used in RX only. */
+    17,               /* TX preamble code. Used in TX only. */
+    17,               /* RX preamble code. Used in RX only. */
     1,               /* 0 to use standard SFD, 1 to use non-standard SFD. */
-    DWT_BR_110K,     /* Data rate. */
+    DWT_BR_6M8,     /* Data rate. */
     DWT_PHRMODE_STD, /* PHY header mode. */
-    (1025 + 64 - 32) /* SFD timeout (preamble length + 1 + SFD length - PAC size). Used in RX only. */
+    (128 + 1 + 64 - 8) /* SFD timeout (preamble length + 1 + SFD length - PAC size). Used in RX only. */
 };
 
 static dwt_txconfig_t txconfig = {
-    0xC9,            /* PG delay. */
-    0x67676767,      /* TX power. */
+    0x95,            /* PG delay. */
+    0x9A9A9A9A,      /* TX power. */
 };
 
 #define TX_TO_RX_DELAY_UUS 60
@@ -31,6 +31,7 @@ Decawave::Decawave(shared_ptr<SharedSPI> sharedSPI, PinName nCs, PinName intPin)
     : CommLink(sharedSPI, nCs, intPin), dw1000_api() {
     // dw1000_api();
     global_radio = this; // TODO: This is very not good
+    setSPIFrequency(2000000);
     if (dwt_initialise(DWT_LOADNONE) == DWT_ERROR) {
         LOG(FATAL,"Decawave not initialized");
         _isInit = false;
@@ -45,9 +46,13 @@ Decawave::Decawave(shared_ptr<SharedSPI> sharedSPI, PinName nCs, PinName intPin)
         dwt_configuretxrf(&txconfig);
 
         dwt_setrxaftertxdelay(TX_TO_RX_DELAY_UUS);
-        // dwt_setinterrupt(DWT_INT_TFRS | DWT_INT_RPHE | DWT_INT_RFCG | DWT_INT_RFCE | DWT_INT_RFSL | DWT_INT_RFTO | DWT_INT_SFDT | DWT_INT_RXPTO | DWT_INT_ARFE, 1);
+        //dwt_setinterrupt(DWT_INT_TFRS | DWT_INT_RPHE | DWT_INT_RFCG | DWT_INT_RFCE | DWT_INT_RFSL | DWT_INT_RFTO | DWT_INT_SFDT | DWT_INT_RXPTO | DWT_INT_ARFE, 1);
         dwt_setcallbacks(NULL, static_cast<dwt_cb_t>(&Decawave::getData_success), NULL, static_cast<dwt_cb_t>(&Decawave::getData_fail));
-        dwt_setinterrupt(DWT_INT_RFCG | DWT_INT_RPHE | DWT_INT_RFCE | DWT_INT_RFSL | DWT_INT_SFDT | DWT_INT_ARFE, 1);
+        // dwt_setinterrupt(DWT_INT_RFCG | DWT_INT_RPHE | DWT_INT_RFCE | DWT_INT_RFSL | DWT_INT_SFDT, 1);
+        dwt_setinterrupt(0x00002000 | DWT_INT_RFCG | DWT_INT_RPHE | DWT_INT_RFCE | DWT_INT_RFSL | DWT_INT_RFTO | DWT_INT_RXPTO | DWT_INT_SFDT | DWT_INT_ARFE, 1);
+        // dwt_setinterrupt(DWT_INT_RFCG, 1);
+
+        dwt_setautorxreenable(1);
 
         setLED(true);
         dwt_forcetrxoff(); // TODO: Better way than force off then reset?
@@ -108,10 +113,16 @@ int32_t Decawave::sendPacket(const rtp::packet* pkt){
     dwt_writetxfctrl(i+3, 0, 0);
 
     if (DWT_SUCCESS == dwt_starttx(DWT_START_TX_IMMEDIATE | DWT_RESPONSE_EXPECTED)) {
+        // LOG(INIT, "0x%02X", dwt_read32bitreg(SYS_CFG_ID));
         return COMM_SUCCESS;
     }
 
     return COMM_DEV_BUF_ERR;
+}
+
+void Decawave::printStuff() {
+    // LOG(INIT, "0x%02X", dwt_read32bitreg(SYS_CFG_ID));
+    // LOG(INIT, "0x%02X", dwt_read32bitreg(SYS_STATUS_ID));
 }
 
 int32_t Decawave::getData(std::vector<uint8_t>* buf){

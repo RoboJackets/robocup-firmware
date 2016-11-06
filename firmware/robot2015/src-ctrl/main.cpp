@@ -331,7 +331,7 @@ int main() {
         // make sure we can always reach back to main by
         // renewing the watchdog timer periodicly
         Watchdog::Renew();
-
+        global_radio->printStuff();
         // periodically reset the console text's format
         ll++;
         if ((ll % 8) == 0) {

@@ -28,6 +28,8 @@ public:
     void decamutexoff(decaIrqStatus_t s);
     void deca_sleep(unsigned int time_ms);
 
+    void printStuff();
+
     void setAddress(uint16_t addr);
     void logSPI(int num);
     void setLED(bool ledOn);

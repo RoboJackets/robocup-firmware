@@ -1647,6 +1647,7 @@ protected:
      */
     void dwt_write8bitoffsetreg(int regFileID, int regOffset, uint8 regval);
 
+    void dwt_setautorxreenable(int enable);
 
     /****************************************************************************************************************************************************
      *
