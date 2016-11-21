@@ -13,12 +13,12 @@
 module BLDC_Encoder_Counter ( clk, reset, enc, count );
 
 // Module parameters
-parameter COUNT_WIDTH = ( 15 );
+parameter COUNTER_WIDTH = ( 15 );
 
 // Module inputs/outputs
 input clk, reset;
 input [1:0] enc;
-output reg [COUNT_WIDTH-1:0] count = 0;
+output reg [COUNTER_WIDTH-1:0] count = 0;
 // ===============================================
 
 
@@ -52,12 +52,12 @@ always @( posedge clk ) begin : ENCODER_COUNTER
 
     enc_d <= enc;
 
-    if ( reset == 1 ) begin
+    if ( reset ) begin
         count <= 0;
     end else begin
-        if ( count_up == 1 ) begin
+        if ( count_up ) begin
             count <= count + 1;
-        end else if ( count_down == 1 ) begin
+        end else if ( count_down ) begin
             count <= count - 1;
         end
     end

@@ -14,6 +14,7 @@
 `include "BLDC_Driver.v"
 `include "BLDC_Hall_Counter.v"
 `include "BLDC_Encoder_Counter.v"
+`include "BLDC_Encoder_Checker.v"
 
 
 // BLDC_Motor module
@@ -40,7 +41,7 @@ output [HALL_COUNT_WIDTH-1:0] hall_count;
 output connected;
 // ===============================================
 
-wire hall_connected, hall_fault;
+wire hall_connected, hall_fault, enc_fault;
 
 // Show the expected startup length during synthesis. Assumes an 18.432MHz input clock.
 initial begin
@@ -50,7 +51,7 @@ end
 // Instantiation of all the modules required for complete functioning with all sensors
 // ===============================================
 BLDC_Encoder_Counter #(         // Instantiation of the encoder for counting the ticks
-    .COUNT_WIDTH                ( ENCODER_COUNT_WIDTH       )
+    .COUNTER_WIDTH              ( ENCODER_COUNT_WIDTH       )
     ) encoder_counter (
     .clk                        ( clk                       ) ,
     .reset                      ( reset_enc_count           ) ,
@@ -65,6 +66,17 @@ BLDC_Hall_Counter #(            // Instantiation of the hall effect sensor's cou
     .reset                      ( reset_hall_count          ) ,
     .hall                       ( hall                      ) ,
     .count                      ( hall_count                )
+);
+
+BLDC_Encoder_Checker #(         // Instantiation of the encoder checker
+    .ENCODER_COUNTER_WIDTH      ( ENCODER_COUNT_WIDTH       ) ,
+    .HALL_COUNTER_WIDTH         ( HALL_COUNT_WIDTH          )
+    ) encoder_checker (
+    .clk                        ( clk                       ) ,
+    .reset                      ( ~en                       ) ,
+    .enc_count                  ( enc_count                 ) ,
+    .hall_count                 ( hall_count                ) ,
+    .fault                      ( enc_fault                 )
 );
 
 BLDC_Driver #(                  // Instantiation of the motor driving module
@@ -84,7 +96,7 @@ BLDC_Driver #(                  // Instantiation of the motor driving module
     .fault                      ( hall_fault                )
 );
 
-assign connected = hall_connected & ~(hall_fault);
+assign connected = hall_connected & ~(hall_fault | enc_fault);
 
 endmodule
 
