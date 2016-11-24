@@ -32,7 +32,7 @@ localparam STEP_3 = 'b11;
 
 // Register and Wire declarations
 // ===============================================
-reg [1:0] enc_d;    // The delayed encoder tick by one clock cycle
+reg [1:0] enc_d; always @(posedge clk) enc_d <= enc;
 
 wire count_up =
     ( ( enc_d == STEP_0 ) && ( enc == STEP_1 ) ) ||
@@ -49,9 +49,6 @@ wire count_down =
 
 // Begin main logic
 always @( posedge clk ) begin : ENCODER_COUNTER
-
-    enc_d <= enc;
-
     if ( reset ) begin
         count <= 0;
     end else begin
@@ -61,7 +58,6 @@ always @( posedge clk ) begin : ENCODER_COUNTER
             count <= count - 1;
         end
     end
-
 end
 
 endmodule

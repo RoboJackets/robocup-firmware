@@ -15,10 +15,11 @@
 `include "BLDC_Hall_Counter.v"
 `include "BLDC_Encoder_Counter.v"
 `include "BLDC_Encoder_Checker.v"
+`include "IIR_LowPass_Filter.v"
 
 
 // BLDC_Motor module
-module BLDC_Motor ( clk, en, reset_enc_count, reset_hall_count, duty_cycle, enc, hall, phaseH, phaseL, enc_count, hall_count, connected );
+module BLDC_Motor ( clk, en, reset_enc_count, reset_hall_count, duty_cycle, enc, hall, phaseH, phaseL, enc_count, hall_count, has_error );
 
 // Module parameters - passed parameters will overwrite the values here
 parameter MAX_DUTY_CYCLE =          ( 'h1FF             );
@@ -36,12 +37,14 @@ input [DUTY_CYCLE_WIDTH-1:0] duty_cycle;
 input [1:0] enc;
 input [2:0] hall;
 output [2:0] phaseH, phaseL;
-output [ENCODER_COUNT_WIDTH-1:0] enc_count;
-output [HALL_COUNT_WIDTH-1:0] hall_count;
-output connected;
+output signed [ENCODER_COUNT_WIDTH-1:0] enc_count;
+output signed [HALL_COUNT_WIDTH-1:0] hall_count;
+output has_error;
 // ===============================================
 
-wire hall_connected, hall_fault, enc_fault;
+wire has_error, has_hall_fault, has_enc_fault;
+wire signed [ENCODER_COUNT_WIDTH-1:0] enc_count_raw;
+wire signed [HALL_COUNT_WIDTH-1:0] hall_count_raw;
 
 // Show the expected startup length during synthesis. Assumes an 18.432MHz input clock.
 initial begin
@@ -56,7 +59,7 @@ BLDC_Encoder_Counter #(         // Instantiation of the encoder for counting the
     .clk                        ( clk                       ) ,
     .reset                      ( reset_enc_count           ) ,
     .enc                        ( enc                       ) ,
-    .count                      ( enc_count                 )
+    .count                      ( enc_count_raw             )
 );
 
 BLDC_Hall_Counter #(            // Instantiation of the hall effect sensor's counter
@@ -65,7 +68,29 @@ BLDC_Hall_Counter #(            // Instantiation of the hall effect sensor's cou
     .clk                        ( clk                       ) ,
     .reset                      ( reset_hall_count          ) ,
     .hall                       ( hall                      ) ,
-    .count                      ( hall_count                )
+    .count                      ( hall_count_raw            )
+);
+
+IIR_LowPass_Filter #(           // IIR filter for the encoder count value
+    .WIDTH                      ( ENCODER_COUNT_WIDTH       ) ,
+    .GAIN                       ( 5                         )
+    ) encoder_count_filterer (
+    .clk                        ( clk                       ) ,
+    .reset                      ( reset_enc_count           ) ,
+    .en                         ( en                        ) ,
+    .in                         ( enc_count_raw             ) ,
+    .out                        ( enc_count                 )
+);
+
+IIR_LowPass_Filter #(           // IIR filter for the hall count value
+    .WIDTH                      ( HALL_COUNT_WIDTH          ) ,
+    .GAIN                       ( 12                        )
+    ) hall_count_filterer (
+    .clk                        ( clk                       ) ,
+    .reset                      ( reset_hall_count          ) ,
+    .en                         ( en                        ) ,
+    .in                         ( hall_count_raw            ) ,
+    .out                        ( hall_count                )
 );
 
 BLDC_Encoder_Checker #(         // Instantiation of the encoder checker
@@ -76,7 +101,7 @@ BLDC_Encoder_Checker #(         // Instantiation of the encoder checker
     .reset                      ( ~en                       ) ,
     .enc_count                  ( enc_count                 ) ,
     .hall_count                 ( hall_count                ) ,
-    .fault                      ( enc_fault                 )
+    .fault                      ( has_enc_fault             )
 );
 
 BLDC_Driver #(                  // Instantiation of the motor driving module
@@ -92,11 +117,13 @@ BLDC_Driver #(                  // Instantiation of the motor driving module
     .duty_cycle                 ( { duty_cycle[DUTY_CYCLE_WIDTH-2:0], 1'b0 } ) ,
     .phaseH                     ( phaseH                    ) ,
     .phaseL                     ( phaseL                    ) ,
-    .connected                  ( hall_connected            ) ,
-    .fault                      ( hall_fault                )
+    .connected                  ( is_hall_connected         ) ,
+    .fault                      ( has_hall_fault            )
 );
 
-assign connected = hall_connected & ~(hall_fault | enc_fault);
+wire has_fault = has_hall_fault | has_enc_fault;
+
+assign has_error = ~is_hall_connected | has_fault;
 
 endmodule
 

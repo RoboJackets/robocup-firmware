@@ -150,7 +150,7 @@ void Task_Controller(void const* args) {
         // assign the duty cycles, zero out motors that the fpga returns an
         // error for
         for (int i = 0; i < 4; i++)
-            duty_cycles[i] = driveMotorDutyCycles[i] * ((1 << i) & statusByte);
+            duty_cycles[i] = driveMotorDutyCycles[i] * (statusByte & (1 << i));
 
         // limit duty cycle values, while keeping sign (+ or -)
         for (int16_t& dc : duty_cycles) {

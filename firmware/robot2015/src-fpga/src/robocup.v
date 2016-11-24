@@ -147,7 +147,7 @@ assign spi_slave_miso = ( spi_slave_ncs_s == 1 ? 1'bZ : spi_slave_miso_o );
 // Internal logic declarations
 wire [ ENCODER_COUNT_WIDTH  - 1:0 ] enc_count        [ NUM_ENCODERS  - 1:0 ];
 wire [ HALL_COUNT_WIDTH     - 1:0 ] hall_count       [ NUM_HALL_SENS - 1:0 ];
-wire [ NUM_HALL_SENS        - 1:0 ] hall_conns;
+wire [ NUM_HALL_SENS        - 1:0 ] motor_has_error;
 reg  [ DUTY_CYCLE_WIDTH     - 1:0 ] duty_cycle       [ NUM_MOTORS    - 1:0 ];
 reg  [ WATCHDOG_TIMER_WIDTH - 1:0 ] watchdog_timer   [1:0];
 
@@ -431,7 +431,7 @@ assign gate_drivers_set_config = ( sys_begin_startup == 1 ) || ( motor_update_fl
 always @( negedge sysclk )
 begin : SPI_SLAVE_LOAD_RESPONSE_BUFFER
     // Always place the first response byte for an SPI transfer into the zero index of the response buffer
-    spi_slave_res_buf[0] <= { sys_rdy, watchdog_trigger, motors_en, hall_conns };
+    spi_slave_res_buf[0] <= { sys_rdy, watchdog_trigger, motors_en, motor_has_error };
     watchdog_timer[1] <= watchdog_timer[0];
 
     // If the flag is set to load the response buffer, reset the flag & do just that. We know that the 'command_byte' is valid if this flag is set.
@@ -631,9 +631,9 @@ generate
             .HALL_COUNT_WIDTH       ( HALL_COUNT_WIDTH              )
             ) motor (
             .clk                    ( sysclk                        ) ,
-            .en                     ( motors_en && sys_rdy          ) ,
+            .en                     ( motors_en & sys_rdy           ) ,
             .reset_enc_count        ( motor_update_flag             ) ,
-            .reset_hall_count       ( motor_update_flag | ~hall_conns[i] ) ,
+            .reset_hall_count       ( motor_update_flag             ) ,
             .duty_cycle             ( duty_cycle[i]                 ) ,
             .enc                    ( enc_s[i]                      ) ,
             .hall                   ( hall_s[i]                     ) ,
@@ -641,7 +641,7 @@ generate
             .phaseL                 ( phaseL_o[i]                   ) ,
             .enc_count              ( enc_count[i]                  ) ,
             .hall_count             ( hall_count[i]                 ) ,
-            .connected              ( hall_conns[i]                 )
+            .has_error              ( motor_has_error[i]            )
         );
     end
 endgenerate
@@ -653,14 +653,14 @@ BLDC_Motor_No_Encoder #(
     .HALL_COUNT_WIDTH       ( HALL_COUNT_WIDTH                      )
     ) dribbler_motor (
     .clk                    ( sysclk                                ) ,
-    .en                     ( motors_en && sys_rdy                  ) ,
-    .reset_hall_count       ( ~hall_conns[DRIBBLER_INDEX]           ) ,
+    .en                     ( motors_en & sys_rdy                  ) ,
+    .reset_hall_count       ( motor_has_error[DRIBBLER_INDEX]      ) ,
     .duty_cycle             ( duty_cycle[DRIBBLER_INDEX]            ) ,
     .hall                   ( hall_s[DRIBBLER_INDEX]                ) ,
     .phaseH                 ( phaseH_o[DRIBBLER_INDEX]              ) ,
     .phaseL                 ( phaseL_o[DRIBBLER_INDEX]              ) ,
     .hall_count             ( hall_count[DRIBBLER_INDEX]            ) ,
-    .connected              ( hall_conns[DRIBBLER_INDEX]            )
+    .has_error              ( motor_has_error[DRIBBLER_INDEX]       )
 );
 `endif  // DRIBBLER_MOTOR_DISABLE
 

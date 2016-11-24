@@ -234,9 +234,9 @@ int main() {
 
         // update target velocity from packet
         Task_Controller_UpdateTarget({
-            (float)msg->bodyX / rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
-            (float)msg->bodyY / rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
-            (float)msg->bodyW / rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
+            static_cast<float>(msg->bodyX) / rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
+            static_cast<float>(msg->bodyY) / rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
+            static_cast<float>(msg->bodyW) / rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
         });
 
         // dribbler
@@ -265,8 +265,8 @@ int main() {
 
         // report any motor errors
         reply.motorErrors = 0;
-        for (size_t i = 0; i < 5; i++) {
-            bool err = global_motors[i].status.hasError;
+        for (auto i = 0; i < 5; i++) {
+            auto err = global_motors[i].status.hasError;
             if (err) reply.motorErrors |= (1 << i);
         }
 
@@ -301,7 +301,7 @@ int main() {
     osStatus tState = osThreadSetPriority(mainID, osPriorityNormal);
     ASSERT(tState == osOK);
 
-    unsigned int ll = 0;
+    auto ll = 0;
     uint16_t errorBitmask = 0;
     if (!fpgaInitialized) {
         // assume all motors have errors if FPGA does not work
@@ -340,8 +340,8 @@ int main() {
             make_pair(2, RJ_ERR_LED_M3), make_pair(3, RJ_ERR_LED_M4),
             make_pair(4, RJ_ERR_LED_DRIB)};
 
-        for (auto& pair : motorErrLedMapping) {
-            const motorErr_t& status = global_motors[pair.first].status;
+        for (const auto& pair : motorErrLedMapping) {
+            const auto& status = global_motors[pair.first].status;
             // clear the bit
             errorBitmask &= ~(1 << pair.second);
             // set the bit to whatever hasError is set to
