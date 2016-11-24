@@ -140,17 +140,20 @@ void Task_Controller(void const* args) {
 
         // take first 4 encoder deltas
         array<int16_t, 4> driveMotorEnc;
-        for (int i = 0; i < 4; i++) driveMotorEnc[i] = enc_deltas[i];
+        for (auto i = 0; i < 4; i++) driveMotorEnc[i] = enc_deltas[i];
 
         // run PID controller to determine what duty cycles to use to drive the
         // motors.
-        array<int16_t, 4> driveMotorDutyCycles =
-            pidController.run(driveMotorEnc, dt);
+        array<int16_t, 4> driveMotorDutyCycles = pidController.run(driveMotorEnc, dt);
 
         // assign the duty cycles, zero out motors that the fpga returns an
         // error for
-        for (int i = 0; i < 4; i++)
-            duty_cycles[i] = driveMotorDutyCycles[i] * (statusByte & (1 << i));
+        auto i = 0;
+        for (const auto& vel : driveMotorDutyCycles) {
+            const bool hasError = (statusByte & (1 << i));
+            duty_cycles[i] = (hasError ? 0 : vel);
+            ++i;
+        }
 
         // limit duty cycle values, while keeping sign (+ or -)
         for (int16_t& dc : duty_cycles) {

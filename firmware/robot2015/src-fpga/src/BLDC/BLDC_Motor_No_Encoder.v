@@ -36,7 +36,7 @@ output [HALL_COUNT_WIDTH-1:0] hall_count;
 output has_error;
 // ===============================================
 
-wire hall_connected, hall_fault;
+wire is_hall_connected, has_hall_fault;
 
 // Show the expected startup length during synthesis. Assumes an 18.432MHz input clock.
 initial begin
@@ -65,11 +65,13 @@ BLDC_Driver #(                  // Instantiation of the motor driving module
     .duty_cycle                 ( { duty_cycle[DUTY_CYCLE_WIDTH-2:0], 1'b0 } ) ,
     .phaseH                     ( phaseH                    ) ,
     .phaseL                     ( phaseL                    ) ,
-    .connected                  ( hall_connected            ) ,
-    .fault                      ( hall_fault                )
+    .connected                  ( is_hall_connected         ) ,
+    .fault                      ( has_hall_fault            )
 );
 
-assign has_error = hall_connected & ~(hall_fault);
+wire has_fault = has_hall_fault;
+
+assign has_error = ~is_hall_connected | has_fault;
 
 endmodule
 

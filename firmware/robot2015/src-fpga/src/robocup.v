@@ -653,8 +653,8 @@ BLDC_Motor_No_Encoder #(
     .HALL_COUNT_WIDTH       ( HALL_COUNT_WIDTH                      )
     ) dribbler_motor (
     .clk                    ( sysclk                                ) ,
-    .en                     ( motors_en & sys_rdy                  ) ,
-    .reset_hall_count       ( motor_has_error[DRIBBLER_INDEX]      ) ,
+    .en                     ( motors_en & sys_rdy                   ) ,
+    .reset_hall_count       ( motor_update_flag                     ) ,
     .duty_cycle             ( duty_cycle[DRIBBLER_INDEX]            ) ,
     .hall                   ( hall_s[DRIBBLER_INDEX]                ) ,
     .phaseH                 ( phaseH_o[DRIBBLER_INDEX]              ) ,

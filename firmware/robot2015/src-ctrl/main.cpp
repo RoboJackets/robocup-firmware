@@ -238,12 +238,12 @@ int main() {
     RadioProtocol radioProtocol(CommModule::Instance, global_radio);
     radioProtocol.setUID(robotShellID);
     radioProtocol.start();
+    
     radioProtocol.rxCallback = [&](const rtp::ControlMessage* msg, const bool addressed) {
         // reset timeout
         radioTimeoutTimer.start(RADIO_TIMEOUT);
 
         if (addressed) {
-
             // update target velocity from packet
             Task_Controller_UpdateTarget({
                 static_cast<float>(msg->bodyX) / rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
@@ -256,7 +256,6 @@ int main() {
 
             // kick!
             kickStrength = msg->kickStrength;
-            // kickStrength = 50;
             if (msg->triggerMode == 1) {
                 // kick immediate
                 kick_hack.kick(kickStrength);
@@ -315,7 +314,7 @@ int main() {
     osStatus tState = osThreadSetPriority(mainID, osPriorityNormal);
     ASSERT(tState == osOK);
 
-    size_t ll = 0;
+    auto ll = 0;
     uint16_t errorBitmask = 0;
     if (!fpgaInitialized) {
         // assume all motors have errors if FPGA does not work
