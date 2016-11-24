@@ -161,8 +161,7 @@ int main() {
     // resistors and polarity swap are enabled for the 4 rotary selector lines.
     MCP23017 ioExpander(RJ_I2C_SDA, RJ_I2C_SCL, RJ_IO_EXPANDER_I2C_ADDRESS);
     ioExpander.config(0x00FF, 0x00ff, 0x00ff);
-    ioExpander.writeMask((uint16_t)~IOExpanderErrorLEDMask,
-                         IOExpanderErrorLEDMask);
+    ioExpander.writeMask(static_cast<uint16_t>(~IOExpanderErrorLEDMask), IOExpanderErrorLEDMask);
 
     // DIP Switch 1 controls the radio channel.
     uint8_t currentRadioChannel = 0;
@@ -301,7 +300,7 @@ int main() {
     osStatus tState = osThreadSetPriority(mainID, osPriorityNormal);
     ASSERT(tState == osOK);
 
-    auto ll = 0;
+    size_t ll = 0;
     uint16_t errorBitmask = 0;
     if (!fpgaInitialized) {
         // assume all motors have errors if FPGA does not work
@@ -341,7 +340,7 @@ int main() {
             make_pair(4, RJ_ERR_LED_DRIB)};
 
         for (const auto& pair : motorErrLedMapping) {
-            const auto& status = global_motors[pair.first].status;
+            const motorErr_t& status = global_motors[pair.first].status;
             // clear the bit
             errorBitmask &= ~(1 << pair.second);
             // set the bit to whatever hasError is set to
