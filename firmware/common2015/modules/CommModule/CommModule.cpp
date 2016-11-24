@@ -112,6 +112,8 @@ void CommModule::rxThread() {
         // class
         osEvent evt = osMailGet(_rxQueue, osWaitForever);
 
+        // wait_ms(25);
+
         if (evt.status == osEventMail) {
             // get a pointer to where the data is stored
             rtp::packet* p = (rtp::packet*)evt.value.p;

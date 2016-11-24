@@ -25,7 +25,7 @@ void ASSERT_IS_ADDR(uint16_t addr) {
 }
 
 // TODO(justin): remove this
-CC1201* global_radio = nullptr;
+// CC1201* global_radio = nullptr;
 
 CC1201::CC1201(shared_ptr<SharedSPI> sharedSPI, PinName nCs, PinName intPin,
                const registerSetting_t* regs, size_t len, int rssiOffset)

@@ -11,8 +11,9 @@
 #include <watchdog.hpp>
 
 #include "BallSense.hpp"
-#include "CC1201.cpp"
-#include "KickerBoard.hpp"
+// #include "CC1201.cpp"
+#include "Decawave.hpp"
+#include "HackedKickerBoard.hpp"
 #include "RadioProtocol.hpp"
 #include "RobotModel.hpp"
 #include "RotarySelector.hpp"
@@ -61,6 +62,10 @@ int main() {
     // set baud rate to higher value than the default for faster terminal
     s.baud(57600);
 
+    uint8_t wd_flag = (LPC_WDT->WDMOD >> 2) & 1;
+    printf("Watchdog caused reset: %s\r\n", (wd_flag > 0) ? "True" : "False");
+    wd_flag = (LPC_WDT->WDMOD >> 2) & 1;
+
     // Turn on some startup LEDs to show they're working, they are turned off
     // before we hit the while loop
     statusLights(true);
@@ -104,18 +109,18 @@ int main() {
     sharedSPI->format(8, 0);  // 8 bits per transfer
 
     // Initialize kicker board
-    KickerBoard::Instance = make_shared<KickerBoard>(
-        sharedSPI, RJ_KICKER_nCS, RJ_KICKER_nRESET, "/local/rj-kickr.nib");
+    //HackedKickerBoard::Instance = make_shared<HackedKickerBoard>(RJ_KICKER_nRESET);
+    HackedKickerBoard kick_hack(RJ_KICKER_nRESET);
     // Reprogramming each time (first arg of flash false) is actually
     // faster than checking the full memory to see if we need to reflash.
-    bool kickerReady = KickerBoard::Instance->flash(false, false);
+    // bool kickerReady = KickerBoard::Instance->flash(false, false);
 
     // flag fro kicking when the ball sense triggers
     bool kickOnBreakBeam = false;
     // Made up value right now, this is the amount of time in ms to
     // allow the capacitor dump power into kicker. Will need to be
     // adjusted once hardware is available.
-    uint8_t kickStrength = DB_KICK_TIME;
+    uint8_t kickStrength = 0x08;//DB_KICK_TIME;
 
     // Initialize and start ball sensor
     BallSense ballSense(RJ_BALL_EMIT, RJ_BALL_DETECTOR);
@@ -127,10 +132,12 @@ int main() {
         ballStatusPin = !haveBall;
 
         // kick!
-        if (kickerReady && haveBall && kickOnBreakBeam) {
-            KickerBoard::Instance->kick(kickStrength);
-        }
+        // if (kickerReady && haveBall && kickOnBreakBeam) {
+        //     KickerBoard::Instance->kick(kickStrength);
+        // }
     };
+    // uintptr_t p = (uintptr_t)(void*)&sharedSPI;
+    // LOG(INIT, "test 0 %p %d",(int)&sharedSPI, *reinterpret_cast<char *>((void*)&sharedSPI));
 
     // Initialize and configure the fpga with the given bitfile
     FPGA::Instance = new FPGA(sharedSPI, RJ_FPGA_nCS, RJ_FPGA_INIT_B,
@@ -187,10 +194,14 @@ int main() {
     // though this is multi-threaded code, that dosen't mean it's
     // a multi-core system.
 
+    // LOG(INIT, "test 1");
+
     // Start the thread task for the on-board control loop
     Thread controller_task(Task_Controller, mainID, osPriorityHigh,
                            DEFAULT_STACK_SIZE / 2);
     Thread::signal_wait(MAIN_TASK_CONTINUE, osWaitForever);
+
+    // LOG(INIT, "test 2");
 
 #ifdef RJ_ENABLE_ROBOT_CONSOLE
     // Start the thread task for the serial console
@@ -214,9 +225,9 @@ int main() {
     RtosTimerHelper radioTimeoutTimer(
         [&]() {
             // reset radio
-            global_radio->strobe(CC1201_STROBE_SIDLE);
-            global_radio->strobe(CC1201_STROBE_SFRX);
-            global_radio->strobe(CC1201_STROBE_SRX);
+            //global_radio->strobe(CC1201_STROBE_SIDLE);
+            //global_radio->strobe(CC1201_STROBE_SFRX);
+            //global_radio->strobe(CC1201_STROBE_SRX);
 
             radioTimeoutTimer.start(RADIO_TIMEOUT);
         },
@@ -227,33 +238,37 @@ int main() {
     RadioProtocol radioProtocol(CommModule::Instance, global_radio);
     radioProtocol.setUID(robotShellID);
     radioProtocol.start();
-    radioProtocol.rxCallback = [&](const rtp::ControlMessage* msg) {
+    radioProtocol.rxCallback = [&](const rtp::ControlMessage* msg, const bool addressed) {
         // reset timeout
         radioTimeoutTimer.start(RADIO_TIMEOUT);
 
-        // update target velocity from packet
-        Task_Controller_UpdateTarget({
-            static_cast<float>(msg->bodyX) / rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
-            static_cast<float>(msg->bodyY) / rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
-            static_cast<float>(msg->bodyW) / rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
-        });
+        if (addressed) {
 
-        // dribbler
-        Task_Controller_UpdateDribbler(msg->dribbler);
+            // update target velocity from packet
+            Task_Controller_UpdateTarget({
+                static_cast<float>(msg->bodyX) / rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
+                static_cast<float>(msg->bodyY) / rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
+                static_cast<float>(msg->bodyW) / rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
+            });
 
-        // kick!
-        kickStrength = msg->kickStrength;
-        if (msg->triggerMode == 1) {
-            // kick immediate
-            KickerBoard::Instance->kick(kickStrength);
-        } else if (msg->triggerMode == 2) {
-            // kick on break beam
-            if (ballSense.have_ball()) {
-                KickerBoard::Instance->kick(kickStrength);
-                kickOnBreakBeam = false;
-            } else {
-                // set flag so that next break beam triggers a kick
-                kickOnBreakBeam = true;
+            // dribbler
+            Task_Controller_UpdateDribbler(msg->dribbler);
+
+            // kick!
+            kickStrength = msg->kickStrength;
+            // kickStrength = 50;
+            if (msg->triggerMode == 1) {
+                // kick immediate
+                kick_hack.kick(kickStrength);
+            } else if (msg->triggerMode == 2) {
+                // kick on break beam
+                if (ballSense.have_ball()) {
+                    kick_hack.kick(kickStrength);
+                    kickOnBreakBeam = false;
+                } else {
+                    // set flag so that next break beam triggers a kick
+                    kickOnBreakBeam = true;
+                }
             }
         }
 
@@ -284,7 +299,7 @@ int main() {
         return replyBuf;
     };
 
-    KickerBoard::Instance->charge();
+    // KickerBoard::Instance->charge();
     LOG(INIT, "Started charging kicker board.");
     uint8_t kickerVoltage = 0;
 
@@ -315,7 +330,7 @@ int main() {
         // make sure we can always reach back to main by
         // renewing the watchdog timer periodicly
         Watchdog::Renew();
-
+        global_radio->printStuff();
         // periodically reset the console text's format
         ll++;
         if ((ll % 8) == 0) {
@@ -351,7 +366,7 @@ int main() {
         battVoltage = (batt.read_u16() >> 8);
 
         // get kicker voltage
-        KickerBoard::Instance->read_voltage(&kickerVoltage);
+        // KickerBoard::Instance->read_voltage(&kickerVoltage);
         LOG(INF1, "Kicker voltage: %u", kickerVoltage);
 
         // update shell id
@@ -361,7 +376,7 @@ int main() {
         // update radio channel
         uint8_t newRadioChannel = radioChannelSwitch.read();
         if (newRadioChannel != currentRadioChannel) {
-            global_radio->setChannel(newRadioChannel);
+            // global_radio->setChannel(newRadioChannel);
             currentRadioChannel = newRadioChannel;
             LOG(INIT, "Changed radio channel to %u", newRadioChannel);
         }

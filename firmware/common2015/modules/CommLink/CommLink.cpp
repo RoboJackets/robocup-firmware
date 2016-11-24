@@ -1,4 +1,5 @@
 #include "CommLink.hpp"
+#include "Decawave.hpp"
 
 #include "assert.hpp"
 #include "logger.hpp"
@@ -15,7 +16,7 @@ CommLink::CommLink(shared_ptr<SharedSPI> sharedSPI, PinName nCs,
       _rxThread(&CommLink::rxThreadHelper, this, osPriorityNormal,
                 DEFAULT_STACK_SIZE / 2) {
     setSPIFrequency(5000000);
-    _int_in.mode(PullUp);
+    _int_in.mode(PullDown);
 }
 
 // =================== RX THREAD ===================
@@ -25,10 +26,9 @@ void CommLink::rxThread() {
     const osPriority threadPriority = _rxThread.get_priority();
 
     // Set the function to call on an interrupt trigger
-    _int_in.fall(this, &CommLink::ISR);
+    _int_in.rise(this, &CommLink::ISR);
 
     std::vector<uint8_t> buf;
-    buf.reserve(rtp::MAX_DATA_SZ);
 
     // Only continue past this point once the hardware link is initialized
     Thread::signal_wait(COMM_LINK_SIGNAL_START_THREAD);
@@ -39,6 +39,7 @@ void CommLink::rxThread() {
     while (true) {
         // Wait until new data has arrived
         // this is triggered by CommLink::ISR()
+        Thread::yield();
         Thread::signal_wait(COMM_LINK_SIGNAL_RX_TRIGGER);
 
         LOG(INF3, "RX interrupt triggered");
@@ -46,6 +47,7 @@ void CommLink::rxThread() {
         // Get the received data from the external chip
         buf.clear();
         int32_t response = getData(&buf);
+        Thread::yield();
 
         if (response == COMM_SUCCESS) {
             // Write the data to the CommModule object's rxQueue
