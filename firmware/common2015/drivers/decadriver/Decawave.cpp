@@ -103,7 +103,6 @@ Decawave::Decawave(shared_ptr<SharedSPI> sharedSPI, PinName nCs, PinName intPin)
 
 int32_t Decawave::sendPacket(const rtp::packet* pkt){
     // Return failutre if not initialized
-    // LOG(INIT,"SENDING");
     if (!_isInit) return COMM_FAILURE;
     dwt_rxreset();
     dwt_forcetrxoff();
@@ -131,15 +130,12 @@ int32_t Decawave::sendPacket(const rtp::packet* pkt){
     uint8_t* headerData = (uint8_t*)&pkt->header;
     for (i = 0; i < sizeof(pkt->header); ++i) {
         tx_buffer[i+9] = headerData[i];
-        // printf("%d ",tx_buffer[i]);
     }
     i+=8;
     for (uint8_t byte : pkt->payload) {
         i++;
         tx_buffer[i] = byte;
-        // printf("%d ",tx_buffer[i]);
     }
-    // printf("\r\n");
     tx_buffer[i + 1] = 0;
     tx_buffer[i + 2] = 0;
 
@@ -147,7 +143,6 @@ int32_t Decawave::sendPacket(const rtp::packet* pkt){
     dwt_writetxfctrl(i+3, 0, 0);
 
     if (DWT_SUCCESS == dwt_starttx(DWT_START_TX_IMMEDIATE | DWT_RESPONSE_EXPECTED)) {
-        // LOG(INIT, "0x%02X", dwt_read32bitreg(SYS_CFG_ID));
         return COMM_SUCCESS;
     }
 
@@ -166,39 +161,24 @@ int32_t Decawave::getData(std::vector<uint8_t>* buf){
     // LOG(INIT, "Getting data");
     if (!_isInit) return COMM_FAILURE;
 
-    // printf("c_%#010x\n\r", dwt_read32bitreg(SYS_CFG_ID));
-    // uint32_t stat = dwt_read32bitreg(SYS_STATUS_ID);
-    // if (!(stat & 0x00002000)) {
-    //     // dwt_write32bitreg(SYS_STATUS_ID, SYS_STATUS_LDEERR | SYS_STATUS_ALL_TX);
-    //     printf("b_%#010x\n\r", stat);
-    //     return COMM_FAILURE;
-    // }
-
-
     rx_status = COMM_NO_DATA;
     rx_len = 0; // Probably not needed
 
     dwt_isr();
     dwt_rxenable(DWT_START_RX_IMMEDIATE);
 
-    // printf("0x%x 0x%x 0x%x\r\n", rx_buffer[0], rx_buffer[1], rx_buffer[5]);
-
-    // LOG(INIT, "Something %u, want %u, not %u, len %u", rx_status, COMM_SUCCESS, COMM_DEV_BUF_ERR, rx_len);
     if (rx_status == COMM_SUCCESS) {
         // LOG(INIT, "SUCCESS?");
 
         for (uint8_t i = 9; i < rx_len - 2; i++) {
-            // printf("%d ",rx_buffer[i]);
             buf->push_back(rx_buffer[i]);
         }
-        // printf("\r\n");
     }
 
+    // Probably not needed
     for (uint8_t i = 0; i < rx_len; i++) {
         rx_buffer[i] = 0;
     }
-
-    // printf("n_%#010x\n\r", dwt_read32bitreg(SYS_STATUS_ID));
 
     return rx_status;
 }
@@ -237,9 +217,6 @@ void Decawave::setAddress(uint16_t addr) {
 
 int Decawave::writetospi(uint16 headerLength, const uint8 *headerBuffer,
                         uint32 bodylength, const uint8 *bodyBuffer) {
-  //_spi.format(8,0);
-  //_spi.frequency(2000000);
-
   chipSelect();
 
   for (size_t i = 0; i < headerLength; i++)
@@ -255,9 +232,6 @@ int Decawave::writetospi(uint16 headerLength, const uint8 *headerBuffer,
 
 int Decawave::readfromspi(uint16 headerLength, const uint8 *headerBuffer,
                         uint32 readlength, uint8 *readBuffer) {
-  //_spi.format(8,0);
-  //_spi.frequency(2000000);
-
   chipSelect();
 
   for (size_t i = 0; i < headerLength; i++) {
@@ -283,7 +257,6 @@ void Decawave::deca_sleep(unsigned int time_ms) {
 // Callback functions for decawave interrupt
 
 void Decawave::getData_success(const dwt_cb_data_t *cb_data) {
-    // uint16 frame_len = dwt_read32bitreg(RX_FINFO_ID) & RX_FINFO_RXFL_MASK_1023;
     if (FRAME_LEN_MAX <= cb_data->datalength) {
         LOG(WARN, "Frame recieved too large:\r\n"
             "   Recieved: %u Max: %u", cb_data->datalength, FRAME_LEN_MAX);
@@ -291,23 +264,17 @@ void Decawave::getData_success(const dwt_cb_data_t *cb_data) {
         rx_status = COMM_DEV_BUF_ERR;
     }
 
-    // printf("g_%#010x\n\r",cb_data->status);
-
     // Read recived data to rx_buffer array
     dwt_readrxdata(rx_buffer, cb_data->datalength, 0);
 
     rx_len = cb_data->datalength;
     rx_status = COMM_SUCCESS;
-    // LOG(INIT,"almost success");
-    // dwt_rxenable(DWT_START_RX_IMMEDIATE);
 }
 
 void Decawave::getData_fail(const dwt_cb_data_t *cb_data) {
     if (rx_status != COMM_SUCCESS) { //TODO: probably better way to do this
         rx_status = COMM_DEV_BUF_ERR;
     }
-    // printf("b_%#010x\n\r",cb_data->status);
-    // dwt_rxenable(DWT_START_RX_IMMEDIATE);
 }
 
 
@@ -320,23 +287,3 @@ void Decawave::logSPI(int num) {
 void Decawave::setLED(bool ledOn) {
     dwt_setleds(ledOn);
 }
-
-/*
-// static void getData_success_cb(const dwt_cb_data_t *cb_data) {
-    global_radio->getData_success(cb_data);
-}
-
-// static void getData_fail_cb(const dwt_cb_data_t *cb_data) {
-    global_radio->getData_fail(cb_data);
-}
-
-// int readfromspi(uint16 headerLength, const uint8 *headerBuffer,
-                        uint32 readlength, uint8 *readBuffer) {
-    return global_radio->readfromspi(headerLength, headerBuffer, readlength, readBuffer);
-}
-
-// int writetospi(uint16 headerLength, const uint8 *headerBuffer,
-                        uint32 bodylength, const uint8 *bodyBuffer) {
-    return global_radio->writetospi(headerLength, headerBuffer, bodylength, bodyBuffer);
-}
-*/
