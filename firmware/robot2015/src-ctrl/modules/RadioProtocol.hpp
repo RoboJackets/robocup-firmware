@@ -101,7 +101,12 @@ public:
         _timeoutTimer.stop();
         _timeoutTimer.start(TIMEOUT_INTERVAL);
 
-        _replyTimer.start(1 + SLOT_DELAY * slot);
+        // TODO: this is bad and lazy
+        if (addressed) {
+            _replyTimer.start(1 + SLOT_DELAY * slot);
+        } else {
+            _replyTimer.start(1 + SLOT_DELAY * (_uid %6));
+        }
 
         if (rxCallback) {
             _reply = std::move(rxCallback(msg, addressed));

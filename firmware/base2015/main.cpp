@@ -146,5 +146,6 @@ int main() {
             // transmit!
             CommModule::Instance->send(std::move(pkt));
         }
+        Thread::yield();
     }
 }

@@ -2177,7 +2177,7 @@ void dw1000_api::dwt_isr(void)
     }
 
     // Handle RX errors events
-    if(status & (SYS_STATUS_ALL_RX_ERR | 0x00002000))
+    if(status & SYS_STATUS_ALL_RX_ERR)
     {
         dwt_write32bitreg(SYS_STATUS_ID, SYS_STATUS_ALL_RX_ERR); // Clear RX error event bits
 
