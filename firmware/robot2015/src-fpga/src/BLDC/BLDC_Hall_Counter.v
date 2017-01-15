@@ -1,9 +1,9 @@
 /*
 *  BLDC_Hall_Counter.v
-*  
+*
 *  Give the hall effect readings as an input and this gives the number times they have changed states as an output.
 *  A synchronous reset input is used to reset the count number.
-*  
+*
 */
 
 `ifndef _BLDC_HALL_COUNTER_
@@ -13,7 +13,7 @@
 module BLDC_Hall_Counter ( clk, reset, hall, count );
 
 // Module parameters
-parameter COUNTER_WIDTH = 8;
+parameter COUNTER_WIDTH = ( 8 );
 
 // Module inputs/outputs
 input clk, reset;
@@ -61,12 +61,12 @@ always @( posedge clk ) begin : HALL_COUNTER
 
     hall_d <= hall;
 
-    if ( reset == 1 ) begin
+    if ( reset ) begin
         count <= 0;
     end else begin
-        if ( count_up == 1 ) begin
+        if ( count_up ) begin
             count <= count + 1;
-        end else if ( count_down == 1 ) begin
+        end else if ( count_down ) begin
             count <= count - 1;
         end
     end

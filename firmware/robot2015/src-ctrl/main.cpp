@@ -168,8 +168,7 @@ int main() {
     // resistors and polarity swap are enabled for the 4 rotary selector lines.
     MCP23017 ioExpander(RJ_I2C_SDA, RJ_I2C_SCL, RJ_IO_EXPANDER_I2C_ADDRESS);
     ioExpander.config(0x00FF, 0x00ff, 0x00ff);
-    ioExpander.writeMask((uint16_t)~IOExpanderErrorLEDMask,
-                         IOExpanderErrorLEDMask);
+    ioExpander.writeMask(static_cast<uint16_t>(~IOExpanderErrorLEDMask), IOExpanderErrorLEDMask);
 
     // DIP Switch 1 controls the radio channel.
     uint8_t currentRadioChannel = 0;
@@ -239,17 +238,17 @@ int main() {
     RadioProtocol radioProtocol(CommModule::Instance, global_radio);
     radioProtocol.setUID(robotShellID);
     radioProtocol.start();
+    
     radioProtocol.rxCallback = [&](const rtp::ControlMessage* msg, const bool addressed) {
         // reset timeout
         radioTimeoutTimer.start(RADIO_TIMEOUT);
 
         if (addressed) {
-
             // update target velocity from packet
             Task_Controller_UpdateTarget({
-                (float)msg->bodyX / rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
-                (float)msg->bodyY / rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
-                (float)msg->bodyW / rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
+                static_cast<float>(msg->bodyX) / rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
+                static_cast<float>(msg->bodyY) / rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
+                static_cast<float>(msg->bodyW) / rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
             });
 
             // dribbler
@@ -257,7 +256,6 @@ int main() {
 
             // kick!
             kickStrength = msg->kickStrength;
-            // kickStrength = 50;
             if (msg->triggerMode == 1) {
                 // kick immediate
                 kick_hack.kick(kickStrength);
@@ -280,8 +278,8 @@ int main() {
 
         // report any motor errors
         reply.motorErrors = 0;
-        for (size_t i = 0; i < 5; i++) {
-            bool err = global_motors[i].status.hasError;
+        for (auto i = 0; i < 5; i++) {
+            auto err = global_motors[i].status.hasError;
             if (err) reply.motorErrors |= (1 << i);
         }
 
@@ -316,7 +314,7 @@ int main() {
     osStatus tState = osThreadSetPriority(mainID, osPriorityNormal);
     ASSERT(tState == osOK);
 
-    unsigned int ll = 0;
+    auto ll = 0;
     uint16_t errorBitmask = 0;
     if (!fpgaInitialized) {
         // assume all motors have errors if FPGA does not work
@@ -355,7 +353,7 @@ int main() {
             make_pair(2, RJ_ERR_LED_M3), make_pair(3, RJ_ERR_LED_M4),
             make_pair(4, RJ_ERR_LED_DRIB)};
 
-        for (auto& pair : motorErrLedMapping) {
+        for (const auto& pair : motorErrLedMapping) {
             const motorErr_t& status = global_motors[pair.first].status;
             // clear the bit
             errorBitmask &= ~(1 << pair.second);
