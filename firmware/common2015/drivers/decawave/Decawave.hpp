@@ -4,8 +4,8 @@
 #include "mbed.h"
 #include "rtos.h"
 
-#include "deca_device_api.hpp"
-#include "deca_regs.h"
+#include "decadriver/deca_device_api.hpp"
+#include "decadriver/deca_regs.h"
 
 #define FRAME_LEN_MAX 127
 
