@@ -135,7 +135,8 @@ base2011-prog: base2011
 STYLIZE_DIFFBASE ?= master
 STYLE_EXCLUDE_DIRS=build \
 				   external \
-				   run
+				   run \
+				   firmware/common2015/drivers/decawave/decadriver
 # automatically format code according to our style config defined in .clang-format
 pretty:
 	@stylize --diffbase=$(STYLIZE_DIFFBASE) --clang_style=file --yapf_style=.style.yapf --exclude_dirs $(STYLE_EXCLUDE_DIRS)
