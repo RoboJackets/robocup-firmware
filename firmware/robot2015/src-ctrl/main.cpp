@@ -132,9 +132,9 @@ int main() {
         ballStatusPin = !haveBall;
 
         // kick!
-        // if (kickerReady && haveBall && kickOnBreakBeam) {
-        //     KickerBoard::Instance->kick(kickStrength);
-        // }
+        if (haveBall && kickOnBreakBeam) {
+            kick_hack.kick(kickStrength);
+        }
     };
     // uintptr_t p = (uintptr_t)(void*)&sharedSPI;
     // LOG(INIT, "test 0 %p %d",(int)&sharedSPI, *reinterpret_cast<char *>((void*)&sharedSPI));
@@ -238,7 +238,7 @@ int main() {
     RadioProtocol radioProtocol(CommModule::Instance, global_radio);
     radioProtocol.setUID(robotShellID);
     radioProtocol.start();
-    
+
     radioProtocol.rxCallback = [&](const rtp::ControlMessage* msg, const bool addressed) {
         // reset timeout
         radioTimeoutTimer.start(RADIO_TIMEOUT);
