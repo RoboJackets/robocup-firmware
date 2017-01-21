@@ -19,10 +19,10 @@ public:
     int32_t selfTest();
     bool isConnected() const;
 
-    int writetospi(uint16 headerLength, const uint8 *headerBuffer,
-                        uint32 bodylength, const uint8 *bodyBuffer);
-    int readfromspi(uint16 headerLength, const uint8 *headerBuffer,
-                        uint32 readlength, uint8 *readBuffer);
+    int writetospi(uint16 headerLength, const uint8* headerBuffer,
+                   uint32 bodylength, const uint8* bodyBuffer);
+    int readfromspi(uint16 headerLength, const uint8* headerBuffer,
+                    uint32 readlength, uint8* readBuffer);
 
     decaIrqStatus_t decamutexon(void);
     void decamutexoff(decaIrqStatus_t s);
@@ -33,9 +33,10 @@ public:
     void setAddress(uint16_t addr);
     void logSPI(int num);
     void setLED(bool ledOn);
+
 private:
     uint32_t _chip_version;
-    uint8 rx_buffer[100]; //TODO: better tx and rx buffer
+    uint8 rx_buffer[100];  // TODO: better tx and rx buffer
     uint8 tx_buffer[100];
     bool _isInit;
 
@@ -43,20 +44,21 @@ private:
     uint8_t rx_len;
     uint8_t _addr = rtp::INVALID_ROBOT_UID;
 
-    void getData_success(const dwt_cb_data_t *cb_data);
-    void getData_fail(const dwt_cb_data_t *cb_data);
-
+    void getData_success(const dwt_cb_data_t* cb_data);
+    void getData_fail(const dwt_cb_data_t* cb_data);
 };
 
 // int readfromspi(uint16 headerLength, const uint8 *headerBuffer,
 //                         uint32 readlength, uint8 *readBuffer) {
 //     LOG(INIT, "spi 1");
-//     return global_radio->readfromspi(headerLength, headerBuffer, readlength, readBuffer);
+//     return global_radio->readfromspi(headerLength, headerBuffer, readlength,
+//     readBuffer);
 // }
 //
 // int writetospi(uint16 headerLength, const uint8 *headerBuffer,
 //                         uint32 bodylength, const uint8 *bodyBuffer) {
-//     return global_radio->writetospi(headerLength, headerBuffer, bodylength, bodyBuffer);
+//     return global_radio->writetospi(headerLength, headerBuffer, bodylength,
+//     bodyBuffer);
 // }
 
 extern Decawave* global_radio;

@@ -2,8 +2,8 @@
 
 #include <rtos.h>
 #include "CC1201.hpp"
-#include "Decawave.hpp"
 #include "CommModule.hpp"
+#include "Decawave.hpp"
 #include "RtosTimerHelper.hpp"
 
 class RadioProtocol {
@@ -46,7 +46,8 @@ public:
      * @param msg A pointer to the start of the message addressed to this robot
      * @return formatted reply buffer
      */
-    std::function<std::vector<uint8_t>(const rtp::ControlMessage* msg, const bool addresed)>
+    std::function<std::vector<uint8_t>(const rtp::ControlMessage* msg,
+                                       const bool addresed)>
         rxCallback;
 
     void start() {
@@ -105,7 +106,7 @@ public:
         if (addressed) {
             _replyTimer.start(1 + SLOT_DELAY * slot);
         } else {
-            _replyTimer.start(1 + SLOT_DELAY * (_uid %6));
+            _replyTimer.start(1 + SLOT_DELAY * (_uid % 6));
         }
 
         if (rxCallback) {
@@ -113,7 +114,6 @@ public:
         } else {
             LOG(WARN, "no callback set");
         }
-
     }
 
 private:

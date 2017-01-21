@@ -144,7 +144,8 @@ void Task_Controller(void const* args) {
 
         // run PID controller to determine what duty cycles to use to drive the
         // motors.
-        array<int16_t, 4> driveMotorDutyCycles = pidController.run(driveMotorEnc, dt);
+        array<int16_t, 4> driveMotorDutyCycles =
+            pidController.run(driveMotorEnc, dt);
 
         // assign the duty cycles, zero out motors that the fpga returns an
         // error for

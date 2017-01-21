@@ -4,22 +4,22 @@
 
 class HackedKickerBoard {
 public:
-
     // time to wait between kicks, in microseconds
     const uint32_t MIN_CHARGE_TIME = 2.5 * 1e6;
 
     HackedKickerBoard(DigitalOut kickLine)
         : _kickLine(kickLine),
           _kickTimer(this, &HackedKickerBoard::_stopKicking, osTimerOnce) {
-            // ensure kicker is off
-            _kickLine = 0;
-            _lastKickTime = 0;
-          }
+        // ensure kicker is off
+        _kickLine = 0;
+        _lastKickTime = 0;
+    }
 
     void kick(uint8_t power) {
         uint32_t t = us_ticker_read();
 
-        // LOG(INIT, "%08X - %08X = %08X : %08X", t, _lastKickTime, t - _lastKickTime, MIN_CHARGE_TIME);
+        // LOG(INIT, "%08X - %08X = %08X : %08X", t, _lastKickTime, t -
+        // _lastKickTime, MIN_CHARGE_TIME);
 
         // don't do anything - it hasn't charged enough since the last kick
         if (t - _lastKickTime < MIN_CHARGE_TIME) {
@@ -30,10 +30,11 @@ public:
 
         _lastKickTime = t;
 
-        // power = 255 corresponds to 8ms kick time.  Everything lower is linearly scaled
+        // power = 255 corresponds to 8ms kick time.  Everything lower is
+        // linearly scaled
         uint8_t time = (float)power / 255.0f * 8.0f;
         LOG(INIT, "KICK : %08X, %08X", power, time);
-        if (time == 0 ) {
+        if (time == 0) {
             return;
         }
         _kickTimer.start(time);

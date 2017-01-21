@@ -109,7 +109,8 @@ int main() {
     sharedSPI->format(8, 0);  // 8 bits per transfer
 
     // Initialize kicker board
-    //HackedKickerBoard::Instance = make_shared<HackedKickerBoard>(RJ_KICKER_nRESET);
+    // HackedKickerBoard::Instance =
+    // make_shared<HackedKickerBoard>(RJ_KICKER_nRESET);
     HackedKickerBoard kick_hack(RJ_KICKER_nRESET);
     // Reprogramming each time (first arg of flash false) is actually
     // faster than checking the full memory to see if we need to reflash.
@@ -120,7 +121,7 @@ int main() {
     // Made up value right now, this is the amount of time in ms to
     // allow the capacitor dump power into kicker. Will need to be
     // adjusted once hardware is available.
-    uint8_t kickStrength = 0x08;//DB_KICK_TIME;
+    uint8_t kickStrength = 0x08;  // DB_KICK_TIME;
 
     // Initialize and start ball sensor
     BallSense ballSense(RJ_BALL_EMIT, RJ_BALL_DETECTOR);
@@ -137,7 +138,8 @@ int main() {
         }
     };
     // uintptr_t p = (uintptr_t)(void*)&sharedSPI;
-    // LOG(INIT, "test 0 %p %d",(int)&sharedSPI, *reinterpret_cast<char *>((void*)&sharedSPI));
+    // LOG(INIT, "test 0 %p %d",(int)&sharedSPI, *reinterpret_cast<char
+    // *>((void*)&sharedSPI));
 
     // Initialize and configure the fpga with the given bitfile
     FPGA::Instance = new FPGA(sharedSPI, RJ_FPGA_nCS, RJ_FPGA_INIT_B,
@@ -168,7 +170,8 @@ int main() {
     // resistors and polarity swap are enabled for the 4 rotary selector lines.
     MCP23017 ioExpander(RJ_I2C_SDA, RJ_I2C_SCL, RJ_IO_EXPANDER_I2C_ADDRESS);
     ioExpander.config(0x00FF, 0x00ff, 0x00ff);
-    ioExpander.writeMask(static_cast<uint16_t>(~IOExpanderErrorLEDMask), IOExpanderErrorLEDMask);
+    ioExpander.writeMask(static_cast<uint16_t>(~IOExpanderErrorLEDMask),
+                         IOExpanderErrorLEDMask);
 
     // DIP Switch 1 controls the radio channel.
     uint8_t currentRadioChannel = 0;
@@ -201,7 +204,7 @@ int main() {
                            DEFAULT_STACK_SIZE / 2);
     Thread::signal_wait(MAIN_TASK_CONTINUE, osWaitForever);
 
-    // LOG(INIT, "test 2");
+// LOG(INIT, "test 2");
 
 #ifdef RJ_ENABLE_ROBOT_CONSOLE
     // Start the thread task for the serial console
@@ -225,9 +228,9 @@ int main() {
     RtosTimerHelper radioTimeoutTimer(
         [&]() {
             // reset radio
-            //global_radio->strobe(CC1201_STROBE_SIDLE);
-            //global_radio->strobe(CC1201_STROBE_SFRX);
-            //global_radio->strobe(CC1201_STROBE_SRX);
+            // global_radio->strobe(CC1201_STROBE_SIDLE);
+            // global_radio->strobe(CC1201_STROBE_SFRX);
+            // global_radio->strobe(CC1201_STROBE_SRX);
 
             radioTimeoutTimer.start(RADIO_TIMEOUT);
         },
@@ -239,16 +242,20 @@ int main() {
     radioProtocol.setUID(robotShellID);
     radioProtocol.start();
 
-    radioProtocol.rxCallback = [&](const rtp::ControlMessage* msg, const bool addressed) {
+    radioProtocol.rxCallback = [&](const rtp::ControlMessage* msg,
+                                   const bool addressed) {
         // reset timeout
         radioTimeoutTimer.start(RADIO_TIMEOUT);
 
         if (addressed) {
             // update target velocity from packet
             Task_Controller_UpdateTarget({
-                static_cast<float>(msg->bodyX) / rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
-                static_cast<float>(msg->bodyY) / rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
-                static_cast<float>(msg->bodyW) / rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
+                static_cast<float>(msg->bodyX) /
+                    rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
+                static_cast<float>(msg->bodyY) /
+                    rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
+                static_cast<float>(msg->bodyW) /
+                    rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
             });
 
             // dribbler
