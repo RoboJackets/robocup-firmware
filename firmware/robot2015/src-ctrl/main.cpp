@@ -225,16 +225,14 @@ int main() {
 
     // Radio timeout timer
     const uint32_t RADIO_TIMEOUT = 100;
-    RtosTimerHelper radioTimeoutTimer(
-        [&]() {
-            // reset radio
-            // global_radio->strobe(CC1201_STROBE_SIDLE);
-            // global_radio->strobe(CC1201_STROBE_SFRX);
-            // global_radio->strobe(CC1201_STROBE_SRX);
+    RtosTimerHelper radioTimeoutTimer([&]() {
+        // reset radio
+        // global_radio->strobe(CC1201_STROBE_SIDLE);
+        // global_radio->strobe(CC1201_STROBE_SFRX);
+        // global_radio->strobe(CC1201_STROBE_SRX);
 
-            radioTimeoutTimer.start(RADIO_TIMEOUT);
-        },
-        osTimerOnce);
+        radioTimeoutTimer.start(RADIO_TIMEOUT);
+    }, osTimerOnce);
     radioTimeoutTimer.start(RADIO_TIMEOUT);
 
     // Setup radio protocol handling
@@ -242,68 +240,68 @@ int main() {
     radioProtocol.setUID(robotShellID);
     radioProtocol.start();
 
-    radioProtocol.rxCallback = [&](const rtp::ControlMessage* msg,
-                                   const bool addressed) {
-        // reset timeout
-        radioTimeoutTimer.start(RADIO_TIMEOUT);
+    radioProtocol.rxCallback =
+        [&](const rtp::ControlMessage* msg, const bool addressed) {
+            // reset timeout
+            radioTimeoutTimer.start(RADIO_TIMEOUT);
 
-        if (addressed) {
-            // update target velocity from packet
-            Task_Controller_UpdateTarget({
-                static_cast<float>(msg->bodyX) /
-                    rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
-                static_cast<float>(msg->bodyY) /
-                    rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
-                static_cast<float>(msg->bodyW) /
-                    rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
-            });
+            if (addressed) {
+                // update target velocity from packet
+                Task_Controller_UpdateTarget({
+                    static_cast<float>(msg->bodyX) /
+                        rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
+                    static_cast<float>(msg->bodyY) /
+                        rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
+                    static_cast<float>(msg->bodyW) /
+                        rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
+                });
 
-            // dribbler
-            Task_Controller_UpdateDribbler(msg->dribbler);
+                // dribbler
+                Task_Controller_UpdateDribbler(msg->dribbler);
 
-            // kick!
-            kickStrength = msg->kickStrength;
-            if (msg->triggerMode == 1) {
-                // kick immediate
-                kick_hack.kick(kickStrength);
-            } else if (msg->triggerMode == 2) {
-                // kick on break beam
-                if (ballSense.have_ball()) {
+                // kick!
+                kickStrength = msg->kickStrength;
+                if (msg->triggerMode == 1) {
+                    // kick immediate
                     kick_hack.kick(kickStrength);
-                    kickOnBreakBeam = false;
-                } else {
-                    // set flag so that next break beam triggers a kick
-                    kickOnBreakBeam = true;
+                } else if (msg->triggerMode == 2) {
+                    // kick on break beam
+                    if (ballSense.have_ball()) {
+                        kick_hack.kick(kickStrength);
+                        kickOnBreakBeam = false;
+                    } else {
+                        // set flag so that next break beam triggers a kick
+                        kickOnBreakBeam = true;
+                    }
                 }
             }
-        }
 
-        rtp::RobotStatusMessage reply;
-        reply.uid = robotShellID;
-        reply.battVoltage = battVoltage;
-        reply.ballSenseStatus = ballSense.have_ball() ? 1 : 0;
+            rtp::RobotStatusMessage reply;
+            reply.uid = robotShellID;
+            reply.battVoltage = battVoltage;
+            reply.ballSenseStatus = ballSense.have_ball() ? 1 : 0;
 
-        // report any motor errors
-        reply.motorErrors = 0;
-        for (auto i = 0; i < 5; i++) {
-            auto err = global_motors[i].status.hasError;
-            if (err) reply.motorErrors |= (1 << i);
-        }
+            // report any motor errors
+            reply.motorErrors = 0;
+            for (auto i = 0; i < 5; i++) {
+                auto err = global_motors[i].status.hasError;
+                if (err) reply.motorErrors |= (1 << i);
+            }
 
-        // fpga status
-        if (!fpgaInitialized) {
-            reply.fpgaStatus = 1;
-        } else if (fpgaError) {
-            reply.fpgaStatus = 2;
-        } else {
-            reply.fpgaStatus = 0;  // good
-        }
+            // fpga status
+            if (!fpgaInitialized) {
+                reply.fpgaStatus = 1;
+            } else if (fpgaError) {
+                reply.fpgaStatus = 2;
+            } else {
+                reply.fpgaStatus = 0;  // good
+            }
 
-        vector<uint8_t> replyBuf;
-        rtp::SerializeToVector(reply, &replyBuf);
+            vector<uint8_t> replyBuf;
+            rtp::SerializeToVector(reply, &replyBuf);
 
-        return replyBuf;
-    };
+            return replyBuf;
+        };
 
     // KickerBoard::Instance->charge();
     LOG(INIT, "Started charging kicker board.");

@@ -97,10 +97,10 @@ int main() {
     DigitalOut radioStatusLed(LED4, global_radio->isConnected());
 
     // set callbacks for usb control transfers
-    usbLink.writeRegisterCallback = [](
-        uint8_t reg, uint8_t val) {  // global_radio->writeReg(reg, val);
-        LOG(INIT, "Trying to write");
-    };
+    usbLink.writeRegisterCallback =
+        [](uint8_t reg, uint8_t val) {  // global_radio->writeReg(reg, val);
+            LOG(INIT, "Trying to write");
+        };
     usbLink.readRegisterCallback =
         [](uint8_t reg) {  // return global_radio->readReg(reg);
             LOG(INIT, "Tring to read");

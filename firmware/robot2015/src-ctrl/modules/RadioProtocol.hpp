@@ -47,8 +47,7 @@ public:
      * @return formatted reply buffer
      */
     std::function<std::vector<uint8_t>(const rtp::ControlMessage* msg,
-                                       const bool addresed)>
-        rxCallback;
+                                       const bool addresed)> rxCallback;
 
     void start() {
         _state = DISCONNECTED;
