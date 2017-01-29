@@ -3,6 +3,7 @@
 #include <rtos.h>
 #include "CC1201.hpp"
 #include "CommModule.hpp"
+#include "Decawave.hpp"
 #include "RtosTimerHelper.hpp"
 
 class RadioProtocol {
@@ -17,7 +18,7 @@ public:
     /// base station, we are considered "disconnected"
     static const uint32_t TIMEOUT_INTERVAL = 2000;
 
-    RadioProtocol(std::shared_ptr<CommModule> commModule, CC1201* radio,
+    RadioProtocol(std::shared_ptr<CommModule> commModule, Decawave* radio,
                   uint8_t uid = rtp::INVALID_ROBOT_UID)
         : _commModule(commModule),
           _radio(radio),
@@ -45,8 +46,8 @@ public:
      * @param msg A pointer to the start of the message addressed to this robot
      * @return formatted reply buffer
      */
-    std::function<std::vector<uint8_t>(const rtp::ControlMessage* msg)>
-        rxCallback;
+    std::function<std::vector<uint8_t>(const rtp::ControlMessage* msg,
+                                       const bool addresed)> rxCallback;
 
     void start() {
         _state = DISCONNECTED;
@@ -76,36 +77,41 @@ public:
         bool addressed = false;
         const rtp::ControlMessage* msg;
         size_t slot;
+        // printf("UUIDs: ");
         for (slot = 0; slot < 6; slot++) {
             size_t offset = slot * sizeof(rtp::ControlMessage);
             msg = (const rtp::ControlMessage*)(pkt.payload.data() + offset);
 
+            // printf("%d:%d ", slot, msg->uid);
             if (msg->uid == _uid) {
+                // LOG(INIT, "")
                 addressed = true;
                 break;
             }
         }
+        // printf("\r\n");
 
         /// time, in ms, for each reply slot
         // TODO(justin): double-check this
         const uint32_t SLOT_DELAY = 2;
 
+        _state = CONNECTED;
+
+        // reset timeout whenever we receive a packet
+        _timeoutTimer.stop();
+        _timeoutTimer.start(TIMEOUT_INTERVAL);
+
+        // TODO: this is bad and lazy
         if (addressed) {
-            _state = CONNECTED;
-
-            // reset timeout whenever we receive a packet
-            _timeoutTimer.stop();
-            _timeoutTimer.start(TIMEOUT_INTERVAL);
-
             _replyTimer.start(1 + SLOT_DELAY * slot);
-
-            if (rxCallback) {
-                _reply = std::move(rxCallback(msg));
-            } else {
-                LOG(WARN, "no callback set");
-            }
         } else {
-            // TODO(justin): reply in an available slot
+            _replyTimer.start(1 + SLOT_DELAY * (_uid % 6));
+        }
+
+        if (rxCallback) {
+            _reply = std::move(rxCallback(msg, addressed));
+        } else {
+            LOG(WARN, "no callback set");
         }
     }
 
@@ -124,7 +130,7 @@ private:
     void _timeout() { _state = DISCONNECTED; }
 
     std::shared_ptr<CommModule> _commModule;
-    CC1201* _radio;
+    Decawave* _radio;
 
     uint32_t _lastReceiveTime = 0;
 

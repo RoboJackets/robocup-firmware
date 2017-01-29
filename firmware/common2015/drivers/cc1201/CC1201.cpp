@@ -25,7 +25,7 @@ void ASSERT_IS_ADDR(uint16_t addr) {
 }
 
 // TODO(justin): remove this
-CC1201* global_radio = nullptr;
+// CC1201* global_radio = nullptr;
 
 CC1201::CC1201(shared_ptr<SharedSPI> sharedSPI, PinName nCs, PinName intPin,
                const registerSetting_t* regs, size_t len, int rssiOffset)
@@ -160,7 +160,7 @@ void CC1201::setChannel(uint8_t chanNumber) {
     // in SmartRF studio and seeing how the FREQ{0,1,2} registers changed. If
     // other frequency-related config values are changed, these values will need
     // to be changed.
-    const uint32_t base = 6003096; // 916MHz
+    const uint32_t base = 6003096;  // 916MHz
     const uint32_t spacing = 13107;
     uint32_t freq = base + spacing * chanNumber;
 

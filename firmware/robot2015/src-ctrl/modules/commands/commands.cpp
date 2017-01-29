@@ -8,6 +8,7 @@
 #include <rtos.h>
 #include <CC1201.hpp>
 #include <CommModule.hpp>
+#include <Decawave.hpp>
 #include <KickerBoard.hpp>
 #include <logger.hpp>
 #include <numparser.hpp>
@@ -1026,15 +1027,15 @@ int cmd_radio(cmd_args_t& args) {
                 Thread::wait(50);
             }
 
-        } else if (args[0] == "strobe") {
-            global_radio->strobe(0x30 + atoi(args[1].c_str()));
-        } else if (args[0] == "debug") {
-            bool wasEnabled = global_radio->isDebugEnabled();
-            global_radio->setDebugEnabled(!wasEnabled);
-            printf("Radio debugging now %s\r\n",
-                   wasEnabled ? "DISABLED" : "ENABLED");
-            if (!wasEnabled)
-                printf("All strobes will appear in the INF2 logs\r\n");
+            // } else if (args[0] == "strobe") {
+            // global_radio->strobe(0x30 + atoi(args[1].c_str()));
+            // } else if (args[0] == "debug") {
+            // bool wasEnabled = global_radio->isDebugEnabled();
+            // global_radio->setDebugEnabled(!wasEnabled);
+            // printf("Radio debugging now %s\r\n",
+            //    wasEnabled ? "DISABLED" : "ENABLED");
+            // if (!wasEnabled)
+            // printf("All strobes will appear in the INF2 logs\r\n");
         } else {
             show_invalid_args(args[0]);
             return 1;
@@ -1102,11 +1103,9 @@ int cmd_pong(cmd_args_t& args) {
 
     // Any packets received on the PING port are placed in a queue.
     Queue<rtp::packet, 2> pings;
-    CommModule::Instance->setRxHandler(
-        [&pings](rtp::packet pkt) {
-            pings.put(new rtp::packet(std::move(pkt)));
-        },
-        rtp::Port::PING);
+    CommModule::Instance->setRxHandler([&pings](rtp::packet pkt) {
+        pings.put(new rtp::packet(std::move(pkt)));
+    }, rtp::Port::PING);
 
     while (true) {
         // Check for a ping packet.  If we got one, print a message and reply
@@ -1141,9 +1140,9 @@ int cmd_ping(cmd_args_t& args) {
 
     // Any packets received on the PING port are placed in a queue
     Queue<rtp::packet, 2> acks;
-    CommModule::Instance->setRxHandler(
-        [&acks](rtp::packet pkt) { acks.put(new rtp::packet(std::move(pkt))); },
-        rtp::Port::PING);
+    CommModule::Instance->setRxHandler([&acks](rtp::packet pkt) {
+        acks.put(new rtp::packet(std::move(pkt)));
+    }, rtp::Port::PING);
 
     uint8_t pingCount = 0;
     int lastPingTime = 0;

@@ -138,10 +138,10 @@ initial begin
     end
 
     // simulate "fault halt (all pins being LOW)"
-    #16000
-    for ( ii = 0; ii < NUM_MOTORS; ii = ii + 1 ) begin
-        { halls_a[ii], halls_b[ii], halls_c[ii] } = 3'b000;
-    end
+    // #16000
+    // for ( ii = 0; ii < NUM_MOTORS; ii = ii + 1 ) begin
+    //     { halls_a[ii], halls_b[ii], halls_c[ii] } = 3'b000;
+    // end
 
     // this should latch the motor's fault, so we "unconnected"
     // the motor & "reconnect" it to make it work again
@@ -200,26 +200,28 @@ task motors_off;
     end
 endtask
 
-reg motor_direction;
-reg [8:0] duty_cycle_level;
-reg [8:0] duty_cycle_level_step;
+task update_duty_cycles;
+    input [SPI_SLAVE_DATA_WIDTH+1:0] duty_cycle;
+    integer i;
+    begin
+        spi_on();
+        spi(8'h80); // Command byte
+        for ( i = 0; i < NUM_MOTORS; i = i + 1 ) begin
+            spi( duty_cycle[SPI_SLAVE_DATA_WIDTH-1:0] );
+            spi( { 6'h00, duty_cycle[SPI_SLAVE_DATA_WIDTH+1:SPI_SLAVE_DATA_WIDTH] } );
+        end
+        spi_off();
+    end
+endtask
+
+reg motor_direction = 1;
+reg [9:0] duty_cycle_level = 10;
+reg [9:0] duty_cycle_level_step = 5;
 integer i;
 // Send an SPI transfer on the slave bus once the motors are up and running
 initial begin
     // Read encoder counts & update motors - dual transfer type
-    #100 spi_on();
-    spi(8'h80);
-    spi(8'h00);     // Duty cycle 0 low bits
-    spi(8'h00);     // Duty cycle 0 top bits
-    spi(8'h00);
-    spi(8'h00);
-    spi(8'h00);
-    spi(8'h00);
-    spi(8'h00);
-    spi(8'h00);
-    spi(8'h00);
-    spi(8'h00);
-    spi_off();
+    #100 update_duty_cycles({ motor_direction, 9'h000 });
 
     // Read hall counts
     #100 spi_on();
@@ -288,45 +290,17 @@ initial begin
     //     #100000 motors_on();
     // end
 
-    // The starting duty cycle for the motors
-    duty_cycle_level = 85;
-
-    // The duty cycle step increment for every SPI transfer (every ~5ms)
-    duty_cycle_level_step = 0;
-
-    // The starting direction for the motors
-    motor_direction = 1;
+    // simulate "motor startup"
+    #50000 start_spinning_motors = 1;
 
     wait ( start_spinning_motors );
 
     // SPI transactions to update duty cycles
     forever begin
         // SPI transfer every 5ms in relation to how the relative timing would look
-        // in real hardware on an 18.432MHz system clock.
-        #9216 spi_on();
-        spi(8'h80);
-        for ( i = 0; i < NUM_MOTORS; i = i + 1 ) begin
-            spi( duty_cycle_level[7:0] );
-            spi( { 6'h00, motor_direction, duty_cycle_level[8] } );
-        end
-        spi_off();
+        // in real hardware on an 18.432MHz system clock. Assuming 100ns timescale.
+        #9216 update_duty_cycles({ motor_direction, duty_cycle_level });
         duty_cycle_level = duty_cycle_level + duty_cycle_level_step;
-    end
-end
-
-// Encoder input simulation
-initial begin
-    // trying to match timings that would translate to ~1500 rpm on a motor
-    //
-    // with 2048 pulses/rev, that's 51200 pulses/sec. or ~20MHz, a 50ns delay
-    // between transitions - so 1 simulation cycle for each pulse
-
-    encoders_a = 5'b11111;
-	#1 encoders_b = 5'b00000;
-
-	forever wait ( start_spinning_motors ) begin
-        #1 encoders_a = ~encoders_a;
-        #1 encoders_b = ~encoders_b;
     end
 end
 
@@ -334,15 +308,33 @@ end
 // Simulation of hall sensors transistions. Each motor's phase is slightly delayed
 always wait ( start_running_motor_state ) begin
 	for ( jj = 0; jj < 6; jj = jj + 1 ) begin
-        // trying to match relative real-world times on a hall change
-        // roughly every 85ms here
-		#15300 for ( ii = 0; ii < NUM_MOTORS; ii = ii + 1 ) begin
+        // There's 48 hall transitions in 1 revolution. Targeting a ~1500 rpm motor,
+        // that's 1200 transitions/sec. At 1.2kHz, that's ~833us between transitions.
+        // With a 100ns timescale, that's ~8330 cycles.
+
+		#8330 for ( ii = 0; ii < NUM_MOTORS; ii = ii + 1 ) begin
 			{ halls_a[ii], halls_b[ii], halls_c[ii] } = hall_states[jj];
 		end
 	end
 end
 
 
+// Encoder input simulation
+initial begin
+    // trying to match timings that would translate to ~1500 rpm on a motor (~25 rev/s)
+    //
+    // with 2048 pulses/rev, that's 51200 pulses/sec. At 51kHz, that's ~20us
+    // between transitions. With a 100ns timescale, that's ~200 cycles.
+    encoders_a = 5'b11111;
+	#200 encoders_b = 5'b00000;
+
+	forever wait ( start_spinning_motors ) begin
+        #200 encoders_a = ~encoders_a;
+        #200 encoders_b = ~encoders_b;
+    end
+end
+
+// system clock
 initial begin
 	forever #0.5 clk = !clk;
 end

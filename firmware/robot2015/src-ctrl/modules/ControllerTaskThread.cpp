@@ -110,8 +110,9 @@ void Task_Controller(void const* args) {
         // zero out command if we haven't gotten an updated target in a while
         if (commandTimedOut) duty_cycles = {0, 0, 0, 0, 0};
 
-        FPGA::Instance->set_duty_get_enc(duty_cycles.data(), duty_cycles.size(),
-                                         enc_deltas.data(), enc_deltas.size());
+        auto statusByte = FPGA::Instance->set_duty_get_enc(
+            duty_cycles.data(), duty_cycles.size(), enc_deltas.data(),
+            enc_deltas.size());
 
         /*
          * The time since the last update is derived with the value of
@@ -139,13 +140,21 @@ void Task_Controller(void const* args) {
 
         // take first 4 encoder deltas
         array<int16_t, 4> driveMotorEnc;
-        for (int i = 0; i < 4; i++) driveMotorEnc[i] = enc_deltas[i];
+        for (auto i = 0; i < 4; i++) driveMotorEnc[i] = enc_deltas[i];
 
         // run PID controller to determine what duty cycles to use to drive the
         // motors.
         array<int16_t, 4> driveMotorDutyCycles =
             pidController.run(driveMotorEnc, dt);
-        for (int i = 0; i < 4; i++) duty_cycles[i] = driveMotorDutyCycles[i];
+
+        // assign the duty cycles, zero out motors that the fpga returns an
+        // error for
+        auto i = 0;
+        for (const auto& vel : driveMotorDutyCycles) {
+            const bool hasError = (statusByte & (1 << i));
+            duty_cycles[i] = (hasError ? 0 : vel);
+            ++i;
+        }
 
         // limit duty cycle values, while keeping sign (+ or -)
         for (int16_t& dc : duty_cycles) {

@@ -33,6 +33,7 @@ set(DRIVERS
     buzzer
     cc1201
     cc1201/cfg
+    decawave
     ds2411
     fpga
     kicker-board

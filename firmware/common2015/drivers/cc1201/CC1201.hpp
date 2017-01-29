@@ -142,4 +142,4 @@ private:
 };
 
 // TODO(justin): remove this
-extern CC1201* global_radio;
+// extern CC1201* global_radio;
