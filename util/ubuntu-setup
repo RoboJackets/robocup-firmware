@@ -35,6 +35,9 @@ elif cat /etc/os-release | grep -iq '^NAME=.*Ubuntu'; then # We are using a vers
     elif cat /etc/os-release | grep -iq '^VERSION=.*16.04'; then # Using Ubuntu 16.04
         echo "Ubuntu 16.04 Detected..."
         SYSTEM="ubuntu-16.04"
+    elif cat /etc/os-release | grep -iq '^VERSION=.*16.10'; then # Using Ubuntu 16.10
+        echo "Ubuntu 16.10 Detected..."
+        SYSTEM="ubuntu-16.10"
     else
         echo "$DISTRO_STR" >&2
         exit 1
@@ -122,4 +125,3 @@ fi
 chown -R $SETUP_USER:$SETUP_USER $BASE/external
 su $SETUP_USER -c 'git submodule sync'
 su $SETUP_USER -c 'git submodule update --init'
-
