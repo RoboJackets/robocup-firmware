@@ -292,10 +292,13 @@ int main() {
             if (!fpgaInitialized) {
                 reply.fpgaStatus = 1;
             } else if (fpgaError) {
-                reply.fpgaStatus = 2;
+                reply.fpgaStatus = 1;
             } else {
                 reply.fpgaStatus = 0;  // good
             }
+
+            // kicker status
+            reply.kickStatus = kick_hack.canKick();
 
             vector<uint8_t> replyBuf;
             rtp::SerializeToVector(reply, &replyBuf);

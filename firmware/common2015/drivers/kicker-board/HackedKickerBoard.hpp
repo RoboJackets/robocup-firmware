@@ -15,6 +15,10 @@ public:
         _lastKickTime = 0;
     }
 
+    bool canKick() {
+        return (us_ticker_read() - _lastKickTime > MIN_CHARGE_TIME);
+    }
+
     void kick(uint8_t power) {
         uint32_t t = us_ticker_read();
 
