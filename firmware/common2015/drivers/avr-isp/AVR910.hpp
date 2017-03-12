@@ -53,12 +53,12 @@
 #define WRITE_HIGH_FLASH_BYTE 0x68
 #define WRITE_LOW_FLASH_BYTE 0x60
 
-// ATtiny84a
+// ATtiny841
 #define AVR_FAMILY_MASK 0xF0
 #define AVR_FAMILY_ID 0x90
-#define ATTINY84A_DEVICE_ID 0x0C
-#define ATTINY84A_PAGESIZE 32  // Size in words (word = 2 bytes)
-#define ATTINY84A_NUM_PAGES 128
+#define ATTINY84A_DEVICE_ID 0x15
+#define ATTINY84A_PAGESIZE 8 // Size in words (word = 2 bytes)
+#define ATTINY84A_NUM_PAGES 512
 
 /**
  * @brief AVR910 ISP
