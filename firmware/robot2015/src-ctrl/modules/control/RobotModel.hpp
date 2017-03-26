@@ -44,3 +44,7 @@ public:
 
 /// Model parameters for 2015 robot.  See RobotModel.cpp for values.
 extern const RobotModel RobotModel2015;
+/// Model parameters for 2017 robot.  See RobotModel.cpp for values.
+extern const RobotModel RobotModel2017;
+/// Model for current robot (if detection is possible)
+extern const RobotModel RobotModelCurrent;

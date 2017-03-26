@@ -45,14 +45,14 @@ public:
         wheelVels *= 2 * M_PI / ENC_TICKS_PER_TURN / dt;
 
         Eigen::Vector4f targetWheelVels =
-            RobotModel2015.BotToWheel * _targetVel;
+            RobotModelCurrent.BotToWheel * _targetVel;
 
         Eigen::Vector4f wheelVelErr = targetWheelVels - wheelVels;
 
         std::array<int16_t, 4> dutyCycles;
         for (int i = 0; i < 4; i++) {
             int16_t dc =
-                targetWheelVels[i] * RobotModel2015.DutyCycleMultiplier;
+                targetWheelVels[i] * RobotModelCurrent.DutyCycleMultiplier;
             dc += _controllers[i].run(wheelVelErr[i]);
 
             dutyCycles[i] = dc;
