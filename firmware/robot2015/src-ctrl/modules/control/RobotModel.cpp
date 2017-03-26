@@ -37,5 +37,5 @@ const RobotModel RobotModel2017 = []() {
 }();
 
 const RobotModel RobotModelCurrent = []() {
-    return RobotModel2015;
+    return RobotModel2017;
 }();
