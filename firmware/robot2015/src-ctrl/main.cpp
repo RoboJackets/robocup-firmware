@@ -14,6 +14,7 @@
 // #include "CC1201.cpp"
 #include "Decawave.hpp"
 #include "HackedKickerBoard.hpp"
+#include "KickerBoard.hpp"
 #include "RadioProtocol.hpp"
 #include "RobotModel.hpp"
 #include "RotarySelector.hpp"
@@ -111,10 +112,12 @@ int main() {
     // Initialize kicker board
     // HackedKickerBoard::Instance =
     // make_shared<HackedKickerBoard>(RJ_KICKER_nRESET);
-    HackedKickerBoard kick_hack(RJ_KICKER_nRESET);
+    // HackedKickerBoard kick_hack(RJ_KICKER_nRESET);
     // Reprogramming each time (first arg of flash false) is actually
     // faster than checking the full memory to see if we need to reflash.
-    // bool kickerReady = KickerBoard::Instance->flash(false, false);
+    KickerBoard::Instance = 
+        make_shared<KickerBoard>(sharedSPI, RJ_KICKER_nCS, RJ_KICKER_nRESET, "/local/rj-kickr.nib");
+    bool kickerReady = KickerBoard::Instance->flash(false, false);
 
     // flag fro kicking when the ball sense triggers
     bool kickOnBreakBeam = false;
@@ -134,7 +137,8 @@ int main() {
 
         // kick!
         if (haveBall && kickOnBreakBeam) {
-            kick_hack.kick(kickStrength);
+            //kick_hack.kick(kickStrength);
+            KickerBoard::Instance->kick(kickStrength);
         }
     };
     // uintptr_t p = (uintptr_t)(void*)&sharedSPI;
@@ -263,11 +267,13 @@ int main() {
                 kickStrength = msg->kickStrength;
                 if (msg->triggerMode == 1) {
                     // kick immediate
-                    kick_hack.kick(kickStrength);
+                    //kick_hack.kick(kickStrength);
+                    KickerBoard::Instance->kick(kickStrength);
                 } else if (msg->triggerMode == 2) {
                     // kick on break beam
                     if (ballSense.have_ball()) {
-                        kick_hack.kick(kickStrength);
+                        //kick_hack.kick(kickStrength);
+                        KickerBoard::Instance->kick(kickStrength);
                         kickOnBreakBeam = false;
                     } else {
                         // set flag so that next break beam triggers a kick
@@ -298,7 +304,9 @@ int main() {
             }
 
             // kicker status
-            reply.kickStatus = kick_hack.canKick();
+            //reply.kickStatus = kick_hack.canKick();
+            //reply.kickStatus = KickerBoard::Instance->canKick();
+            reply.kickStatus = true;
 
             vector<uint8_t> replyBuf;
             rtp::SerializeToVector(reply, &replyBuf);
