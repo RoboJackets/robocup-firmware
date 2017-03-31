@@ -314,7 +314,7 @@ int main() {
             return replyBuf;
         };
 
-    // KickerBoard::Instance->charge();
+    KickerBoard::Instance->charge();
     LOG(INIT, "Started charging kicker board.");
     uint8_t kickerVoltage = 0;
 

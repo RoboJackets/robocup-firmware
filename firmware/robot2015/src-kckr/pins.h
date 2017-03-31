@@ -7,9 +7,9 @@
 #define KCKR_MOSI_PIN (PA6)  // pin 7, not actually used in code
 #define V_MONITOR_PIN (PA2)  // pin 11
 // active low buttons
-#define DB_KICK_PIN (PB0)  // should send a normal kick commmand
+#define DB_KICK_PIN (PB2)  // should send a normal kick commmand
 #define DB_CHIP_PIN (PB1)  // should send a normal chip command
-#define DB_CHG_PIN (PB2)   // pressed = enable_charging
+#define DB_CHG_PIN (PB0)   // pressed = enable_charging
                            // unpressed = disable_charging
 
 /* Outputs */
