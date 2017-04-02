@@ -1,9 +1,9 @@
 #pragma once
 
-#include <mbed.h>
-#include <logger.hpp>
 #include <string>
 #include "AVR910.hpp"
+#include "Logger.hpp"
+#include "Mbed.hpp"
 #include "kicker_commands.h"
 
 /**
@@ -56,10 +56,10 @@ public:
 
     /**
      * @brief Reads the charge voltage back from the KickerBoard.
-     * @param voltage Output voltage 0 (GND) to 255 (Vd)
-     * @return If the read_voltage command was acknowledged
+     * @return If the read_voltage command was acknowledged and the voltage
+     * reading
      */
-    bool read_voltage(uint8_t* voltage);
+    std::pair<bool, uint8_t> readVoltage();
 
     /**
      * @brief Sets the charge pin (to high)

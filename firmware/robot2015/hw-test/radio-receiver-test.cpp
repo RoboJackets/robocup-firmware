@@ -8,12 +8,12 @@
  */
 
 #include <cmsis_os.h>
-#include <mbed.h>
 #include <memory>
+#include "Mbed.hpp"
 
 #include "CC1201Radio.hpp"
+#include "Logger.hpp"
 #include "SharedSPI.hpp"
-#include "logger.hpp"
 #include "pins-ctrl-2015.hpp"
 
 using namespace std;
@@ -34,20 +34,20 @@ bool initRadio() {
     CommModule::Instance = make_shared<CommModule>(rxTimeoutLED, txTimeoutLED);
 
     // Create a new physical hardware communication link
-    global_radio =
-        new CC1201(sharedSPI, RJ_RADIO_nCS, RJ_RADIO_INT, preferredSettings,
-                   sizeof(preferredSettings) / sizeof(registerSetting_t));
+    globalRadio = std::make_unique<CC1201>(
+        sharedSPI, RJ_RADIO_nCS, RJ_RADIO_INT, preferredSettings,
+        sizeof(preferredSettings) / sizeof(registerSetting_t));
 
-    return global_radio->isConnected();
+    return globalRadio->isConnected();
 }
 
-void radioRxHandler(rtp::packet pkt) {
+void radioRxHandler(RTP::Packet pkt) {
     static int rxCount = 0;
     rxCount++;
     printf("<-- %d\r\n", rxCount);
 
-    rtp::ControlMessage controlMsg;
-    bool success = rtp::DeserializeFromBuffer(&controlMsg, pkt.payload.data(),
+    RTP::ControlMessage controlMsg;
+    bool success = RTP::DeserializeFromBuffer(&controlMsg, pkt.payload.data(),
                                               pkt.payload.size());
     if (!success) {
         printf("bad rx\r\n");
@@ -60,15 +60,15 @@ void radioRxHandler(rtp::packet pkt) {
     }
 
     // send reply packet
-    rtp::packet replyPkt;
-    replyPkt.header.port = rtp::Port::CONTROL;
-    replyPkt.header.address = rtp::BROADCAST_ADDRESS;
+    RTP::Packet replyPkt;
+    replyPkt.header.port = RTP::Port::CONTROL;
+    replyPkt.header.address = RTP::BROADCAST_ADDRESS;
 
     // create control message and add it to the packet payload
-    rtp::RobotStatusMessage msg;
+    RTP::RobotStatusMessage msg;
     msg.uid = 1;
     msg.battVoltage = 12;
-    rtp::SerializeToVector(msg, &replyPkt.payload);
+    RTP::SerializeToVector(msg, &replyPkt.payload);
 
     // transmit!
     CommModule::Instance->send(std::move(replyPkt));
@@ -87,27 +87,27 @@ int main() {
     rjLogLevel = INIT;
 
     printf("****************************************\r\n");
-    LOG(INIT, "Radio test receiver starting...");
+    LOG(INFO, "Radio test receiver starting...");
 
     if (initRadio()) {
-        LOG(INIT, "Radio interface ready on %3.2fMHz!", global_radio->freq());
+        LOG(OK, "Radio interface ready on %3.2fMHz!", globalRadio->freq());
 
         // register handlers for any ports we might use
-        for (rtp::Port port :
-             {rtp::Port::CONTROL, rtp::Port::PING, rtp::Port::LEGACY}) {
+        for (RTP::Port port :
+             {RTP::Port::CONTROL, RTP::Port::PING, RTP::Port::LEGACY}) {
             CommModule::Instance->setRxHandler(&radioRxHandler, port);
-            CommModule::Instance->setTxHandler((CommLink*)global_radio,
+            CommModule::Instance->setTxHandler((CommLink*)globalRadio,
                                                &CommLink::sendPacket, port);
         }
     } else {
-        LOG(FATAL, "No radio interface found!");
+        LOG(SEVERE, "No radio interface found!");
     }
 
-    DigitalOut radioStatusLed(LED4, global_radio->isConnected());
+    DigitalOut radioStatusLed(LED4, globalRadio->isConnected());
 
     // wait for incoming packets
     while (true) {
-        global_radio->printDebugInfo();
+        globalRadio->printDebugInfo();
         Thread::wait(1000);
     }
 }

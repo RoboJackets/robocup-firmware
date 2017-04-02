@@ -12,7 +12,7 @@
  */
 #include <cstddef>
 
-#include <mbed.h>
+#include "Mbed.hpp"
 
 #ifndef TARGET_LPC1768
 #error NeoStrip only supports the NXP LPC1768!

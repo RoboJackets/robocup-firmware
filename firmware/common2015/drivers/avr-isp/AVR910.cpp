@@ -151,10 +151,10 @@ bool AVR910::enableProgramming() {
     // Programming Enable Command: 0xAC, 0x53, 0x00, 0x00
     // Byte two echo'd back in byte three.
     chipSelect();
-    _spi->write(0xAC);
-    _spi->write(0x53);
-    int response = _spi->write(0x00);
-    _spi->write(0x00);
+    m_spi->write(0xAC);
+    m_spi->write(0x53);
+    int response = m_spi->write(0x00);
+    m_spi->write(0x00);
     chipDeselect();
 
     if (response == 0x53) {
@@ -169,20 +169,20 @@ void AVR910::poll() {
     int response = 0;
     chipSelect();
     do {
-        _spi->write(0xF0);
-        _spi->write(0x00);
-        _spi->write(0x00);
-        response = _spi->write(0x00);
+        m_spi->write(0xF0);
+        m_spi->write(0x00);
+        m_spi->write(0x00);
+        response = m_spi->write(0x00);
     } while ((response & 0x01) != 0);
     chipDeselect();
 }
 
 int AVR910::readRegister(int reg) {
     chipSelect();
-    _spi->write(0x30);
-    _spi->write(0x00);
-    _spi->write(reg);
-    int val = _spi->write(0x00);
+    m_spi->write(0x30);
+    m_spi->write(0x00);
+    m_spi->write(reg);
+    int val = m_spi->write(0x00);
     chipDeselect();
 
     return val;
@@ -209,10 +209,10 @@ int AVR910::readPartNumber() {
 void AVR910::chipErase() {
     // Issue chip erase command.
     chipSelect();
-    _spi->write(0xAC);
-    _spi->write(0x80);
-    _spi->write(0x00);
-    _spi->write(0x00);
+    m_spi->write(0xAC);
+    m_spi->write(0x80);
+    m_spi->write(0x00);
+    m_spi->write(0x00);
     chipDeselect();
 
     poll();
@@ -224,10 +224,10 @@ void AVR910::chipErase() {
 
 void AVR910::loadMemoryPage(int highLow, char address, char data) {
     chipSelect();
-    _spi->write(highLow);
-    _spi->write(0x00);
-    _spi->write(address & 0x3F);
-    _spi->write(data);
+    m_spi->write(highLow);
+    m_spi->write(0x00);
+    m_spi->write(address & 0x3F);
+    m_spi->write(data);
     chipDeselect();
 
     poll();
@@ -235,19 +235,19 @@ void AVR910::loadMemoryPage(int highLow, char address, char data) {
 
 void AVR910::writeFlashMemoryByte(int highLow, int address, char data) {
     chipSelect();
-    _spi->write(highLow);
-    _spi->write(address & 0xFF00 >> 8);
-    _spi->write(address & 0x00FF);
-    _spi->write(data);
+    m_spi->write(highLow);
+    m_spi->write(address & 0xFF00 >> 8);
+    m_spi->write(address & 0x00FF);
+    m_spi->write(data);
     chipDeselect();
 }
 
 void AVR910::writeFlashMemoryPage(char pageNumber) {
     chipSelect();
-    _spi->write(0x4C);
-    _spi->write(pageNumber >> 3);  // top 5 bits stored in bottom of byte
-    _spi->write(pageNumber << 5);  // bottom 3 bits stored in top of byte
-    _spi->write(0x00);
+    m_spi->write(0x4C);
+    m_spi->write(pageNumber >> 3);  // top 5 bits stored in bottom of byte
+    m_spi->write(pageNumber << 5);  // bottom 3 bits stored in top of byte
+    m_spi->write(0x00);
     chipDeselect();
 
     poll();
@@ -255,10 +255,10 @@ void AVR910::writeFlashMemoryPage(char pageNumber) {
 
 char AVR910::readProgramMemory(int highLow, char pageNumber, char pageOffset) {
     chipSelect();
-    _spi->write(highLow);
-    _spi->write(pageNumber >> 3);
-    _spi->write((pageNumber << 5) | (pageOffset & 0x3F));
-    char response = _spi->write(0x00);
+    m_spi->write(highLow);
+    m_spi->write(pageNumber >> 3);
+    m_spi->write((pageNumber << 5) | (pageOffset & 0x3F));
+    char response = m_spi->write(0x00);
     chipDeselect();
 
     poll();

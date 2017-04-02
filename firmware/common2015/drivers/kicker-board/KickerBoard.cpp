@@ -53,15 +53,15 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
         return false;
     } else {
         // Program it!
-        LOG(INIT, "Opened kicker binary, attempting to program kicker.");
-        bool shouldProgram = true;
+        LOG(DEBUG, "Opened kicker binary, attempting to program kicker.");
+        auto shouldProgram = true;
         if (onlyIfDifferent &&
             (checkMemory(ATTINY84A_PAGESIZE, ATTINY84A_NUM_PAGES, fp, false) ==
              0))
             shouldProgram = false;
 
         if (!shouldProgram) {
-            LOG(INIT, "Kicker up-to-date, no need to flash.");
+            LOG(DEBUG, "Kicker up-to-date, no need to flash.");
 
             // exit programming mode by bringing nReset high
             exitProgramming();
@@ -72,7 +72,7 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
             if (nSuccess) {
                 LOG(WARN, "Failed to program kicker.");
             } else {
-                LOG(INIT, "Kicker successfully programmed.");
+                LOG(DEBUG, "Kicker successfully programmed.");
             }
         }
 
@@ -83,22 +83,24 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
 }
 
 bool KickerBoard::send_to_kicker(uint8_t cmd, uint8_t arg, uint8_t* ret_val) {
-    LOG(INF2, "Sending: CMD:%02X, ARG:%02X", cmd, arg);
+    LOG(DEBUG, "Sending: CMD:%02X, ARG:%02X", cmd, arg);
+
     chipSelect();
     // Returns state (charging, not charging), but we don't care about that
-    uint8_t charge_resp = _spi->write(cmd);
+    auto charge_resp = static_cast<uint8_t>(m_spi->write(cmd));
+    (void)charge_resp;  // disable unused-variable compiler warning
     // Should return the command we just sent
-    uint8_t command_resp = _spi->write(arg);
+    auto command_resp = static_cast<uint8_t>(m_spi->write(arg));
     // Should return final response to full cmd, arg pair
-    uint8_t ret = _spi->write(BLANK);
+    auto ret = static_cast<uint8_t>(m_spi->write(BLANK));
     chipDeselect();
 
-    if (ret_val != nullptr) {
+    if (ret_val) {
         *ret_val = ret;
     }
 
-    bool command_acked = command_resp == cmd;
-    LOG(INF2, "ACK?:%s, CHG:%02X, CMD:%02X, RET:%02X",
+    auto command_acked = (command_resp == cmd);
+    LOG(DEBUG, "ACK?:%s, CHG:%02X, CMD:%02X, RET:%02X",
         command_acked ? "true" : "false", charge_resp, command_resp, ret);
 
     return command_acked;
@@ -112,8 +114,10 @@ bool KickerBoard::chip(uint8_t time) {
     return send_to_kicker(CHIP_CMD, time, nullptr);
 }
 
-bool KickerBoard::read_voltage(uint8_t* voltage) {
-    return send_to_kicker(GET_VOLTAGE_CMD, BLANK, voltage);
+std::pair<bool, uint8_t> KickerBoard::readVoltage() {
+    auto voltage = uint8_t{0};
+    auto status = send_to_kicker(GET_VOLTAGE_CMD, BLANK, &voltage);
+    return std::make_pair(status, voltage);
 }
 
 bool KickerBoard::charge() {
@@ -132,9 +136,9 @@ bool KickerBoard::is_charge_enabled() {
     uint8_t ret = 0;
 
     chipSelect();
-    ret = _spi->write(PING_CMD);
-    _spi->write(BLANK);
-    _spi->write(BLANK);
+    ret = m_spi->write(PING_CMD);
+    m_spi->write(BLANK);
+    m_spi->write(BLANK);
     chipDeselect();
 
     // boolean determined by MSB of 2nd byte

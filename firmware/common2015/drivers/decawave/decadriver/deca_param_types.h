@@ -63,5 +63,3 @@ extern const uint16 lde_replicaCoeff[PCODES];
 #endif
 
 #endif
-
-

@@ -20,72 +20,7 @@ list(APPEND common2015_SRC ${asm_SRC})
 
 # append all of the accessory library sources
 list(APPEND common2015_SRC ${MBED_ASSEC_LIBS_SRCS})
-
-# set the names of each directory and then set the names of the subdirectories within each one
-set(DRIVERS_ROOT_NAME   drivers)
-set(MODULES_ROOT_NAME   modules)
-set(UTILS_ROOT_NAME     utils)
-
-# subdirectories
-set(DRIVERS
-    avr-isp
-    ball_sense
-    buzzer
-    cc1201
-    cc1201/cfg
-    decawave
-    ds2411
-    fpga
-    kicker-board
-    mcp23017
-    mpu-6050
-    rotarySelector
-    rtos-i2c
-    shared-spi
-    software-spi
-    ws2811
-)
-
-set(MODULES
-    CommModule
-    CommLink
-    Console
-)
-
-set(UTILS
-    assert
-    logger
-    numparser
-    rtos-mgmt
-)
-
-# generate a list of directories that we need to include from the values set above
-set(common2015_INCLUDE_DIRS
-    ${CMAKE_CURRENT_SOURCE_DIR}/${DRIVERS_ROOT_NAME}
-    ${CMAKE_CURRENT_SOURCE_DIR}/${MODULES_ROOT_NAME}
-    ${CMAKE_CURRENT_SOURCE_DIR}/${UTILS_ROOT_NAME}
-)
-
-# TODO(justin): do better
-list(APPEND common2015_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/common)
-list(APPEND common2015_SRC ${PROJECT_SOURCE_DIR}/common/Pid.cpp)
-
-# append all of the common2015 subdirectories listed in the variables above
-foreach(driver_subdir ${DRIVERS})
-    list(APPEND common2015_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/${DRIVERS_ROOT_NAME}/${driver_subdir})
-endforeach()
-foreach(module_subdir ${MODULES})
-    list(APPEND common2015_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/${MODULES_ROOT_NAME}/${module_subdir})
-endforeach()
-foreach(util_subdir ${UTILS})
-    list(APPEND common2015_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/${UTILS_ROOT_NAME}/${util_subdir})
-endforeach()
-
-# append all of the accessory library include directories
-list(APPEND common2015_INCLUDE_DIRS ${MBED_ASSEC_LIBS_INCLUDES})
-
 # include PID from common
-list(APPEND common2015_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/common/)
 list(APPEND common2015_SRC ${CMAKE_SOURCE_DIR}/common/Pid.cpp)
 
 # tell cmake that all of the source files aren't here yet
@@ -97,7 +32,31 @@ list(APPEND common2015_SRC ${CMAKE_SOURCE_DIR}/common/Pid.cpp)
 
 # build the 'common2015' library that contains all the MBED stuff needed for
 # both the base station and robot firmware
-add_library(common2015 ${common2015_SRC} ${CMAKE_BINARY_DIR}/common/git_version.cpp)
+add_library(common2015 ${common2015_SRC} "${CMAKE_BINARY_DIR}/common/git_version.cpp")
+
+target_include_directories( common2015 PUBLIC
+    utils/include
+    modules/include
+    drivers/include
+    drivers/avr-isp
+    drivers/ball-sense
+    drivers/buzzer
+    drivers/cc1201
+    drivers/decawave
+    drivers/ds2411
+    drivers/fpga
+    drivers/kicker-board
+    drivers/mcp23017
+    drivers/mpu-6050
+    drivers/rotarySelector
+    drivers/rtos-i2c
+    drivers/shared-spi
+    drivers/software-spi
+    drivers/ws2811
+    ${CMAKE_SOURCE_DIR}/common
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${MBED_ASSEC_LIBS_INCLUDES}
+)
 
 # CC1201 Register settings
 # Automatically generate a C header with the register values from a chosen smartrf xml file
@@ -115,17 +74,12 @@ add_custom_target(cc1201_register_export
     COMMENT "Generating C header file for cc1201 registers from '${CC1201_CONFIG_NAME}' smartrf xml file"
 )
 set_target_properties(cc1201_register_export PROPERTIES EXCLUDE_FROM_ALL TRUE)
+
 add_dependencies(common2015 cc1201_register_export)
 target_include_directories(common2015 PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
-
 # depends on the mbed libraries and all of the accessory libraries
 add_dependencies(common2015 mbed_libraries ${MBED_ASSEC_LIBS_DEPENDS})
-
 target_link_libraries(common2015 ${MBED_LIBRARY})
-
-target_include_directories(common2015 PUBLIC ${common2015_INCLUDE_DIRS})
-
-# only build firmware library if required
 set_target_properties(common2015 PROPERTIES EXCLUDE_FROM_ALL TRUE)
 
 # See common/CMakeLists for more info on how this works

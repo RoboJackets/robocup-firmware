@@ -8,7 +8,7 @@
  * ND/2045729
  */
 
-#include "mbed.h"
+#include "Mbed.hpp"
 
 struct DS2411_t {
     char family;

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "CommLink.hpp"
-#include "mbed.h"
-#include "rtos.h"
+#include "Mbed.hpp"
+#include "Rtos.hpp"
 #include "ti/defines.hpp"
 
 // The config file exported from RF Studio contains an array consisting of these
@@ -47,7 +47,7 @@ public:
      *
      * @return A status value indicating success/error. See CommLink for info.
      */
-    int32_t sendPacket(const rtp::packet* pkt);
+    int32_t sendPacket(const RTP::Packet* pkt);
 
     /**
      * Read data from the radio's RX buffer.  This should be called after
@@ -136,10 +136,10 @@ private:
     bool _isInit;
     float _rssi;
 
-    // In debug mode, all strobe commands are logged at INF2
+    // In debug mode, all strobe commands are logged at DEBUG
     // note that this decreases performance, so shouldn't be used normally
     bool _debugEnabled = false;
 };
 
 // TODO(justin): remove this
-// extern CC1201* global_radio;
+// extern CC1201* globalRadio;

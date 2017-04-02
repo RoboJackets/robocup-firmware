@@ -1,24 +1,22 @@
-#include <RPCVariable.h>
-#include <rtos.h>
-
-#include <Console.hpp>
-#include <assert.hpp>
-#include <logger.hpp>
-
+#include "Assert.hpp"
+#include "Console.hpp"
+#include "FPGA.hpp"
+#include "Logger.hpp"
 #include "PidMotionController.hpp"
+#include "RPCVariable.h"
+#include "RobotDevices.hpp"
+#include "Rtos.hpp"
 #include "RtosTimerHelper.hpp"
-#include "fpga.hpp"
+#include "TaskSignals.hpp"
 #include "io-expander.hpp"
 #include "motors.hpp"
 #include "mpu-6050.hpp"
-#include "robot-devices.hpp"
-#include "task-signals.hpp"
 
 using namespace std;
 
 // Keep this pretty high for now. Ideally, drop it down to ~3 for production
 // builds. Hopefully that'll be possible without the console
-static const int CONTROL_LOOP_WAIT_MS = 5;
+static const auto CONTROL_LOOP_WAIT_MS = 5;
 
 // initialize PID controller
 PidMotionController pidController;
@@ -49,15 +47,17 @@ void Task_Controller_UpdateDribbler(uint8_t dribbler) {
 /**
  * initializes the motion controller thread
  */
-void Task_Controller(void const* args) {
-    const osThreadId mainID = (const osThreadId)args;
+void Task_Controller(const void* args) {
+    const auto mainID =
+        reinterpret_cast<const osThreadId>(const_cast<void*>(args));
 
     // Store the thread's ID
-    osThreadId threadID = Thread::gettid();
+    const auto threadID = Thread::gettid();
     ASSERT(threadID != nullptr);
 
     // Store our priority so we know what to reset it to after running a command
-    osPriority threadPriority = osThreadGetPriority(threadID);
+    const auto threadPriority = osThreadGetPriority(threadID);
+    (void)threadPriority;  // disable warning if unused
 
     MPU6050 imu(RJ_I2C_SDA, RJ_I2C_SCL);
 
@@ -70,14 +70,14 @@ void Task_Controller(void const* args) {
     if ((testResp = imu.testConnection())) {
         float resultRatio[6];
         imu.selfTest(resultRatio);
-        LOG(INIT,
+        LOG(INFO,
             "IMU self test results:\r\n"
             "    Accel (X,Y,Z):\t(%2.2f%%, %2.2f%%, %2.2f%%)\r\n"
             "    Gyro  (X,Y,Z):\t(%2.2f%%, %2.2f%%, %2.2f%%)",
             resultRatio[0], resultRatio[1], resultRatio[2], resultRatio[3],
             resultRatio[4], resultRatio[5]);
 
-        LOG(INIT, "Control loop ready!\r\n    Thread ID: %u, Priority: %d",
+        LOG(OK, "Control loop ready!\r\n    Thread ID: %u, Priority: %d",
             ((P_TCB)threadID)->task_id, threadPriority);
     } else {
         LOG(SEVERE,
@@ -166,15 +166,6 @@ void Task_Controller(void const* args) {
 
         // dribbler duty cycle
         duty_cycles[4] = dribblerSpeed;
-
-#if 0
-        // log duty cycle values
-        printf("duty cycles: ");
-        for (int i = 0; i < 4; i++) {
-            printf("%d, ", duty_cycles[i]);
-        }
-        printf("\r\n");
-#endif
 
         Thread::wait(CONTROL_LOOP_WAIT_MS);
     }

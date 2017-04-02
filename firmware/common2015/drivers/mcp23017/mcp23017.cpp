@@ -1,14 +1,12 @@
 #include "mcp23017.hpp"
 
-#include <mbed.h>
-#include <logger.hpp>
+#include "Logger.hpp"
+#include "Mbed.hpp"
 
 MCP23017::MCP23017(PinName sda, PinName scl, int i2cAddress)
     : _i2c(sda, scl), _i2cAddress(i2cAddress) {
     _i2c.frequency(400000);
     reset();
-
-    LOG(OK, "MCP23017 initialized");
 }
 
 void MCP23017::reset() {
@@ -56,7 +54,7 @@ void MCP23017::writeMask(uint16_t data, uint16_t mask) {
 uint8_t MCP23017::readPin(MCP23017::ExpPinName pin) {
     _cachedGPIO = digitalWordRead();
 
-    LOG(INF2,
+    LOG(DEBUG,
         "Read an I/O pin bit:"
         "    Bit:\t%u\r\n"
         "    State:\t%s",
@@ -71,7 +69,7 @@ void MCP23017::config(uint16_t dir_config, uint16_t pullup_config,
     internalPullupMask(pullup_config);
     inputPolarityMask(polarity_config);
 
-    LOG(INF2,
+    LOG(DEBUG,
         "IO Expander Configuration:\r\n"
         "    IODIR:\t0x%04X\r\n"
         "    GPPU:\t0x%04X\r\n"

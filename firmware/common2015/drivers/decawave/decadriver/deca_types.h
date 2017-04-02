@@ -68,5 +68,3 @@ typedef signed long int32;
 #endif
 
 #endif /* DECA_TYPES_H_ */
-
-

@@ -11,7 +11,7 @@
  */
 
 #include "mbed.h"
-#include <logger.hpp>
+#include <Logger.hpp>
 
 #include "deca_types.h"
 #include "deca_param_types.h"
@@ -3245,4 +3245,3 @@ void dw1000_api::dwt_setautorxreenable(int enable)
 
    ===============================================================================================
 */
-

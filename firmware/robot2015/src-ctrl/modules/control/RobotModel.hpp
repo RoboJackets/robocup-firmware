@@ -3,8 +3,8 @@
 #define EIGEN_HAS_CXX11_MATH 0
 #include <Eigen/Dense>
 #include <array>
+#include "ConstMath.hpp"
 #include "Geometry2d/Util.hpp"
-#include "const-math.hpp"
 
 /// Model parameters for a robot.  Used by the controls system.
 class RobotModel {

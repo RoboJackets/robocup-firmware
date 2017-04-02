@@ -1,38 +1,35 @@
 // ** DON'T INCLUDE <iostream>! THINGS WILL BREAK! **
+#include "Assert.hpp"
+#include "BallSensor.hpp"
+#include "Commands.hpp"
+#include "Decawave.hpp"
+#include "FPGA.hpp"
+#include "HackedKickerBoard.hpp"
+#include "HelperFuncs.hpp"
+#include "Logger.hpp"
+#include "RadioProtocol.hpp"
+#include "RobotDevices.hpp"
+#include "RobotModel.hpp"
+#include "RotarySelector.hpp"
+#include "Rtos.hpp"
+#include "RtosTimerHelper.hpp"
+#include "SharedSPI.hpp"
+#include "TaskSignals.hpp"
+#include "Watchdog.hpp"
+#include "io-expander.hpp"
+#include "motors.hpp"
+#include "neostrip.hpp"
+
 #include <array>
 #include <ctime>
 #include <string>
 
-#include <rtos.h>
-
-#include <assert.hpp>
-#include <helper-funcs.hpp>
-#include <logger.hpp>
-#include <watchdog.hpp>
-
-#include "BallSense.hpp"
-// #include "CC1201.cpp"
-#include "Decawave.hpp"
-#include "HackedKickerBoard.hpp"
-#include "RadioProtocol.hpp"
-#include "RobotModel.hpp"
-#include "RotarySelector.hpp"
-#include "RtosTimerHelper.hpp"
-#include "SharedSPI.hpp"
-#include "commands.hpp"
-#include "fpga.hpp"
-#include "io-expander.hpp"
-#include "neostrip.hpp"
-#include "robot-devices.hpp"
-#include "task-signals.hpp"
-
-#define RJ_ENABLE_ROBOT_CONSOLE
-
 using namespace std;
 
-void Task_Controller(void const* args);
+void Task_Controller(const void* args);
 void Task_Controller_UpdateTarget(Eigen::Vector3f targetVel);
 void Task_Controller_UpdateDribbler(uint8_t dribbler);
+void InitializeCommModule(SharedSPIDevice<>::SpiPtrT sharedSPI);
 
 /**
  * @brief Sets the hardware configurations for the status LEDs & places
@@ -72,7 +69,7 @@ int main() {
 
     // Set the default logging configurations
     isLogging = RJ_LOGGING_EN;
-    rjLogLevel = INIT;
+    rjLogLevel = INFO;
 
     /* Always send out an empty line at startup for keeping the console
      * clean on after a 'reboot' command is called;
@@ -93,7 +90,7 @@ int main() {
     rgbLED.clear();
 
     // Set the RGB LEDs to a medium blue while the threads are started up
-    float defaultBrightness = 0.02f;
+    auto defaultBrightness = 0.02f;
     rgbLED.brightness(3 * defaultBrightness);
     rgbLED.setPixel(0, NeoColorBlue);
     rgbLED.setPixel(1, NeoColorBlue);
@@ -103,10 +100,9 @@ int main() {
     RtosTimerHelper init_leds_off([]() { statusLights(false); }, osTimerOnce);
     init_leds_off.start(RJ_STARTUP_LED_TIMEOUT_MS);
 
-    /// A shared spi bus used for the fpga and cc1201 radio
-    shared_ptr<SharedSPI> sharedSPI =
-        make_shared<SharedSPI>(RJ_SPI_MOSI, RJ_SPI_MISO, RJ_SPI_SCK);
-    sharedSPI->format(8, 0);  // 8 bits per transfer
+    /// A shared spi bus
+    auto spiBus = make_shared<SharedSPI>(RJ_SPI_MOSI, RJ_SPI_MISO, RJ_SPI_SCK);
+    spiBus->format(8, 0);  // 8 bits per transfer
 
     // Initialize kicker board
     // HackedKickerBoard::Instance =
@@ -117,14 +113,14 @@ int main() {
     // bool kickerReady = KickerBoard::Instance->flash(false, false);
 
     // flag fro kicking when the ball sense triggers
-    bool kickOnBreakBeam = false;
+    auto kickOnBreakBeam = false;
     // Made up value right now, this is the amount of time in ms to
     // allow the capacitor dump power into kicker. Will need to be
     // adjusted once hardware is available.
     uint8_t kickStrength = 0x08;  // DB_KICK_TIME;
 
     // Initialize and start ball sensor
-    BallSense ballSense(RJ_BALL_EMIT, RJ_BALL_DETECTOR);
+    BallSensor ballSense(RJ_BALL_EMIT, RJ_BALL_DETECTOR);
     ballSense.start(10);
     ballSense.senseChangeCallback = [&](bool haveBall) {
         // invert value due to active-low wiring of led
@@ -137,29 +133,27 @@ int main() {
             kick_hack.kick(kickStrength);
         }
     };
-    // uintptr_t p = (uintptr_t)(void*)&sharedSPI;
-    // LOG(INIT, "test 0 %p %d",(int)&sharedSPI, *reinterpret_cast<char
-    // *>((void*)&sharedSPI));
 
     // Initialize and configure the fpga with the given bitfile
-    FPGA::Instance = new FPGA(sharedSPI, RJ_FPGA_nCS, RJ_FPGA_INIT_B,
+    FPGA::Instance = new FPGA(spiBus, RJ_FPGA_nCS, RJ_FPGA_INIT_B,
                               RJ_FPGA_PROG_B, RJ_FPGA_DONE);
-    const bool fpgaInitialized =
+
+    const auto fpgaInitialized =
         FPGA::Instance->configure("/local/rj-fpga.nib");
+    auto fpgaError = false;
     uint8_t fpgaLastStatus = 0;
-    bool fpgaError = false;  // set based on status byte reading in main loop
 
     if (fpgaInitialized) {
         rgbLED.brightness(3 * defaultBrightness);
         rgbLED.setPixel(1, NeoColorGreen);
 
-        LOG(INIT, "FPGA Configuration Successful!");
+        LOG(OK, "FPGA Configuration Successful!");
 
     } else {
         rgbLED.brightness(4 * defaultBrightness);
         rgbLED.setPixel(1, NeoColorOrange);
 
-        LOG(FATAL, "FPGA Configuration Failed!");
+        LOG(SEVERE, "FPGA Configuration Failed!");
     }
     rgbLED.write();
 
@@ -197,23 +191,19 @@ int main() {
     // though this is multi-threaded code, that dosen't mean it's
     // a multi-core system.
 
-    // LOG(INIT, "test 1");
-
     // Start the thread task for the on-board control loop
     Thread controller_task(Task_Controller, mainID, osPriorityHigh,
                            DEFAULT_STACK_SIZE / 2);
     Thread::signal_wait(MAIN_TASK_CONTINUE, osWaitForever);
 
-// LOG(INIT, "test 2");
-
-#ifdef RJ_ENABLE_ROBOT_CONSOLE
+#ifndef NDEBUG
     // Start the thread task for the serial console
     Thread console_task(Task_SerialConsole, mainID, osPriorityBelowNormal);
     Thread::signal_wait(MAIN_TASK_CONTINUE, osWaitForever);
 #endif
 
-    // Initialize the CommModule and CC1201 radio
-    InitializeCommModule(sharedSPI);
+    // Initialize CommModule and radio
+    InitializeCommModule(spiBus);
 
     // Make sure all of the motors are enabled
     motors_Init();
@@ -224,36 +214,36 @@ int main() {
     uint8_t battVoltage = 0;
 
     // Radio timeout timer
-    const uint32_t RADIO_TIMEOUT = 100;
+    const auto RadioTimeout = 100;
     RtosTimerHelper radioTimeoutTimer([&]() {
         // reset radio
-        // global_radio->strobe(CC1201_STROBE_SIDLE);
-        // global_radio->strobe(CC1201_STROBE_SFRX);
-        // global_radio->strobe(CC1201_STROBE_SRX);
+        // globalRadio->strobe(CC1201_STROBE_SIDLE);
+        // globalRadio->strobe(CC1201_STROBE_SFRX);
+        // globalRadio->strobe(CC1201_STROBE_SRX);
 
-        radioTimeoutTimer.start(RADIO_TIMEOUT);
+        radioTimeoutTimer.start(RadioTimeout);
     }, osTimerOnce);
-    radioTimeoutTimer.start(RADIO_TIMEOUT);
+    radioTimeoutTimer.start(RadioTimeout);
 
     // Setup radio protocol handling
-    RadioProtocol radioProtocol(CommModule::Instance, global_radio);
+    RadioProtocol radioProtocol(CommModule::Instance);
     radioProtocol.setUID(robotShellID);
     radioProtocol.start();
 
     radioProtocol.rxCallback =
-        [&](const rtp::ControlMessage* msg, const bool addressed) {
+        [&](const RTP::ControlMessage* msg, const bool addressed) {
             // reset timeout
-            radioTimeoutTimer.start(RADIO_TIMEOUT);
+            radioTimeoutTimer.start(RadioTimeout);
 
             if (addressed) {
                 // update target velocity from packet
                 Task_Controller_UpdateTarget({
                     static_cast<float>(msg->bodyX) /
-                        rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
+                        RTP::ControlMessage::VELOCITY_SCALE_FACTOR,
                     static_cast<float>(msg->bodyY) /
-                        rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
+                        RTP::ControlMessage::VELOCITY_SCALE_FACTOR,
                     static_cast<float>(msg->bodyW) /
-                        rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
+                        RTP::ControlMessage::VELOCITY_SCALE_FACTOR,
                 });
 
                 // dribbler
@@ -266,7 +256,7 @@ int main() {
                     kick_hack.kick(kickStrength);
                 } else if (msg->triggerMode == 2) {
                     // kick on break beam
-                    if (ballSense.have_ball()) {
+                    if (ballSense.hasBall()) {
                         kick_hack.kick(kickStrength);
                         kickOnBreakBeam = false;
                     } else {
@@ -276,10 +266,10 @@ int main() {
                 }
             }
 
-            rtp::RobotStatusMessage reply;
+            RTP::RobotStatusMessage reply;
             reply.uid = robotShellID;
             reply.battVoltage = battVoltage;
-            reply.ballSenseStatus = ballSense.have_ball() ? 1 : 0;
+            reply.ballSenseStatus = ballSense.hasBall() ? 1 : 0;
 
             // report any motor errors
             reply.motorErrors = 0;
@@ -301,26 +291,31 @@ int main() {
             reply.kickStatus = kick_hack.canKick();
 
             vector<uint8_t> replyBuf;
-            rtp::SerializeToVector(reply, &replyBuf);
+            RTP::serializeToVector(reply, &replyBuf);
 
             return replyBuf;
         };
 
     // KickerBoard::Instance->charge();
-    LOG(INIT, "Started charging kicker board.");
-    uint8_t kickerVoltage = 0;
+    // LOG(DEBUG, "Started charging kicker board.");
 
     // Set the watdog timer's initial config
-    Watchdog::Set(RJ_WATCHDOG_TIMER_VALUE);
+    Watchdog::set(RJ_WATCHDOG_TIMER_VALUE);
 
     // Release each thread into its operations in a structured manner
     controller_task.signal_set(SUB_TASK_CONTINUE);
-#ifdef RJ_ENABLE_ROBOT_CONSOLE
+#ifndef NDEBUG
     console_task.signal_set(SUB_TASK_CONTINUE);
 #endif
 
-    osStatus tState = osThreadSetPriority(mainID, osPriorityNormal);
+// #pragma for gcc has bugs in it for selectively disabling warnings
+// so we test for NDEBUG instead
+#ifndef NDEBUG
+    auto tState = osThreadSetPriority(mainID, osPriorityNormal);
     ASSERT(tState == osOK);
+#else
+    osThreadSetPriority(mainID, osPriorityNormal);
+#endif
 
     auto ll = 0;
     uint16_t errorBitmask = 0;
@@ -333,11 +328,13 @@ int main() {
         errorBitmask |= (1 << RJ_ERR_LED_DRIB);
     }
 
+    cmd_heapfill();
+
     while (true) {
         // make sure we can always reach back to main by
         // renewing the watchdog timer periodicly
-        Watchdog::Renew();
-        global_radio->printStuff();
+        Watchdog::renew();
+
         // periodically reset the console text's format
         ll++;
         if ((ll % 8) == 0) {
@@ -348,7 +345,7 @@ int main() {
         Thread::wait(RJ_WATCHDOG_TIMER_VALUE * 250);
 
         // Pack errors into bitmask
-        errorBitmask |= (!global_radio || !global_radio->isConnected())
+        errorBitmask |= (!globalRadio || !globalRadio->isConnected())
                         << RJ_ERR_LED_RADIO;
 
         fpgaLastStatus = motors_refresh();
@@ -373,25 +370,27 @@ int main() {
         battVoltage = (batt.read_u16() >> 8);
 
         // get kicker voltage
-        // KickerBoard::Instance->read_voltage(&kickerVoltage);
-        LOG(INF1, "Kicker voltage: %u", kickerVoltage);
+        // auto kickerVoltage = KickerBoard::Instance->readVoltage().second;
+        LOG(DEBUG, "Kicker voltage: %u", kickerVoltage);
 
         // update shell id
         robotShellID = rotarySelector.read();
         radioProtocol.setUID(robotShellID);
 
         // update radio channel
-        uint8_t newRadioChannel = radioChannelSwitch.read();
+        auto newRadioChannel = static_cast<uint8_t>(radioChannelSwitch.read());
         if (newRadioChannel != currentRadioChannel) {
-            // global_radio->setChannel(newRadioChannel);
+            // globalRadio->setChannel(newRadioChannel);
             currentRadioChannel = newRadioChannel;
-            LOG(INIT, "Changed radio channel to %u", newRadioChannel);
+            LOG(INFO, "Changed radio channel to %u", newRadioChannel);
         }
 
         // Set error-indicating leds on the control board
         ioExpander.writeMask(~errorBitmask, IOExpanderErrorLEDMask);
 
-        if (errorBitmask || !fpgaInitialized || fpgaError) {
+        const auto robotHasError =
+            errorBitmask || !fpgaInitialized || fpgaError;
+        if (robotHasError) {
             // orange - error
             rgbLED.brightness(6 * defaultBrightness);
             rgbLED.setPixel(0, NeoColorOrange);
@@ -423,14 +422,22 @@ _EXTERN void HARD_FAULT_HANDLER(uint32_t* stackAddr) {
      * away as the variables never actually get used.  If the debugger won't
      * show the values of the variables, make them global my moving their
      * declaration outside of this function. */
-    volatile uint32_t r0;
-    volatile uint32_t r1;
-    volatile uint32_t r2;
-    volatile uint32_t r3;
-    volatile uint32_t r12;
-    volatile uint32_t lr;  /* Link register. */
-    volatile uint32_t pc;  /* Program counter. */
-    volatile uint32_t psr; /* Program status register. */
+    volatile uint32_t r0{};
+    (void)r0;  // disables compiler warning about unused-variables
+    volatile uint32_t r1{};
+    (void)r1;
+    volatile uint32_t r2{};
+    (void)r2;
+    volatile uint32_t r3{};
+    (void)r3;
+    volatile uint32_t r12{};
+    (void)r12;
+    volatile uint32_t lr{};
+    (void)lr; /* Link register. */
+    volatile uint32_t pc{};
+    (void)pc; /* Program counter. */
+    volatile uint32_t psr{};
+    (void)psr; /* Program status register. */
 
     r0 = stackAddr[0];
     r1 = stackAddr[1];
@@ -441,7 +448,7 @@ _EXTERN void HARD_FAULT_HANDLER(uint32_t* stackAddr) {
     pc = stackAddr[6];
     psr = stackAddr[7];
 
-    LOG(FATAL,
+    LOG(SEVERE,
         "\r\n"
         "================================\r\n"
         "========== HARD FAULT ==========\r\n"

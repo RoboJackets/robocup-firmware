@@ -6,7 +6,7 @@
  * or when pinout doesn't match exactly to the target's SPI pins
  *
  * @code
- * #include "mbed.h"
+ * #include "Mbed.hpp"
  * #include "software-spi.hpp"
  *
  * SoftwareSPI spi(p5, p6, p7); // mosi, miso, sck

@@ -1,6 +1,6 @@
-#include <mbed.h>
-#include <rtos.h>
-#include <logger.hpp>
+#include "Logger.hpp"
+#include "Mbed.hpp"
+#include "Rtos.hpp"
 
 #include "AVR910.hpp"
 #include "SharedSPI.hpp"
@@ -23,7 +23,7 @@ void imAlive() { ledOne = !ledOne; }
 
 int main() {
     isLogging = RJ_LOGGING_EN;
-    rjLogLevel = INF2;
+    rjLogLevel = DEBUG;
 
     lifeLight.attach(&imAlive, ALIVE_BLINK_RATE);
     pc.baud(BAUD_RATE);
