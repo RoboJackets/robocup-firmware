@@ -5,7 +5,7 @@
 // #include <util/delay.h>
 //
 // #include "kicker_commands.h"
-// #include "pins.h"
+#include "pins.h"
 
 // #define NO_COMMAND 0
 //
@@ -66,7 +66,8 @@ void main() {
     // ensure KICK_PIN, CHIP_PIN, and CHARGE_PIN are outputs
     // DDB0 = 1;  // MISO is handled by CS interrupt
     // SETBIT(DDRB,0);
-    DDRB |= (1<<DDRB0);
+    DDRB |= _BV(CHARGE_PIN);
+    DDRA &= ~(_BV(DB_CHG_PIN));
 
     // ensure N_KICK_CS & MISO are inputs
     /* DDRA &= ~(_BV(N_KICK_CS_PIN) | _BV(KCKR_MISO_PIN)); */
@@ -130,7 +131,11 @@ void main() {
         // last_voltage_ = voltage_accum / 255;
 
         // if (charge_allowed_ && last_voltage_ < VOLTAGE_CUTOFF) {
-            PORTB |= (1<<PORTB0);
+        if (!(PINA & _BV(DB_CHG_PIN))) {
+            PORTB |= _BV(CHARGE_PIN);
+        } else {
+            PORTB &= ~_BV(CHARGE_PIN);
+        }
             // SETBIT(PORTB,0);
         // } else {
             // PORTA &= ~(_BV(CHARGE_PIN));
