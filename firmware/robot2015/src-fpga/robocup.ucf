@@ -11,64 +11,64 @@ NET "sysclk" LOC="P50";
 #################################################
 #                     Phases                    #
 #################################################
-NET "phase_aH[0]" LOC="P93";                    # Drive Motor 1
-NET "phase_aL[0]" LOC="P94";
-NET "phase_bH[0]" LOC="P96";
-NET "phase_bL[0]" LOC="P97";
-NET "phase_cH[0]" LOC="P98";
-NET "phase_cL[0]" LOC="P103";
+NET "phase_aH[0]" LOC="P94";                    # Drive Motor 1
+NET "phase_aL[0]" LOC="P93";
+NET "phase_bH[0]" LOC="P92";
+NET "phase_bL[0]" LOC="P91";
+NET "phase_cH[0]" LOC="P88";
+NET "phase_cL[0]" LOC="P87";
 
-NET "phase_aH[1]" LOC="P15";                     # Drive Motor 2
-NET "phase_aL[1]" LOC="P14";
-NET "phase_bH[1]" LOC="P8";
-NET "phase_bL[1]" LOC="P7";
-NET "phase_cH[1]" LOC="P5";
-NET "phase_cL[1]" LOC="P4";
+NET "phase_aH[1]" LOC="P116";                     # Drive Motor 2
+NET "phase_aL[1]" LOC="P113";
+NET "phase_bH[1]" LOC="P112";
+NET "phase_bL[1]" LOC="P106";
+NET "phase_cH[1]" LOC="P105";
+NET "phase_cL[1]" LOC="P104";
 
-NET "phase_aH[2]" LOC="P125";                   # Drive Motor 3
-NET "phase_aL[2]" LOC="P124";
-NET "phase_bH[2]" LOC="P83";
-NET "phase_bL[2]" LOC="P85";
-NET "phase_cH[2]" LOC="P86";
-NET "phase_cL[2]" LOC="P87";
+NET "phase_aH[2]" LOC="P21";                   # Drive Motor 3
+NET "phase_aL[2]" LOC="P20";
+NET "phase_bH[2]" LOC="P7";
+NET "phase_bL[2]" LOC="P5";
+NET "phase_cH[2]" LOC="P4";
+NET "phase_cL[2]" LOC="P3";
 
-NET "phase_aH[3]" LOC="P16";                    # Drive Motor 4
-NET "phase_aL[3]" LOC="P17";
-NET "phase_bH[3]" LOC="P82";
-NET "phase_bL[3]" LOC="P81";
-NET "phase_cH[3]" LOC="P77";
-NET "phase_cL[3]" LOC="P76";
+NET "phase_aH[3]" LOC="P21";                    # Drive Motor 4
+NET "phase_aL[3]" LOC="P20";
+NET "phase_bH[3]" LOC="P34";
+NET "phase_bL[3]" LOC="P32";
+NET "phase_cH[3]" LOC="P31";
+NET "phase_cL[3]" LOC="P26";
 
-NET "phase_aH[4]" LOC="P32";                    # Dribbler
-NET "phase_aL[4]" LOC="P26";
-NET "phase_bH[4]" LOC="P25";
-NET "phase_bL[4]" LOC="P23";
-NET "phase_cH[4]" LOC="P21";
-NET "phase_cL[4]" LOC="P70";
+NET "phase_aH[4]" LOC="P83";                    # Dribbler
+NET "phase_aL[4]" LOC="P82";
+NET "phase_bH[4]" LOC="P81";
+NET "phase_bL[4]" LOC="P77";
+NET "phase_cH[4]" LOC="P76";
+NET "phase_cL[4]" LOC="P75";
 
 
 #################################################
 #                  Hall Sensors                 #
 #################################################
-NET "hall_a[0]" LOC="P106";                     # Drive Motor 1
-NET "hall_b[0]" LOC="P105";
-NET "hall_c[0]" LOC="P104";
+NET "hall_a[0]" LOC="P84";                     # Drive Motor 1
+NET "hall_b[0]" LOC="P86";
+NET "hall_c[0]" LOC="P89";
 
-NET "hall_a[1]" LOC="P112";                     # Drive Motor 2
-NET "hall_b[1]" LOC="P113";
-NET "hall_c[1]" LOC="P116";
+NET "hall_a[1]" LOC="P98";                     # Drive Motor 2
+NET "hall_b[1]" LOC="P101";
+NET "hall_c[1]" LOC="P103";
 
-NET "hall_a[2]" LOC="P74";                      # Drive Motor 3
-NET "hall_b[2]" LOC="P75";
-NET "hall_c[2]" LOC="P68";
+NET "hall_a[2]" LOC="P141";                      # Drive Motor 3
+NET "hall_b[2]" LOC="P142";
+NET "hall_c[2]" LOC="P2";
 
-NET "hall_a[3]" LOC="P123";                     # Drive Motor 4
-NET "hall_b[3]" LOC="P122";
-NET "hall_c[3]" LOC="P117";
+NET "hall_a[3]" LOC="P23";                     # Drive Motor 4
+NET "hall_b[3]" LOC="P24";
+NET "hall_c[3]" LOC="P25";
 
-NET "hall_a[4]" LOC="P88";                      # Dribbler
-NET "hall_b[4]" LOC="P91";
-NET "hall_c[4]" LOC="P92";
+NET "hall_a[4]" LOC="P74";                      # Dribbler
+NET "hall_b[4]" LOC="P70";
+NET "hall_c[4]" LOC="P68";
 
 # Attach a pullup to all of the hall pins
 NET "hall_*" PULLUP;
@@ -77,17 +77,17 @@ NET "hall_*" PULLUP;
 #################################################
 #                    Encoders                   #
 #################################################
-NET "enc_a[0]" LOC="P101";                      # Drive Motor 1
+NET "enc_a[0]" LOC="P97";                      # Drive Motor 1
 NET "enc_b[0]" LOC="P95";
 
-NET "enc_a[1]" LOC="P12";                       # Drive Motor 2
-NET "enc_b[1]" LOC="P6";
+NET "enc_a[1]" LOC="P122";                       # Drive Motor 2
+NET "enc_b[1]" LOC="P119";
 
-NET "enc_a[2]" LOC="P31";                       # Drive Motor 3
-NET "enc_b[2]" LOC="P24";
+NET "enc_a[2]" LOC="P140";                       # Drive Motor 3
+NET "enc_b[2]" LOC="P139";
 
-NET "enc_a[3]" LOC="P89";                       # Drive Motor 4
-NET "enc_b[3]" LOC="P84";
+NET "enc_a[3]" LOC="P17";                       # Drive Motor 4
+NET "enc_b[3]" LOC="P16";
 
 # Attach a pullup to all of the encoder pins
 NET "enc_*" PULLUP;
@@ -96,8 +96,8 @@ NET "enc_*" PULLUP;
 #################################################
 #                   SPI Slave                   #
 #################################################
-NET "spi_slave_miso" LOC="P63";
-NET "spi_slave_mosi" LOC="P44";
+NET "spi_slave_miso" LOC="P44";
+NET "spi_slave_mosi" LOC="P63";
 NET "spi_slave_sck" LOC="P71";
 NET "spi_slave_ncs" LOC="P69";
 
@@ -105,18 +105,19 @@ NET "spi_slave_ncs" LOC="P69";
 #################################################
 #                  SPI Master                   #
 #################################################
-NET "spi_master_miso" LOC="P139";
-NET "spi_master_mosi" LOC="P140";
-NET "spi_master_sck" LOC="P135";
+NET "spi_master_miso" LOC="P124";
+NET "spi_master_mosi" LOC="P123";
+NET "spi_master_sck" LOC="P125";
 
 # These are the driver chip select pins for the SPI master
-NET "drv_ncs[0]" LOC="P131";
-NET "drv_ncs[1]" LOC="P126";
-NET "drv_ncs[2]" LOC="P130";
-NET "drv_ncs[3]" LOC="P34";
-NET "drv_ncs[4]" LOC="P35";
+NET "drv_ncs[0]" LOC="P96";
+NET "drv_ncs[1]" LOC="P117";
+NET "drv_ncs[2]" LOC="P15";
+NET "drv_ncs[3]" LOC="P35";
+NET "drv_ncs[4]" LOC="P85";
 
 # These are the ADC chip select pins for the SPI master
+# TODO: NOT CONNECTED
 NET "adc_ncs[0]" LOC="P132";
 NET "adc_ncs[1]" LOC="P134";
 

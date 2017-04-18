@@ -42,7 +42,7 @@ void Task_Controller_UpdateDribbler(uint8_t dribbler);
  */
 void statusLights(bool state) {
     DigitalOut init_leds[] = {
-        {RJ_BALL_LED}, {RJ_RX_LED}, {RJ_TX_LED}, {RJ_RDY_LED}};
+        {RJ_BALL_LED}};
     // the state is inverted because the leds are wired active-low
     for (DigitalOut& led : init_leds) led = !state;
 }
@@ -89,14 +89,14 @@ int main() {
 
     // Force off since the neopixel's hardware is stateless from previous
     // settings
-    NeoStrip rgbLED(RJ_NEOPIXEL, 2);
+    NeoStrip rgbLED(RJ_NEOPIXEL, 1);
     rgbLED.clear();
 
     // Set the RGB LEDs to a medium blue while the threads are started up
     float defaultBrightness = 0.02f;
     rgbLED.brightness(3 * defaultBrightness);
     rgbLED.setPixel(0, NeoColorBlue);
-    rgbLED.setPixel(1, NeoColorBlue);
+    // rgbLED.setPixel(1, NeoColorBlue);
     rgbLED.write();
 
     // Flip off the startup LEDs after a timeout period
@@ -151,19 +151,19 @@ int main() {
 
     if (fpgaInitialized) {
         rgbLED.brightness(3 * defaultBrightness);
-        rgbLED.setPixel(1, NeoColorGreen);
+        rgbLED.setPixel(0, NeoColorPurple);
 
         LOG(INIT, "FPGA Configuration Successful!");
 
     } else {
         rgbLED.brightness(4 * defaultBrightness);
-        rgbLED.setPixel(1, NeoColorOrange);
+        rgbLED.setPixel(0, NeoColorRed);
 
         LOG(FATAL, "FPGA Configuration Failed!");
     }
     rgbLED.write();
 
-    DigitalOut rdy_led(RJ_RDY_LED, !fpgaInitialized);
+    // DigitalOut rdy_led(RJ_RDY_LED, !fpgaInitialized);
 
     // Init IO Expander and turn all LEDs on.  The first parameter to config()
     // sets the first 8 lines to input and the last 8 to output.  The pullup
