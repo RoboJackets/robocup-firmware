@@ -11,31 +11,31 @@ NET "sysclk" LOC="P50";
 #################################################
 #                     Phases                    #
 #################################################
-NET "phase_aH[0]" LOC="P94";                    # Drive Motor 1
-NET "phase_aL[0]" LOC="P93";
-NET "phase_bH[0]" LOC="P92";
-NET "phase_bL[0]" LOC="P91";
+NET "phase_bH[0]" LOC="P94";                    # Drive Motor 1
+NET "phase_bL[0]" LOC="P93";
+NET "phase_aH[0]" LOC="P92";
+NET "phase_aL[0]" LOC="P91";
 NET "phase_cH[0]" LOC="P88";
 NET "phase_cL[0]" LOC="P87";
 
-NET "phase_aH[1]" LOC="P116";                     # Drive Motor 2
-NET "phase_aL[1]" LOC="P113";
-NET "phase_bH[1]" LOC="P112";
-NET "phase_bL[1]" LOC="P106";
+NET "phase_bH[1]" LOC="P116";                     # Drive Motor 2
+NET "phase_bL[1]" LOC="P113";
+NET "phase_aH[1]" LOC="P112";
+NET "phase_aL[1]" LOC="P106";
 NET "phase_cH[1]" LOC="P105";
 NET "phase_cL[1]" LOC="P104";
 
-NET "phase_aH[2]" LOC="P14";                   # Drive Motor 3
-NET "phase_aL[2]" LOC="P8";
-NET "phase_bH[2]" LOC="P7";
-NET "phase_bL[2]" LOC="P5";
+NET "phase_bH[2]" LOC="P14";                   # Drive Motor 3
+NET "phase_bL[2]" LOC="P8";
+NET "phase_aH[2]" LOC="P7";
+NET "phase_aL[2]" LOC="P5";
 NET "phase_cH[2]" LOC="P4";
 NET "phase_cL[2]" LOC="P3";
 
-NET "phase_aH[3]" LOC="P21";                    # Drive Motor 4
-NET "phase_aL[3]" LOC="P20";
-NET "phase_bH[3]" LOC="P34";
-NET "phase_bL[3]" LOC="P32";
+NET "phase_bH[3]" LOC="P21";                    # Drive Motor 4
+NET "phase_bL[3]" LOC="P20";
+NET "phase_aH[3]" LOC="P34";
+NET "phase_aL[3]" LOC="P32";
 NET "phase_cH[3]" LOC="P31";
 NET "phase_cL[3]" LOC="P26";
 
