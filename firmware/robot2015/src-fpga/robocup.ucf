@@ -25,8 +25,8 @@ NET "phase_bL[1]" LOC="P106";
 NET "phase_cH[1]" LOC="P105";
 NET "phase_cL[1]" LOC="P104";
 
-NET "phase_aH[2]" LOC="P21";                   # Drive Motor 3
-NET "phase_aL[2]" LOC="P20";
+NET "phase_aH[2]" LOC="P14";                   # Drive Motor 3
+NET "phase_aL[2]" LOC="P8";
 NET "phase_bH[2]" LOC="P7";
 NET "phase_bL[2]" LOC="P5";
 NET "phase_cH[2]" LOC="P4";
