@@ -9,6 +9,7 @@
 
 #define RJ_ENABLE_ROBOT_CONSOLE
 
+#define MOTOR_MAX_SAMPLES 2
 // Ticker lifeLight;
 // DigitalOut ledOne(LED1);
 // DigitalOut ledTwo(LED2);
@@ -19,6 +20,74 @@ LocalFileSystem fs("local");
  * timer interrupt based light flicker
  */
 // void imAlive() { ledOne = !ledOne; }
+typedef uint16_t motorVel_t;
+struct motorErr_t {
+    /*
+    Available Flags:
+    GVDD_OV, GVDD_UV, PVDD_UV
+    OTSD, OTW
+    FETHA_OC, FETLA_OC
+    FETHB_OC, FETLB_OC
+    FETHC_OC, FETLC_OC
+    */
+    bool hasError;
+    std::array<uint16_t, 2> drvStatus;
+};
+struct motor_t {
+    motorVel_t vel;
+    uint16_t hall;
+    std::array<uint32_t, MOTOR_MAX_SAMPLES> enc;
+    motorErr_t status;
+    std::string desc;
+};
+
+motor_t mtrEx = {.vel = 0x4D,
+                 .hall = 0x0A,
+                 .enc = {0x23, 0x18},
+                 .status = {.hasError = false, .drvStatus = {0x26, 0x0F}},
+                 .desc = "Motor"};
+
+const int NUM_MOTORS = 5;
+std::vector<motor_t> global_motors(NUM_MOTORS, mtrEx);
+
+void motors_show() {
+    std::array<int16_t, NUM_MOTORS> duty_cycles = {0};
+    std::array<uint8_t, NUM_MOTORS> halls = {0};
+    std::array<int16_t, NUM_MOTORS> enc_deltas = {0};
+
+    FPGA::Instance->read_duty_cycles(duty_cycles.data(), duty_cycles.size());
+    FPGA::Instance->read_halls(halls.data(), halls.size());
+    FPGA::Instance->read_encs(enc_deltas.data(), enc_deltas.size());
+
+    // get the driver register values from the fpga
+    std::vector<uint16_t> driver_regs;
+    FPGA::Instance->gate_drivers(driver_regs);
+
+    // The status byte fields:
+    //   { sys_rdy, watchdog_trigger, motors_en, is_connected[4:0] }
+    uint8_t status_byte = FPGA::Instance->watchdog_reset();
+
+    printf("\033[?25l\033[25mStatus:\033[K\t\t\t%s\033E",
+           status_byte & 0x20 ? "ENABLED" : "DISABLED");
+    printf(
+        "\033[KLast Update:\t\t%-6.2fms\t%s\033E",
+        (static_cast<float>(enc_deltas.back()) * (1 / 18.432) * 2 * 64) / 1000,
+        status_byte & 0x40 ? "[EXPIRED]" : "[OK]     ");
+    printf("\033[K    ID\t\tVEL\tHALL\tENC\tDIR\tSTATUS\t\tFAULTS\033E");
+    for (size_t i = 0; i < duty_cycles.size() - 1; i++) {
+        printf("\033[K    %s\t%-3d\t%-3u\t%-5d\t%s\t%s\t0x%03X\033E",
+               global_motors[i].desc.c_str(), duty_cycles[i], halls[i],
+               enc_deltas[i], duty_cycles[i] < 0 ? "CW" : "CCW",
+               (status_byte & (1 << i)) ? "[OK]    " : "[UNCONN]",
+               driver_regs[i]);
+    }
+    printf("\033[K    %s\t%-3u\t%-3u\tN/A\t%s\t%s\t0x%03X\033E",
+           global_motors.back().desc.c_str(), duty_cycles.back() & 0x1FF,
+           halls.back(), duty_cycles.back() < 0 ? "CW" : "CCW",
+           (status_byte & (1 << (enc_deltas.size() - 1))) ? "[OK]    "
+                                                          : "[UNCONN]",
+           driver_regs.back());
+}
 
 int main() {
     Serial s(RJ_SERIAL_RXTX);
@@ -106,10 +175,15 @@ int main() {
         // limit max value
         duty_cycle_all = 100; //std::min(duty_cycle_all, static_cast<uint16_t>(511));
 
+
         // set the duty cycle values all to our determined value according to
         // the rotary selector
         std::fill(duty_cycles.begin(), duty_cycles.end(), duty_cycle_all);
+        motors_show();
 
+        // move cursor back 8 rows
+        printf("\033[%uA", 8);
+        // Console::Instance()->Flush();
         wait_ms(3);
     }
 }
