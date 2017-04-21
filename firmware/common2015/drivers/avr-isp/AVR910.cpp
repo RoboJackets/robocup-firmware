@@ -91,7 +91,7 @@ bool AVR910::program(FILE* binary, int pageSize, int numPages) {
                     printf(
                         "ERROR: AVR910 binary exceeds chip memory "
                         "capacity\r\n");
-                    return -1;
+                    return false;
                 }
                 pageOffset = 0;
             }
@@ -130,7 +130,7 @@ bool AVR910::program(FILE* binary, int pageSize, int numPages) {
                     printf(
                         "ERROR: AVR910 binary exceeds chip memory "
                         "capacity\r\n");
-                    return -1;
+                    return false;
                 }
             }
         }
@@ -139,7 +139,7 @@ bool AVR910::program(FILE* binary, int pageSize, int numPages) {
     // We might have partially filled up a page.
     writeFlashMemoryPage(pageNumber);
 
-    bool success = checkMemory(pageNumber, pageSize, binary);
+    bool success = checkMemory(pageSize, pageNumber, binary, true);
 
     // Leave serial programming mode by toggling reset
     exitProgramming();
