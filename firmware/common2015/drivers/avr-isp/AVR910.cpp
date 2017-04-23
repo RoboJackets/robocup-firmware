@@ -242,11 +242,11 @@ void AVR910::writeFlashMemoryByte(int highLow, int address, char data) {
     chipDeselect();
 }
 
-void AVR910::writeFlashMemoryPage(char pageNumber) {
+void AVR910::writeFlashMemoryPage(int pageNumber) {
     chipSelect();
     _spi->write(0x4C);
-    _spi->write(pageNumber >> 3);  // top 5 bits stored in bottom of byte
-    _spi->write(pageNumber << 5);  // bottom 3 bits stored in top of byte
+    _spi->write(MSB(pageNumber << 3));
+    _spi->write(LSB(pageNumber << 3));
     _spi->write(0x00);
     chipDeselect();
 
@@ -256,8 +256,8 @@ void AVR910::writeFlashMemoryPage(char pageNumber) {
 char AVR910::readProgramMemory(int highLow, char pageNumber, char pageOffset) {
     chipSelect();
     _spi->write(highLow);
-    _spi->write(pageNumber >> 3);
-    _spi->write((pageNumber << 5) | (pageOffset & 0x3F));
+    _spi->write(MSB(pageNumber << 3));
+    _spi->write(LSB(pageNumber << 3) | (pageOffset & 0x3F));
     char response = _spi->write(0x00);
     chipDeselect();
 

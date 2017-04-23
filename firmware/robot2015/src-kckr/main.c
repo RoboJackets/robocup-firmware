@@ -2,7 +2,7 @@
 
 // #include <avr/interrupt.h>
 #include <avr/io.h>
-// #include <util/delay.h>
+#include <util/delay.h>
 //
 // #include "kicker_commands.h"
 #include "pins.h"
@@ -67,7 +67,9 @@ void main() {
     // DDB0 = 1;  // MISO is handled by CS interrupt
     // SETBIT(DDRB,0);
     DDRB |= _BV(CHARGE_PIN);
-    DDRA &= ~(_BV(DB_CHG_PIN));
+    DDRA |= _BV(KICK_PIN);
+    // PORTB |= _BV(CHARGE_PIN);
+    // DDRA &= ~(_BV(DB_CHG_PIN));
 
     // ensure N_KICK_CS & MISO are inputs
     /* DDRA &= ~(_BV(N_KICK_CS_PIN) | _BV(KCKR_MISO_PIN)); */
@@ -122,27 +124,47 @@ void main() {
     // const int kalpha = 32;
 
     // We handle voltage readings here
+    int kicked = 0;
     while (1) {
-        // get a voltage reading by weighing in a new reading, same concept as
-        // TCP RTT estimates (exponentially weighted sum)
-        // last_voltage_ = get_voltage();
-        // int voltage_accum =
-        //     (255 - kalpha) * last_voltage_ + kalpha * get_voltage();
-        // last_voltage_ = voltage_accum / 255;
-
-        // if (charge_allowed_ && last_voltage_ < VOLTAGE_CUTOFF) {
+    //     // get a voltage reading by weighing in a new reading, same concept as
+    //     // TCP RTT estimates (exponentially weighted sum)
+    //     // last_voltage_ = get_voltage();
+    //     // int voltage_accum =
+    //     //     (255 - kalpha) * last_voltage_ + kalpha * get_voltage();
+    //     // last_voltage_ = voltage_accum / 255;
+    //
+    //     // if (charge_allowed_ && last_voltage_ < VOLTAGE_CUTOFF) {
         if (!(PINA & _BV(DB_CHG_PIN))) {
             PORTB |= _BV(CHARGE_PIN);
         } else {
             PORTB &= ~_BV(CHARGE_PIN);
         }
-            // SETBIT(PORTB,0);
-        // } else {
-            // PORTA &= ~(_BV(CHARGE_PIN));
-        // }
 
-        // _delay_ms(VOLTAGE_READ_DELAY_MS);
+        if (!(PINA & _BV(DB_KICK_PIN))) {
+            if (!kicked) {
+                PORTA |= _BV(KICK_PIN);
+                _delay_ms(20);
+                PORTA &= ~_BV(KICK_PIN);
+
+                kicked = 1;
+            }
+        } else {
+            kicked = 0;
+        }
+    //         // SETBIT(PORTB,0);
+    //     // } else {
+    //         // PORTA &= ~(_BV(CHARGE_PIN));
+    //     // }
+    //
+    //     // _delay_ms(VOLTAGE_READ_DELAY_MS);
     }
+    // PORTB |= _BV(CHARGE_PIN);
+    // _delay_ms(1000);
+    // PORTB &= ~_BV(CHARGE_PIN);
+    // PORTA |= _BV(KICK_PIN);
+    // _delay_ms(20);
+    // PORTA &= ~_BV(KICK_PIN);
+
 }
 
 /*

@@ -43,7 +43,7 @@ FPGA::FPGA(std::shared_ptr<SharedSPI> sharedSPI, PinName nCs, PinName initB,
       _initB(initB),
       _done(done),
       _progB(progB, PIN_OUTPUT, OpenDrain, 1) {
-    setSPIFrequency(500000);
+    setSPIFrequency(10000000); // Max of 10MHz I think
 }
 
 bool FPGA::configure(const std::string& filepath) {
