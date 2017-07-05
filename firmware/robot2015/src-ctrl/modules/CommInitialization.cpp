@@ -71,19 +71,8 @@ uint32_t loopback_tx_cb(const RTP::Packet* p) {
 }
 
 void InitializeCommModule(SharedSPIDevice<>::SpiPtrT sharedSPI) {
-// leds that flash if tx/rx have happened recently
-#if defined(ENABLE_RX_TX_LEDS)
-    auto rxTimeoutLED = make_shared<FlashingTimeoutLED>(
-        DigitalOut(RJ_RX_LED, OpenDrain), 160, 400);
-    auto txTimeoutLED = make_shared<FlashingTimeoutLED>(
-        DigitalOut(RJ_TX_LED, OpenDrain), 160, 400);
-#else
-    auto rxTimeoutLED = nullptr;
-    auto txTimeoutLED = nullptr;
-#endif
-
     // Startup the CommModule interface
-    CommModule::Instance = make_shared<CommModule>(rxTimeoutLED, txTimeoutLED);
+    CommModule::Instance = make_shared<CommModule>();
     auto commModule = CommModule::Instance;
 
     // TODO(justin): make this non-global

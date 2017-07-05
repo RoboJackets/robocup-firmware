@@ -1,3 +1,5 @@
+#define __CM3_REV 0x200
+
 // ** DON'T INCLUDE <iostream>! THINGS WILL BREAK! **
 #include "Assert.hpp"
 #include "BallSensor.hpp"
@@ -26,6 +28,38 @@
 
 using namespace std;
 
+void Task_Simulate_RX_Packet(const void* args) {
+    auto commModule = CommModule::Instance;
+
+    while(true) {
+        Thread::wait(1);
+
+        RTP::Packet pkt;
+        pkt.header.port = RTP::PortType::CONTROL;
+        pkt.header.type = RTP::MessageType::CONTROL;
+        pkt.header.address = 1;
+
+        RTP::ControlMessage msg;
+        msg.uid = 1;
+        msg.bodyX = 0;
+        msg.bodyY = 0;
+        msg.bodyW = 0;
+        msg.dribbler = 0;
+        msg.kickStrength = 0;
+        msg.shootMode = 0;
+        msg.triggerMode = 0;
+        msg.song = 0;
+
+        auto payload = std::vector<uint8_t>{};
+        serializeToVector(msg, &payload);
+        pkt.payload = std::move(payload);
+
+        commModule->receive(std::move(pkt));
+
+        Thread::yield();
+    }
+}
+
 void Task_Controller(const void* args);
 void Task_Controller_UpdateTarget(Eigen::Vector3f targetVel);
 void Task_Controller_UpdateDribbler(uint8_t dribbler);
@@ -48,6 +82,9 @@ void statusLights(bool state) {
  * The entry point of the system where each submodule's thread is started.
  */
 int main() {
+    // disable write buffer use during default memory map accesses
+    // SCnSCB->ACTLR |= SCnSCB_ACTLR_DISDEFWBUF_Msk;
+
     // Store the thread's ID
     const osThreadId mainID = Thread::gettid();
     ASSERT(mainID != nullptr);
@@ -216,11 +253,6 @@ int main() {
     // Radio timeout timer
     const auto RadioTimeout = 100;
     RtosTimerHelper radioTimeoutTimer([&]() {
-        // reset radio
-        // globalRadio->strobe(CC1201_STROBE_SIDLE);
-        // globalRadio->strobe(CC1201_STROBE_SFRX);
-        // globalRadio->strobe(CC1201_STROBE_SRX);
-
         radioTimeoutTimer.start(RadioTimeout);
     }, osTimerOnce);
     radioTimeoutTimer.start(RadioTimeout);
@@ -311,13 +343,14 @@ int main() {
 // #pragma for gcc has bugs in it for selectively disabling warnings
 // so we test for NDEBUG instead
 #ifndef NDEBUG
-    auto tState = osThreadSetPriority(mainID, osPriorityNormal);
+    auto tState = osThreadSetPriority(mainID, osPriorityAboveNormal);
     ASSERT(tState == osOK);
 #else
-    osThreadSetPriority(mainID, osPriorityNormal);
+    osThreadSetPriority(mainID, osPriorityAboveNormal);
 #endif
 
     auto ll = 0;
+    (void)ll;
     uint16_t errorBitmask = 0;
     if (!fpgaInitialized) {
         // assume all motors have errors if FPGA does not work
@@ -330,17 +363,21 @@ int main() {
 
     cmd_heapfill();
 
+    Thread sim_task(Task_Simulate_RX_Packet, mainID, osPriorityAboveNormal);
+
     while (true) {
         // make sure we can always reach back to main by
         // renewing the watchdog timer periodicly
         Watchdog::renew();
 
+#ifndef NDEBUG
         // periodically reset the console text's format
         ll++;
         if ((ll % 8) == 0) {
             printf("\033[m");
             fflush(stdout);
         }
+#endif
 
         Thread::wait(RJ_WATCHDOG_TIMER_VALUE * 250);
 
@@ -448,9 +485,8 @@ _EXTERN void HARD_FAULT_HANDLER(uint32_t* stackAddr) {
     pc = stackAddr[6];
     psr = stackAddr[7];
 
-    LOG(SEVERE,
+    std::printf(
         "\r\n"
-        "================================\r\n"
         "========== HARD FAULT ==========\r\n"
         "\r\n"
         "  MSP:\t0x%08X\r\n"
@@ -466,8 +502,7 @@ _EXTERN void HARD_FAULT_HANDLER(uint32_t* stackAddr) {
         "  pc:\t0x%08X\r\n"
         "  psr:\t0x%08X\r\n"
         "\r\n"
-        "========== HARD FAULT ==========\r\n"
-        "================================",
+        "================================\r\n",
         __get_MSP, SCB->HFSR, SCB->CFSR, r0, r1, r2, r3, r12, lr, pc, psr);
 
     // do nothing so everything remains unchanged for debugging

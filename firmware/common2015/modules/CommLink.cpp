@@ -37,8 +37,6 @@ void CommLink::rxThread() {
         reinterpret_cast<P_TCB>(m_rxThread.gettid())->task_id, threadPriority);
 
     while (true) {
-        // Thread::yield();
-
         // Wait until new data has arrived
         Thread::signal_wait(SIGNAL_RX);
 
@@ -47,12 +45,9 @@ void CommLink::rxThread() {
         // Get the received data from the external chip
         auto response = getData();
 
-        // Thread::yield();
-
         if (!response.empty()) {
             // Write the data to the CommModule object's rxQueue
-            RTP::Packet p(response);
-            CommModule::Instance->receive(std::move(p));
+            CommModule::Instance->receive(RTP::Packet(response));
         }
     }
 

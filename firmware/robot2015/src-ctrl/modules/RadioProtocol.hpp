@@ -108,7 +108,7 @@ public:
         }
 
         if (rxCallback) {
-            m_reply = std::move(rxCallback(msg, addressed));
+            m_reply = rxCallback(msg, addressed);
         } else {
             LOG(WARN, "no callback set");
         }

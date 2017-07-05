@@ -5,7 +5,6 @@
 
 #include "CommPort.hpp"
 #include "HelperFuncs.hpp"
-#include "MailHelpers.hpp"
 #include "RTP.hpp"
 #include "TimeoutLED.hpp"
 
@@ -14,6 +13,8 @@
 #include <map>
 #include <memory>
 #include <vector>
+#include <utility>
+#include <deque>
 
 /**
  * @brief A high-level firmware class for packet handling & routing
@@ -35,8 +36,7 @@ public:
     static std::shared_ptr<CommModule> Instance;
 
     /// The constructor initializes and starts threads and mail queues
-    CommModule(std::shared_ptr<FlashingTimeoutLED> rxTimeoutLED,
-               std::shared_ptr<FlashingTimeoutLED> txTimeoutLED);
+    CommModule();
 
     /// Assign an RX callback function to a port
     void setRxHandler(RxCallbackT callback, uint8_t portNbr);
@@ -89,14 +89,16 @@ public:
 protected:
     static constexpr size_t SIGNAL_START = (1 << 0);
 
-    osMailQId m_txQueue;
-    osMailQId m_rxQueue;
+    osPoolId m_txPoolId;
+    osPoolId m_rxPoolId;
+
+    osMessageQId m_txMessageQueue;
+    osMessageQId m_rxMessageQueue;
 
 private:
-    static constexpr size_t TX_QUEUE_SIZE = 3;
-    static constexpr size_t RX_QUEUE_SIZE = 3;
     // DEFAULT_STACK_SIZE defined in rtos library
     static constexpr size_t STACK_SIZE = DEFAULT_STACK_SIZE / 2;
+
     static constexpr osPriority RX_PRIORITY = osPriorityAboveNormal;
     static constexpr osPriority TX_PRIORITY = osPriorityAboveNormal;
 
@@ -105,14 +107,11 @@ private:
     Thread m_rxThread;
     Thread m_txThread;
 
-    MailHelper<RTP::Packet, TX_QUEUE_SIZE> m_txQueueHelper;
-    MailHelper<RTP::Packet, RX_QUEUE_SIZE> m_rxQueueHelper;
+    osThreadId m_rxThreadId;
+    osThreadId m_txThreadId;
 
-    std::shared_ptr<FlashingTimeoutLED> m_rxTimeoutLED;
-    std::shared_ptr<FlashingTimeoutLED> m_txTimeoutLED;
-
-    bool m_isReady = false;
-    bool m_isRunning = false;
+    bool m_isReady{ false };
+    bool m_isRunning{ false };
 
     void ready();
     void txThread();
