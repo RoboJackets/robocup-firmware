@@ -27,7 +27,7 @@
 #include <string>
 
 // set to 1 to enable CommModule rx/tx stress test
-#define COMM_STRESS_TEST (1)
+#define COMM_STRESS_TEST (0)
 
 using namespace std;
 
