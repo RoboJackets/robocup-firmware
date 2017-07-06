@@ -67,10 +67,10 @@ void CommModule::txThread() {
                 if (portIter->second.hasTxCallback()) {
                     portIter->second.getTxCallback()(p);
 
-                    LOG(INFO,
-                        "Transmission:\r\n"
-                        "    Port:\t%u\r\n",
-                        portNum);
+                    // LOG(INFO,
+                    //     "Transmission:\r\n"
+                    //     "    Port:\t%u\r\n",
+                    //     portNum);
                 }
             }
 
@@ -143,10 +143,10 @@ void CommModule::rxThread() {
 
                     portIter->second.getRxCallback()(*p);
 
-                    LOG(INFO,
-                        "Reception:\r\n"
-                        "    Port:\t%u\r\n",
-                        portNum);
+                    // LOG(INFO,
+                    //     "Reception:\r\n"
+                    //     "    Port:\t%u\r\n",
+                    //     portNum);
                 }
             }
 
