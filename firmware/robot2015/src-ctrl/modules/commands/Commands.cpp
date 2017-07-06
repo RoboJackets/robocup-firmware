@@ -16,7 +16,7 @@ void execute_line(char* rawCommand) {}
 #include "Logger.hpp"
 #include "Rtos.hpp"
 #include "ds2411.hpp"
-#include "fpga.hpp"
+#include "FPGA.hpp"
 #include "mbed_rpc.h"
 #include "neostrip.hpp"
 
@@ -712,7 +712,9 @@ int cmd_kicker(cmd_args_t& args) {
             }
         } else if (args[0] == "volts") {
             uint8_t volts;
-            if (KickerBoard::Instance->read_voltage(&volts)) {
+            bool isValid;
+            std::tie(isValid, volts) = KickerBoard::Instance->readVoltage();
+            if (isValid) {
                 printf("Kicker volts success. Volts: %d\r\n", volts);
             } else {
                 printf("Kicker voltage read success.\r\n");

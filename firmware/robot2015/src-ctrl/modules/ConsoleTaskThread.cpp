@@ -22,7 +22,7 @@ void Task_SerialConsole(const void* args) {
 
     // Initalize the console buffer and save the char buffer's starting address
     // std::shared_ptr<Console> console = ;
-    Console::Instance = make_shared<Console>();
+    Console::Instance = std::make_shared<Console>();
 
     // Set the console username to whoever the git author is
     Console::Instance->changeUser(git_head_author);

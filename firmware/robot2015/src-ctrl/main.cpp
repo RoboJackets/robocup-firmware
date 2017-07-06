@@ -26,8 +26,12 @@
 #include <ctime>
 #include <string>
 
+// set to 1 to enable CommModule rx/tx stress test
+#define COMM_STRESS_TEST (1)
+
 using namespace std;
 
+#if COMM_STRESS_TEST
 void Task_Simulate_RX_Packet(const void* args) {
     auto commModule = CommModule::Instance;
 
@@ -59,6 +63,7 @@ void Task_Simulate_RX_Packet(const void* args) {
         Thread::yield();
     }
 }
+#endif
 
 void Task_Controller(const void* args);
 void Task_Controller_UpdateTarget(Eigen::Vector3f targetVel);
@@ -86,19 +91,23 @@ int main() {
     // SCnSCB->ACTLR |= SCnSCB_ACTLR_DISDEFWBUF_Msk;
 
     // Store the thread's ID
-    const osThreadId mainID = Thread::gettid();
+    const auto mainID = Thread::gettid();
     ASSERT(mainID != nullptr);
 
-    // clear any extraneous rx serial bytes
-    Serial s(RJ_SERIAL_RXTX);
-    while (s.readable()) s.getc();
+    {
+        // clear any extraneous rx serial bytes
+        Serial s(RJ_SERIAL_RXTX);
+        while (s.readable()) s.getc();
 
-    // set baud rate to higher value than the default for faster terminal
-    s.baud(57600);
+        // set baud rate to higher value than the default for faster terminal
+        s.baud(57600);
+    }
 
-    uint8_t wd_flag = (LPC_WDT->WDMOD >> 2) & 1;
-    printf("Watchdog caused reset: %s\r\n", (wd_flag > 0) ? "True" : "False");
-    wd_flag = (LPC_WDT->WDMOD >> 2) & 1;
+    {
+        uint8_t wd_flag = (LPC_WDT->WDMOD >> 2) & 1;
+        std::printf("Watchdog caused reset: %s\r\n", (wd_flag > 0) ? "True" : "False");
+        wd_flag = (LPC_WDT->WDMOD >> 2) & 1;
+    }
 
     // Turn on some startup LEDs to show they're working, they are turned off
     // before we hit the while loop
@@ -113,7 +122,7 @@ int main() {
      */
     if (isLogging) {
         // reset the console's default settings and enable the cursor
-        printf("\033[m");
+        std::printf("\033[m");
         fflush(stdout);
     }
 
@@ -363,7 +372,10 @@ int main() {
 
     cmd_heapfill();
 
+#if COMM_STRESS_TEST
+
     Thread sim_task(Task_Simulate_RX_Packet, mainID, osPriorityAboveNormal);
+#endif
 
     while (true) {
         // make sure we can always reach back to main by
@@ -407,7 +419,7 @@ int main() {
         battVoltage = (batt.read_u16() >> 8);
 
         // get kicker voltage
-        // auto kickerVoltage = KickerBoard::Instance->readVoltage().second;
+        auto kickerVoltage = 0;//KickerBoard::Instance->readVoltage().second;
         LOG(DEBUG, "Kicker voltage: %u", kickerVoltage);
 
         // update shell id

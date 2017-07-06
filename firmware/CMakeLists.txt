@@ -29,7 +29,7 @@ endif()
 # set(CMAKE_EXE_LINKER_FLAGS ${MBED_CMAKE_EXE_LINKER_FLAGS})
 
 # enable C++ exceptions
-set(MBED_CMAKE_CXX_FLAGS "${MBED_CMAKE_CXX_FLAGS} -fexceptions")
+# set(MBED_CMAKE_CXX_FLAGS "${MBED_CMAKE_CXX_FLAGS} -fexceptions")
 # the mbed libraries are compiled with -fno-rtti, so we need to as well
 set(MBED_CMAKE_CXX_FLAGS "${MBED_CMAKE_CXX_FLAGS} -fno-rtti")
 # Enable logging for the common2015 library
@@ -52,8 +52,6 @@ target_link_libraries(test-firmware ${GTEST_LIBRARIES})
 target_include_directories(test-firmware PRIVATE "common2015" "common2015/test" "common2015/utils/include" "common2015/modules/include")
 target_compile_definitions(test-firmware PRIVATE -D__MBED_TEST__)
 set_target_properties(test-firmware PROPERTIES EXCLUDE_FROM_ALL TRUE)
-
-add_compile_options(-DNDEBUG)
 
 # build robot and base station firmware and the library that they depend on
 add_subdirectory(mbed)

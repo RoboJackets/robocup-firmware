@@ -16,7 +16,7 @@ using namespace std;
 
 // Keep this pretty high for now. Ideally, drop it down to ~3 for production
 // builds. Hopefully that'll be possible without the console
-static const auto CONTROL_LOOP_WAIT_MS = 5;
+constexpr auto CONTROL_LOOP_WAIT_MS = 5;
 
 // initialize PID controller
 PidMotionController pidController;
@@ -26,8 +26,8 @@ PidMotionController pidController;
  * zero.  This is a safety feature to prevent robots from doing unwanted things
  * when they lose radio communication.
  */
-static const uint32_t COMMAND_TIMEOUT_INTERVAL = 250;
-unique_ptr<RtosTimerHelper> commandTimeoutTimer = nullptr;
+constexpr uint32_t COMMAND_TIMEOUT_INTERVAL = 250;
+std::unique_ptr<RtosTimerHelper> commandTimeoutTimer = nullptr;
 bool commandTimedOut = true;
 
 void Task_Controller_UpdateTarget(Eigen::Vector3f targetVel) {
@@ -59,6 +59,7 @@ void Task_Controller(const void* args) {
     const auto threadPriority = osThreadGetPriority(threadID);
     (void)threadPriority;  // disable warning if unused
 
+#if 0   /* enable whenever the imu is actually used */
     MPU6050 imu(RJ_I2C_SDA, RJ_I2C_SCL);
 
     imu.setBW(MPU6050_BW_256);
@@ -85,12 +86,13 @@ void Task_Controller(const void* args) {
             "sensorless control loop.",
             testResp);
     }
+#endif
 
     // signal back to main and wait until we're signaled to continue
     osSignalSet(mainID, MAIN_TASK_CONTINUE);
     Thread::signal_wait(SUB_TASK_CONTINUE, osWaitForever);
 
-    array<int16_t, 5> duty_cycles{};
+    std::array<int16_t, 5> duty_cycles{};
 
     // pidController.setPidValues(1.5, 0.05, 0);
     //pidController.setPidValues(0.8, 0.05, 0);
@@ -101,12 +103,14 @@ void Task_Controller(const void* args) {
         [&]() { commandTimedOut = true; }, osTimerPeriodic);
 
     while (true) {
-        // imu.getGyro(gyroVals);
-        // imu.getAccelero(accelVals);
+#if 0   /* enable whenever the imu is actually used */
+        imu.getGyro(gyroVals);
+        imu.getAccelero(accelVals);
+#endif
 
         // note: the 4th value is not an encoder value.  See the large comment
         // below for an explanation.
-        array<int16_t, 5> enc_deltas{};
+        std::array<int16_t, 5> enc_deltas{};
 
         // zero out command if we haven't gotten an updated target in a while
         if (commandTimedOut) duty_cycles = {0, 0, 0, 0, 0};
@@ -140,12 +144,12 @@ void Task_Controller(const void* args) {
         const float dt = enc_deltas.back() * (1 / 18.432e6) * 2 * 64;
 
         // take first 4 encoder deltas
-        array<int16_t, 4> driveMotorEnc;
+        std::array<int16_t, 4> driveMotorEnc;
         for (auto i = 0; i < 4; i++) driveMotorEnc[i] = enc_deltas[i];
 
         // run PID controller to determine what duty cycles to use to drive the
         // motors.
-        array<int16_t, 4> driveMotorDutyCycles =
+        std::array<int16_t, 4> driveMotorDutyCycles =
             pidController.run(driveMotorEnc, dt);
 
         // assign the duty cycles, zero out motors that the fpga returns an
@@ -158,7 +162,7 @@ void Task_Controller(const void* args) {
         }
 
         // limit duty cycle values, while keeping sign (+ or -)
-        for (int16_t& dc : duty_cycles) {
+        for (auto dc : duty_cycles) {
             if (std::abs(dc) > FPGA::MAX_DUTY_CYCLE) {
                 dc = copysign(FPGA::MAX_DUTY_CYCLE, dc);
             }

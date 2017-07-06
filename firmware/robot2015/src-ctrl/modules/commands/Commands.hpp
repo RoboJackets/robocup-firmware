@@ -25,7 +25,7 @@ void Task_SerialConsole(const void* args);
 #ifndef NDEBUG
 
 #include "motors.hpp"
-#include "robot-devices.hpp"
+#include "RobotDevices.hpp"
 
 #include <algorithm>
 #include <array>

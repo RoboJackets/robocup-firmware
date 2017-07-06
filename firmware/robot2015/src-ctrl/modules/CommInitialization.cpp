@@ -40,7 +40,7 @@ void legacy_rx_cb(RTP::Packet p) {
 }
 
 void loopback_rx_cb(RTP::Packet p) {
-    vector<uint16_t> duty_cycles;
+    std::vector<uint16_t> duty_cycles;
     duty_cycles.assign(5, 100);
     for (size_t i = 0; i < duty_cycles.size(); ++i)
         duty_cycles.at(i) = 100 + 206 * i;
@@ -72,7 +72,7 @@ uint32_t loopback_tx_cb(const RTP::Packet* p) {
 
 void InitializeCommModule(SharedSPIDevice<>::SpiPtrT sharedSPI) {
     // Startup the CommModule interface
-    CommModule::Instance = make_shared<CommModule>();
+    CommModule::Instance = std::make_shared<CommModule>();
     auto commModule = CommModule::Instance;
 
     // TODO(justin): make this non-global

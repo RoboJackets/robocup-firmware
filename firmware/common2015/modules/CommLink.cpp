@@ -24,8 +24,8 @@ CommLink::CommLink(SpiPtrT sharedSPI, PinName nCs, PinName intPin)
 void CommLink::rxThread() {
     // Store our priority so we know what to reset it to if ever needed
     const auto threadPriority = m_rxThread.get_priority();
-    (void)threadPriority  // disable compiler warning for unused-variable
-        ASSERT(threadPriority != osPriorityError);
+    (void)threadPriority;  // disable compiler warning for unused-variable
+    ASSERT(threadPriority != osPriorityError);
 
     // Set the function to call on an interrupt trigger
     m_intIn.rise(this, &CommLink::ISR);
