@@ -8,8 +8,8 @@
 
 #include <ctime>
 
-osPoolDef(CommModuleTxPool, 4, RTP::Packet);
-osPoolDef(CommModuleRxPool, 4, RTP::Packet);
+osPoolDef(CommModuleTxPool, 5, RTP::Packet);
+osPoolDef(CommModuleRxPool, 5, RTP::Packet);
 
 osMessageQDef(CommModuleTxQueue, 3, RTP::Packet);
 osMessageQDef(CommModuleRxQueue, 3, RTP::Packet);
@@ -21,8 +21,8 @@ CommModule::CommModule() :
       m_rxPoolId(osPoolCreate(osPool(CommModuleRxPool))),
       m_txMessageQueue(osMessageCreate(osMessageQ(CommModuleTxQueue), nullptr)),
       m_rxMessageQueue(osMessageCreate(osMessageQ(CommModuleRxQueue), nullptr)),
-      m_rxThread(&CommModule::rxThreadHelper, this, RX_PRIORITY, STACK_SIZE),
-      m_txThread(&CommModule::txThreadHelper, this, TX_PRIORITY, STACK_SIZE)
+      m_rxThread(&CommModule::rxThreadHelper, this, osPriorityAboveNormal, STACK_SIZE),
+      m_txThread(&CommModule::txThreadHelper, this, osPriorityAboveNormal, STACK_SIZE)
       {
       }
 
@@ -48,13 +48,10 @@ void CommModule::txThread() {
         if (event.status == osEventMessage) {
             auto p = reinterpret_cast<RTP::Packet*>(event.value.p);
 
-// Bump up the thread's priority
-#ifndef NDEBUG
-            auto tState = osThreadSetPriority(m_txThreadId, osPriorityHigh);
-            ASSERT(tState == osOK);
-#else
-            osThreadSetPriority(m_txThreadId, osPriorityHigh);
-#endif
+            {   // Bump up the thread's priority
+                auto tState = osThreadSetPriority(m_txThreadId, osPriorityHigh);
+                ASSERT(tState == osOK); (void)tState;
+            }
 
             // grab the port number
             const auto portNum = p->header.port;
@@ -78,12 +75,10 @@ void CommModule::txThread() {
             p->~Packet();
             osPoolFree(m_txPoolId, p);
 
-#ifndef NDEBUG
-            tState = osThreadSetPriority(m_txThreadId, threadPriority);
-            ASSERT(tState == osOK);
-#else
-            osThreadSetPriority(m_txThreadId, threadPriority);
-#endif
+            {
+                auto tState = osThreadSetPriority(m_txThreadId, threadPriority);
+                ASSERT(tState == osOK); (void)tState;
+            }
         } else {
             std::printf("osMessageGet for TX returned unexpected status: %d\r\n", event.status);
             fflush(stdout);
@@ -120,13 +115,10 @@ void CommModule::rxThread() {
         if (event.status == osEventMessage) {
             auto p = reinterpret_cast<RTP::Packet*>(event.value.p);
 
-// Bump up the thread's priority
-#ifndef NDEBUG
-            auto tState = osThreadSetPriority(m_rxThreadId, osPriorityHigh);
-            ASSERT(tState == osOK);
-#else
-            osThreadSetPriority(m_rxThreadId, osPriorityHigh);
-#endif
+            {   // Bump up the thread's priority
+                auto tState = osThreadSetPriority(m_rxThreadId, osPriorityHigh);
+                ASSERT(tState == osOK); (void)tState;
+            }
 
             // grab the port number
             const auto portNum = p->header.port;
@@ -154,12 +146,10 @@ void CommModule::rxThread() {
             p->~Packet();
             osPoolFree(m_rxPoolId, p);
 
-#ifndef NDEBUG
-            tState = osThreadSetPriority(m_rxThreadId, threadPriority);
-            ASSERT(tState == osOK);
-#else
-            osThreadSetPriority(m_rxThreadId, threadPriority);
-#endif
+            {
+                auto tState = osThreadSetPriority(m_rxThreadId, threadPriority);
+                ASSERT(tState == osOK); (void)tState;
+            }
         } else {
             auto p = reinterpret_cast<RTP::Packet*>(event.value.p);
             std::printf("osMessageGet for RX returned unexpected status: %d\r\n", event.status);

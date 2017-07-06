@@ -6,7 +6,6 @@
 namespace {
 // DEFAULT_STACK_SIZE defined in rtos library
 constexpr auto STACK_SIZE = DEFAULT_STACK_SIZE / 2;
-constexpr auto RX_PRIORITY = osPriorityHigh;
 }
 
 std::unique_ptr<CommLink> globalRadio = nullptr;
@@ -14,7 +13,7 @@ std::unique_ptr<CommLink> globalRadio = nullptr;
 CommLink::CommLink(SpiPtrT sharedSPI, PinName nCs, PinName intPin)
     : SharedSPIDevice(sharedSPI, nCs, true),
       m_intIn(intPin),
-      m_rxThread(&CommLink::rxThreadHelper, this, RX_PRIORITY, STACK_SIZE) {
+      m_rxThread(&CommLink::rxThreadHelper, this, osPriorityNormal, STACK_SIZE) {
     setSPIFrequency(5'000'000);
     m_intIn.mode(PullDown);
     ready();
@@ -24,8 +23,7 @@ CommLink::CommLink(SpiPtrT sharedSPI, PinName nCs, PinName intPin)
 void CommLink::rxThread() {
     // Store our priority so we know what to reset it to if ever needed
     const auto threadPriority = m_rxThread.get_priority();
-    (void)threadPriority;  // disable compiler warning for unused-variable
-    ASSERT(threadPriority != osPriorityError);
+    ASSERT(threadPriority != osPriorityError); (void)threadPriority;
 
     // Set the function to call on an interrupt trigger
     m_intIn.rise(this, &CommLink::ISR);

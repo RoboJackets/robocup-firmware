@@ -99,9 +99,6 @@ private:
     // DEFAULT_STACK_SIZE defined in rtos library
     static constexpr size_t STACK_SIZE = DEFAULT_STACK_SIZE / 2;
 
-    static constexpr osPriority RX_PRIORITY = osPriorityAboveNormal;
-    static constexpr osPriority TX_PRIORITY = osPriorityAboveNormal;
-
     std::map<uint8_t, PortT> m_ports;
 
     Thread m_rxThread;
