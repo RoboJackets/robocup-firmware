@@ -6,7 +6,6 @@
 #include "Commands.hpp"
 #include "Decawave.hpp"
 #include "FPGA.hpp"
-#include "HackedKickerBoard.hpp"
 #include "HelperFuncs.hpp"
 #include "Logger.hpp"
 #include "KickerBoard.hpp"
@@ -151,15 +150,11 @@ int main() {
     auto spiBus = make_shared<SharedSPI>(RJ_SPI_MOSI, RJ_SPI_MISO, RJ_SPI_SCK);
     spiBus->format(8, 0);  // 8 bits per transfer
 
-    // Initialize kicker board
-    // HackedKickerBoard::Instance =
-    // make_shared<HackedKickerBoard>(RJ_KICKER_nRESET);
-    // HackedKickerBoard kick_hack(RJ_KICKER_nRESET);
     // Reprogramming each time (first arg of flash false) is actually
     // faster than checking the full memory to see if we need to reflash.
-    KickerBoard::Instance = 
-        make_shared<KickerBoard>(sharedSPI, RJ_KICKER_nCS, RJ_KICKER_nRESET, "/local/rj-kickr.nib");
-    bool kickerReady = KickerBoard::Instance->flash(false, false);
+    // KickerBoard::Instance =
+    //     std::make_shared<KickerBoard>(sharedSPI, RJ_KICKER_nCS, RJ_KICKER_nRESET, "/local/rj-kickr.nib");
+    // bool kickerReady = KickerBoard::Instance->flash(false, false);
 
     // flag fro kicking when the ball sense triggers
     auto kickOnBreakBeam = false;
@@ -179,8 +174,7 @@ int main() {
 
         // kick!
         if (haveBall && kickOnBreakBeam) {
-            //kick_hack.kick(kickStrength);
-            KickerBoard::Instance->kick(kickStrength);
+            // KickerBoard::Instance->kick(kickStrength);
         }
     };
 
@@ -298,13 +292,11 @@ int main() {
                 kickStrength = msg->kickStrength;
                 if (msg->triggerMode == 1) {
                     // kick immediate
-                    //kick_hack.kick(kickStrength);
-                    KickerBoard::Instance->kick(kickStrength);
+                    // KickerBoard::Instance->kick(kickStrength);
                 } else if (msg->triggerMode == 2) {
                     // kick on break beam
-                    if (ballSense.have_ball()) {
-                        //kick_hack.kick(kickStrength);
-                        KickerBoard::Instance->kick(kickStrength);
+                    if (ballSense.hasBall()) {
+                        // KickerBoard::Instance->kick(kickStrength);
                         kickOnBreakBeam = false;
                     } else {
                         // set flag so that next break beam triggers a kick
@@ -335,7 +327,6 @@ int main() {
             }
 
             // kicker status
-            //reply.kickStatus = kick_hack.canKick();
             //reply.kickStatus = KickerBoard::Instance->canKick();
             reply.kickStatus = true;
 
@@ -345,9 +336,8 @@ int main() {
             return replyBuf;
         };
 
-    KickerBoard::Instance->charge();
-    LOG(INIT, "Started charging kicker board.");
-    uint8_t kickerVoltage = 0;
+    // KickerBoard::Instance->charge();
+    // LOG(INIT, "Started charging kicker board.");
 
     // Set the watdog timer's initial config
     Watchdog::set(RJ_WATCHDOG_TIMER_VALUE);

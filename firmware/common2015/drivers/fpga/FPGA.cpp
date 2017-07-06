@@ -150,7 +150,7 @@ bool FPGA::send_config(const std::string& filepath) {
                     break;
                 }
 
-                _spi->write(buf[j]);
+                m_spi->write(buf[j]);
             }
 
             if (breakOut) break;
