@@ -6,7 +6,7 @@
 namespace {
 // DEFAULT_STACK_SIZE defined in rtos library
 constexpr auto STACK_SIZE = DEFAULT_STACK_SIZE / 2;
-constexpr auto RX_PRIORITY = osPriorityNormal;
+constexpr auto RX_PRIORITY = osPriorityHigh;
 }
 
 std::unique_ptr<CommLink> globalRadio = nullptr;
