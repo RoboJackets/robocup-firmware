@@ -91,7 +91,7 @@ bool AVR910::program(FILE* binary, int pageSize, int numPages) {
                     printf(
                         "ERROR: AVR910 binary exceeds chip memory "
                         "capacity\r\n");
-                    return -1;
+                    return false;
                 }
                 pageOffset = 0;
             }
@@ -130,7 +130,7 @@ bool AVR910::program(FILE* binary, int pageSize, int numPages) {
                     printf(
                         "ERROR: AVR910 binary exceeds chip memory "
                         "capacity\r\n");
-                    return -1;
+                    return false;
                 }
             }
         }
@@ -139,7 +139,7 @@ bool AVR910::program(FILE* binary, int pageSize, int numPages) {
     // We might have partially filled up a page.
     writeFlashMemoryPage(pageNumber);
 
-    bool success = checkMemory(pageNumber, pageSize, binary);
+    bool success = checkMemory(pageSize, pageNumber, binary, true);
 
     // Leave serial programming mode by toggling reset
     exitProgramming();
@@ -242,11 +242,11 @@ void AVR910::writeFlashMemoryByte(int highLow, int address, char data) {
     chipDeselect();
 }
 
-void AVR910::writeFlashMemoryPage(char pageNumber) {
+void AVR910::writeFlashMemoryPage(int pageNumber) {
     chipSelect();
     m_spi->write(0x4C);
-    m_spi->write(pageNumber >> 3);  // top 5 bits stored in bottom of byte
-    m_spi->write(pageNumber << 5);  // bottom 3 bits stored in top of byte
+    m_spi->write(MSB(pageNumber << 3));
+    m_spi->write(LSB(pageNumber << 3));
     m_spi->write(0x00);
     chipDeselect();
 
@@ -256,8 +256,8 @@ void AVR910::writeFlashMemoryPage(char pageNumber) {
 char AVR910::readProgramMemory(int highLow, char pageNumber, char pageOffset) {
     chipSelect();
     m_spi->write(highLow);
-    m_spi->write(pageNumber >> 3);
-    m_spi->write((pageNumber << 5) | (pageOffset & 0x3F));
+    m_spi->write(MSB(pageNumber << 3));
+    m_spi->write(LSB(pageNumber << 3) | (pageOffset & 0x3F));
     char response = m_spi->write(0x00);
     chipDeselect();
 

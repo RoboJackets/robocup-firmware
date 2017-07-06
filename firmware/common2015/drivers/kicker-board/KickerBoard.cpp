@@ -66,10 +66,10 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
             // exit programming mode by bringing nReset high
             exitProgramming();
         } else {
-            bool nSuccess =
+            bool success =
                 program(fp, ATTINY84A_PAGESIZE, ATTINY84A_NUM_PAGES);
 
-            if (nSuccess) {
+            if (!success) {
                 LOG(WARN, "Failed to program kicker.");
             } else {
                 LOG(DEBUG, "Kicker successfully programmed.");

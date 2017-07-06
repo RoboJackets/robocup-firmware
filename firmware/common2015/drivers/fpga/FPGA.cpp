@@ -43,7 +43,7 @@ FPGA::FPGA(std::shared_ptr<SharedSPI> sharedSPI, PinName nCs, PinName initB,
       _initB(initB),
       _done(done),
       _progB(progB, PIN_OUTPUT, OpenDrain, 1) {
-    setSPIFrequency(500000);
+    setSPIFrequency(10000000); // Max of 10MHz I think
 }
 
 bool FPGA::configure(const std::string& filepath) {
@@ -110,8 +110,8 @@ bool FPGA::configure(const std::string& filepath) {
     return false;
 }
 
-TODO(remove this hack once issue number 590 is closed)
-#include "../../../robot2015/src-ctrl/config/pins-ctrl-2015.hpp"
+// TODO(remove this hack once issue number 590 is closed)
+// #include "../../robot2015/src-ctrl/config/pins-ctrl-2015.hpp"
 
 bool FPGA::send_config(const std::string& filepath) {
     constexpr auto bufSize = 50;
@@ -126,10 +126,10 @@ bool FPGA::send_config(const std::string& filepath) {
 
         chipSelect();
 
-// MISO & MOSI are intentionally switched here
-// defaults to 8 bit field size with CPOL = 0 & CPHA = 0
-#pragma message "FPGA configuration pins are flipped due to PCB design errors."
-        SoftwareSPI softSpi(RJ_SPI_MISO, RJ_SPI_MOSI, RJ_SPI_SCK);
+// // MISO & MOSI are intentionally switched here
+// // defaults to 8 bit field size with CPOL = 0 & CPHA = 0
+// #warning FPGA configuration pins currently flipped due to PCB design errors, the final revision requires firmware updates.
+        // SoftwareSPI softSpi(RJ_SPI_MISO, RJ_SPI_MOSI, RJ_SPI_SCK);
 
         fseek(fp, 0, SEEK_END);
         filesize = ftell(fp);
@@ -150,13 +150,13 @@ bool FPGA::send_config(const std::string& filepath) {
                     break;
                 }
 
-                softSpi.write(buf[j]);
+                _spi->write(buf[j]);
             }
 
             if (breakOut) break;
         }
 
-        SPI dummySPI(RJ_SPI_MOSI, RJ_SPI_MISO, RJ_SPI_SCK);
+        // SPI dummySPI(RJ_SPI_MOSI, RJ_SPI_MISO, RJ_SPI_SCK);
 
         chipDeselect();
         fclose(fp);

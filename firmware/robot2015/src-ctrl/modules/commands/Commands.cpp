@@ -515,12 +515,12 @@ int cmd_info(cmd_args_t& args) {
 
         printf("\tBuild Date:\t%s %s\r\n", __DATE__, __TIME__);
 
-        printf("\tBase ID:\t");
-
-        if (ds2411_read_id(RJ_BASE_ID, &id) == ID_HANDSHAKE_FAIL)
-            printf("[id chip not connected]\r\n");
-        else
-            for (int i = 0; i < 6; i++) printf("%02X\r\n", id.serial[i]);
+        // printf("\tBase ID:\t");
+        // 
+        // if (ds2411_read_id(RJ_BASE_ID, &id) == ID_HANDSHAKE_FAIL)
+        //     printf("[id chip not connected]\r\n");
+        // else
+        //     for (int i = 0; i < 6; i++) printf("%02X\r\n", id.serial[i]);
 
         // info about the mbed's interface chip on the bottom of the mbed
         if (mbed_interface_uid(buf) == -1) memcpy(buf, "N/A\0", 4);

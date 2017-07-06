@@ -9,6 +9,7 @@
 #include "HackedKickerBoard.hpp"
 #include "HelperFuncs.hpp"
 #include "Logger.hpp"
+#include "KickerBoard.hpp"
 #include "RadioProtocol.hpp"
 #include "RobotDevices.hpp"
 #include "RobotModel.hpp"
@@ -78,7 +79,7 @@ void InitializeCommModule(SharedSPIDevice<>::SpiPtrT sharedSPI);
  */
 void statusLights(bool state) {
     DigitalOut init_leds[] = {
-        {RJ_BALL_LED}, {RJ_RX_LED}, {RJ_TX_LED}, {RJ_RDY_LED}};
+        {RJ_BALL_LED}};
     // the state is inverted because the leds are wired active-low
     for (DigitalOut& led : init_leds) led = !state;
 }
@@ -132,14 +133,14 @@ int main() {
 
     // Force off since the neopixel's hardware is stateless from previous
     // settings
-    NeoStrip rgbLED(RJ_NEOPIXEL, 2);
+    NeoStrip rgbLED(RJ_NEOPIXEL, 1);
     rgbLED.clear();
 
     // Set the RGB LEDs to a medium blue while the threads are started up
     auto defaultBrightness = 0.02f;
     rgbLED.brightness(3 * defaultBrightness);
     rgbLED.setPixel(0, NeoColorBlue);
-    rgbLED.setPixel(1, NeoColorBlue);
+    // rgbLED.setPixel(1, NeoColorBlue);
     rgbLED.write();
 
     // Flip off the startup LEDs after a timeout period
@@ -153,10 +154,12 @@ int main() {
     // Initialize kicker board
     // HackedKickerBoard::Instance =
     // make_shared<HackedKickerBoard>(RJ_KICKER_nRESET);
-    HackedKickerBoard kick_hack(RJ_KICKER_nRESET);
+    // HackedKickerBoard kick_hack(RJ_KICKER_nRESET);
     // Reprogramming each time (first arg of flash false) is actually
     // faster than checking the full memory to see if we need to reflash.
-    // bool kickerReady = KickerBoard::Instance->flash(false, false);
+    KickerBoard::Instance = 
+        make_shared<KickerBoard>(sharedSPI, RJ_KICKER_nCS, RJ_KICKER_nRESET, "/local/rj-kickr.nib");
+    bool kickerReady = KickerBoard::Instance->flash(false, false);
 
     // flag fro kicking when the ball sense triggers
     auto kickOnBreakBeam = false;
@@ -176,7 +179,8 @@ int main() {
 
         // kick!
         if (haveBall && kickOnBreakBeam) {
-            kick_hack.kick(kickStrength);
+            //kick_hack.kick(kickStrength);
+            KickerBoard::Instance->kick(kickStrength);
         }
     };
 
@@ -191,19 +195,19 @@ int main() {
 
     if (fpgaInitialized) {
         rgbLED.brightness(3 * defaultBrightness);
-        rgbLED.setPixel(1, NeoColorGreen);
+        rgbLED.setPixel(0, NeoColorPurple);
 
         LOG(OK, "FPGA Configuration Successful!");
 
     } else {
         rgbLED.brightness(4 * defaultBrightness);
-        rgbLED.setPixel(1, NeoColorOrange);
+        rgbLED.setPixel(0, NeoColorRed);
 
         LOG(SEVERE, "FPGA Configuration Failed!");
     }
     rgbLED.write();
 
-    DigitalOut rdy_led(RJ_RDY_LED, !fpgaInitialized);
+    // DigitalOut rdy_led(RJ_RDY_LED, !fpgaInitialized);
 
     // Init IO Expander and turn all LEDs on.  The first parameter to config()
     // sets the first 8 lines to input and the last 8 to output.  The pullup
@@ -294,11 +298,13 @@ int main() {
                 kickStrength = msg->kickStrength;
                 if (msg->triggerMode == 1) {
                     // kick immediate
-                    kick_hack.kick(kickStrength);
+                    //kick_hack.kick(kickStrength);
+                    KickerBoard::Instance->kick(kickStrength);
                 } else if (msg->triggerMode == 2) {
                     // kick on break beam
-                    if (ballSense.hasBall()) {
-                        kick_hack.kick(kickStrength);
+                    if (ballSense.have_ball()) {
+                        //kick_hack.kick(kickStrength);
+                        KickerBoard::Instance->kick(kickStrength);
                         kickOnBreakBeam = false;
                     } else {
                         // set flag so that next break beam triggers a kick
@@ -329,7 +335,9 @@ int main() {
             }
 
             // kicker status
-            reply.kickStatus = kick_hack.canKick();
+            //reply.kickStatus = kick_hack.canKick();
+            //reply.kickStatus = KickerBoard::Instance->canKick();
+            reply.kickStatus = true;
 
             vector<uint8_t> replyBuf;
             RTP::serializeToVector(reply, &replyBuf);
@@ -337,8 +345,9 @@ int main() {
             return replyBuf;
         };
 
-    // KickerBoard::Instance->charge();
-    // LOG(DEBUG, "Started charging kicker board.");
+    KickerBoard::Instance->charge();
+    LOG(INIT, "Started charging kicker board.");
+    uint8_t kickerVoltage = 0;
 
     // Set the watdog timer's initial config
     Watchdog::set(RJ_WATCHDOG_TIMER_VALUE);
