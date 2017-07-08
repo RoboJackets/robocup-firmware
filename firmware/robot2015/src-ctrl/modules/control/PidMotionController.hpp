@@ -11,9 +11,9 @@
  */
 class PidMotionController {
 public:
-    bool logging = false;
+    bool logging = true;
     // num_samples * dt_per_sample * 0.005 -> 12 seconds of recording?
-    const static int num_samples = 250;
+    const static int num_samples = 300;
     const static int dt_per_sample = 3;
     int cur_sample = 0;
 
@@ -141,6 +141,13 @@ public:
             dutyCycles[i] = (int16_t) dc;
         }
 
+        // if we're about to log, send 0 duty cycle
+        int effective_index = cur_sample / dt_per_sample;
+        if (effective_index > num_samples - 20) {
+            for (int i = 0; i < 4; ++i) {
+                dutyCycles[i] = 0;
+            }
+        }
         log(dt, wheelVelErr);
 
 // enable these printouts to get a python-formatted data set than can be
