@@ -43,7 +43,7 @@ FPGA::FPGA(std::shared_ptr<SharedSPI> sharedSPI, PinName nCs, PinName initB,
       _initB(initB),
       _done(done),
       _progB(progB, PIN_OUTPUT, OpenDrain, 1) {
-    setSPIFrequency(10000000); // Max of 10MHz I think
+	  setSPIFrequency(1000000); // I don't know, it works
 }
 
 bool FPGA::configure(const std::string& filepath) {
@@ -253,7 +253,6 @@ uint8_t FPGA::set_duty_get_enc(int16_t* duty_cycles, size_t size_dut,
 
     for (size_t i = 0; i < 5; i++) {
         uint16_t dc = toSignMag<9>(duty_cycles[i]);
-
         uint16_t enc = m_spi->write(dc & 0xFF) << 8;
         enc |= m_spi->write(dc >> 8);
         enc_deltas[i] = static_cast<int16_t>(enc);

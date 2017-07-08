@@ -31,6 +31,10 @@
 
 using namespace std;
 
+#ifdef NDEBUG
+LocalFileSystem local("local");
+#endif
+
 #if COMM_STRESS_TEST
 void Task_Simulate_RX_Packet(const void* args) {
     auto commModule = CommModule::Instance;
@@ -372,7 +376,6 @@ int main() {
     cmd_heapfill();
 
 #if COMM_STRESS_TEST
-
     Thread sim_task(Task_Simulate_RX_Packet, mainID, osPriorityAboveNormal);
 #endif
 
