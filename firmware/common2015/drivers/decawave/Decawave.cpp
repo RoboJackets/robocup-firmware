@@ -103,7 +103,6 @@ Decawave::Decawave(SpiPtrT sharedSPI, PinName nCs, PinName intPin)
 
         LOG(INFO, "Decawave ready!");
         CommLink::ready();
-        CommLink::raiseThreadPriority();
     }
 }
 

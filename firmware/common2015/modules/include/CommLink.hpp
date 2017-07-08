@@ -76,11 +76,6 @@ protected:
     /// Called by the derived class to begin thread operations
     void ready() { m_rxThread.signal_set(SIGNAL_START); }
 
-    /// Bump up the priority of the RX thread
-    osStatus raiseThreadPriority() {
-        return m_rxThread.set_priority(osPriorityHigh);
-    };
-
     template <typename T>
     constexpr static T twos_compliment(T val) {
         return ~val + 1;

@@ -348,10 +348,14 @@ int main() {
     console_task.signal_set(SUB_TASK_CONTINUE);
 #endif
 
-    {
-        auto tState = osThreadSetPriority(mainID, osPriorityAboveNormal);
-        ASSERT(tState == osOK); (void)tState;
-    }
+// #pragma for gcc has bugs in it for selectively disabling warnings
+// so we test for NDEBUG instead
+#ifndef NDEBUG
+    auto tState = osThreadSetPriority(mainID, osPriorityAboveNormal);
+    ASSERT(tState == osOK);
+#else
+    osThreadSetPriority(mainID, osPriorityAboveNormal);
+#endif
 
     auto ll = 0;
     (void)ll;
@@ -368,6 +372,7 @@ int main() {
     cmd_heapfill();
 
 #if COMM_STRESS_TEST
+
     Thread sim_task(Task_Simulate_RX_Packet, mainID, osPriorityAboveNormal);
 #endif
 
