@@ -10,16 +10,16 @@
 class RobotModel {
 public:
     /// Radius of omni-wheel (in meters)
-    float WheelRadius;
+    double WheelRadius;
 
     /// Distance from center of robot to center of wheel
-    float WheelDist;
+    double WheelDist;
 
     /// Wheel angles (in radians) measured between +x axis and wheel axle
-    std::array<float, 4> WheelAngles;
+    std::array<double, 4> WheelAngles;
 
     /// wheelSpeeds = BotToWheel * V_bot
-    Eigen::Matrix<float, 4, 3> BotToWheel;
+    Eigen::Matrix<double, 4, 3> BotToWheel;
 
     /// This should be called when any of the other parameters are changed
     void recalculateBotToWheel() {

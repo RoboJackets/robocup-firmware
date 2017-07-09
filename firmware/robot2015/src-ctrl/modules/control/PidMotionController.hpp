@@ -11,7 +11,7 @@
  */
 class PidMotionController {
 public:
-    bool logging = false;
+    bool logging = true;
     // num_samples * dt_per_sample * 0.005 -> 12 seconds of recording?
     const static int num_samples = 1000;
     const static int dt_per_sample = 3;
@@ -92,14 +92,28 @@ public:
      */
     std::array<int16_t, 4> run(const std::array<int16_t, 4>& encoderDeltas,
                                float dt) {
+
+
         // convert encoder ticks to rad/s
-        Eigen::Vector4f wheelVels;
+        Eigen::Vector4d wheelVels;
         wheelVels << encoderDeltas[0], encoderDeltas[1], encoderDeltas[2],
             encoderDeltas[3];
-        wheelVels *= 2 * M_PI / ENC_TICKS_PER_TURN / dt;
+        wheelVels *= 2.0 * M_PI / ENC_TICKS_PER_TURN / dt;
+        //std::printf("%f, %d, %f\r\n", wheelVels[0], encoderDeltas[0], dt);
 
-        Eigen::Vector4f targetWheelVels =
-            RobotModel2015.BotToWheel * _targetVel;
+        /*
+        static char timeBuf[25];
+        auto sysTime = time(nullptr);
+        localtime(&sysTime);
+        */
+
+        //std::printf("%f\r\n", _targetVel[1]);
+
+        //std::printf("%d, %f\r\n", sysTime, dt);
+        //strftime(timeBuf,25,"%H:%")
+
+        Eigen::Vector4d targetWheelVels =
+            RobotModel2015.BotToWheel * _targetVel.cast<double>();
 //        targetWheelVels *= 10;
         // Forwards
         //Eigen::Vector4f targetWheelVels(.288675, .32169, -.32169, -.288675);
@@ -118,7 +132,7 @@ public:
         //Eigen::Vector4f targetWheelVels(0, 0, 0, 1);
         //targetWheelVels /= RobotModel2015.WheelRadius;
 
-        Eigen::Vector4f wheelVelErr = targetWheelVels - wheelVels;
+        Eigen::Vector4d wheelVelErr = targetWheelVels - wheelVels;
 
 
         std::array<int16_t, 4> dutyCycles;
@@ -144,13 +158,13 @@ public:
         // if we're about to log, send 0 duty cycle
         /*
         int effective_index = cur_sample / dt_per_sample;
-        if (effective_index > num_samples - 20) {
+        if (effective_index > num_samples - 20 && effective_index < num_samples + 10) {
             for (int i = 0; i < 4; ++i) {
                 dutyCycles[i] = 0;
             }
         }
         */
-        log(dt, wheelVelErr);
+        //log(dt, targetVel);
 
 // enable these printouts to get a python-formatted data set than can be
 // graphed to visualize pid control and debug problems

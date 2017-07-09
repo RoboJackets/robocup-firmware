@@ -2,7 +2,7 @@
 
 const RobotModel RobotModel2015 = []() {
     RobotModel model;
-    model.WheelRadius = 0.02856;
+    model.WheelRadius = 0.02768;
 
     model.WheelAngles = {
         DegreesToRadians(180 - 30), // M1
