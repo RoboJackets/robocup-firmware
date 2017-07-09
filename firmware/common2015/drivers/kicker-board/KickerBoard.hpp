@@ -59,7 +59,7 @@ public:
      * @param voltage Output voltage 0 (GND) to 255 (Vd)
      * @return If the read_voltage command was acknowledged
      */
-    bool read_voltage(uint8_t* voltage);
+    std::pair<bool, uint8_t> readVoltage();
 
     /**
      * @brief Sets the charge pin (to high)

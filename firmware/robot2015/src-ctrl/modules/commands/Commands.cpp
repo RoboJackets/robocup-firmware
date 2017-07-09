@@ -693,17 +693,13 @@ int cmd_kicker(cmd_args_t& args) {
         return 1;
     } else {
         if (args[0] == "kick") {
-            if (KickerBoard::Instance->kick(DB_KICK_TIME)) {
+            if (KickerBoard::Instance->kick(DB_KICK_TIME, true)) {
                 printf("Kick success.\r\n");
             } else {
                 printf("Kick failure.\r\n");
             }
         } else if (args[0] == "chip") {
-            if (KickerBoard::Instance->chip(DB_CHIP_TIME)) {
-                printf("Chip success.\r\n");
-            } else {
-                printf("Chip failure.\r\n");
-            }
+            printf("Chip not implemented\r\n");
         } else if (args[0] == "ping") {
             if (KickerBoard::Instance->is_pingable()) {
                 printf("Kicker ping success.\r\n");

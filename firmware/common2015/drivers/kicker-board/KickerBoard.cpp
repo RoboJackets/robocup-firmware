@@ -53,7 +53,7 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
         return false;
     } else {
         // Program it!
-        LOG(INIT, "Opened kicker binary, attempting to program kicker.");
+        LOG(INFO, "Opened kicker binary, attempting to program kicker.");
         bool shouldProgram = true;
         if (onlyIfDifferent &&
             (checkMemory(ATTINY_PAGESIZE, ATTINY_NUM_PAGES, fp, false) ==
@@ -61,7 +61,7 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
             shouldProgram = false;
 
         if (!shouldProgram) {
-            LOG(INIT, "Kicker up-to-date, no need to flash.");
+            LOG(INFO, "Kicker up-to-date, no need to flash.");
 
             // exit programming mode by bringing nReset high
             exitProgramming();
@@ -72,7 +72,7 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
             if (!success) {
                 LOG(WARN, "Failed to program kicker.");
             } else {
-                LOG(INIT, "Kicker successfully programmed.");
+                LOG(INFO, "Kicker successfully programmed.");
             }
         }
 
@@ -83,7 +83,7 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
 }
 
 bool KickerBoard::send_to_kicker(uint8_t cmd, uint8_t arg, uint8_t* ret_val) {
-    LOG(INF2, "Sending: CMD:%02X, ARG:%02X", cmd, arg);
+    LOG(DEBUG, "Sending: CMD:%02X, ARG:%02X", cmd, arg);
     chipSelect();
     // Returns state (charging, not charging), but we don't care about that
     // uint8_t charge_resp = m_spi->write(cmd);
@@ -103,7 +103,7 @@ bool KickerBoard::send_to_kicker(uint8_t cmd, uint8_t arg, uint8_t* ret_val) {
     }
 
     bool command_acked = command_resp == cmd;
-    LOG(INF2, "ACK?:%s, CMD:%02X, RET:%02X, STT:%02X",
+    LOG(DEBUG, "ACK?:%s, CMD:%02X, RET:%02X, STT:%02X",
         command_acked ? "true" : "false", command_resp, ret, state);
 
     return true;
@@ -114,8 +114,10 @@ bool KickerBoard::kick(uint8_t strength, bool immediate) {
                           strength, nullptr);
 }
 
-bool KickerBoard::read_voltage(uint8_t* voltage) {
-    return send_to_kicker(GET_VOLTAGE_CMD, BLANK, voltage);
+std::pair<bool, uint8_t> KickerBoard::readVoltage() {
+    uint8_t volts;
+    bool res = send_to_kicker(GET_VOLTAGE_CMD, BLANK, &volts);
+    return std::make_pair(res, volts);
 }
 
 bool KickerBoard::charge() {
