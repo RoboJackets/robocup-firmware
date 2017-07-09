@@ -100,7 +100,7 @@ public:
 
         Eigen::Vector4f targetWheelVels =
             RobotModel2015.BotToWheel * _targetVel;
-        targetWheelVels *= 10;
+//        targetWheelVels *= 10;
         // Forwards
         //Eigen::Vector4f targetWheelVels(.288675, .32169, -.32169, -.288675);
         //Eigen::Vector4f targetWheelVels(.32169, .288675, -.288675, -.32169);
@@ -168,7 +168,8 @@ public:
         return dutyCycles;
     }
 
-    static const uint16_t ENC_TICKS_PER_TURN = 2048;
+    // 2048 ticks per turn. Theres is a 3:1 gear ratio between the motor and the wheel.
+    static const uint16_t ENC_TICKS_PER_TURN = 2048 * 3;
 
 private:
     /// controllers for each wheel
