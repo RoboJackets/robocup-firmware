@@ -1,9 +1,9 @@
 #pragma once
 
+#include <mbed.h>
 #include <string>
-#include "AVR910.hpp"
 #include "Logger.hpp"
-#include "Mbed.hpp"
+#include "AVR910.hpp"
 #include "kicker_commands.h"
 
 /**
@@ -41,10 +41,10 @@ public:
      * @brief Sends the KickerBoard a command to kick for the allotted time in
      *     in milliseconds. This roughly corresponds to kick strength.
      *
-     * @param time Millisecond kick time, can only range from 0 to 255 ms
+     * @param Kicker strength, eventually gets mapped to duty cycle
      * @return If the kick command was acknowledged
      */
-    bool kick(uint8_t time);
+    bool kick(uint8_t strength, bool immediate);
 
     /**
      * @brief Sends the KickerBoard a command to chip for the allotted time in
@@ -52,14 +52,14 @@ public:
      * @param time Millisecond chip time, can only range from 0 to 255 ms
      * @return If the chip command was acknowledged
      */
-    bool chip(uint8_t time);
+    //bool chip(uint8_t time);
 
     /**
      * @brief Reads the charge voltage back from the KickerBoard.
-     * @return If the read_voltage command was acknowledged and the voltage
-     * reading
+     * @param voltage Output voltage 0 (GND) to 255 (Vd)
+     * @return If the read_voltage command was acknowledged
      */
-    std::pair<bool, uint8_t> readVoltage();
+    bool read_voltage(uint8_t* voltage);
 
     /**
      * @brief Sets the charge pin (to high)

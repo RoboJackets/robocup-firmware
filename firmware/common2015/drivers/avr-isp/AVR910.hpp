@@ -38,8 +38,8 @@
 
 #pragma once
 
-#include "Mbed.hpp"
-#include "Rtos.hpp"
+#include <mbed.h>
+#include <rtos.h>
 
 #include "SharedSPI.hpp"
 
@@ -53,15 +53,11 @@
 #define WRITE_HIGH_FLASH_BYTE 0x68
 #define WRITE_LOW_FLASH_BYTE 0x60
 
-// ATtiny841
 #define AVR_FAMILY_MASK 0xF0
 #define AVR_FAMILY_ID 0x90
-#define ATTINY84A_DEVICE_ID 0x15
-#define ATTINY84A_PAGESIZE 8 // Size in words (word = 2 bytes)
-#define ATTINY84A_NUM_PAGES 512
-
-#define LSB(I) ((I) & 0xFF)
-#define MSB(I) (((I) & 0xF00) >> 8)
+#define ATTINY_DEVICE_ID 0x87
+#define ATTINY_PAGESIZE 64 // Size in words (word = 2 bytes)
+#define ATTINY_NUM_PAGES 128
 
 /**
  * @brief AVR910 ISP
@@ -192,7 +188,7 @@ private:
      *
      * @param pageNumber The page number to write to in flash memory.
      */
-    void writeFlashMemoryPage(int pageNumber);
+    void writeFlashMemoryPage(char pageNumber);
 
     /**
      * Read a byte from program memory.
