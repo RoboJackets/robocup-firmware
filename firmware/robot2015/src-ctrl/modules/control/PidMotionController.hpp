@@ -11,9 +11,9 @@
  */
 class PidMotionController {
 public:
-    bool logging = true;
+    bool logging = false;
     // num_samples * dt_per_sample * 0.005 -> 12 seconds of recording?
-    const static int num_samples = 300;
+    const static int num_samples = 1000;
     const static int dt_per_sample = 3;
     int cur_sample = 0;
 
@@ -39,7 +39,7 @@ public:
         int effective_index = cur_sample / dt_per_sample;
         if (effective_index < num_samples) {
             //points[effective_index] = std::make_tuple(dt, wheelVelErr[0]); //std::make_tuple(dt, wheelVelErr);
-            points[effective_index] = wheelVelErr[0];
+            points[effective_index] = wheelVelErr[1];
             cur_sample++;
         } else {
             save_log();
@@ -142,12 +142,14 @@ public:
         }
 
         // if we're about to log, send 0 duty cycle
+        /*
         int effective_index = cur_sample / dt_per_sample;
         if (effective_index > num_samples - 20) {
             for (int i = 0; i < 4; ++i) {
                 dutyCycles[i] = 0;
             }
         }
+        */
         log(dt, wheelVelErr);
 
 // enable these printouts to get a python-formatted data set than can be

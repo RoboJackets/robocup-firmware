@@ -3,8 +3,8 @@
 #define EIGEN_HAS_CXX11_MATH 0
 #include <Eigen/Dense>
 #include <array>
-#include "ConstMath.hpp"
 #include "Geometry2d/Util.hpp"
+//#include "const-math.hpp"
 
 /// Model parameters for a robot.  Used by the controls system.
 class RobotModel {
@@ -26,20 +26,18 @@ public:
         // See this paper for more info on how this matrix is derived:
         // http://people.idsia.ch/~foerster/2006/1/omnidrive_kiart_preprint.pdf
 
+        // Factor WheelDist (R) into this matrix
         // clang-format off
         BotToWheel <<
-            sinf(WheelAngles[0]), cosf(WheelAngles[0]), -WheelDist,
-            sinf(WheelAngles[1]), cosf(WheelAngles[1]), -WheelDist,
-            sinf(WheelAngles[2]), cosf(WheelAngles[2]), -WheelDist,
-            sinf(WheelAngles[3]), cosf(WheelAngles[3]), -WheelDist;
+            -sinf(WheelAngles[0]), cosf(WheelAngles[0]), WheelDist,
+            -sinf(WheelAngles[1]), cosf(WheelAngles[1]), WheelDist,
+            -sinf(WheelAngles[2]), cosf(WheelAngles[2]), WheelDist,
+            -sinf(WheelAngles[3]), cosf(WheelAngles[3]), WheelDist;
+        // Invert because our wheels spin opposite to paper
+        BotToWheel *= -1;
         BotToWheel /= WheelRadius;
         // clang-format on
     }
-
-    /// (wheel rad/s desired) * DutyCycleMultiplier = duty cycle
-    /// Note that this is an approximation, as the relationship isn't exactly
-    /// linear
-    float DutyCycleMultiplier;
 };
 
 /// Model parameters for 2015 robot.  See RobotModel.cpp for values.
