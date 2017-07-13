@@ -31,7 +31,7 @@ bool initRadio() {
     auto txTimeoutLED = make_shared<FlashingTimeoutLED>(LED2);
 
     // Startup the CommModule interface
-    CommModule::Instance = make_shared<CommModule>(rxTimeoutLED, txTimeoutLED);
+    CommModule::Instance = make_shared<CommModule>();
 
     // Construct an object pointer for the radio
     globalRadio =
@@ -40,7 +40,7 @@ bool initRadio() {
     return globalRadio->isConnected();
 }
 
-void radioRxHandler(RTP::Packet pkt) {
+void radioRxHandler(rtp::Packet pkt) {
     LOG(DEBUG, "radioRxHandler()");
     // write packet content (including header) out to EPBULK_IN
     vector<uint8_t> buf;
@@ -48,9 +48,9 @@ void radioRxHandler(RTP::Packet pkt) {
 
     // drop the packet if it's the wrong size. Thsi will need to be changed if
     // we have variable-sized reply packets
-    if (buf.size() != RTP::ReverseSize) {
+    if (buf.size() != rtp::ReverseSize) {
         LOG(WARN, "Dropping packet, wrong size '%u', should be '%u'",
-            buf.size(), RTP::ReverseSize);
+            buf.size(), rtp::ReverseSize);
         return;
     }
 
@@ -84,8 +84,8 @@ int main() {
         // globalRadio->freq());
 
         // register handlers for any ports we might use
-        for (RTP::PortType port : {RTP::PortType::CONTROL, RTP::PortType::PING,
-                                   RTP::PortType::LEGACY}) {
+        for (rtp::PortType port : {rtp::PortType::CONTROL, rtp::PortType::PING,
+                                   rtp::PortType::LEGACY}) {
             CommModule::Instance->setRxHandler(&radioRxHandler, port);
             CommModule::Instance->setTxHandler(
                 dynamic_cast<CommLink*>(globalRadio.get()),
@@ -95,7 +95,7 @@ int main() {
         LOG(SEVERE, "No radio interface found!");
     }
 
-    globalRadio->setAddress(RTP::BASE_STATION_ADDRESS);
+    globalRadio->setAddress(rtp::BASE_STATION_ADDRESS);
 
     DigitalOut radioStatusLed(LED4, globalRadio->isConnected());
 
@@ -142,10 +142,10 @@ int main() {
             LOG(DEBUG, "Read %d bytes from BULK IN", bufSize);
 
             // construct packet from buffer received over USB
-            RTP::Packet pkt(buf);
+            rtp::Packet pkt(buf);
 
             // send to all robots
-            pkt.header.address = RTP::ROBOT_ADDRESS;
+            pkt.header.address = rtp::ROBOT_ADDRESS;
 
             // transmit!
             CommModule::Instance->send(std::move(pkt));

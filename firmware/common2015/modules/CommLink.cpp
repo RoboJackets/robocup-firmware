@@ -47,7 +47,7 @@ void CommLink::rxThread() {
 
         if (!response.empty()) {
             // Write the data to the CommModule object's rxQueue
-            CommModule::Instance->receive(RTP::Packet(response));
+            CommModule::Instance->receive(rtp::Packet(response));
         }
     }
 

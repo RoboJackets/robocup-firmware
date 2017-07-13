@@ -47,7 +47,7 @@ public:
      *
      * @return A status value indicating success/error. See CommLink for info.
      */
-    int32_t sendPacket(const RTP::Packet* pkt);
+    int32_t sendPacket(const rtp::Packet* pkt);
 
     /**
      * Read data from the radio's RX buffer.  This should be called after

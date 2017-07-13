@@ -5,7 +5,7 @@
 
 #include "CommPort.hpp"
 #include "HelperFuncs.hpp"
-#include "RTP.hpp"
+#include "firmware-common/common2015/utils/rtp.hpp"
 #include "TimeoutLED.hpp"
 
 #include <algorithm>
@@ -26,8 +26,8 @@
 class CommModule {
 public:
     /// Type aliases
-    using RxCallbackSigT = void(RTP::Packet);
-    using TxCallbackSigT = uint32_t(const RTP::Packet*);
+    using RxCallbackSigT = void(rtp::Packet);
+    using TxCallbackSigT = uint32_t(const rtp::Packet*);
     using RxCallbackT = std::function<RxCallbackSigT>;
     using TxCallbackT = std::function<TxCallbackSigT>;
     using PortT = CommPort<RxCallbackSigT, TxCallbackSigT>;
@@ -46,22 +46,22 @@ public:
 
     /// Assign an RX callback method to a port
     template <typename B>
-    void setRxHandler(B* obj, void (B::*mptr)(RTP::Packet), uint8_t portNbr) {
+    void setRxHandler(B* obj, void (B::*mptr)(rtp::Packet), uint8_t portNbr) {
         setRxHandler(std::bind(mptr, obj, std::placeholders::_1), portNbr);
     }
 
     /// Assign an TX callback method to a port
     template <typename B>
-    void setTxHandler(B* obj, int32_t (B::*mptr)(const RTP::Packet*),
+    void setTxHandler(B* obj, int32_t (B::*mptr)(const rtp::Packet*),
                       uint8_t portNbr) {
         setTxHandler(std::bind(mptr, obj, std::placeholders::_1), portNbr);
     }
 
-    /// Send an RTP::Packet over previsouly initialized hardware
-    void send(RTP::Packet pkt);
+    /// Send an rtp::Packet over previsouly initialized hardware
+    void send(rtp::Packet pkt);
 
     /// Called by CommLink instances whenever a packet is received via radio
-    void receive(RTP::Packet pkt);
+    void receive(rtp::Packet pkt);
 
     /// Close a port that was previouly assigned callback functions/methods
     void close(unsigned int portNbr) noexcept;

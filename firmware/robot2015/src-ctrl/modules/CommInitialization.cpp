@@ -24,11 +24,11 @@ using namespace std;
  * https://www.overleaf.com/2187548nsfdps
  */
 
-void loopback_ack_pck(RTP::Packet p) {
+void loopback_ack_pck(rtp::Packet p) {
     CommModule::Instance->send(std::move(p));
 }
 
-void legacy_rx_cb(RTP::Packet p) {
+void legacy_rx_cb(rtp::Packet p) {
     if (p.payload.size()) {
         LOG(DEBUG,
             "Legacy rx successful!\r\n"
@@ -39,7 +39,7 @@ void legacy_rx_cb(RTP::Packet p) {
     }
 }
 
-void loopback_rx_cb(RTP::Packet p) {
+void loopback_rx_cb(rtp::Packet p) {
     std::vector<uint16_t> duty_cycles;
     duty_cycles.assign(5, 100);
     for (size_t i = 0; i < duty_cycles.size(); ++i)
@@ -55,7 +55,7 @@ void loopback_rx_cb(RTP::Packet p) {
     }
 }
 
-uint32_t loopback_tx_cb(const RTP::Packet* p) {
+uint32_t loopback_tx_cb(const rtp::Packet* p) {
     if (p->payload.size()) {
         LOG(DEBUG,
             "Loopback tx successful!\r\n"
@@ -83,8 +83,8 @@ void InitializeCommModule(SharedSPIDevice<>::SpiPtrT sharedSPI) {
     // Open a socket for running tests across the link layer
     // The LINK port handlers are always active, regardless of whether or not a
     // working radio is connected.
-    commModule->setRxHandler(&loopback_rx_cb, RTP::PortType::LINK);
-    commModule->setTxHandler(&loopback_tx_cb, RTP::PortType::LINK);
+    commModule->setRxHandler(&loopback_rx_cb, rtp::PortType::LINK);
+    commModule->setTxHandler(&loopback_tx_cb, rtp::PortType::LINK);
 
     /*
      * Ports are always displayed in ascending (lowest -> highest) order
@@ -95,8 +95,8 @@ void InitializeCommModule(SharedSPIDevice<>::SpiPtrT sharedSPI) {
 
         // Legacy port
         commModule->setTxHandler(globalRadio.get(), &CommLink::sendPacket,
-                                 RTP::PortType::LEGACY);
-        commModule->setRxHandler(&legacy_rx_cb, RTP::PortType::LEGACY);
+                                 rtp::PortType::LEGACY);
+        commModule->setRxHandler(&legacy_rx_cb, rtp::PortType::LEGACY);
 
 #ifndef NDEBUG
         LOG(INFO, "%u sockets opened", commModule->numOpenSockets());

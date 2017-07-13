@@ -42,12 +42,12 @@ void Task_Simulate_RX_Packet(const void* args) {
     while(true) {
         Thread::wait(1);
 
-        RTP::Packet pkt;
-        pkt.header.port = RTP::PortType::CONTROL;
-        pkt.header.type = RTP::MessageType::CONTROL;
+        rtp::Packet pkt;
+        pkt.header.port = rtp::PortType::CONTROL;
+        pkt.header.type = rtp::MessageType::CONTROL;
         pkt.header.address = 1;
 
-        RTP::ControlMessage msg;
+        rtp::ControlMessage msg;
         msg.uid = 1;
         msg.bodyX = 0;
         msg.bodyY = 0;
@@ -274,7 +274,7 @@ int main() {
     radioProtocol.start();
 
     radioProtocol.rxCallback =
-        [&](const RTP::ControlMessage* msg, const bool addressed) {
+        [&](const rtp::ControlMessage* msg, const bool addressed) {
             // reset timeout
             radioTimeoutTimer.start(RadioTimeout);
 
@@ -282,11 +282,11 @@ int main() {
                 // update target velocity from packet
                 Task_Controller_UpdateTarget({
                     static_cast<float>(msg->bodyX) /
-                        RTP::ControlMessage::VELOCITY_SCALE_FACTOR,
+                        rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
                     static_cast<float>(msg->bodyY) /
-                        RTP::ControlMessage::VELOCITY_SCALE_FACTOR,
+                        rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
                     static_cast<float>(msg->bodyW) /
-                        RTP::ControlMessage::VELOCITY_SCALE_FACTOR,
+                        rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
                 });
 
                 // dribbler
@@ -309,7 +309,7 @@ int main() {
                 }
             }
 
-            RTP::RobotStatusMessage reply;
+            rtp::RobotStatusMessage reply;
             reply.uid = robotShellID;
             reply.battVoltage = battVoltage;
             reply.ballSenseStatus = ballSense.hasBall() ? 1 : 0;
@@ -333,9 +333,12 @@ int main() {
             // kicker status
             //reply.kickStatus = KickerBoard::Instance->canKick();
             reply.kickStatus = true;
+            
+            // TODO: actually implement this.
+            reply.debug_data[0] = 42;
 
             vector<uint8_t> replyBuf;
-            RTP::serializeToVector(reply, &replyBuf);
+            rtp::serializeToVector(reply, &replyBuf);
 
             return replyBuf;
         };
