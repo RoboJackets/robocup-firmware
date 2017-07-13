@@ -373,7 +373,7 @@ int main() {
         errorBitmask |= (1 << RJ_ERR_LED_DRIB);
     }
 
-    cmd_heapfill();
+    //cmd_heapfill();
 
 #if COMM_STRESS_TEST
     Thread sim_task(Task_Simulate_RX_Packet, mainID, osPriorityAboveNormal);

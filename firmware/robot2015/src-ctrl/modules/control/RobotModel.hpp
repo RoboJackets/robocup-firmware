@@ -38,6 +38,8 @@ public:
         BotToWheel /= WheelRadius;
         // clang-format on
     }
+
+    float DutyCycleMultiplier = 2.5f;
 };
 
 /// Model parameters for 2015 robot.  See RobotModel.cpp for values.

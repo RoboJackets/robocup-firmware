@@ -134,12 +134,15 @@ public:
 
         Eigen::Vector4d wheelVelErr = targetWheelVels - wheelVels;
 
+        std::printf("%f\r\n", wheelVelErr[0]);
+
 
         std::array<int16_t, 4> dutyCycles;
         for (int i = 0; i < 4; i++) {
-            // dc = targetWheelVels[i] * RobotModel2015.DutyCycleMultiplier;
+            float dc;
+            //float dc = targetWheelVels[i] * RobotModel2015.DutyCycleMultiplier;
             //int16_t dc = _controllers[i].run(wheelVelErr[i]);
-            float dc = duties[i];
+            dc = duties[i];
             dc += _controllers[i].run(wheelVelErr[i], dt);
 
             if (std::abs(dc) > FPGA::MAX_DUTY_CYCLE) {
