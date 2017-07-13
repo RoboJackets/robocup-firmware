@@ -70,26 +70,26 @@ void main() {
     while (true) {
         // get a voltage reading by weighing in a new reading, same concept as
         // TCP RTT estimates (exponentially weighted sum)
+
         if (time % 400 == 0) {
-            last_voltage_ = get_voltage();
             int voltage_accum =
                 (255 - kalpha) * last_voltage_ + kalpha * get_voltage();
             last_voltage_ = voltage_accum / 255;
         }
 
-        // keep voltage between 235 and 240
-        if (last_voltage_ > 240 || !charge_allowed_ || !charge_commanded_) {
+        // if we dropped below acceptable voltage, then this will catch it
+        if (last_voltage_ > 239 || !charge_allowed_ || !charge_commanded_) {
             PORTB &= ~(_BV(CHARGE_PIN));
-        } else if (last_voltage_ < 235 && charge_allowed_ && charge_commanded_) {
+        } else if (last_voltage_ < 232 && charge_allowed_ && charge_commanded_) {
             PORTB |= _BV(CHARGE_PIN);
         }
 
-        if (!(PORTB & _BV(N_KICK_CS_PIN))) {
+        if (PORTB & _BV(N_KICK_CS_PIN)) {
             byte_cnt = 0;
         }
 
-        time++;
-        _delay_us(100);
+        // attempted to do us delays with bad effects of SPI line
+        _delay_us(100); // 0.1 ms
     }
 }
 
@@ -161,8 +161,10 @@ ISR(SPI_STC_vect) {
         SPDR = execute_cmd(cur_command_, recv_data);
     } else if (byte_cnt == 2) {
         SPDR |= (is_charging() << CHARGING);
+    } else if (byte_cnt == 4) {
+        // no-op
     }
-    int NUM_BYTES = 3;
+    int NUM_BYTES = 4;
     byte_cnt++;
     byte_cnt %= NUM_BYTES;
 }
@@ -241,14 +243,12 @@ uint8_t execute_cmd(uint8_t cmd, uint8_t arg) {
         case KICK_BREAKBEAM_CMD: // we don't support kick on break beam right now :/
         case KICK_IMMEDIATE_CMD:
             // arg contains 0-255 strength, map to 0-12 ms?
-            pre_kick_cooldown_ = 10;
-            //millis_left_ = (int) ((arg / 255.0) * 12.0);
-            millis_left_ = 5;
-            post_kick_cooldown_ = 10;
+            pre_kick_cooldown_ = 5;
+            millis_left_ = (int) ((arg / 255.0) * 12.0);
+            post_kick_cooldown_ = 5;
 
             TCCR0B |= _BV(CS01);     // start timer /8 prescale
             break;
-
 
         case SET_CHARGE_CMD:
             // set state based on argument

@@ -84,15 +84,17 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
 
 bool KickerBoard::send_to_kicker(uint8_t cmd, uint8_t arg, uint8_t* ret_val) {
     LOG(DEBUG, "Sending: CMD:%02X, ARG:%02X", cmd, arg);
+    wait_us(300);
     chipSelect();
-
+    wait_us(300);
     m_spi->write(cmd);
-    wait_us(100);
+    wait_us(300);
     uint8_t command_resp = m_spi->write(arg);
-    wait_us(100);
+    wait_us(300);
     uint8_t ret = m_spi->write(BLANK);
-    wait_us(100);
+    wait_us(300);
     uint8_t state = m_spi->write(BLANK);
+    wait_us(300);
     chipDeselect();
 
     if (ret_val != nullptr) {

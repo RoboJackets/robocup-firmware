@@ -167,6 +167,8 @@ int main() {
     // adjusted once hardware is available.
     uint8_t kickStrength = 0x08;  // DB_KICK_TIME;
 
+    uint8_t kickerVoltage = 0;
+
     /*
       Ball sense moved to kicker board
     // Initialize and start ball sensor
@@ -328,8 +330,7 @@ int main() {
             }
 
             // kicker status
-            //reply.kickStatus = KickerBoard::Instance->canKick();
-            reply.kickStatus = true;
+            reply.kickStatus = kickerVoltage;
 
             vector<uint8_t> replyBuf;
             RTP::serializeToVector(reply, &replyBuf);
@@ -337,7 +338,7 @@ int main() {
             return replyBuf;
         };
 
-    // KickerBoard::Instance->charge();
+    KickerBoard::Instance->charge();
     // LOG(INIT, "Started charging kicker board.");
 
     // Set the watdog timer's initial config
@@ -418,7 +419,7 @@ int main() {
         battVoltage = (batt.read_u16() >> 8);
 
         // get kicker voltage
-        auto kickerVoltage = 0;//KickerBoard::Instance->readVoltage().second;
+        kickerVoltage = KickerBoard::Instance->readVoltage().second;
         LOG(DEBUG, "Kicker voltage: %u", kickerVoltage);
 
         // update shell id
