@@ -29,6 +29,7 @@
 /* Commands */
 #define KICK_IMMEDIATE_CMD 0x01
 #define KICK_BREAKBEAM_CMD 0x02
+#define CANCEL_BREAKBEAM_CMD 0x03
 #define SET_CHARGE_CMD 0x04
 #define GET_VOLTAGE_CMD 0x05
 #define PING_CMD 0x06

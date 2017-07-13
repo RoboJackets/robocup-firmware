@@ -156,9 +156,9 @@ int main() {
 
     // Reprogramming each time (first arg of flash false) is actually
     // faster than checking the full memory to see if we need to reflash.
-    // KickerBoard::Instance =
-    //     std::make_shared<KickerBoard>(sharedSPI, RJ_KICKER_nCS, RJ_KICKER_nRESET, "/local/rj-kickr.nib");
-    // bool kickerReady = KickerBoard::Instance->flash(false, false);
+    KickerBoard::Instance =
+        std::make_shared<KickerBoard>(spiBus, RJ_KICKER_nCS, RJ_KICKER_nRESET, "/local/rj-kickr.nib");
+    bool kickerReady = KickerBoard::Instance->flash(false, false);
 
     // flag fro kicking when the ball sense triggers
     auto kickOnBreakBeam = false;
@@ -167,8 +167,10 @@ int main() {
     // adjusted once hardware is available.
     uint8_t kickStrength = 0x08;  // DB_KICK_TIME;
 
+    /*
+      Ball sense moved to kicker board
     // Initialize and start ball sensor
-    BallSensor ballSense(RJ_BALL_EMIT, RJ_BALL_DETECTOR);
+    //BallSensor ballSense(RJ_BALL_EMIT, RJ_BALL_DETECTOR);
     ballSense.start(10);
     ballSense.senseChangeCallback = [&](bool haveBall) {
         // invert value due to active-low wiring of led
@@ -181,6 +183,7 @@ int main() {
             // KickerBoard::Instance->kick(kickStrength);
         }
     };
+    */
 
     // Initialize and configure the fpga with the given bitfile
     FPGA::Instance = new FPGA(spiBus, RJ_FPGA_nCS, RJ_FPGA_INIT_B,
@@ -296,23 +299,17 @@ int main() {
                 kickStrength = msg->kickStrength;
                 if (msg->triggerMode == 1) {
                     // kick immediate
-                    // KickerBoard::Instance->kick(kickStrength);
+                    KickerBoard::Instance->kick(kickStrength, true);
                 } else if (msg->triggerMode == 2) {
                     // kick on break beam
-                    if (ballSense.hasBall()) {
-                        // KickerBoard::Instance->kick(kickStrength);
-                        kickOnBreakBeam = false;
-                    } else {
-                        // set flag so that next break beam triggers a kick
-                        kickOnBreakBeam = true;
-                    }
+                    KickerBoard::Instance->kick(kickStrength, false);
                 }
             }
 
             RTP::RobotStatusMessage reply;
             reply.uid = robotShellID;
             reply.battVoltage = battVoltage;
-            reply.ballSenseStatus = ballSense.hasBall() ? 1 : 0;
+            //reply.ballSenseStatus = ballSense.hasBall() ? 1 : 0;
 
             // report any motor errors
             reply.motorErrors = 0;

@@ -693,7 +693,7 @@ int cmd_kicker(cmd_args_t& args) {
         return 1;
     } else {
         if (args[0] == "kick") {
-            if (KickerBoard::Instance->kick(DB_KICK_TIME, true)) {
+            if (KickerBoard::Instance->kick(255, true)) {
                 printf("Kick success.\r\n");
             } else {
                 printf("Kick failure.\r\n");
@@ -713,7 +713,7 @@ int cmd_kicker(cmd_args_t& args) {
             if (isValid) {
                 printf("Kicker volts success. Volts: %d\r\n", volts);
             } else {
-                printf("Kicker voltage read success.\r\n");
+                printf("Kicker volts failure.\r\n");
             }
         } else if (args[0] == "charge") {
             if (args.size() != 2) {

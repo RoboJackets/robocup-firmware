@@ -85,14 +85,11 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
 bool KickerBoard::send_to_kicker(uint8_t cmd, uint8_t arg, uint8_t* ret_val) {
     LOG(DEBUG, "Sending: CMD:%02X, ARG:%02X", cmd, arg);
     chipSelect();
-    // Returns state (charging, not charging), but we don't care about that
-    // uint8_t charge_resp = m_spi->write(cmd);
-    // Should return the command we just sent
+
     m_spi->write(cmd);
     wait_us(100);
     uint8_t command_resp = m_spi->write(arg);
     wait_us(100);
-    // Should return final response to full cmd, arg pair
     uint8_t ret = m_spi->write(BLANK);
     wait_us(100);
     uint8_t state = m_spi->write(BLANK);
@@ -102,11 +99,11 @@ bool KickerBoard::send_to_kicker(uint8_t cmd, uint8_t arg, uint8_t* ret_val) {
         *ret_val = ret;
     }
 
-    bool command_acked = command_resp == cmd;
+    bool command_acked = ACK;
     LOG(DEBUG, "ACK?:%s, CMD:%02X, RET:%02X, STT:%02X",
         command_acked ? "true" : "false", command_resp, ret, state);
 
-    return true;
+    return command_acked;
 }
 
 bool KickerBoard::kick(uint8_t strength, bool immediate) {

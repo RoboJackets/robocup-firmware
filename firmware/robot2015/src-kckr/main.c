@@ -14,7 +14,9 @@
 #define VOLTAGE_READ_DELAY_MS 40
 
 // Used to time kick and chip durations
-volatile unsigned millis_left_ = 0;
+volatile int pre_kick_cooldown_ = 0;
+volatile int millis_left_ = 0;
+volatile int post_kick_cooldown_ = 0;
 
 // Used to keep track of current button state
 volatile int kick_db_held_down_ = 0;
@@ -28,7 +30,12 @@ volatile uint8_t cur_command_ = NO_COMMAND;
 // always up-to-date voltage so we don't have to get_voltage() inside interupts
 volatile uint8_t last_voltage_ = 0;
 
-volatile bool charge_allowed_ = false;
+// whether or not MBED has requested charging to be on
+volatile bool charge_commanded_ = false;
+
+volatile bool charge_allowed_ = true;
+
+unsigned time = 0;
 
 // executes a command coming from SPI
 uint8_t execute_cmd(uint8_t, uint8_t);
@@ -63,15 +70,17 @@ void main() {
     while (true) {
         // get a voltage reading by weighing in a new reading, same concept as
         // TCP RTT estimates (exponentially weighted sum)
-        last_voltage_ = get_voltage();
-        int voltage_accum =
-            (255 - kalpha) * last_voltage_ + kalpha * get_voltage();
-        last_voltage_ = voltage_accum / 255;
+        if (time % 400 == 0) {
+            last_voltage_ = get_voltage();
+            int voltage_accum =
+                (255 - kalpha) * last_voltage_ + kalpha * get_voltage();
+            last_voltage_ = voltage_accum / 255;
+        }
 
         // keep voltage between 235 and 240
-        if (last_voltage_ > 240) {
+        if (last_voltage_ > 240 || !charge_allowed_ || !charge_commanded_) {
             PORTB &= ~(_BV(CHARGE_PIN));
-        } else if (last_voltage_ < 235 && charge_allowed_) {
+        } else if (last_voltage_ < 235 && charge_allowed_ && charge_commanded_) {
             PORTB |= _BV(CHARGE_PIN);
         }
 
@@ -79,8 +88,8 @@ void main() {
             byte_cnt = 0;
         }
 
-        _delay_ms(VOLTAGE_READ_DELAY_MS);
-
+        time++;
+        _delay_us(100);
     }
 }
 
@@ -137,7 +146,6 @@ void init() {
  * stored in SPDR. Writing a response also occurs using the SPDR register.
  */
 ISR(SPI_STC_vect) {
-    // SPDR contains the data
     uint8_t recv_data = SPDR;
 
     SPDR = 0xFF;
@@ -198,17 +206,18 @@ ISR(PCINT0_vect) {
  * ISR for TIMER 0
  */
 ISR(TIMER0_COMPA_vect) {
-    // decrement ms counter
-    millis_left_--;
-
-    // if the counter hits 0, clear the kick/chip pin state
-    if (!millis_left_) {
-        // could be kicking or chipping, clear both
-        // timing issue was preventing kick pin from clearing?
+    if (pre_kick_cooldown_ > 0) {
+        pre_kick_cooldown_--;
+        // disable charging
+        charge_allowed_ = false;
+    } else if (millis_left_ > 0) {
+        millis_left_--;
+        PORTB |= _BV(KICK_PIN);  // set KICK pin
+    } else if (post_kick_cooldown_ > 0) {
+        // kick is done
         PORTB &= ~_BV(KICK_PIN);
-        PORTB &= ~_BV(KICK_PIN);
-        PORTB &= ~_BV(KICK_PIN);
-        PORTB &= ~_BV(KICK_PIN);
+        post_kick_cooldown_--;
+    } else {
         // stop prescaled timer
         TCCR0B &= ~_BV(CS01);
 
@@ -232,12 +241,11 @@ uint8_t execute_cmd(uint8_t cmd, uint8_t arg) {
         case KICK_BREAKBEAM_CMD: // we don't support kick on break beam right now :/
         case KICK_IMMEDIATE_CMD:
             // arg contains 0-255 strength, map to 0-12 ms?
-            millis_left_ = (int) (arg / 255.0) * 12;
+            pre_kick_cooldown_ = 10;
+            //millis_left_ = (int) ((arg / 255.0) * 12.0);
+            millis_left_ = 5;
+            post_kick_cooldown_ = 10;
 
-            /* Turn off charging during kick */
-            PORTB &= ~(_BV(CHARGE_PIN));
-
-            PORTB |= _BV(KICK_PIN);  // set KICK pin
             TCCR0B |= _BV(CS01);     // start timer /8 prescale
             break;
 
@@ -246,10 +254,10 @@ uint8_t execute_cmd(uint8_t cmd, uint8_t arg) {
             // set state based on argument
             if (arg == ON_ARG) {
                 ret_val = 1;
-                charge_allowed_ = true;
+                charge_commanded_ = true;
             } else if (arg == OFF_ARG) {
                 ret_val = 0;
-                charge_allowed_ = false;
+                charge_commanded_ = false;
             }
             break;
 
