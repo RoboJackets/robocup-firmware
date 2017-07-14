@@ -1,5 +1,10 @@
+#include <cmath>
+
+#include <configuration/ConfigStore.hpp>
+#include <Geometry2d/Util.hpp>
 #include "Assert.hpp"
 #include "Console.hpp"
+#include "ConfigStore.hpp"
 #include "FPGA.hpp"
 #include "Logger.hpp"
 #include "PidMotionController.hpp"
@@ -106,6 +111,15 @@ void Task_Controller(const void* args) {
         imu.getAccelero(accelVals);
 #endif
 
+        if (DebugCommunication::configStoreIsValid[DebugCommunication::ConfigCommunication::PID_P]) {
+            pidController.updatePValues(DebugCommunication::configStore[DebugCommunication::ConfigCommunication::PID_P]);
+        }
+        if (DebugCommunication::configStoreIsValid[DebugCommunication::ConfigCommunication::PID_I]) {
+            pidController.updateIValues(DebugCommunication::configStore[DebugCommunication::ConfigCommunication::PID_I]);
+        }
+        if (DebugCommunication::configStoreIsValid[DebugCommunication::ConfigCommunication::PID_D]) {
+            pidController.updateDValues(DebugCommunication::configStore[DebugCommunication::ConfigCommunication::PID_D]);
+        }
         // note: the 4th value is not an encoder value.  See the large comment
         // below for an explanation.
         std::array<int16_t, 5> enc_deltas{};
@@ -145,10 +159,16 @@ void Task_Controller(const void* args) {
         std::array<int16_t, 4> driveMotorEnc;
         for (auto i = 0; i < 4; i++) driveMotorEnc[i] = enc_deltas[i];
 
+        Eigen::Vector4d errors;
         // run PID controller to determine what duty cycles to use to drive the
         // motors.
         std::array<int16_t, 4> driveMotorDutyCycles =
-            pidController.run(driveMotorEnc, dt);
+            pidController.run(driveMotorEnc, dt, &errors);
+
+        DebugCommunication::debugStore[DebugCommunication::DebugResponse::PIDError0] = static_cast<int16_t>(clamp<double>(errors[0]*1000, std::numeric_limits<int16_t>::min(), std::numeric_limits<int16_t>::max()));
+        DebugCommunication::debugStore[DebugCommunication::DebugResponse::PIDError1] = static_cast<int16_t>(clamp<double>(errors[1]*1000, std::numeric_limits<int16_t>::min(), std::numeric_limits<int16_t>::max()));
+        DebugCommunication::debugStore[DebugCommunication::DebugResponse::PIDError2] = static_cast<int16_t>(clamp<double>(errors[2]*1000, std::numeric_limits<int16_t>::min(), std::numeric_limits<int16_t>::max()));
+        DebugCommunication::debugStore[DebugCommunication::DebugResponse::PIDError3] = static_cast<int16_t>(clamp<double>(errors[3]*1000, std::numeric_limits<int16_t>::min(), std::numeric_limits<int16_t>::max()));
 
         // assign the duty cycles, zero out motors that the fpga returns an
         // error for

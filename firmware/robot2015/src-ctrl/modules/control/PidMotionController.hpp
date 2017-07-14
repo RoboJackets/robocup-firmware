@@ -69,13 +69,30 @@ public:
         logging = false;
     }
 
-
     void setPidValues(float p, float i, float d, float derivAlpha) {
         for (Pid& ctl : _controllers) {
             ctl.kp = p;
             ctl.ki = i;
             ctl.kd = d;
             ctl.derivAlpha = derivAlpha;
+        }
+    }
+
+    void updatePValues(float p) {
+        for (Pid& ctl : _controllers) {
+            ctl.kp = p;
+        }
+    }
+
+    void updateIValues(float i) {
+        for (Pid& ctl : _controllers) {
+            ctl.ki = i;
+        }
+    }
+
+    void updateDValues(float d) {
+        for (Pid& ctl : _controllers) {
+            ctl.kd = d;
         }
     }
 
@@ -91,7 +108,7 @@ public:
      * @return Duty cycle values for each of the 4 motors
      */
     std::array<int16_t, 4> run(const std::array<int16_t, 4>& encoderDeltas,
-                               float dt) {
+                               float dt, Eigen::Vector4d *errors=nullptr) {
 
 
         // convert encoder ticks to rad/s
@@ -133,6 +150,10 @@ public:
         //targetWheelVels /= RobotModel2015.WheelRadius;
 
         Eigen::Vector4d wheelVelErr = targetWheelVels - wheelVels;
+
+        if (errors) {
+            *errors = wheelVelErr;
+        }
 
         std::printf("%f\r\n", wheelVelErr[0]);
 

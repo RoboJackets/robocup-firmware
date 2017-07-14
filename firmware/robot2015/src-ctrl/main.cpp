@@ -4,6 +4,7 @@
 #include "Assert.hpp"
 #include "BallSensor.hpp"
 #include "Commands.hpp"
+#include "ConfigStore.hpp"
 #include "Decawave.hpp"
 #include "FPGA.hpp"
 #include "HelperFuncs.hpp"
@@ -25,6 +26,7 @@
 #include <array>
 #include <ctime>
 #include <string>
+#include <configuration/ConfigStore.hpp>
 
 // set to 1 to enable CommModule rx/tx stress test
 #define COMM_STRESS_TEST (0)
@@ -273,6 +275,23 @@ int main() {
     radioProtocol.setUID(robotShellID);
     radioProtocol.start();
 
+    radioProtocol.debugCallback =
+        [&](const rtp::DebugMessage &msg) {
+            DebugCommunication::debugResponses = msg.keys;
+        };
+
+    radioProtocol.confCallback =
+        [&](const rtp::ConfMessage &msg) {
+            for (int i=0; i<rtp::ConfMessage::length; i++) {
+                auto configCommunication = msg.keys[i];
+                if (configCommunication != DebugCommunication::ConfigCommunication::CONFIG_COMMUNICATION_NONE) {
+                    const auto index = static_cast<int> (configCommunication);
+                    DebugCommunication::configStore[index] = msg.values[i];
+                    DebugCommunication::configStoreIsValid[index] = true;
+                }
+            }
+        };
+
     radioProtocol.rxCallback =
         [&](const rtp::ControlMessage* msg, const bool addressed) {
             // reset timeout
@@ -334,8 +353,13 @@ int main() {
             //reply.kickStatus = KickerBoard::Instance->canKick();
             reply.kickStatus = true;
             
-            // TODO: actually implement this.
-            reply.debug_data[0] = 42;
+            // TODO: actually implement this
+            for (int i=0; i<rtp::RobotStatusMessage::debug_data_length; i++) {
+                auto debugType = DebugCommunication::debugResponses[i];
+                if (debugType != 0) {
+                    reply.debug_data[i] = DebugCommunication::debugStore[debugType];
+                }
+            }
 
             vector<uint8_t> replyBuf;
             rtp::serializeToVector(reply, &replyBuf);

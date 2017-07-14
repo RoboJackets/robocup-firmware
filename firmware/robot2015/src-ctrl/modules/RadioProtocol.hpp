@@ -48,6 +48,9 @@ public:
     std::function<std::vector<uint8_t>(const rtp::ControlMessage* msg,
                                        const bool addresed)> rxCallback;
 
+    std::function<void(const rtp::ConfMessage &msg)> confCallback;
+    std::function<void(const rtp::DebugMessage &msg)> debugCallback;
+
     void start() {
         m_state = State::DISCONNECTED;
 
@@ -73,22 +76,23 @@ public:
 
     void rxHandler(rtp::Packet pkt) {
         // TODO: check packet size before parsing
-        bool addressed = false;
-        const rtp::ControlMessage* msg;
-        size_t slot;
+//        bool addressed = false;
+        const rtp::ControlMessage* controlMessage = nullptr;
         // printf("UUIDs: ");
-        for (slot = 0; slot < 6; slot++) {
-            const auto offset = slot * sizeof(rtp::ControlMessage);
-            msg = reinterpret_cast<const rtp::ControlMessage*>(
-                pkt.payload.data() + offset);
+        const auto messages  = reinterpret_cast<const rtp::RobotTxMessage*>(pkt.payload.data());
+
+        size_t slot;
+        for (size_t i = 0; i < 6; i++) {
+            auto msg = std::next(messages, i);
 
             // printf("%d:%d ", slot, msg->uid);
             if (msg->uid == m_uid) {
-                addressed = true;
-                break;
+                if (msg->messageType == rtp::RobotTxMessage::ControlMessageType) {
+                    controlMessage = &msg->message.controlMessage;
+                }
+                slot = i;
             }
         }
-        // printf("\r\n");
 
         /// time, in ms, for each reply slot
         // TODO(justin): double-check this
@@ -101,16 +105,33 @@ public:
         m_timeoutTimer.start(TIMEOUT_INTERVAL);
 
         // TODO: this is bad and lazy
-        if (addressed) {
+        if (controlMessage) {
             m_replyTimer.start(1 + SLOT_DELAY * slot);
         } else {
             m_replyTimer.start(1 + SLOT_DELAY * (m_uid % 6));
         }
 
         if (rxCallback) {
-            m_reply = rxCallback(msg, addressed);
+            m_reply = rxCallback(controlMessage, controlMessage != nullptr);
         } else {
             LOG(WARN, "no callback set");
+        }
+
+        for (size_t i = 0; i < 6; i++) {
+            auto msg = std::next(messages, i);
+            if (msg->uid == m_uid) {
+                if (msg->messageType == rtp::RobotTxMessage::ConfMessageType) {
+                    if (confCallback) {
+                        const auto confMessage = msg->message.confMessage;
+                        confCallback(confMessage);
+                    }
+                } else if (msg->messageType == rtp::RobotTxMessage::DebugMessageType) {
+                    if (debugCallback) {
+                        const auto debugMessage = msg->message.debugMessage;
+                        debugCallback(debugMessage);
+                    }
+                }
+            }
         }
     }
 
