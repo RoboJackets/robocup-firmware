@@ -11,6 +11,7 @@
  */
 
 /*
+ * THIS MAY BE INACCURATE
  * KickerBoard SPI protocol.
  * Each conversation begins with chip selecting the kickerboard.
  *
@@ -29,7 +30,7 @@
 /* Commands */
 #define KICK_IMMEDIATE_CMD 0x01
 #define KICK_BREAKBEAM_CMD 0x02
-#define CANCEL_BREAKBEAM_CMD 0x03
+#define KICK_BREAKBEAM_CANCEL_CMD 0x03
 #define SET_CHARGE_CMD 0x04
 #define GET_VOLTAGE_CMD 0x05
 #define PING_CMD 0x06
@@ -46,8 +47,3 @@
 
 /* Response Codes, charging/not charging */
 #define ACK 0x77;
-
-/* Kicker status */
-//#define CHARGING (_BV(0))
-//#define BALL_SENSE (_BV(1)) // not implemented yet
-#define CHARGING 0

@@ -46,6 +46,8 @@ public:
      */
     bool kick(uint8_t strength, bool immediate);
 
+    bool cancel_breakbeam();
+
     /**
      * @brief Sends the KickerBoard a command to chip for the allotted time in
      *     in milliseconds. This roughly corresponds to chip strength.
@@ -100,6 +102,10 @@ private:
     bool verbose;
 
     std::string _filename;
+
+    // Note, these fields only updated after some command is send to kicker
+    bool _is_charging_ = false;
+    bool _ball_sensed_ = false;
 
     /**
      * This function enforces the design choice that each cmd must have an arg

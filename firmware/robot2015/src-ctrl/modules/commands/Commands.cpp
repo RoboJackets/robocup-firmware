@@ -692,12 +692,22 @@ int cmd_kicker(cmd_args_t& args) {
         show_invalid_args(args);
         return 1;
     } else {
+        bool res = false;
         if (args[0] == "kick") {
-            if (KickerBoard::Instance->kick(255, true)) {
-                printf("Kick success.\r\n");
+            if (args.size() < 2) {
+                // no args, kick immediately
+                res = KickerBoard::Instance->kick(256/2, true);
             } else {
-                printf("Kick failure.\r\n");
+                // args, check if break beam on or off
+                if (args[1] == "break_on") {
+                    res = KickerBoard::Instance->kick(256/2, false);
+                } else if (args[1] == "break_off") {
+                    res = KickerBoard::Instance->cancel_breakbeam();
+                } else {
+                    printf("break_on or break_off\r\n");
+                }
             }
+            printf("Kick command success?: %s\r\n", res ? "true" : "false");
         } else if (args[0] == "chip") {
             printf("Chip not implemented\r\n");
         } else if (args[0] == "ping") {

@@ -40,12 +40,23 @@ volatile bool charge_commanded_ = false;
 
 volatile bool charge_allowed_ = true;
 
+volatile bool kick_on_breakbeam_ = false;
+volatile uint8_t kick_on_breakbeam_strength_ = 0;
+
 unsigned ball_sense_change_count_ = 0;
 
 unsigned time = 0;
 
 // executes a command coming from SPI
 uint8_t execute_cmd(uint8_t, uint8_t);
+
+void kick(uint8_t strength) {
+    pre_kick_cooldown_ = 5;
+    millis_left_ = (int) ((strength / 255.0) * 12.0);
+    post_kick_cooldown_ = 5;
+
+    TCCR0B |= _BV(CS01);     // start timer /8 prescale
+}
 
 void init();
 
@@ -107,7 +118,13 @@ void main() {
         // counter exceeds maximium, so reset
         if (ball_sense_change_count_ > BALL_SENSE_MAX_SAMPLES) {
             ball_sense_change_count_ = 0;
+
             ball_sensed_ = !ball_sensed_;
+            if (ball_sensed_ && kick_on_breakbeam_) {
+                // pow
+                kick(kick_on_breakbeam_strength_);
+                kick_on_breakbeam_ = false;
+            }
         }
 
         _delay_us(100); // 0.1 ms
@@ -267,14 +284,17 @@ uint8_t execute_cmd(uint8_t cmd, uint8_t arg) {
     uint8_t ret_val = BLANK;
 
     switch (cmd) {
-        case KICK_BREAKBEAM_CMD: // we don't support kick on break beam right now :/
-        case KICK_IMMEDIATE_CMD:
-            // arg contains 0-255 strength, map to 0-12 ms?
-            pre_kick_cooldown_ = 5;
-            millis_left_ = (int) ((arg / 255.0) * 12.0);
-            post_kick_cooldown_ = 5;
+        case KICK_BREAKBEAM_CMD:
+            kick_on_breakbeam_ = true;
+            kick_on_breakbeam_strength_ = arg;
+            break;
 
-            TCCR0B |= _BV(CS01);     // start timer /8 prescale
+        case KICK_BREAKBEAM_CANCEL_CMD:
+            kick_on_breakbeam_ = false;
+            kick_on_breakbeam_strength_ = 0;
+
+        case KICK_IMMEDIATE_CMD:
+            kick(arg);
             break;
 
         case SET_CHARGE_CMD:

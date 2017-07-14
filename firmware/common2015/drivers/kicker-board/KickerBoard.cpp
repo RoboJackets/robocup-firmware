@@ -97,6 +97,12 @@ bool KickerBoard::send_to_kicker(uint8_t cmd, uint8_t arg, uint8_t* ret_val) {
     wait_us(300);
     chipDeselect();
 
+    _is_charging_ = state & CHARGE_FIELD;
+    _ball_sensed_ = state & BALL_SENSE_FIELD;
+
+    //std::printf("%d\r\n", state);
+    //std::printf("sensed? %s\r\n", _ball_sensed_ ? "true" : "false");
+
     if (ret_val != nullptr) {
         *ret_val = ret;
     }
@@ -111,6 +117,10 @@ bool KickerBoard::send_to_kicker(uint8_t cmd, uint8_t arg, uint8_t* ret_val) {
 bool KickerBoard::kick(uint8_t strength, bool immediate) {
     return send_to_kicker(immediate ? KICK_IMMEDIATE_CMD : KICK_BREAKBEAM_CMD,
                           strength, nullptr);
+}
+
+bool KickerBoard::cancel_breakbeam() {
+    return send_to_kicker(KICK_BREAKBEAM_CANCEL_CMD, BLANK, nullptr);
 }
 
 std::pair<bool, uint8_t> KickerBoard::readVoltage() {
