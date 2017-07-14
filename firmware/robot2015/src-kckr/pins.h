@@ -13,6 +13,8 @@
 #define CHARGE_PIN (PB2)
 // #define CHIP_PIN (PORT)
 #define KICK_PIN (PB1)
+#define BALL_SENSE_TX (PB4)
+#define BALL_SENSE_RX (PB3)
 
 /* Tri-State */
 #define KICK_MISO_PIN (PA2)

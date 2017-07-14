@@ -13,6 +13,9 @@
 #define TIMING_CONSTANT 125
 #define VOLTAGE_READ_DELAY_MS 40
 
+// get different ball reading for 20 * 100 us = 2 ms before switching
+#define BALL_SENSE_MAX_SAMPLES 20
+
 // Used to time kick and chip durations
 volatile int pre_kick_cooldown_ = 0;
 volatile int millis_left_ = 0;
@@ -30,10 +33,14 @@ volatile uint8_t cur_command_ = NO_COMMAND;
 // always up-to-date voltage so we don't have to get_voltage() inside interupts
 volatile uint8_t last_voltage_ = 0;
 
+volatile bool ball_sensed_ = 0;
+
 // whether or not MBED has requested charging to be on
 volatile bool charge_commanded_ = false;
 
 volatile bool charge_allowed_ = true;
+
+unsigned ball_sense_change_count_ = 0;
 
 unsigned time = 0;
 
@@ -58,7 +65,7 @@ uint8_t get_voltage() {
 /*
  * Returns true if charging is currently active
  */
-bool is_charging() { return PORTB & _BV(CHARGE_PIN); }
+//bool is_charging() { return PORTB & _BV(CHARGE_PIN); }
 
 void main() {
     init();
@@ -88,7 +95,21 @@ void main() {
             byte_cnt = 0;
         }
 
-        // attempted to do us delays with bad effects of SPI line
+        bool bs = PINB & _BV(BALL_SENSE_RX);
+        if (ball_sensed_) {
+            if (!bs) ball_sense_change_count_++; // wrong reading, inc counter
+            else ball_sense_change_count_ = 0; // correct reading, reset counter
+        } else {
+            if (bs) ball_sense_change_count_++; // wrong reading, inc counter
+            else ball_sense_change_count_ = 0; // correct reading, reset counter
+        }
+
+        // counter exceeds maximium, so reset
+        if (ball_sense_change_count_ > BALL_SENSE_MAX_SAMPLES) {
+            ball_sense_change_count_ = 0;
+            ball_sensed_ = !ball_sensed_;
+        }
+
         _delay_us(100); // 0.1 ms
     }
 }
@@ -103,10 +124,15 @@ void init() {
     WDTCR = 0x00;
     /* Outputs */
     DDRA |= _BV(KICK_MISO_PIN);
-    DDRB |= _BV(KICK_PIN) | _BV(CHARGE_PIN);
+    DDRB |= _BV(KICK_PIN) | _BV(CHARGE_PIN) | _BV(BALL_SENSE_TX);
+
+    PORTB |= _BV(BALL_SENSE_TX);
 
     /* Inputs */
     DDRA &= ~(_BV(N_KICK_CS_PIN) | _BV(V_MONITOR_PIN) | _BV(KICK_MOSI_PIN));
+
+    PORTB &= ~(_BV(BALL_SENSE_RX));
+    DDRB &= ~(_BV(BALL_SENSE_RX));
 
     /* SPI Init */
     SPCR = _BV(SPE) | _BV(SPIE);
@@ -160,7 +186,8 @@ ISR(SPI_STC_vect) {
         // buffer to our return value
         SPDR = execute_cmd(cur_command_, recv_data);
     } else if (byte_cnt == 2) {
-        SPDR |= (is_charging() << CHARGING);
+        //SPDR = (is_charging() << CHARGE_FIELD) | (ball_sensed_ << BALL_SENSE_FIELD);
+        SPDR = ball_sensed_;
     } else if (byte_cnt == 4) {
         // no-op
     }
