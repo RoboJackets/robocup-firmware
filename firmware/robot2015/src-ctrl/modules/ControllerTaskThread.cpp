@@ -112,13 +112,13 @@ void Task_Controller(const void* args) {
 #endif
 
         if (DebugCommunication::configStoreIsValid[DebugCommunication::ConfigCommunication::PID_P]) {
-            pidController.updatePValues(DebugCommunication::configStore[DebugCommunication::ConfigCommunication::PID_P]);
+            pidController.updatePValues(static_cast<float>(DebugCommunication::configStore[DebugCommunication::ConfigCommunication::PID_P]/1000.0f));
         }
         if (DebugCommunication::configStoreIsValid[DebugCommunication::ConfigCommunication::PID_I]) {
-            pidController.updateIValues(DebugCommunication::configStore[DebugCommunication::ConfigCommunication::PID_I]);
+            pidController.updatePValues(static_cast<float>(DebugCommunication::configStore[DebugCommunication::ConfigCommunication::PID_I]/1000.0f));
         }
         if (DebugCommunication::configStoreIsValid[DebugCommunication::ConfigCommunication::PID_D]) {
-            pidController.updateDValues(DebugCommunication::configStore[DebugCommunication::ConfigCommunication::PID_D]);
+            pidController.updatePValues(static_cast<float>(DebugCommunication::configStore[DebugCommunication::ConfigCommunication::PID_D]/1000.0f));
         }
         // note: the 4th value is not an encoder value.  See the large comment
         // below for an explanation.
