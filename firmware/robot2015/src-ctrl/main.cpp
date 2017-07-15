@@ -305,13 +305,15 @@ int main() {
                 } else if (msg->triggerMode == 2) {
                     // kick on break beam
                     KickerBoard::Instance->kick(kickStrength, false);
+                } else {
+                    KickerBoard::Instance->cancel_breakbeam();
                 }
             }
 
             RTP::RobotStatusMessage reply;
             reply.uid = robotShellID;
             reply.battVoltage = battVoltage;
-            //reply.ballSenseStatus = ballSense.hasBall() ? 1 : 0;
+            reply.ballSenseStatus = KickerBoard::Instance->isBallSensed();
 
             // report any motor errors
             reply.motorErrors = 0;

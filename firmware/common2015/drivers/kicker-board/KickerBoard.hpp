@@ -48,6 +48,10 @@ public:
 
     bool cancel_breakbeam();
 
+    bool isCharging();
+
+    bool isBallSensed();
+
     /**
      * @brief Sends the KickerBoard a command to chip for the allotted time in
      *     in milliseconds. This roughly corresponds to chip strength.

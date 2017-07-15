@@ -14,7 +14,7 @@
 #define VOLTAGE_READ_DELAY_MS 40
 
 // get different ball reading for 20 * 100 us = 2 ms before switching
-#define BALL_SENSE_MAX_SAMPLES 20
+#define BALL_SENSE_MAX_SAMPLES 5
 
 // Used to time kick and chip durations
 volatile int pre_kick_cooldown_ = 0;

@@ -123,6 +123,14 @@ bool KickerBoard::cancel_breakbeam() {
     return send_to_kicker(KICK_BREAKBEAM_CANCEL_CMD, BLANK, nullptr);
 }
 
+bool KickerBoard::isCharging() {
+    return _is_charging_;
+}
+
+bool KickerBoard::isBallSensed() {
+    return  _ball_sensed_;
+}
+
 std::pair<bool, uint8_t> KickerBoard::readVoltage() {
     uint8_t volts;
     bool res = send_to_kicker(GET_VOLTAGE_CMD, BLANK, &volts);
