@@ -119,7 +119,7 @@ public:
 
         for (size_t i = 0; i < 6; i++) {
             auto msg = std::next(messages, i);
-            if (msg->uid == m_uid) {
+            if (msg->uid == m_uid || msg->uid == rtp::ANY_ROBOT_UID) {
                 if (msg->messageType == rtp::RobotTxMessage::ConfMessageType) {
                     if (confCallback) {
                         const auto confMessage = msg->message.confMessage;

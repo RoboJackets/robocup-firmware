@@ -358,6 +358,8 @@ int main() {
                 auto debugType = DebugCommunication::debugResponses[i];
                 if (debugType != 0) {
                     reply.debug_data[i] = DebugCommunication::debugStore[debugType];
+                } else {
+                    reply.debug_data[i] =  -32666;
                 }
             }
 
