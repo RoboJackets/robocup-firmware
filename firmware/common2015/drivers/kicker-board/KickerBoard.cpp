@@ -126,7 +126,7 @@ bool KickerBoard::kick(uint8_t strength, bool immediate) {
 
 bool KickerBoard::cancelBreakbeam() {
     bool res = true;
-    printf("armed?: %d\r\n", _is_breakbeam_armed_);
+    //printf("armed?: %d\r\n", _is_breakbeam_armed_);
     if (_is_breakbeam_armed_) {
         res = send_to_kicker(KICK_BREAKBEAM_CANCEL_CMD, BLANK, nullptr);
     }
