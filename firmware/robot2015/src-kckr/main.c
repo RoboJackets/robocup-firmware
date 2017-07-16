@@ -115,11 +115,12 @@ void main() {
             ball_sense_change_count_ = 0;
 
             ball_sensed_ = !ball_sensed_;
-            if (ball_sensed_ && kick_on_breakbeam_) {
-                // pow
-                kick(kick_on_breakbeam_strength_);
-                kick_on_breakbeam_ = false;
-            }
+        }
+
+        if (ball_sensed_ && kick_on_breakbeam_) {
+            // pow
+            kick(kick_on_breakbeam_strength_);
+            kick_on_breakbeam_ = false;
         }
 
         _delay_us(100); // 0.1 ms
