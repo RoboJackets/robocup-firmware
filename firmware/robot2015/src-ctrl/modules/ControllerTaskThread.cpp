@@ -115,11 +115,12 @@ void Task_Controller(const void* args) {
             pidController.updatePValues(static_cast<float>(DebugCommunication::configStore[DebugCommunication::ConfigCommunication::PID_P]/1000.0f));
         }
         if (DebugCommunication::configStoreIsValid[DebugCommunication::ConfigCommunication::PID_I]) {
-            pidController.updatePValues(static_cast<float>(DebugCommunication::configStore[DebugCommunication::ConfigCommunication::PID_I]/1000.0f));
+            pidController.updateIValues(static_cast<float>(DebugCommunication::configStore[DebugCommunication::ConfigCommunication::PID_I]/1000.0f));
         }
         if (DebugCommunication::configStoreIsValid[DebugCommunication::ConfigCommunication::PID_D]) {
-            pidController.updatePValues(static_cast<float>(DebugCommunication::configStore[DebugCommunication::ConfigCommunication::PID_D]/1000.0f));
+            pidController.updateDValues(static_cast<float>(DebugCommunication::configStore[DebugCommunication::ConfigCommunication::PID_D]/1000.0f));
         }
+
         // note: the 4th value is not an encoder value.  See the large comment
         // below for an explanation.
         std::array<int16_t, 5> enc_deltas{};
