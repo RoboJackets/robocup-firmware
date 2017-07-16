@@ -97,11 +97,9 @@ bool KickerBoard::send_to_kicker(uint8_t cmd, uint8_t arg, uint8_t* ret_val) {
     wait_us(300);
     chipDeselect();
 
-    _is_charging_ = state & CHARGE_FIELD;
-    _ball_sensed_ = state & BALL_SENSE_FIELD;
-
-    //std::printf("%d\r\n", state);
-    //std::printf("sensed? %s\r\n", _ball_sensed_ ? "true" : "false");
+    _is_charging_ = state & (1 << CHARGE_FIELD);
+    _ball_sensed_ = state & (1 << BALL_SENSE_FIELD);
+    _is_breakbeam_armed_ = state & (1 << KICK_ON_BREAKBEAM_FIELD);
 
     if (ret_val != nullptr) {
         *ret_val = ret;
@@ -115,12 +113,24 @@ bool KickerBoard::send_to_kicker(uint8_t cmd, uint8_t arg, uint8_t* ret_val) {
 }
 
 bool KickerBoard::kick(uint8_t strength, bool immediate) {
-    return send_to_kicker(immediate ? KICK_IMMEDIATE_CMD : KICK_BREAKBEAM_CMD,
-                          strength, nullptr);
+    bool res = false;
+    if (immediate) {
+        res = send_to_kicker(KICK_IMMEDIATE_CMD, strength, nullptr);
+    } else {
+        if (!_is_breakbeam_armed_) {
+            res = send_to_kicker(KICK_BREAKBEAM_CMD, strength, nullptr);
+        }
+    }
+    return res;
 }
 
-bool KickerBoard::cancel_breakbeam() {
-    return send_to_kicker(KICK_BREAKBEAM_CANCEL_CMD, BLANK, nullptr);
+bool KickerBoard::cancelBreakbeam() {
+    bool res = true;
+    printf("armed?: %d\r\n", _is_breakbeam_armed_);
+    if (_is_breakbeam_armed_) {
+        res = send_to_kicker(KICK_BREAKBEAM_CANCEL_CMD, BLANK, nullptr);
+    }
+    return res;
 }
 
 bool KickerBoard::isCharging() {

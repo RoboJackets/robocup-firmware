@@ -46,7 +46,7 @@ public:
      */
     bool kick(uint8_t strength, bool immediate);
 
-    bool cancel_breakbeam();
+    bool cancelBreakbeam();
 
     bool isCharging();
 
@@ -110,6 +110,7 @@ private:
     // Note, these fields only updated after some command is send to kicker
     bool _is_charging_ = false;
     bool _ball_sensed_ = false;
+    bool _is_breakbeam_armed_ = false;
 
     /**
      * This function enforces the design choice that each cmd must have an arg

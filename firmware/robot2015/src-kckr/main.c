@@ -73,11 +73,6 @@ uint8_t get_voltage() {
     return ADCH;
 }
 
-/*
- * Returns true if charging is currently active
- */
-//bool is_charging() { return PORTB & _BV(CHARGE_PIN); }
-
 void main() {
     init();
 
@@ -203,8 +198,9 @@ ISR(SPI_STC_vect) {
         // buffer to our return value
         SPDR = execute_cmd(cur_command_, recv_data);
     } else if (byte_cnt == 2) {
-        //SPDR = (is_charging() << CHARGE_FIELD) | (ball_sensed_ << BALL_SENSE_FIELD);
-        SPDR = ball_sensed_;
+        SPDR = ((ball_sensed_ ? 1 : 0) << BALL_SENSE_FIELD)
+            | ((charge_commanded_ ? 1 : 0) << CHARGE_FIELD)
+            | ((kick_on_breakbeam_ ? 1 : 0) << KICK_ON_BREAKBEAM_FIELD);
     } else if (byte_cnt == 4) {
         // no-op
     }
@@ -221,6 +217,7 @@ ISR(SPI_STC_vect) {
  */
 ISR(PCINT0_vect) {
     // First we get the current state of each button, active low
+    /*
     int kick_db_pressed = !(PINA & _BV(DB_KICK_PIN));
     int charge_db_pressed = !(PINA & _BV(DB_CHG_PIN));
 
@@ -244,6 +241,7 @@ ISR(PCINT0_vect) {
     // Now our last state becomes the current state of the buttons
     kick_db_held_down_ = kick_db_pressed;
     charge_db_down_ = charge_db_pressed;
+    */
 }
 
 /*
@@ -292,6 +290,7 @@ uint8_t execute_cmd(uint8_t cmd, uint8_t arg) {
         case KICK_BREAKBEAM_CANCEL_CMD:
             kick_on_breakbeam_ = false;
             kick_on_breakbeam_strength_ = 0;
+            break;
 
         case KICK_IMMEDIATE_CMD:
             kick(arg);

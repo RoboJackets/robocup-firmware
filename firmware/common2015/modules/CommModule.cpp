@@ -213,9 +213,13 @@ void CommModule::receive(RTP::Packet packet) {
         }
         osThreadYield();
     } else {
+        // We think this printout was jamming up the threads and preventing
+        // the RX socket from ever opening.
+        /*
         LOG(WARN,
             "Failed to send %u byte packet: No RX socket on port %u exists",
             packet.payload.size(), packet.header.port);
+        */
     }
 }
 

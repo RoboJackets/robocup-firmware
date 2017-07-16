@@ -24,8 +24,9 @@
  * ----------------------------------------------
  */
 
-#define CHARGE_FIELD 0x01
-#define BALL_SENSE_FIELD 0x02
+#define CHARGE_FIELD 0x00
+#define BALL_SENSE_FIELD 0x01
+#define KICK_ON_BREAKBEAM_FIELD 0x02
 
 /* Commands */
 #define KICK_IMMEDIATE_CMD 0x01

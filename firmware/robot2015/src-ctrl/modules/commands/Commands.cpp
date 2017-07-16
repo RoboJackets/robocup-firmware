@@ -702,7 +702,7 @@ int cmd_kicker(cmd_args_t& args) {
                 if (args[1] == "break_on") {
                     res = KickerBoard::Instance->kick(256/2, false);
                 } else if (args[1] == "break_off") {
-                    res = KickerBoard::Instance->cancel_breakbeam();
+                    res = KickerBoard::Instance->cancelBreakbeam();
                 } else {
                     printf("break_on or break_off\r\n");
                 }

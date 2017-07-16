@@ -306,7 +306,7 @@ int main() {
                     // kick on break beam
                     KickerBoard::Instance->kick(kickStrength, false);
                 } else {
-                    KickerBoard::Instance->cancel_breakbeam();
+                    KickerBoard::Instance->cancelBreakbeam();
                 }
             }
 
@@ -332,7 +332,7 @@ int main() {
             }
 
             // kicker status
-            reply.kickStatus = kickerVoltage;
+            reply.kickStatus = kickerVoltage > 230;
 
             vector<uint8_t> replyBuf;
             RTP::serializeToVector(reply, &replyBuf);
@@ -420,7 +420,9 @@ int main() {
         // get the battery voltage
         battVoltage = (batt.read_u16() >> 8);
 
-        // get kicker voltage
+        // get kicker voltage, note, this call serves to update the kicker
+        // state variables (is break beam active, is there ball sense, is breakbeam armed)
+        // so removing it right now would be a bad idea.
         kickerVoltage = KickerBoard::Instance->readVoltage().second;
         LOG(DEBUG, "Kicker voltage: %u", kickerVoltage);
 
