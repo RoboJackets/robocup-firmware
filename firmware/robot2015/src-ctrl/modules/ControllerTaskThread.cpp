@@ -112,13 +112,16 @@ void Task_Controller(const void* args) {
 #endif
 
         if (DebugCommunication::configStoreIsValid[DebugCommunication::ConfigCommunication::PID_P]) {
-            pidController.updatePValues(static_cast<float>(DebugCommunication::configStore[DebugCommunication::ConfigCommunication::PID_P]/1000.0f));
+            pidController.updatePValues(DebugCommunication::configValueToFloat(DebugCommunication::ConfigCommunication::PID_P,
+                                                   DebugCommunication::configStore[DebugCommunication::ConfigCommunication::PID_P]));
         }
         if (DebugCommunication::configStoreIsValid[DebugCommunication::ConfigCommunication::PID_I]) {
-            pidController.updateIValues(static_cast<float>(DebugCommunication::configStore[DebugCommunication::ConfigCommunication::PID_I]/1000.0f));
+            pidController.updateIValues(DebugCommunication::configValueToFloat(DebugCommunication::ConfigCommunication::PID_I,
+                                                                               DebugCommunication::configStore[DebugCommunication::ConfigCommunication::PID_I]));
         }
         if (DebugCommunication::configStoreIsValid[DebugCommunication::ConfigCommunication::PID_D]) {
-            pidController.updateDValues(static_cast<float>(DebugCommunication::configStore[DebugCommunication::ConfigCommunication::PID_D]/1000.0f));
+            pidController.updateDValues(DebugCommunication::configValueToFloat(DebugCommunication::ConfigCommunication::PID_D,
+                                                                               DebugCommunication::configStore[DebugCommunication::ConfigCommunication::PID_D]));
         }
 
         // note: the 4th value is not an encoder value.  See the large comment
