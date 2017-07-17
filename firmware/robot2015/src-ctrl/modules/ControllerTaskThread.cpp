@@ -166,10 +166,10 @@ void Task_Controller(const void* args) {
         std::array<int16_t, 4> driveMotorDutyCycles =
             pidController.run(driveMotorEnc, dt, &errors);
 
-        DebugCommunication::debugStore[DebugCommunication::DebugResponse::PIDError0] = static_cast<int16_t>(clamp<double>(errors[0]*1000, std::numeric_limits<int16_t>::min(), std::numeric_limits<int16_t>::max()));
-        DebugCommunication::debugStore[DebugCommunication::DebugResponse::PIDError1] = static_cast<int16_t>(clamp<double>(errors[1]*1000, std::numeric_limits<int16_t>::min(), std::numeric_limits<int16_t>::max()));
-        DebugCommunication::debugStore[DebugCommunication::DebugResponse::PIDError2] = static_cast<int16_t>(clamp<double>(errors[2]*1000, std::numeric_limits<int16_t>::min(), std::numeric_limits<int16_t>::max()));
-        DebugCommunication::debugStore[DebugCommunication::DebugResponse::PIDError3] = static_cast<int16_t>(clamp<double>(errors[3]*1000, std::numeric_limits<int16_t>::min(), std::numeric_limits<int16_t>::max()));
+        DebugCommunication::debugStore[DebugCommunication::DebugResponse::PIDError0] = DebugCommunication::debugResponseToValue(DebugCommunication::DebugResponse::PIDError0, errors[0]);
+        DebugCommunication::debugStore[DebugCommunication::DebugResponse::PIDError1] = DebugCommunication::debugResponseToValue(DebugCommunication::DebugResponse::PIDError1, errors[1]);
+        DebugCommunication::debugStore[DebugCommunication::DebugResponse::PIDError2] = DebugCommunication::debugResponseToValue(DebugCommunication::DebugResponse::PIDError2, errors[2]);
+        DebugCommunication::debugStore[DebugCommunication::DebugResponse::PIDError3] = DebugCommunication::debugResponseToValue(DebugCommunication::DebugResponse::PIDError3, errors[3]);
 
         // assign the duty cycles, zero out motors that the fpga returns an
         // error for
