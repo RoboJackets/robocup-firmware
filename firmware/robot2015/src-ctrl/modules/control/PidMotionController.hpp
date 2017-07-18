@@ -108,7 +108,7 @@ public:
      * @return Duty cycle values for each of the 4 motors
      */
     std::array<int16_t, 4> run(const std::array<int16_t, 4>& encoderDeltas,
-                               float dt, Eigen::Vector4d *errors=nullptr) {
+                               float dt, Eigen::Vector4d *errors=nullptr, Eigen::Vector4d *wheelVelsOut=nullptr) {
 
 
         // convert encoder ticks to rad/s
@@ -153,6 +153,10 @@ public:
 
         if (errors) {
             *errors = wheelVelErr;
+        }
+
+        if (wheelVelsOut) {
+            *wheelVelsOut = wheelVels;
         }
 
         // std::printf("%f\r\n", wheelVelErr[0]);
