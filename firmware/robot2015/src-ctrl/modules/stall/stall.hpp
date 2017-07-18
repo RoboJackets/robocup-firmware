@@ -58,9 +58,9 @@ public:
 
     // Public for debug purposes only
     int stall_counter = 0;
+    bool stalled = false;
 
 private:
-    bool stalled = false;
 
 
 };

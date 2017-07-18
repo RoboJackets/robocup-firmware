@@ -33,6 +33,7 @@ PidMotionController pidController;
  */
 constexpr uint32_t COMMAND_TIMEOUT_INTERVAL = 250;
 std::unique_ptr<RtosTimerHelper> commandTimeoutTimer = nullptr;
+std::array<WheelStallDetection,4> wheelStallDetection{};
 bool commandTimedOut = true;
 
 void Task_Controller_UpdateTarget(Eigen::Vector3f targetVel) {
@@ -98,8 +99,6 @@ void Task_Controller(const void* args) {
     Thread::signal_wait(SUB_TASK_CONTINUE, osWaitForever);
 
     std::array<int16_t, 5> duty_cycles{};
-
-    std::array<WheelStallDetection,4> wheelStallDetection{};
 
     pidController.setPidValues(0.2, 0.00, 0.0005, 0.96);
 

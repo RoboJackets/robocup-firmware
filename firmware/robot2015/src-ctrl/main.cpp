@@ -27,6 +27,7 @@
 #include <ctime>
 #include <string>
 #include <configuration/ConfigStore.hpp>
+#include <stall/stall.hpp>
 
 // set to 1 to enable CommModule rx/tx stress test
 #define COMM_STRESS_TEST (0)
@@ -75,6 +76,8 @@ void Task_Controller(const void* args);
 void Task_Controller_UpdateTarget(Eigen::Vector3f targetVel);
 void Task_Controller_UpdateDribbler(uint8_t dribbler);
 void InitializeCommModule(SharedSPIDevice<>::SpiPtrT sharedSPI);
+
+extern std::array<WheelStallDetection,4> wheelStallDetection;
 
 /**
  * @brief Sets the hardware configurations for the status LEDs & places
@@ -338,6 +341,12 @@ int main() {
             for (auto i = 0; i < 5; i++) {
                 auto err = global_motors[i].status.hasError;
                 if (err) reply.motorErrors |= (1 << i);
+            }
+
+            for (auto i=0; i<wheelStallDetection.size(); i++) {
+                if (wheelStallDetection[i].stalled) {
+                    reply.motorErrors |= (1 << i);
+                }
             }
 
             // fpga status
