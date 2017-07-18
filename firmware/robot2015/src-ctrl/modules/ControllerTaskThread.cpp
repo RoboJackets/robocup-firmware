@@ -164,8 +164,8 @@ void Task_Controller(const void* args) {
         std::array<int16_t, 4> driveMotorEnc;
         for (auto i = 0; i < 4; i++) driveMotorEnc[i] = enc_deltas[i];
 
-        Eigen::Vector4d errors;
-        Eigen::Vector4d wheelVelsOut;
+        Eigen::Vector4d errors{};
+        Eigen::Vector4d wheelVelsOut{};
         // run PID controller to determine what duty cycles to use to drive the
         // motors.
         std::array<int16_t, 4> driveMotorDutyCycles =

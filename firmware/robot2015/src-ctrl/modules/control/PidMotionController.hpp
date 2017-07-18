@@ -21,7 +21,7 @@ public:
     //std::tuple<float, float> points[num_samples];
     //float points[num_samples];
     //std::vector< std::tuple<float, float> > points;
-    float points[num_samples];
+    // float points[num_samples];
     float duties[4] = {0, 0, 0, 0};
 
     PidMotionController() {
@@ -39,7 +39,7 @@ public:
         int effective_index = cur_sample / dt_per_sample;
         if (effective_index < num_samples) {
             //points[effective_index] = std::make_tuple(dt, wheelVelErr[0]); //std::make_tuple(dt, wheelVelErr);
-            points[effective_index] = wheelVelErr[1];
+            // points[effective_index] = wheelVelErr[1];
             cur_sample++;
         } else {
             save_log();
@@ -60,7 +60,7 @@ public:
             //fprintf(fp, "%f,%f,%f,%f,%f\n", dt, velErrs[0], velErrs[1], velErrs[2], velErrs[3]);
             //fprintf(fp, "%f,%f\n", time_sum, vel);
             //fprintf(fp, "%f\n", points[i]);
-            printf("%f\r\n", points[i]);
+            // printf("%f\r\n", points[i]);
         }
         //fprintf(fp, "%d\n", points.size());
         //fflush(fp);
