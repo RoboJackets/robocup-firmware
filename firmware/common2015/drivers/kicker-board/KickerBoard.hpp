@@ -4,6 +4,7 @@
 #include <string>
 #include "Logger.hpp"
 #include "AVR910.hpp"
+#include "RtosTimerHelper.hpp"
 #include "kicker_commands.h"
 
 /**
@@ -25,6 +26,8 @@ public:
 
     static std::shared_ptr<KickerBoard> Instance;
 
+    std::unique_ptr<RtosTimerHelper> serviceTimer;
+
     /**
      * @brief Reflashes the program on the kicker board MCU with the file
      *     specified in the constructor.
@@ -44,52 +47,31 @@ public:
      * @param Kicker strength, eventually gets mapped to duty cycle
      * @return If the kick command was acknowledged
      */
-    bool kick(uint8_t strength, bool immediate);
+    void kick(uint8_t strength);
 
-    bool cancelBreakbeam();
+    void kickOnBreakbeam(uint8_t strength);
+
+    void cancelBreakbeam();
 
     bool isCharging();
 
     bool isBallSensed();
 
     /**
-     * @brief Sends the KickerBoard a command to chip for the allotted time in
-     *     in milliseconds. This roughly corresponds to chip strength.
-     * @param time Millisecond chip time, can only range from 0 to 255 ms
-     * @return If the chip command was acknowledged
-     */
-    //bool chip(uint8_t time);
-
-    /**
      * @brief Reads the charge voltage back from the KickerBoard.
-     * @param voltage Output voltage 0 (GND) to 255 (Vd)
+     * @param voltage Output voltage 0 (GND) to 255 (Vd),
+     * roughly maps to actual voltage in V
      * @return If the read_voltage command was acknowledged
      */
-    std::pair<bool, uint8_t> readVoltage();
+    uint8_t getVoltage();
 
     /**
      * @brief Sets the charge pin (to high)
      * @return If the charge command was acknowledged
      */
-    bool charge();
+    void setChargeAllowed(bool chargeAllowed);
 
-    /**
-     * @brief Clears the charge pin
-     * @return If the stop_charging command was acknowledged
-     */
-    bool stop_charging();
-
-    /**
-     * @brief Sends a ping command and checks that we get the correct resposne
-     * @return If the ping command was acknowledged
-     */
-    bool is_pingable();
-
-    /**
-     * @brief Gets the current charging state
-     * @return True if charging is enabled, otherwise false
-     */
-    bool is_charge_enabled();
+    bool isHealthy();
 
 protected:
     /**
@@ -108,9 +90,23 @@ private:
     std::string _filename;
 
     // Note, these fields only updated after some command is send to kicker
-    bool _is_charging_ = false;
-    bool _ball_sensed_ = false;
-    bool _is_breakbeam_armed_ = false;
+    bool _is_charging = false;
+    bool _ball_sensed = false;
+    bool _is_breakbeam_armed = false;
+
+    bool _is_healthy = false;
+
+    uint8_t _current_voltage = 0;
+
+    bool _kick_immediate_commanded = false;
+    bool _kick_breakbeam_commanded = false;
+    bool _cancel_breakbeam_commanded = false;
+    uint8_t _kick_strength = 0;
+
+    bool _charging_commanded = false;
+    bool _stop_charging_commanded = false;
+
+    void service();
 
     /**
      * This function enforces the design choice that each cmd must have an arg

@@ -14,4 +14,4 @@
 
 // Period of kicker status updates
 // This will affect how quickly changes in breakbeam make their way up to soccer
-#define RJ_KICKER_UPDATE_PERIOD_MS 50
+#define RJ_KICKER_UPDATE_PERIOD_MS 25

@@ -158,15 +158,7 @@ int main() {
     // faster than checking the full memory to see if we need to reflash.
     KickerBoard::Instance =
         std::make_shared<KickerBoard>(spiBus, RJ_KICKER_nCS, RJ_KICKER_nRESET, "/local/rj-kickr.nib");
-    bool kickerReady = KickerBoard::Instance->flash(false, false);
-
-    uint8_t kickerVoltage = 0;
-    // get kicker voltage, note, this call serves to update the kicker
-    // state variables (is break beam active, is there ball sense, is breakbeam armed)
-    // so removing it right now would be a bad idea.
-    RtosTimerHelper kicker_status_update([&]() { kickerVoltage = KickerBoard::Instance->readVoltage().second;}, osTimerPeriodic);
-
-    kicker_status_update.start(RJ_KICKER_UPDATE_PERIOD_MS);
+    KickerBoard::Instance->flash(false, false);
 
     init_leds_off.start(RJ_STARTUP_LED_TIMEOUT_MS);
 
@@ -281,15 +273,17 @@ int main() {
                 Task_Controller_UpdateDribbler(msg->dribbler);
 
                 // kick!
-                uint8_t kickStrength = msg->kickStrength;
-                if (msg->triggerMode == 1) {
-                    // kick immediate
-                    KickerBoard::Instance->kick(kickStrength, true);
-                } else if (msg->triggerMode == 2) {
-                    // kick on break beam
-                    KickerBoard::Instance->kick(kickStrength, false);
-                } else {
-                    KickerBoard::Instance->cancelBreakbeam();
+                if (msg->shootMode == 0) {
+                    uint8_t kickStrength = msg->kickStrength;
+                    if (msg->triggerMode == 1) {
+                        // kick immediate
+                        KickerBoard::Instance->kick(kickStrength);
+                    } else if (msg->triggerMode == 2) {
+                        // kick on break beam
+                        KickerBoard::Instance->kickOnBreakbeam(kickStrength);
+                    } else {
+                        KickerBoard::Instance->cancelBreakbeam();
+                    }
                 }
             }
 
@@ -315,7 +309,8 @@ int main() {
             }
 
             // kicker status
-            reply.kickStatus = kickerVoltage > 230;
+            reply.kickStatus = KickerBoard::Instance->isHealthy()
+                               && KickerBoard::Instance->getVoltage() > 230;
 
             vector<uint8_t> replyBuf;
             RTP::serializeToVector(reply, &replyBuf);
@@ -323,7 +318,7 @@ int main() {
             return replyBuf;
         };
 
-    KickerBoard::Instance->charge();
+    KickerBoard::Instance->setChargeAllowed(true);
     // LOG(INIT, "Started charging kicker board.");
 
     // Set the watdog timer's initial config
