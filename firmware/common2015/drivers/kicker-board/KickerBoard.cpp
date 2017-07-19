@@ -8,6 +8,7 @@ std::shared_ptr<KickerBoard> KickerBoard::Instance;
 KickerBoard::KickerBoard(shared_ptr<SharedSPI> sharedSPI, PinName nCs,
                          PinName nReset, const string& progFilename)
     : AVR910(sharedSPI, nCs, nReset), _filename(progFilename) {
+    this->setSPIFrequency(32000);
     serviceTimer = std::make_unique<RtosTimerHelper>([&]() { this->service(); }, osTimerPeriodic);
 }
 
@@ -138,18 +139,19 @@ void KickerBoard::service() {
 
 bool KickerBoard::send_to_kicker(uint8_t cmd, uint8_t arg, uint8_t* ret_val) {
     LOG(DEBUG, "Sending: CMD:%02X, ARG:%02X", cmd, arg);
-    wait_us(300);
+    wait_us(100);
     chipSelect();
-    wait_us(300);
+    wait_us(100);
     m_spi->write(cmd);
-    wait_us(300);
+    wait_us(100);
     uint8_t command_resp = m_spi->write(arg);
-    wait_us(300);
+    wait_us(500);
     uint8_t ret = m_spi->write(BLANK);
-    wait_us(300);
+    wait_us(500);
     uint8_t state = m_spi->write(BLANK);
-    wait_us(300);
+    wait_us(100);
     chipDeselect();
+    wait_us(100);
 
     _is_charging = state & (1 << CHARGE_FIELD);
     _ball_sensed = state & (1 << BALL_SENSE_FIELD);

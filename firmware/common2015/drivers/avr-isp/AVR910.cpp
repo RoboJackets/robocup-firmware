@@ -39,7 +39,7 @@ using namespace std;
 
 AVR910::AVR910(shared_ptr<SharedSPI> spi, PinName nCs, PinName nReset)
     : SharedSPIDevice(spi, nCs, true), nReset_(nReset) {
-    setSPIFrequency(32000);
+    setSPIFrequency(100000);
 
     // Enter serial programming mode by pulling reset line low.
     nReset_ = 0;
