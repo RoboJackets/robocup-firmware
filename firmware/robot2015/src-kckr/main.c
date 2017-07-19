@@ -58,6 +58,10 @@ void kick(uint8_t strength) {
     TCCR0B |= _BV(CS01);     // start timer /8 prescale
 }
 
+bool is_kicking() {
+    return pre_kick_cooldown_ || millis_left_ || post_kick_cooldown_;
+}
+
 void init();
 
 /* Voltage Function */
@@ -201,7 +205,8 @@ ISR(SPI_STC_vect) {
     } else if (byte_cnt == 2) {
         SPDR = ((ball_sensed_ ? 1 : 0) << BALL_SENSE_FIELD)
             | ((charge_commanded_ ? 1 : 0) << CHARGE_FIELD)
-            | ((kick_on_breakbeam_ ? 1 : 0) << KICK_ON_BREAKBEAM_FIELD);
+            | ((kick_on_breakbeam_ ? 1 : 0) << KICK_ON_BREAKBEAM_FIELD)
+            | ((is_kicking() ? 1 : 0) << KICKING_FIELD);
     } else if (byte_cnt == 4) {
         // no-op
     }

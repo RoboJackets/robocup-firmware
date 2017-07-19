@@ -9,7 +9,6 @@ KickerBoard::KickerBoard(shared_ptr<SharedSPI> sharedSPI, PinName nCs,
                          PinName nReset, const string& progFilename)
     : AVR910(sharedSPI, nCs, nReset), _filename(progFilename) {
     serviceTimer = std::make_unique<RtosTimerHelper>([&]() { this->service(); }, osTimerPeriodic);
-    serviceTimer->start(25); // 25 Hz kicker update speed
 }
 
 bool KickerBoard::verify_param(const char* name, char expected,
@@ -85,12 +84,16 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
     return true;
 }
 
+void KickerBoard::start() {
+    serviceTimer->start(25); // 25 Hz kicker update speed
+}
+
 void KickerBoard::service() {
     // function that actually executes commands given to kicker
 
     if (_kick_immediate_commanded) {
         _kick_immediate_commanded = false;
-        _is_healthy &= send_to_kicker(KICK_IMMEDIATE_CMD, _kick_strength, nullptr);
+        send_to_kicker(KICK_IMMEDIATE_CMD, _kick_strength, nullptr);
         _kick_strength = 0;
     }
 
@@ -99,7 +102,7 @@ void KickerBoard::service() {
 
         // check if it is already armed
         if (!_is_breakbeam_armed) {
-            _is_healthy &= send_to_kicker(KICK_BREAKBEAM_CMD, _kick_strength, nullptr);
+            send_to_kicker(KICK_BREAKBEAM_CMD, _kick_strength, nullptr);
         }
 
         _kick_strength = 0;
@@ -109,7 +112,7 @@ void KickerBoard::service() {
         _cancel_breakbeam_commanded = false;
 
         if (_is_breakbeam_armed) {
-            _is_healthy &= send_to_kicker(KICK_BREAKBEAM_CANCEL_CMD, BLANK, nullptr);
+            send_to_kicker(KICK_BREAKBEAM_CANCEL_CMD, BLANK, nullptr);
         }
 
     }
@@ -118,7 +121,7 @@ void KickerBoard::service() {
         _charging_commanded = false;
 
         if (!_is_charging) {
-            _is_healthy &= send_to_kicker(SET_CHARGE_CMD, ON_ARG, nullptr);
+            send_to_kicker(SET_CHARGE_CMD, ON_ARG, nullptr);
         }
     }
 
@@ -126,11 +129,11 @@ void KickerBoard::service() {
         _stop_charging_commanded = false;
 
         if (_is_charging) {
-            _is_healthy &= send_to_kicker(SET_CHARGE_CMD, OFF_ARG, nullptr);
+            send_to_kicker(SET_CHARGE_CMD, OFF_ARG, nullptr);
         }
     }
 
-    _is_healthy &= send_to_kicker(GET_VOLTAGE_CMD, BLANK, &_current_voltage);
+    _is_healthy = send_to_kicker(GET_VOLTAGE_CMD, BLANK, &_current_voltage);
 }
 
 bool KickerBoard::send_to_kicker(uint8_t cmd, uint8_t arg, uint8_t* ret_val) {
@@ -151,6 +154,7 @@ bool KickerBoard::send_to_kicker(uint8_t cmd, uint8_t arg, uint8_t* ret_val) {
     _is_charging = state & (1 << CHARGE_FIELD);
     _ball_sensed = state & (1 << BALL_SENSE_FIELD);
     _is_breakbeam_armed = state & (1 << KICK_ON_BREAKBEAM_FIELD);
+    _is_kicking = state & (1 << KICKING_FIELD);
 
     if (ret_val != nullptr) {
         *ret_val = ret;
@@ -164,13 +168,17 @@ bool KickerBoard::send_to_kicker(uint8_t cmd, uint8_t arg, uint8_t* ret_val) {
 }
 
 void KickerBoard::kick(uint8_t strength) {
-    _kick_immediate_commanded = true;
-    _kick_strength = strength;
+    if (!_is_kicking) {
+        _kick_immediate_commanded = true;
+        _kick_strength = strength;
+    }
 }
 
 void KickerBoard::kickOnBreakbeam(uint8_t strength) {
-    _kick_breakbeam_commanded = true;
-    _kick_strength = strength;
+    if (!_is_kicking) {
+        _kick_breakbeam_commanded = true;
+        _kick_strength = strength;
+    }
 }
 
 void KickerBoard::cancelBreakbeam() {

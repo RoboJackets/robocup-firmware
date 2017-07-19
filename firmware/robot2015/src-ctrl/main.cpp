@@ -165,6 +165,8 @@ int main() {
         std::make_shared<KickerBoard>(spiBus, RJ_KICKER_nCS, RJ_KICKER_nRESET, "/local/rj-kickr.nib");
     KickerBoard::Instance->flash(false, false);
 
+    KickerBoard::Instance->start();
+
     init_leds_off.start(RJ_STARTUP_LED_TIMEOUT_MS);
 
     // Initialize and configure the fpga with the given bitfile
@@ -435,7 +437,7 @@ int main() {
         // get the battery voltage
         battVoltage = (batt.read_u16() >> 8);
 
-        LOG(DEBUG, "Kicker voltage: %u", kickerVoltage);
+        LOG(DEBUG, "Kicker voltage: %u", KickerBoard::Instance->getVoltage());
 
         // update shell id
         robotShellID = rotarySelector.read();

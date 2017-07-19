@@ -40,6 +40,9 @@ public:
      */
     bool flash(bool onlyIfDifferent = true, bool verbose = false);
 
+
+    void start();
+
     /**
      * @brief Sends the KickerBoard a command to kick for the allotted time in
      *     in milliseconds. This roughly corresponds to kick strength.
@@ -93,8 +96,9 @@ private:
     bool _is_charging = false;
     bool _ball_sensed = false;
     bool _is_breakbeam_armed = false;
+    bool _is_kicking = false;
 
-    bool _is_healthy = false;
+    bool _is_healthy = true;
 
     uint8_t _current_voltage = 0;
 

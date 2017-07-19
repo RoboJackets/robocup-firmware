@@ -694,53 +694,37 @@ int cmd_kicker(cmd_args_t& args) {
     } else {
         bool res = false;
         if (args[0] == "kick") {
-            if (args.size() < 2) {
-                // no args, kick immediately
-                res = KickerBoard::Instance->kick(256/2, true);
+            // no args, kick immediately
+            KickerBoard::Instance->kick(256/2);
+        } else if (args[0] == "break") {
+            if (args.size() != 2) {
+                printf("Must specify <on|off>.\r\n");
             } else {
-                // args, check if break beam on or off
-                if (args[1] == "break_on") {
-                    res = KickerBoard::Instance->kick(256/2, false);
-                } else if (args[1] == "break_off") {
-                    res = KickerBoard::Instance->cancelBreakbeam();
+                if (args[1] == "on") {
+                    KickerBoard::Instance->kickOnBreakbeam(256/2);
+                    printf("Kick on break beam on\r\n");
+                } else if (args[1] == "off") {
+                    KickerBoard::Instance->cancelBreakbeam();
+                    printf("Kick on break beam off\r\n");
                 } else {
-                    printf("break_on or break_off\r\n");
+                    printf("<on|off>");
                 }
             }
-            printf("Kick command success?: %s\r\n", res ? "true" : "false");
-        } else if (args[0] == "chip") {
-            printf("Chip not implemented\r\n");
-        } else if (args[0] == "ping") {
-            if (KickerBoard::Instance->is_pingable()) {
-                printf("Kicker ping success.\r\n");
-            } else {
-                printf("Kicker ping failure.\r\n");
-            }
+        } else if (args[0] == "break_off") {
+            KickerBoard::Instance->cancelBreakbeam();
+        } else if (args[0] == "healthy?") {
+            printf("Healthy? : %s\r\n", KickerBoard::Instance->isHealthy());
         } else if (args[0] == "volts") {
-            uint8_t volts;
-            bool isValid;
-            std::tie(isValid, volts) = KickerBoard::Instance->readVoltage();
-            if (isValid) {
-                printf("Kicker volts success. Volts: %d\r\n", volts);
-            } else {
-                printf("Kicker volts failure.\r\n");
-            }
+            uint8_t volts = KickerBoard::Instance->getVoltage();
+            printf("Volts: %d\r\n", volts);
         } else if (args[0] == "charge") {
             if (args.size() != 2) {
                 printf("Must specify <on|off>.\r\n");
             } else {
                 if (args[1] == "on") {
-                    if (KickerBoard::Instance->charge()) {
-                        printf("Kicker charge on success.\r\n");
-                    } else {
-                        printf("Kicker charge on failure.\r\n");
-                    }
+                    KickerBoard::Instance->setChargeAllowed(true);
                 } else if (args[1] == "off") {
-                    if (KickerBoard::Instance->stop_charging()) {
-                        printf("Kicker charge off success.\r\n");
-                    } else {
-                        printf("Kicker charge off failure.\r\n");
-                    }
+                    KickerBoard::Instance->setChargeAllowed(false);
                 } else {
                     show_invalid_args(args);
                 }
