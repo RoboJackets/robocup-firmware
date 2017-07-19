@@ -107,7 +107,7 @@ Decawave::Decawave(SpiPtrT sharedSPI, PinName nCs, PinName intPin)
 }
 
 // Virtual functions from CommLink
-int32_t Decawave::sendPacket(const RTP::Packet* pkt) {
+int32_t Decawave::sendPacket(const rtp::Packet* pkt) {
     // Return failutre if not initialized
     if (!m_isInit) return COMM_FAILURE;
 
@@ -127,11 +127,11 @@ int32_t Decawave::sendPacket(const RTP::Packet* pkt) {
     ASSERT(txBuffer.size() == 9);
 
     const auto headerFirstPtr = reinterpret_cast<const uint8_t*>(&pkt->header);
-    const auto headerLastPtr = headerFirstPtr + RTP::HeaderSize;
+    const auto headerLastPtr = headerFirstPtr + rtp::HeaderSize;
 
-    // insert the RTP header
+    // insert the rtp header
     txBuffer.insert(txBuffer.end(), headerFirstPtr, headerLastPtr);
-    // insert the RTP payload
+    // insert the rtp payload
     txBuffer.insert(txBuffer.end(), pkt->payload.begin(), pkt->payload.end());
     // insert padding for CRC
     txBuffer.insert(txBuffer.end(), {0x00, 0x00});

@@ -4,6 +4,7 @@
 #include "Assert.hpp"
 #include "BallSensor.hpp"
 #include "Commands.hpp"
+#include "ConfigStore.hpp"
 #include "Decawave.hpp"
 #include "FPGA.hpp"
 #include "HelperFuncs.hpp"
@@ -25,6 +26,8 @@
 #include <array>
 #include <ctime>
 #include <string>
+#include <configuration/ConfigStore.hpp>
+#include <stall/stall.hpp>
 
 // set to 1 to enable CommModule rx/tx stress test
 #define COMM_STRESS_TEST (0)
@@ -42,12 +45,12 @@ void Task_Simulate_RX_Packet(const void* args) {
     while(true) {
         Thread::wait(1);
 
-        RTP::Packet pkt;
-        pkt.header.port = RTP::PortType::CONTROL;
-        pkt.header.type = RTP::MessageType::CONTROL;
+        rtp::Packet pkt;
+        pkt.header.port = rtp::PortType::CONTROL;
+        pkt.header.type = rtp::MessageType::CONTROL;
         pkt.header.address = 1;
 
-        RTP::ControlMessage msg;
+        rtp::ControlMessage msg;
         msg.uid = 1;
         msg.bodyX = 0;
         msg.bodyY = 0;
@@ -73,6 +76,8 @@ void Task_Controller(const void* args);
 void Task_Controller_UpdateTarget(Eigen::Vector3f targetVel);
 void Task_Controller_UpdateDribbler(uint8_t dribbler);
 void InitializeCommModule(SharedSPIDevice<>::SpiPtrT sharedSPI);
+
+extern std::array<WheelStallDetection,4> wheelStallDetection;
 
 /**
  * @brief Sets the hardware configurations for the status LEDs & places
@@ -253,8 +258,25 @@ int main() {
     radioProtocol.setUID(robotShellID);
     radioProtocol.start();
 
+    radioProtocol.debugCallback =
+        [&](const rtp::DebugMessage &msg) {
+            DebugCommunication::debugResponses = msg.keys;
+        };
+
+    radioProtocol.confCallback =
+        [&](const rtp::ConfMessage &msg) {
+            for (int i=0; i<rtp::ConfMessage::length; i++) {
+                auto configCommunication = msg.keys[i];
+                if (configCommunication != DebugCommunication::ConfigCommunication::CONFIG_COMMUNICATION_NONE) {
+                    const auto index = static_cast<int> (configCommunication);
+                    DebugCommunication::configStore[index] = msg.values[i];
+                    DebugCommunication::configStoreIsValid[index] = true;
+                }
+            }
+        };
+
     radioProtocol.rxCallback =
-        [&](const RTP::ControlMessage* msg, const bool addressed) {
+        [&](const rtp::ControlMessage* msg, const bool addressed) {
             // reset timeout
             radioTimeoutTimer.start(RadioTimeout);
 
@@ -262,11 +284,11 @@ int main() {
                 // update target velocity from packet
                 Task_Controller_UpdateTarget({
                     static_cast<float>(msg->bodyX) /
-                        RTP::ControlMessage::VELOCITY_SCALE_FACTOR,
+                        rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
                     static_cast<float>(msg->bodyY) /
-                        RTP::ControlMessage::VELOCITY_SCALE_FACTOR,
+                        rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
                     static_cast<float>(msg->bodyW) /
-                        RTP::ControlMessage::VELOCITY_SCALE_FACTOR,
+                        rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
                 });
 
                 // dribbler
@@ -287,7 +309,7 @@ int main() {
                 }
             }
 
-            RTP::RobotStatusMessage reply;
+            rtp::RobotStatusMessage reply;
             reply.uid = robotShellID;
             reply.battVoltage = battVoltage;
             reply.ballSenseStatus = KickerBoard::Instance->isBallSensed();
@@ -297,6 +319,12 @@ int main() {
             for (auto i = 0; i < 5; i++) {
                 auto err = global_motors[i].status.hasError;
                 if (err) reply.motorErrors |= (1 << i);
+            }
+
+            for (auto i=0; i<wheelStallDetection.size(); i++) {
+                if (wheelStallDetection[i].stalled) {
+                    reply.motorErrors |= (1 << i);
+                }
             }
 
             // fpga status
@@ -312,8 +340,17 @@ int main() {
             reply.kickStatus = KickerBoard::Instance->isHealthy()
                                && KickerBoard::Instance->getVoltage() > 230;
 
+            for (int i=0; i<rtp::RobotStatusMessage::debug_data_length; i++) {
+                auto debugType = DebugCommunication::debugResponses[i];
+                if (debugType != 0) {
+                    reply.debug_data[i] = DebugCommunication::debugStore[debugType];
+                } else {
+                    reply.debug_data[i] =  -32666;
+                }
+            }
+
             vector<uint8_t> replyBuf;
-            RTP::serializeToVector(reply, &replyBuf);
+            rtp::serializeToVector(reply, &replyBuf);
 
             return replyBuf;
         };
@@ -351,7 +388,7 @@ int main() {
         errorBitmask |= (1 << RJ_ERR_LED_DRIB);
     }
 
-    cmd_heapfill();
+    //cmd_heapfill();
 
 #if COMM_STRESS_TEST
     Thread sim_task(Task_Simulate_RX_Packet, mainID, osPriorityAboveNormal);

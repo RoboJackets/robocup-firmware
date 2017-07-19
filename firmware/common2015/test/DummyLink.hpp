@@ -6,7 +6,7 @@ class DummyLink : public CommLink {
 public:
     DummyLink(SpiPtrT sharedSPI, PinName nCs, PinName intPin);
 
-    virtual int32_t sendPacket(const RTP::Packet* pkt) override { return 0; }
+    virtual int32_t sendPacket(const rtp::Packet* pkt) override { return 0; }
 
     virtual BufferT getData() override { return BufferT{0}; }
 

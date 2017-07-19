@@ -3,7 +3,7 @@
 #include "CommModule.hpp"
 #include "MacroHelpers.hpp"
 #include "MailHelpers.hpp"
-#include "RTP.hpp"
+#include "firmware-common/common2015/utils/rtp.hpp"
 #include "Rtos.hpp"
 #include "SharedSPI.hpp"
 
@@ -49,7 +49,7 @@ public:
     virtual bool isConnected() const = 0;
 
     /// Send & Receive through the rtp structure
-    virtual int32_t sendPacket(const RTP::Packet* pkt) = 0;
+    virtual int32_t sendPacket(const rtp::Packet* pkt) = 0;
 
     /// Set the MAC layer filtering address for the link
     virtual void setAddress(int addr) { m_address = addr; }
@@ -58,7 +58,7 @@ protected:
     static constexpr size_t SIGNAL_START = (1 << 1);
     static constexpr size_t SIGNAL_RX = (1 << 1);
 
-    int m_address = RTP::INVALID_ROBOT_UID;
+    int m_address = rtp::INVALID_ROBOT_UID;
     InterruptIn m_intIn;
 
     /**

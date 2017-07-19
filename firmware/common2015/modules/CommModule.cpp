@@ -8,11 +8,11 @@
 
 #include <ctime>
 
-osPoolDef(CommModuleTxPool, 4, RTP::Packet);
-osPoolDef(CommModuleRxPool, 4, RTP::Packet);
+osPoolDef(CommModuleTxPool, 4, rtp::Packet);
+osPoolDef(CommModuleRxPool, 4, rtp::Packet);
 
-osMessageQDef(CommModuleTxQueue, 3, RTP::Packet);
-osMessageQDef(CommModuleRxQueue, 3, RTP::Packet);
+osMessageQDef(CommModuleTxQueue, 3, rtp::Packet);
+osMessageQDef(CommModuleRxQueue, 3, rtp::Packet);
 
 std::shared_ptr<CommModule> CommModule::Instance = nullptr;
 
@@ -46,7 +46,7 @@ void CommModule::txThread() {
         auto event = osMessageGet(m_txMessageQueue, osWaitForever);
 
         if (event.status == osEventMessage) {
-            auto p = reinterpret_cast<RTP::Packet*>(event.value.p);
+            auto p = reinterpret_cast<rtp::Packet*>(event.value.p);
 
 // Bump up the thread's priority
 #ifndef NDEBUG
@@ -118,7 +118,7 @@ void CommModule::rxThread() {
         auto event = osMessageGet(m_rxMessageQueue, osWaitForever);
 
         if (event.status == osEventMessage) {
-            auto p = reinterpret_cast<RTP::Packet*>(event.value.p);
+            auto p = reinterpret_cast<rtp::Packet*>(event.value.p);
 
 // Bump up the thread's priority
 #ifndef NDEBUG
@@ -161,7 +161,7 @@ void CommModule::rxThread() {
             osThreadSetPriority(m_rxThreadId, threadPriority);
 #endif
         } else {
-            auto p = reinterpret_cast<RTP::Packet*>(event.value.p);
+            auto p = reinterpret_cast<rtp::Packet*>(event.value.p);
             std::printf("osMessageGet for RX returned unexpected status: %d\r\n", event.status);
             fflush(stdout);
             ASSERT(false);
@@ -173,7 +173,7 @@ void CommModule::rxThread() {
     ASSERT(!"Execution is at an unreachable line!");
 }
 
-void CommModule::send(RTP::Packet packet) {
+void CommModule::send(rtp::Packet packet) {
     const auto portNum = packet.header.port;
     const auto portExists = m_ports.find(portNum) != m_ports.end();
     const auto hasCallback = m_ports[portNum].hasTxCallback();
@@ -184,7 +184,7 @@ void CommModule::send(RTP::Packet packet) {
         auto block = osPoolAlloc(m_txPoolId);
         // Drop packet if unable to allocate
         if (block) {
-            auto ptr = new (block) RTP::Packet(std::move(packet));
+            auto ptr = new (block) rtp::Packet(std::move(packet));
             // Signal worker thread
             osMessagePut(m_txMessageQueue, reinterpret_cast<uint32_t>(ptr), osWaitForever);
         }
@@ -196,7 +196,7 @@ void CommModule::send(RTP::Packet packet) {
     }
 }
 
-void CommModule::receive(RTP::Packet packet) {
+void CommModule::receive(rtp::Packet packet) {
     const auto portNum = packet.header.port;
     const auto portExists = m_ports.find(portNum) != m_ports.end();
     const auto hasCallback = m_ports[portNum].hasRxCallback();
@@ -207,7 +207,7 @@ void CommModule::receive(RTP::Packet packet) {
         auto block = osPoolAlloc(m_rxPoolId);
         // Drop packet if unable to allocate
         if (block) {
-            auto ptr = new (block) RTP::Packet(std::move(packet));
+            auto ptr = new (block) rtp::Packet(std::move(packet));
             // Signal worker thread
             osMessagePut(m_rxMessageQueue, reinterpret_cast<uint32_t>(ptr), osWaitForever);
         }

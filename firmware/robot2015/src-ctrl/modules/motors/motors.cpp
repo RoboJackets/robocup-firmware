@@ -39,6 +39,7 @@ uint8_t motors_refresh() {
     for (size_t i = 0; i < global_motors.size(); ++i)
         global_motors[i].status.hasError =
             (status_byte & (1 << i)) ? true : false;
+
     return status_byte;
 }
 

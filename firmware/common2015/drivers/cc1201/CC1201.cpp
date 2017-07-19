@@ -46,7 +46,7 @@ CC1201::CC1201(SpiPtrT sharedSPI, PinName nCs, PinName intPin,
     }
 }
 
-int32_t CC1201::sendPacket(const RTP::Packet* pkt) {
+int32_t CC1201::sendPacket(const rtp::Packet* pkt) {
     // Return if there's no functional radio transceiver - the system will
     // lockup otherwise
     if (!_isInit) return COMM_FAILURE;

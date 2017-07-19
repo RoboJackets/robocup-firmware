@@ -1,5 +1,10 @@
+#include <cmath>
+
+#include <configuration/ConfigStore.hpp>
+#include <Geometry2d/Util.hpp>
 #include "Assert.hpp"
 #include "Console.hpp"
+#include "ConfigStore.hpp"
 #include "FPGA.hpp"
 #include "Logger.hpp"
 #include "PidMotionController.hpp"
@@ -11,7 +16,7 @@
 #include "io-expander.hpp"
 #include "motors.hpp"
 #include "mpu-6050.hpp"
-
+#include "stall/stall.hpp"
 using namespace std;
 
 // Keep this pretty high for now. Ideally, drop it down to ~3 for production
@@ -28,6 +33,7 @@ PidMotionController pidController;
  */
 constexpr uint32_t COMMAND_TIMEOUT_INTERVAL = 250;
 std::unique_ptr<RtosTimerHelper> commandTimeoutTimer = nullptr;
+std::array<WheelStallDetection,4> wheelStallDetection{};
 bool commandTimedOut = true;
 
 void Task_Controller_UpdateTarget(Eigen::Vector3f targetVel) {
@@ -94,9 +100,7 @@ void Task_Controller(const void* args) {
 
     std::array<int16_t, 5> duty_cycles{};
 
-    // pidController.setPidValues(1.5, 0.05, 0);
-    //pidController.setPidValues(0.8, 0.05, 0);
-    pidController.setPidValues(1.35, 0.02, 0.08); // Tuned 4/18/17
+    pidController.setPidValues(4.5, 0.00, 0, 0, 50);
 
     // initialize timeout timer
     commandTimeoutTimer = make_unique<RtosTimerHelper>(
@@ -107,6 +111,19 @@ void Task_Controller(const void* args) {
         imu.getGyro(gyroVals);
         imu.getAccelero(accelVals);
 #endif
+
+        if (DebugCommunication::configStoreIsValid[DebugCommunication::ConfigCommunication::PID_P]) {
+            pidController.updatePValues(DebugCommunication::configValueToFloat(DebugCommunication::ConfigCommunication::PID_P,
+                                                   DebugCommunication::configStore[DebugCommunication::ConfigCommunication::PID_P]));
+        }
+        if (DebugCommunication::configStoreIsValid[DebugCommunication::ConfigCommunication::PID_I]) {
+            pidController.updateIValues(DebugCommunication::configValueToFloat(DebugCommunication::ConfigCommunication::PID_I,
+                                                                               DebugCommunication::configStore[DebugCommunication::ConfigCommunication::PID_I]));
+        }
+        if (DebugCommunication::configStoreIsValid[DebugCommunication::ConfigCommunication::PID_D]) {
+            pidController.updateDValues(DebugCommunication::configValueToFloat(DebugCommunication::ConfigCommunication::PID_D,
+                                                                               DebugCommunication::configStore[DebugCommunication::ConfigCommunication::PID_D]));
+        }
 
         // note: the 4th value is not an encoder value.  See the large comment
         // below for an explanation.
@@ -141,24 +158,48 @@ void Task_Controller(const void* args) {
          *     time_precision = 6.94us
          *
          */
-        const float dt = enc_deltas.back() * (1 / 18.432e6) * 2 * 64;
+        const float dt = enc_deltas.back() * (1 / 18.432e6) * 2 * 128;
 
         // take first 4 encoder deltas
         std::array<int16_t, 4> driveMotorEnc;
         for (auto i = 0; i < 4; i++) driveMotorEnc[i] = enc_deltas[i];
 
+        Eigen::Vector4d errors{};
+        Eigen::Vector4d wheelVelsOut{};
         // run PID controller to determine what duty cycles to use to drive the
         // motors.
         std::array<int16_t, 4> driveMotorDutyCycles =
-            pidController.run(driveMotorEnc, dt);
+            pidController.run(driveMotorEnc, dt, &errors, &wheelVelsOut);
+
+        DebugCommunication::debugStore[DebugCommunication::DebugResponse::PIDError0] = DebugCommunication::debugResponseToValue(DebugCommunication::DebugResponse::PIDError0, errors[0]);
+        DebugCommunication::debugStore[DebugCommunication::DebugResponse::PIDError1] = DebugCommunication::debugResponseToValue(DebugCommunication::DebugResponse::PIDError1, errors[1]);
+        DebugCommunication::debugStore[DebugCommunication::DebugResponse::PIDError2] = DebugCommunication::debugResponseToValue(DebugCommunication::DebugResponse::PIDError2, errors[2]);
+        DebugCommunication::debugStore[DebugCommunication::DebugResponse::PIDError3] = DebugCommunication::debugResponseToValue(DebugCommunication::DebugResponse::PIDError3, errors[3]);
+
+        DebugCommunication::debugStore[DebugCommunication::DebugResponse::MotorDuty0] = DebugCommunication::debugResponseToValue(DebugCommunication::DebugResponse::MotorDuty0, duty_cycles[0]);
+        DebugCommunication::debugStore[DebugCommunication::DebugResponse::MotorDuty1] = DebugCommunication::debugResponseToValue(DebugCommunication::DebugResponse::MotorDuty1, duty_cycles[1]);
+        DebugCommunication::debugStore[DebugCommunication::DebugResponse::MotorDuty2] = DebugCommunication::debugResponseToValue(DebugCommunication::DebugResponse::MotorDuty2, duty_cycles[2]);
+        DebugCommunication::debugStore[DebugCommunication::DebugResponse::MotorDuty3] = DebugCommunication::debugResponseToValue(DebugCommunication::DebugResponse::MotorDuty3, duty_cycles[3]);
+
+        DebugCommunication::debugStore[DebugCommunication::DebugResponse::WheelVel0] = DebugCommunication::debugResponseToValue(DebugCommunication::DebugResponse::WheelVel0, wheelVelsOut[0]);
+        DebugCommunication::debugStore[DebugCommunication::DebugResponse::WheelVel1] = DebugCommunication::debugResponseToValue(DebugCommunication::DebugResponse::WheelVel1, wheelVelsOut[1]);
+        DebugCommunication::debugStore[DebugCommunication::DebugResponse::WheelVel2] = DebugCommunication::debugResponseToValue(DebugCommunication::DebugResponse::WheelVel2, wheelVelsOut[2]);
+        DebugCommunication::debugStore[DebugCommunication::DebugResponse::WheelVel3] = DebugCommunication::debugResponseToValue(DebugCommunication::DebugResponse::WheelVel3, wheelVelsOut[3]);
+
+        DebugCommunication::debugStore[DebugCommunication::DebugResponse::StallCounter0] = DebugCommunication::debugResponseToValue(DebugCommunication::DebugResponse::StallCounter0, wheelStallDetection[0].stall_counter);
+        DebugCommunication::debugStore[DebugCommunication::DebugResponse::StallCounter1] = DebugCommunication::debugResponseToValue(DebugCommunication::DebugResponse::StallCounter1, wheelStallDetection[1].stall_counter);
+        DebugCommunication::debugStore[DebugCommunication::DebugResponse::StallCounter2] = DebugCommunication::debugResponseToValue(DebugCommunication::DebugResponse::StallCounter2, wheelStallDetection[2].stall_counter);
+        DebugCommunication::debugStore[DebugCommunication::DebugResponse::StallCounter3] = DebugCommunication::debugResponseToValue(DebugCommunication::DebugResponse::StallCounter3, wheelStallDetection[3].stall_counter);
 
         // assign the duty cycles, zero out motors that the fpga returns an
         // error for
-        auto i = 0;
-        for (const auto& vel : driveMotorDutyCycles) {
-            const bool hasError = (statusByte & (1 << i));
+        static_assert(wheelStallDetection.size()==driveMotorDutyCycles.size(), "wheelStallDetection Size should be the same as driveMotorDutyCycles");
+        for (int i=0; i<driveMotorDutyCycles.size(); i++) {
+            const auto& vel = driveMotorDutyCycles[i];
+            bool didStall = wheelStallDetection[i].stall_update(duty_cycles[i], wheelVelsOut[i]);
+
+            const bool hasError = (statusByte & (1 << i)) || didStall;
             duty_cycles[i] = (hasError ? 0 : vel);
-            ++i;
         }
 
         // limit duty cycle values, while keeping sign (+ or -)

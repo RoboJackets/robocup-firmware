@@ -7,7 +7,7 @@ class Decawave : public CommLink, public dw1000_api {
 public:
     Decawave(SpiPtrT sharedSPI, PinName nCs, PinName intPin);
 
-    virtual int32_t sendPacket(const RTP::Packet* pkt) override;
+    virtual int32_t sendPacket(const rtp::Packet* pkt) override;
 
     virtual BufferT getData() override;
 
