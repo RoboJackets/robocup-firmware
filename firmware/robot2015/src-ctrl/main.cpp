@@ -161,31 +161,19 @@ int main() {
 
     // Reprogramming each time (first arg of flash false) is actually
     // faster than checking the full memory to see if we need to reflash.
-    // KickerBoard::Instance =
-    //     std::make_shared<KickerBoard>(sharedSPI, RJ_KICKER_nCS, RJ_KICKER_nRESET, "/local/rj-kickr.nib");
-    // bool kickerReady = KickerBoard::Instance->flash(false, false);
+    KickerBoard::Instance =
+        std::make_shared<KickerBoard>(spiBus, RJ_KICKER_nCS, RJ_KICKER_nRESET, "/local/rj-kickr.nib");
+    bool kickerReady = KickerBoard::Instance->flash(false, false);
 
-    // flag fro kicking when the ball sense triggers
-    auto kickOnBreakBeam = false;
-    // Made up value right now, this is the amount of time in ms to
-    // allow the capacitor dump power into kicker. Will need to be
-    // adjusted once hardware is available.
-    uint8_t kickStrength = 0x08;  // DB_KICK_TIME;
+    uint8_t kickerVoltage = 0;
+    // get kicker voltage, note, this call serves to update the kicker
+    // state variables (is break beam active, is there ball sense, is breakbeam armed)
+    // so removing it right now would be a bad idea.
+    RtosTimerHelper kicker_status_update([&]() { kickerVoltage = KickerBoard::Instance->readVoltage().second;}, osTimerPeriodic);
 
-    // Initialize and start ball sensor
-    BallSensor ballSense(RJ_BALL_EMIT, RJ_BALL_DETECTOR);
-    ballSense.start(10);
-    ballSense.senseChangeCallback = [&](bool haveBall) {
-        // invert value due to active-low wiring of led
-        // set ball indicator led.
-        static DigitalOut ballStatusPin(RJ_BALL_LED);
-        ballStatusPin = !haveBall;
+    kicker_status_update.start(RJ_KICKER_UPDATE_PERIOD_MS);
 
-        // kick!
-        if (haveBall && kickOnBreakBeam) {
-            // KickerBoard::Instance->kick(kickStrength);
-        }
-    };
+    init_leds_off.start(RJ_STARTUP_LED_TIMEOUT_MS);
 
     // Initialize and configure the fpga with the given bitfile
     FPGA::Instance = new FPGA(spiBus, RJ_FPGA_nCS, RJ_FPGA_INIT_B,
@@ -315,26 +303,22 @@ int main() {
                 Task_Controller_UpdateDribbler(msg->dribbler);
 
                 // kick!
-                kickStrength = msg->kickStrength;
+                uint8_t kickStrength = msg->kickStrength;
                 if (msg->triggerMode == 1) {
                     // kick immediate
-                    // KickerBoard::Instance->kick(kickStrength);
+                    KickerBoard::Instance->kick(kickStrength, true);
                 } else if (msg->triggerMode == 2) {
                     // kick on break beam
-                    if (ballSense.hasBall()) {
-                        // KickerBoard::Instance->kick(kickStrength);
-                        kickOnBreakBeam = false;
-                    } else {
-                        // set flag so that next break beam triggers a kick
-                        kickOnBreakBeam = true;
-                    }
+                    KickerBoard::Instance->kick(kickStrength, false);
+                } else {
+                    KickerBoard::Instance->cancelBreakbeam();
                 }
             }
 
             rtp::RobotStatusMessage reply;
             reply.uid = robotShellID;
             reply.battVoltage = battVoltage;
-            reply.ballSenseStatus = ballSense.hasBall() ? 1 : 0;
+            reply.ballSenseStatus = KickerBoard::Instance->isBallSensed();
 
             // report any motor errors
             reply.motorErrors = 0;
@@ -359,10 +343,8 @@ int main() {
             }
 
             // kicker status
-            //reply.kickStatus = KickerBoard::Instance->canKick();
-            reply.kickStatus = true;
+            reply.kickStatus = kickerVoltage > 230;
             
-            // TODO: actually implement this
             for (int i=0; i<rtp::RobotStatusMessage::debug_data_length; i++) {
                 auto debugType = DebugCommunication::debugResponses[i];
                 if (debugType != 0) {
@@ -378,7 +360,7 @@ int main() {
             return replyBuf;
         };
 
-    // KickerBoard::Instance->charge();
+    KickerBoard::Instance->charge();
     // LOG(INIT, "Started charging kicker board.");
 
     // Set the watdog timer's initial config
@@ -458,8 +440,6 @@ int main() {
         // get the battery voltage
         battVoltage = (batt.read_u16() >> 8);
 
-        // get kicker voltage
-        auto kickerVoltage = 0;//KickerBoard::Instance->readVoltage().second;
         LOG(DEBUG, "Kicker voltage: %u", kickerVoltage);
 
         // update shell id

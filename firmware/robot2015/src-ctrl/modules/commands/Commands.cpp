@@ -692,18 +692,24 @@ int cmd_kicker(cmd_args_t& args) {
         show_invalid_args(args);
         return 1;
     } else {
+        bool res = false;
         if (args[0] == "kick") {
-            if (KickerBoard::Instance->kick(DB_KICK_TIME)) {
-                printf("Kick success.\r\n");
+            if (args.size() < 2) {
+                // no args, kick immediately
+                res = KickerBoard::Instance->kick(256/2, true);
             } else {
-                printf("Kick failure.\r\n");
+                // args, check if break beam on or off
+                if (args[1] == "break_on") {
+                    res = KickerBoard::Instance->kick(256/2, false);
+                } else if (args[1] == "break_off") {
+                    res = KickerBoard::Instance->cancelBreakbeam();
+                } else {
+                    printf("break_on or break_off\r\n");
+                }
             }
+            printf("Kick command success?: %s\r\n", res ? "true" : "false");
         } else if (args[0] == "chip") {
-            if (KickerBoard::Instance->chip(DB_CHIP_TIME)) {
-                printf("Chip success.\r\n");
-            } else {
-                printf("Chip failure.\r\n");
-            }
+            printf("Chip not implemented\r\n");
         } else if (args[0] == "ping") {
             if (KickerBoard::Instance->is_pingable()) {
                 printf("Kicker ping success.\r\n");
@@ -717,7 +723,7 @@ int cmd_kicker(cmd_args_t& args) {
             if (isValid) {
                 printf("Kicker volts success. Volts: %d\r\n", volts);
             } else {
-                printf("Kicker voltage read success.\r\n");
+                printf("Kicker volts failure.\r\n");
             }
         } else if (args[0] == "charge") {
             if (args.size() != 2) {

@@ -11,3 +11,7 @@
 
 // The amount of time (in ms) that all LEDs stay lit during startup
 #define RJ_STARTUP_LED_TIMEOUT_MS 500
+
+// Period of kicker status updates
+// This will affect how quickly changes in breakbeam make their way up to soccer
+#define RJ_KICKER_UPDATE_PERIOD_MS 50
