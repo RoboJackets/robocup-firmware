@@ -39,7 +39,7 @@ public:
         // clang-format on
     }
 
-    float DutyCycleMultiplier = 2.5f;
+    float DutyCycleMultiplier = 2.0f;
 };
 
 /// Model parameters for 2015 robot.  See RobotModel.cpp for values.

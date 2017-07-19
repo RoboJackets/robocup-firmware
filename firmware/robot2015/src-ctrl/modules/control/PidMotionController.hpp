@@ -25,7 +25,7 @@ public:
     float duties[4] = {0, 0, 0, 0};
 
     PidMotionController() {
-        setPidValues(1, 0, 0, 0);
+        setPidValues(4.0, 0, 0, 0, 50);
 
         //if (logging) {
         //    points.reserve(num_samples);
@@ -69,12 +69,13 @@ public:
         logging = false;
     }
 
-    void setPidValues(float p, float i, float d, float derivAlpha) {
+    void setPidValues(float p, float i, float d, float derivAlpha, unsigned int windup) {
         for (Pid& ctl : _controllers) {
             ctl.kp = p;
             ctl.ki = i;
             ctl.kd = d;
             ctl.derivAlpha = derivAlpha;
+            ctl.setWindup(windup);
         }
     }
 
@@ -164,10 +165,10 @@ public:
 
         std::array<int16_t, 4> dutyCycles;
         for (int i = 0; i < 4; i++) {
-            float dc;
-            //float dc = targetWheelVels[i] * RobotModel2015.DutyCycleMultiplier;
-            //int16_t dc = _controllers[i].run(wheelVelErr[i]);
-            dc = duties[i];
+            // float dc;
+            float dc = targetWheelVels[i] * RobotModel2015.DutyCycleMultiplier + copysign(4, targetWheelVels[i]);
+            // int16_t dc = _controllers[i].run(wheelVelErr[i], dt);
+            // dc = duties[i];
             dc += _controllers[i].run(wheelVelErr[i], dt);
 
             if (std::abs(dc) > FPGA::MAX_DUTY_CYCLE) {
@@ -215,7 +216,7 @@ public:
 
 private:
     /// controllers for each wheel
-    std::array<Pid, 4> _controllers;
+    std::array<Pid, 4> _controllers{};
 
-    Eigen::Vector3f _targetVel;
+    Eigen::Vector3f _targetVel{};
 };

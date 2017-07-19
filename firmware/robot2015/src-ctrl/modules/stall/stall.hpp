@@ -66,4 +66,4 @@ private:
 };
 
 
-typedef StallDetection<80, 1, 511*100, 80, 60> WheelStallDetection;
+typedef StallDetection<30, 1, 250*100, 80, 60> WheelStallDetection;
