@@ -121,7 +121,7 @@ BLDC_Driver #(                  // Instantiation of the motor driving module
     .fault                      ( has_hall_fault            )
 );
 
-wire has_fault = has_hall_fault | has_enc_fault;
+wire has_fault = has_hall_fault;
 
 assign has_error = ~is_hall_connected | has_fault;
 
