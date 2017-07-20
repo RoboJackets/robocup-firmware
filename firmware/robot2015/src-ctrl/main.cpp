@@ -347,7 +347,7 @@ int main() {
                 if (debugType != 0) {
                     reply.debug_data[i] = DebugCommunication::debugStore[debugType];
                 } else {
-                    reply.debug_data[i] =  -32666;
+                    reply.debug_data[i] =  -1;
                 }
             }
 
