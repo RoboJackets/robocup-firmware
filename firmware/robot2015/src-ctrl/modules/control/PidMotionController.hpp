@@ -109,7 +109,8 @@ public:
      * @return Duty cycle values for each of the 4 motors
      */
     std::array<int16_t, 4> run(const std::array<int16_t, 4>& encoderDeltas,
-                               float dt, Eigen::Vector4d *errors=nullptr, Eigen::Vector4d *wheelVelsOut=nullptr) {
+                               float dt, Eigen::Vector4d *errors=nullptr, Eigen::Vector4d *wheelVelsOut=nullptr, 
+                               Eigen::Vector4d *targetWheelVelsOut=nullptr) {
 
 
         // convert encoder ticks to rad/s
@@ -132,6 +133,10 @@ public:
 
         Eigen::Vector4d targetWheelVels =
             RobotModel2015.BotToWheel * _targetVel.cast<double>();
+
+        if (targetWheelVelsOut) {
+            *targetWheelVelsOut = targetWheelVels;
+        }
 //        targetWheelVels *= 10;
         // Forwards
         //Eigen::Vector4f targetWheelVels(.288675, .32169, -.32169, -.288675);

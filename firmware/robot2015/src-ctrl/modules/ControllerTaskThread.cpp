@@ -166,10 +166,11 @@ void Task_Controller(const void* args) {
 
         Eigen::Vector4d errors{};
         Eigen::Vector4d wheelVelsOut{};
+        Eigen::Vector4d targetWheelVelsOut{};
         // run PID controller to determine what duty cycles to use to drive the
         // motors.
         std::array<int16_t, 4> driveMotorDutyCycles =
-            pidController.run(driveMotorEnc, dt, &errors, &wheelVelsOut);
+            pidController.run(driveMotorEnc, dt, &errors, &wheelVelsOut, &targetWheelVelsOut);
 
         DebugCommunication::debugStore[DebugCommunication::DebugResponse::PIDError0] = DebugCommunication::debugResponseToValue(DebugCommunication::DebugResponse::PIDError0, errors[0]);
         DebugCommunication::debugStore[DebugCommunication::DebugResponse::PIDError1] = DebugCommunication::debugResponseToValue(DebugCommunication::DebugResponse::PIDError1, errors[1]);
@@ -190,6 +191,11 @@ void Task_Controller(const void* args) {
         DebugCommunication::debugStore[DebugCommunication::DebugResponse::StallCounter1] = DebugCommunication::debugResponseToValue(DebugCommunication::DebugResponse::StallCounter1, wheelStallDetection[1].stall_counter);
         DebugCommunication::debugStore[DebugCommunication::DebugResponse::StallCounter2] = DebugCommunication::debugResponseToValue(DebugCommunication::DebugResponse::StallCounter2, wheelStallDetection[2].stall_counter);
         DebugCommunication::debugStore[DebugCommunication::DebugResponse::StallCounter3] = DebugCommunication::debugResponseToValue(DebugCommunication::DebugResponse::StallCounter3, wheelStallDetection[3].stall_counter);
+
+        DebugCommunication::debugStore[DebugCommunication::DebugResponse::TargetWheelVel0] = DebugCommunication::debugResponseToValue(DebugCommunication::DebugResponse::TargetWheelVel0, targetWheelVelsOut[0]);
+        DebugCommunication::debugStore[DebugCommunication::DebugResponse::TargetWheelVel1] = DebugCommunication::debugResponseToValue(DebugCommunication::DebugResponse::TargetWheelVel1, targetWheelVelsOut[1]);
+        DebugCommunication::debugStore[DebugCommunication::DebugResponse::TargetWheelVel2] = DebugCommunication::debugResponseToValue(DebugCommunication::DebugResponse::TargetWheelVel2, targetWheelVelsOut[2]);
+        DebugCommunication::debugStore[DebugCommunication::DebugResponse::TargetWheelVel3] = DebugCommunication::debugResponseToValue(DebugCommunication::DebugResponse::TargetWheelVel3, targetWheelVelsOut[3]);
 
         // assign the duty cycles, zero out motors that the fpga returns an
         // error for
