@@ -52,7 +52,9 @@ uint8_t execute_cmd(uint8_t, uint8_t);
 
 void kick(uint8_t strength) {
     pre_kick_cooldown_ = 5;
-    millis_left_ = (int) ((strength / 255.0) * 12.0);
+    // minimum of 6 ms, we were breaking kickers with low duty cycles
+    // maximum of 6 + 7 == 13 ms
+    millis_left_ = (int) ((strength / 255.0) * 6.0) + 7;
     post_kick_cooldown_ = 5;
 
     TCCR0B |= _BV(CS01);     // start timer /8 prescale
@@ -224,12 +226,13 @@ ISR(SPI_STC_vect) {
 ISR(PCINT0_vect) {
     // First we get the current state of each button, active low
     int kick_db_pressed = !(PINA & _BV(DB_KICK_PIN));
-    int charge_db_pressed = !(PINA & _BV(DB_CHG_PIN));
+    //int charge_db_pressed = !(PINA & _BV(DB_CHG_PIN));
 
     if (!kick_db_held_down_ && kick_db_pressed)
-        execute_cmd(KICK_IMMEDIATE_CMD, 255); // max strength kick
+        execute_cmd(KICK_IMMEDIATE_CMD, 256/2); // max strength kick
 
     // toggle charge
+    /*
     if (charge_db_pressed)
         execute_cmd(SET_CHARGE_CMD, ON_ARG);
     else
@@ -242,10 +245,11 @@ ISR(PCINT0_vect) {
             execute_cmd(SET_CHARGE_CMD, ON_ARG);
         }
     }
+    */
 
     // Now our last state becomes the current state of the buttons
     kick_db_held_down_ = kick_db_pressed;
-    charge_db_down_ = charge_db_pressed;
+    //charge_db_down_ = charge_db_pressed;
 }
 
 /*
