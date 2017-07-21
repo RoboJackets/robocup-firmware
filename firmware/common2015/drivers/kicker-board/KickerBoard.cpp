@@ -8,7 +8,7 @@ std::shared_ptr<KickerBoard> KickerBoard::Instance;
 KickerBoard::KickerBoard(shared_ptr<SharedSPI> sharedSPI, PinName nCs,
                          PinName nReset, const string& progFilename)
     : AVR910(sharedSPI, nCs, nReset), _filename(progFilename) {
-    this->setSPIFrequency(32000);
+    //this->setSPIFrequency(32000);
     serviceTimer = std::make_unique<RtosTimerHelper>([&]() { this->service(); }, osTimerPeriodic);
 }
 
@@ -91,7 +91,9 @@ void KickerBoard::start() {
 
 void KickerBoard::service() {
     // function that actually executes commands given to kicker
+    wait_us(100);
 
+    chipSelect();
     if (_kick_immediate_commanded) {
         _kick_immediate_commanded = false;
         send_to_kicker(KICK_IMMEDIATE_CMD, _kick_strength, nullptr);
@@ -135,22 +137,21 @@ void KickerBoard::service() {
     }
 
     _is_healthy = send_to_kicker(GET_VOLTAGE_CMD, BLANK, &_current_voltage);
+
+    wait_us(100);
+    chipDeselect();
 }
 
 bool KickerBoard::send_to_kicker(uint8_t cmd, uint8_t arg, uint8_t* ret_val) {
     LOG(DEBUG, "Sending: CMD:%02X, ARG:%02X", cmd, arg);
     wait_us(100);
-    chipSelect();
-    wait_us(100);
     m_spi->write(cmd);
     wait_us(100);
     uint8_t command_resp = m_spi->write(arg);
-    wait_us(500);
+    wait_us(400);
     uint8_t ret = m_spi->write(BLANK);
-    wait_us(500);
+    wait_us(400);
     uint8_t state = m_spi->write(BLANK);
-    wait_us(100);
-    chipDeselect();
     wait_us(100);
 
     _is_charging = state & (1 << CHARGE_FIELD);
