@@ -225,11 +225,11 @@ ISR(SPI_STC_vect) {
  */
 ISR(PCINT0_vect) {
     // First we get the current state of each button, active low
-    int kick_db_pressed = !(PINA & _BV(DB_KICK_PIN));
+    //int kick_db_pressed = !(PINA & _BV(DB_KICK_PIN));
     //int charge_db_pressed = !(PINA & _BV(DB_CHG_PIN));
 
-    if (!kick_db_held_down_ && kick_db_pressed)
-        execute_cmd(KICK_IMMEDIATE_CMD, 256/2); // max strength kick
+    //if (!kick_db_held_down_ && kick_db_pressed)
+    //    execute_cmd(KICK_IMMEDIATE_CMD, 256/2); // max strength kick
 
     // toggle charge
     /*
@@ -248,7 +248,7 @@ ISR(PCINT0_vect) {
     */
 
     // Now our last state becomes the current state of the buttons
-    kick_db_held_down_ = kick_db_pressed;
+    //kick_db_held_down_ = kick_db_pressed;
     //charge_db_down_ = charge_db_pressed;
 }
 
