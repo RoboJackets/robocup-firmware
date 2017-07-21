@@ -148,9 +148,9 @@ bool KickerBoard::send_to_kicker(uint8_t cmd, uint8_t arg, uint8_t* ret_val) {
     m_spi->write(cmd);
     wait_us(100);
     uint8_t command_resp = m_spi->write(arg);
-    wait_us(400);
+    wait_us(600);
     uint8_t ret = m_spi->write(BLANK);
-    wait_us(400);
+    wait_us(600);
     uint8_t state = m_spi->write(BLANK);
     wait_us(100);
 
