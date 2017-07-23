@@ -25,7 +25,7 @@ public:
     float duties[4] = {0, 0, 0, 0};
 
     PidMotionController() {
-        setPidValues(4.0, 0, 0, 0, 50);
+        setPidValues(3.0, 0, 0, 50, 0);
 
         //if (logging) {
         //    points.reserve(num_samples);
@@ -69,13 +69,13 @@ public:
         logging = false;
     }
 
-    void setPidValues(float p, float i, float d, float derivAlpha, unsigned int windup) {
+    void setPidValues(float p, float i, float d, unsigned int windup, float derivAlpha) {
         for (Pid& ctl : _controllers) {
             ctl.kp = p;
             ctl.ki = i;
             ctl.kd = d;
-            ctl.derivAlpha = derivAlpha;
             ctl.setWindup(windup);
+            ctl.derivAlpha = derivAlpha;
         }
     }
 
@@ -174,7 +174,7 @@ public:
             float dc = targetWheelVels[i] * RobotModel2015.DutyCycleMultiplier + copysign(4, targetWheelVels[i]);
             // int16_t dc = _controllers[i].run(wheelVelErr[i], dt);
             // dc = duties[i];
-            dc += _controllers[i].run(wheelVelErr[i], dt);
+            dc += _controllers[i].run(wheelVelErr[i]);
 
             if (std::abs(dc) > FPGA::MAX_DUTY_CYCLE) {
                 // Limit to max duty cycle
