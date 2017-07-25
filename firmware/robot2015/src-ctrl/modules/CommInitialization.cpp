@@ -78,7 +78,7 @@ void InitializeCommModule(SharedSPIDevice<>::SpiPtrT sharedSPI) {
     // TODO(justin): make this non-global
     // Create a new physical hardware communication link
     globalRadio =
-        std::make_unique<Decawave>(sharedSPI, RJ_RADIO_nCS, RJ_RADIO_INT);
+        std::make_unique<Decawave>(sharedSPI, RJ_RADIO_nCS, RJ_RADIO_INT, RJ_RADIO_nRESET);
 
     // Open a socket for running tests across the link layer
     // The LINK port handlers are always active, regardless of whether or not a

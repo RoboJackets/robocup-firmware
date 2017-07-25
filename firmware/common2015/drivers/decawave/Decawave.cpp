@@ -70,40 +70,9 @@ constexpr auto TX_TO_RX_DELAY_UUS = 60;
 constexpr auto RX_RESP_TO_UUS = 5000;
 }
 
-Decawave::Decawave(SpiPtrT sharedSPI, PinName nCs, PinName intPin)
-    : CommLink(sharedSPI, nCs, intPin), dw1000_api() {
-    setSPIFrequency(2'000'000);
-
-    if (dwt_initialise(DWT_LOADUCODE) == DWT_ERROR) {
-        LOG(SEVERE, "Decawave not initialized");
-        return;
-    }
-
+Decawave::Decawave(SpiPtrT sharedSPI, PinName nCs, PinName intPin, PinName _nReset)
+    : CommLink(sharedSPI, nCs, intPin), dw1000_api(), nReset(_nReset) {
     reset();
-    selfTest();
-
-    if (m_isInit) {
-        dwt_configure(&config);
-        dwt_configuretxrf(&txconfig);
-
-        setSPIFrequency(8'000'000);  // won't work after 8MHz
-
-        dwt_setrxaftertxdelay(TX_TO_RX_DELAY_UUS);
-        dwt_setcallbacks(
-            nullptr, static_cast<dwt_cb_t>(&Decawave::getDataSuccess), nullptr,
-            static_cast<dwt_cb_t>(&Decawave::getDataFail));
-        dwt_setinterrupt(DWT_INT_RFCG, 1);
-
-        dwt_setautorxreenable(1);
-
-        setLED(true);
-        dwt_forcetrxoff();  // TODO: Better way than force off then reset?
-        dwt_rxreset();
-        // dwt_rxenable(DWT_START_RX_IMMEDIATE);
-
-        LOG(INFO, "Decawave ready!");
-        CommLink::ready();
-    }
 }
 
 // Virtual functions from CommLink
@@ -185,6 +154,47 @@ int32_t Decawave::selfTest() {
     } else {
         m_isInit = true;
         return 0;
+    }
+}
+
+void Decawave::reset() {
+    nReset = 0;
+    wait_ms(3);
+    nReset = 1;
+
+    m_isInit = 0;
+    setSPIFrequency(2'000'000);
+
+    if (dwt_initialise(DWT_LOADUCODE) == DWT_ERROR) {
+        LOG(SEVERE, "Decawave not initialized");
+        return;
+    }
+
+    // reset();
+    dwt_softreset();
+    selfTest();
+
+    if (m_isInit) {
+        dwt_configure(&config);
+        dwt_configuretxrf(&txconfig);
+
+        setSPIFrequency(8'000'000);  // won't work after 8MHz
+
+        dwt_setrxaftertxdelay(TX_TO_RX_DELAY_UUS);
+        dwt_setcallbacks(
+            nullptr, static_cast<dwt_cb_t>(&Decawave::getDataSuccess), nullptr,
+            static_cast<dwt_cb_t>(&Decawave::getDataFail));
+        dwt_setinterrupt(DWT_INT_RFCG, 1);
+
+        dwt_setautorxreenable(1);
+
+        setLED(true);
+        dwt_forcetrxoff();  // TODO: Better way than force off then reset?
+        dwt_rxreset();
+        // dwt_rxenable(DWT_START_RX_IMMEDIATE);
+
+        LOG(INFO, "Decawave ready!");
+        CommLink::ready();
     }
 }
 

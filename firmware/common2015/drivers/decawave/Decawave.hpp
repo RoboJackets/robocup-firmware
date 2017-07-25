@@ -5,13 +5,14 @@
 
 class Decawave : public CommLink, public dw1000_api {
 public:
-    Decawave(SpiPtrT sharedSPI, PinName nCs, PinName intPin);
+    Decawave(SpiPtrT sharedSPI, PinName nCs, PinName intPin, PinName _nReset);
 
     virtual int32_t sendPacket(const rtp::Packet* pkt) override;
 
     virtual BufferT getData() override;
 
-    virtual void reset() override { dwt_softreset(); }
+    // virtual void reset() override { dwt_softreset(); }
+    virtual void reset() override;
 
     virtual int32_t selfTest() override;
 
@@ -32,6 +33,7 @@ private:
     BufferPtrT m_txBufferPtr = nullptr;
     uint32_t m_chipVersion;
     bool m_isInit = false;
+    DigitalOut nReset;
 
     void getDataSuccess(const dwt_cb_data_t* cb_data);
     void getDataFail(const dwt_cb_data_t* cb_data);

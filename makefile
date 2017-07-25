@@ -14,7 +14,8 @@ endef
 # targeted code separately.
 define cmake_build_target_fw
 	mkdir -p build/firmware
-	cd build/firmware && cmake -DCMAKE_BUILD_TYPE=Debug -Wno-dev --target $1 $2 ../.. && make $1 $(MAKE_FLAGS) -j
+	# CMAKE_BUILD_TYPE Debug or Release
+	cd build/firmware && cmake -DCMAKE_BUILD_TYPE=Release -Wno-dev --target $1 $2 ../.. && make $1 $(MAKE_FLAGS) -j
 endef
 
 all:
