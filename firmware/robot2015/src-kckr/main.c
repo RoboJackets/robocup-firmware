@@ -1,7 +1,7 @@
 #include <stdbool.h>
 
-#include <avr/wdt.h> 
-#include <avr/interrupt.h>
+// #include <avr/wdt.h>
+// #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <util/delay.h>
 
@@ -103,7 +103,7 @@ void main() {
             PORTB |= _BV(CHARGE_PIN);
         }
 
-        if (PORTB & _BV(N_KICK_CS_PIN)) {
+        if (PINA & _BV(N_KICK_CS_PIN)) {
             byte_cnt = 0;
         }
 
