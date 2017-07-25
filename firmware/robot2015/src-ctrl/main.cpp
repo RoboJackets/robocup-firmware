@@ -252,7 +252,7 @@ int main() {
     const auto RadioTimeout = 100;
     RtosTimerHelper radioTimeoutTimer([&]() {
         // Reset radio if no RX packet in specified time
-        globalRadio->reset();
+        // globalRadio->reset();
         radioTimeoutTimer.start(RadioTimeout);
     }, osTimerOnce);
     radioTimeoutTimer.start(RadioTimeout);
