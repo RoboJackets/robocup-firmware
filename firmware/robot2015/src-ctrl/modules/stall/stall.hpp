@@ -49,6 +49,11 @@ public:
             // Mark this motor as stalled
             stalled = true;
         }
+
+        if (stalled && stall_counter <= Stall_Threshold/10) {
+            stalled = false;
+        }
+
         return stalled;
     }
 
