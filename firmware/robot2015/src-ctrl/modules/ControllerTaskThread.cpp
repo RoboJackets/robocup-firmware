@@ -197,6 +197,14 @@ void Task_Controller(const void* args) {
         DebugCommunication::debugStore[DebugCommunication::DebugResponse::TargetWheelVel2] = DebugCommunication::debugResponseToValue(DebugCommunication::DebugResponse::TargetWheelVel2, targetWheelVelsOut[2]);
         DebugCommunication::debugStore[DebugCommunication::DebugResponse::TargetWheelVel3] = DebugCommunication::debugResponseToValue(DebugCommunication::DebugResponse::TargetWheelVel3, targetWheelVelsOut[3]);
 
+        if (DebugCommunication::configStoreIsValid[DebugCommunication::ConfigCommunication::ResetStall]) {
+            if (DebugCommunication::configStore[DebugCommunication::ConfigCommunication::ResetStall] >= 1) {
+                for (int i=0; i<driveMotorDutyCycles.size(); i++) {
+                    wheelStallDetection[i].resetStallDetection();
+                }
+            }
+        }
+
         // assign the duty cycles, zero out motors that the fpga returns an
         // error for
         static_assert(wheelStallDetection.size()==driveMotorDutyCycles.size(), "wheelStallDetection Size should be the same as driveMotorDutyCycles");
