@@ -118,6 +118,9 @@ int main() {
         wd_flag = (LPC_WDT->WDMOD >> 2) & 1;
     }
 
+    printf("\tCommit Hash:\t%s%s\r\n", git_version_hash,
+           git_version_dirty ? " (dirty)" : "");
+
     // Turn on some startup LEDs to show they're working, they are turned off
     // before we hit the while loop
     statusLights(true);
