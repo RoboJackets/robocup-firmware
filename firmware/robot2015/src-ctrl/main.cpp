@@ -264,7 +264,7 @@ int main() {
 
     radioProtocol.debugCallback =
         [&](const rtp::DebugMessage &msg) {
-            DebugCommunication::debugResponses = msg.keys;
+//            DebugCommunication::debugResponses = msg.keys;
         };
 
     radioProtocol.confCallback =
@@ -344,14 +344,14 @@ int main() {
             reply.kickStatus = KickerBoard::Instance->isHealthy()
                                && KickerBoard::Instance->getVoltage() > 230;
 
-            for (int i=0; i<rtp::RobotStatusMessage::debug_data_length; i++) {
-                auto debugType = DebugCommunication::debugResponses[i];
-                if (debugType != 0) {
-                    reply.debug_data[i] = DebugCommunication::debugStore[debugType];
-                } else {
-                    reply.debug_data[i] =  -1;
-                }
-            }
+//            for (int i=0; i<rtp::RobotStatusMessage::debug_data_length; i++) {
+//                auto debugType = DebugCommunication::debugResponses[i];
+//                if (debugType != 0) {
+//                    reply.debug_data[i] = DebugCommunication::debugStore[debugType];
+//                } else {
+//                    reply.debug_data[i] =  -1;
+//                }
+//            }
 
             vector<uint8_t> replyBuf;
             rtp::serializeToVector(reply, &replyBuf);
