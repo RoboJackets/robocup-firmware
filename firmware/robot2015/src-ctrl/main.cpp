@@ -261,7 +261,10 @@ int main() {
         // Reset radio if no RX packet in specified time
         // globalRadio->reset();
         radioTimeoutTimer.start(RadioTimeout);
+
         KickerBoard::Instance->setChargeAllowed(false);
+        globalRadio->reset();
+        globalRadio->setAddress(rtp::ROBOT_ADDRESS);
     }, osTimerOnce);
     radioTimeoutTimer.start(RadioTimeout);
 
@@ -428,6 +431,7 @@ int main() {
         Thread::wait(RJ_WATCHDOG_TIMER_VALUE * 250);
 
         // Pack errors into bitmask
+        errorBitmask &= ~(1 << RJ_ERR_LED_RADIO);
         errorBitmask |= (!globalRadio || !globalRadio->isConnected())
                         << RJ_ERR_LED_RADIO;
 
