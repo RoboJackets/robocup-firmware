@@ -47,7 +47,9 @@ public:
             stall_counter = Stall_Threshold;
 
             // Mark this motor as stalled
-            stalled = true;
+			// TODO enable this after it is tested.
+            // stalled = true;
+            stalled = false;
         }
 
         if (stalled && stall_counter <= Stall_Threshold/10) {
