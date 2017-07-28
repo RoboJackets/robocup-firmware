@@ -24,7 +24,10 @@ public:
     KickerBoard(std::shared_ptr<SharedSPI> sharedSPI, PinName nCs,
                 PinName nReset, const std::string& progFilename);
 
+    DigitalOut ballSenseLED;
+
     static std::shared_ptr<KickerBoard> Instance;
+
 
     std::unique_ptr<RtosTimerHelper> serviceTimer;
 
