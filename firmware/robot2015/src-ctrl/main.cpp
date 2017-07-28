@@ -301,6 +301,10 @@ int main() {
                 // dribbler
                 Task_Controller_UpdateDribbler(msg->dribbler);
 
+                if (msg->triggerMode == 0) {
+                    KickerBoard::Instance->cancelBreakbeam();
+                }
+
                 // kick!
                 if (msg->shootMode == 0) {
                     uint8_t kickStrength = msg->kickStrength;
@@ -344,8 +348,8 @@ int main() {
             }
 
             // kicker status
-            reply.kickStatus = KickerBoard::Instance->isHealthy()
-                               && KickerBoard::Instance->getVoltage() > 230;
+            reply.kickStatus = KickerBoard::Instance->getVoltage() > 230;
+            reply.kickHealthy = KickerBoard::Instance->isHealthy();
 
 //            for (int i=0; i<rtp::RobotStatusMessage::debug_data_length; i++) {
 //                auto debugType = DebugCommunication::debugResponses[i];

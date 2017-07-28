@@ -103,10 +103,7 @@ void KickerBoard::service() {
     if (_kick_breakbeam_commanded) {
         _kick_breakbeam_commanded = false;
 
-        // check if it is already armed
-        if (!_is_breakbeam_armed) {
-            send_to_kicker(KICK_BREAKBEAM_CMD, _kick_strength, nullptr);
-        }
+        send_to_kicker(KICK_BREAKBEAM_CMD, _kick_strength, nullptr);
 
         _kick_strength = 0;
     }
