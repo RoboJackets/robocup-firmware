@@ -20,6 +20,7 @@
 volatile int pre_kick_cooldown_ = 0;
 volatile int millis_left_ = 0;
 volatile int post_kick_cooldown_ = 0;
+volatile int kick_wait = 1000;
 
 // Used to keep track of current button state
 volatile int kick_db_held_down_ = 0;
@@ -56,7 +57,8 @@ void kick(uint8_t strength) {
     // maximum of 6 + 7 == 13 ms
     //millis_left_ = (int) ((strength / 255.0) * 6.0) + 7;
     millis_left_ = 13; // always full kick speed
-    post_kick_cooldown_ = 100;
+    post_kick_cooldown_ = 5;
+    kick_wait = 1000;
 
     TCCR0B |= _BV(CS01);     // start timer /8 prescale
 }
@@ -270,11 +272,13 @@ ISR(TIMER0_COMPA_vect) {
         // kick is done
         PORTB &= ~_BV(KICK_PIN);
         post_kick_cooldown_--;
+    } else if (kick_wait > 0) {
+        // don't allow super repeated kicking
+        kick_wait--;
+        charge_allowed_ = true;
     } else {
         // stop prescaled timer
         TCCR0B &= ~_BV(CS01);
-
-        charge_allowed_ = true;
     }
 }
 
