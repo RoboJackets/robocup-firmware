@@ -20,10 +20,10 @@
 volatile int pre_kick_cooldown_ = 0;
 volatile int millis_left_ = 0;
 volatile int post_kick_cooldown_ = 0;
-volatile int kick_wait = 1000;
+volatile int kick_wait = 0;
 
 // Used to keep track of current button state
-volatile int kick_db_held_down_ = 0;
+volatile int kick_db_down_ = 0;
 volatile int chip_db_down_ = 0;
 volatile int charge_db_down_ = 0;
 
@@ -51,20 +51,21 @@ unsigned time = 0;
 // executes a command coming from SPI
 uint8_t execute_cmd(uint8_t, uint8_t);
 
+bool is_kicking() {
+    return pre_kick_cooldown_ || millis_left_ || post_kick_cooldown_ || kick_wait;
+}
+
 void kick(uint8_t strength) {
+    if (is_kicking()) return;
     pre_kick_cooldown_ = 5;
     // minimum of 6 ms, we were breaking kickers with low duty cycles
     // maximum of 6 + 7 == 13 ms
     //millis_left_ = (int) ((strength / 255.0) * 6.0) + 7;
     millis_left_ = 13; // always full kick speed
     post_kick_cooldown_ = 5;
-    kick_wait = 1000;
+    kick_wait = 2000;
 
     TCCR0B |= _BV(CS01);     // start timer /8 prescale
-}
-
-bool is_kicking() {
-    return pre_kick_cooldown_ || millis_left_ || post_kick_cooldown_;
 }
 
 void init();
@@ -228,31 +229,24 @@ ISR(SPI_STC_vect) {
  */
 ISR(PCINT0_vect) {
     // First we get the current state of each button, active low
-    //int kick_db_pressed = !(PINA & _BV(DB_KICK_PIN));
-    //int charge_db_pressed = !(PINA & _BV(DB_CHG_PIN));
+    int dbg_switched = !(PINB & _BV(DB_SWITCH));
 
-    //if (!kick_db_held_down_ && kick_db_pressed)
-    //    execute_cmd(KICK_IMMEDIATE_CMD, 256/2); // max strength kick
+    if (!dbg_switched) return;
+    int kick_db_pressed = !(PINA & _BV(DB_KICK_PIN));
+    int charge_db_pressed = !(PINA & _BV(DB_CHG_PIN));
+
+    if (!kick_db_down_ && kick_db_pressed)
+        kick(255);
 
     // toggle charge
-    /*
-    if (charge_db_pressed)
-        execute_cmd(SET_CHARGE_CMD, ON_ARG);
-    else
-        execute_cmd(SET_CHARGE_CMD, OFF_ARG);
     if (!charge_db_down_ && charge_db_pressed) {
         // check if charge is already on, toggle appropriately
-        if (PINA & _BV(CHARGE_PIN)) {
-            execute_cmd(SET_CHARGE_CMD, OFF_ARG);
-        } else {
-            execute_cmd(SET_CHARGE_CMD, ON_ARG);
-        }
+        charge_commanded_ = !charge_commanded_;
     }
-    */
 
     // Now our last state becomes the current state of the buttons
-    //kick_db_held_down_ = kick_db_pressed;
-    //charge_db_down_ = charge_db_pressed;
+    kick_db_down_ = kick_db_pressed;
+    charge_db_down_ = charge_db_pressed;
 }
 
 /*

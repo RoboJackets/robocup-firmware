@@ -208,5 +208,9 @@ uint8_t KickerBoard::getVoltage() {
 }
 
 void KickerBoard::setChargeAllowed(bool chargeAllowed) {
-    _charging_commanded = true;
+    if (chargeAllowed) {
+        _charging_commanded = true;
+    } else {
+        _stop_charging_commanded = true;
+    }
 }

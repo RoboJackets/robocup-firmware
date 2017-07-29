@@ -15,6 +15,7 @@
 #define KICK_PIN (PB1)
 #define BALL_SENSE_TX (PB4)
 #define BALL_SENSE_RX (PB3)
+#define DB_SWITCH (PB5)
 
 /* Tri-State */
 #define KICK_MISO_PIN (PA2)

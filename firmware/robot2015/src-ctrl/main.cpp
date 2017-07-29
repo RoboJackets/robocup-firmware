@@ -257,8 +257,10 @@ int main() {
         // Reset radio if no RX packet in specified time
         // globalRadio->reset();
         radioTimeoutTimer.start(RadioTimeout);
+        KickerBoard::Instance->setChargeAllowed(false);
     }, osTimerOnce);
     radioTimeoutTimer.start(RadioTimeout);
+
 
     // Setup radio protocol handling
     RadioProtocol radioProtocol(CommModule::Instance);
@@ -319,6 +321,7 @@ int main() {
                     }
                 }
             }
+            KickerBoard::Instance->setChargeAllowed(true);
 
             rtp::RobotStatusMessage reply;
             reply.uid = robotShellID;
@@ -366,7 +369,6 @@ int main() {
             return replyBuf;
         };
 
-    KickerBoard::Instance->setChargeAllowed(true);
     // LOG(INIT, "Started charging kicker board.");
 
     // Set the watdog timer's initial config
