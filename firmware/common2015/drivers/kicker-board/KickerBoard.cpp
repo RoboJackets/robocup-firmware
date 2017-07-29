@@ -6,9 +6,8 @@ using namespace std;
 std::shared_ptr<KickerBoard> KickerBoard::Instance;
 
 KickerBoard::KickerBoard(shared_ptr<SharedSPI> sharedSPI, PinName nCs,
-                         PinName nReset, const string& progFilename)
-    : AVR910(sharedSPI, nCs, nReset), _filename(progFilename), ballSenseLED(p24) {
-    //this->setSPIFrequency(32000);
+                         PinName nReset, PinName ball_led, const string& progFilename)
+    : AVR910(sharedSPI, nCs, nReset), ballSenseLED(ball_led), _filename(progFilename) {
     serviceTimer = std::make_unique<RtosTimerHelper>([&]() { this->service(); }, osTimerPeriodic);
 }
 

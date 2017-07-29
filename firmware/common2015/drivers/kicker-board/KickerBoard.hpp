@@ -22,7 +22,7 @@ public:
      *     loaded by the flash() method
      */
     KickerBoard(std::shared_ptr<SharedSPI> sharedSPI, PinName nCs,
-                PinName nReset, const std::string& progFilename);
+                PinName nReset, PinName ball_led, const std::string& progFilename);
 
     DigitalOut ballSenseLED;
 

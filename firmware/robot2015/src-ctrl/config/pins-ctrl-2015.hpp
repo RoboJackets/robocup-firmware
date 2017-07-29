@@ -33,10 +33,6 @@ const PinName RJ_FPGA_nCS = p13;
 // This defines the Kicker Board's Chip Select pin. This should always be
 const PinName RJ_KICKER_nCS = p14;
 
-// This defines the ball sensor's detector pin. This should always be configured
-// analog input
-const PinName RJ_BALL_DETECTOR = p15;
-
 // This defines the Battery Voltage pin. This should always be configured as an
 // analog input
 const PinName RJ_BATT_SENSE = p16;

@@ -165,7 +165,11 @@ int main() {
     // Reprogramming each time (first arg of flash false) is actually
     // faster than checking the full memory to see if we need to reflash.
     KickerBoard::Instance =
-        std::make_shared<KickerBoard>(spiBus, RJ_KICKER_nCS, RJ_KICKER_nRESET, "/local/rj-kickr.nib");
+        std::make_shared<KickerBoard>(spiBus,
+                                      RJ_KICKER_nCS,
+                                      RJ_KICKER_nRESET,
+                                      RJ_BALL_LED,
+                                      "/local/rj-kickr.nib");
     KickerBoard::Instance->flash(false, false);
 
     KickerBoard::Instance->start();
