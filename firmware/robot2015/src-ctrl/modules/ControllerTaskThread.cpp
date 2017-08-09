@@ -17,6 +17,8 @@
 #include "motors.hpp"
 #include "mpu-6050.hpp"
 #include "stall/stall.hpp"
+#include "Pid.hpp"
+
 using namespace std;
 
 // Keep this pretty high for now. Ideally, drop it down to ~3 for production
@@ -65,7 +67,7 @@ void Task_Controller(const void* args) {
     const auto threadPriority = osThreadGetPriority(threadID);
     (void)threadPriority;  // disable warning if unused
 
-#if 0   /* enable whenever the imu is actually used */
+#if 1   /* enable whenever the imu is actually used */
     MPU6050 imu(RJ_I2C_SDA, RJ_I2C_SCL);
 
     imu.setBW(MPU6050_BW_256);
@@ -99,18 +101,23 @@ void Task_Controller(const void* args) {
     Thread::signal_wait(SUB_TASK_CONTINUE, osWaitForever);
 
     std::array<int16_t, 5> duty_cycles{};
-    
+
     pidController.setPidValues(3.0, 10, 2, 30, 0);
+    pidController.setGyroPid(.1, 0, 0);
 
     // initialize timeout timer
     commandTimeoutTimer = make_unique<RtosTimerHelper>(
         [&]() { commandTimedOut = true; }, osTimerPeriodic);
 
+    float gyroVals[3];
+
     while (true) {
-#if 0   /* enable whenever the imu is actually used */
+
         imu.getGyro(gyroVals);
-        imu.getAccelero(accelVals);
-#endif
+
+        float z_gyro = gyroVals[2];
+        std::printf("z_gryo: %f\r\n", z_gyro); // see if gyro is working like we think it is
+        //imu.getAccelero(accelVals);
 
         if (DebugCommunication::configStoreIsValid[DebugCommunication::ConfigCommunication::PID_P]) {
             pidController.updatePValues(DebugCommunication::configValueToFloat(DebugCommunication::ConfigCommunication::PID_P,
@@ -164,13 +171,14 @@ void Task_Controller(const void* args) {
         std::array<int16_t, 4> driveMotorEnc;
         for (auto i = 0; i < 4; i++) driveMotorEnc[i] = enc_deltas[i];
 
+
         Eigen::Vector4d errors{};
         Eigen::Vector4d wheelVelsOut{};
         Eigen::Vector4d targetWheelVelsOut{};
         // run PID controller to determine what duty cycles to use to drive the
         // motors.
         std::array<int16_t, 4> driveMotorDutyCycles =
-            pidController.run(driveMotorEnc, dt, &errors, &wheelVelsOut, &targetWheelVelsOut);
+                    pidController.run(driveMotorEnc, z_gyro, dt, &errors, &wheelVelsOut, &targetWheelVelsOut);
 
         DebugCommunication::debugStore[DebugCommunication::DebugResponse::PIDError0] = DebugCommunication::debugResponseToValue(DebugCommunication::DebugResponse::PIDError0, errors[0]);
         DebugCommunication::debugStore[DebugCommunication::DebugResponse::PIDError1] = DebugCommunication::debugResponseToValue(DebugCommunication::DebugResponse::PIDError1, errors[1]);
