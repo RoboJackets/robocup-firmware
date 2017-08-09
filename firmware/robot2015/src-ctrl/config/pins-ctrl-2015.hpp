@@ -64,7 +64,7 @@ const PinName RJ_KICKER_nRESET = p12;
 // open drain
 // const PinName RJ_RX_LED = p23; // NOT CONNECTED
 // Decawave reset
-const PinName RJ_RADIO_nRESET = p23; // NOT CONNECTED
+const PinName RJ_RADIO_nRESET = p23;
 
 // This defines the `BALL` LED for ball detection. This should always be
 // open drain
