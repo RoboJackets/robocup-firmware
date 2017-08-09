@@ -1,11 +1,11 @@
 #include <mbed.h>
 
-#include <logger.hpp>
+#include "Logger.hpp"
 
+#include "FPGA.hpp"
+#include "RobotDevices.hpp"
 #include "RotarySelector.hpp"
-#include "fpga.hpp"
 #include "io-expander.hpp"
-#include "robot-devices.hpp"
 
 #define RJ_ENABLE_ROBOT_CONSOLE
 
@@ -95,7 +95,7 @@ int main() {
     s.baud(57600);
 
     isLogging = RJ_LOGGING_EN;
-    rjLogLevel = INIT;
+    rjLogLevel = INFO;
 
     if (isLogging) {
         // reset the console's default settings and enable the cursor
@@ -173,8 +173,8 @@ int main() {
         duty_cycle_all |= (((rotary_vel & (1 << 3)) >> 3) << 9);
 
         // limit max value
-        duty_cycle_all = 100; //std::min(duty_cycle_all, static_cast<uint16_t>(511));
-
+        duty_cycle_all =
+            100;  // std::min(duty_cycle_all, static_cast<uint16_t>(511));
 
         // set the duty cycle values all to our determined value according to
         // the rotary selector
