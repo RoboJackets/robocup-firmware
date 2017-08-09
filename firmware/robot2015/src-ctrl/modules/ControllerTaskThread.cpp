@@ -99,8 +99,8 @@ void Task_Controller(const void* args) {
     Thread::signal_wait(SUB_TASK_CONTINUE, osWaitForever);
 
     std::array<int16_t, 5> duty_cycles{};
-
-    pidController.setPidValues(3.0, 10, 2, 52, 0);
+    
+    pidController.setPidValues(3.0, 10, 2, 30, 0);
 
     // initialize timeout timer
     commandTimeoutTimer = make_unique<RtosTimerHelper>(
