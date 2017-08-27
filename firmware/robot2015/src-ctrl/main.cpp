@@ -262,7 +262,7 @@ int main() {
         // globalRadio->reset();
         radioTimeoutTimer.start(RadioTimeout);
 
-        KickerBoard::Instance->setChargeAllowed(false);
+        //KickerBoard::Instance->setChargeAllowed(false);
         globalRadio->reset();
         globalRadio->setAddress(rtp::ROBOT_ADDRESS);
     }, osTimerOnce);
