@@ -15,6 +15,24 @@ MPU6050::MPU6050(PinName sda, PinName scl, int freq)
     // Initializations:
     currentGyroRange = 0;
     currentAcceleroRange = 0;
+
+    setBW(MPU6050_BW_256);
+    setGyroRange(MPU6050_GYRO_RANGE_250);
+    setAcceleroRange(MPU6050_ACCELERO_RANGE_2G);
+    setSleepMode(false);
+
+    const int num_samples = 100;
+    float alpha = 0.1;
+    for (int i = 0; i < num_samples; ++i) {
+        getGyro(return_gyro_values);
+
+        for (int j = 0; j < 3; ++j) {
+            gyroOffsets[j] = alpha * gyroOffsets[j] + (1 - alpha) * return_gyro_values[j];
+        }
+        wait(0.05);
+    }
+
+    printf("MPU: Gyro offset found to be %f, %f, %f\r\n", gyroOffsets[0], gyroOffsets[1], gyroOffsets[2]);
 }
 
 void MPU6050::write(uint8_t address, uint8_t data) {
@@ -202,7 +220,6 @@ void MPU6050::getGyro(float* data) {
 
     if (currentGyroRange == MPU6050_GYRO_RANGE_1000) {
         data[0] = (float)temp[0] / 1879.3;
-        ;
         data[1] = (float)temp[1] / 1879.3;
         data[2] = (float)temp[2] / 1879.3;
     }
@@ -211,6 +228,10 @@ void MPU6050::getGyro(float* data) {
         data[0] = (float)temp[0] / 939.7;
         data[1] = (float)temp[1] / 939.7;
         data[2] = (float)temp[2] / 939.7;
+    }
+
+    for (int i = 0; i < 3; ++i) {
+        data[i] -= gyroOffsets[i];
     }
 }
 
@@ -235,7 +256,7 @@ float MPU6050::getTemp() {
 /* Should return percent deviation from factory trim
  * values, +/- 14 or less deviation is a pass.
  */
-void MPU6050::selfTest(float* results) {
+void MPU6050::selfTest() {
     uint8_t rawData[4] = {0, 0, 0, 0};
     uint8_t selfTest[6];
     float factoryTrim[6];
@@ -305,17 +326,20 @@ void MPU6050::selfTest(float* results) {
     // of the Self-Test Response
     // To get to percent, must multiply by 100 and subtract result from 100
     for (int i = 0; i < 6; i++) {
-        results[i] = 100.0f +
+        SelfTest[i] = 100.0f +
                      100.0f * (selfTest[i] - factoryTrim[i]) /
                          factoryTrim[i];  // Report percent differences
     }
+
+    printf("x,y,z-axis self test: acceleration trim within : %f, %f, %f of factory value", SelfTest[0], SelfTest[1], SelfTest[2]);
+    printf("x,y,z-axis self test: gyration trim within : %f, %f, %f", SelfTest[3], SelfTest[4], SelfTest[5]);
 }
 
 // Function which accumulates gyro and accelerometer data after device
 // initialization. It calculates the average
 // of the at-rest readings and then loads the resulting offsets into
 // accelerometer and gyro bias registers.
-void MPU6050::calibrate(float* dest1, float* dest2) {
+void MPU6050::calibrate() {
     uint8_t
         data[12];  // data array to hold accelerometer and gyro x, y, z, data
     uint16_t ii, packet_count, fifo_count;
@@ -332,8 +356,8 @@ void MPU6050::calibrate(float* dest1, float* dest2) {
     // get stable time source
     // Set clock source to be PLL with x-axis gyroscope reference, bits 2:0 =
     // 001
-    write(MPU6050_RA_PWR_MGMT_1, 0x01);
-    write(MPU6050_RA_PWR_MGMT_2, 0x00);
+    //write(MPU6050_RA_PWR_MGMT_1, 0x01);
+    //write(MPU6050_RA_PWR_MGMT_2, 0x00);
     Thread::wait(0.2);
 
     // Configure device for bias calculation
@@ -432,9 +456,9 @@ void MPU6050::calibrate(float* dest1, float* dest2) {
     write(MPU6050_RA_ZG_OFFS_USRL, data[5]);
 
     // construct gyro bias in deg/s for later manual subtraction
-    dest1[0] = (float)gyro_bias[0] / (float)gyrosensitivity;
-    dest1[1] = (float)gyro_bias[1] / (float)gyrosensitivity;
-    dest1[2] = (float)gyro_bias[2] / (float)gyrosensitivity;
+    gyroBias[0] = (float)gyro_bias[0] / (float)gyrosensitivity;
+    gyroBias[1] = (float)gyro_bias[1] / (float)gyrosensitivity;
+    gyroBias[2] = (float)gyro_bias[2] / (float)gyrosensitivity;
 
     // Construct the accelerometer biases for push to the hardware accelerometer
     // bias registers. These registers contain
@@ -502,9 +526,9 @@ void MPU6050::calibrate(float* dest1, float* dest2) {
 
     // Output scaled accelerometer biases for manual subtraction in the main
     // program
-    dest2[0] = (float)accel_bias[0] / (float)accelsensitivity;
-    dest2[1] = (float)accel_bias[1] / (float)accelsensitivity;
-    dest2[2] = (float)accel_bias[2] / (float)accelsensitivity;
+    accelBias[0] = (float)accel_bias[0] / (float)accelsensitivity;
+    accelBias[1] = (float)accel_bias[1] / (float)accelsensitivity;
+    accelBias[2] = (float)accel_bias[2] / (float)accelsensitivity;
 }
 
 // Must pass arrays of length 3

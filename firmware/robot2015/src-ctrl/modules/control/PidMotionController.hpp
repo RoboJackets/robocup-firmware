@@ -77,6 +77,9 @@ public:
         float gyroErr = targetTurnRate - measuredTurnRate;
 
         // increase or decrease target to compensate for measured feedback
+        // the idea is that our normal controller will receive a falsified target
+        // turn rate that is actually controlled by a gyro turn rate controller,
+        // and hopefully this will prevent fish-tailing
         targetTurnRate += _gyroPid.run(gyroErr);
 
         _targetVel[2] = targetTurnRate;

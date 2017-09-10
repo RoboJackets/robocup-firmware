@@ -43,14 +43,26 @@ int main() {
     */
 
     MPU6050 imu(RJ_I2C_SDA, RJ_I2C_SCL);
+
+    //imu.selfTest();
+    //imu.reset();
+
+    //imu.calibrate();
+
+    /*
     imu.setBW(MPU6050_BW_256);
     imu.setGyroRange(MPU6050_GYRO_RANGE_250);
     imu.setAcceleroRange(MPU6050_ACCELERO_RANGE_2G);
     imu.setSleepMode(false);
+    */
 
+
+    float return_gyro_vals[3];
     while (true) {
         printf("Test passed? %d\r\n", imu.testConnection());
-        //printf("%hu\r\n", imu.getGyroRawX());
+        //printf("Test passed? %d\r\n", imu.getGyroRawX());
+        imu.getGyro(return_gyro_vals);
+        printf("%f\r\n", return_gyro_vals[2]);
         wait(0.25);
     }
 

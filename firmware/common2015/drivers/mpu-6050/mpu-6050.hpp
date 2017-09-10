@@ -241,14 +241,24 @@ public:
     void read(uint8_t adress, uint8_t* data, int length);
 
     // returns 6 values
-    void selfTest(float* results);
+    void selfTest();
 
-    void calibrate(float* dest1, float* dest2);
+    void calibrate();
 
 private:
     I2CMasterRtos connection;
     uint8_t currentAcceleroRange;
     uint8_t currentGyroRange;
+
+    int16_t accelCount[3];  // Stores the 16-bit signed accelerometer sensor output
+    int16_t gyroCount[3];   // Stores the 16-bit signed gyro sensor output
+    float gyroBias[3] = {0, 0, 0}, accelBias[3] = {0, 0, 0}; // Bias corrections for gyro and accelerometer
+    int16_t tempCount;   // Stores the real internal chip temperature in degrees Celsius
+    float temperature;
+    float SelfTest[6];
+    float gyroOffsets[3];
+
+    float return_gyro_values[3];
 
     void genGyroFT(uint8_t*, float*);
     void genAccelFT(uint8_t*, float*);
