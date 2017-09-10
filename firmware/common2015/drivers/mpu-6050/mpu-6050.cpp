@@ -21,6 +21,12 @@ MPU6050::MPU6050(PinName sda, PinName scl, int freq)
     setAcceleroRange(MPU6050_ACCELERO_RANGE_2G);
     setSleepMode(false);
 
+
+    for (int i = 0; i < 3; ++i) {
+        gyroOffsets[i] = 0.0;
+    }
+
+    //printf("entering calibration\r\n");
     const int num_samples = 100;
     float alpha = 0.1;
     for (int i = 0; i < num_samples; ++i) {
@@ -29,10 +35,10 @@ MPU6050::MPU6050(PinName sda, PinName scl, int freq)
         for (int j = 0; j < 3; ++j) {
             gyroOffsets[j] = alpha * gyroOffsets[j] + (1 - alpha) * return_gyro_values[j];
         }
-        wait(0.05);
+        Thread::wait(0.05);
     }
 
-    printf("MPU: Gyro offset found to be %f, %f, %f\r\n", gyroOffsets[0], gyroOffsets[1], gyroOffsets[2]);
+    //printf("MPU: Gyro offset found to be %f, %f, %f\r\n", gyroOffsets[0], gyroOffsets[1], gyroOffsets[2]);
 }
 
 void MPU6050::write(uint8_t address, uint8_t data) {

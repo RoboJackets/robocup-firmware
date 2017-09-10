@@ -72,17 +72,33 @@ public:
                                float dt, Eigen::Vector4d *errors=nullptr, Eigen::Vector4d *wheelVelsOut=nullptr, 
                                Eigen::Vector4d *targetWheelVelsOut=nullptr) {
 
-        float targetTurnRate = _targetVel[2];
+        print_counter++;
+
+        Eigen::Vector3f target;
+        target = _targetVel;
+
+        // if this is a float.... segfault
+        double targetTurnRate = target[2];
 
         float gyroErr = targetTurnRate - measuredTurnRate;
 
         // increase or decrease target to compensate for measured feedback
         // the idea is that our normal controller will receive a falsified target
-        // turn rate that is actually controlled by a gyro turn rate controller,
+        // rate that is actually controlled by a gyro turn rate controller,
         // and hopefully this will prevent fish-tailing
+        //targetTurnRate += 1.0f;//_gyroPid.run(gyroErr);
         targetTurnRate += _gyroPid.run(gyroErr);
 
-        _targetVel[2] = targetTurnRate;
+        if (print_counter % 200 == 0) {
+            printf("m: %f\r\n", measuredTurnRate);
+            printf("r: %f\r\n", targetTurnRate);
+            //printf("t: %f\r\n", target[2] + 1.0);
+            //printf("m: %f\r\n", measuredTurnRate);
+            //printf("%f\r\n", gyroErr);
+            //fflush(stdout);
+        }
+
+        target[2] = targetTurnRate;
 
         // convert encoder ticks to rad/s
         Eigen::Vector4d wheelVels;
@@ -91,7 +107,7 @@ public:
         wheelVels *= 2.0 * M_PI / ENC_TICKS_PER_TURN / dt;
 
         Eigen::Vector4d targetWheelVels =
-            RobotModel2015.BotToWheel * _targetVel.cast<double>();
+            RobotModel2015.BotToWheel * target.cast<double>();
 
         if (targetWheelVelsOut) {
             *targetWheelVelsOut = targetWheelVels;
@@ -124,7 +140,11 @@ public:
 
             duties[i] = dc;
             dutyCycles[i] = (int16_t) dc;
+
+            printf("dc: %d\r\n", static_cast<int16_t>(dc));
+
         }
+
 
         return dutyCycles;
     }
@@ -136,6 +156,8 @@ private:
     /// controllers for each wheel
     std::array<Pid, 4> _controllers{};
     Pid _gyroPid;
+
+    int print_counter = 0;
 
     Eigen::Vector3f _targetVel{};
 };

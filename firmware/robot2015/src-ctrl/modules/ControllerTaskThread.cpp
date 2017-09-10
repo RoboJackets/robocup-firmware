@@ -76,7 +76,9 @@ void Task_Controller(const void* args) {
     imu.setSleepMode(false);
 
     char testResp;
-    if ((testResp = imu.testConnection())) {
+    if (testResp = imu.testConnection())
+        LOG(INFO, "Imu connection verified");
+        /*
         float resultRatio[6];
         imu.selfTest(resultRatio);
         LOG(INFO,
@@ -86,6 +88,8 @@ void Task_Controller(const void* args) {
             resultRatio[0], resultRatio[1], resultRatio[2], resultRatio[3],
             resultRatio[4], resultRatio[5]);
 
+        */
+        /*
         LOG(OK, "Control loop ready!\r\n    Thread ID: %u, Priority: %d",
             ((P_TCB)threadID)->task_id, threadPriority);
     } else {
@@ -94,6 +98,7 @@ void Task_Controller(const void* args) {
             "sensorless control loop.",
             testResp);
     }
+        */
 #endif
 
     // signal back to main and wait until we're signaled to continue
@@ -103,7 +108,7 @@ void Task_Controller(const void* args) {
     std::array<int16_t, 5> duty_cycles{};
 
     pidController.setPidValues(3.0, 10, 2, 30, 0);
-    pidController.setGyroPid(.1, 0, 0);
+    pidController.setGyroPid(2, 0, 0);
 
     // initialize timeout timer
     commandTimeoutTimer = make_unique<RtosTimerHelper>(
@@ -115,9 +120,7 @@ void Task_Controller(const void* args) {
 
         imu.getGyro(gyroVals);
 
-        float z_gyro = gyroVals[2];
-        std::printf("z_gryo: %f\r\n", z_gyro); // see if gyro is working like we think it is
-        //imu.getAccelero(accelVals);
+        float z_gyro_vel = gyroVals[2];
 
         if (DebugCommunication::configStoreIsValid[DebugCommunication::ConfigCommunication::PID_P]) {
             pidController.updatePValues(DebugCommunication::configValueToFloat(DebugCommunication::ConfigCommunication::PID_P,
@@ -137,7 +140,7 @@ void Task_Controller(const void* args) {
         std::array<int16_t, 5> enc_deltas{};
 
         // zero out command if we haven't gotten an updated target in a while
-        if (commandTimedOut) duty_cycles = {0, 0, 0, 0, 0};
+        //if (commandTimedOut) duty_cycles = {0, 0, 0, 0, 0};
 
         auto statusByte = FPGA::Instance->set_duty_get_enc(
             duty_cycles.data(), duty_cycles.size(), enc_deltas.data(),
@@ -178,7 +181,7 @@ void Task_Controller(const void* args) {
         // run PID controller to determine what duty cycles to use to drive the
         // motors.
         std::array<int16_t, 4> driveMotorDutyCycles =
-                    pidController.run(driveMotorEnc, z_gyro, dt, &errors, &wheelVelsOut, &targetWheelVelsOut);
+                    pidController.run(driveMotorEnc, z_gyro_vel, dt, &errors, &wheelVelsOut, &targetWheelVelsOut);
 
         DebugCommunication::debugStore[DebugCommunication::DebugResponse::PIDError0] = DebugCommunication::debugResponseToValue(DebugCommunication::DebugResponse::PIDError0, errors[0]);
         DebugCommunication::debugStore[DebugCommunication::DebugResponse::PIDError1] = DebugCommunication::debugResponseToValue(DebugCommunication::DebugResponse::PIDError1, errors[1]);

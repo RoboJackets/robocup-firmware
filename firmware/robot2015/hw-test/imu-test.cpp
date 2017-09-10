@@ -58,12 +58,16 @@ int main() {
 
 
     float return_gyro_vals[3];
+    float pos_rad = 0.0;
+    const float delta = 0.05;
     while (true) {
-        printf("Test passed? %d\r\n", imu.testConnection());
+        //printf("Test passed? %d\r\n", imu.testConnection());
         //printf("Test passed? %d\r\n", imu.getGyroRawX());
         imu.getGyro(return_gyro_vals);
-        printf("%f\r\n", return_gyro_vals[2]);
-        wait(0.25);
+        pos_rad += return_gyro_vals[2] * delta;
+        printf("%f\r\n", pos_rad);
+
+        wait(delta);
     }
 
 }
