@@ -353,15 +353,14 @@ void MPU6050::calibrate() {
     const uint16_t gyrosensitivity = 131;     // = 131 LSB/degrees/sec
     const uint16_t accelsensitivity = 16384;  // = 16384 LSB/g
 
-    // reset device, reset all registers, clear gyro and accelerometer bias
-    // registers
-    write(MPU6050_RA_PWR_MGMT_1,
-          0x80);  // Write a one to bit 7 reset bit; toggle reset device
+    // reset device
+    write(MPU6050_RA_PWR_MGMT_1, 1 << 7);
     Thread::wait(0.1);
 
     // get stable time source
     // Set clock source to be PLL with x-axis gyroscope reference, bits 2:0 =
     // 001
+    // this is causing loss of communication with the chip? Or is it disabling x gyro?
     //write(MPU6050_RA_PWR_MGMT_1, 0x01);
     //write(MPU6050_RA_PWR_MGMT_2, 0x00);
     Thread::wait(0.2);
@@ -380,8 +379,7 @@ void MPU6050::calibrate() {
     write(MPU6050_RA_SMPLRT_DIV, 0x00);   // Set sample rate to 1 kHz
     write(MPU6050_RA_GYRO_CONFIG, 0x00);  // Set gyro full-scale to 250 degrees
     // per second, maximum sensitivity
-    write(MPU6050_RA_ACCEL_CONFIG,
-          0x00);  // Set accelerometer full-scale to 2 g, maximum sensitivity
+    write(MPU6050_RA_ACCEL_CONFIG, 0x00);  // Set accelerometer full-scale to 2 g, maximum sensitivity
 
     // Configure FIFO to capture accelerometer and gyro data for bias
     // calculation
@@ -392,8 +390,7 @@ void MPU6050::calibrate() {
     Thread::wait(0.08);  // accumulate 80 samples in 80 milliseconds = 960 bytes
 
     // At end of sample accumulation, turn off FIFO sensor read
-    write(MPU6050_RA_FIFO_EN,
-          0x00);  // Disable gyro and accelerometer sensors for FIFO
+    write(MPU6050_RA_FIFO_EN, 0x00);  // Disable gyro and accelerometer sensors for FIFO
 
     // read FIFO sample count
     read(MPU6050_RA_FIFO_COUNTH, &data[0], 2);
@@ -523,12 +520,12 @@ void MPU6050::calibrate() {
     // registers
 
     // Push accelerometer biases to hardware registers
-    //  write(XA_OFFSET_H, data[0]);
-    //  write(XA_OFFSET_L_TC, data[1]);
-    //  write(YA_OFFSET_H, data[2]);
-    //  write(YA_OFFSET_L_TC, data[3]);
-    //  write(ZA_OFFSET_H, data[4]);
-    //  write(ZA_OFFSET_L_TC, data[5]);
+    write(XA_OFFSET_H, data[0]);
+    write(XA_OFFSET_L_TC, data[1]);
+    write(YA_OFFSET_H, data[2]);
+    write(YA_OFFSET_L_TC, data[3]);
+    write(ZA_OFFSET_H, data[4]);
+    write(ZA_OFFSET_L_TC, data[5]);
 
     // Output scaled accelerometer biases for manual subtraction in the main
     // program
