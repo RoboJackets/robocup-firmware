@@ -141,7 +141,7 @@ public:
             duties[i] = dc;
             dutyCycles[i] = (int16_t) dc;
 
-            printf("dc: %d\r\n", static_cast<int16_t>(dc));
+            //printf("dc: %d\r\n", static_cast<int16_t>(dc));
 
         }
 

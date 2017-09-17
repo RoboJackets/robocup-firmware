@@ -346,6 +346,7 @@ void MPU6050::selfTest() {
 // of the at-rest readings and then loads the resulting offsets into
 // accelerometer and gyro bias registers.
 void MPU6050::calibrate() {
+    /*
     uint8_t
         data[12];  // data array to hold accelerometer and gyro x, y, z, data
     uint16_t ii, packet_count, fifo_count;
@@ -532,6 +533,7 @@ void MPU6050::calibrate() {
     accelBias[0] = (float)accel_bias[0] / (float)accelsensitivity;
     accelBias[1] = (float)accel_bias[1] / (float)accelsensitivity;
     accelBias[2] = (float)accel_bias[2] / (float)accelsensitivity;
+    */
 }
 
 // Must pass arrays of length 3
