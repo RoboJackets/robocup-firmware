@@ -2,11 +2,11 @@
 
 #if DEVICE_I2C
 
-#include <mbed.h>
-#include <rtos.h>
+#include "Mbed.hpp"
+#include "Rtos.hpp"
 // #include "cmsis_os.h"
 
-#include "logger.hpp"
+#include "Logger.hpp"
 
 // little helpers cloned from official i2c api
 #if defined(TARGET_LPC1768) || defined(TARGET_LPC2368)

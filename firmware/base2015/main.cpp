@@ -1,16 +1,16 @@
 #include <cmsis_os.h>
-#include <mbed.h>
 #include <memory>
+#include "Mbed.hpp"
 
 #include "CC1201Radio.hpp"
 #include "Decawave.hpp"
+#include "Logger.hpp"
+#include "Logger.hpp"
 #include "RJBaseUSBDevice.hpp"
 #include "SharedSPI.hpp"
+#include "Watchdog.hpp"
 #include "firmware-common/base2015/usb-interface.hpp"
-#include "logger.hpp"
-#include "logger.hpp"
 #include "pins.hpp"
-#include "watchdog.hpp"
 
 #define RJ_WATCHDOG_TIMER_VALUE 2  // seconds
 
@@ -31,30 +31,32 @@ bool initRadio() {
     auto txTimeoutLED = make_shared<FlashingTimeoutLED>(LED2);
 
     // Startup the CommModule interface
-    CommModule::Instance = make_shared<CommModule>(rxTimeoutLED, txTimeoutLED);
+    CommModule::Instance = make_shared<CommModule>();
 
-    // Create a new physical hardware communication link
-    global_radio = new Decawave(sharedSPI, RJ_RADIO_nCS, RJ_RADIO_INT);
+    // Construct an object pointer for the radio
+    globalRadio =
+        std::make_unique<Decawave>(sharedSPI, RJ_RADIO_nCS, RJ_RADIO_INT, RJ_RADIO_nRESET);
 
-    return global_radio->isConnected();
+    return globalRadio->isConnected();
 }
 
-void radioRxHandler(rtp::packet pkt) {
-    LOG(INF3, "radioRxHandler()");
+void radioRxHandler(rtp::Packet pkt) {
+    LOG(DEBUG, "radioRxHandler()");
     // write packet content (including header) out to EPBULK_IN
     vector<uint8_t> buf;
     pkt.pack(&buf);
 
     // drop the packet if it's the wrong size. Thsi will need to be changed if
     // we have variable-sized reply packets
-    if (buf.size() != rtp::Reverse_Size) {
+    if (buf.size() != rtp::ReverseSize) {
         LOG(WARN, "Dropping packet, wrong size '%u', should be '%u'",
-            buf.size(), rtp::Reverse_Size);
+            buf.size(), rtp::ReverseSize);
         return;
     }
 
     bool success = usbLink.writeNB(EPBULK_IN, buf.data(), buf.size(),
                                    MAX_PACKET_SIZE_EPBULK);
+    (void)success;  // disable unused-variable warnings
 
     // TODO(justin): add this message back in. For some reason, the usb system
     // reports failure *unless* I add a print statement inside
@@ -72,75 +74,75 @@ int main() {
 
     // Set the default logging configurations
     isLogging = RJ_LOGGING_EN;
-    rjLogLevel = INIT;
+    rjLogLevel = INFO;
 
     printf("****************************************\r\n");
-    LOG(INIT, "Base station starting...");
+    LOG(INFO, "Base station starting...");
 
     if (initRadio()) {
-        // LOG(INIT, "Radio interface ready on %3.2fMHz!",
-        // global_radio->freq());
+        // LOG(OK, "Radio interface ready on %3.2fMHz!",
+        // globalRadio->freq());
 
         // register handlers for any ports we might use
-        for (rtp::Port port :
-             {rtp::Port::CONTROL, rtp::Port::PING, rtp::Port::LEGACY}) {
+        for (rtp::PortType port : {rtp::PortType::CONTROL, rtp::PortType::PING,
+                                   rtp::PortType::LEGACY}) {
             CommModule::Instance->setRxHandler(&radioRxHandler, port);
-            CommModule::Instance->setTxHandler((CommLink*)global_radio,
-                                               &CommLink::sendPacket, port);
+            CommModule::Instance->setTxHandler(
+                dynamic_cast<CommLink*>(globalRadio.get()),
+                &CommLink::sendPacket, port);
         }
     } else {
-        LOG(FATAL, "No radio interface found!");
+        LOG(SEVERE, "No radio interface found!");
     }
 
-    global_radio->setAddress(rtp::BASE_STATION_ADDRESS);
+    globalRadio->setAddress(rtp::BASE_STATION_ADDRESS);
 
-    DigitalOut radioStatusLed(LED4, global_radio->isConnected());
+    DigitalOut radioStatusLed(LED4, globalRadio->isConnected());
 
     // set callbacks for usb control transfers
     usbLink.writeRegisterCallback =
-        [](uint8_t reg, uint8_t val) {  // global_radio->writeReg(reg, val);
-            LOG(INIT, "Trying to write");
+        [](uint8_t reg, uint8_t val) {  // globalRadio->writeReg(reg, val);
+            LOG(DEBUG, "Trying to write");
         };
     usbLink.readRegisterCallback =
-        [](uint8_t reg) {  // return global_radio->readReg(reg);
-            LOG(INIT, "Tring to read");
+        [](uint8_t reg) {  // return globalRadio->readReg(reg);
+            LOG(DEBUG, "Tring to read");
             return 0;
         };
     usbLink.strobeCallback =
-        [](uint8_t strobe) {  // global_radio->strobe(strobe);
-            LOG(INIT, "trying to strobe");
+        [](uint8_t strobe) {  // globalRadio->strobe(strobe);
+            LOG(DEBUG, "trying to strobe");
         };
     usbLink.setRadioChannelCallback = [](uint8_t chanNumber) {
-        // global_radio->setChannel(chanNumber);
-        LOG(INIT, "(Not) Set radio channel to %u", chanNumber);
+        // globalRadio->setChannel(chanNumber);
+        LOG(OK, "(Not) Set radio channel to %u", chanNumber);
     };
 
-    LOG(INIT, "Initializing USB interface...");
+    LOG(OK, "Initializing USB interface...");
     usbLink.connect();  // note: this blocks until the link is connected
-    LOG(INIT, "Initialized USB interface!");
+    LOG(OK, "Initialized USB interface!");
 
     // Set the watdog timer's initial config
-    Watchdog::Set(RJ_WATCHDOG_TIMER_VALUE);
+    Watchdog::set(RJ_WATCHDOG_TIMER_VALUE);
 
-    LOG(INIT, "Listening for commands over USB");
+    LOG(OK, "Listening for commands over USB");
 
     // buffer to read data from usb bulk transfers into
-    uint8_t buf[MAX_PACKET_SIZE_EPBULK];
-    uint32_t bufSize;
+    auto buf = std::array<uint8_t, MAX_PACKET_SIZE_EPBULK>{};
+    auto bufSize = uint32_t{};
 
     while (true) {
         // make sure we can always reach back to main by renewing the watchdog
         // timer periodically
-        Watchdog::Renew();
+        Watchdog::renew();
         // attempt to read data from EPBULK_OUT
         // if data is available, write it into @pkt and send it
-        if (usbLink.readEP_NB(EPBULK_OUT, buf, &bufSize,
+        if (usbLink.readEP_NB(EPBULK_OUT, buf.data(), &bufSize,
                               MAX_PACKET_SIZE_EPBULK)) {
-            LOG(INF3, "Read %d bytes from BULK IN", bufSize);
+            LOG(DEBUG, "Read %d bytes from BULK IN", bufSize);
 
             // construct packet from buffer received over USB
-            rtp::packet pkt;
-            pkt.recv(buf, bufSize);
+            rtp::Packet pkt(buf);
 
             // send to all robots
             pkt.header.address = rtp::ROBOT_ADDRESS;

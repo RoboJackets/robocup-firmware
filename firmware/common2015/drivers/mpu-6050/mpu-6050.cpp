@@ -6,8 +6,8 @@
 
 #include <cmath>
 
-#include <rtos.h>
-#include <logger.hpp>
+#include "Logger.hpp"
+#include "Rtos.hpp"
 
 MPU6050::MPU6050(PinName sda, PinName scl, int freq)
     : connection(sda, scl, freq) {
@@ -37,27 +37,20 @@ void MPU6050::read(uint8_t address, uint8_t* data, int length) {
 }
 
 void MPU6050::setSleepMode(bool state) {
-    uint8_t temp;
-    temp = this->read(MPU6050_RA_PWR_MGMT_1);
-
+    auto temp = this->read(MPU6050_RA_PWR_MGMT_1);
     if (state == true) temp |= 1 << MPU6050_SLP_BIT;
-
     if (state == false) temp &= ~(1 << MPU6050_SLP_BIT);
-
     this->write(MPU6050_RA_PWR_MGMT_1, temp);
 }
 
 bool MPU6050::testConnection() {
-    uint8_t temp;
-    temp = this->read(MPU6050_RA_WHO_AM_I);
-    LOG(OK, "MPU-6050 'WHO_AM_I' reg: 0x%02X", temp);
+    auto temp = this->read(MPU6050_RA_WHO_AM_I);
     return (temp == (MPU6050_ADDRESS & 0xFE));
 }
 
 void MPU6050::setBW(uint8_t BW) {
-    uint8_t temp;
     BW = BW & 0x07;
-    temp = this->read(MPU6050_RA_CONFIG);
+    auto temp = this->read(MPU6050_RA_CONFIG);
     temp &= 0xF8;
     temp = temp + BW;
     this->write(MPU6050_RA_CONFIG, temp);
@@ -66,13 +59,9 @@ void MPU6050::setBW(uint8_t BW) {
 uint8_t MPU6050::getRate() { return this->read(MPU6050_RA_SMPLRT_DIV); }
 
 void MPU6050::setI2CBypass(bool state) {
-    uint8_t temp;
-    temp = this->read(MPU6050_RA_INT_PIN_CFG);
-
+    auto temp = this->read(MPU6050_RA_INT_PIN_CFG);
     if (state == true) temp |= 1 << MPU6050_BYPASS_BIT;
-
     if (state == false) temp &= ~(1 << MPU6050_BYPASS_BIT);
-
     this->write(MPU6050_RA_INT_PIN_CFG, temp);
 }
 
@@ -81,10 +70,9 @@ void MPU6050::setI2CBypass(bool state) {
 //--------------------------------------------------
 
 void MPU6050::setAcceleroRange(uint8_t range) {
-    uint8_t temp;
     range = range & 0x03;
     currentAcceleroRange = range;
-    temp = this->read(MPU6050_RA_ACCEL_CONFIG);
+    auto temp = this->read(MPU6050_RA_ACCEL_CONFIG);
     temp &= ~(3 << 3);
     temp = temp + (range << 3);
     this->write(MPU6050_RA_ACCEL_CONFIG, temp);

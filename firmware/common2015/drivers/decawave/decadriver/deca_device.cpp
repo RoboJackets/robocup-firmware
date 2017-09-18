@@ -10,8 +10,8 @@
  *
  */
 
-#include "mbed.h"
-#include <logger.hpp>
+#include "Mbed.hpp"
+#include "Logger.hpp"
 
 #include "deca_types.h"
 #include "deca_param_types.h"
@@ -86,7 +86,7 @@ int dw1000_api::dwt_initialise(uint16 config)
     uint32_t chip_version = dwt_readdevid();
     if (DWT_DEVICE_ID != chip_version) // MP IC ONLY (i.e. DW1000) FOR THIS CODE
     {
-        LOG(FATAL,
+        LOG(SEVERE,
             "Decawave part number error:\r\n"
             "    Found:\t0x%02X (expected 0x%02X)",
             chip_version, DWT_DEVICE_ID);
@@ -2291,7 +2291,7 @@ void dw1000_api::dwt_setleds(uint8 mode)
         // Set up MFIO for LED output.
         reg = dwt_read32bitoffsetreg(GPIO_CTRL_ID, GPIO_MODE_OFFSET);
         reg &= ~(GPIO_MSGP2_MASK | GPIO_MSGP3_MASK);
-        reg |= (GPIO_PIN2_RXLED | GPIO_PIN3_TXLED);
+        reg |= (GPIO_PIN2_RXLED | GPIO_PIN3_TXLED | GPIO_PIN0_RXOKLED);
         dwt_write32bitoffsetreg(GPIO_CTRL_ID, GPIO_MODE_OFFSET, reg);
 
         // Enable LP Oscillator to run from counter and turn on de-bounce clock.
@@ -3245,4 +3245,3 @@ void dw1000_api::dwt_setautorxreenable(int enable)
 
    ===============================================================================================
 */
-

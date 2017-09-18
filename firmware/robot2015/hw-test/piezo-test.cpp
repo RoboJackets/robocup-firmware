@@ -1,9 +1,9 @@
-#include <mbed.h>
-#include <rtos.h>
+#include "Mbed.hpp"
+#include "Rtos.hpp"
 
 #include <array>
 
-#include <helper-funcs.hpp>
+#include <HelperFuncs.hpp>
 
 #include "robot-devices.hpp"
 

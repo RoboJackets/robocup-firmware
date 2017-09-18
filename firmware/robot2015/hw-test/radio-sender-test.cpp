@@ -7,12 +7,12 @@
  */
 
 #include <cmsis_os.h>
-#include <mbed.h>
 #include <memory>
+#include "Mbed.hpp"
 
 #include "CC1201Radio.hpp"
+#include "Logger.hpp"
 #include "SharedSPI.hpp"
-#include "logger.hpp"
 #include "pins-ctrl-2015.hpp"
 
 using namespace std;
@@ -33,17 +33,18 @@ bool initRadio() {
     // Startup the CommModule interface
     CommModule::Instance = make_shared<CommModule>(rxTimeoutLED, txTimeoutLED);
 
-    // Create a new physical hardware communication link
-    global_radio =
-        new CC1201(sharedSPI, RJ_RADIO_nCS, RJ_RADIO_INT, preferredSettings,
-                   sizeof(preferredSettings) / sizeof(registerSetting_t));
+    // Construct an object pointer for the radio
+    constexpr auto settingsSize =
+        sizeof(preferredSettings) / sizeof(registerSetting_t);
+    globalRadio = std::make_unique<CC1201>(
+        sharedSPI, RJ_RADIO_nCS, RJ_RADIO_INT, preferredSettings, settingsSize);
 
-    return global_radio->isConnected();
+    return globalRadio->isConnected();
 }
 
-void radioRxHandler(rtp::packet pkt) {
+void radioRxHandler(rtp::Packet pkt) {
     static int rxCount = 0;
-    rxCount++;
+    ++rxCount;
     printf("<-- %d\r\n", rxCount);
 }
 
@@ -57,30 +58,30 @@ int main() {
     rjLogLevel = INIT;
 
     printf("****************************************\r\n");
-    LOG(INIT, "Radio test sender starting...");
+    LOG(INFO, "Radio test sender starting...");
 
     if (initRadio()) {
-        LOG(INIT, "Radio interface ready on %3.2fMHz!", global_radio->freq());
+        LOG(OK, "Radio interface ready on %3.2fMHz!", globalRadio->freq());
 
         // register handlers for any ports we might use
         for (rtp::Port port :
              {rtp::Port::CONTROL, rtp::Port::PING, rtp::Port::LEGACY}) {
             CommModule::Instance->setRxHandler(&radioRxHandler, port);
-            CommModule::Instance->setTxHandler((CommLink*)global_radio,
+            CommModule::Instance->setTxHandler((CommLink*)globalRadio,
                                                &CommLink::sendPacket, port);
         }
     } else {
-        LOG(FATAL, "No radio interface found!");
+        LOG(SEVERE, "No radio interface found!");
     }
 
     DigitalOut senderIndicator(LED3, 1);
-    DigitalOut radioStatusLed(LED4, global_radio->isConnected());
+    DigitalOut radioStatusLed(LED4, globalRadio->isConnected());
 
     // send packets every @TRANSMIT_INTERVAL forever
     while (true) {
         static int txCount = 0;
 
-        rtp::packet pkt;
+        rtp::Packet pkt;
         pkt.header.port = rtp::Port::CONTROL;
         pkt.header.address = rtp::BROADCAST_ADDRESS;
 

@@ -1,6 +1,6 @@
 #include "I2CDriver.hpp"
 
-#include <logger.hpp>
+#include "Logger.hpp"
 
 #include "i2cRtos_api.hpp"
 
@@ -31,16 +31,20 @@ I2CDriver::I2CDriver(PinName sda, PinName scl, int hz, int slaveAdr)
     }
 
     // check pins and determine i2c channel
-    int channel = 0;
+    auto channel = int{0};
 #if defined(TARGET_LPC1768) || defined(TARGET_LPC2368)
-    if (sda == c_sdas[0] && scl == c_scls[0])
+    if (sda == c_sdas[0] && scl == c_scls[0]) {
         channel = 0;  // I2C_1
-    else
+    } else {
+#else
+    if (true) {
 #endif
-        if (sda == c_sdas[1] && scl == c_scls[1])
-        channel = 1;  // I2C_2 or I2C
-    else
-        LOG(SEVERE, "I2CDriver: Invalid I2C pins selected");
+        if (sda == c_sdas[1] && scl == c_scls[1]) {
+            channel = 1;  // I2C_2 or I2C
+        } else {
+            LOG(SEVERE, "I2CDriver: Invalid I2C pins selected");
+        }
+    }
 
     // initialize the selected i2c channel
     if (s_channels[channel] == 0) {

@@ -1,5 +1,5 @@
-#include <mbed.h>
-#include <rtos.h>
+#include "Mbed.hpp"
+#include "Rtos.hpp"
 
 #include "KickerBoard.hpp"
 #include "SharedSPI.hpp"
@@ -27,7 +27,7 @@ std::string bool_to_string(bool b) { return b ? "true" : "false"; }
 
 int main() {
     isLogging = true;
-    rjLogLevel = INF2;
+    rjLogLevel = INFO;
     lifeLight.attach(&imAlive, ALIVE_BLINK_RATE);
 
     pc.baud(BAUD_RATE);  // set up the serial

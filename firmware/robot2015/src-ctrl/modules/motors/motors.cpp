@@ -1,15 +1,15 @@
 #include "motors.hpp"
 
-#include <mbed.h>
-#include <rtos.h>
-#include <Console.hpp>
-#include <numparser.hpp>
+#include "Console.hpp"
+#include "HelperFuncs.hpp"
+#include "Mbed.hpp"
+#include "Rtos.hpp"
 
-#include "commands.hpp"
-#include "fpga.hpp"
+#include "Commands.hpp"
+#include "FPGA.hpp"
 
 namespace {
-const int NUM_MOTORS = 5;
+constexpr auto NUM_MOTORS = 5;
 
 motor_t mtrEx = {.vel = 0x4D,
                  .hall = 0x0A,
@@ -33,15 +33,17 @@ void motors_Init() {
 
 uint8_t motors_refresh() {
     std::array<int16_t, NUM_MOTORS> enc_deltas = {0};
-    uint8_t status_byte =
+    auto status_byte =
         FPGA::Instance->read_encs(enc_deltas.data(), enc_deltas.size());
 
-    for (auto i = 0; i < global_motors.size(); ++i)
+    for (size_t i = 0; i < global_motors.size(); ++i)
         global_motors[i].status.hasError =
             (status_byte & (1 << i)) ? true : false;
+
     return status_byte;
 }
 
+#ifndef NDEBUG
 void motors_show() {
     std::array<int16_t, NUM_MOTORS> duty_cycles = {0};
     std::array<uint8_t, NUM_MOTORS> halls = {0};
@@ -86,7 +88,7 @@ int cmd_motors_scroll(const std::vector<std::string>& args) {
 
     // move cursor back 8 rows
     printf("\033[%uA", 8);
-    Console::Instance()->Flush();
+    Console::Instance->Flush();
 
     Thread::wait(300);
     return 0;
@@ -150,3 +152,4 @@ int cmd_motors(const std::vector<std::string>& args) {
 
     return 0;
 }
+#endif

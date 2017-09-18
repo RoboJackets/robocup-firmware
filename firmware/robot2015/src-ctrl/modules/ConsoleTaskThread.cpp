@@ -1,89 +1,99 @@
-#include <rtos.h>
-#include <mbed_rpc.h>
-
-#include <Console.hpp>
-#include <logger.hpp>
-#include <assert.hpp>
-
-#include "task-signals.hpp"
-#include "commands.hpp"
+#include "Assert.hpp"
+#include "Commands.hpp"
+#include "Console.hpp"
+#include "Logger.hpp"
+#include "Rtos.hpp"
+#include "TaskSignals.hpp"
+#include "git_version.hpp"
+#include "mbed_rpc.h"
 
 /**
  * Initializes the console
  */
-void Task_SerialConsole(void const* args) {
-    const osThreadId mainID = (const osThreadId)args;
+void Task_SerialConsole(const void* args) {
+    const auto mainID = static_cast<osThreadId>(const_cast<void*>(args));
 
     // Store the thread's ID
-    const osThreadId threadID = Thread::gettid();
+    const auto threadID = Thread::gettid();
     ASSERT(threadID != nullptr);
 
     // Store our priority so we know what to reset it to after running a command
-    const osPriority threadPriority = osThreadGetPriority(threadID);
+    const auto threadPriority = osThreadGetPriority(threadID);
 
     // Initalize the console buffer and save the char buffer's starting address
-    std::shared_ptr<Console> console = Console::Instance();
+    // std::shared_ptr<Console> console = ;
+    Console::Instance = std::make_shared<Console>();
 
     // Set the console username to whoever the git author is
-    console->changeUser(git_head_author);
+    Console::Instance->changeUser(git_head_author);
 
     // Let everyone know we're ok
-    LOG(INIT,
+    LOG(OK,
         "Serial console ready!\r\n"
         "    Thread ID: %u, Priority: %d",
-        ((P_TCB)threadID)->task_id, threadPriority);
+        reinterpret_cast<P_TCB>(threadID)->task_id, threadPriority);
 
     // Signal back to main and wait until we're signaled to continue
     osSignalSet(mainID, MAIN_TASK_CONTINUE);
     Thread::signal_wait(SUB_TASK_CONTINUE, osWaitForever);
 
     // Display RoboJackets if we're up and running at this point during startup
-    console->ShowLogo();
+    Console::Instance->ShowLogo();
 
     // Print out the header to show the user we're ready for input
-    console->PrintHeader();
+    Console::Instance->PrintHeader();
 
     // Set the title of the terminal window
-    console->SetTitle("RoboJackets");
+    Console::Instance->SetTitle("RoboJackets");
 
     while (true) {
         // Execute any active iterative command
         execute_iterative_command();
 
         // If there is a new command to handle, parse and process it
-        if (console->CommandReady() == true) {
-            // Increase the thread's priority first so we can make sure the
-            // scheduler will select it to run
-            osStatus tState =
-                osThreadSetPriority(threadID, osPriorityAboveNormal);
+        if (Console::Instance->CommandReady() == true) {
+// Increase the thread's priority first so we can make sure the
+// scheduler will select it to run
+#ifndef NDEBUG
+            auto tState = osThreadSetPriority(threadID, osPriorityAboveNormal);
             ASSERT(tState == osOK);
+#else
+            osThreadSetPriority(threadID, osPriorityAboveNormal);
+#endif
 
             // Execute the command
-            size_t rxLen = console->rxBuffer().size() + 1;
+            const auto rxLen = Console::Instance->rxBuffer().size() + 1;
             char rx[rxLen];
-            memcpy(rx, console->rxBuffer().c_str(), rxLen - 1);
+            memcpy(rx, Console::Instance->rxBuffer().c_str(), rxLen - 1);
             rx[rxLen - 1] = '\0';
 
             // Detach the console from reading stdin while the comamnd is
             // running to allow the command to read input.  We re-attach the
             // Console's handler as soon as the command is done executing.
-            console->detachInputHandler();
+            Console::Instance->detachInputHandler();
             execute_line(rx);
             // flush any extra characters that were input while executing cmd
-            while (console->pc.readable()) console->pc.getc();
-            console->attachInputHandler();
+            while (Console::Instance->pc.readable())
+                Console::Instance->pc.getc();
+            Console::Instance->attachInputHandler();
 
-            // Now, reset the priority of the thread to its idle state
+// Now, reset the priority of the thread to its idle state
+#ifndef NDEBUG
             tState = osThreadSetPriority(threadID, threadPriority);
             ASSERT(tState == osOK);
+#else
+            osThreadSetPriority(threadID, threadPriority);
+#endif
 
-            console->CommandHandled();
+            Console::Instance->CommandHandled();
         }
 
         // Check if a system stop is requested
-        if (console->IsSystemStopRequested() == true) break;
+        if (Console::Instance->IsSystemStopRequested() == true) break;
 
         // Yield to other threads when not needing to execute anything
         Thread::yield();
     }
+
+    ASSERT(!"Execution is at an unreachable line!");
 }

@@ -1,11 +1,11 @@
 #include "RJBaseUSBDevice.hpp"
 #include <USBDescriptor.h>
 #include <USBDevice_Types.h>
+#include "Logger.hpp"
 #include "firmware-common/base2015/usb-interface.hpp"
-#include "logger.hpp"
 
 bool RJBaseUSBDevice::USBCallback_setConfiguration(uint8_t configuration) {
-    LOG(INIT, "RJBaseUSBDevice::USBCallback_setConfiguration() called");
+    LOG(DEBUG, "RJBaseUSBDevice::USBCallback_setConfiguration() called");
 
     // Configuration 1 is our only configuration
     if (configuration != 1) return false;
@@ -28,7 +28,7 @@ bool RJBaseUSBDevice::USBCallback_request() {
     if (transfer->setup.bmRequestType.Type == VENDOR_TYPE) {
         switch (transfer->setup.bRequest) {
             case Base2015ControlCommand::RadioWriteRegister:
-                LOG(INF3, "writeReg request");
+                LOG(DEBUG, "writeReg request");
                 return true;
                 if (writeRegisterCallback)
                     writeRegisterCallback(transfer->setup.wIndex,
@@ -36,7 +36,7 @@ bool RJBaseUSBDevice::USBCallback_request() {
                 return true;
 
             case Base2015ControlCommand::RadioReadRegister:
-                LOG(INF3, "readReg request");
+                LOG(DEBUG, "readReg request");
                 return true;
                 if (transfer->setup.wLength > 0 && readRegisterCallback) {
                     _controlTransferReplyValue =
@@ -53,13 +53,13 @@ bool RJBaseUSBDevice::USBCallback_request() {
                 return true;
 
             case Base2015ControlCommand::RadioStrobe:
-                LOG(INF3, "strobe request");
+                LOG(DEBUG, "strobe request");
                 return true;
                 if (strobeCallback) strobeCallback(transfer->setup.wIndex);
                 return true;
 
             case Base2015ControlCommand::RadioSetChannel:
-                LOG(INF3, "set channel request");
+                LOG(DEBUG, "set channel request");
                 return true;
                 if (setRadioChannelCallback)
                     setRadioChannelCallback(transfer->setup.wValue);

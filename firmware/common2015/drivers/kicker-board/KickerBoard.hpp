@@ -1,9 +1,10 @@
 #pragma once
 
 #include <mbed.h>
-#include <logger.hpp>
 #include <string>
+#include "Logger.hpp"
 #include "AVR910.hpp"
+#include "RtosTimerHelper.hpp"
 #include "kicker_commands.h"
 
 /**
@@ -21,9 +22,14 @@ public:
      *     loaded by the flash() method
      */
     KickerBoard(std::shared_ptr<SharedSPI> sharedSPI, PinName nCs,
-                PinName nReset, const std::string& progFilename);
+                PinName nReset, PinName ball_led, const std::string& progFilename);
+
+    DigitalOut ballSenseLED;
 
     static std::shared_ptr<KickerBoard> Instance;
+
+
+    std::unique_ptr<RtosTimerHelper> serviceTimer;
 
     /**
      * @brief Reflashes the program on the kicker board MCU with the file
@@ -37,53 +43,41 @@ public:
      */
     bool flash(bool onlyIfDifferent = true, bool verbose = false);
 
+
+    void start();
+
     /**
      * @brief Sends the KickerBoard a command to kick for the allotted time in
      *     in milliseconds. This roughly corresponds to kick strength.
      *
-     * @param time Millisecond kick time, can only range from 0 to 255 ms
+     * @param Kicker strength, eventually gets mapped to duty cycle
      * @return If the kick command was acknowledged
      */
-    bool kick(uint8_t time);
+    void kick(uint8_t strength);
 
-    /**
-     * @brief Sends the KickerBoard a command to chip for the allotted time in
-     *     in milliseconds. This roughly corresponds to chip strength.
-     * @param time Millisecond chip time, can only range from 0 to 255 ms
-     * @return If the chip command was acknowledged
-     */
-    bool chip(uint8_t time);
+    void kickOnBreakbeam(uint8_t strength);
+
+    void cancelBreakbeam();
+
+    bool isCharging();
+
+    bool isBallSensed();
 
     /**
      * @brief Reads the charge voltage back from the KickerBoard.
-     * @param voltage Output voltage 0 (GND) to 255 (Vd)
+     * @param voltage Output voltage 0 (GND) to 255 (Vd),
+     * roughly maps to actual voltage in V
      * @return If the read_voltage command was acknowledged
      */
-    bool read_voltage(uint8_t* voltage);
+    uint8_t getVoltage();
 
     /**
      * @brief Sets the charge pin (to high)
      * @return If the charge command was acknowledged
      */
-    bool charge();
+    void setChargeAllowed(bool chargeAllowed);
 
-    /**
-     * @brief Clears the charge pin
-     * @return If the stop_charging command was acknowledged
-     */
-    bool stop_charging();
-
-    /**
-     * @brief Sends a ping command and checks that we get the correct resposne
-     * @return If the ping command was acknowledged
-     */
-    bool is_pingable();
-
-    /**
-     * @brief Gets the current charging state
-     * @return True if charging is enabled, otherwise false
-     */
-    bool is_charge_enabled();
+    bool isHealthy();
 
 protected:
     /**
@@ -100,6 +94,26 @@ private:
     bool verbose;
 
     std::string _filename;
+
+    // Note, these fields only updated after some command is send to kicker
+    bool _is_charging = false;
+    bool _ball_sensed = false;
+    bool _is_breakbeam_armed = false;
+    bool _is_kicking = false;
+
+    bool _is_healthy = true;
+
+    uint8_t _current_voltage = 0;
+
+    bool _kick_immediate_commanded = false;
+    bool _kick_breakbeam_commanded = false;
+    bool _cancel_breakbeam_commanded = false;
+    uint8_t _kick_strength = 0;
+
+    bool _charging_commanded = false;
+    bool _stop_charging_commanded = false;
+
+    void service();
 
     /**
      * This function enforces the design choice that each cmd must have an arg

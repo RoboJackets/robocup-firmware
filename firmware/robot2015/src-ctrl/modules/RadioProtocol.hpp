@@ -1,14 +1,14 @@
 #pragma once
 
-#include <rtos.h>
 #include "CC1201.hpp"
 #include "CommModule.hpp"
 #include "Decawave.hpp"
+#include "Rtos.hpp"
 #include "RtosTimerHelper.hpp"
 
 class RadioProtocol {
 public:
-    enum State {
+    enum class State {
         STOPPED,
         DISCONNECTED,
         CONNECTED,
@@ -18,23 +18,22 @@ public:
     /// base station, we are considered "disconnected"
     static const uint32_t TIMEOUT_INTERVAL = 2000;
 
-    RadioProtocol(std::shared_ptr<CommModule> commModule, Decawave* radio,
+    RadioProtocol(std::shared_ptr<CommModule> commModule,
                   uint8_t uid = rtp::INVALID_ROBOT_UID)
-        : _commModule(commModule),
-          _radio(radio),
-          _uid(uid),
-          _state(STOPPED),
-          _replyTimer(this, &RadioProtocol::reply, osTimerOnce),
-          _timeoutTimer(this, &RadioProtocol::_timeout, osTimerOnce) {
+        : m_commModule(commModule),
+          m_uid(uid),
+          m_state(State::STOPPED),
+          m_replyTimer(this, &RadioProtocol::reply, osTimerOnce),
+          m_timeoutTimer(this, &RadioProtocol::timeout, osTimerOnce) {
         ASSERT(commModule != nullptr);
-        ASSERT(radio != nullptr);
-        _radio->setAddress(rtp::ROBOT_ADDRESS);
+        ASSERT(globalRadio != nullptr);
+        globalRadio->setAddress(rtp::ROBOT_ADDRESS);
     }
 
     ~RadioProtocol() { stop(); }
 
     /// Set robot unique id.  Also update address.
-    void setUID(uint8_t uid) { _uid = uid; }
+    void setUID(uint8_t uid) { m_uid = uid; }
 
     /**
      * Callback that is called whenever a packet is received.  Set this in
@@ -49,96 +48,116 @@ public:
     std::function<std::vector<uint8_t>(const rtp::ControlMessage* msg,
                                        const bool addresed)> rxCallback;
 
+    std::function<void(const rtp::ConfMessage &msg)> confCallback;
+    std::function<void(const rtp::DebugMessage &msg)> debugCallback;
+
     void start() {
-        _state = DISCONNECTED;
+        m_state = State::DISCONNECTED;
 
-        _commModule->setRxHandler(this, &RadioProtocol::rxHandler,
-                                  rtp::Port::CONTROL);
-        _commModule->setTxHandler((CommLink*)global_radio,
-                                  &CommLink::sendPacket, rtp::Port::CONTROL);
+        m_commModule->setRxHandler(this, &RadioProtocol::rxHandler,
+                                   rtp::PortType::CONTROL);
+        m_commModule->setTxHandler(globalRadio.get(), &CommLink::sendPacket,
+                                   rtp::PortType::CONTROL);
 
-        LOG(INF1, "Radio protocol listening on port %d", rtp::Port::CONTROL);
+        LOG(INFO, "Radio protocol listening on port %d",
+            rtp::PortType::CONTROL);
     }
 
     void stop() {
-        _commModule->close(rtp::Port::CONTROL);
+        m_commModule->close(rtp::PortType::CONTROL);
 
-        _replyTimer.stop();
-        _state = STOPPED;
+        m_replyTimer.stop();
+        m_state = State::STOPPED;
 
-        LOG(INF1, "Radio protocol stopped");
+        LOG(INFO, "Radio protocol stopped");
     }
 
-    State state() const { return _state; }
+    State state() const { return m_state; }
 
-    void rxHandler(rtp::packet pkt) {
-        // LOG(INIT, "got pkt!");
+    void rxHandler(rtp::Packet pkt) {
         // TODO: check packet size before parsing
-        bool addressed = false;
-        const rtp::ControlMessage* msg;
-        size_t slot;
+//        bool addressed = false;
+        const rtp::ControlMessage* controlMessage = nullptr;
         // printf("UUIDs: ");
-        for (slot = 0; slot < 6; slot++) {
-            size_t offset = slot * sizeof(rtp::ControlMessage);
-            msg = (const rtp::ControlMessage*)(pkt.payload.data() + offset);
+        const auto messages  = reinterpret_cast<const rtp::RobotTxMessage*>(pkt.payload.data());
+
+        size_t slot;
+        for (size_t i = 0; i < 6; i++) {
+            auto msg = std::next(messages, i);
 
             // printf("%d:%d ", slot, msg->uid);
-            if (msg->uid == _uid) {
-                // LOG(INIT, "")
-                addressed = true;
-                break;
+            if (msg->uid == m_uid) {
+                if (msg->messageType == rtp::RobotTxMessage::ControlMessageType) {
+                    controlMessage = &msg->message.controlMessage;
+                }
+                slot = i;
             }
         }
-        // printf("\r\n");
 
         /// time, in ms, for each reply slot
         // TODO(justin): double-check this
         const uint32_t SLOT_DELAY = 2;
 
-        _state = CONNECTED;
+        m_state = State::CONNECTED;
 
         // reset timeout whenever we receive a packet
-        _timeoutTimer.stop();
-        _timeoutTimer.start(TIMEOUT_INTERVAL);
+        m_timeoutTimer.stop();
+        m_timeoutTimer.start(TIMEOUT_INTERVAL);
 
         // TODO: this is bad and lazy
-        if (addressed) {
-            _replyTimer.start(1 + SLOT_DELAY * slot);
+        if (controlMessage) {
+            m_replyTimer.start(1 + SLOT_DELAY * slot);
         } else {
-            _replyTimer.start(1 + SLOT_DELAY * (_uid % 6));
+            m_replyTimer.start(1 + SLOT_DELAY * (m_uid % 6));
         }
 
         if (rxCallback) {
-            _reply = std::move(rxCallback(msg, addressed));
+            m_reply = rxCallback(controlMessage, controlMessage != nullptr);
         } else {
             LOG(WARN, "no callback set");
+        }
+
+        for (size_t i = 0; i < 6; i++) {
+            auto msg = std::next(messages, i);
+            if (msg->uid == m_uid || msg->uid == rtp::ANY_ROBOT_UID) {
+                if (msg->messageType == rtp::RobotTxMessage::ConfMessageType) {
+                    if (confCallback) {
+                        const auto confMessage = msg->message.confMessage;
+                        confCallback(confMessage);
+                    }
+                } else if (msg->messageType == rtp::RobotTxMessage::DebugMessageType) {
+                    if (debugCallback) {
+                        const auto debugMessage = msg->message.debugMessage;
+                        debugCallback(debugMessage);
+                    }
+                }
+            }
         }
     }
 
 private:
     void reply() {
-        rtp::packet pkt;
-        pkt.header.port = rtp::Port::CONTROL;
-        pkt.header.type = rtp::header_data::Control;
+        rtp::Packet pkt;
+        pkt.header.port = rtp::PortType::CONTROL;
+        pkt.header.type = rtp::MessageType::CONTROL;
         pkt.header.address = rtp::BASE_STATION_ADDRESS;
 
-        pkt.payload = std::move(_reply);
+        pkt.payload = std::move(m_reply);
 
-        _commModule->send(std::move(pkt));
+        m_commModule->send(std::move(pkt));
     }
 
-    void _timeout() { _state = DISCONNECTED; }
+    void timeout() { m_state = State::DISCONNECTED; }
 
-    std::shared_ptr<CommModule> _commModule;
-    Decawave* _radio;
+    std::shared_ptr<CommModule> m_commModule;
 
-    uint32_t _lastReceiveTime = 0;
+    uint32_t m_lastReceiveTime = 0;
 
-    uint8_t _uid;
-    State _state;
+    uint8_t m_uid;
+    State m_state;
 
-    std::vector<uint8_t> _reply;
+    std::vector<uint8_t> m_reply;
 
-    RtosTimerHelper _replyTimer;
-    RtosTimerHelper _timeoutTimer;
+    RtosTimerHelper m_replyTimer;
+    RtosTimerHelper m_timeoutTimer;
 };

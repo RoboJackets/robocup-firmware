@@ -1,65 +1,40 @@
 #pragma once
 
 #include "CommLink.hpp"
-#include "mbed.h"
-#include "rtos.h"
-
 #include "decadriver/deca_device_api.hpp"
-#include "decadriver/deca_regs.h"
-
-#define FRAME_LEN_MAX 127
 
 class Decawave : public CommLink, public dw1000_api {
 public:
-    Decawave(std::shared_ptr<SharedSPI> sharedSPI, PinName nCs, PinName intPin);
+    Decawave(SpiPtrT sharedSPI, PinName nCs, PinName intPin, PinName _nReset);
 
-    int32_t sendPacket(const rtp::packet* pkt);
-    int32_t getData(std::vector<uint8_t>* buf);
-    void reset();
-    int32_t selfTest();
-    bool isConnected() const;
+    virtual int32_t sendPacket(const rtp::Packet* pkt) override;
 
-    int writetospi(uint16 headerLength, const uint8* headerBuffer,
-                   uint32 bodylength, const uint8* bodyBuffer);
-    int readfromspi(uint16 headerLength, const uint8* headerBuffer,
-                    uint32 readlength, uint8* readBuffer);
+    virtual BufferT getData() override;
 
-    decaIrqStatus_t decamutexon(void);
-    void decamutexoff(decaIrqStatus_t s);
-    void deca_sleep(unsigned int time_ms);
+    // virtual void reset() override { dwt_softreset(); }
+    virtual void reset() override;
 
-    void printStuff();
+    virtual int32_t selfTest() override;
 
-    void setAddress(uint16_t addr);
-    void logSPI(int num);
-    void setLED(bool ledOn);
+    virtual bool isConnected() const override { return m_isInit; }
+
+    virtual void setAddress(int addr) override;
+
+    virtual int writetospi(uint16 headerLength, const uint8* headerBuffer,
+                           uint32 bodylength, const uint8* bodyBuffer) override;
+    virtual int readfromspi(uint16 headerLength, const uint8* headerBuffer,
+                            uint32 readlength, uint8* readBuffer) override;
+    virtual decaIrqStatus_t decamutexon() override { return 0; }
+
+    void setLED(bool ledOn) { dwt_setleds(ledOn); };
 
 private:
-    uint32_t _chip_version;
-    uint8 rx_buffer[100];  // TODO: better tx and rx buffer
-    uint8 tx_buffer[100];
-    bool _isInit;
+    BufferPtrT m_rxBufferPtr = nullptr;
+    BufferPtrT m_txBufferPtr = nullptr;
+    uint32_t m_chipVersion;
+    bool m_isInit = false;
+    DigitalOut nReset;
 
-    uint32_t rx_status;
-    uint8_t rx_len;
-    uint8_t _addr = rtp::INVALID_ROBOT_UID;
-
-    void getData_success(const dwt_cb_data_t* cb_data);
-    void getData_fail(const dwt_cb_data_t* cb_data);
+    void getDataSuccess(const dwt_cb_data_t* cb_data);
+    void getDataFail(const dwt_cb_data_t* cb_data);
 };
-
-// int readfromspi(uint16 headerLength, const uint8 *headerBuffer,
-//                         uint32 readlength, uint8 *readBuffer) {
-//     LOG(INIT, "spi 1");
-//     return global_radio->readfromspi(headerLength, headerBuffer, readlength,
-//     readBuffer);
-// }
-//
-// int writetospi(uint16 headerLength, const uint8 *headerBuffer,
-//                         uint32 bodylength, const uint8 *bodyBuffer) {
-//     return global_radio->writetospi(headerLength, headerBuffer, bodylength,
-//     bodyBuffer);
-// }
-
-extern Decawave* global_radio;
-// Decawave& global_radio() {static Decawave radio; return radio}

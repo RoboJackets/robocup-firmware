@@ -1,10 +1,10 @@
-#include <mbed.h>
-#include <rtos.h>
+#include "Mbed.hpp"
+#include "Rtos.hpp"
 
-#include <vector>
 #include <algorithm>
+#include <vector>
 
-#include <helper-funcs.hpp>
+#include <HelperFuncs.hpp>
 
 #include "robot-devices.hpp"
 

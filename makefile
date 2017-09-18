@@ -1,6 +1,6 @@
 MAKE_FLAGS = --no-print-directory
 TESTS = *
-FIRMWR_TESTS = -i2c -io-expander -fpga -piezo -neopixel -attiny -led -radio-sender -radio-receiver -kicker -attiny-programmer
+FIRMWR_TESTS = -i2c -io-expander -fpga -piezo -neopixel -attiny -led -radio-sender -radio-receiver -kicker -attiny-programmer -motor
 
 # build a specified target with CMake and Ninja
 # usage: $(call cmake_build_target, target, extraCmakeFlags)
@@ -14,7 +14,8 @@ endef
 # targeted code separately.
 define cmake_build_target_fw
 	mkdir -p build/firmware
-	cd build/firmware && cmake -Wno-dev --target $1 $2 ../.. && make $1 $(MAKE_FLAGS) -j
+	# CMAKE_BUILD_TYPE Debug or Release
+	cd build/firmware && cmake -DCMAKE_BUILD_TYPE=Release -Wno-dev --target $1 $2 ../.. && make $1 $(MAKE_FLAGS) -j
 endef
 
 all:

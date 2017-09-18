@@ -1,10 +1,10 @@
 #include "CC1201.hpp"
 
-#include "assert.hpp"
-#include "logger.hpp"
+#include "Assert.hpp"
+#include "Logger.hpp"
 
 // clang-format off
-const char* CC1201_STATE_NAMES[] = {
+constexpr const char* const CC1201_STATE_NAMES[] = {
     "IDLE",
     "RX",
     "TX",
@@ -24,10 +24,7 @@ void ASSERT_IS_ADDR(uint16_t addr) {
            (addr == 0x007F) || (addr == 0x00BF) || (addr == 0x00FF));
 }
 
-// TODO(justin): remove this
-// CC1201* global_radio = nullptr;
-
-CC1201::CC1201(shared_ptr<SharedSPI> sharedSPI, PinName nCs, PinName intPin,
+CC1201::CC1201(SpiPtrT sharedSPI, PinName nCs, PinName intPin,
                const registerSetting_t* regs, size_t len, int rssiOffset)
     : CommLink(sharedSPI, nCs, intPin) {
     reset();
@@ -44,12 +41,12 @@ CC1201::CC1201(shared_ptr<SharedSPI> sharedSPI, PinName nCs, PinName intPin,
         // start out in RX mode
         strobe(CC1201_STROBE_SRX);
 
-        LOG(INIT, "CC1201 ready!");
+        LOG(INFO, "CC1201 ready!");
         CommLink::ready();
     }
 }
 
-int32_t CC1201::sendPacket(const rtp::packet* pkt) {
+int32_t CC1201::sendPacket(const rtp::Packet* pkt) {
     // Return if there's no functional radio transceiver - the system will
     // lockup otherwise
     if (!_isInit) return COMM_FAILURE;
@@ -65,11 +62,12 @@ int32_t CC1201::sendPacket(const rtp::packet* pkt) {
     // Send the data to the CC1201.
     chipSelect();
     uint8_t device_state =
-        _spi->write(CC1201_TXFIFO | CC1201_BURST | CC1201_WRITE);
-    _spi->write(pkt->size());  // write size byte first
+        m_spi->write(CC1201_TXFIFO | CC1201_BURST | CC1201_WRITE);
+    m_spi->write(pkt->size());  // write size byte first
     uint8_t* headerData = (uint8_t*)&pkt->header;
-    for (size_t i = 0; i < sizeof(pkt->header); ++i) _spi->write(headerData[i]);
-    for (uint8_t byte : pkt->payload) _spi->write(byte);
+    for (size_t i = 0; i < sizeof(pkt->header); ++i)
+        m_spi->write(headerData[i]);
+    for (uint8_t byte : pkt->payload) m_spi->write(byte);
     chipDeselect();
 
     // Enter the TX state.
@@ -113,8 +111,8 @@ int32_t CC1201::getData(std::vector<uint8_t>* buf) {
 
     if (num_rx_bytes > 0) {
         chipSelect();
-        _spi->write(CC1201_RXFIFO | CC1201_READ | CC1201_BURST);
-        size_t size_byte = _spi->write(CC1201_STROBE_SNOP);
+        m_spi->write(CC1201_RXFIFO | CC1201_READ | CC1201_BURST);
+        size_t size_byte = m_spi->write(CC1201_STROBE_SNOP);
 
         if (size_byte > num_rx_bytes) {
             // the size byte isn't right
@@ -127,12 +125,12 @@ int32_t CC1201::getData(std::vector<uint8_t>* buf) {
             return COMM_DEV_BUF_ERR;
         }
         for (uint8_t i = 0; i < size_byte; i++) {
-            buf->push_back(_spi->write(CC1201_STROBE_SNOP));
+            buf->push_back(m_spi->write(CC1201_STROBE_SNOP));
         }
         chipDeselect();
         strobe(CC1201_STROBE_SFRX);
 
-        LOG(INF3, "Bytes in RX buffer: %u, size_byte: %u", num_rx_bytes,
+        LOG(DEBUG, "Bytes in RX buffer: %u, size_byte: %u", num_rx_bytes,
             size_byte);
     } else {
         // flush rx
@@ -187,12 +185,12 @@ uint8_t CC1201::readReg(uint16_t addr) {
 
     chipSelect();
     if (addr >= CC1201_EXTENDED_ACCESS) {
-        _spi->write(CC1201_EXTENDED_ACCESS | CC1201_READ);
-        _spi->write(addr & 0xFF);
+        m_spi->write(CC1201_EXTENDED_ACCESS | CC1201_READ);
+        m_spi->write(addr & 0xFF);
     } else {
-        _spi->write(addr | CC1201_READ);
+        m_spi->write(addr | CC1201_READ);
     }
-    returnVal = _spi->write(0x00);
+    returnVal = m_spi->write(0x00);
     chipDeselect();
 
     return returnVal;
@@ -206,12 +204,12 @@ uint8_t CC1201::readReg(uint16_t addr, uint8_t* buffer, uint8_t len) {
     chipSelect();
     if (addr >= CC1201_EXTENDED_ACCESS) {
         status_byte =
-            _spi->write(CC1201_EXTENDED_ACCESS | CC1201_READ | CC1201_BURST);
-        _spi->write(addr & 0xFF);
+            m_spi->write(CC1201_EXTENDED_ACCESS | CC1201_READ | CC1201_BURST);
+        m_spi->write(addr & 0xFF);
     } else {
-        status_byte = _spi->write(addr | CC1201_READ | CC1201_BURST);
+        status_byte = m_spi->write(addr | CC1201_READ | CC1201_BURST);
     }
-    for (uint8_t i = 0; i < len; i++) buffer[i] = _spi->write(0x00);
+    for (uint8_t i = 0; i < len; i++) buffer[i] = m_spi->write(0x00);
     chipDeselect();
 
     return status_byte;
@@ -224,12 +222,12 @@ uint8_t CC1201::writeReg(uint16_t addr, uint8_t value) {
 
     chipSelect();
     if (addr >= CC1201_EXTENDED_ACCESS) {
-        status_byte = _spi->write(CC1201_EXTENDED_ACCESS | CC1201_WRITE);
-        _spi->write(addr & 0xFF);
+        status_byte = m_spi->write(CC1201_EXTENDED_ACCESS | CC1201_WRITE);
+        m_spi->write(addr & 0xFF);
     } else {
-        status_byte = _spi->write(addr);
+        status_byte = m_spi->write(addr);
     }
-    _spi->write(value);
+    m_spi->write(value);
     chipDeselect();
 
     return status_byte;
@@ -243,13 +241,13 @@ uint8_t CC1201::writeReg(uint16_t addr, const uint8_t* buffer, uint8_t len) {
     chipSelect();
     if (addr >= CC1201_EXTENDED_ACCESS) {
         status_byte =
-            _spi->write(CC1201_EXTENDED_ACCESS | CC1201_WRITE | CC1201_BURST);
-        _spi->write(addr & 0xFF);  // write lower byte of address
+            m_spi->write(CC1201_EXTENDED_ACCESS | CC1201_WRITE | CC1201_BURST);
+        m_spi->write(addr & 0xFF);  // write lower byte of address
     } else {
         // write lower byte of address
-        status_byte = _spi->write(addr | CC1201_WRITE | CC1201_BURST);
+        status_byte = m_spi->write(addr | CC1201_WRITE | CC1201_BURST);
     }
-    for (uint8_t i = 0; i < len; i++) _spi->write(buffer[i]);
+    for (uint8_t i = 0; i < len; i++) m_spi->write(buffer[i]);
     chipDeselect();
 
     return status_byte;
@@ -261,7 +259,7 @@ void CC1201::printDebugInfo() {
     uint8_t state = (stateByte >> 4) & 7;
 
     printf("Radio Status:\r\n  ready: %u, state: %s, int pin: %u\r\n", ready,
-           CC1201_STATE_NAMES[state], _int_in == 1);
+           CC1201_STATE_NAMES[state], m_intIn == 1);
 }
 
 uint8_t CC1201::strobe(uint8_t addr) {
@@ -271,7 +269,7 @@ uint8_t CC1201::strobe(uint8_t addr) {
     }
 
     chipSelect();
-    uint8_t ret = _spi->write(addr);
+    uint8_t ret = m_spi->write(addr);
     chipDeselect();
 
     // If debug is enabled, we wait for a brief interval, then send a NOP to get
@@ -283,7 +281,7 @@ uint8_t CC1201::strobe(uint8_t addr) {
         Thread::wait(delay);
 
         chipSelect();
-        uint8_t ret2 = _spi->write(CC1201_STROBE_SNOP);
+        uint8_t ret2 = m_spi->write(CC1201_STROBE_SNOP);
         chipDeselect();
 
         const char* strobe_names[] = {
@@ -302,16 +300,21 @@ uint8_t CC1201::strobe(uint8_t addr) {
             "WORRST",  // 0x3c
             "NOP"      // 0x3d
         };
+        (void)strobe_names;  // disable unsed-variable warnings
 
         // The status byte returned from strobe() contains from (msb to lsb):
         // * 1 bit - chip ready (0 indicates xosc is stable)
         // * 3 bits - state
         // * 4 bits - unused
         int rdy_n = ret & (1 << 7);
+        (void)rdy_n;  // disable unsed-variable warnings
         int state = (ret >> 4) & 7;
+        (void)state;
         int rdy2_n = ret2 & (1 << 7);
+        (void)rdy2_n;
         int state2 = (ret2 >> 4) & 7;
-        LOG(INF2,
+        (void)state2;
+        LOG(DEBUG,
             "strobe '%s' sent, status = {rdy_n: %d, state: %s}, "
             "after %dms = {rdy_n: %d, state: %s}",
             strobe_names[addr - 0x30], rdy_n, CC1201_STATE_NAMES[state], delay,
@@ -326,7 +329,7 @@ uint8_t CC1201::mode() { return 0x1F & readReg(CC1201_MARCSTATE); }
 void CC1201::reset() {
     idle();
     chipSelect();
-    _spi->write(CC1201_STROBE_SRES);
+    m_spi->write(CC1201_STROBE_SRES);
     chipDeselect();
 
     // Wait up to 300ms for the radio to do anything. Don't block everything
@@ -347,7 +350,7 @@ int32_t CC1201::selfTest() {
     _chip_version = readReg(CC1201_PARTNUMBER);
 
     if (_chip_version != CC1201_EXPECTED_PARTNUMBER) {
-        LOG(FATAL,
+        LOG(SEVERE,
             "CC1201 part number error:\r\n"
             "    Found:\t0x%02X (expected 0x%02X)",
             _chip_version, CC1201_EXPECTED_PARTNUMBER);
@@ -365,6 +368,7 @@ bool CC1201::isConnected() const { return _isInit; }
 void CC1201::flush_tx() {
     idle();
     size_t bytes = readReg(CC1201_NUM_TXBYTES);
+    (void)bytes;  // disable unsed-variable warnings
     strobe(CC1201_STROBE_SFTX);
     LOG(WARN, "%u bytes flushed from TX FIFO buffer.", bytes);
 }
@@ -372,6 +376,7 @@ void CC1201::flush_tx() {
 void CC1201::flush_rx() {
     idle();
     size_t bytes = readReg(CC1201_NUM_RXBYTES);
+    (void)bytes;  // disable unsed-variable warnings
     strobe(CC1201_STROBE_SFRX);
     LOG(WARN, "%u bytes flushed from RX FIFO buffer.", bytes);
 }
@@ -433,7 +438,7 @@ float CC1201::freq() {
 
     float freq = f_vco / lo_divider / 1000000;
 
-    LOG(INF2, "Operating Frequency: %3.2f MHz", freq);
+    LOG(DEBUG, "Operating Frequency: %3.2f MHz", freq);
 
     return freq;
 }

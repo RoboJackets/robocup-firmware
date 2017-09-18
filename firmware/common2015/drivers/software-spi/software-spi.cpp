@@ -1,7 +1,7 @@
-#include <mbed.h>
+#include "Mbed.hpp"
 
+#include "Logger.hpp"
 #include "software-spi.hpp"
-#include "logger.hpp"
 
 SoftwareSPI::SoftwareSPI(PinName mosi_pin, PinName miso_pin, PinName sck_pin,
                          int bit_width) {

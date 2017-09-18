@@ -1801,5 +1801,3 @@ private:
 // #endif
 
 #endif /* _DECA_DEVICE_API_H_ */
-
-

@@ -29,11 +29,9 @@ endif()
 # set(CMAKE_EXE_LINKER_FLAGS ${MBED_CMAKE_EXE_LINKER_FLAGS})
 
 # enable C++ exceptions
-set(MBED_CMAKE_CXX_FLAGS "${MBED_CMAKE_CXX_FLAGS} -fexceptions")
+# set(MBED_CMAKE_CXX_FLAGS "${MBED_CMAKE_CXX_FLAGS} -fexceptions")
 # the mbed libraries are compiled with -fno-rtti, so we need to as well
 set(MBED_CMAKE_CXX_FLAGS "${MBED_CMAKE_CXX_FLAGS} -fno-rtti")
-# enable C++14
-set(MBED_CMAKE_CXX_FLAGS "${MBED_CMAKE_CXX_FLAGS} -std=c++14")
 # Enable logging for the common2015 library
 set(MBED_CMAKE_CXX_FLAGS "${MBED_CMAKE_CXX_FLAGS} -DRJ_LOGGING_EN")
 # ignore formatting flags for printf
@@ -46,12 +44,13 @@ set(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS "")
 set(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "")
 
 # Add a test runner target "test-firmware"
-file(GLOB FIRMWARE_TEST_SRC "common2015/testing/*.cpp")
+file(GLOB FIRMWARE_TEST_SRC "common2015/test/*.cpp")
 add_executable(test-firmware ${FIRMWARE_TEST_SRC})
 add_dependencies(test-firmware googletest)
 target_link_libraries(test-firmware ${GTEST_LIBRARIES})
-
-# Don't build the tests by default
+# target_include_directories(test-firmware PRIVATE "common2015")
+target_include_directories(test-firmware PRIVATE "common2015" "common2015/test" "common2015/utils/include" "common2015/modules/include")
+target_compile_definitions(test-firmware PRIVATE -D__MBED_TEST__)
 set_target_properties(test-firmware PROPERTIES EXCLUDE_FROM_ALL TRUE)
 
 # build robot and base station firmware and the library that they depend on
