@@ -1,6 +1,5 @@
 MAKE_FLAGS = --no-print-directory
 TESTS = *
-FIRMWR_TESTS = -i2c -io-expander -fpga -piezo -neopixel -attiny -led -radio-sender -radio-receiver -kicker -attiny-programmer
 
 # Similar to the above build target command, but for firmware.  This is used
 # because CMake can only handle one toolchain at a time, so we build the MBED-
@@ -38,12 +37,12 @@ fpga-test:
 fpga-test-strict:
 	$(call cmake_build_target, fpga_iverilog_strict)
 
+FIRMWR_TESTS := $(patsubst src/hw-test/test-%.cpp,%,$(wildcard src/hw-test/test-*.cpp))
 # robot2015-test-<test_unit>{-prog}
-# TODO: make this better
 # defines the targets described at the line above - test units defined in FIRMWR_TESTS
-$(FIRMWR_TESTS:-%=robot-test-%):
+$(FIRMWR_TESTS:%=robot-test-%):
 	$(call cmake_build_target, robot-test, -DHW_TEST_UNIT:STRING=$(@F:robot-test-%=%))
-$(FIRMWR_TESTS:-%=robot-test-%-prog):
+$(FIRMWR_TESTS:%=robot-test-%-prog):
 	$(call cmake_build_target, robot-test-prog, -DHW_TEST_UNIT:STRING=$(@F:robot-test-%-prog=%))
 
 GDB_PORT ?= 3333
