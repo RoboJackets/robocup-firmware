@@ -118,7 +118,7 @@ foreach(srcFile ${verilog_SRC})
 endforeach()
 
 # target for synthesizing the Verilog to a bitstream file that can be used to configure the fpga
-add_custom_target(fpga2015bit
+add_custom_target(fpgabit
     ${XILINX_TOOLS_DIR}/xflow
         -g CMAKE_SCRIPT
         -wd ${CMAKE_CURRENT_BINARY_DIR}
@@ -141,22 +141,22 @@ set(PROGMEN_FLAGS)
 if(${COMPRESS_BINARY})
     set(PROGMEN_FLAGS -z ${PROGMEN_FLAGS})
 endif()
-add_custom_target(fpga2015bin
+add_custom_target(fpgabin
     ${XILINX_TOOLS_DIR}/promgen ${PROGMEN_FLAGS} -w -b -p bin -u 0 ${CMAKE_CURRENT_BINARY_DIR}/${BIT_OUT_FILENAME} -o ${CMAKE_CURRENT_BINARY_DIR}/${BIN_OUT_FILENAME}
     COMMENT "Creating ${BIN_OUT_FILENAME} binary from the ${BIT_OUT_FILENAME} bitstream"
-    DEPENDS fpga2015bit
+    DEPENDS fpgabit
 )
 
 # only synthesize if we need to
 set(FPGA_TARGET_DEPENDS copy_src)
 if(${NEED_TO_SYNTHESIZE})
-    list(APPEND FPGA_TARGET_DEPENDS fpga2015bin)
+    list(APPEND FPGA_TARGET_DEPENDS fpgabin)
 else()
     message(STATUS "No new or modified source files found for synthesis")
 endif()
 
 # MBED tries to load the most recent .bin file as its main program, so we can't name our fpga file with a .bin extension
-add_custom_target(fpga2015
+add_custom_target(fpga
     cp ${CMAKE_CURRENT_BINARY_DIR}/${BIN_OUT_FILENAME} ${PROJECT_SOURCE_DIR}/run/${NIB_OUT_FILENAME}
     COMMENT "Copying ${BIN_OUT_FILENAME} to ${NIB_OUT_FILENAME} b/c *.bin is a reserved extension on the mbed"
     DEPENDS ${FPGA_TARGET_DEPENDS} ${CMAKE_CURRENT_BINARY_DIR}/git_version.vh
@@ -164,10 +164,10 @@ add_custom_target(fpga2015
 set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES ${PROJECT_SOURCE_DIR}/run/${NIB_OUT_FILENAME})
 
 # target to copy the output fpga bitstream to the mbed
-add_custom_target(fpga2015-prog
+add_custom_target(fpga-prog
     COMMAND ${MBED_COPY_SCRIPT} ${PROJECT_SOURCE_DIR}/run/${NIB_OUT_FILENAME}
     COMMENT COMMENT "Copying ${NIB_OUT_FILENAME} (bitstream file) to the mbed"
-    DEPENDS fpga2015
+    DEPENDS fpga
 )
 
 
@@ -214,7 +214,7 @@ list(REMOVE_ITEM verilog_SRC ${CMAKE_CURRENT_SOURCE_DIR}/${UCF_IN_FILENAME})
 list(REMOVE_ITEM verilog_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/Hall_Effect_Sensor_6StepPWM.v)
 list(REMOVE_ITEM verilog_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/Hall_Effect_Sensor_PWMonPWM.v)
 
-add_custom_target(fpga2015_iverilog
+add_custom_target(fpga_iverilog
     DEPENDS copy_src
     COMMAND iverilog ${verilog_SRC}
             -o ${CMAKE_CURRENT_BINARY_DIR}/robocup_iverilog
@@ -227,8 +227,8 @@ add_custom_target(fpga2015_iverilog
 
 # A command that only succeeds if the iverilog compile log doesn't contain the
 # word "warning".
-add_custom_target(fpga2015_iverilog_strict
-    DEPENDS fpga2015_iverilog
+add_custom_target(fpga_iverilog_strict
+    DEPENDS fpga_iverilog
     COMMAND ! grep warning ${CMAKE_CURRENT_BINARY_DIR}/iverilog-compile.log > /dev/null
     COMMENT "Ensuring iverilog compilation succeeded without warnings"
 )

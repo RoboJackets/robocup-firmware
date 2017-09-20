@@ -1,25 +1,26 @@
 MAKE_FLAGS = --no-print-directory
 TESTS = *
-FIRMWR_TESTS = -i2c -io-expander -fpga -piezo -neopixel -attiny -led -radio-sender -radio-receiver -kicker -attiny-programmer -motor
-
-# build a specified target with CMake and Ninja
-# usage: $(call cmake_build_target, target, extraCmakeFlags)
-define cmake_build_target
-	mkdir -p build
-	cd build && cmake -GNinja -Wno-dev --target $1 $2 .. && ninja $1
-endef
+FIRMWR_TESTS = -i2c -io-expander -fpga -piezo -neopixel -attiny -led -radio-sender -radio-receiver -kicker -attiny-programmer
 
 # Similar to the above build target command, but for firmware.  This is used
 # because CMake can only handle one toolchain at a time, so we build the MBED-
 # targeted code separately.
-define cmake_build_target_fw
-	mkdir -p build/firmware
-	# CMAKE_BUILD_TYPE Debug or Release
-	cd build/firmware && cmake -DCMAKE_BUILD_TYPE=Release -Wno-dev --target $1 $2 ../.. && make $1 $(MAKE_FLAGS) -j
+define cmake_build_target
+	mkdir -p build
+	cd build && cmake -Wno-dev --target $1 $2 .. && make $1 $(MAKE_FLAGS) -j
 endef
 
+# TODO: what?
 all:
 	$(call cmake_build_target, all)
+
+# Targets to be uploaded to robot
+FIRMWARE_UPLOADS = control kicker fpga base
+$(FIRMWARE_UPLOADS):
+	$(call cmake_build_target, $(@F))
+$(FIRMWARE_UPLOADS:%=%-prog):
+	$(call cmake_build_target, $(@F))
+
 
 # Run both C++ and python unit tests
 tests: test-firmware
@@ -31,52 +32,37 @@ clean:
 	cd build && ninja clean || true
 	rm -rf build
 
-# the alias names that point to the current set of firmware targets
-robot: robot2015
-robot-prog: robot2015-prog
-fpga: fpga2015
-fpga-prog: fpga2015-prog
-base: base2015
-base-prog: base2015-prog
-kicker: kicker2015
-kicker-prog: kicker2015-prog
-firmware: firmware2015
 
-fpga2015-test:
-	$(call cmake_build_target_fw, fpga2015_iverilog)
-fpga2015-test-strict:
-	$(call cmake_build_target_fw, fpga2015_iverilog_strict)
-
-# robot 2015 firmware
-robot2015:
-	$(call cmake_build_target_fw, robot2015)
-robot2015-prog:
-	$(call cmake_build_target_fw, robot2015-prog)
+fpga-test:
+	$(call cmake_build_target, fpga_iverilog)
+fpga-test-strict:
+	$(call cmake_build_target, fpga_iverilog_strict)
 
 # robot2015-test-<test_unit>{-prog}
+# TODO: make this better
 # defines the targets described at the line above - test units defined in FIRMWR_TESTS
-$(FIRMWR_TESTS:-%=robot2015-test-%):
-	$(call cmake_build_target_fw, robot2015-test, -DHW_TEST_UNIT:STRING=$(@F:robot2015-test-%=%))
-$(FIRMWR_TESTS:-%=robot2015-test-%-prog):
-	$(call cmake_build_target_fw, robot2015-test-prog, -DHW_TEST_UNIT:STRING=$(@F:robot2015-test-%-prog=%))
+$(FIRMWR_TESTS:-%=robot-test-%):
+	$(call cmake_build_target, robot-test, -DHW_TEST_UNIT:STRING=$(@F:robot-test-%=%))
+$(FIRMWR_TESTS:-%=robot-test-%-prog):
+	$(call cmake_build_target, robot-test-prog, -DHW_TEST_UNIT:STRING=$(@F:robot-test-%-prog=%))
 
 GDB_PORT ?= 3333
-.INTERMEDIATE: build/robot2015-gdb.pid
-build/robot2015-gdb.pid:
+.INTERMEDIATE: build/control-gdb.pid
+build/control-gdb.pid:
 # this will cache sudo use without a password in the environment
 # so we won't enter the gdb server and skip past the password prompt.
-	@sudo echo "starting pyocd-gdbserver, logging to build/robot2015-gdb.log"
+	@sudo echo "starting pyocd-gdbserver, logging to build/control-gdb.log"
 # now we can refresh the sudo timeout and start up the gdb server
 	sudo -v && { sudo pyocd-gdbserver --allow-remote --port $(GDB_PORT) --reset-break \
-	--target lpc1768 -S -G > build/robot2015-gdb.log 2>&1 & sudo echo $$! > $@; }
+	--target lpc1768 -S -G > build/control-gdb.log 2>&1 & sudo echo $$! > $@; }
 
 GDB_NO_CONN ?= 0
-robot2015-gdb: robot2015 build/robot2015-gdb.pid
+control-gdb: robot build/control-gdb.pid
 # use pyocd-gdbserver, and explicitly pass it the type of target we want to connect with,
 # making sure that we enable semihosting and use gdb syscalls for the file io
-	@trap 'sudo pkill -9 -P `cat build/robot2015-gdb.pid`; exit' TERM INT EXIT && \
+	@trap 'sudo pkill -9 -P `cat build/control-gdb.pid`; exit' TERM INT EXIT && \
 	if [ $(GDB_NO_CONN) -eq 0 ]; then \
-		arm-none-eabi-gdb build/firmware/firmware/robot2015/src-ctrl/robot2015_elf \
+		arm-none-eabi-gdb build/src/control/robot_elf \
 		  -ex "target remote localhost:$(GDB_PORT)" \
 		  -ex "load" \
 		  -ex "tbreak main" \
@@ -85,59 +71,17 @@ robot2015-gdb: robot2015 build/robot2015-gdb.pid
 		while true; do sleep 10; done; \
 	fi
 
-# kicker 2015 firmware
-kicker2015:
-	$(call cmake_build_target_fw, kicker2015)
-kicker2015-prog:
-	$(call cmake_build_target_fw, kicker2015-prog)
-
-# fpga 2015 synthesis
-fpga2015:
-	$(call cmake_build_target_fw, fpga2015)
-fpga2015-prog:
-	$(call cmake_build_target_fw, fpga2015-prog)
-
-# Base station 2015 firmware
-base2015:
-	$(call cmake_build_target_fw, base2015)
-base2015-prog:
-	$(call cmake_build_target_fw, base2015-prog)
 
 # Build all of the 2015 firmware for a robot, and/or move all of the binaries over to the mbed
-firmware2015: robot2015 kicker2015 fpga2015 base2015
-firmware2015-prog: robot2015-prog kicker2015-prog fpga2015-prog
-
-# Robot firmware (both 2008/2011)
-robot2011:
-	cd firmware && scons robot
-robot2011-prog: robot
-	cd firmware && sudo scons robot-prog
-robot2011-prog-samba: robot
-	cd firmware && sudo scons robot-prog-samba
-robot2011-prog-ota: robot
-	cd firmware && scons robot-ota
-
-# Robot FPGA
-fpga2011:
-	cd firmware && scons fpga2011
-# program the fpga over the usb spi interface
-fpga2011-prog-spi: fpga2011
-	cd firmware && sudo scons fpga2011-spi
-# program the fpga over the jtag interface
-fpga2011-prog-jtag: fpga2011
-	cd firmware && sudo scons fpga2011-jtag
-# USB Radio Base Station
-base2011:
-	cd firmware && scons base2011
-base2011-prog: base2011
-	cd firmware && sudo scons base2011-prog
+firmware: control kicker fpga base
+firmware-prog: control-prog kicker-prog fpga-prog
 
 
 STYLIZE_DIFFBASE ?= master
 STYLE_EXCLUDE_DIRS=build \
 				   external \
 				   run \
-				   firmware/common2015/drivers/decawave/decadriver
+				   lib/drivers/decawave/decadriver
 # automatically format code according to our style config defined in .clang-format
 pretty:
 	@stylize --diffbase=$(STYLIZE_DIFFBASE) --clang_style=file --yapf_style=.style.yapf --exclude_dirs $(STYLE_EXCLUDE_DIRS)
