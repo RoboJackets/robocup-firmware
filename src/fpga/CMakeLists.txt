@@ -216,13 +216,15 @@ list(REMOVE_ITEM verilog_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/Hall_Effect_Sensor_
 
 add_custom_target(fpga_iverilog
     DEPENDS copy_src
-    COMMAND iverilog ${verilog_SRC}
+    COMMAND iverilog
             -o ${CMAKE_CURRENT_BINARY_DIR}/robocup_iverilog
             -I ${CMAKE_CURRENT_BINARY_DIR}
             -s ${TOP_LEVEL_NAME}
-            -v 2>&1
+            -v
+            ${verilog_SRC}
+            2>&1
             | tee ${CMAKE_CURRENT_BINARY_DIR}/iverilog-compile.log
-    COMMENT "Compiling verilog code with iverilog"
+    COMMENT "Compiling verilog code with iverilog ${CMAKE_CURRENT_BINARY_DIR}"
 )
 
 # A command that only succeeds if the iverilog compile log doesn't contain the

@@ -107,14 +107,24 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
 set(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS "")
 set(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "")
 
-# Add a test runner target "test-firmware"
-file(GLOB FIRMWARE_TEST_SRC "lib/test/*.cpp")
-add_executable(test-firmware ${FIRMWARE_TEST_SRC})
-add_dependencies(test-firmware googletest)
-target_link_libraries(test-firmware ${GTEST_LIBRARIES})
+# # Add a test runner target "test-firmware"
+# file(GLOB FIRMWARE_TEST_SRC "lib/test/*.cpp")
+# add_executable(test-firmware ${FIRMWARE_TEST_SRC})
+# add_dependencies(test-firmware googletest)
+# target_link_libraries(test-firmware ${GTEST_LIBRARIES})
+#
+# # Don't build the tests by default
+# set_target_properties(test-firmware PROPERTIES EXCLUDE_FROM_ALL TRUE)
 
-# Don't build the tests by default
-set_target_properties(test-firmware PROPERTIES EXCLUDE_FROM_ALL TRUE)
+# # Add a test runner target "test-firmware"
+# file(GLOB FIRMWARE_TEST_SRC "lib/test/*.cpp")
+# add_executable(test-firmware ${FIRMWARE_TEST_SRC})
+# add_dependencies(test-firmware googletest)
+# target_link_libraries(test-firmware ${GTEST_LIBRARIES})
+# # target_include_directories(test-firmware PRIVATE "common2015")
+# target_include_directories(test-firmware PRIVATE "lib" "lib/test" "lib/utils/include" "lib/modules/include")
+# target_compile_definitions(test-firmware PRIVATE -D__MBED_TEST__)
+# set_target_properties(test-firmware PROPERTIES EXCLUDE_FROM_ALL TRUE)
 
 # build robot and base station firmware and the library that they depend on
 add_subdirectory(lib/mbed)
