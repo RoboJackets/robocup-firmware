@@ -27,6 +27,8 @@ echo "-- Installing python packages"
 pip2 install colorama
 pip2 install jinja2
 
+pip3 install stylize
+
 
 echo "-- Updating submodules"
 git submodule sync
