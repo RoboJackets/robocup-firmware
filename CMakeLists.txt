@@ -116,15 +116,22 @@ set(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "")
 # # Don't build the tests by default
 # set_target_properties(test-firmware PROPERTIES EXCLUDE_FROM_ALL TRUE)
 
-# # Add a test runner target "test-firmware"
-# file(GLOB FIRMWARE_TEST_SRC "lib/test/*.cpp")
-# add_executable(test-firmware ${FIRMWARE_TEST_SRC})
-# add_dependencies(test-firmware googletest)
-# target_link_libraries(test-firmware ${GTEST_LIBRARIES})
-# # target_include_directories(test-firmware PRIVATE "common2015")
-# target_include_directories(test-firmware PRIVATE "lib" "lib/test" "lib/utils/include" "lib/modules/include")
-# target_compile_definitions(test-firmware PRIVATE -D__MBED_TEST__)
-# set_target_properties(test-firmware PROPERTIES EXCLUDE_FROM_ALL TRUE)
+# TODO: probably move this to lib cmake
+# Several things depend on the headers in the 'common' directory
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/lib/common") # for headers in common/
+include_directories("${CMAKE_CURRENT_BINARY_DIR}/lib/common") # for generated protobuf headers
+
+add_subdirectory(lib/common)
+
+# Add a test runner target "test-firmware"
+file(GLOB FIRMWARE_TEST_SRC "lib/test/*.cpp")
+add_executable(test-firmware ${FIRMWARE_TEST_SRC})
+add_dependencies(test-firmware googletest)
+target_link_libraries(test-firmware ${GTEST_LIBRARIES})
+# target_include_directories(test-firmware PRIVATE "common2015")
+target_include_directories(test-firmware PRIVATE "lib" "lib/test" "lib/utils/include" "lib/modules/include")
+target_compile_definitions(test-firmware PRIVATE -D__MBED_TEST__)
+set_target_properties(test-firmware PROPERTIES EXCLUDE_FROM_ALL TRUE)
 
 # build robot and base station firmware and the library that they depend on
 add_subdirectory(lib/mbed)

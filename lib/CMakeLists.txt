@@ -1,19 +1,3 @@
-# Several things depend on the headers in the 'common' directory
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}/common") # for headers in common/
-include_directories("${CMAKE_CURRENT_BINARY_DIR}/common") # for generated protobuf headers
-
-add_subdirectory(common)
-
-# Add a test runner target "test-firmware"
-file(GLOB FIRMWARE_TEST_SRC "test/*.cpp")
-add_executable(test-firmware ${FIRMWARE_TEST_SRC})
-add_dependencies(test-firmware googletest)
-target_link_libraries(test-firmware ${GTEST_LIBRARIES})
-# target_include_directories(test-firmware PRIVATE "common2015")
-target_include_directories(test-firmware PRIVATE "." "test" "utils/include" "modules/include")
-target_compile_definitions(test-firmware PRIVATE -D__MBED_TEST__)
-set_target_properties(test-firmware PROPERTIES EXCLUDE_FROM_ALL TRUE)
-
 # set the arm toolchain and include it so we can use it
 set(CMAKE_TOOLCHAIN_FILE ${ARM_TOOLCHAIN_FILE})
 include(${ARM_TOOLCHAIN_FILE})
