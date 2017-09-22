@@ -43,6 +43,7 @@ const PinName RJ_5V_SENSE = p17;
 
 // This defines the Piezo Speaker's pin.
 // const PinName RJ_SPEAKER = p18; // NOT CONNECTED
+const PinName RJ_SPARE_IO = p18;
 
 // This defines the FPGA's `INIT_B` pin.
 // 10k pull-up to 3.3V (HSWAP_EN = NC?)

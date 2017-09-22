@@ -6,7 +6,7 @@
 
 #include <HelperFuncs.hpp>
 
-#include "robot-devices.hpp"
+#include "RobotDevices.hpp"
 
 #define MCP23017_I2C_READ (0x01)
 
@@ -41,14 +41,15 @@ int main() {
     DigitalOut bad2(LED3, 0);
     DigitalOut pwr(LED4, 1);
     Serial pc(RJ_SERIAL_RXTX);
-    I2C i2c(RJ_I2C_BUS);
+    I2C i2c(RJ_I2C_SDA, RJ_I2C_SCL);
 
     pc.baud(57600);
     pc.printf("START========= STARTING TEST =========\r\n\r\n");
 
     pwr = 0;
-    RtosTimer live_light(imAlive, osTimerPeriodic, (void*)&pwr);
-    live_light.start(250);
+    // TODO: probably fix
+    // RtosTimer live_light(imAlive, osTimerPeriodic, (void*)&pwr);
+    // live_light.start(250);
 
     pc.printf("--  Testing IO Expander at 100kHz\r\n");
     // Test on low bus frequency
@@ -87,7 +88,7 @@ int main() {
     good = testPass;
     bad1 = !testPass;
     bad2 = !testPass;
-    live_light.stop();
+    // live_light.stop();
     pwr = testPass;
 
     while (true) {

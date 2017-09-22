@@ -1,5 +1,6 @@
 #include "Mbed.hpp"
-#include "kicker-board.hpp"
+#include "KickerBoard.hpp"
+#include "pins-ctrl-2015.hpp"
 
 Ticker lifeLight;
 DigitalOut ledOne(LED1);
@@ -18,16 +19,14 @@ void imAlive() { ledOne = !ledOne; }
 int main() {
     lifeLight.attach(&imAlive, 0.25);
 
+    /// A shared spi bus
+    auto spiBus = make_shared<SharedSPI>(RJ_SPI_MOSI, RJ_SPI_MISO, RJ_SPI_SCK);
+    spiBus->format(8, 0);  // 8 bits per transfer
+
     //  initialize kicker board and flash it with new firmware if necessary
-    KickerBoard kickerBoard(p11, p12, p13, p27, string("/local/rj-kickr.nib"));
-    bool kickerSuccess = kickerBoard.flash(true, true) == 0;
+    KickerBoard kickerBoard(spiBus, RJ_KICKER_nCS, RJ_KICKER_nRESET, RJ_BALL_LED, "/local/rj-kickr.nib");
+    bool kickerSuccess = !kickerBoard.flash(true, true);
 
-    while (true) {
-        // main loop heartbeat
-        wait(0.3);
-        ledTwo = !ledTwo;
-    }
-
-    // clear light for main loop (shows its complete)
-    ledTwo = false;  // <- yo!, it'll never get here.
+    // Set LED to indicate kicker success
+    ledTwo = kickerSuccess;
 }

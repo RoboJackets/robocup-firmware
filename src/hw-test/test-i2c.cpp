@@ -6,14 +6,14 @@
 
 #include <HelperFuncs.hpp>
 
-#include "robot-devices.hpp"
+#include "RobotDevices.hpp"
 
 DigitalOut good(LED1, 0);
 DigitalOut bad1(LED2, 0);
 DigitalOut bad2(LED3, 0);
 DigitalOut pwr(LED4, 1);
 Serial pc(RJ_SERIAL_RXTX);
-I2C i2c(RJ_I2C_BUS);
+I2C i2c(RJ_I2C_SDA, RJ_I2C_SCL);
 
 bool testPass = false;
 bool batchedResult = false;
@@ -27,8 +27,9 @@ int main() {
     pc.printf("START========= STARTING TEST =========\r\n\r\n");
 
     pwr = 0;
-    RtosTimer live_light(imAlive, osTimerPeriodic, (void*)&pwr);
-    live_light.start(250);
+    // TODO: probably fix and uncomment
+    // RtosTimer live_light(imAlive, osTimerPeriodic, (void*)&pwr);
+    // live_light.start(250);
 
     pc.printf("--  Testing address space using 100kHz\r\n");
     // Test on low bus frequency
@@ -92,7 +93,7 @@ int main() {
     good = testPass;
     bad1 = !testPass;
     bad2 = !testPass;
-    live_light.stop();
+    // live_light.stop();
     pwr = testPass;
 
     while (true) {

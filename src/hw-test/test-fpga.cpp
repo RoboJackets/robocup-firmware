@@ -7,7 +7,7 @@
 #include <software-spi.hpp>
 #include "Logger.hpp"
 
-#include "robot-devices.hpp"
+#include "RobotDevices.hpp"
 
 const std::string filename = "rj-fpga.nib";
 const std::string filesystemname = "local";
@@ -60,7 +60,7 @@ bool fpgaInit() {
         fseek(fp, 0, SEEK_END);
         size_t filesize = ftell(fp);
         fseek(fp, 0, SEEK_SET);
-        size_t count;
+        size_t count = 0;
 
         pc.printf("--  opened %s (%u bytes)\r\n", filename.c_str(), filesize);
 
@@ -103,8 +103,9 @@ int main() {
     pc.printf("START========= STARTING TEST =========\r\n\r\n");
 
     pwr = 0;
-    RtosTimer live_light(imAlive, osTimerPeriodic, (void*)&pwr);
-    live_light.start(250);
+    // TODO: probably fix and uncomment
+    // RtosTimer live_light(imAlive, osTimerPeriodic, (void*)&pwr);
+    // live_light.start(250);
 
     // strobe the prob_b pin to reset any previous configurations for the FPGA
     start_flag_config(prog_b);
@@ -158,7 +159,7 @@ int main() {
     pc.printf("=================================DONE");
 
     // Turn on the corresponding LED(s)
-    live_light.stop();
+    // live_light.stop();
     pwr = testPass;
     good = testPass;
     bad1 = !testPass;

@@ -5,7 +5,7 @@
 #include "RotarySelector.hpp"
 #include "fpga.hpp"
 #include "io-expander.hpp"
-#include "robot-devices.hpp"
+#include "RobotDevices.hpp"
 
 #define RJ_ENABLE_ROBOT_CONSOLE
 
@@ -95,7 +95,7 @@ int main() {
     s.baud(57600);
 
     isLogging = RJ_LOGGING_EN;
-    rjLogLevel = INIT;
+    rjLogLevel = INFO;
 
     if (isLogging) {
         // reset the console's default settings and enable the cursor
@@ -116,10 +116,10 @@ int main() {
     bool fpgaReady = FPGA::Instance->configure("/local/rj-fpga.nib");
 
     if (fpgaReady) {
-        LOG(INIT, "FPGA Configuration Successful!");
+        LOG(OK, "FPGA Configuration Successful!");
 
     } else {
-        LOG(FATAL, "FPGA Configuration Failed!");
+        LOG(SEVERE, "FPGA Configuration Failed!");
     }
 
     // DigitalOut rdy_led(RJ_RDY_LED, !fpgaReady);
