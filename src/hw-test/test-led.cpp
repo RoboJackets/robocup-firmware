@@ -57,7 +57,7 @@ int main(int argc, char** argv) {
         const std::array<MCP23017::ExpPinName, 8> orderedErrLeds = {
             RJ_ERR_LED_M1,     RJ_ERR_LED_M2,   RJ_ERR_LED_M3,
             RJ_ERR_LED_M4,     RJ_ERR_LED_MPU,  RJ_ERR_LED_DRIB,
-            RJ_ERR_LED_BSENSE, RJ_ERR_LED_RADIO};
+            RJ_ERR_LED_KICK, RJ_ERR_LED_RADIO};
 
         int ledMask = 1 << orderedErrLeds[selector % orderedErrLeds.size()];
         ioExpander.writeMask(~ledMask, IOExpanderErrorLEDMask);

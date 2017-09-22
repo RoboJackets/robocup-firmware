@@ -101,7 +101,7 @@ TEST_COMMANDS+=( 'make kicker;kicker;A check to see if kicker firmware compiles'
 TEST_COMMANDS+=( 'make fpga-test-strict;synthesize-verilog; compile verilog code with icarus verilog' )
 TEST_COMMANDS+=( 'make base;base;A check to see if base station firmware compiles' )
 TEST_COMMANDS+=( 'make test-firmware;test-firmware;A check to see if firmware tests pass' )
-TEST_COMMANDS+=('make robot-test-led;led-demo; Compile led demo program for firmware')
+TEST_COMMANDS+=( 'make robot-test-led;led-demo; Compile led demo program for firmware')
 TEST_COMMANDS+=( 'git fetch origin && STYLIZE_DIFFBASE=origin/master make checkstyle;style;A check to see if style passes' )
 
 # @RECCOMENDED
