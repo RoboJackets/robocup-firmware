@@ -22,12 +22,12 @@ public:
      *     loaded by the flash() method
      */
     KickerBoard(std::shared_ptr<SharedSPI> sharedSPI, PinName nCs,
-                PinName nReset, PinName ball_led, const std::string& progFilename);
+                PinName nReset, PinName ball_led,
+                const std::string& progFilename);
 
     DigitalOut ballSenseLED;
 
     static std::shared_ptr<KickerBoard> Instance;
-
 
     std::unique_ptr<RtosTimerHelper> serviceTimer;
 
@@ -42,7 +42,6 @@ public:
      * @return True if flashing was successful
      */
     bool flash(bool onlyIfDifferent = true, bool verbose = false);
-
 
     void start();
 

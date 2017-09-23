@@ -6,9 +6,13 @@ using namespace std;
 std::shared_ptr<KickerBoard> KickerBoard::Instance;
 
 KickerBoard::KickerBoard(shared_ptr<SharedSPI> sharedSPI, PinName nCs,
-                         PinName nReset, PinName ball_led, const string& progFilename)
-    : AVR910(sharedSPI, nCs, nReset), ballSenseLED(ball_led), _filename(progFilename) {
-    serviceTimer = std::make_unique<RtosTimerHelper>([&]() { this->service(); }, osTimerPeriodic);
+                         PinName nReset, PinName ball_led,
+                         const string& progFilename)
+    : AVR910(sharedSPI, nCs, nReset),
+      ballSenseLED(ball_led),
+      _filename(progFilename) {
+    serviceTimer = std::make_unique<RtosTimerHelper>([&]() { this->service(); },
+                                                     osTimerPeriodic);
 }
 
 bool KickerBoard::verify_param(const char* name, char expected,
@@ -58,8 +62,7 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
         LOG(INFO, "Opened kicker binary, attempting to program kicker.");
         bool shouldProgram = true;
         if (onlyIfDifferent &&
-            (checkMemory(ATTINY_PAGESIZE, ATTINY_NUM_PAGES, fp, false) ==
-             0))
+            (checkMemory(ATTINY_PAGESIZE, ATTINY_NUM_PAGES, fp, false) == 0))
             shouldProgram = false;
 
         if (!shouldProgram) {
@@ -68,8 +71,7 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
             // exit programming mode by bringing nReset high
             exitProgramming();
         } else {
-            bool success =
-                program(fp, ATTINY_PAGESIZE, ATTINY_NUM_PAGES);
+            bool success = program(fp, ATTINY_PAGESIZE, ATTINY_NUM_PAGES);
 
             if (!success) {
                 LOG(WARN, "Failed to program kicker.");
@@ -85,7 +87,7 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
 }
 
 void KickerBoard::start() {
-    serviceTimer->start(25); // 25 Hz kicker update speed
+    serviceTimer->start(25);  // 25 Hz kicker update speed
 }
 
 void KickerBoard::service() {
@@ -113,7 +115,6 @@ void KickerBoard::service() {
         if (_is_breakbeam_armed) {
             send_to_kicker(KICK_BREAKBEAM_CANCEL_CMD, BLANK, nullptr);
         }
-
     }
 
     if (_charging_commanded) {
@@ -186,25 +187,15 @@ void KickerBoard::kickOnBreakbeam(uint8_t strength) {
     }
 }
 
-void KickerBoard::cancelBreakbeam() {
-    _cancel_breakbeam_commanded = true;
-}
+void KickerBoard::cancelBreakbeam() { _cancel_breakbeam_commanded = true; }
 
-bool KickerBoard::isCharging() {
-    return _is_charging;
-}
+bool KickerBoard::isCharging() { return _is_charging; }
 
-bool KickerBoard::isBallSensed() {
-    return _ball_sensed;
-}
+bool KickerBoard::isBallSensed() { return _ball_sensed; }
 
-bool KickerBoard::isHealthy() {
-    return _is_healthy;
-}
+bool KickerBoard::isHealthy() { return _is_healthy; }
 
-uint8_t KickerBoard::getVoltage() {
-    return _current_voltage;
-}
+uint8_t KickerBoard::getVoltage() { return _current_voltage; }
 
 void KickerBoard::setChargeAllowed(bool chargeAllowed) {
     if (chargeAllowed) {

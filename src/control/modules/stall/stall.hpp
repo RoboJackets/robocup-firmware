@@ -25,7 +25,8 @@
  * power.
  */
 
-template<int Stall_kSpeed, int Stall_kCommand, int Stall_Threshold, int Stall_Decay, int Stall_Deadband>
+template <int Stall_kSpeed, int Stall_kCommand, int Stall_Threshold,
+          int Stall_Decay, int Stall_Deadband>
 class StallDetection {
 public:
     // Returns if the motor is stalled
@@ -37,7 +38,7 @@ public:
         }
 
         stall_counter +=
-                command * Stall_kCommand - speed * Stall_kSpeed - Stall_Decay;
+            command * Stall_kCommand - speed * Stall_kSpeed - Stall_Decay;
         if (stall_counter < 0) {
             stall_counter = 0;
         }
@@ -47,30 +48,25 @@ public:
             stall_counter = Stall_Threshold;
 
             // Mark this motor as stalled
-			// TODO enable this after it is tested.
+            // TODO enable this after it is tested.
             // stalled = true;
             stalled = false;
         }
 
-        if (stalled && stall_counter <= Stall_Threshold/10) {
+        if (stalled && stall_counter <= Stall_Threshold / 10) {
             stalled = false;
         }
 
         return stalled;
     }
 
-    void resetStallDetection() {
-        stalled = false;
-    }
+    void resetStallDetection() { stalled = false; }
 
     // Public for debug purposes only
     int stall_counter = 0;
     bool stalled = false;
 
 private:
-
-
 };
-
 
 typedef StallDetection<3, 1, 40000, 50, 30> WheelStallDetection;

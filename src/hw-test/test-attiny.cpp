@@ -24,7 +24,8 @@ int main() {
     spiBus->format(8, 0);  // 8 bits per transfer
 
     //  initialize kicker board and flash it with new firmware if necessary
-    KickerBoard kickerBoard(spiBus, RJ_KICKER_nCS, RJ_KICKER_nRESET, RJ_BALL_LED, "/local/rj-kickr.nib");
+    KickerBoard kickerBoard(spiBus, RJ_KICKER_nCS, RJ_KICKER_nRESET,
+                            RJ_BALL_LED, "/local/rj-kickr.nib");
     bool kickerSuccess = !kickerBoard.flash(true, true);
 
     // Set LED to indicate kicker success

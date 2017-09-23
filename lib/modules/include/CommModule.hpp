@@ -110,8 +110,8 @@ private:
     osThreadId m_rxThreadId;
     osThreadId m_txThreadId;
 
-    bool m_isReady{ false };
-    bool m_isRunning{ false };
+    bool m_isReady{false};
+    bool m_isRunning{false};
 
     void ready();
     void txThread();

@@ -16,15 +16,13 @@ osMessageQDef(CommModuleRxQueue, 3, rtp::Packet);
 
 std::shared_ptr<CommModule> CommModule::Instance = nullptr;
 
-CommModule::CommModule() :
-      m_txPoolId(osPoolCreate(osPool(CommModuleTxPool))),
+CommModule::CommModule()
+    : m_txPoolId(osPoolCreate(osPool(CommModuleTxPool))),
       m_rxPoolId(osPoolCreate(osPool(CommModuleRxPool))),
       m_txMessageQueue(osMessageCreate(osMessageQ(CommModuleTxQueue), nullptr)),
       m_rxMessageQueue(osMessageCreate(osMessageQ(CommModuleRxQueue), nullptr)),
       m_rxThread(&CommModule::rxThreadHelper, this, RX_PRIORITY, STACK_SIZE),
-      m_txThread(&CommModule::txThreadHelper, this, TX_PRIORITY, STACK_SIZE)
-      {
-      }
+      m_txThread(&CommModule::txThreadHelper, this, TX_PRIORITY, STACK_SIZE) {}
 
 void CommModule::txThread() {
     m_txThreadId = osThreadGetId();
@@ -85,7 +83,9 @@ void CommModule::txThread() {
             osThreadSetPriority(m_txThreadId, threadPriority);
 #endif
         } else {
-            std::printf("osMessageGet for TX returned unexpected status: %d\r\n", event.status);
+            std::printf(
+                "osMessageGet for TX returned unexpected status: %d\r\n",
+                event.status);
             fflush(stdout);
             ASSERT(false);
         }
@@ -138,8 +138,7 @@ void CommModule::rxThread() {
             if (portIter != m_ports.end()) {
                 if (portIter->second.hasRxCallback()) {
                     rxCount++;
-                    if(rxCount % 2000 == 0)
-                        std::printf("%u\r\n", rxCount);
+                    if (rxCount % 2000 == 0) std::printf("%u\r\n", rxCount);
 
                     portIter->second.getRxCallback()(*p);
 
@@ -162,7 +161,9 @@ void CommModule::rxThread() {
 #endif
         } else {
             auto p = reinterpret_cast<rtp::Packet*>(event.value.p);
-            std::printf("osMessageGet for RX returned unexpected status: %d\r\n", event.status);
+            std::printf(
+                "osMessageGet for RX returned unexpected status: %d\r\n",
+                event.status);
             fflush(stdout);
             ASSERT(false);
         }
@@ -186,7 +187,8 @@ void CommModule::send(rtp::Packet packet) {
         if (block) {
             auto ptr = new (block) rtp::Packet(std::move(packet));
             // Signal worker thread
-            osMessagePut(m_txMessageQueue, reinterpret_cast<uint32_t>(ptr), osWaitForever);
+            osMessagePut(m_txMessageQueue, reinterpret_cast<uint32_t>(ptr),
+                         osWaitForever);
         }
         osThreadYield();
     } else {
@@ -209,7 +211,8 @@ void CommModule::receive(rtp::Packet packet) {
         if (block) {
             auto ptr = new (block) rtp::Packet(std::move(packet));
             // Signal worker thread
-            osMessagePut(m_rxMessageQueue, reinterpret_cast<uint32_t>(ptr), osWaitForever);
+            osMessagePut(m_rxMessageQueue, reinterpret_cast<uint32_t>(ptr),
+                         osWaitForever);
         }
         osThreadYield();
     } else {

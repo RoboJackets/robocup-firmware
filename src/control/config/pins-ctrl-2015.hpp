@@ -25,7 +25,7 @@ const PinName RJ_FPGA_PROG_B = p11;
 
 // This defines the robot's Green `RDY` LED. This should always be configured as
 // open drain output.
-const PinName RJ_RDY_LED = p18; // NOT CONNECTED
+const PinName RJ_RDY_LED = p18;  // NOT CONNECTED
 
 // This defines the FPGA's Chip Select pin. This should always be configured as
 const PinName RJ_FPGA_nCS = p13;

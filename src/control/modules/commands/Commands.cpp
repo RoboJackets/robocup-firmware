@@ -516,7 +516,7 @@ int cmd_info(cmd_args_t& args) {
         printf("\tBuild Date:\t%s %s\r\n", __DATE__, __TIME__);
 
         // printf("\tBase ID:\t");
-        // 
+        //
         // if (ds2411_read_id(RJ_BASE_ID, &id) == ID_HANDSHAKE_FAIL)
         //     printf("[id chip not connected]\r\n");
         // else
@@ -695,13 +695,13 @@ int cmd_kicker(cmd_args_t& args) {
         bool res = false;
         if (args[0] == "kick") {
             // no args, kick immediately
-            KickerBoard::Instance->kick(256/2);
+            KickerBoard::Instance->kick(256 / 2);
         } else if (args[0] == "break") {
             if (args.size() != 2) {
                 printf("Must specify <on|off>.\r\n");
             } else {
                 if (args[1] == "on") {
-                    KickerBoard::Instance->kickOnBreakbeam(256/2);
+                    KickerBoard::Instance->kickOnBreakbeam(256 / 2);
                     printf("Kick on break beam on\r\n");
                 } else if (args[1] == "off") {
                     KickerBoard::Instance->cancelBreakbeam();

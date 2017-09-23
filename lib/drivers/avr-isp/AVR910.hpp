@@ -56,7 +56,7 @@
 #define AVR_FAMILY_MASK 0xF0
 #define AVR_FAMILY_ID 0x90
 #define ATTINY_DEVICE_ID 0x87
-#define ATTINY_PAGESIZE 64 // Size in words (word = 2 bytes)
+#define ATTINY_PAGESIZE 64  // Size in words (word = 2 bytes)
 #define ATTINY_NUM_PAGES 128
 
 /**

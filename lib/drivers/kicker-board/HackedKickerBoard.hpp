@@ -47,9 +47,7 @@ public:
         _kickLine = 1;
     }
 
-    std::pair<bool, uint8_t> readVoltage() {
-        return std::make_pair(false, 0);
-    }
+    std::pair<bool, uint8_t> readVoltage() { return std::make_pair(false, 0); }
 
 protected:
     void _stopKicking() { _kickLine = 0; }

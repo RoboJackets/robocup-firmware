@@ -43,7 +43,7 @@ FPGA::FPGA(std::shared_ptr<SharedSPI> sharedSPI, PinName nCs, PinName initB,
       _initB(initB),
       _done(done),
       _progB(progB, PIN_OUTPUT, OpenDrain, 1) {
-	  setSPIFrequency(1000000); // I don't know, it works
+    setSPIFrequency(1000000);  // I don't know, it works
 }
 
 bool FPGA::configure(const std::string& filepath) {

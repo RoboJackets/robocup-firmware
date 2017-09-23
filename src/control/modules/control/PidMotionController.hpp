@@ -5,7 +5,6 @@
 #include "FPGA.hpp"
 #include "RobotModel.hpp"
 
-
 /**
  * Robot controller that runs a PID loop on each of the four wheels.
  */
@@ -18,27 +17,28 @@ public:
     int cur_sample = 0;
 
     // For logging
-    //std::tuple<float, float> points[num_samples];
-    //float points[num_samples];
-    //std::vector< std::tuple<float, float> > points;
+    // std::tuple<float, float> points[num_samples];
+    // float points[num_samples];
+    // std::vector< std::tuple<float, float> > points;
     // float points[num_samples];
     float duties[4] = {0, 0, 0, 0};
 
     PidMotionController() {
         setPidValues(3.0, 0, 0, 50, 0);
 
-        //if (logging) {
+        // if (logging) {
         //    points.reserve(num_samples);
         //}
     }
 
     void log(float dt, const Eigen::Vector4f& wheelVelErr) {
         if (!logging) return;
-        //printf("Hit log\r\n");
+        // printf("Hit log\r\n");
 
         int effective_index = cur_sample / dt_per_sample;
         if (effective_index < num_samples) {
-            //points[effective_index] = std::make_tuple(dt, wheelVelErr[0]); //std::make_tuple(dt, wheelVelErr);
+            // points[effective_index] = std::make_tuple(dt, wheelVelErr[0]);
+            // //std::make_tuple(dt, wheelVelErr);
             // points[effective_index] = wheelVelErr[1];
             cur_sample++;
         } else {
@@ -48,28 +48,30 @@ public:
 
     void save_log() {
         printf("Saving motor error log to disk.\r\n");
-        //FILE *fp = fopen("/local/VEL", "w");
-        //fprintf(fp, "time,m1_err,m2_err,m3_err,m4_errble\n");
-        //for (auto& p : points) {
-        //float time_sum = 0;
+        // FILE *fp = fopen("/local/VEL", "w");
+        // fprintf(fp, "time,m1_err,m2_err,m3_err,m4_errble\n");
+        // for (auto& p : points) {
+        // float time_sum = 0;
         for (int i = 0; i < num_samples; ++i) {
-            //float dt; Eigen::Vector4f velErrs;
-            //float dt, vel;
-            //std::tie(dt, vel) = points[i];
-            //time_sum += dt;
-            //fprintf(fp, "%f,%f,%f,%f,%f\n", dt, velErrs[0], velErrs[1], velErrs[2], velErrs[3]);
-            //fprintf(fp, "%f,%f\n", time_sum, vel);
-            //fprintf(fp, "%f\n", points[i]);
+            // float dt; Eigen::Vector4f velErrs;
+            // float dt, vel;
+            // std::tie(dt, vel) = points[i];
+            // time_sum += dt;
+            // fprintf(fp, "%f,%f,%f,%f,%f\n", dt, velErrs[0], velErrs[1],
+            // velErrs[2], velErrs[3]);
+            // fprintf(fp, "%f,%f\n", time_sum, vel);
+            // fprintf(fp, "%f\n", points[i]);
             // printf("%f\r\n", points[i]);
         }
-        //fprintf(fp, "%d\n", points.size());
-        //fflush(fp);
-        //fclose(fp);
+        // fprintf(fp, "%d\n", points.size());
+        // fflush(fp);
+        // fclose(fp);
 
         logging = false;
     }
 
-    void setPidValues(float p, float i, float d, unsigned int windup, float derivAlpha) {
+    void setPidValues(float p, float i, float d, unsigned int windup,
+                      float derivAlpha) {
         for (Pid& ctl : _controllers) {
             ctl.kp = p;
             ctl.ki = i;
@@ -109,16 +111,15 @@ public:
      * @return Duty cycle values for each of the 4 motors
      */
     std::array<int16_t, 4> run(const std::array<int16_t, 4>& encoderDeltas,
-                               float dt, Eigen::Vector4d *errors=nullptr, Eigen::Vector4d *wheelVelsOut=nullptr, 
-                               Eigen::Vector4d *targetWheelVelsOut=nullptr) {
-
-
+                               float dt, Eigen::Vector4d* errors = nullptr,
+                               Eigen::Vector4d* wheelVelsOut = nullptr,
+                               Eigen::Vector4d* targetWheelVelsOut = nullptr) {
         // convert encoder ticks to rad/s
         Eigen::Vector4d wheelVels;
         wheelVels << encoderDeltas[0], encoderDeltas[1], encoderDeltas[2],
             encoderDeltas[3];
         wheelVels *= 2.0 * M_PI / ENC_TICKS_PER_TURN / dt;
-        //std::printf("%f, %d, %f\r\n", wheelVels[0], encoderDeltas[0], dt);
+        // std::printf("%f, %d, %f\r\n", wheelVels[0], encoderDeltas[0], dt);
 
         /*
         static char timeBuf[25];
@@ -126,10 +127,10 @@ public:
         localtime(&sysTime);
         */
 
-        //std::printf("%f\r\n", _targetVel[1]);
+        // std::printf("%f\r\n", _targetVel[1]);
 
-        //std::printf("%d, %f\r\n", sysTime, dt);
-        //strftime(timeBuf,25,"%H:%")
+        // std::printf("%d, %f\r\n", sysTime, dt);
+        // strftime(timeBuf,25,"%H:%")
 
         Eigen::Vector4d targetWheelVels =
             RobotModel2015.BotToWheel * _targetVel.cast<double>();
@@ -137,23 +138,23 @@ public:
         if (targetWheelVelsOut) {
             *targetWheelVelsOut = targetWheelVels;
         }
-//        targetWheelVels *= 10;
+        //        targetWheelVels *= 10;
         // Forwards
-        //Eigen::Vector4f targetWheelVels(.288675, .32169, -.32169, -.288675);
-        //Eigen::Vector4f targetWheelVels(.32169, .288675, -.288675, -.32169);
+        // Eigen::Vector4f targetWheelVels(.288675, .32169, -.32169, -.288675);
+        // Eigen::Vector4f targetWheelVels(.32169, .288675, -.288675, -.32169);
 
         /*
         float front = .34641;
         float back = .257352;
         Eigen::Vector4f targetWheelVels(front, back, -back, -front);
         */
-        //Eigen::Vector4f targetWheelVels(.4, -.317803, -.476705, .6);
+        // Eigen::Vector4f targetWheelVels(.4, -.317803, -.476705, .6);
 
         // Right
-        //Eigen::Vector4f targetWheelVels(.5, -.397254, -.397254, .5);
-        //Eigen::Vector4f targetWheelVels(.397254, -.5, -.5, .397254);
-        //Eigen::Vector4f targetWheelVels(0, 0, 0, 1);
-        //targetWheelVels /= RobotModel2015.WheelRadius;
+        // Eigen::Vector4f targetWheelVels(.5, -.397254, -.397254, .5);
+        // Eigen::Vector4f targetWheelVels(.397254, -.5, -.5, .397254);
+        // Eigen::Vector4f targetWheelVels(0, 0, 0, 1);
+        // targetWheelVels /= RobotModel2015.WheelRadius;
 
         Eigen::Vector4d wheelVelErr = targetWheelVels - wheelVels;
 
@@ -167,11 +168,11 @@ public:
 
         // std::printf("%f\r\n", wheelVelErr[0]);
 
-
         std::array<int16_t, 4> dutyCycles;
         for (int i = 0; i < 4; i++) {
             // float dc;
-            float dc = targetWheelVels[i] * RobotModel2015.DutyCycleMultiplier + copysign(4, targetWheelVels[i]);
+            float dc = targetWheelVels[i] * RobotModel2015.DutyCycleMultiplier +
+                       copysign(4, targetWheelVels[i]);
             // int16_t dc = _controllers[i].run(wheelVelErr[i], dt);
             // dc = duties[i];
             dc += _controllers[i].run(wheelVelErr[i]);
@@ -186,19 +187,19 @@ public:
             }
 
             duties[i] = dc;
-            dutyCycles[i] = (int16_t) dc;
+            dutyCycles[i] = (int16_t)dc;
         }
 
-        // if we're about to log, send 0 duty cycle
-        /*
-        int effective_index = cur_sample / dt_per_sample;
-        if (effective_index > num_samples - 20 && effective_index < num_samples + 10) {
-            for (int i = 0; i < 4; ++i) {
-                dutyCycles[i] = 0;
-            }
-        }
-        */
-        //log(dt, targetVel);
+// if we're about to log, send 0 duty cycle
+/*
+int effective_index = cur_sample / dt_per_sample;
+if (effective_index > num_samples - 20 && effective_index < num_samples + 10) {
+    for (int i = 0; i < 4; ++i) {
+        dutyCycles[i] = 0;
+    }
+}
+*/
+// log(dt, targetVel);
 
 // enable these printouts to get a python-formatted data set than can be
 // graphed to visualize pid control and debug problems
@@ -216,7 +217,8 @@ public:
         return dutyCycles;
     }
 
-    // 2048 ticks per turn. Theres is a 3:1 gear ratio between the motor and the wheel.
+    // 2048 ticks per turn. Theres is a 3:1 gear ratio between the motor and the
+    // wheel.
     static const uint16_t ENC_TICKS_PER_TURN = 2048 * 3;
 
 private:

@@ -42,7 +42,7 @@ LocalFileSystem local("local");
 void Task_Simulate_RX_Packet(const void* args) {
     auto commModule = CommModule::Instance;
 
-    while(true) {
+    while (true) {
         Thread::wait(1);
 
         rtp::Packet pkt;
@@ -77,7 +77,7 @@ void Task_Controller_UpdateTarget(Eigen::Vector3f targetVel);
 void Task_Controller_UpdateDribbler(uint8_t dribbler);
 void InitializeCommModule(SharedSPIDevice<>::SpiPtrT sharedSPI);
 
-extern std::array<WheelStallDetection,4> wheelStallDetection;
+extern std::array<WheelStallDetection, 4> wheelStallDetection;
 
 /**
  * @brief Sets the hardware configurations for the status LEDs & places
@@ -86,8 +86,7 @@ extern std::array<WheelStallDetection,4> wheelStallDetection;
  * @param[in] state The next state of the LEDs
  */
 void statusLights(bool state) {
-    DigitalOut init_leds[] = {
-        {RJ_BALL_LED}};
+    DigitalOut init_leds[] = {{RJ_BALL_LED}};
     // the state is inverted because the leds are wired active-low
     for (DigitalOut& led : init_leds) led = !state;
 }
@@ -114,7 +113,8 @@ int main() {
 
     {
         uint8_t wd_flag = (LPC_WDT->WDMOD >> 2) & 1;
-        std::printf("Watchdog caused reset: %s\r\n", (wd_flag > 0) ? "True" : "False");
+        std::printf("Watchdog caused reset: %s\r\n",
+                    (wd_flag > 0) ? "True" : "False");
         wd_flag = (LPC_WDT->WDMOD >> 2) & 1;
     }
 
@@ -165,11 +165,8 @@ int main() {
     // Reprogramming each time (first arg of flash false) is actually
     // faster than checking the full memory to see if we need to reflash.
     KickerBoard::Instance =
-        std::make_shared<KickerBoard>(spiBus,
-                                      RJ_KICKER_nCS,
-                                      RJ_KICKER_nRESET,
-                                      RJ_BALL_LED,
-                                      "/local/rj-kickr.nib");
+        std::make_shared<KickerBoard>(spiBus, RJ_KICKER_nCS, RJ_KICKER_nRESET,
+                                      RJ_BALL_LED, "/local/rj-kickr.nib");
     KickerBoard::Instance->flash(false, false);
 
     KickerBoard::Instance->start();
@@ -262,34 +259,32 @@ int main() {
         // globalRadio->reset();
         radioTimeoutTimer.start(RadioTimeout);
 
-        //KickerBoard::Instance->setChargeAllowed(false);
+        // KickerBoard::Instance->setChargeAllowed(false);
         globalRadio->reset();
         globalRadio->setAddress(rtp::ROBOT_ADDRESS);
     }, osTimerOnce);
     radioTimeoutTimer.start(RadioTimeout);
-
 
     // Setup radio protocol handling
     RadioProtocol radioProtocol(CommModule::Instance);
     radioProtocol.setUID(robotShellID);
     radioProtocol.start();
 
-    radioProtocol.debugCallback =
-        [&](const rtp::DebugMessage &msg) {
-//            DebugCommunication::debugResponses = msg.keys;
-        };
+    radioProtocol.debugCallback = [&](const rtp::DebugMessage& msg) {
+        //            DebugCommunication::debugResponses = msg.keys;
+    };
 
-    radioProtocol.confCallback =
-        [&](const rtp::ConfMessage &msg) {
-            for (int i=0; i<rtp::ConfMessage::length; i++) {
-                auto configCommunication = msg.keys[i];
-                if (configCommunication != DebugCommunication::ConfigCommunication::CONFIG_COMMUNICATION_NONE) {
-                    const auto index = static_cast<int> (configCommunication);
-                    DebugCommunication::configStore[index] = msg.values[i];
-                    DebugCommunication::configStoreIsValid[index] = true;
-                }
+    radioProtocol.confCallback = [&](const rtp::ConfMessage& msg) {
+        for (int i = 0; i < rtp::ConfMessage::length; i++) {
+            auto configCommunication = msg.keys[i];
+            if (configCommunication != DebugCommunication::ConfigCommunication::
+                                           CONFIG_COMMUNICATION_NONE) {
+                const auto index = static_cast<int>(configCommunication);
+                DebugCommunication::configStore[index] = msg.values[i];
+                DebugCommunication::configStoreIsValid[index] = true;
             }
-        };
+        }
+    };
 
     radioProtocol.rxCallback =
         [&](const rtp::ControlMessage* msg, const bool addressed) {
@@ -342,7 +337,7 @@ int main() {
                 if (err) reply.motorErrors |= (1 << i);
             }
 
-            for (auto i=0; i<wheelStallDetection.size(); i++) {
+            for (auto i = 0; i < wheelStallDetection.size(); i++) {
                 if (wheelStallDetection[i].stalled) {
                     reply.motorErrors |= (1 << i);
                 }
@@ -361,14 +356,17 @@ int main() {
             reply.kickStatus = KickerBoard::Instance->getVoltage() > 230;
             reply.kickHealthy = KickerBoard::Instance->isHealthy();
 
-//            for (int i=0; i<rtp::RobotStatusMessage::debug_data_length; i++) {
-//                auto debugType = DebugCommunication::debugResponses[i];
-//                if (debugType != 0) {
-//                    reply.debug_data[i] = DebugCommunication::debugStore[debugType];
-//                } else {
-//                    reply.debug_data[i] =  -1;
-//                }
-//            }
+            //            for (int i=0;
+            //            i<rtp::RobotStatusMessage::debug_data_length; i++) {
+            //                auto debugType =
+            //                DebugCommunication::debugResponses[i];
+            //                if (debugType != 0) {
+            //                    reply.debug_data[i] =
+            //                    DebugCommunication::debugStore[debugType];
+            //                } else {
+            //                    reply.debug_data[i] =  -1;
+            //                }
+            //            }
 
             vector<uint8_t> replyBuf;
             rtp::serializeToVector(reply, &replyBuf);
@@ -408,7 +406,7 @@ int main() {
         errorBitmask |= (1 << RJ_ERR_LED_DRIB);
     }
 
-    //cmd_heapfill();
+// cmd_heapfill();
 
 #if COMM_STRESS_TEST
     Thread sim_task(Task_Simulate_RX_Packet, mainID, osPriorityAboveNormal);

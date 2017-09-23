@@ -48,8 +48,8 @@ public:
     std::function<std::vector<uint8_t>(const rtp::ControlMessage* msg,
                                        const bool addresed)> rxCallback;
 
-    std::function<void(const rtp::ConfMessage &msg)> confCallback;
-    std::function<void(const rtp::DebugMessage &msg)> debugCallback;
+    std::function<void(const rtp::ConfMessage& msg)> confCallback;
+    std::function<void(const rtp::DebugMessage& msg)> debugCallback;
 
     void start() {
         m_state = State::DISCONNECTED;
@@ -76,10 +76,11 @@ public:
 
     void rxHandler(rtp::Packet pkt) {
         // TODO: check packet size before parsing
-//        bool addressed = false;
+        //        bool addressed = false;
         const rtp::ControlMessage* controlMessage = nullptr;
         // printf("UUIDs: ");
-        const auto messages  = reinterpret_cast<const rtp::RobotTxMessage*>(pkt.payload.data());
+        const auto messages =
+            reinterpret_cast<const rtp::RobotTxMessage*>(pkt.payload.data());
 
         size_t slot;
         for (size_t i = 0; i < 6; i++) {
@@ -87,7 +88,8 @@ public:
 
             // printf("%d:%d ", slot, msg->uid);
             if (msg->uid == m_uid) {
-                if (msg->messageType == rtp::RobotTxMessage::ControlMessageType) {
+                if (msg->messageType ==
+                    rtp::RobotTxMessage::ControlMessageType) {
                     controlMessage = &msg->message.controlMessage;
                 }
                 slot = i;
@@ -125,7 +127,8 @@ public:
                         const auto confMessage = msg->message.confMessage;
                         confCallback(confMessage);
                     }
-                } else if (msg->messageType == rtp::RobotTxMessage::DebugMessageType) {
+                } else if (msg->messageType ==
+                           rtp::RobotTxMessage::DebugMessageType) {
                     if (debugCallback) {
                         const auto debugMessage = msg->message.debugMessage;
                         debugCallback(debugMessage);

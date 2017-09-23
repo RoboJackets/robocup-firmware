@@ -173,8 +173,8 @@ int main() {
         duty_cycle_all |= (((rotary_vel & (1 << 3)) >> 3) << 9);
 
         // limit max value
-        duty_cycle_all = 100; //std::min(duty_cycle_all, static_cast<uint16_t>(511));
-
+        duty_cycle_all =
+            100;  // std::min(duty_cycle_all, static_cast<uint16_t>(511));
 
         // set the duty cycle values all to our determined value according to
         // the rotary selector

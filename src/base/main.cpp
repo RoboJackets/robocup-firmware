@@ -34,8 +34,8 @@ bool initRadio() {
     CommModule::Instance = make_shared<CommModule>();
 
     // Construct an object pointer for the radio
-    globalRadio =
-        std::make_unique<Decawave>(sharedSPI, RJ_RADIO_nCS, RJ_RADIO_INT, RJ_RADIO_nRESET);
+    globalRadio = std::make_unique<Decawave>(sharedSPI, RJ_RADIO_nCS,
+                                             RJ_RADIO_INT, RJ_RADIO_nRESET);
 
     return globalRadio->isConnected();
 }

@@ -70,7 +70,8 @@ constexpr auto TX_TO_RX_DELAY_UUS = 60;
 constexpr auto RX_RESP_TO_UUS = 5000;
 }
 
-Decawave::Decawave(SpiPtrT sharedSPI, PinName nCs, PinName intPin, PinName _nReset)
+Decawave::Decawave(SpiPtrT sharedSPI, PinName nCs, PinName intPin,
+                   PinName _nReset)
     : CommLink(sharedSPI, nCs, intPin), dw1000_api(), nReset(_nReset) {
     reset();
 }

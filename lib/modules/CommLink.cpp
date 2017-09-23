@@ -23,9 +23,9 @@ CommLink::CommLink(SpiPtrT sharedSPI, PinName nCs, PinName intPin)
 // Task operations for placing received data into the received data queue
 void CommLink::rxThread() {
     // Store our priority so we know what to reset it to if ever needed
-    //const auto threadPriority = m_rxThread.get_priority();
+    // const auto threadPriority = m_rxThread.get_priority();
     //(void)threadPriority;  // disable compiler warning for unused-variable
-    //ASSERT(threadPriority != osPriorityError);
+    // ASSERT(threadPriority != osPriorityError);
 
     // Set the function to call on an interrupt trigger
     m_intIn.rise(this, &CommLink::ISR);
@@ -33,8 +33,10 @@ void CommLink::rxThread() {
     // Only continue past this point once the hardware link is initialized
     Thread::signal_wait(SIGNAL_START);
 
-    //LOG(OK, "RX communication link ready!\r\n    Thread ID: %u, Priority: %d",
-    //    reinterpret_cast<P_TCB>(m_rxThread.gettid())->task_id, threadPriority);
+    // LOG(OK, "RX communication link ready!\r\n    Thread ID: %u, Priority:
+    // %d",
+    //    reinterpret_cast<P_TCB>(m_rxThread.gettid())->task_id,
+    //    threadPriority);
 
     while (true) {
         // Wait until new data has arrived

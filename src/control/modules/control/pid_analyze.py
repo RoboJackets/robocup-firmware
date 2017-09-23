@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 """
 This script can plot data from the robot's pid controller in order to visualize
 the relationship between command velocity, actual velocity, and pid control

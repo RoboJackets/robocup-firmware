@@ -52,7 +52,8 @@ unsigned time = 0;
 uint8_t execute_cmd(uint8_t, uint8_t);
 
 bool is_kicking() {
-    return pre_kick_cooldown_ || millis_left_ || post_kick_cooldown_ || kick_wait;
+    return pre_kick_cooldown_ || millis_left_ || post_kick_cooldown_ ||
+           kick_wait;
 }
 
 void kick(uint8_t strength) {
@@ -60,12 +61,12 @@ void kick(uint8_t strength) {
     pre_kick_cooldown_ = 5;
     // minimum of 6 ms, we were breaking kickers with low duty cycles
     // maximum of 6 + 7 == 13 ms
-    //millis_left_ = (int) ((strength / 255.0) * 6.0) + 7;
-    millis_left_ = 13; // always full kick speed
+    // millis_left_ = (int) ((strength / 255.0) * 6.0) + 7;
+    millis_left_ = 13;  // always full kick speed
     post_kick_cooldown_ = 5;
     kick_wait = 2000;
 
-    TCCR0B |= _BV(CS01);     // start timer /8 prescale
+    TCCR0B |= _BV(CS01);  // start timer /8 prescale
 }
 
 void init();
@@ -103,7 +104,8 @@ void main() {
         // if we dropped below acceptable voltage, then this will catch it
         if (last_voltage_ > 239 || !charge_allowed_ || !charge_commanded_) {
             PORTB &= ~(_BV(CHARGE_PIN));
-        } else if (last_voltage_ < 232 && charge_allowed_ && charge_commanded_) {
+        } else if (last_voltage_ < 232 && charge_allowed_ &&
+                   charge_commanded_) {
             PORTB |= _BV(CHARGE_PIN);
         }
 
@@ -113,11 +115,15 @@ void main() {
 
         bool bs = PINB & _BV(BALL_SENSE_RX);
         if (ball_sensed_) {
-            if (!bs) ball_sense_change_count_++; // wrong reading, inc counter
-            else ball_sense_change_count_ = 0; // correct reading, reset counter
+            if (!bs)
+                ball_sense_change_count_++;  // wrong reading, inc counter
+            else
+                ball_sense_change_count_ = 0;  // correct reading, reset counter
         } else {
-            if (bs) ball_sense_change_count_++; // wrong reading, inc counter
-            else ball_sense_change_count_ = 0; // correct reading, reset counter
+            if (bs)
+                ball_sense_change_count_++;  // wrong reading, inc counter
+            else
+                ball_sense_change_count_ = 0;  // correct reading, reset counter
         }
 
         // counter exceeds maximium, so reset
@@ -133,12 +139,12 @@ void main() {
             kick_on_breakbeam_ = false;
         }
 
-        _delay_us(100); // 0.1 ms
+        _delay_us(100);  // 0.1 ms
     }
 }
 
 void init() {
-    cli(); // disable interrupts
+    cli();  // disable interrupts
 
     // disable watchdog
     wdt_reset();
@@ -159,7 +165,7 @@ void init() {
 
     /* SPI Init */
     SPCR = _BV(SPE) | _BV(SPIE);
-    SPCR &= ~(_BV(MSTR)); // ensure we are a slave SPI device
+    SPCR &= ~(_BV(MSTR));  // ensure we are a slave SPI device
 
     // enable interrupts for PCINT0-PCINT7
     PCICR |= _BV(PCIE0);
@@ -167,9 +173,8 @@ void init() {
     // enable interrupts on debug buttons
     PCMSK0 = _BV(INT_DB_KICK) | _BV(INT_DB_CHG);
 
-
     // Set low bits corresponding to pin we read from
-    ADMUX |= _BV(ADLAR) | 0x00; // connect PA0 (V_MONITOR_PIN) to ADC
+    ADMUX |= _BV(ADLAR) | 0x00;  // connect PA0 (V_MONITOR_PIN) to ADC
 
     // Interrupt on TIMER 0
     TIMSK0 |= _BV(OCIE0A);
@@ -184,7 +189,7 @@ void init() {
 
     // ensure ADC isn't shut off
     PRR &= ~_BV(PRADC);
-    ADCSRA |= _BV(ADEN);   // enable the ADC - Pg. 133
+    ADCSRA |= _BV(ADEN);  // enable the ADC - Pg. 133
 
     // enable global interrupts
     sei();
@@ -209,10 +214,10 @@ ISR(SPI_STC_vect) {
         // buffer to our return value
         SPDR = execute_cmd(cur_command_, recv_data);
     } else if (byte_cnt == 2) {
-        SPDR = ((ball_sensed_ ? 1 : 0) << BALL_SENSE_FIELD)
-            | ((charge_commanded_ ? 1 : 0) << CHARGE_FIELD)
-            | ((kick_on_breakbeam_ ? 1 : 0) << KICK_ON_BREAKBEAM_FIELD)
-            | ((is_kicking() ? 1 : 0) << KICKING_FIELD);
+        SPDR = ((ball_sensed_ ? 1 : 0) << BALL_SENSE_FIELD) |
+               ((charge_commanded_ ? 1 : 0) << CHARGE_FIELD) |
+               ((kick_on_breakbeam_ ? 1 : 0) << KICK_ON_BREAKBEAM_FIELD) |
+               ((is_kicking() ? 1 : 0) << KICKING_FIELD);
     } else if (byte_cnt == 4) {
         // no-op
     }
@@ -235,8 +240,7 @@ ISR(PCINT0_vect) {
     int kick_db_pressed = !(PINA & _BV(DB_KICK_PIN));
     int charge_db_pressed = !(PINA & _BV(DB_CHG_PIN));
 
-    if (!kick_db_down_ && kick_db_pressed)
-        kick(255);
+    if (!kick_db_down_ && kick_db_pressed) kick(255);
 
     // toggle charge
     if (!charge_db_down_ && charge_db_pressed) {
@@ -327,7 +331,8 @@ uint8_t execute_cmd(uint8_t cmd, uint8_t arg) {
 
         default:
             // return error value to show arg wasn't recognized
-            ret_val = 0xCC;  // return a weird value to show arg wasn't recognized
+            ret_val =
+                0xCC;  // return a weird value to show arg wasn't recognized
             break;
     }
 
