@@ -1,6 +1,6 @@
 #include <mbed.h>
 
-#include <logger.hpp>
+#include "Logger.hpp"
 
 #include "RotarySelector.hpp"
 #include "fpga.hpp"

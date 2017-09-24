@@ -13,10 +13,10 @@ ExternalProject_Add(burstspi_library
 )
 set_target_properties(burstspi_library PROPERTIES EXCLUDE_FROM_ALL TRUE)
 
-# the directory to include for linking in with the common2015 library
+# the directory to include for linking in with the firm-lib library
 ExternalProject_Get_Property(burstspi_library SOURCE_DIR)
 
-# the source files that will be added to common2015
+# the source files that will be added to firm-lib
 file(GLOB BURSTSPI_SRC "${SOURCE_DIR}/*.cpp")
 
 # add the external project's path/src info into the accessory library lists

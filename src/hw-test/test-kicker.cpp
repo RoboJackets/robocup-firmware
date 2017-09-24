@@ -3,7 +3,7 @@
 
 #include "KickerBoard.hpp"
 #include "SharedSPI.hpp"
-#include "pins-ctrl-2015.hpp"
+#include "pins-control.hpp"
 
 using namespace std;
 

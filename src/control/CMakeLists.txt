@@ -1,8 +1,8 @@
 # this file came from https://github.com/uwearzt/mbed-cmake
 # and was modified by Justin Buchanan
 #
-# The end result of this file is the 'robot2015' target
-# building this target ouputs an MBED-runnable file at run/robot2015.bin, which can be copied onto the MBED
+# The end result of this file is the 'control' target
+# building this target ouputs an MBED-runnable file at run/control.bin, which can be copied onto the MBED
 set(CMAKE_TOOLCHAIN_FILE ${ARM_TOOLCHAIN_FILE})
 include(${ARM_TOOLCHAIN_FILE})
 
@@ -33,7 +33,7 @@ file(GLOB_RECURSE control_SRC "*.cpp")
 # add the target for making the elf file
 add_executable(control_elf ${control_SRC} ${asm_SRC})
 
-# specify that we depend on the common2015 library and link to it
+# specify that we depend on the firm-lib library and link to it
 target_link_libraries(control_elf firm-lib)
 
 # include directories

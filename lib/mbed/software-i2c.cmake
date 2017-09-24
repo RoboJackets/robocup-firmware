@@ -10,10 +10,10 @@ ExternalProject_Add(swi2c_library
 )
 set_target_properties(swi2c_library PROPERTIES EXCLUDE_FROM_ALL TRUE)
 
-# the directory to include for linking in with the common2015 library
+# the directory to include for linking in with the firm-lib library
 ExternalProject_Get_Property(swi2c_library SOURCE_DIR)
 
-# the source files that will be added to common2015
+# the source files that will be added to firm-lib
 set(SWI2C_SRC ${SOURCE_DIR}/SoftwareI2C.cpp)
 
 # add the external project's path/src info into the accessory library lists

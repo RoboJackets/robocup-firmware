@@ -1,6 +1,6 @@
 #include "Mbed.hpp"
 #include "KickerBoard.hpp"
-#include "pins-ctrl-2015.hpp"
+#include "pins-control.hpp"
 
 Ticker lifeLight;
 DigitalOut ledOne(LED1);

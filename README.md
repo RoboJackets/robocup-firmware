@@ -1,5 +1,5 @@
 # GT RoboJackets RoboCup SSL - Firmware
-[![Build Status](https://circleci.com/gh/RoboJackets/robocup-firmware.svg?&style=shield)](https://circleci.com/gh/RoboJackets/robocup-firmware) 
+[![Build Status](https://circleci.com/gh/RoboJackets/robocup-firmware.svg?&style=shield)](https://circleci.com/gh/RoboJackets/robocup-firmware)
 
 The Georgia Tech RoboJackets team competes in the annual RoboCup Small Size League (SSL) competition.  This repository contains all of the firmware that we run on our robots. More information on how our software works can be found on our [documentation page](http://robojackets.github.io/robocup-firmware/), our [wiki](http://wiki.robojackets.org/w/RoboCup_Software) or on our [website](http://www.robojackets.org/).
 Also, check out our [2014 qualification video](https://www.youtube.com/watch?v=H3F9HexPLT0) to see our robots in action!
@@ -13,13 +13,14 @@ The official [RoboCup site](http://robocupssl.cpe.ku.ac.th/) has more informatio
 
 ## Project Layout
 
-### firmware/
+### src/
 
-The firmware folder contains the code that runs on the robot (soccer/robot) and on the radio base station.  See the firmware/robot [README](firmware/robot/README.md) for more info.
+The src folder contains the firmware code for the different targets that are compiled for the robot/base. See the src [README](src/README.md) for more info.
 
-### common/
+### lib/
 
-Code that's shared between the different projects is stored here.
+The lib folder contains the libraries used for the compiling targets in the src folder. This contains the source for drivers, modules, and common.
+
 
 ### run/
 
@@ -43,34 +44,35 @@ There are a few setup scripts in the util directory for installing required pack
 
 ```
 $ cd robocup-firmware
-$ util/<SYSTEM>-setup
+$ ./util/<SYSTEM>-setup
 ```
 
-3) Build the project
+3) Build the project for the desired target. The `control` target is the firmware for the MBED. The `fpga` target is for the FPGA to be uploaded to the MBED. The `kicker` target is for the kicker MCU to be uploaded to the MBED. The `base` target is for the base station firmware to be uploaded to the base station MBED.
 
 ```
-$ make
+$ make <TARGET>
 ```
+
+Make targets can be uploaded automatically to the MBED by appending `-prog` to the end of the target name.
 
 We use CMake as our build system and have a simple `makefile` setup that invokes CMake.
-
-After running `make`, several programs will be placed in the **run** folder.  See the [soccer docs](http://robojackets.github.io/robocup-software/md_soccer_doc__soccer.html) for instructions on running the soccer program.
 
 
 ## Documentation
 
 We use [Doxygen](www.doxygen.org) for documentation.  This allows us to convert specially-formatted comments within code files into a nifty website that lets us easily see how things are laid out.  Our compiled doxygen documentation can be found here:
 
-http://robojackets.github.io/robocup-software/
 http://robojackets.github.io/robocup-firmware/
 
 Note: The doxygen documentation site above is updated automacally using circle-ci.  See our autoupdate-docs.sh file for more info.
 
-## Testing
-We use [gtest](https://code.google.com/p/googletest/) for unit-testing our software, which can be run by running `make tests`.  To add a test to be run with the rest of the bunch, add a new file in soccer/tests.
 
-The soccer tests can be run using `make test-soccer` or firmware tests with `make test-firmware`.
-The TESTS name filter to run only certain tests. For example `make test-soccer TESTS=Point*` runs only the tests for the Point class.
+## Testing
+
+Firmware tests can be written and placed in `src/hw-test` with the name `test-<TESTNAME>.cpp` then compiled with `make robot-test-<TESTNAME>`
+
+Generic firmware tests can be run with `make test-firmware`. (Still not completely sure what this does)
+
 
 ## License
 

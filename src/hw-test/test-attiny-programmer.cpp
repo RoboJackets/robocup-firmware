@@ -4,7 +4,7 @@
 
 #include "AVR910.hpp"
 #include "SharedSPI.hpp"
-#include "pins-ctrl-2015.hpp"
+#include "pins-control.hpp"
 
 const int BAUD_RATE = 57600;
 const float ALIVE_BLINK_RATE = 0.25;

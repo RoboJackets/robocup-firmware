@@ -4,7 +4,7 @@
 #include "io-expander.hpp"
 #include "mcp23017.hpp"
 #include "neostrip.hpp"
-#include "pins-ctrl-2015.hpp"
+#include "pins-control.hpp"
 #include "robot-config.hpp"
 
 // For some reason, the linker fails if there is no call to Thread::wait()...

@@ -38,7 +38,7 @@ fpga-test-strict:
 	$(call cmake_build_target, fpga_iverilog_strict)
 
 FIRMWR_TESTS := $(patsubst src/hw-test/test-%.cpp,%,$(wildcard src/hw-test/test-*.cpp))
-# robot2015-test-<test_unit>{-prog}
+# robot-test-<test_unit>{-prog}
 # defines the targets described at the line above - test units defined in FIRMWR_TESTS
 $(FIRMWR_TESTS:%=robot-test-%):
 	$(call cmake_build_target, robot-test, -DHW_TEST_UNIT:STRING=$(@F:robot-test-%=%))
@@ -71,7 +71,7 @@ control-gdb: robot build/control-gdb.pid
 	fi
 
 
-# Build all of the 2015 firmware for a robot, and/or move all of the binaries over to the mbed
+# Build all of the firmware for a robot, and/or move all of the binaries over to the mbed
 firmware: control kicker fpga base
 firmware-prog: control-prog kicker-prog fpga-prog
 

@@ -11,10 +11,10 @@ ExternalProject_Add(modserial_library
 )
 set_target_properties(modserial_library PROPERTIES EXCLUDE_FROM_ALL TRUE)
 
-# the directory to include for linking in with the common2015 library
+# the directory to include for linking in with the firm-lib library
 ExternalProject_Get_Property(modserial_library SOURCE_DIR)
 
-# the source files that will be added to common2015
+# the source files that will be added to firm-lib
 set(        MODSERIAL_SRC ${SOURCE_DIR}/MODSERIAL.cpp)
 list(APPEND MODSERIAL_SRC ${SOURCE_DIR}/INIT.cpp)
 list(APPEND MODSERIAL_SRC ${SOURCE_DIR}/PUTC.cpp)

@@ -42,5 +42,5 @@ public:
     float DutyCycleMultiplier = 2.0f;
 };
 
-/// Model parameters for 2015 robot.  See RobotModel.cpp for values.
-extern const RobotModel RobotModel2015;
+/// Model parameters for robot.  See RobotModel.cpp for values.
+extern const RobotModel RobotModelControl;

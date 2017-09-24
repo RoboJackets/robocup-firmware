@@ -1,4 +1,4 @@
-# 2015 Firmware: The FPGA
+# FPGA Firmware
 
 The [`src`](./src) directory contains the Verilog source files. When synthesized, these files generate a bitfile that will tell the FPGA how to configure transistors in the circuit after a robot is turned on.
 

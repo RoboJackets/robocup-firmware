@@ -24,10 +24,10 @@ target_include_directories(decawave PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
 
 # depends on the mbed libraries and all of the accessory libraries
 # add_dependencies(decadriver mbed_libraries ${MBED_ASSEC_LIBS_DEPENDS})
-add_dependencies(decawave common2015)
+add_dependencies(decawave firm-lib)
 
 target_link_libraries(decawave ${MBED_LIBRARY})
-target_link_libraries(decawave common2015)
+target_link_libraries(decawave firm-lib)
 
 target_include_directories(decawave PUBLIC ${decadriver_INCLUDE_DIRS})
 

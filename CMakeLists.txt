@@ -96,7 +96,7 @@ set(MBED_CMAKE_CXX_FLAGS "${MBED_CMAKE_CXX_FLAGS} -fexceptions")
 set(MBED_CMAKE_CXX_FLAGS "${MBED_CMAKE_CXX_FLAGS} -fno-rtti")
 # enable C++14
 set(MBED_CMAKE_CXX_FLAGS "${MBED_CMAKE_CXX_FLAGS} -std=c++14")
-# Enable logging for the common2015 library
+# Enable logging for the firm-lib library
 set(MBED_CMAKE_CXX_FLAGS "${MBED_CMAKE_CXX_FLAGS} -DRJ_LOGGING_EN")
 # ignore formatting flags for printf
 set(MBED_CMAKE_CXX_FLAGS "${MBED_CMAKE_CXX_FLAGS} -Wno-format -Wno-switch -Wno-unused-parameter -Wno-missing-field-initializers")
@@ -128,7 +128,7 @@ file(GLOB FIRMWARE_TEST_SRC "lib/test/*.cpp")
 add_executable(test-firmware ${FIRMWARE_TEST_SRC})
 add_dependencies(test-firmware googletest)
 target_link_libraries(test-firmware ${GTEST_LIBRARIES})
-# target_include_directories(test-firmware PRIVATE "common2015")
+
 target_include_directories(test-firmware PRIVATE "lib" "lib/test" "lib/utils/include" "lib/modules/include")
 target_compile_definitions(test-firmware PRIVATE -D__MBED_TEST__)
 set_target_properties(test-firmware PROPERTIES EXCLUDE_FROM_ALL TRUE)

@@ -18,7 +18,7 @@ if(HW_TEST_UNIT AND NOT(HW_TEST_UNIT MATCHES "default"))
 
     add_executable(robot_test_ELF ${TEST_UNIT_FILE})
 
-    # specify that we depend on the common2015 library and link to it
+    # specify that we depend on the firm-lib library and link to it
     target_link_libraries(robot_test_ELF firm-lib)
 
     # include the file at test

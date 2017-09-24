@@ -133,7 +133,7 @@ public:
         // strftime(timeBuf,25,"%H:%")
 
         Eigen::Vector4d targetWheelVels =
-            RobotModel2015.BotToWheel * _targetVel.cast<double>();
+            RobotModelControl.BotToWheel * _targetVel.cast<double>();
 
         if (targetWheelVelsOut) {
             *targetWheelVelsOut = targetWheelVels;
@@ -154,7 +154,7 @@ public:
         // Eigen::Vector4f targetWheelVels(.5, -.397254, -.397254, .5);
         // Eigen::Vector4f targetWheelVels(.397254, -.5, -.5, .397254);
         // Eigen::Vector4f targetWheelVels(0, 0, 0, 1);
-        // targetWheelVels /= RobotModel2015.WheelRadius;
+        // targetWheelVels /= RobotModelControl.WheelRadius;
 
         Eigen::Vector4d wheelVelErr = targetWheelVels - wheelVels;
 
@@ -171,7 +171,7 @@ public:
         std::array<int16_t, 4> dutyCycles;
         for (int i = 0; i < 4; i++) {
             // float dc;
-            float dc = targetWheelVels[i] * RobotModel2015.DutyCycleMultiplier +
+            float dc = targetWheelVels[i] * RobotModelControl.DutyCycleMultiplier +
                        copysign(4, targetWheelVels[i]);
             // int16_t dc = _controllers[i].run(wheelVelErr[i], dt);
             // dc = duties[i];

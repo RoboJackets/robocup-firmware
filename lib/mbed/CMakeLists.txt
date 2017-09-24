@@ -2,7 +2,7 @@
 set(ARM_TOOLCHAIN_FILE ${CMAKE_CURRENT_LIST_DIR}/arm_toolchain.cmake)
 set(ARM_TOOLCHAIN_FILE ${ARM_TOOLCHAIN_FILE} PARENT_SCOPE)
 
-# create a list of which accessory libraries we want to download and add to the common2015 library
+# create a list of which accessory libraries we want to download and add to the firm-lib library
 set(MBED_ASSEC_LIBS
     # "${CMAKE_CURRENT_LIST_DIR}/burst-spi.cmake"
     # "${CMAKE_CURRENT_LIST_DIR}/modserial.cmake"

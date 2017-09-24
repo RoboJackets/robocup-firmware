@@ -49,8 +49,7 @@ const PinName RJ_SPARE_IO = p18;
 // 10k pull-up to 3.3V (HSWAP_EN = NC?)
 const PinName RJ_FPGA_INIT_B = p19;
 
-// This defines one of the mbed's unused pins. It is not connected to anything
-// on the 2015 Control Board rev. 1.
+// This defines the kicker nReset pin used for programming the kicker
 const PinName RJ_KICKER_nRESET = p12;
 
 // This defines the pin used for communicating with the Mechanical Base's ID#.

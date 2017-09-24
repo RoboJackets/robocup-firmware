@@ -11,10 +11,10 @@ ExternalProject_Add(moddma_library
 )
 set_target_properties(moddma_library PROPERTIES EXCLUDE_FROM_ALL TRUE)
 
-# the directory to include for linking in with the common2015 library
+# the directory to include for linking in with the firm-lib library
 ExternalProject_Get_Property(moddma_library SOURCE_DIR)
 
-# the source files that will be added to common2015
+# the source files that will be added to firm-lib
 set(MODDMA_SRC ${SOURCE_DIR}/MODDMA.cpp)
 list(APPEND MODDMA_SRC ${SOURCE_DIR}/INIT.cpp)
 list(APPEND MODDMA_SRC ${SOURCE_DIR}/SETUP.cpp)

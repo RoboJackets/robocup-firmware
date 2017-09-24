@@ -30,7 +30,7 @@ list(APPEND firm-lib_SRC ${CMAKE_CURRENT_SOURCE_DIR}/common/Pid.cpp)
 #     DEPENDS                 ${MBED_ASSEC_LIBS_DEPENDS}
 # )
 
-# build the 'common2015' library that contains all the MBED stuff needed for
+# build the 'firm-lib' library that contains all the MBED stuff needed for
 # both the base station and robot firmware
 add_library(firm-lib ${firm-lib_SRC} "${CMAKE_CURRENT_BINARY_DIR}/common/git_version.cpp")
 

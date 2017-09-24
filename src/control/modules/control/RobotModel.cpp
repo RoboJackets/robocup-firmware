@@ -1,6 +1,6 @@
 #include "RobotModel.hpp"
 
-const RobotModel RobotModel2015 = []() {
+const RobotModel RobotModelControl = []() {
     RobotModel model;
     model.WheelRadius = 0.02768;
 

@@ -27,7 +27,7 @@ bool RJBaseUSBDevice::USBCallback_request() {
     // Handle vendor-specific requests
     if (transfer->setup.bmRequestType.Type == VENDOR_TYPE) {
         switch (transfer->setup.bRequest) {
-            case Base2015ControlCommand::RadioWriteRegister:
+            case BaseControlCommand::RadioWriteRegister:
                 LOG(DEBUG, "writeReg request");
                 return true;
                 if (writeRegisterCallback)
@@ -35,7 +35,7 @@ bool RJBaseUSBDevice::USBCallback_request() {
                                           transfer->setup.wValue);
                 return true;
 
-            case Base2015ControlCommand::RadioReadRegister:
+            case BaseControlCommand::RadioReadRegister:
                 LOG(DEBUG, "readReg request");
                 return true;
                 if (transfer->setup.wLength > 0 && readRegisterCallback) {
@@ -52,13 +52,13 @@ bool RJBaseUSBDevice::USBCallback_request() {
                 }
                 return true;
 
-            case Base2015ControlCommand::RadioStrobe:
+            case BaseControlCommand::RadioStrobe:
                 LOG(DEBUG, "strobe request");
                 return true;
                 if (strobeCallback) strobeCallback(transfer->setup.wIndex);
                 return true;
 
-            case Base2015ControlCommand::RadioSetChannel:
+            case BaseControlCommand::RadioSetChannel:
                 LOG(DEBUG, "set channel request");
                 return true;
                 if (setRadioChannelCallback)
@@ -97,6 +97,7 @@ uint8_t* RJBaseUSBDevice::stringIproductDesc() {
     static uint8_t stringIproductDescriptor[] = {
         0x14,              /*bLength*/
         STRING_DESCRIPTOR, /*bDescriptorType 0x03*/
+        // TODO: change to remove 2015
         'B', 0, 'a', 0, 's', 0, 'e', 0, ' ', 0, '2', 0, '0', 0, '1', 0, '5',
         0 /*bString iProduct - Base 2015*/
     };
