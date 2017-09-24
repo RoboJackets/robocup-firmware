@@ -9,7 +9,7 @@
 #include "RJBaseUSBDevice.hpp"
 #include "SharedSPI.hpp"
 #include "Watchdog.hpp"
-#include "firmware-common/base2015/usb-interface.hpp"
+#include "firmware-common/base/usb-interface.hpp"
 #include "pins.hpp"
 
 #define RJ_WATCHDOG_TIMER_VALUE 2  // seconds

@@ -5,7 +5,7 @@
 
 #include "CommPort.hpp"
 #include "HelperFuncs.hpp"
-#include "firmware-common/common2015/utils/rtp.hpp"
+#include "firmware-common/rtp.hpp"
 #include "TimeoutLED.hpp"
 
 #include <algorithm>

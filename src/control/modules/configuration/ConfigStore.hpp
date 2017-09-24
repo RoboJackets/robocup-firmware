@@ -1,6 +1,6 @@
 #pragma once
 
-#include "firmware-common/common2015/utils/rtp.hpp"
+#include "firmware-common/rtp.hpp"
 
 namespace DebugCommunication {
 extern std::array<

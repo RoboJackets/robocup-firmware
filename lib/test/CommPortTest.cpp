@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "CommPort.hpp"
-#include "firmware-common/common2015/utils/rtp.hpp"
+#include "firmware-common/rtp.hpp"
 
 #include <functional>
 
