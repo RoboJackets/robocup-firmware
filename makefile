@@ -7,7 +7,7 @@ TESTS = *
 define cmake_build_target
 	mkdir -p build
 	# CMAKE_BUILD_TYPE Debug or Release
-	cd build/firmware && cmake -DCMAKE_BUILD_TYPE=Release -Wno-dev --target $1 $2 ../.. && make $1 $(MAKE_FLAGS) -j
+	cd build && cmake -DCMAKE_BUILD_TYPE=Release -Wno-dev --target $1 $2 .. && make $1 $(MAKE_FLAGS) -j
 endef
 
 # TODO: what?
