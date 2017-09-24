@@ -171,8 +171,9 @@ public:
         std::array<int16_t, 4> dutyCycles;
         for (int i = 0; i < 4; i++) {
             // float dc;
-            float dc = targetWheelVels[i] * RobotModelControl.DutyCycleMultiplier +
-                       copysign(4, targetWheelVels[i]);
+            float dc =
+                targetWheelVels[i] * RobotModelControl.DutyCycleMultiplier +
+                copysign(4, targetWheelVels[i]);
             // int16_t dc = _controllers[i].run(wheelVelErr[i], dt);
             // dc = duties[i];
             dc += _controllers[i].run(wheelVelErr[i]);

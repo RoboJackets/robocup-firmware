@@ -16,11 +16,12 @@ TEST(rtp, Header_IsCorrectSize) {
     EXPECT_EQ(sizeof(rtp::Header), rtp::HeaderSize);
 }
 
+// TODO: make sure this test is correct
 TEST(rtp, ControlMessage_IsCorrectSize) {
-    EXPECT_EQ(sizeof(rtp::ControlMessage), 10);
+    EXPECT_EQ(sizeof(rtp::ControlMessage), 9);
 }
 TEST(rtp, RobotStatusMessage_IsCorrectSize) {
-    EXPECT_EQ(sizeof(rtp::RobotStatusMessage), 3);
+    EXPECT_EQ(sizeof(rtp::RobotStatusMessage), 4);
 }
 
 TEST(rtp, PortType_HasCorrectValues) {

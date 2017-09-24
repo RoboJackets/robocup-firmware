@@ -17,8 +17,7 @@
 using namespace std;
 
 // setup USB interface with custom vendor/product ids
-RJBaseUSBDevice usbLink(RJ_BASE_VENDOR_ID, RJ_BASE_PRODUCT_ID,
-                        RJ_BASE_RELEASE);
+RJBaseUSBDevice usbLink(RJ_BASE_VENDOR_ID, RJ_BASE_PRODUCT_ID, RJ_BASE_RELEASE);
 
 bool initRadio() {
     // setup SPI bus
