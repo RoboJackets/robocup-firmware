@@ -57,12 +57,12 @@ build/control-gdb.pid:
 	--target lpc1768 -S -G > build/control-gdb.log 2>&1 & sudo echo $$! > $@; }
 
 GDB_NO_CONN ?= 0
-control-gdb: robot build/control-gdb.pid
+control-gdb: control build/control-gdb.pid
 # use pyocd-gdbserver, and explicitly pass it the type of target we want to connect with,
 # making sure that we enable semihosting and use gdb syscalls for the file io
 	@trap 'sudo pkill -9 -P `cat build/control-gdb.pid`; exit' TERM INT EXIT && \
 	if [ $(GDB_NO_CONN) -eq 0 ]; then \
-		arm-none-eabi-gdb build/src/control/robot_elf \
+		arm-none-eabi-gdb build/src/control/control_elf \
 		  -ex "target remote localhost:$(GDB_PORT)" \
 		  -ex "load" \
 		  -ex "tbreak main" \
