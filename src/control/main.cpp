@@ -92,6 +92,22 @@ void statusLights(bool state) {
 }
 
 /**
+ * A function used to convert ascii to a byte for two characters with support
+ * for hex values
+ */
+int atob(char char1, char char2) {
+    uint8_t result;
+    result = (char1 >= 'a' ? char1 - 'a' + 10 : char1 - '0') << 4;
+    if (char2 >= 'a') {
+        result += char2 - 'a' + 10;
+    } else {
+        result += char2 - '0';
+    }
+
+    return result;
+}
+
+/**
  * The entry point of the system where each submodule's thread is started.
  */
 int main() {
@@ -144,15 +160,28 @@ int main() {
 
     // Force off since the neopixel's hardware is stateless from previous
     // settings
-    NeoStrip rgbLED(RJ_NEOPIXEL, 1);
+    NeoStrip rgbLED(RJ_NEOPIXEL, 2);
     rgbLED.clear();
 
     // Set the RGB LEDs to a medium blue while the threads are started up
     auto defaultBrightness = 0.02f;
     rgbLED.brightness(3 * defaultBrightness);
     rgbLED.setPixel(0, NeoColorBlue);
-    // rgbLED.setPixel(1, NeoColorBlue);
+    rgbLED.setPixel(1, NeoColorBlue);
     rgbLED.write();
+
+    // Set pixel 1 to colors corresponding to github hash values
+    uint8_t red = atob(git_version_short_hash[0], git_version_short_hash[1]);
+    uint8_t green = atob(git_version_short_hash[2], git_version_short_hash[3]);
+    uint8_t blue = atob(git_version_short_hash[4], git_version_short_hash[5]);
+    rgbLED.setPixel(1, red, green, blue);
+    rgbLED.write();
+
+    // Set neopixel 1 to purple if git version is dirty
+    if (git_version_dirty) {
+        rgbLED.setPixel(1, NeoColorPurple);
+        rgbLED.write();
+    }
 
     // Flip off the startup LEDs after a timeout period
     RtosTimerHelper init_leds_off([]() { statusLights(false); }, osTimerOnce);
