@@ -94,8 +94,9 @@ void statusLights(bool state) {
 /**
  * A function used to convert ascii to a byte for two characters with support
  * for hex values
+ * @return value of chars shifted and added with a size of 1 byte
  */
-int atob(char char1, char char2) {
+uint8_t atob(char char1, char char2) {
     uint8_t result;
     result = (char1 >= 'a' ? char1 - 'a' + 10 : char1 - '0') << 4;
     if (char2 >= 'a') {
