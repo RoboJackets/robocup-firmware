@@ -4,7 +4,7 @@
 #include "Pid.hpp"
 #include "FPGA.hpp"
 #include "RobotModel.hpp"
-
+#include "Geometry2d/Util.hpp"
 
 /**
  * Robot controller that runs a PID loop on each of the four wheels.
@@ -131,9 +131,19 @@ public:
         //std::printf("%d, %f\r\n", sysTime, dt);
         //strftime(timeBuf,25,"%H:%")
 
+        Eigen::Vector4d wheelSlip;
+        wheelSlip = RobotModel2015.SlipDetect * wheelVels;
+
         Eigen::Vector4d targetWheelVels =
             RobotModel2015.BotToWheel * _targetVel.cast<double>();
 
+        // If there is some slipage
+        if (!nearlyEqual(wheelSlip.squaredNorm(), 0)) {
+            // Project wheel matrix onto the hyperplane without slip vector direction
+            targetWheelVels -= 1 / 4 * (targetWheelVels.cwiseProduct(RobotModel2015.SlipVector));
+        }
+
+        
         if (targetWheelVelsOut) {
             *targetWheelVelsOut = targetWheelVels;
         }

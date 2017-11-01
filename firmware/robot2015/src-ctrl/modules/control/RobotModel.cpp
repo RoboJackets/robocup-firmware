@@ -14,6 +14,7 @@ const RobotModel RobotModel2015 = []() {
     model.WheelDist = 0.0798576;
 
     model.recalculateBotToWheel();
+    model.recalculateSlipDetect();
 
     return model;
 }();

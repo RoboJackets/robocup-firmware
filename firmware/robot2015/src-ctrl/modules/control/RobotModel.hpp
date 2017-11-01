@@ -21,6 +21,13 @@ public:
     /// wheelSpeeds = BotToWheel * V_bot
     Eigen::Matrix<double, 4, 3> BotToWheel;
 
+    /// wheelSlip = ( I - BotToWheel*BotToWheel^+ ) * wheelSpeed
+    Eigen::Matrix<double, 4, 4> SlipDetect;
+
+    /// Slip vector in the motor matrix where the result of a movement
+    /// yields no movement
+    Eigen::Vector4d SlipVector;
+
     /// This should be called when any of the other parameters are changed
     void recalculateBotToWheel() {
         // See this paper for more info on how this matrix is derived:
@@ -37,6 +44,16 @@ public:
         BotToWheel *= -1;
         BotToWheel /= WheelRadius;
         // clang-format on
+    }
+
+    /// This should be called when any of the other parameters are changed
+    /// Should be called after recalculateBotToWheel is called
+    void recalculateSlipDetect() {
+        // See this paper for more info on how this matrix is derived:
+        // http://people.idsia.ch/~foerster/2006/1/omnidrive_kiart_preprint.pdf
+        SlipDetect = Eigen::MatrixXd::Identity(4, 4) - (BotToWheel.transpose() * BotToWheel).inverse() * BotToWheel.transpose();
+        SlipVector = ((Eigen::Matrix<double, 4, 4>)BotToWheel.fullPivLu().kernel()).col(0);
+        SlipVector = SlipVector.cwiseProduct(SlipVector);
     }
 
     float DutyCycleMultiplier = 2.0f;
