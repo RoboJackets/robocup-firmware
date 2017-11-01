@@ -51,7 +51,7 @@ public:
     void recalculateSlipDetect() {
         // See this paper for more info on how this matrix is derived:
         // http://people.idsia.ch/~foerster/2006/1/omnidrive_kiart_preprint.pdf
-        SlipDetect = Eigen::MatrixXd::Identity(4, 4) - (BotToWheel.transpose() * BotToWheel).inverse() * BotToWheel.transpose();
+        SlipDetect = Eigen::MatrixXd::Identity(4, 4) - BotToWheel * (BotToWheel.transpose() * BotToWheel).inverse() * BotToWheel.transpose();
         SlipVector = ((Eigen::Matrix<double, 4, 4>)BotToWheel.fullPivLu().kernel()).col(0);
         SlipVector = SlipVector.cwiseProduct(SlipVector);
     }
