@@ -140,7 +140,8 @@ public:
         // If there is some slipage
         if (!nearlyEqual(wheelSlip.squaredNorm(), 0)) {
             // Project wheel matrix onto the hyperplane without slip vector direction
-            targetWheelVels -= 1 / 4 * (targetWheelVels.cwiseProduct(RobotModel2015.SlipVector));
+            // targetWheelVels dot SlipVector * SlipVector / SlipVector.squaredNorm()
+            targetWheelVels -= targetWheelVels.dot(RobotModel2015.SlipVector) * RobotModel2015.SlipVector / RobotModel2015.SlipVector.squaredNorm();
         }
 
         
