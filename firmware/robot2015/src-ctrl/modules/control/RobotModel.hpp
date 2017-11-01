@@ -49,10 +49,14 @@ public:
     /// This should be called when any of the other parameters are changed
     /// Should be called after recalculateBotToWheel is called
     void recalculateSlipDetect() {
-        // See this paper for more info on how this matrix is derived:
-        // http://people.idsia.ch/~foerster/2006/1/omnidrive_kiart_preprint.pdf
+                     // I - DD^+, where D^+ = (D'*D)^-1 * D'
         SlipDetect = Eigen::MatrixXd::Identity(4, 4) - BotToWheel * (BotToWheel.transpose() * BotToWheel).inverse() * BotToWheel.transpose();
-        SlipVector = ((Eigen::Matrix<double, 4, 4>)BotToWheel.fullPivLu().kernel()).col(0);
+
+                     // Assume that that the Slip Detect Matrix is actually the has the null space basis as the rows with different scales
+                     // This holds true in the matlab sim
+        SlipVector = SlipDetect.row(0).transpose();
+                     // This returns a 0 vector for some odd reason
+                     //((Eigen::Matrix<double, 4, 4>)BotToWheel.fullPivLu().kernel()).col(0);
     }
 
     float DutyCycleMultiplier = 2.0f;

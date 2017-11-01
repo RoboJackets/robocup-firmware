@@ -141,7 +141,7 @@ public:
         if (!nearlyEqual(wheelSlip.squaredNorm(), 0)) {
             // Project wheel matrix onto the hyperplane without slip vector direction
             // targetWheelVels dot SlipVector * SlipVector / SlipVector.squaredNorm()
-            targetWheelVels -= targetWheelVels.dot(RobotModel2015.SlipVector) * RobotModel2015.SlipVector / RobotModel2015.SlipVector.squaredNorm();
+            targetWheelVels -= targetWheelVels.dot(RobotModel2015.SlipVector) * RobotModel2015.SlipVector / targetWheelVels.squaredNorm();
         }
 
         
