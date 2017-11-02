@@ -11,7 +11,7 @@
  */
 class PidMotionController {
 public:
-    bool logging = true;
+    bool logging = false;
     // num_samples * dt_per_sample * 0.005 -> 12 seconds of recording?
     const static int num_samples = 1000;
     const static int dt_per_sample = 3;
@@ -142,6 +142,10 @@ public:
             // Project wheel matrix onto the hyperplane without slip vector direction
             // targetWheelVels dot SlipVector * SlipVector / SlipVector.squaredNorm()
             targetWheelVels -= targetWheelVels.dot(RobotModel2015.SlipVector) * RobotModel2015.SlipVector / targetWheelVels.squaredNorm();
+
+        }
+        if (logging) {
+            // do some sort of logging
         }
 
         
