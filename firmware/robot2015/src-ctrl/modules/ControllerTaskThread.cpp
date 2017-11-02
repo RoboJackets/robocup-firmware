@@ -36,8 +36,10 @@ std::unique_ptr<RtosTimerHelper> commandTimeoutTimer = nullptr;
 std::array<WheelStallDetection,4> wheelStallDetection{};
 bool commandTimedOut = true;
 
-void Task_Controller_UpdateTarget(Eigen::Vector3f targetVel) {
+void Task_Controller_UpdateTarget(Eigen::Vector3f targetVel, bool do_print) {
     pidController.setTargetVel(targetVel);
+
+    pidController.logging = true;
 
     // reset timeout
     commandTimedOut = false;

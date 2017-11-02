@@ -4,14 +4,14 @@
 #include "Pid.hpp"
 #include "FPGA.hpp"
 #include "RobotModel.hpp"
-
+#include "Geometry2d/Util.hpp"
 
 /**
  * Robot controller that runs a PID loop on each of the four wheels.
  */
 class PidMotionController {
 public:
-    bool logging = true;
+    bool logging = false;
     // num_samples * dt_per_sample * 0.005 -> 12 seconds of recording?
     const static int num_samples = 1000;
     const static int dt_per_sample = 3;
@@ -131,9 +131,24 @@ public:
         //std::printf("%d, %f\r\n", sysTime, dt);
         //strftime(timeBuf,25,"%H:%")
 
+        Eigen::Vector4d wheelSlip;
+        wheelSlip = RobotModel2015.SlipDetect * wheelVels;
+
         Eigen::Vector4d targetWheelVels =
             RobotModel2015.BotToWheel * _targetVel.cast<double>();
 
+        // If there is some slipage
+        if (!nearlyEqual(wheelSlip.squaredNorm(), 0)) {
+            // Project wheel matrix onto the hyperplane without slip vector direction
+            // targetWheelVels dot SlipVector * SlipVector / SlipVector.squaredNorm()
+            targetWheelVels -= targetWheelVels.dot(RobotModel2015.SlipVector) * RobotModel2015.SlipVector / targetWheelVels.squaredNorm();
+
+        }
+        if (logging) {
+            // do some sort of logging
+        }
+
+        
         if (targetWheelVelsOut) {
             *targetWheelVelsOut = targetWheelVels;
         }

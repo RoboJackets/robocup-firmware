@@ -73,7 +73,7 @@ void Task_Simulate_RX_Packet(const void* args) {
 #endif
 
 void Task_Controller(const void* args);
-void Task_Controller_UpdateTarget(Eigen::Vector3f targetVel);
+void Task_Controller_UpdateTarget(Eigen::Vector3f targetVel, bool do_print);
 void Task_Controller_UpdateDribbler(uint8_t dribbler);
 void InitializeCommModule(SharedSPIDevice<>::SpiPtrT sharedSPI);
 
@@ -305,7 +305,7 @@ int main() {
                         rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
                     static_cast<float>(msg->bodyW) /
                         rtp::ControlMessage::VELOCITY_SCALE_FACTOR,
-                });
+                }, msg->shootMode == 0);
 
                 // dribbler
                 Task_Controller_UpdateDribbler(msg->dribbler);
@@ -316,16 +316,16 @@ int main() {
 
                 // kick!
                 if (msg->shootMode == 0) {
-                    uint8_t kickStrength = msg->kickStrength;
-                    if (msg->triggerMode == 1) {
-                        // kick immediate
-                        KickerBoard::Instance->kick(kickStrength);
-                    } else if (msg->triggerMode == 2) {
-                        // kick on break beam
-                        KickerBoard::Instance->kickOnBreakbeam(kickStrength);
-                    } else {
-                        KickerBoard::Instance->cancelBreakbeam();
-                    }
+                    // uint8_t kickStrength = msg->kickStrength;
+                    // if (msg->triggerMode == 1) {
+                        // // kick immediate
+                        // KickerBoard::Instance->kick(kickStrength);
+                    // } else if (msg->triggerMode == 2) {
+                        // // kick on break beam
+                        // KickerBoard::Instance->kickOnBreakbeam(kickStrength);
+                    // } else {
+                        // KickerBoard::Instance->cancelBreakbeam();
+                    // }
                 }
             }
             KickerBoard::Instance->setChargeAllowed(true);
