@@ -168,6 +168,7 @@ public:
         // std::printf("%f\r\n", wheelVelErr[0]);
         // Calculated by checking for slippage at max accel, and decreasing appropriately
         // Binary search works really well in this case
+        // Caution: This is dependent on the PID values so increasing the agressiveness of that will change this
         double max_error = 3.134765625;
         double scale = 1;
 
