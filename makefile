@@ -1,5 +1,13 @@
 MAKE_FLAGS = --no-print-directory
 TESTS = *
+FIRMWR_TESTS = -i2c -io-expander -fpga -piezo -neopixel -attiny -led -radio-sender -radio-receiver -kicker -attiny-programmer -motor -imu
+
+# build a specified target with CMake and Ninja
+# usage: $(call cmake_build_target, target, extraCmakeFlags)
+define cmake_build_target
+	mkdir -p build
+	cd build && cmake -GNinja -Wno-dev --target $1 $2 .. && ninja $1
+endef
 
 # Similar to the above build target command, but for firmware.  This is used
 # because CMake can only handle one toolchain at a time, so we build the MBED-
