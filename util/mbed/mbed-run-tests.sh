@@ -7,12 +7,12 @@ cd $SCRIPT_DIR
 cd ../..
 set -e
 
-make robot2015-i2c
-make robot2015-io-expander
-make robot2015-piezo
-make robot2015-fpga
+make robot-test-i2c
+make robot-test-io-expander
+make robot-test-piezo
+make robot-test-fpga
 
-msg="${BOLD}All 2015 firmware hw-test targets successfully built!${AOFF}${WHITE}${GREENBG} "
+msg="${BOLD}All firmware hw-test targets successfully built!${AOFF}${WHITE}${GREENBG} "
 printf "$WHITE $GREENBG $PUTLN \n $PUTLN \n"
 printf "%*s\n" $(((${#msg}+$(tput cols))/2)) "$msg"
 printf "$PUTLN \n $PUTLN$R\n"
