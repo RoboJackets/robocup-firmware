@@ -100,7 +100,11 @@ void loop() {
         printf("Data is printed as: acelX acelY acelZ giroX giroY giroZ\r\n");
         printf("Check that your sensor readings are close to 0 0 16384 0 0 0\r\n");
         printf("If calibration was succesful write down your offsets so you can set them in your projects using something similar to mpu.setXAccelOffset(youroffset)\r\n");
-        while (1);
+        while (1) {
+            accelgyro.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);
+            // printf("%d %d %d %d %d %d\r\n", ax, ay, az, gx, gy, gz);
+            printf("%d\r\n", gz);
+        }
     }
 }
 
@@ -149,9 +153,9 @@ void calibration(){
         accelgyro.setYAccelOffset(ay_offset);
         accelgyro.setZAccelOffset(az_offset);
 
-        accelgyro.setXGyroOffset(gx_offset);
-        accelgyro.setYGyroOffset(gy_offset);
-        accelgyro.setZGyroOffset(gz_offset);
+        accelgyro.setXGyroOffsetUser(gx_offset);
+        accelgyro.setYGyroOffsetUser(gy_offset);
+        accelgyro.setZGyroOffsetUser(gz_offset);
 
         meansensors();
         printf("...\r\n");

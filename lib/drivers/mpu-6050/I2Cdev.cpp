@@ -201,6 +201,8 @@ bool I2Cdev::writeBits(uint8_t devAddr, uint8_t regAddr, uint8_t bitStart, uint8
     } else {
         return false;
     }
+
+
 }
 
 /** Write multiple bits in a 16-bit device register.
@@ -249,7 +251,14 @@ bool I2Cdev::writeByte(uint8_t devAddr, uint8_t regAddr, uint8_t data) {
  * @return Status of operation (true = success)
  */
 bool I2Cdev::writeWord(uint8_t devAddr, uint8_t regAddr, uint16_t data) {
-    return writeWords(devAddr, regAddr, 1, &data);
+    i2c.start();
+    i2c.write(devAddr<<1);
+    i2c.write(regAddr);
+    i2c.write((uint8_t) (data >> 8)); //MSByte
+    i2c.write((uint8_t) (data >> 0)); //LSByte
+    i2c.stop();
+    return true;
+    //return writeWords(devAddr, regAddr, 1, &data);
 }
 
 bool I2Cdev::writeBytes(uint8_t devAddr, uint8_t regAddr, uint8_t length, uint8_t *data)
@@ -257,35 +266,46 @@ bool I2Cdev::writeBytes(uint8_t devAddr, uint8_t regAddr, uint8_t length, uint8_
     i2c.start();
     i2c.write(devAddr<<1);
     i2c.write(regAddr);
-    // for(int i = 0; i < length; i++) {
-        // i2c.write(data[i]);
-    // }
+    for(int i = 0; i < length; i++) {
+        i2c.write(data[i]);
+    }
     i2c.stop();
     return true;
 }
 
 bool I2Cdev::writeWords(uint8_t devAddr, uint8_t regAddr, uint8_t length, uint16_t *data)
 {
-    i2c.start();
+    // i2c.start();
     // i2c.write(devAddr<<1);
     // i2c.write(regAddr);
 
-    // uint16_t bytes_num = length*2;
-    // uint8_t bytes[bytes_num];
-
-    // uint16_t bytes_pos = 0;
-    // for(int i = 0; i < length; i += 2) {
-        // bytes[i] = (data[i] >> 8) & 0xFF;
-        // bytes[i+1] = data[i] & 0xFF;
-
-        // bytes_pos += 2;
+    // // uint16_t bytes_num = length*2;
+    // // uint8_t bytes[bytes_num];
+    // unsigned int i = 1;
+    // char *c = (char*)&i;
+    // if (*c)    
+        // printf("Little endian");
+    // else
+        // printf("Big endian");
+    
+    // for (int i = 0; i < length; ++i) {
+        // i2c.write(static_cast<uint8_t>(data[i] && 0xFF));
+        // i2c.write(static_cast<uint8_t>((data[i] >> 8) && 0xFF));
     // }
 
-    i2c.write(devAddr, data, length);
+    // // uint16_t bytes_pos = 0;
+    // // for(int i = 0; i < length; i += 2) {
+        // // bytes[i] = (data[i] >> 8) & 0xFF;
+        // // bytes[i+1] = data[i] & 0xFF;
 
-    i2c.stop();
+        // // bytes_pos += 2;
+    // // }
+
+    // // i2c.write(devAddr, data, length);
+
+    // i2c.stop();
     
-    //writeBytes(devAddr, regAddr, length*2, bytes);
+    // //writeBytes(devAddr, regAddr, length*2, bytes);
 
     return true;
 
