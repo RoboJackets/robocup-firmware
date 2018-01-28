@@ -22,7 +22,7 @@
 #include "io-expander.hpp"
 #include "motors.hpp"
 #include "neostrip.hpp"
-#include "mpu-6050.hpp"
+//#include "mpu-6050.hpp"
 
 #include <array>
 #include <ctime>
