@@ -17,6 +17,7 @@ bool batchedResult = false;
 std::vector<unsigned int> freq1;
 std::vector<unsigned int> freq2;
 
+LocalFileSystem local("local");
 
 int buffersize=1000;     //Amount of readings used to average, make it higher to get more precision but sketch will be slower  (default:1000)
 int acel_deadzone=8;     //Acelerometer error allowed, make it lower to get more precision, but sketch may not converge  (default:8)
@@ -100,10 +101,13 @@ void loop() {
         printf("Data is printed as: acelX acelY acelZ giroX giroY giroZ\r\n");
         printf("Check that your sensor readings are close to 0 0 16384 0 0 0\r\n");
         printf("If calibration was succesful write down your offsets so you can set them in your projects using something similar to mpu.setXAccelOffset(youroffset)\r\n");
+        FILE *fp = fopen("/local/offsets.txt", "w");  // Open "out.txt" on the local file system for writing
+        fprintf(fp, "%d %d %d %d %d %d", ax_offset, ay_offset, az_offset, gx_offset, gy_offset, gz_offset);
+        fclose(fp);
         while (1) {
-            accelgyro.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);
+            // accelgyro.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);
             // printf("%d %d %d %d %d %d\r\n", ax, ay, az, gx, gy, gz);
-            printf("%d\r\n", gz);
+            // printf("%d\r\n", gz);
         }
     }
 }
