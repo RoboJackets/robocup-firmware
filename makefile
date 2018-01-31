@@ -1,6 +1,6 @@
 MAKE_FLAGS = --no-print-directory
 TESTS = *
-FIRMWR_TESTS = -i2c -io-expander -fpga -piezo -neopixel -attiny -led -radio-sender -radio-receiver -kicker -attiny-programmer -motor -imu
+FIRMWR_TESTS = -i2c -io-expander -fpga -piezo -neopixel -attiny -led -radio-sender -radio-receiver -kicker -attiny-programmer -motor -imu -imu-calibration
 
 # build a specified target with CMake and Ninja
 # usage: $(call cmake_build_target, target, extraCmakeFlags)
