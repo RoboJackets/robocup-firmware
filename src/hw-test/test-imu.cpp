@@ -56,6 +56,9 @@ int main() {
         printf("closed\r\n");
     }
 
+    imu.setFullScaleGyroRange(MPU6050_GYRO_FS_1000);
+    imu.setFullScaleAccelRange(MPU6050_ACCEL_FS_8);
+
     imu.setXAccelOffset(ax_offset);
     imu.setYAccelOffset(ay_offset);
     imu.setZAccelOffset(az_offset);

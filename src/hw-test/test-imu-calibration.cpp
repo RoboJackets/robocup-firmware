@@ -49,8 +49,8 @@ int main() {
     // initialize device
     imu.initialize();
 
-    // Thread::wait for ready - TODO test if this is necessary
-    Thread::wait(1000);
+    imu.setFullScaleGyroRange(MPU6050_GYRO_FS_1000);
+    imu.setFullScaleAccelRange(MPU6050_ACCEL_FS_8);
 
     // start message
     printf("MPU6050 Calibration\r\n");
