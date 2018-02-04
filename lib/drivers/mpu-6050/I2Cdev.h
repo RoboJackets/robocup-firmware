@@ -12,8 +12,8 @@
 
 class I2Cdev {
     private:
-        I2CMasterRtos i2c;
         Serial debugSerial;
+        I2CMasterRtos i2c;
     public:
         I2Cdev();
         I2Cdev(PinName i2cSda, PinName i2cScl);        
