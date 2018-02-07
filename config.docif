@@ -96,11 +96,12 @@ SETUP_SHA_FILES+=("./util/docker/baseimage/Dockerfile")
 # COMMAND; SHORT_NAME; DESCRIPTION
 TEST_COMMANDS=()
 TEST_COMMANDS+=( 'make;compile;A check to see if the code compiles' )
-TEST_COMMANDS+=( 'make robot2015;firmware;A check to see if firmware compiles' )
-TEST_COMMANDS+=( 'make fpga2015-test-strict;synthesize-verilog; compile verilog code with icarus verilog' )
-TEST_COMMANDS+=( 'make base2015;base2015;A check to see if base station firmware compiles' )
+TEST_COMMANDS+=( 'make control;control;A check to see if control firmware compiles' )
+TEST_COMMANDS+=( 'make kicker;kicker;A check to see if kicker firmware compiles' )
+TEST_COMMANDS+=( 'make fpga-test-strict;synthesize-verilog; compile verilog code with icarus verilog' )
+TEST_COMMANDS+=( 'make base;base;A check to see if base station firmware compiles' )
 TEST_COMMANDS+=( 'make test-firmware;test-firmware;A check to see if firmware tests pass' )
-TEST_COMMANDS+=('make robot2015-test-led;led-demo; Compile led demo program for firmware')
+TEST_COMMANDS+=( 'make robot-test-led;led-demo; Compile led demo program for firmware')
 TEST_COMMANDS+=( 'git fetch origin && STYLIZE_DIFFBASE=origin/master make checkstyle;style;A check to see if style passes' )
 
 # @RECCOMENDED

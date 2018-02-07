@@ -752,10 +752,9 @@ WARN_LOGFILE           =
 # spaces.
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = soccer \
-                         firmware/robot2015 \
-                         firmware/common2015 \
-                         common \
+INPUT                  = src/control \
+                         lib \
+                         lib/common \
                          doc
 
 # This tag can be used to specify the character encoding of the source files

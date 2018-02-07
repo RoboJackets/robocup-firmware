@@ -1,0 +1,11 @@
+
+cmake
+protobuf
+eigen
+sdl
+qt5
+python
+python3
+gcc-arm-none-eabi-49
+avr-gcc
+ninja
