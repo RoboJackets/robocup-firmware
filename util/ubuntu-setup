@@ -23,10 +23,7 @@ if cat /etc/os-release | grep -iq '^NAME=.*Debian'; then # dont add repositories
     echo "[WARN] You are using a flavor of debian. This configuration is not officially supported..." >&2
     SYSTEM="debian"
 elif cat /etc/os-release | grep -iq '^NAME=.*Ubuntu'; then # We are using a version of ubuntu...
-    if cat /etc/os-release | grep -iq '^VERSION=.*14.04'; then # Using Ubuntu 14.04
-        echo "Ubuntu 14.04 Detected..."
-        SYSTEM="ubuntu-14.04"
-    elif cat /etc/os-release | grep -iq '^VERSION=.*15.04'; then # Using Ubuntu 15.04
+    if cat /etc/os-release | grep -iq '^VERSION=.*15.04'; then # Using Ubuntu 15.04
         echo "Ubuntu 15.04 Detected..."
         SYSTEM="ubuntu-15.04"
     elif cat /etc/os-release | grep -iq '^VERSION=.*15.10'; then # Using Ubuntu 15.10
@@ -38,6 +35,9 @@ elif cat /etc/os-release | grep -iq '^NAME=.*Ubuntu'; then # We are using a vers
     elif cat /etc/os-release | grep -iq '^VERSION=.*16.10'; then # Using Ubuntu 16.10
         echo "Ubuntu 16.10 Detected..."
         SYSTEM="ubuntu-16.10"
+    elif cat /etc/os-release | grep -iq '^VERSION=.*18.04'; then # Using Ubuntu 18.04
+        echo "Ubuntu 16.10 Detected..."
+        SYSTEM="ubuntu-18.04"
     else
         echo "$DISTRO_STR" >&2
         exit 1
@@ -96,18 +96,6 @@ PACKAGES="$(sed 's/#.*//;/^$/d' $BASE/util/ubuntu-packages.txt)"
 
 # install all of the packages listed in required_packages.txt
 apt-get install $ARGS $PACKAGES
-
-# Use ubuntu's 'update-alternatives' to select the newer compiler as the default
-# See issue #468 on GitHub
-if [ "$SYSTEM" = "ubuntu-14.04" ]; then
-    update-alternatives --install /usr/bin/g++ g++ $(command -v g++-4.9) 40
-    update-alternatives --set g++ $(command -v g++-4.9)
-fi
-
-if [ "ubuntu-14.04" = "$SYSTEM" -a "$(clang --version | grep -Eo '[0-9]+\.[0-9]+' | head -n1)" \< "3.5" ]; then
-    echo "-- Symlinking clang-3.5 to clang"
-    ln -sf $(which clang-3.5) /usr/bin/clang
-fi
 
 # install python3 requirements
 pip3 install -r $BASE/util/requirements3.txt

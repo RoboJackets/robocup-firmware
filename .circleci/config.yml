@@ -1,0 +1,192 @@
+defaults: &dir
+  working_directory: ~/robocup-firmware
+
+defaults: &image
+  docker:
+    - image: robojackets/robocup-firmware:master
+
+defaults: &install_deps
+  run: sudo ./util/ubuntu-setup --yes && sudo ccache -M 100M
+defaults: &save_src_cache
+  save_cache:
+    key: source-v1-{{ .Branch }}-{{ .Revision }}
+    paths:
+      - ".git"
+defaults: &load_src_cache
+  restore_cache:
+    keys:
+      - source-v1-{{ .Branch }}-{{ .Revision }}
+      - source-v1-{{ .Branch }}-
+      - source-v1-
+defaults: &save_compile_cache
+  save_cache:
+    key: ccache-{{ arch }}-{{ .Branch }}-{{ .Revision }}
+    paths:
+      - ~/.ccache
+defaults: &load_compile_cache
+  restore_cache:
+    keys:
+      - ccache-{{ arch }}-{{ .Branch }}-{{ .Revision }}
+      - ccache-{{ arch }}-{{ .Branch }}
+      - ccache-{{ arch }}
+      - ccache-
+defaults: &save_workspace
+  persist_to_workspace:
+    root: build
+    paths:
+      - ./*
+defaults: &load_workspace
+  attach_workspace:
+    at: build
+
+version: 2
+jobs:
+  compile:
+    <<: *dir
+    <<: *image
+    steps:
+      - <<: *load_src_cache
+      - checkout
+      # Ensure latest deps are installed
+      - <<: *install_deps
+      - <<: *save_src_cache
+      - <<: *load_compile_cache
+      - run: make
+      - <<: *save_compile_cache
+      - <<: *save_workspace
+
+  control:
+    <<: *dir
+    <<: *image
+    steps:
+      - <<: *load_src_cache
+      - checkout
+      # Ensure latest deps are installed
+      - <<: *install_deps
+      - <<: *load_workspace
+      - <<: *load_compile_cache
+      - run: make control
+
+  kicker:
+    <<: *dir
+    <<: *image
+    steps:
+      - <<: *load_src_cache
+      - checkout
+      # Ensure latest deps are installed
+      - <<: *install_deps
+      - <<: *load_workspace
+      - <<: *load_compile_cache
+      - run: make kicker
+
+  synthesize-verilog:
+    <<: *dir
+    <<: *image
+    steps:
+      - <<: *load_src_cache
+      - checkout
+      # Ensure latest deps are installed
+      - <<: *install_deps
+      - <<: *load_workspace
+      - <<: *load_compile_cache
+      - run: make base
+
+  base:
+    <<: *dir
+    <<: *image
+    steps:
+      - <<: *load_src_cache
+      - checkout
+      # Ensure latest deps are installed
+      - <<: *install_deps
+      - <<: *load_workspace
+      - <<: *load_compile_cache
+      - run: make fpga-test-strict
+
+  test-firmware:
+    <<: *dir
+    <<: *image
+    steps:
+      - <<: *load_src_cache
+      - checkout
+      # Ensure latest deps are installed
+      - <<: *install_deps
+      - <<: *load_workspace
+      - <<: *load_compile_cache
+      - run: make test-firmware
+
+  led-demo:
+    <<: *dir
+    <<: *image
+    steps:
+      - <<: *load_src_cache
+      - checkout
+      # Ensure latest deps are installed
+      - <<: *install_deps
+      - <<: *load_workspace
+      - <<: *load_compile_cache
+      - run: make robot-test-led
+
+  style:
+    <<: *dir
+    <<: *image
+    steps:
+      - <<: *load_src_cache
+      - checkout
+      # Ensure latest deps are installed
+      - <<: *install_deps
+      - <<: *load_workspace
+      - <<: *load_compile_cache
+      - run: git fetch origin && STYLIZE_DIFFBASE=origin/master make checkstyle
+      - store_artifacts:
+          path: /tmp/clean.patch
+
+  gen-docs:
+    <<: *dir
+    <<: *image
+    steps:
+      - <<: *load_src_cache
+      - checkout
+      # Ensure latest deps are installed
+      - <<: *install_deps
+      - <<: *load_workspace
+      - <<: *load_compile_cache
+      - run: ./autoupdate-docs.sh
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - compile
+      - control:
+          requires:
+            - compile
+      - kicker:
+          requires:
+            - compile
+      - synthesize-verilog:
+          requires:
+            - compile
+      - base:
+          requires:
+            - compile
+      - test-firmware:
+          requires:
+            - compile
+      - led-demo:
+          requires:
+            - compile
+
+      - gen-docs:
+          requires:
+            - compile
+            - control
+            - kicker
+            - synthesize-verilog
+            - base
+            - test-firmware
+            - led-demo
+
+          filters:
+            branches:
+              only: master
