@@ -76,6 +76,7 @@ void Task_Simulate_RX_Packet(const void* args) {
 void Task_Controller(const void* args);
 void Task_Controller_UpdateTarget(Eigen::Vector3f targetVel);
 void Task_Controller_UpdateDribbler(uint8_t dribbler);
+std::array<int16_t, 4> Task_Controller_EncGetClear();
 void InitializeCommModule(SharedSPIDevice<>::SpiPtrT sharedSPI);
 
 extern std::array<WheelStallDetection, 4> wheelStallDetection;
@@ -386,6 +387,12 @@ int main() {
             // kicker status
             reply.kickStatus = KickerBoard::Instance->getVoltage() > 230;
             reply.kickHealthy = KickerBoard::Instance->isHealthy();
+
+            // note: this clears the encoder count
+            auto enc_array = Task_Controller_EncGetClear();
+            for (auto i = 0; i < enc_array.size(); ++i) {
+                reply.encDeltas[i] = enc_array[i];
+            }
 
             //            for (int i=0;
             //            i<rtp::RobotStatusMessage::debug_data_length; i++) {

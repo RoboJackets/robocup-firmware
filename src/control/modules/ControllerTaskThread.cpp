@@ -31,9 +31,12 @@ PidMotionController pidController;
  * when they lose radio communication.
  */
 constexpr uint32_t COMMAND_TIMEOUT_INTERVAL = 250;
+
 std::unique_ptr<RtosTimerHelper> commandTimeoutTimer = nullptr;
 std::array<WheelStallDetection, 4> wheelStallDetection{};
 bool commandTimedOut = true;
+
+std::array<int16_t, 4> enc_counts = {0, 0, 0, 0};
 
 void Task_Controller_UpdateTarget(Eigen::Vector3f targetVel) {
     pidController.setTargetVel(targetVel);
@@ -47,6 +50,16 @@ void Task_Controller_UpdateTarget(Eigen::Vector3f targetVel) {
 uint8_t dribblerSpeed = 0;
 void Task_Controller_UpdateDribbler(uint8_t dribbler) {
     dribblerSpeed = dribbler;
+}
+
+std::array<int16_t, 4> Task_Controller_EncGetClear() {
+    // copy
+    std::array<int16_t, 4> ret_enc(enc_counts);
+    // perform reset
+    for (auto& e : enc_counts) {
+        e = 0;
+    }
+    return ret_enc;
 }
 
 /**
@@ -170,7 +183,10 @@ void Task_Controller(const void* args) {
 
         // take first 4 encoder deltas
         std::array<int16_t, 4> driveMotorEnc;
-        for (auto i = 0; i < 4; i++) driveMotorEnc[i] = enc_deltas[i];
+        for (auto i = 0; i < 4; i++) {
+            driveMotorEnc[i] = enc_deltas[i];
+            enc_counts[i] += enc_deltas[i];
+        }
 
         Eigen::Vector4d errors{};
         Eigen::Vector4d wheelVelsOut{};
@@ -280,6 +296,7 @@ void Task_Controller(const void* args) {
                 DebugCommunication::debugResponseToValue(
                     DebugCommunication::DebugResponse::TargetWheelVel3,
                     targetWheelVelsOut[3]);
+
 
         // assign the duty cycles, zero out motors that the fpga returns an
         // error for
