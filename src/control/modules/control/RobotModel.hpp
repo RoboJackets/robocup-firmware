@@ -6,9 +6,7 @@
 #include <cmath>
 //#include "const-math.hpp"
 
-constexpr double DegreesToRadians(double val) {
-    return val * 180.0 / M_PI;
-}
+constexpr double DegreesToRadians(double val) { return val * 180.0 / M_PI; }
 
 /// Model parameters for a robot.  Used by the controls system.
 class RobotModel {
