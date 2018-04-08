@@ -1,7 +1,6 @@
 #include <cmath>
 
 #include <configuration/ConfigStore.hpp>
-#include <Geometry2d/Util.hpp>
 #include "Assert.hpp"
 #include "Console.hpp"
 #include "ConfigStore.hpp"

@@ -20,8 +20,11 @@ list(APPEND firm-lib_SRC ${asm_SRC})
 
 # append all of the accessory library sources
 list(APPEND firm-lib_SRC ${MBED_ASSEC_LIBS_SRCS})
-# include PID from common
-list(APPEND firm-lib_SRC ${CMAKE_CURRENT_SOURCE_DIR}/common/Pid.cpp)
+
+# get the rc-fshare lib target
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/robocup-fshare")
+# require it be built after we've run mbed setup
+add_dependencies(rc-fshare mbed_libraries)
 
 # tell cmake that all of the source files aren't here yet
 # set_source_files_properties(
@@ -32,7 +35,8 @@ list(APPEND firm-lib_SRC ${CMAKE_CURRENT_SOURCE_DIR}/common/Pid.cpp)
 
 # build the 'firm-lib' library that contains all the MBED stuff needed for
 # both the base station and robot firmware
-add_library(firm-lib ${firm-lib_SRC} "${CMAKE_CURRENT_BINARY_DIR}/common/git_version.cpp")
+add_library(firm-lib ${firm-lib_SRC})
+target_link_libraries(firm-lib rc-fshare)
 
 target_include_directories( firm-lib PUBLIC
     utils/include
@@ -81,9 +85,3 @@ target_include_directories(firm-lib PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
 add_dependencies(firm-lib mbed_libraries ${MBED_ASSEC_LIBS_DEPENDS})
 target_link_libraries(firm-lib ${MBED_LIBRARY})
 set_target_properties(firm-lib PROPERTIES EXCLUDE_FROM_ALL TRUE)
-
-# See common/CMakeLists for more info on how this works
-add_custom_command(
-    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/common/git_version.cpp
-    DEPENDS git_version
-)
