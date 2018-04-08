@@ -106,6 +106,7 @@ file(GLOB FIRMWARE_TEST_SRC "lib/test/*.cpp")
 add_executable(test-firmware ${FIRMWARE_TEST_SRC})
 add_dependencies(test-firmware googletest)
 target_link_libraries(test-firmware ${GTEST_LIBRARIES})
+target_link_libraries(test-firmware rc-fshare)
 
 target_include_directories(test-firmware PRIVATE "lib" "lib/test" "lib/utils/include" "lib/modules/include")
 target_compile_definitions(test-firmware PRIVATE -D__MBED_TEST__)
