@@ -114,6 +114,5 @@ set_target_properties(test-firmware PROPERTIES EXCLUDE_FROM_ALL TRUE)
 
 # build robot and base station firmware and the library that they depend on
 add_subdirectory(lib/mbed)
-
 add_subdirectory(lib)
 add_subdirectory(src)
