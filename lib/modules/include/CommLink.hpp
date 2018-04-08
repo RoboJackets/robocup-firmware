@@ -3,7 +3,7 @@
 #include "CommModule.hpp"
 #include "MacroHelpers.hpp"
 #include "MailHelpers.hpp"
-#include "firmware-common/rtp.hpp"
+#include "rc-fshare/rtp.hpp"
 #include "Rtos.hpp"
 #include "SharedSPI.hpp"
 

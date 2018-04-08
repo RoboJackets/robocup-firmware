@@ -1,6 +1,5 @@
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.1)
 project("GT RoboJackets RoboCup Firmware")
-
 
 # include cmake files in the 'cmake folder'
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
@@ -14,16 +13,8 @@ enable_testing()
 include(SetupGTest)
 
 # C++ version
-if ("${CMAKE_VERSION}" LESS "3.1")
-    # This is to support the CMake version backported to Ubuntu 14.04
-    message("CMAKE_VERSION < 3.1, specifying c++14 flag.")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
-else()
-    # This is the more modern way of setting our c++ version
-    message("CMAKE_VERSION >= 3.1, setting CMAKE_CXX_STANDARD to 14.")
-    set(CMAKE_CXX_STANDARD 14)
-    set(CMAKE_CXX_STANDARD_REQUIRED ON) # Don't fall back to older versions
-endif()
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON) # Don't fall back to older versions
 
 # Because we use ninja, we have to explicitly turn on color output for the compiler
 if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
@@ -53,12 +44,6 @@ find_package(libusb-1.0 REQUIRED)
 
 # SDL
 find_package(SDL REQUIRED)
-
-
-
-# run all the other CMakeLists files
-# add_subdirectory(common)
-# add_subdirectory(firmware)
 
 # This sets up MBED all MBED libraries, then sets up the robot and base station
 # firmware, which depend on the MBED libs
@@ -115,13 +100,6 @@ set(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "")
 #
 # # Don't build the tests by default
 # set_target_properties(test-firmware PROPERTIES EXCLUDE_FROM_ALL TRUE)
-
-# TODO: probably move this to lib cmake
-# Several things depend on the headers in the 'common' directory
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}/lib/common") # for headers in common/
-include_directories("${CMAKE_CURRENT_BINARY_DIR}/lib/common") # for generated protobuf headers
-
-add_subdirectory(lib/common)
 
 # Add a test runner target "test-firmware"
 file(GLOB FIRMWARE_TEST_SRC "lib/test/*.cpp")

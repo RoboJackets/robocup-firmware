@@ -13,3 +13,6 @@
 [submodule "external/style-configs"]
 	path = external/style-configs
 	url = https://github.com/RoboJackets/style-configs.git
+[submodule "lib/robocup-fshare"]
+	path = lib/robocup-fshare
+	url = https://github.com/jpfeltracco/robocup-fshare

@@ -3,8 +3,12 @@
 #define EIGEN_HAS_CXX11_MATH 0
 #include <Eigen/Dense>
 #include <array>
-#include "Geometry2d/Util.hpp"
+#include <cmath>
 //#include "const-math.hpp"
+
+constexpr double DegreesToRadians(double val) {
+    return val * 180.0 / M_PI;
+}
 
 /// Model parameters for a robot.  Used by the controls system.
 class RobotModel {

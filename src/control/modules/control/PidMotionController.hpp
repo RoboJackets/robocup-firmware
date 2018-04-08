@@ -1,7 +1,7 @@
 #pragma once
 
 #include <array>
-#include "Pid.hpp"
+#include "rc-fshare/pid.hpp"
 #include "FPGA.hpp"
 #include "RobotModel.hpp"
 
