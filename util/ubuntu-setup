@@ -95,7 +95,11 @@ if $YES; then
     ARGS="-y"
 fi
 
-PACKAGES="$(sed 's/#.*//;/^$/d' $BASE/util/ubuntu-packages.txt)"
+if [ "ubuntu-18.04" = "$SYSTEM" ]; then
+	PACKAGES="$(sed 's/#.*//;/^$/d' $BASE/util/ubuntu-18.04-packages.txt)"
+else
+	PACKAGES="$(sed 's/#.*//;/^$/d' $BASE/util/ubuntu-packages.txt)"
+fi
 
 # install all of the packages listed in required_packages.txt
 apt-get install $ARGS $PACKAGES
