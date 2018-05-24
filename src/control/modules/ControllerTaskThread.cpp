@@ -44,9 +44,49 @@ void Task_Controller_UpdateTarget(Eigen::Vector3f targetVel) {
         commandTimeoutTimer->start(COMMAND_TIMEOUT_INTERVAL);
 }
 
+constexpr uint8_t DRIBBLER_SPEED_UPPERBOUND = 255;
+constexpr uint8_t DRIBBLER_SPEED_LOWERBOUND = 0;
+constexpr float   DRIBBLER_FULL_RAMP_TIME_MS = 500;
+constexpr uint8_t DRIBBLER_MAX_DELTAV_PER_ITER = static_cast<uint8_t>(
+	(static_cast<float>(DRIBBLER_SPEED_UPPERBOUND - DRIBBLER_SPEED_LOWERBOUND) 
+	/ (DRIBBLER_FULL_RAMP_TIME_MS / static_cast<float>(CONTROL_LOOP_WAIT_MS)))
+		+ 1.0f);
+
 uint8_t dribblerSpeed = 0;
+uint8_t dribblerSpeedSetPoint = 0;
 void Task_Controller_UpdateDribbler(uint8_t dribbler) {
-    dribblerSpeed = dribbler;
+    dribblerSpeedSetPoint = dribbler;
+}
+
+/**
+ *
+ */
+uint8_t get_damped_drib_duty_cycle() {
+	// if we're already at the speed we want, return
+	if (dribblerSpeed == dribblerSpeedSetPoint) {
+		return dribblerSpeed;
+	}
+
+	// overflows/underflows on unsigned ints don't behave the way we want
+	// a cast is cheaper than more logic based on the reg size of the M3
+	sDribblerSpeed = static_cast<int16_t>(dribblerSpeed);
+	sDribblerSpeedSetPoint = static_cast<int16_t>(dribblerSpeedSetPoint);
+
+	if (dribblerSpeed < dribblerSpeedSetPoint) { // ramp up
+		if (sDribblerSpeed + DRIBBLER_MAX_DELTAV_PER_ITER >= sDribblerSpeedSetPoint) {
+			dribblerSpeed = dribblerSpeedSetPoint;
+		} else {
+			dribblerSpeed += DRIBBLER_MAX_DELTAV_PER_ITER;
+		}
+	} else { // ramp down
+		if (sDribblerSpeed - DRIBBLER_MAX_DELTAV_PER_ITER <= sDribblerSpeedSetPoint) {
+			dribblerSpeed = dribblerSpeedSetPoint;
+		} else {
+			dribblerSpeed -= DRIBBLER_MAX_DELTAV_PER_ITER;
+		}
+	}
+
+	return dribblerSpeed;
 }
 
 /**
@@ -303,8 +343,10 @@ void Task_Controller(const void* args) {
         }
 
         // dribbler duty cycle
-        duty_cycles[4] = dribblerSpeed;
+        //duty_cycles[4] = dribblerSpeed;
+	duty_cycles[4] = get_damped_drub_duty_cycle();
 
         Thread::wait(CONTROL_LOOP_WAIT_MS);
     }
 }
+
