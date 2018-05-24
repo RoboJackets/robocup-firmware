@@ -69,8 +69,8 @@ uint8_t get_damped_drib_duty_cycle() {
 
 	// overflows/underflows on unsigned ints don't behave the way we want
 	// a cast is cheaper than more logic based on the reg size of the M3
-	sDribblerSpeed = static_cast<int16_t>(dribblerSpeed);
-	sDribblerSpeedSetPoint = static_cast<int16_t>(dribblerSpeedSetPoint);
+	int16_t sDribblerSpeed = static_cast<int16_t>(dribblerSpeed);
+	int16_t sDribblerSpeedSetPoint = static_cast<int16_t>(dribblerSpeedSetPoint);
 
 	if (dribblerSpeed < dribblerSpeedSetPoint) { // ramp up
 		if (sDribblerSpeed + DRIBBLER_MAX_DELTAV_PER_ITER >= sDribblerSpeedSetPoint) {
@@ -344,7 +344,7 @@ void Task_Controller(const void* args) {
 
         // dribbler duty cycle
         //duty_cycles[4] = dribblerSpeed;
-	duty_cycles[4] = get_damped_drub_duty_cycle();
+	duty_cycles[4] = get_damped_drib_duty_cycle();
 
         Thread::wait(CONTROL_LOOP_WAIT_MS);
     }
