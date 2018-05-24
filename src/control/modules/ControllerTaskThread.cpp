@@ -44,7 +44,7 @@ void Task_Controller_UpdateTarget(Eigen::Vector3f targetVel) {
         commandTimeoutTimer->start(COMMAND_TIMEOUT_INTERVAL);
 }
 
-constexpr uint8_t DRIBBLER_SPEED_UPPERBOUND = 255;
+constexpr uint8_t DRIBBLER_SPEED_UPPERBOUND = 128;
 constexpr uint8_t DRIBBLER_SPEED_LOWERBOUND = 0;
 constexpr float   DRIBBLER_FULL_RAMP_TIME_MS = 500;
 constexpr uint8_t DRIBBLER_MAX_DELTAV_PER_ITER = static_cast<uint8_t>(
