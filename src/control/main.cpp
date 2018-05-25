@@ -22,6 +22,8 @@
 #include "motors.hpp"
 #include "neostrip.hpp"
 
+// some versions of gcc don't have std::round despite compiling c++11?
+#define EIGEN_HAS_CXX11_MATH 0
 #include <Eigen/Dense>
 #include <array>
 #include <ctime>

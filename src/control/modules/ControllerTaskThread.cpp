@@ -16,6 +16,8 @@
 #include "motors.hpp"
 #include "stall/stall.hpp"
 
+// some versions of gcc don't have std::round despite compiling c++11?
+#define EIGEN_HAS_CXX11_MATH 0
 #include <Eigen/Dense>
 
 
