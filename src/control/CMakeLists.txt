@@ -14,7 +14,7 @@ set_property(SOURCE ${asm_SRC} PROPERTY LANGUAGE C)
 set(MODULES_ROOT_NAME   ${CMAKE_CURRENT_SOURCE_DIR}/modules)
 set(CONFIG_ROOT_NAME    ${CMAKE_CURRENT_SOURCE_DIR}/config)
 set(CONFIG_ROOT_NAME    ${CONFIG_ROOT_NAME} PARENT_SCOPE)
-set(MODULES commands control motors configuration)
+set(MODULES commands motion-control motors configuration)
 
 # generate a list of directories that we need to include from the values set above
 set(CONTROL_ELF_INCLUDES ${CONFIG_ROOT_NAME} ${MODULES_ROOT_NAME})

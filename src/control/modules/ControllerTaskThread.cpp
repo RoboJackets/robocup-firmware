@@ -14,9 +14,7 @@
 #include "TaskSignals.hpp"
 #include "io-expander.hpp"
 #include "motors.hpp"
-//#include "mpu-6050.hpp"
 #include "stall/stall.hpp"
-using namespace std;
 
 // Keep this pretty high for now. Ideally, drop it down to ~3 for production
 // builds. Hopefully that'll be possible without the console
@@ -77,35 +75,6 @@ void Task_Controller(const void* args) {
     const auto threadPriority = osThreadGetPriority(threadID);
     (void)threadPriority;  // disable warning if unused
 
-#if 0 /* enable whenever the imu is actually used */
-    MPU6050 imu(RJ_I2C_SDA, RJ_I2C_SCL);
-
-    imu.setBW(MPU6050_BW_256);
-    imu.setGyroRange(MPU6050_GYRO_RANGE_250);
-    imu.setAcceleroRange(MPU6050_ACCELERO_RANGE_2G);
-    imu.setSleepMode(false);
-
-    char testResp;
-    if ((testResp = imu.testConnection())) {
-        float resultRatio[6];
-        imu.selfTest(resultRatio);
-        LOG(INFO,
-            "IMU self test results:\r\n"
-            "    Accel (X,Y,Z):\t(%2.2f%%, %2.2f%%, %2.2f%%)\r\n"
-            "    Gyro  (X,Y,Z):\t(%2.2f%%, %2.2f%%, %2.2f%%)",
-            resultRatio[0], resultRatio[1], resultRatio[2], resultRatio[3],
-            resultRatio[4], resultRatio[5]);
-
-        LOG(OK, "Control loop ready!\r\n    Thread ID: %u, Priority: %d",
-            ((P_TCB)threadID)->task_id, threadPriority);
-    } else {
-        LOG(SEVERE,
-            "MPU6050 not found!\t(response: 0x%02X)\r\n    Falling back to "
-            "sensorless control loop.",
-            testResp);
-    }
-#endif
-
     // signal back to main and wait until we're signaled to continue
     osSignalSet(mainID, MAIN_TASK_CONTINUE);
     Thread::signal_wait(SUB_TASK_CONTINUE, osWaitForever);
@@ -119,11 +88,6 @@ void Task_Controller(const void* args) {
         [&]() { commandTimedOut = true; }, osTimerPeriodic);
 
     while (true) {
-#if 0 /* enable whenever the imu is actually used */
-        imu.getGyro(gyroVals);
-        imu.getAccelero(accelVals);
-#endif
-
         if (DebugCommunication::configStoreIsValid
                 [DebugCommunication::ConfigCommunication::PID_P]) {
             pidController.updatePValues(DebugCommunication::configValueToFloat(

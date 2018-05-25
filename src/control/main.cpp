@@ -12,7 +12,6 @@
 #include "KickerBoard.hpp"
 #include "RadioProtocol.hpp"
 #include "RobotDevices.hpp"
-#include "RobotModel.hpp"
 #include "RotarySelector.hpp"
 #include "Rtos.hpp"
 #include "RtosTimerHelper.hpp"
@@ -23,6 +22,7 @@
 #include "motors.hpp"
 #include "neostrip.hpp"
 //#include "mpu-6050.hpp"
+#include <rc-fshare/robot_model.hpp>
 
 #include <array>
 #include <ctime>
