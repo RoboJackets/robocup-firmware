@@ -10,9 +10,7 @@
  */
 class PidMotionController {
 public:
-    PidMotionController() {
-        setPidValues(3.0, 0, 0, 50, 0);
-    }
+    PidMotionController() { setPidValues(3.0, 0, 0, 50, 0); }
 
     void setPidValues(float p, float i, float d, unsigned int windup,
                       float derivAlpha) {

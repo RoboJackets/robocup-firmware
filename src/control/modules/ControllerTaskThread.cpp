@@ -20,7 +20,6 @@
 #define EIGEN_HAS_CXX11_MATH 0
 #include <Eigen/Dense>
 
-
 // Keep this pretty high for now. Ideally, drop it down to ~3 for production
 // builds. Hopefully that'll be possible without the console
 constexpr auto CONTROL_LOOP_WAIT_MS = 5;
@@ -265,7 +264,6 @@ void Task_Controller(const void* args) {
                 DebugCommunication::debugResponseToValue(
                     DebugCommunication::DebugResponse::TargetWheelVel3,
                     targetWheelVelsOut[3]);
-
 
         // assign the duty cycles, zero out motors that the fpga returns an
         // error for
