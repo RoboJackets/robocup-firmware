@@ -21,9 +21,8 @@
 #include "io-expander.hpp"
 #include "motors.hpp"
 #include "neostrip.hpp"
-//#include "mpu-6050.hpp"
-#include <rc-fshare/robot_model.hpp>
 
+#include <Eigen/Dense>
 #include <array>
 #include <ctime>
 #include <string>

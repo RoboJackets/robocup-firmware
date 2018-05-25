@@ -16,6 +16,9 @@
 #include "motors.hpp"
 #include "stall/stall.hpp"
 
+#include <Eigen/Dense>
+
+
 // Keep this pretty high for now. Ideally, drop it down to ~3 for production
 // builds. Hopefully that'll be possible without the console
 constexpr auto CONTROL_LOOP_WAIT_MS = 5;
