@@ -63,7 +63,7 @@ public:
         wheelVels *= 2.0 * M_PI / ENC_TICKS_PER_TURN / dt;
 
         Eigen::Vector4d targetWheelVels =
-            RobotModelControl.BotToWheel * _targetVel.cast<double>();
+            RobotModel::get().BotToWheel * _targetVel.cast<double>();
 
         if (targetWheelVelsOut) {
             *targetWheelVelsOut = targetWheelVels;
@@ -98,9 +98,8 @@ public:
 
         std::array<int16_t, 4> dutyCycles;
         for (int i = 0; i < 4; i++) {
-            // float dc;
             float dc =
-                targetWheelVels[i] * RobotModelControl.DutyCycleMultiplier +
+                targetWheelVels[i] * RobotModel::get().DutyCycleMultiplier +
                 copysign(4, targetWheelVels[i]);
 
             dc += _controllers[i].run(wheelVelErr[i]);
