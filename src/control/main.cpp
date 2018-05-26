@@ -4,7 +4,6 @@
 #include "Assert.hpp"
 #include "BallSensor.hpp"
 #include "Commands.hpp"
-#include "ConfigStore.hpp"
 #include "Decawave.hpp"
 #include "FPGA.hpp"
 #include "HelperFuncs.hpp"
@@ -12,7 +11,6 @@
 #include "KickerBoard.hpp"
 #include "RadioProtocol.hpp"
 #include "RobotDevices.hpp"
-#include "RobotModel.hpp"
 #include "RotarySelector.hpp"
 #include "Rtos.hpp"
 #include "RtosTimerHelper.hpp"
@@ -22,12 +20,13 @@
 #include "io-expander.hpp"
 #include "motors.hpp"
 #include "neostrip.hpp"
-//#include "mpu-6050.hpp"
 
+// some versions of gcc don't have std::round despite compiling c++11?
+#define EIGEN_HAS_CXX11_MATH 0
+#include <Eigen/Dense>
 #include <array>
 #include <ctime>
 #include <string>
-#include <configuration/ConfigStore.hpp>
 #include <stall/stall.hpp>
 
 // set to 1 to enable CommModule rx/tx stress test
@@ -76,6 +75,7 @@ void Task_Simulate_RX_Packet(const void* args) {
 void Task_Controller(const void* args);
 void Task_Controller_UpdateTarget(Eigen::Vector3f targetVel);
 void Task_Controller_UpdateDribbler(uint8_t dribbler);
+std::array<int16_t, 4> Task_Controller_EncGetClear();
 void InitializeCommModule(SharedSPIDevice<>::SpiPtrT sharedSPI);
 
 extern std::array<WheelStallDetection, 4> wheelStallDetection;
@@ -301,22 +301,6 @@ int main() {
     radioProtocol.setUID(robotShellID);
     radioProtocol.start();
 
-    radioProtocol.debugCallback = [&](const rtp::DebugMessage& msg) {
-        //            DebugCommunication::debugResponses = msg.keys;
-    };
-
-    radioProtocol.confCallback = [&](const rtp::ConfMessage& msg) {
-        for (int i = 0; i < rtp::ConfMessage::length; i++) {
-            auto configCommunication = msg.keys[i];
-            if (configCommunication != DebugCommunication::ConfigCommunication::
-                                           CONFIG_COMMUNICATION_NONE) {
-                const auto index = static_cast<int>(configCommunication);
-                DebugCommunication::configStore[index] = msg.values[i];
-                DebugCommunication::configStoreIsValid[index] = true;
-            }
-        }
-    };
-
     radioProtocol.rxCallback =
         [&](const rtp::ControlMessage* msg, const bool addressed) {
             // reset timeout
@@ -368,7 +352,7 @@ int main() {
                 if (err) reply.motorErrors |= (1 << i);
             }
 
-            for (auto i = 0; i < wheelStallDetection.size(); i++) {
+            for (std::size_t i = 0; i < wheelStallDetection.size(); i++) {
                 if (wheelStallDetection[i].stalled) {
                     reply.motorErrors |= (1 << i);
                 }
@@ -387,17 +371,11 @@ int main() {
             reply.kickStatus = KickerBoard::Instance->getVoltage() > 230;
             reply.kickHealthy = KickerBoard::Instance->isHealthy();
 
-            //            for (int i=0;
-            //            i<rtp::RobotStatusMessage::debug_data_length; i++) {
-            //                auto debugType =
-            //                DebugCommunication::debugResponses[i];
-            //                if (debugType != 0) {
-            //                    reply.debug_data[i] =
-            //                    DebugCommunication::debugStore[debugType];
-            //                } else {
-            //                    reply.debug_data[i] =  -1;
-            //                }
-            //            }
+            // note: this clears the encoder count
+            auto enc_array = Task_Controller_EncGetClear();
+            for (std::size_t i = 0; i < enc_array.size(); ++i) {
+                reply.encDeltas[i] = enc_array[i];
+            }
 
             vector<uint8_t> replyBuf;
             rtp::serializeToVector(reply, &replyBuf);
