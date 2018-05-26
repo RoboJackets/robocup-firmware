@@ -67,8 +67,7 @@ std::array<int16_t, 4> Task_Controller_EncGetClear() {
  * initializes the motion controller thread
  */
 void Task_Controller(const void* args) {
-    const auto mainID =
-        reinterpret_cast<osThreadId>(const_cast<void*>(args));
+    const auto mainID = reinterpret_cast<osThreadId>(const_cast<void*>(args));
 
     // Store the thread's ID
     const auto threadID = Thread::gettid();
