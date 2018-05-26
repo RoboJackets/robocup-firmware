@@ -4,7 +4,6 @@
 #include "Assert.hpp"
 #include "BallSensor.hpp"
 #include "Commands.hpp"
-#include "ConfigStore.hpp"
 #include "Decawave.hpp"
 #include "FPGA.hpp"
 #include "HelperFuncs.hpp"
@@ -28,7 +27,6 @@
 #include <array>
 #include <ctime>
 #include <string>
-#include <configuration/ConfigStore.hpp>
 #include <stall/stall.hpp>
 
 // set to 1 to enable CommModule rx/tx stress test
@@ -303,22 +301,6 @@ int main() {
     radioProtocol.setUID(robotShellID);
     radioProtocol.start();
 
-    radioProtocol.debugCallback = [&](const rtp::DebugMessage& msg) {
-        //            DebugCommunication::debugResponses = msg.keys;
-    };
-
-    radioProtocol.confCallback = [&](const rtp::ConfMessage& msg) {
-        for (int i = 0; i < rtp::ConfMessage::length; i++) {
-            auto configCommunication = msg.keys[i];
-            if (configCommunication != DebugCommunication::ConfigCommunication::
-                                           CONFIG_COMMUNICATION_NONE) {
-                const auto index = static_cast<int>(configCommunication);
-                DebugCommunication::configStore[index] = msg.values[i];
-                DebugCommunication::configStoreIsValid[index] = true;
-            }
-        }
-    };
-
     radioProtocol.rxCallback =
         [&](const rtp::ControlMessage* msg, const bool addressed) {
             // reset timeout
@@ -370,7 +352,7 @@ int main() {
                 if (err) reply.motorErrors |= (1 << i);
             }
 
-            for (auto i = 0; i < wheelStallDetection.size(); i++) {
+            for (std::size_t i = 0; i < wheelStallDetection.size(); i++) {
                 if (wheelStallDetection[i].stalled) {
                     reply.motorErrors |= (1 << i);
                 }
@@ -391,21 +373,9 @@ int main() {
 
             // note: this clears the encoder count
             auto enc_array = Task_Controller_EncGetClear();
-            for (auto i = 0; i < enc_array.size(); ++i) {
+            for (std::size_t i = 0; i < enc_array.size(); ++i) {
                 reply.encDeltas[i] = enc_array[i];
             }
-
-            //            for (int i=0;
-            //            i<rtp::RobotStatusMessage::debug_data_length; i++) {
-            //                auto debugType =
-            //                DebugCommunication::debugResponses[i];
-            //                if (debugType != 0) {
-            //                    reply.debug_data[i] =
-            //                    DebugCommunication::debugStore[debugType];
-            //                } else {
-            //                    reply.debug_data[i] =  -1;
-            //                }
-            //            }
 
             vector<uint8_t> replyBuf;
             rtp::serializeToVector(reply, &replyBuf);

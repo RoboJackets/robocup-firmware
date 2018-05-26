@@ -1,9 +1,7 @@
 #include <cmath>
 
-#include <configuration/ConfigStore.hpp>
 #include "Assert.hpp"
 #include "Console.hpp"
-#include "ConfigStore.hpp"
 #include "FPGA.hpp"
 #include "Logger.hpp"
 #include "PidMotionController.hpp"
@@ -18,6 +16,7 @@
 
 // some versions of gcc don't have std::round despite compiling c++11?
 #define EIGEN_HAS_CXX11_MATH 0
+// #include <Eigen/DisableStupidWarnings.h>
 #include <Eigen/Dense>
 
 // Keep this pretty high for now. Ideally, drop it down to ~3 for production
@@ -69,7 +68,7 @@ std::array<int16_t, 4> Task_Controller_EncGetClear() {
  */
 void Task_Controller(const void* args) {
     const auto mainID =
-        reinterpret_cast<const osThreadId>(const_cast<void*>(args));
+        reinterpret_cast<osThreadId>(const_cast<void*>(args));
 
     // Store the thread's ID
     const auto threadID = Thread::gettid();
@@ -92,28 +91,6 @@ void Task_Controller(const void* args) {
         [&]() { commandTimedOut = true; }, osTimerPeriodic);
 
     while (true) {
-        if (DebugCommunication::configStoreIsValid
-                [DebugCommunication::ConfigCommunication::PID_P]) {
-            pidController.updatePValues(DebugCommunication::configValueToFloat(
-                DebugCommunication::ConfigCommunication::PID_P,
-                DebugCommunication::configStore
-                    [DebugCommunication::ConfigCommunication::PID_P]));
-        }
-        if (DebugCommunication::configStoreIsValid
-                [DebugCommunication::ConfigCommunication::PID_I]) {
-            pidController.updateIValues(DebugCommunication::configValueToFloat(
-                DebugCommunication::ConfigCommunication::PID_I,
-                DebugCommunication::configStore
-                    [DebugCommunication::ConfigCommunication::PID_I]));
-        }
-        if (DebugCommunication::configStoreIsValid
-                [DebugCommunication::ConfigCommunication::PID_D]) {
-            pidController.updateDValues(DebugCommunication::configValueToFloat(
-                DebugCommunication::ConfigCommunication::PID_D,
-                DebugCommunication::configStore
-                    [DebugCommunication::ConfigCommunication::PID_D]));
-        }
-
         // note: the 4th value is not an encoder value.  See the large comment
         // below for an explanation.
         std::array<int16_t, 5> enc_deltas{};
@@ -164,113 +141,12 @@ void Task_Controller(const void* args) {
         std::array<int16_t, 4> driveMotorDutyCycles = pidController.run(
             driveMotorEnc, dt, &errors, &wheelVelsOut, &targetWheelVelsOut);
 
-        DebugCommunication::debugStore
-            [DebugCommunication::DebugResponse::PIDError0] =
-                DebugCommunication::debugResponseToValue(
-                    DebugCommunication::DebugResponse::PIDError0, errors[0]);
-        DebugCommunication::debugStore
-            [DebugCommunication::DebugResponse::PIDError1] =
-                DebugCommunication::debugResponseToValue(
-                    DebugCommunication::DebugResponse::PIDError1, errors[1]);
-        DebugCommunication::debugStore
-            [DebugCommunication::DebugResponse::PIDError2] =
-                DebugCommunication::debugResponseToValue(
-                    DebugCommunication::DebugResponse::PIDError2, errors[2]);
-        DebugCommunication::debugStore
-            [DebugCommunication::DebugResponse::PIDError3] =
-                DebugCommunication::debugResponseToValue(
-                    DebugCommunication::DebugResponse::PIDError3, errors[3]);
-
-        DebugCommunication::debugStore
-            [DebugCommunication::DebugResponse::MotorDuty0] =
-                DebugCommunication::debugResponseToValue(
-                    DebugCommunication::DebugResponse::MotorDuty0,
-                    duty_cycles[0]);
-        DebugCommunication::debugStore
-            [DebugCommunication::DebugResponse::MotorDuty1] =
-                DebugCommunication::debugResponseToValue(
-                    DebugCommunication::DebugResponse::MotorDuty1,
-                    duty_cycles[1]);
-        DebugCommunication::debugStore
-            [DebugCommunication::DebugResponse::MotorDuty2] =
-                DebugCommunication::debugResponseToValue(
-                    DebugCommunication::DebugResponse::MotorDuty2,
-                    duty_cycles[2]);
-        DebugCommunication::debugStore
-            [DebugCommunication::DebugResponse::MotorDuty3] =
-                DebugCommunication::debugResponseToValue(
-                    DebugCommunication::DebugResponse::MotorDuty3,
-                    duty_cycles[3]);
-
-        DebugCommunication::debugStore
-            [DebugCommunication::DebugResponse::WheelVel0] =
-                DebugCommunication::debugResponseToValue(
-                    DebugCommunication::DebugResponse::WheelVel0,
-                    wheelVelsOut[0]);
-        DebugCommunication::debugStore
-            [DebugCommunication::DebugResponse::WheelVel1] =
-                DebugCommunication::debugResponseToValue(
-                    DebugCommunication::DebugResponse::WheelVel1,
-                    wheelVelsOut[1]);
-        DebugCommunication::debugStore
-            [DebugCommunication::DebugResponse::WheelVel2] =
-                DebugCommunication::debugResponseToValue(
-                    DebugCommunication::DebugResponse::WheelVel2,
-                    wheelVelsOut[2]);
-        DebugCommunication::debugStore
-            [DebugCommunication::DebugResponse::WheelVel3] =
-                DebugCommunication::debugResponseToValue(
-                    DebugCommunication::DebugResponse::WheelVel3,
-                    wheelVelsOut[3]);
-
-        DebugCommunication::debugStore
-            [DebugCommunication::DebugResponse::StallCounter0] =
-                DebugCommunication::debugResponseToValue(
-                    DebugCommunication::DebugResponse::StallCounter0,
-                    wheelStallDetection[0].stall_counter);
-        DebugCommunication::debugStore
-            [DebugCommunication::DebugResponse::StallCounter1] =
-                DebugCommunication::debugResponseToValue(
-                    DebugCommunication::DebugResponse::StallCounter1,
-                    wheelStallDetection[1].stall_counter);
-        DebugCommunication::debugStore
-            [DebugCommunication::DebugResponse::StallCounter2] =
-                DebugCommunication::debugResponseToValue(
-                    DebugCommunication::DebugResponse::StallCounter2,
-                    wheelStallDetection[2].stall_counter);
-        DebugCommunication::debugStore
-            [DebugCommunication::DebugResponse::StallCounter3] =
-                DebugCommunication::debugResponseToValue(
-                    DebugCommunication::DebugResponse::StallCounter3,
-                    wheelStallDetection[3].stall_counter);
-
-        DebugCommunication::debugStore
-            [DebugCommunication::DebugResponse::TargetWheelVel0] =
-                DebugCommunication::debugResponseToValue(
-                    DebugCommunication::DebugResponse::TargetWheelVel0,
-                    targetWheelVelsOut[0]);
-        DebugCommunication::debugStore
-            [DebugCommunication::DebugResponse::TargetWheelVel1] =
-                DebugCommunication::debugResponseToValue(
-                    DebugCommunication::DebugResponse::TargetWheelVel1,
-                    targetWheelVelsOut[1]);
-        DebugCommunication::debugStore
-            [DebugCommunication::DebugResponse::TargetWheelVel2] =
-                DebugCommunication::debugResponseToValue(
-                    DebugCommunication::DebugResponse::TargetWheelVel2,
-                    targetWheelVelsOut[2]);
-        DebugCommunication::debugStore
-            [DebugCommunication::DebugResponse::TargetWheelVel3] =
-                DebugCommunication::debugResponseToValue(
-                    DebugCommunication::DebugResponse::TargetWheelVel3,
-                    targetWheelVelsOut[3]);
-
         // assign the duty cycles, zero out motors that the fpga returns an
         // error for
         static_assert(wheelStallDetection.size() == driveMotorDutyCycles.size(),
                       "wheelStallDetection Size should be the same as "
                       "driveMotorDutyCycles");
-        for (int i = 0; i < driveMotorDutyCycles.size(); i++) {
+        for (std::size_t i = 0; i < driveMotorDutyCycles.size(); i++) {
             const auto& vel = driveMotorDutyCycles[i];
             bool didStall = wheelStallDetection[i].stall_update(
                 duty_cycles[i], wheelVelsOut[i]);
