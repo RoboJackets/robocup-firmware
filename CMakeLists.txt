@@ -38,6 +38,8 @@ include_directories(SYSTEM ${PROTOBUF_INCLUDE_DIR})
 
 # Eigen - used for linear algebra
 find_package(Eigen3 REQUIRED)
+# Disabled until eigen gets this patched
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-int-in-bool-context")
 
 # libusb
 find_package(libusb-1.0 REQUIRED)
@@ -84,7 +86,7 @@ set(MBED_CMAKE_CXX_FLAGS "${MBED_CMAKE_CXX_FLAGS} -std=c++14")
 # Enable logging for the firm-lib library
 set(MBED_CMAKE_CXX_FLAGS "${MBED_CMAKE_CXX_FLAGS} -DRJ_LOGGING_EN")
 # ignore formatting flags for printf
-set(MBED_CMAKE_CXX_FLAGS "${MBED_CMAKE_CXX_FLAGS} -Wno-format -Wno-switch -Wno-unused-parameter -Wno-missing-field-initializers")
+set(MBED_CMAKE_CXX_FLAGS "${MBED_CMAKE_CXX_FLAGS} -Wno-format -Wno-switch -Wno-unused-parameter -Wno-missing-field-initializers -Wno-cast-function-type")
 # generate debugging information for gdb
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
 

@@ -78,6 +78,7 @@ static void i2cRtos_isr(uint32_t ch) {
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wswitch"
+#pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
     switch (tr->cmd) {
         case readMst:
             switch (stat) {

@@ -160,7 +160,7 @@ void CommModule::rxThread() {
             osThreadSetPriority(m_rxThreadId, threadPriority);
 #endif
         } else {
-            auto p = reinterpret_cast<rtp::Packet*>(event.value.p);
+            // auto p = reinterpret_cast<rtp::Packet*>(event.value.p);
             std::printf(
                 "osMessageGet for RX returned unexpected status: %d\r\n",
                 event.status);
