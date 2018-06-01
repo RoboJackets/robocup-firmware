@@ -122,10 +122,11 @@ if $YES; then
     ARGS="-y"
 fi
 
+TOOLCHAIN_PACKAGES="libnewlib-dev libnewlib-arm-none-eabi gcc-arm-none-eabi libstdc++-arm-none-eabi-newlib"
 if [ "ubuntu-18.04" = "$SYSTEM" ]; then
 	# check for missing compiler
 	ARM_COMPILER=true
-	if [[ $(apt-cache policy gcc-arm-none-eabi) = "*Installed: (none)*" ]]; then
+	if [[ $(apt-cache policy gcc-arm-none-eabi) = *"Installed: (none)"* ]]; then
 		ARM_COMPILER=false
 	else
 		echo "-- found existing ARM compiler install, verifying"
@@ -133,11 +134,11 @@ if [ "ubuntu-18.04" = "$SYSTEM" ]; then
 
 	# compiler is installed, check if the version is correct
 	if [ "$ARM_COMPILER" = true ]; then
-		if [[ $(apt-cache policy gcc-arm-none-eabi) = "*Installed: 15:4.9.3*" ]]; then
+		if [[ $(apt-cache policy gcc-arm-none-eabi) = *"Installed: 15:4.9.3"* ]]; then
 			echo "-- detected good arm compiler version"
 		else
 			echo "-- detected bad arm compiler verison, purging"
-			apt-get purge libnewlib-dev libnewlib-arm-none-eabi gcc-arm-none-eabi libstdc++-arm-none-eabi-newlib $ARGS
+			apt-get purge $TOOLCHAIN_PACKAGES $ARGS
 			apt-get autoremove $ARGS
 		fi
 	fi
@@ -149,6 +150,11 @@ fi
 
 # install all of the packages listed in required_packages.txt
 apt-get install $ARGS $PACKAGES
+
+if [ "$SYSTEM" = "ubuntu-18.04" ]; then
+	echo "-- pinning arm toolchain"
+	apt-mark hold $TOOLCHAIN_PACKAGES
+fi
 
 # Use ubuntu's 'update-alternatives' to select the newer compiler as the default
 # See issue #468 on GitHub
