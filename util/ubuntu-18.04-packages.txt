@@ -14,7 +14,10 @@ libmpfr-dev
 libmpc-dev
 
 # arm toolchain for compiling for mbed
-gcc-arm-none-eabi
+libnewlib-dev=2.2.0+git20150830.5a3d536-1
+libnewlib-arm-none-eabi=2.2.0+git20150830.5a3d536-1
+gcc-arm-none-eabi=15:4.9.3+svn231177-1
+libstdc++-arm-none-eabi-newlib=15:4.9.3+svn227297-1+8
 
 # program to generate api documentation from comments in code files
 doxygen
@@ -24,7 +27,7 @@ libeigen3-dev
 
 # C/C++ compiler
 # tends to be faster and have more helpful error messages than gcc
-clang-3.9
+clang
 
 # for newer C++ stdlib
 g++-5

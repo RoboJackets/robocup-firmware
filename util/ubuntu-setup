@@ -76,6 +76,33 @@ if [ $UID -ne 0 ]; then
 	exec sudo $0 $@
 fi
 
+# ask for permission to modify apt sources if '-y' flag abesnt
+if [ "ubuntu-18.04" = "$SYSTEM" -a "$YES" != true ]; then
+	echo "Need to add xenial universe to package lists for arm compiler support."
+	read -r -p "Is this okay? [y/N] " response
+	case "$response" in 
+	[yY][eE][sS]|[yY]) 
+        	;;
+    	*)
+		echo "cannot continue on Bionic without permission to add to lists"
+		echo "-- exit"
+		exit 1
+        	;;
+	esac
+fi
+
+if [ "ubuntu-18.04" = "$SYSTEM" ]; then
+	SOURCE_LIST=/etc/apt/sources.list.d/gcc-arm-none-eabi_xenial.list
+	if [ ! -f $SOURCE_LIST ]; then
+		echo "-- adding xenial universe to support arm compiler"
+		touch $SOURCE_LIST
+		echo "# robocup-firmware added xenial universe for gcc-arm-none-eabi 5.4.1" > $SOURCE_LIST
+		echo "deb http://archive.ubuntu.com/ubuntu xenial universe" > $SOURCE_LIST
+	else
+		echo "-- found xenial universe to support arm compiler"
+	fi
+fi
+
 apt-get update
 
 MACH=$(uname -m)
@@ -96,6 +123,25 @@ if $YES; then
 fi
 
 if [ "ubuntu-18.04" = "$SYSTEM" ]; then
+	# check for missing compiler
+	ARM_COMPILER=true
+	if [[ $(apt-cache policy gcc-arm-none-eabi) = "*Installed: (none)*" ]]; then
+		ARM_COMPILER=false
+	else
+		echo "-- found existing ARM compiler install, verifying"
+	fi
+
+	# compiler is installed, check if the version is correct
+	if [ "$ARM_COMPILER" = true ]; then
+		if [[ $(apt-cache policy gcc-arm-none-eabi) = "*Installed: 15:4.9.3*" ]]; then
+			echo "-- detected good arm compiler version"
+		else
+			echo "-- detected bad arm compiler verison, purging"
+			apt-get purge libnewlib-dev libnewlib-arm-none-eabi gcc-arm-none-eabi libstdc++-arm-none-eabi-newlib $ARGS
+			apt-get autoremove $ARGS
+		fi
+	fi
+
 	PACKAGES="$(sed 's/#.*//;/^$/d' $BASE/util/ubuntu-18.04-packages.txt)"
 else
 	PACKAGES="$(sed 's/#.*//;/^$/d' $BASE/util/ubuntu-packages.txt)"
