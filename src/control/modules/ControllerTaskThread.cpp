@@ -1,6 +1,7 @@
 #include <cmath>
 
 #include "Assert.hpp"
+#include "Battery.hpp"
 #include "Console.hpp"
 #include "FPGA.hpp"
 #include "Logger.hpp"
@@ -138,7 +139,9 @@ void Task_Controller(const void* args) {
         std::array<int16_t, 5> enc_deltas{};
 
         // zero out command if we haven't gotten an updated target in a while
-        if (commandTimedOut) duty_cycles = {0, 0, 0, 0, 0};
+        if (commandTimedOut || Battery::globBatt->isBattCritical()) {
+		duty_cycles = {0, 0, 0, 0, 0};
+	}
 
         auto statusByte = FPGA::Instance->set_duty_get_enc(
             duty_cycles.data(), duty_cycles.size(), enc_deltas.data(),

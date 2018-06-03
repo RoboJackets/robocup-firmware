@@ -3,6 +3,7 @@
 // ** DON'T INCLUDE <iostream>! THINGS WILL BREAK! **
 #include "Assert.hpp"
 #include "BallSensor.hpp"
+#include "Battery.hpp"
 #include "Commands.hpp"
 #include "Decawave.hpp"
 #include "FPGA.hpp"
@@ -169,7 +170,6 @@ int main() {
     auto defaultBrightness = 0.02f;
     rgbLED.brightness(3 * defaultBrightness);
     rgbLED.setPixel(0, NeoColorBlue);
-    rgbLED.setPixel(1, NeoColorBlue);
     rgbLED.write();
 
     // Set pixel 1 to colors corresponding to github hash values
@@ -280,8 +280,8 @@ int main() {
 
     // setup analog in on battery sense pin
     // the value is updated in the main loop below
-    AnalogIn batt(RJ_BATT_SENSE);
-    uint8_t battVoltage = 0;
+    Battery battery;
+    Battery::globBatt = &battery;
 
     // Radio timeout timer
     const auto RadioTimeout = 100;
@@ -342,7 +342,7 @@ int main() {
 
             rtp::RobotStatusMessage reply;
             reply.uid = robotShellID;
-            reply.battVoltage = battVoltage;
+            reply.battVoltage = Battery::globBatt->getRaw();
             reply.ballSenseStatus = KickerBoard::Instance->isBallSensed();
 
             // report any motor errors
@@ -461,7 +461,16 @@ int main() {
         }
 
         // get the battery voltage
-        battVoltage = (batt.read_u16() >> 8);
+        Battery::globBatt->update();
+	if (Battery::globBatt->isBattCritical()) {
+		rgbLED.brightness(6 * defaultBrightness);
+		rgbLED.setPixel(1, NeoColorRed);
+	} else {
+		rgbLED.brightness(3 * defaultBrightness);
+		uint8_t red = static_cast<uint8_t>((1.0f - Battery::globBatt->getBattPercentage()) * 255.0f);
+		uint8_t green = static_cast<uint8_t>(Battery::globBatt->getBattPercentage() * 255.0f);
+		rgbLED.setPixel(1, red, green, 0);
+	}
 
         LOG(DEBUG, "Kicker voltage: %u", KickerBoard::Instance->getVoltage());
 
