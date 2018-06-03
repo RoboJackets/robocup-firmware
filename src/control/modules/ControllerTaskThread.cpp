@@ -140,8 +140,8 @@ void Task_Controller(const void* args) {
 
         // zero out command if we haven't gotten an updated target in a while
         if (commandTimedOut || Battery::globBatt->isBattCritical()) {
-		duty_cycles = {0, 0, 0, 0, 0};
-	}
+            duty_cycles = {0, 0, 0, 0, 0};
+        }
 
         auto statusByte = FPGA::Instance->set_duty_get_enc(
             duty_cycles.data(), duty_cycles.size(), enc_deltas.data(),

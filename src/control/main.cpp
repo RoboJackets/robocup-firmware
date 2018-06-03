@@ -462,15 +462,17 @@ int main() {
 
         // get the battery voltage
         Battery::globBatt->update();
-	if (Battery::globBatt->isBattCritical()) {
-		rgbLED.brightness(6 * defaultBrightness);
-		rgbLED.setPixel(1, NeoColorRed);
-	} else {
-		rgbLED.brightness(3 * defaultBrightness);
-		uint8_t red = static_cast<uint8_t>((1.0f - Battery::globBatt->getBattPercentage()) * 255.0f);
-		uint8_t green = static_cast<uint8_t>(Battery::globBatt->getBattPercentage() * 255.0f);
-		rgbLED.setPixel(1, red, green, 0);
-	}
+        if (Battery::globBatt->isBattCritical()) {
+            rgbLED.brightness(6 * defaultBrightness);
+            rgbLED.setPixel(1, NeoColorRed);
+        } else {
+            rgbLED.brightness(3 * defaultBrightness);
+            uint8_t red = static_cast<uint8_t>(
+                (1.0f - Battery::globBatt->getBattPercentage()) * 255.0f);
+            uint8_t green = static_cast<uint8_t>(
+                Battery::globBatt->getBattPercentage() * 255.0f);
+            rgbLED.setPixel(1, red, green, 0);
+        }
 
         LOG(DEBUG, "Kicker voltage: %u", KickerBoard::Instance->getVoltage());
 
