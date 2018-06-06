@@ -136,7 +136,7 @@ CommLink::BufferT Decawave::getData() {
     if (buf.empty()) return std::move(buf);
 
     // remove the last 2 elements
-    buf.erase(buf.end() - 3, buf.end() - 1);
+    buf.erase(buf.end() - 2, buf.end());
 
     // move the buffer to the caller
     return std::move(buf);
