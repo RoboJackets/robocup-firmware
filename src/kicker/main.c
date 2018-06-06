@@ -61,8 +61,8 @@ void kick(uint8_t strength) {
     pre_kick_cooldown_ = 5;
     // minimum of 6 ms, we were breaking kickers with low duty cycles
     // maximum of 6 + 7 == 13 ms
-    // millis_left_ = (int) ((strength / 255.0) * 6.0) + 7;
-    millis_left_ = 13;  // always full kick speed
+    millis_left_ = (int)((strength / 255.0) * 10.0);
+    // millis_left_ = 13;  // always full kick speed
     post_kick_cooldown_ = 5;
     kick_wait = 2000;
 
