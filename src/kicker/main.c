@@ -72,7 +72,7 @@ bool is_kicking() {
 
 /*
  * start the kick FSM for desired strength. If the FSM is already running,
- * the call will be ignored. 
+ * the call will be ignored.
  */
 void kick(uint8_t strength) {
     // check if the kick FSM is running
@@ -86,12 +86,13 @@ void kick(uint8_t strength) {
     // compute time the solenoid FET is turned on, in milliseconds, based on
     // min and max effective FET enabled times
     float strength_pct = (strength / MAX_KICK_STRENGTH);
-    float time_cnt_flt_ms = ((strength_pct * MAX_EFFECTIVE_KICK_FET_EN_TIME) + MIN_EFFECTIVE_KICK_FET_EN_TIME);
+    float time_cnt_flt_ms = ((strength_pct * MAX_EFFECTIVE_KICK_FET_EN_TIME) +
+                             MIN_EFFECTIVE_KICK_FET_EN_TIME);
     float time_cnt_flt = time_cnt_flt_ms * MS_TO_TIMER;
-    timer_cnts_left_ = (int) (time_cnt_flt + 0.5f); // round
+    timer_cnts_left_ = (int)(time_cnt_flt + 0.5f);  // round
 
     // start timer to enable the kick FSM processing interrupt
-    TCCR0B |= _BV(CS01);  
+    TCCR0B |= _BV(CS01);
 }
 
 void init();
@@ -177,7 +178,7 @@ void init() {
     MCUSR &= ~(_BV(WDRF));
     WDTCR |= (_BV(WDCE)) | (_BV(WDE));
     WDTCR = 0x00;
-    
+
     // configure output pins
     DDRA |= _BV(KICK_MISO_PIN);
     DDRB |= _BV(KICK_PIN) | _BV(CHARGE_PIN) | _BV(BALL_SENSE_TX);
@@ -201,13 +202,12 @@ void init() {
     // enable interrupts on debug buttons
     PCMSK0 = _BV(INT_DB_KICK) | _BV(INT_DB_CHG);
 
-
     ///////////////////////////////////////////////////////////////////////////
-    //  TIMER INITIALIZATION 
+    //  TIMER INITIALIZATION
     //
-    //  The timer works by interrupt callback. The timer is based off of an 
-    //  accumulator register that is incremented per clock tick. When the 
-    //  accumulator register reaches the value in the target register, 
+    //  The timer works by interrupt callback. The timer is based off of an
+    //  accumulator register that is incremented per clock tick. When the
+    //  accumulator register reaches the value in the target register,
     //  the interrupt fires.
     //
     //  Initialization
@@ -222,11 +222,10 @@ void init() {
     //  kick()
     //
     //  initialize timer
-    TIMSK0 |= _BV(OCIE0A);      // Interrupt on TIMER 0
-    TCCR0A |= _BV(WGM01);       // CTC - Clear Timer on Compare Match
-    OCR0A = TIMING_CONSTANT;    // OCR0A is max val of timer before reset
+    TIMSK0 |= _BV(OCIE0A);    // Interrupt on TIMER 0
+    TCCR0A |= _BV(WGM01);     // CTC - Clear Timer on Compare Match
+    OCR0A = TIMING_CONSTANT;  // OCR0A is max val of timer before reset
     ///////////////////////////////////////////////////////////////////////////
-
 
     // Set low bits corresponding to pin we read from
     ADMUX |= _BV(ADLAR) | 0x00;  // connect PA0 (V_MONITOR_PIN) to ADC
@@ -303,10 +302,12 @@ ISR(PCINT0_vect) {
  * ISR for TIMER 0
  *
  * Pre and post cool downs add time between kicking and charging
- * 
+ *
  * Charging while kicking is destructive to the charging circuitry
- * If no outstanding coutners are running from the timer, the pre, active, post, and cooldown
- * states are all finished. We disable the timer to avoid unnecessary ISR invocations when
+ * If no outstanding coutners are running from the timer, the pre, active, post,
+ *and cooldown
+ * states are all finished. We disable the timer to avoid unnecessary ISR
+ *invocations when
  * there's nothing to do. The kick function will reinstate the timer.
  *
  * TCCR0B:
@@ -317,20 +318,20 @@ ISR(PCINT0_vect) {
  */
 ISR(TIMER0_COMPA_vect) {
     if (pre_kick_cooldown_ > 0) {
-	/* PRE KICKING STATE 
-         * stop charging
-         * wait between stopping charging and kicking for safety
-         */
+        /* PRE KICKING STATE
+             * stop charging
+             * wait between stopping charging and kicking for safety
+             */
 
         // disable charging
         charge_allowed_ = false;
 
         pre_kick_cooldown_--;
     } else if (timer_cnts_left_ > 0) {
-	/* KICKING STATE
-         * assert the kick pin, enabling the kick FET
-         * wait for kick interval to end
-         */
+        /* KICKING STATE
+             * assert the kick pin, enabling the kick FET
+             * wait for kick interval to end
+             */
 
         // set KICK pin
         PORTB |= _BV(KICK_PIN);
@@ -339,7 +340,8 @@ ISR(TIMER0_COMPA_vect) {
     } else if (post_kick_cooldown_ > 0) {
         /* POST KICKING STATE
          * deassert the kick pin, disabling the kick FET
-         * wait between stopping the FET and reenabling charging in the next state
+         * wait between stopping the FET and reenabling charging in the next
+         * state
          */
 
         // kick is done
@@ -352,7 +354,7 @@ ISR(TIMER0_COMPA_vect) {
          * don't allow kicking during the cooldown
          */
 
-	// reenable charching
+        // reenable charching
         charge_allowed_ = true;
 
         kick_wait--;
