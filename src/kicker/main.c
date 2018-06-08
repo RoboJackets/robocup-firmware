@@ -14,7 +14,7 @@
 #define VOLTAGE_READ_DELAY_MS 40
 
 // 1 ms / 80 us = 12.5
-#define TIMER_TO_MS 12.5f
+#define MS_TO_TIMER 12.5f
 
 // get different ball reading for 20 * 100 us = 2 ms before switching
 #define BALL_SENSE_MAX_SAMPLES 5
@@ -61,13 +61,14 @@ bool is_kicking() {
 
 void kick(uint8_t strength) {
     if (is_kicking()) return;
-    pre_kick_cooldown_ = 5 * TIMER_TO_MS;
-    // minimum of 6 ms, we were breaking kickers with low duty cycles
-    float time_cnt_flt = ((strength / 255.0f) * 9.0f + 0.8f) * TIMER_TO_MS;
-    timer_cnts_left_ = (int) (time_cnt_flt + 0.5f);
 
-    post_kick_cooldown_ = 5 * TIMER_TO_MS;
-    kick_wait = 2000 * TIMER_TO_MS;
+    pre_kick_cooldown_ = 5 * MS_TO_TIMER;
+    // minimum of 6 ms, we were breaking kickers with low duty cycles
+    float time_cnt_flt = ((strength / 255.0f) * 9.0f + 0.8f) * MS_TO_TIMER;
+    timer_cnts_left_ = (int) (time_cnt_flt + 0.5f); // round
+
+    post_kick_cooldown_ = 5 * MS_TO_TIMER;
+    kick_wait = 2000 * MS_TO_TIMER;
 
     TCCR0B |= _BV(CS01);  // start timer /8 prescale
 }
@@ -142,7 +143,7 @@ void main() {
             kick_on_breakbeam_ = false;
         }
 
-        _delay_us(10);  // 0.1 ms
+        _delay_us(10);
     }
 }
 
@@ -186,10 +187,7 @@ void init() {
     TCCR0A |= _BV(WGM01);
 
     // OCR0A is max val of timer before reset
-    // we need 1000 clocks at 1 Mhz to get 1 millisecond
-    // ~80 us - we think - Will
-    // don't worry about it - Jeremy
-    OCR0A = TIMING_CONSTANT;  // reset every millisecond
+    OCR0A = TIMING_CONSTANT;
 
     // ensure ADC isn't shut off
     PRR &= ~_BV(PRADC);
