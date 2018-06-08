@@ -10,15 +10,18 @@
 
 #define NO_COMMAND 0
 
-#define TIMING_CONSTANT 125
+#define TIMING_CONSTANT 10
 #define VOLTAGE_READ_DELAY_MS 40
+
+// 1 ms / 80 us = 12.5
+#define TIMER_TO_MS 12.5f
 
 // get different ball reading for 20 * 100 us = 2 ms before switching
 #define BALL_SENSE_MAX_SAMPLES 5
 
 // Used to time kick and chip durations
 volatile int pre_kick_cooldown_ = 0;
-volatile int millis_left_ = 0;
+volatile int timer_cnts_left_ = 0;
 volatile int post_kick_cooldown_ = 0;
 volatile int kick_wait = 0;
 
@@ -52,20 +55,19 @@ unsigned time = 0;
 uint8_t execute_cmd(uint8_t, uint8_t);
 
 bool is_kicking() {
-    return pre_kick_cooldown_ || millis_left_ || post_kick_cooldown_ ||
+    return pre_kick_cooldown_ || timer_cnts_left_ || post_kick_cooldown_ ||
            kick_wait;
 }
 
 void kick(uint8_t strength) {
     if (is_kicking()) return;
-    pre_kick_cooldown_ = 5;
+    pre_kick_cooldown_ = 5 * TIMER_TO_MS;
     // minimum of 6 ms, we were breaking kickers with low duty cycles
-    // maximum of 6 + 7 == 13 ms
-    float milli = (strength / 255.0f) * 9.0f + 1.0f;
-    millis_left_ = (int) (milli + 0.5f);
+    float time_cnt_flt = ((strength / 255.0f) * 9.0f + 0.8f) * TIMER_TO_MS;
+    timer_cnts_left_ = (int) (time_cnt_flt + 0.5f);
 
-    post_kick_cooldown_ = 5;
-    kick_wait = 2000;
+    post_kick_cooldown_ = 5 * TIMER_TO_MS;
+    kick_wait = 2000 * TIMER_TO_MS;
 
     TCCR0B |= _BV(CS01);  // start timer /8 prescale
 }
@@ -140,7 +142,7 @@ void main() {
             kick_on_breakbeam_ = false;
         }
 
-        _delay_us(100);  // 0.1 ms
+        _delay_us(10);  // 0.1 ms
     }
 }
 
@@ -185,7 +187,8 @@ void init() {
 
     // OCR0A is max val of timer before reset
     // we need 1000 clocks at 1 Mhz to get 1 millisecond
-    // if we prescale by 8, then we need 125 on timer to get 1 ms exactly
+    // ~80 us - we think - Will
+    // don't worry about it - Jeremy
     OCR0A = TIMING_CONSTANT;  // reset every millisecond
 
     // ensure ADC isn't shut off
@@ -264,8 +267,8 @@ ISR(TIMER0_COMPA_vect) {
         pre_kick_cooldown_--;
         // disable charging
         charge_allowed_ = false;
-    } else if (millis_left_ > 0) {
-        millis_left_--;
+    } else if (timer_cnts_left_ > 0) {
+        timer_cnts_left_--;
         PORTB |= _BV(KICK_PIN);  // set KICK pin
     } else if (post_kick_cooldown_ > 0) {
         // kick is done
