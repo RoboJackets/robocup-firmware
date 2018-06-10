@@ -84,21 +84,24 @@ public:
                                float dt, Eigen::Vector4d* errors = nullptr,
                                Eigen::Vector4d* wheelVelsOut = nullptr,
                                Eigen::Vector4d* targetWheelVelsOut = nullptr) {
-        // convert sensor readings to mathematically valid values
         imu.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);
 
+        // convert sensor readings to mathematically valid values
         Eigen::Vector4d wheelVels;
         wheelVels << encoderDeltas[0], encoderDeltas[1], encoderDeltas[2], encoderDeltas[3];
         wheelVels *= 2.0 * M_PI / ENC_TICKS_PER_TURN / dt;
-        auto body_vels = RobotModel::get().WheelToBot * wheelVels;
+        // auto bot_vel = RobotModel::get().EncToBot * wheelVels;
+        // body_vels = body_vels / dt;
+        
+        auto bot_vel = RobotModel::get().WheelToBot * wheelVels;
 
         // two redundent sensor measurements for rotation
         // 32.8 comes from data sheet, units are LSB / (deg/s)
         float ang_vel_gyro = (gz / 32.8f) * M_PI / 180.0f;
-        float ang_vel_enc = body_vels[2];
+        float ang_vel_enc = bot_vel[2];
         // float ang_vel_enc = dt;
 
-        // printf("%f\r\n", ang_vel_gyro);
+        // printf("%f\r\n", ang_vel_enc);
 
         // std::printf("%f %f\r\n", ang_vel_gyro, ang_vel_enc);
 
@@ -111,7 +114,9 @@ public:
         // perform state update based on fused value
         float alpha = 0.8;
         angular_vel = (alpha * ang_vel_update + (1 - alpha) * angular_vel);
-        rotation += angular_vel*2 * dt;
+        rotation += angular_vel * dt;
+
+        // printf("%f\r\n", rotation);
 
         // rotation controller
         float target_w = _targetVel[2];

@@ -22,7 +22,7 @@
 
 // Keep this pretty high for now. Ideally, drop it down to ~3 for production
 // builds. Hopefully that'll be possible without the console
-constexpr auto CONTROL_LOOP_WAIT_MS = 50;
+constexpr auto CONTROL_LOOP_WAIT_MS = 5;
 
 // initialize PID controller
 PidMotionController pidController;
@@ -175,6 +175,7 @@ void Task_Controller(const void* args) {
          *
          */
         const float dt = enc_deltas.back() * (1 / 18.432e6) * 2 * 128;
+        // const float dt = 1.0f / (CONTROL_LOOP_WAIT_MS / 1000.0f);
 
         // take first 4 encoder deltas
         std::array<int16_t, 4> driveMotorEnc;
