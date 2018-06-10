@@ -13,7 +13,8 @@
 #define MIN_EFFECTIVE_KICK_FET_EN_TIME 0.8f
 #define MAX_EFFECTIVE_KICK_FET_EN_TIME 10.0f
 
-#define KICK_TIME_SLOPE (MAX_EFFECTIVE_KICK_FET_EN_TIME - MIN_EFFECTIVE_KICK_FET_EN_TIME)
+#define KICK_TIME_SLOPE \
+    (MAX_EFFECTIVE_KICK_FET_EN_TIME - MIN_EFFECTIVE_KICK_FET_EN_TIME)
 
 #define KICK_COOLDOWN_MS 2000
 #define PRE_KICK_SAFETY_MARGIN_MS 5
@@ -25,8 +26,9 @@
 #define TIMER_PER_MS 20
 
 // calculate our TIMING_CONSTANT (timer cmp val) from the desired resolution
-#define CLK_FREQ 8000000 // after removing default CLKDIV8 prescale
-#define TIMER_PRESCALE 8 // set by TCCR0B |= _BV(CS01) which also starts the timer
+#define CLK_FREQ 8000000  // after removing default CLKDIV8 prescale
+#define TIMER_PRESCALE \
+    8  // set by TCCR0B |= _BV(CS01) which also starts the timer
 #define MS_PER_SECOND 1000
 
 #define MAX_TIMER_FREQ (CLK_FREQ / TIMER_PRESCALE)
@@ -76,10 +78,8 @@ uint8_t execute_cmd(uint8_t, uint8_t);
  * Checks and returns if we're in the middle of a kick
  */
 bool is_kicking() {
-    return pre_kick_cooldown_ >= 0
-            || timer_cnts_left_ >= 0
-            || post_kick_cooldown_ >= 0
-            || kick_wait_ >= 0;
+    return pre_kick_cooldown_ >= 0 || timer_cnts_left_ >= 0 ||
+           post_kick_cooldown_ >= 0 || kick_wait_ >= 0;
 }
 
 /*
@@ -94,12 +94,13 @@ void kick(uint8_t strength) {
     pre_kick_cooldown_ = (PRE_KICK_SAFETY_MARGIN_MS * TIMER_PER_MS);
     post_kick_cooldown_ = (POST_KICK_SAFETY_MARGIN_MS * TIMER_PER_MS);
     // force to int32_t, default word size too small
-    kick_wait_ = ((int32_t) KICK_COOLDOWN_MS) * TIMER_PER_MS;
+    kick_wait_ = ((int32_t)KICK_COOLDOWN_MS) * TIMER_PER_MS;
 
     // compute time the solenoid FET is turned on, in milliseconds, based on
     // min and max effective FET enabled times
     float strength_ratio = (strength / MAX_KICK_STRENGTH);
-    float time_cnt_flt_ms = KICK_TIME_SLOPE * strength_ratio + MIN_EFFECTIVE_KICK_FET_EN_TIME;
+    float time_cnt_flt_ms =
+        KICK_TIME_SLOPE * strength_ratio + MIN_EFFECTIVE_KICK_FET_EN_TIME;
     float time_cnt_flt = time_cnt_flt_ms * TIMER_PER_MS;
     timer_cnts_left_ = (int)(time_cnt_flt + 0.5f);  // round
 
@@ -142,7 +143,8 @@ void main() {
         time++;
 
         // if we dropped below acceptable voltage, then this will catch it
-        // note: these aren't true voltages, just ADC output, but it matches fairly close
+        // note: these aren't true voltages, just ADC output, but it matches
+        // fairly close
         if (last_voltage_ > 239 || !charge_allowed_ || !charge_commanded_) {
             PORTB &= ~(_BV(CHARGE_PIN));
         } else if (last_voltage_ < 232 && charge_allowed_ &&
@@ -200,7 +202,7 @@ void init() {
     // 2. within four cycles, write the desired value to CLKPS while writing a
     //    zero to CLKPCE.
     CLKPR = _BV(CLKPCE);
-    CLKPR = 0; // corresponds to CLKDIV1 prescale, also keeps CLKPCE low
+    CLKPR = 0;  // corresponds to CLKDIV1 prescale, also keeps CLKPCE low
 
     // configure output pins
     DDRA |= _BV(KICK_MISO_PIN);
