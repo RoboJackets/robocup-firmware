@@ -21,13 +21,18 @@
 
 #define NO_COMMAND 0
 
-#define TIMING_CONSTANT (10-1)
+// number of steps of resolution we want per millisecond
+#define TIMER_PER_MS 20
 
-// 8 Mhz clock ~ 0.125 us period
-// timer CKDIV8 1 Mhz ~ 1 us period
-// timer CMP value divides by 10, 0.1 Mhz ~ 10 us period
-// 1 ms / 10 us = 100 timer interrupts per ms
-#define MS_TO_TIMER 100
+// calculate our TIMING_CONSTANT (timer cmp val) from the desired resolution
+#define CLK_FREQ 8000000 // after removing default CLKDIV8 prescale
+#define TIMER_PRESCALE 8 // set by TCCR0B |= _BV(CS01) which also starts the timer
+#define MS_PER_SECOND 1000
+
+#define MAX_TIMER_FREQ (CLK_FREQ / TIMER_PRESCALE)
+#define DESIRED_TIMER_FREQ (TIMER_PER_MS * MS_PER_SECOND)
+
+#define TIMING_CONSTANT ((MAX_TIMER_FREQ / DESIRED_TIMER_FREQ) - 1)
 
 // get different ball reading for 20 * 100 us = 2 ms before switching
 #define BALL_SENSE_MAX_SAMPLES 5
@@ -86,16 +91,16 @@ void kick(uint8_t strength) {
     if (is_kicking()) return;
 
     // initialize the countdowns for pre and post kick
-    pre_kick_cooldown_ = (PRE_KICK_SAFETY_MARGIN_MS * MS_TO_TIMER);
-    post_kick_cooldown_ = (POST_KICK_SAFETY_MARGIN_MS * MS_TO_TIMER);
+    pre_kick_cooldown_ = (PRE_KICK_SAFETY_MARGIN_MS * TIMER_PER_MS);
+    post_kick_cooldown_ = (POST_KICK_SAFETY_MARGIN_MS * TIMER_PER_MS);
     // force to int32_t, default word size too small
-    kick_wait_ = ((int32_t) KICK_COOLDOWN_MS) * MS_TO_TIMER;
+    kick_wait_ = ((int32_t) KICK_COOLDOWN_MS) * TIMER_PER_MS;
 
     // compute time the solenoid FET is turned on, in milliseconds, based on
     // min and max effective FET enabled times
     float strength_ratio = (strength / MAX_KICK_STRENGTH);
     float time_cnt_flt_ms = KICK_TIME_SLOPE * strength_ratio + MIN_EFFECTIVE_KICK_FET_EN_TIME;
-    float time_cnt_flt = time_cnt_flt_ms * MS_TO_TIMER;
+    float time_cnt_flt = time_cnt_flt_ms * TIMER_PER_MS;
     timer_cnts_left_ = (int)(time_cnt_flt + 0.5f);  // round
 
     // start timer to enable the kick FSM processing interrupt
@@ -134,6 +139,7 @@ void main() {
                 (255 - kalpha) * last_voltage_ + kalpha * get_voltage();
             last_voltage_ = voltage_accum / 255;
         }
+        time++;
 
         // if we dropped below acceptable voltage, then this will catch it
         // note: these aren't true voltages, just ADC output, but it matches fairly close
