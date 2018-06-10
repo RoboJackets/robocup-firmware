@@ -133,8 +133,8 @@ void main() {
         // get a voltage reading by weighing in a new reading, same concept as
         // TCP RTT estimates (exponentially weighted sum)
 
-        // 10 us * 4000 = 40 ms, we don't need to run the ADC much faster
-        if (time % 4000 == 0) {
+        // don't run the adc every loop
+        if (time % 1000 == 0) {
             int voltage_accum =
                 (255 - kalpha) * last_voltage_ + kalpha * get_voltage();
             last_voltage_ = voltage_accum / 255;
@@ -304,7 +304,7 @@ ISR(PCINT0_vect) {
     int kick_db_pressed = !(PINA & _BV(DB_KICK_PIN));
     int charge_db_pressed = !(PINA & _BV(DB_CHG_PIN));
 
-    if (!kick_db_down_ && kick_db_pressed) kick(127);
+    if (!kick_db_down_ && kick_db_pressed) kick(255);
 
     // toggle charge
     if (!charge_db_down_ && charge_db_pressed) {
