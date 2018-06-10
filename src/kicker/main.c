@@ -13,7 +13,7 @@
 #define MIN_EFFECTIVE_KICK_FET_EN_TIME 0.8f
 #define MAX_EFFECTIVE_KICK_FET_EN_TIME 10.0f
 
-#define KICK_TIME_SLOPE ((MAX_EFFECTIVE_KICK_FET_EN_TIME - MIN_EFFECTIVE_KICK_FET_EN_TIME)) / MAX_KICK_STRENGTH
+#define KICK_TIME_SLOPE (MAX_EFFECTIVE_KICK_FET_EN_TIME - MIN_EFFECTIVE_KICK_FET_EN_TIME)
 
 #define KICK_COOLDOWN_MS 2000
 #define PRE_KICK_SAFETY_MARGIN_MS 5
@@ -22,7 +22,6 @@
 #define NO_COMMAND 0
 
 #define TIMING_CONSTANT (10-1)
-#define VOLTAGE_READ_DELAY_MS 40
 
 // 8 Mhz clock ~ 0.125 us period
 // timer CKDIV8 1 Mhz ~ 1 us period
@@ -33,11 +32,11 @@
 // get different ball reading for 20 * 100 us = 2 ms before switching
 #define BALL_SENSE_MAX_SAMPLES 5
 
-// Used to time kick and chip durations
-volatile int32_t pre_kick_cooldown_ = 0;
-volatile int32_t timer_cnts_left_ = 0;
-volatile int32_t post_kick_cooldown_ = 0;
-volatile int32_t kick_wait_ = 0;
+// Used to time kick and chip durations, -1 indicates inactive state
+volatile int32_t pre_kick_cooldown_ = -1;
+volatile int32_t timer_cnts_left_ = -1;
+volatile int32_t post_kick_cooldown_ = -1;
+volatile int32_t kick_wait_ = -1;
 
 // Used to keep track of current button state
 volatile int kick_db_down_ = 0;
@@ -74,7 +73,7 @@ uint8_t execute_cmd(uint8_t, uint8_t);
 bool is_kicking() {
     return pre_kick_cooldown_ >= 0
             || timer_cnts_left_ >= 0
-            || post_kick_cooldown_ >= 0 
+            || post_kick_cooldown_ >= 0
             || kick_wait_ >= 0;
 }
 
@@ -89,6 +88,7 @@ void kick(uint8_t strength) {
     // initialize the countdowns for pre and post kick
     pre_kick_cooldown_ = (PRE_KICK_SAFETY_MARGIN_MS * MS_TO_TIMER);
     post_kick_cooldown_ = (POST_KICK_SAFETY_MARGIN_MS * MS_TO_TIMER);
+    // force to int32_t, default word size too small
     kick_wait_ = ((int32_t) KICK_COOLDOWN_MS) * MS_TO_TIMER;
 
     // compute time the solenoid FET is turned on, in milliseconds, based on
@@ -97,11 +97,6 @@ void kick(uint8_t strength) {
     float time_cnt_flt_ms = KICK_TIME_SLOPE * strength_ratio + MIN_EFFECTIVE_KICK_FET_EN_TIME;
     float time_cnt_flt = time_cnt_flt_ms * MS_TO_TIMER;
     timer_cnts_left_ = (int)(time_cnt_flt + 0.5f);  // round
-
-    pre_kick_cooldown_ = 100;
-    post_kick_cooldown_ = 100;
-    kick_wait_ = 100;
-    timer_cnts_left_ = 2 * MS_TO_TIMER;
 
     // start timer to enable the kick FSM processing interrupt
     TCCR0B |= _BV(CS01);
@@ -271,24 +266,22 @@ ISR(SPI_STC_vect) {
     // increment our received byte count and take appropriate action
     if (byte_cnt == 0) {
         cur_command_ = recv_data;
-        // kicker status fields
-        SPDR |= ACK;
+        SPDR = ACK;
     } else if (byte_cnt == 1) {
         // execute the currently set command with
         // the newly given argument, set the response
         // buffer to our return value
         SPDR = execute_cmd(cur_command_, recv_data);
     } else if (byte_cnt == 2) {
+        // return kicker state
         SPDR = ((ball_sensed_ ? 1 : 0) << BALL_SENSE_FIELD) |
                ((charge_commanded_ ? 1 : 0) << CHARGE_FIELD) |
                ((kick_on_breakbeam_ ? 1 : 0) << KICK_ON_BREAKBEAM_FIELD) |
                ((is_kicking() ? 1 : 0) << KICKING_FIELD);
-    } else if (byte_cnt == 4) {
-        // no-op
     }
-    int NUM_BYTES = 4;
+    int MAX_NUM_BYTES = 4;
     byte_cnt++;
-    byte_cnt %= NUM_BYTES;
+    byte_cnt %= MAX_NUM_BYTES;
 }
 
 /*
@@ -305,7 +298,7 @@ ISR(PCINT0_vect) {
     int kick_db_pressed = !(PINA & _BV(DB_KICK_PIN));
     int charge_db_pressed = !(PINA & _BV(DB_CHG_PIN));
 
-    if (!kick_db_down_ && kick_db_pressed) kick(255);
+    if (!kick_db_down_ && kick_db_pressed) kick(127);
 
     // toggle charge
     if (!charge_db_down_ && charge_db_pressed) {
@@ -339,7 +332,6 @@ ISR(PCINT0_vect) {
  * (When CS00 is one, and CS01 is 0, no prescale. We don't use this)
  */
 ISR(TIMER0_COMPA_vect) {
-    sei();
     if (pre_kick_cooldown_ >= 0) {
         /* PRE KICKING STATE
          * stop charging
@@ -377,7 +369,7 @@ ISR(TIMER0_COMPA_vect) {
          * don't allow kicking during the cooldown
          */
 
-        // reenable charching
+        // reenable charging
         charge_allowed_ = true;
 
         kick_wait_--;
@@ -389,7 +381,6 @@ ISR(TIMER0_COMPA_vect) {
         // stop prescaled timer
         TCCR0B &= ~_BV(CS01);
     }
-    cli();
 }
 
 /*
