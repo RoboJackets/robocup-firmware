@@ -12,7 +12,6 @@
 
 class I2Cdev {
     private:
-        Serial debugSerial;
         I2CMasterRtos i2c;
     public:
         I2Cdev();

@@ -405,7 +405,6 @@ THE SOFTWARE.
 class MPU6050 {
     private:
         I2Cdev *i2Cdev;
-        Serial debugSerial;
     public:
         MPU6050();
         MPU6050(uint8_t address, PinName i2cSda, PinName i2cScl);

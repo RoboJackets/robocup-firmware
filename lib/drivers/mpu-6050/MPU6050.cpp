@@ -42,8 +42,6 @@ THE SOFTWARE.
 
 #include "MPU6050.h"
 
-// #define useDebugSerial
-
 //instead of using pgmspace.h
 typedef const unsigned char prog_uchar;
 #define pgm_read_byte_near(x) (*(prog_uchar*)x)
@@ -52,7 +50,7 @@ typedef const unsigned char prog_uchar;
 /** Default constructor, uses default I2C address.
  * @see MPU6050_DEFAULT_ADDRESS
  */
-MPU6050::MPU6050() : debugSerial(USBTX, USBRX)
+MPU6050::MPU6050()
 {
     this->i2Cdev = new I2Cdev(I2C_SDA, I2C_SCL);
     devAddr = MPU6050_DEFAULT_ADDRESS;
@@ -66,7 +64,7 @@ MPU6050::MPU6050() : debugSerial(USBTX, USBRX)
  * @param i2c sda
  * @param i2c scl
  */
-MPU6050::MPU6050(uint8_t address, PinName sda, PinName scl) : debugSerial(USBTX, USBRX)
+MPU6050::MPU6050(uint8_t address, PinName sda, PinName scl)
 {
     this->i2Cdev = new I2Cdev(sda, scl);
     devAddr = address;
@@ -81,19 +79,11 @@ MPU6050::MPU6050(uint8_t address, PinName sda, PinName scl) : debugSerial(USBTX,
  */
 void MPU6050::initialize()
 {
-
-#ifdef useDebugSerial
-    debugSerial.printf("MPU6050::initialize start\n");
-#endif
-
     setClockSource(MPU6050_CLOCK_PLL_XGYRO);
     setFullScaleGyroRange(MPU6050_GYRO_FS_250);
     setFullScaleAccelRange(MPU6050_ACCEL_FS_2);
     setSleepEnabled(false); // thanks to Jack Elston for pointing this one out!
 
-#ifdef useDebugSerial
-    debugSerial.printf("MPU6050::initialize end\n");
-#endif
 }
 
 /** Verify the I2C connection.
@@ -102,13 +92,7 @@ void MPU6050::initialize()
  */
 bool MPU6050::testConnection()
 {
-#ifdef useDebugSerial
-    debugSerial.printf("MPU6050::testConnection start\n");
-#endif
     uint8_t deviceId = getDeviceID();
-#ifdef useDebugSerial
-    debugSerial.printf("DeviceId = %d\n",deviceId);
-#endif
     printf("deviceID = %d\n", deviceId);
     return deviceId == 0x34;
 }
