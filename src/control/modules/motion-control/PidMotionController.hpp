@@ -17,41 +17,27 @@ public:
         ax(0), ay(0), az(0), gx(0), gy(0), gz(0), rotation(0), angular_vel(0)
     { 
         setPidValues(3.0, 0, 0, 50, 0);
-        imu.initialize();
-
-        FILE *fp = fopen("/local/offsets.txt", "r");  // Open "out.txt" on the local file system for writing
-
-        int success = 0;
-        printf("opening gyro offsets file\r\n");
-        if (fp != nullptr) {
-            success = fscanf(fp, "%d %d %d %d %d %d", &ax_offset, &ay_offset, &az_offset,
-                                                      &gx_offset, &gy_offset, &gz_offset);
-            printf("fscanf done of gyro offsets\r\n");
-            fclose(fp);
-            printf("closed gyro offset file\r\n");
-        }
-
-        if (success == 6) {
-            printf("Successfully imported offsets from offsets.txt\r\n");
-        } else {
-            printf("Failed to import offsets from offsets.txt, defaulting to 0\r\n");
-        }
-
-        Thread::wait(2000);
-
-        imu.setFullScaleGyroRange(MPU6050_GYRO_FS_1000);
-        imu.setFullScaleAccelRange(MPU6050_ACCEL_FS_8);
-
-        imu.setXAccelOffset(ax_offset);
-        imu.setYAccelOffset(ay_offset);
-        imu.setZAccelOffset(az_offset);
-        imu.setXGyroOffset(gx_offset);
-        imu.setYGyroOffset(gy_offset);
-        imu.setZGyroOffset(gz_offset);
 
         rotation_pid.kp = 5;
         rotation_pid.ki = 0;
         rotation_pid.kd = 0;
+    }
+
+    // can't init gyro in constructor because i2c not fully up?
+    void startGyro(int16_t ax, int16_t ay, int16_t az, int16_t gx, int16_t gy, int16_t gz) {
+        imu.initialize();
+
+        // Thread::wait(100);
+
+        imu.setFullScaleGyroRange(MPU6050_GYRO_FS_1000);
+        imu.setFullScaleAccelRange(MPU6050_ACCEL_FS_8);
+
+        imu.setXAccelOffset(ax);
+        imu.setYAccelOffset(ay);
+        imu.setZAccelOffset(az);
+        imu.setXGyroOffset(gx);
+        imu.setYGyroOffset(gy);
+        imu.setZGyroOffset(gz);
     }
 
     void setPidValues(float p, float i, float d, unsigned int windup,
@@ -107,20 +93,25 @@ public:
         auto body_vels = RobotModel::get().WheelToBot * wheelVels;
 
         // two redundent sensor measurements for rotation
-        float ang_vel_gyro = 32.8 * gz;
+        // 32.8 comes from data sheet, units are LSB / (deg/s)
+        float ang_vel_gyro = (gz / 32.8f) * M_PI / 180.0f;
         float ang_vel_enc = body_vels[2];
+        // float ang_vel_enc = dt;
 
-        std::printf("%f %f\r\n", ang_vel_gyro, ang_vel_enc);
+        // printf("%f\r\n", ang_vel_gyro);
+
+        // std::printf("%f %f\r\n", ang_vel_gyro, ang_vel_enc);
 
         // perform sensor fusion
         // the higher this is, the more gyro measurements are used instead of encoders
-        float sensor_fuse_ratio = 0.9;
+        float sensor_fuse_ratio = 0;
         float ang_vel_update = ang_vel_gyro * sensor_fuse_ratio
-                             + ang_vel_enc * sensor_fuse_ratio;
+                             + ang_vel_enc * (1 - sensor_fuse_ratio);
 
         // perform state update based on fused value
         float alpha = 0.8;
-        rotation = alpha * ang_vel_update + (1 - alpha) * angular_vel;
+        angular_vel = (alpha * ang_vel_update + (1 - alpha) * angular_vel);
+        rotation += angular_vel*2 * dt;
 
         // rotation controller
         float target_w = _targetVel[2];

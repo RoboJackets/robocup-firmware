@@ -22,7 +22,7 @@
 
 // Keep this pretty high for now. Ideally, drop it down to ~3 for production
 // builds. Hopefully that'll be possible without the console
-constexpr auto CONTROL_LOOP_WAIT_MS = 5;
+constexpr auto CONTROL_LOOP_WAIT_MS = 50;
 
 // initialize PID controller
 PidMotionController pidController;
@@ -47,6 +47,11 @@ void Task_Controller_UpdateTarget(Eigen::Vector3f targetVel) {
     commandTimedOut = false;
     if (commandTimeoutTimer)
         commandTimeoutTimer->start(COMMAND_TIMEOUT_INTERVAL);
+}
+
+void Task_Controller_UpdateOffsets(int16_t ax, int16_t ay, int16_t az,
+                                   int16_t gx, int16_t gy, int16_t gz) {
+    pidController.startGyro(ax, ay, az, gx, gy, gz);
 }
 
 constexpr uint8_t DRIBBLER_SPEED_UPPERBOUND = 128;

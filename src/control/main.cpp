@@ -76,6 +76,8 @@ void Task_Simulate_RX_Packet(const void* args) {
 void Task_Controller(const void* args);
 void Task_Controller_UpdateTarget(Eigen::Vector3f targetVel);
 void Task_Controller_UpdateDribbler(uint8_t dribbler);
+void Task_Controller_UpdateOffsets(int16_t ax, int16_t ay, int16_t az,
+                                   int16_t gx, int16_t gy, int16_t gz);
 std::array<int16_t, 4> Task_Controller_EncGetClear();
 void InitializeCommModule(SharedSPIDevice<>::SpiPtrT sharedSPI);
 
@@ -179,6 +181,7 @@ int main() {
     rgbLED.setPixel(1, red, green, blue);
     rgbLED.write();
 
+
     // Set neopixel 1 to purple if git version is dirty
     if (git_version_dirty) {
         rgbLED.setPixel(1, NeoColorPurple);
@@ -226,6 +229,29 @@ int main() {
         LOG(SEVERE, "FPGA Configuration Failed!");
     }
     rgbLED.write();
+
+    int16_t ax_offset, ay_offset, az_offset, gx_offset, gy_offset, gz_offset;
+
+    FILE *fp = fopen("/local/offsets.txt", "r");  // Open "out.txt" on the local file system for writing
+    int success = 0;
+    // printf("opening gyro offsets file\r\n");
+    if (fp != nullptr) {
+        success = fscanf(fp, "%d %d %d %d %d %d", &ax_offset, &ay_offset, &az_offset,
+                                                  &gx_offset, &gy_offset, &gz_offset);
+        printf("fscanf done of gyro offsets\r\n");
+        fclose(fp);
+        printf("closed gyro offset file\r\n");
+    }
+
+    printf("vals: %d %d %d %d %d %d\r\n", ax_offset, ay_offset, az_offset, gx_offset, gy_offset, gz_offset);
+
+    if (success == 6) {
+        printf("Successfully imported offsets from offsets.txt\r\n");
+    } else {
+        printf("Failed to import offsets from offsets.txt, defaulting to 0\r\n");
+    }
+
+    Task_Controller_UpdateOffsets(ax_offset, ay_offset, az_offset, gx_offset, gy_offset, gz_offset);
 
     // DigitalOut rdy_led(RJ_RDY_LED, !fpgaInitialized);
 
