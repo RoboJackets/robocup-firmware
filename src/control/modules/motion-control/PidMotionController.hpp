@@ -17,11 +17,13 @@ public:
         ax_offset(0), ay_offset(0), az_offset(0), gx_offset(0), gy_offset(0), gz_offset(0),
         ax(0), ay(0), az(0), gx(0), gy(0), gz(0), rotation(0), angular_vel(0)
     { 
-        setPidValues(3.0, 0, 0, 50, 0);
+        setPidValues(1.0, 0, 0, 50, 0);
 
-        rotation_pid.kp = 5;
-        rotation_pid.ki = 0;
+        rotation_pid.kp = 8;
+        rotation_pid.ki = 4;
         rotation_pid.kd = 0;
+        rotation_pid.setWindup(40);
+        // rotation.derivAlpha = .05;
     }
 
     // can't init gyro in constructor because i2c not fully up?
@@ -113,7 +115,7 @@ public:
                              + ang_vel_enc * (1 - sensor_fuse_ratio);
 
         // perform state update based on fused value
-        float alpha = 0.8;
+        float alpha = 1.0;
         angular_vel = (alpha * ang_vel_update + (1 - alpha) * angular_vel);
         rotation += angular_vel * dt;
 
@@ -123,10 +125,13 @@ public:
         float target_w = _targetVel[2];
         target_w = rotation_pid.run(rotation); // rotation pid to do an angular hold
         // correct target velocity to include rotation hold
-        _targetVel[2] -= target_w;
+        // _targetVel[2] -= target_w;
+
+        auto target_vel_tmp = _targetVel;
+        target_vel_tmp[2] -= target_w;
 
         // conversion to commanded wheel velocities
-        Eigen::Vector4d targetWheelVels = RobotModel::get().BotToWheel * _targetVel.cast<double>();
+        Eigen::Vector4d targetWheelVels = RobotModel::get().BotToWheel * target_vel_tmp.cast<double>();
 
         if (targetWheelVelsOut) {
             *targetWheelVelsOut = targetWheelVels;
@@ -167,6 +172,7 @@ public:
 
             dc += _controllers[i].run(wheelVelErr[i]);
 
+
             if (std::abs(dc) > FPGA::MAX_DUTY_CYCLE) {
                 // Limit to max duty cycle
                 dc = copysign(FPGA::MAX_DUTY_CYCLE, dc);
@@ -176,6 +182,9 @@ public:
                 _controllers[i].set_saturated(false);
             }
 
+            if (i == 0) {
+                // printf("%d\r\n", static_cast<int16_t>(dc));
+            }
             dutyCycles[i] = (int16_t)dc;
         }
 
