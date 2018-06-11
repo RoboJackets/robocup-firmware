@@ -15,6 +15,7 @@
 #include "RotarySelector.hpp"
 #include "Rtos.hpp"
 #include "RtosTimerHelper.hpp"
+#include "SharedI2C.hpp"
 #include "SharedSPI.hpp"
 #include "TaskSignals.hpp"
 #include "Watchdog.hpp"
@@ -82,6 +83,9 @@ std::array<int16_t, 4> Task_Controller_EncGetClear();
 void InitializeCommModule(SharedSPIDevice<>::SpiPtrT sharedSPI);
 
 extern std::array<WheelStallDetection, 4> wheelStallDetection;
+
+// A shared I2C bus
+std::shared_ptr<SharedI2C> shared_i2c = make_shared<SharedI2C>(RJ_I2C_SDA, RJ_I2C_SCL, RJ_I2C_FREQ);
 
 /**
  * @brief Sets the hardware configurations for the status LEDs & places
@@ -258,7 +262,7 @@ int main() {
     // Init IO Expander and turn all LEDs on.  The first parameter to config()
     // sets the first 8 lines to input and the last 8 to output.  The pullup
     // resistors and polarity swap are enabled for the 4 rotary selector lines.
-    MCP23017 ioExpander(RJ_I2C_SDA, RJ_I2C_SCL, RJ_IO_EXPANDER_I2C_ADDRESS);
+    MCP23017 ioExpander(shared_i2c, RJ_IO_EXPANDER_I2C_ADDRESS);
     ioExpander.config(0x00FF, 0x00ff, 0x00ff);
     ioExpander.writeMask(static_cast<uint16_t>(~IOExpanderErrorLEDMask),
                          IOExpanderErrorLEDMask);

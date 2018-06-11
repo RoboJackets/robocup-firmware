@@ -5,16 +5,6 @@
 
 #include "I2Cdev.h"
 
-I2Cdev::I2Cdev(): i2c(I2C_SDA,I2C_SCL)
-{
-
-}
-
-I2Cdev::I2Cdev(PinName i2cSda, PinName i2cScl): i2c(i2cSda,i2cScl)
-{
-
-}
-
 /** Read a single bit from an 8-bit device register.
  * @param devAddr I2C slave device address
  * @param regAddr Register regAddr to read from

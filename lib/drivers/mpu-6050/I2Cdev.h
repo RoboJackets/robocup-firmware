@@ -14,8 +14,7 @@ class I2Cdev {
     private:
         I2CMasterRtos i2c;
     public:
-        I2Cdev();
-        I2Cdev(PinName i2cSda, PinName i2cScl);        
+        I2Cdev(std::shared_ptr<SharedI2C> sharedI2C) : i2c(sharedI2C) {}
         
         int8_t readBit(uint8_t devAddr, uint8_t regAddr, uint8_t bitNum, uint8_t *data, uint16_t timeout=I2Cdev::readTimeout());
         int8_t readBitW(uint8_t devAddr, uint8_t regAddr, uint8_t bitNum, uint16_t *data, uint16_t timeout=I2Cdev::readTimeout());

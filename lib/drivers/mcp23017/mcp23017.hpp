@@ -47,7 +47,7 @@ public:
         PinB7 = 15
     } ExpPinName;
 
-    MCP23017(PinName sda, PinName scl, int i2cAddress);
+    MCP23017(std::shared_ptr<SharedI2C> sharedI2C, int i2cAddress);
 
     /** Reset MCP23017 device to its power-on state
      */

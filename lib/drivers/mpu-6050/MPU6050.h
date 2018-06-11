@@ -406,8 +406,8 @@ class MPU6050 {
     private:
         I2Cdev *i2Cdev;
     public:
-        MPU6050();
-        MPU6050(uint8_t address, PinName i2cSda, PinName i2cScl);
+        MPU6050(std::shared_ptr<SharedI2C> sharedI2C);
+        MPU6050(std::shared_ptr<SharedI2C> sharedI2C, uint8_t address);
 
         void initialize();
         bool testConnection();

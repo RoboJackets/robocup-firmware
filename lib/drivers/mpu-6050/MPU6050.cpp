@@ -39,8 +39,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ===============================================
 */
-
 #include "MPU6050.h"
+
+#include "SharedI2C.hpp"
 
 //instead of using pgmspace.h
 typedef const unsigned char prog_uchar;
@@ -50,9 +51,9 @@ typedef const unsigned char prog_uchar;
 /** Default constructor, uses default I2C address.
  * @see MPU6050_DEFAULT_ADDRESS
  */
-MPU6050::MPU6050()
+MPU6050::MPU6050(std::shared_ptr<SharedI2C> sharedI2C)
 {
-    this->i2Cdev = new I2Cdev(I2C_SDA, I2C_SCL);
+    this->i2Cdev = new I2Cdev(sharedI2C);
     devAddr = MPU6050_DEFAULT_ADDRESS;
 }
 
@@ -64,9 +65,9 @@ MPU6050::MPU6050()
  * @param i2c sda
  * @param i2c scl
  */
-MPU6050::MPU6050(uint8_t address, PinName sda, PinName scl)
+MPU6050::MPU6050(std::shared_ptr<SharedI2C> sharedI2C, uint8_t address)
 {
-    this->i2Cdev = new I2Cdev(sda, scl);
+    this->i2Cdev = new I2Cdev(sharedI2C);
     devAddr = address;
 }
 

@@ -4,15 +4,16 @@
 #include <rc-fshare/pid.hpp>
 #include <rc-fshare/robot_model.hpp>
 
-#include "MPU6050.h"
 #include "FPGA.hpp"
+#include "MPU6050.h"
+#include "RobotDevices.hpp"
 
 /**
  * Robot controller that runs a PID loop on each of the four wheels.
  */
 class PidMotionController {
 public:
-    PidMotionController() : imu(MPU6050_DEFAULT_ADDRESS, RJ_I2C_SDA, RJ_I2C_SCL),
+    PidMotionController() : imu(shared_i2c, MPU6050_DEFAULT_ADDRESS),
         ax_offset(0), ay_offset(0), az_offset(0), gx_offset(0), gy_offset(0), gz_offset(0),
         ax(0), ay(0), az(0), gx(0), gy(0), gz(0), rotation(0), angular_vel(0)
     { 
