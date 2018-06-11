@@ -123,7 +123,7 @@ public:
         float target_w = _targetVel[2];
         target_w = rotation_pid.run(rotation); // rotation pid to do an angular hold
         // correct target velocity to include rotation hold
-        _targetVel[2] += target_w;
+        _targetVel[2] -= target_w;
 
         // conversion to commanded wheel velocities
         Eigen::Vector4d targetWheelVels = RobotModel::get().BotToWheel * _targetVel.cast<double>();

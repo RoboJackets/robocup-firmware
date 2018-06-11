@@ -234,28 +234,29 @@ int main() {
     }
     rgbLED.write();
 
-    int16_t ax_offset, ay_offset, az_offset, gx_offset, gy_offset, gz_offset;
+    // int16_t ax_offset, ay_offset, az_offset, gx_offset, gy_offset, gz_offset;
 
-    FILE *fp = fopen("/local/offsets.txt", "r");  // Open "out.txt" on the local file system for writing
-    int success = 0;
-    // printf("opening gyro offsets file\r\n");
-    if (fp != nullptr) {
-        success = fscanf(fp, "%d %d %d %d %d %d", &ax_offset, &ay_offset, &az_offset,
-                                                  &gx_offset, &gy_offset, &gz_offset);
-        printf("fscanf done of gyro offsets\r\n");
-        fclose(fp);
-        printf("closed gyro offset file\r\n");
-    }
+    // FILE *fp = fopen("/local/offsets.txt", "r");  // Open "out.txt" on the local file system for writing
+    // int success = 0;
+    // // printf("opening gyro offsets file\r\n");
+    // if (fp != nullptr) {
+        // success = fscanf(fp, "%d %d %d %d %d %d", &ax_offset, &ay_offset, &az_offset,
+                                                  // &gx_offset, &gy_offset, &gz_offset);
+        // printf("fscanf done of gyro offsets\r\n");
+        // fclose(fp);
+        // printf("closed gyro offset file\r\n");
+    // }
 
-    printf("vals: %d %d %d %d %d %d\r\n", ax_offset, ay_offset, az_offset, gx_offset, gy_offset, gz_offset);
+    // printf("vals: %d %d %d %d %d %d\r\n", ax_offset, ay_offset, az_offset, gx_offset, gy_offset, gz_offset);
 
-    if (success == 6) {
-        printf("Successfully imported offsets from offsets.txt\r\n");
-    } else {
-        printf("Failed to import offsets from offsets.txt, defaulting to 0\r\n");
-    }
-
-    Task_Controller_UpdateOffsets(ax_offset, ay_offset, az_offset, gx_offset, gy_offset, gz_offset);
+    // if (success == 6) {
+        // printf("Successfully imported offsets from offsets.txt\r\n");
+    // } else {
+        // printf("Failed to import offsets from offsets.txt, defaulting to 0\r\n");
+    // }
+    // -1825 2134 6841 27 0 28
+    Task_Controller_UpdateOffsets(-1825, 2134, 6841, 27, 0, 28);
+    // Task_Controller_UpdateOffsets(ax_offset, ay_offset, az_offset, gx_offset, gy_offset, gz_offset);
 
     // DigitalOut rdy_led(RJ_RDY_LED, !fpgaInitialized);
 
