@@ -22,7 +22,7 @@
 
 // Keep this pretty high for now. Ideally, drop it down to ~3 for production
 // builds. Hopefully that'll be possible without the console
-constexpr auto CONTROL_LOOP_WAIT_MS = 8;
+constexpr auto CONTROL_LOOP_WAIT_MS = 5;
 
 // initialize PID controller
 PidMotionController pidController;

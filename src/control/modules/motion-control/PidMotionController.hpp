@@ -108,7 +108,7 @@ public:
 
         // perform sensor fusion
         // the higher this is, the more gyro measurements are used instead of encoders
-        float sensor_fuse_ratio = 0;
+        float sensor_fuse_ratio = 1;
         float ang_vel_update = ang_vel_gyro * sensor_fuse_ratio
                              + ang_vel_enc * (1 - sensor_fuse_ratio);
 
@@ -117,7 +117,7 @@ public:
         angular_vel = (alpha * ang_vel_update + (1 - alpha) * angular_vel);
         rotation += angular_vel * dt;
 
-        // printf("%f\r\n", rotation);
+        // printf("%f\r\n", rotation * 180.0f / M_PI);
 
         // rotation controller
         float target_w = _targetVel[2];
