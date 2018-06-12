@@ -38,6 +38,9 @@ elif cat /etc/os-release | grep -iq '^NAME=.*Ubuntu'; then # We are using a vers
     elif cat /etc/os-release | grep -iq '^VERSION=.*16.10'; then # Using Ubuntu 16.10
         echo "Ubuntu 16.10 Detected..."
         SYSTEM="ubuntu-16.10"
+    elif cat /etc/os-release | grep -iq '^VERSION=.*18.04'; then # Using Ubuntu 18.04
+        echo "Ubuntu 18.04 Detected..."
+        SYSTEM="ubuntu-18.04"
     else
         echo "$DISTRO_STR" >&2
         exit 1
@@ -73,6 +76,35 @@ if [ $UID -ne 0 ]; then
 	exec sudo $0 $@
 fi
 
+# ask for permission to modify apt sources if '-y' flag abesnt
+if [ "ubuntu-18.04" = "$SYSTEM" -a "$YES" != true ]; then
+	echo "Need to add xenial universe to package lists for arm compiler support."
+	read -r -p "Is this okay? [y/N] " response
+	case "$response" in 
+	[yY][eE][sS]|[yY]) 
+        	;;
+    	*)
+		echo "cannot continue on Bionic without permission to add to lists"
+		echo "-- exit"
+		exit 1
+        	;;
+	esac
+fi
+
+if [ "ubuntu-18.04" = "$SYSTEM" ]; then
+	SOURCE_LIST=/etc/apt/sources.list.d/gcc-arm-none-eabi_xenial.list
+	if [ ! -f "$SOURCE_LIST" ]; then
+		echo "-- adding xenial universe to support arm compiler"
+		cat << EOF > $SOURCE_LIST
+# robocup-firmware added xenial universe for gcc-arm-none-eabi 5.4.1
+deb http://archive.ubuntu.com/ubuntu xenial universe
+deb http://archive.ubuntu.com/ubuntu xenial main
+EOF
+	else
+		echo "-- found xenial universe to support arm compiler"
+	fi
+fi
+
 apt-get update
 
 MACH=$(uname -m)
@@ -92,10 +124,39 @@ if $YES; then
     ARGS="-y"
 fi
 
-PACKAGES="$(sed 's/#.*//;/^$/d' $BASE/util/ubuntu-packages.txt)"
+TOOLCHAIN_PACKAGES="libnewlib-dev libnewlib-arm-none-eabi gcc-arm-none-eabi libstdc++-arm-none-eabi-newlib"
+if [ "ubuntu-18.04" = "$SYSTEM" ]; then
+	# check for missing compiler
+	ARM_COMPILER=true
+	if [[ $(dpkg -s gcc-arm-none-eabi) -ne 0 ]]; then
+		ARM_COMPILER=false
+	else
+		echo "-- found existing ARM compiler install, verifying"
+	fi
+
+	# compiler is installed, check if the version is correct
+	if [ "$ARM_COMPILER" = true ]; then
+		if [[ $(apt-cache policy gcc-arm-none-eabi) = *"Installed: 15:4.9.3"* ]]; then
+			echo "-- detected good arm compiler version"
+		else
+			echo "-- detected bad arm compiler verison, purging"
+			apt-get purge $TOOLCHAIN_PACKAGES $ARGS
+			apt-get autoremove $ARGS
+		fi
+	fi
+
+	PACKAGES="$(sed 's/#.*//;/^$/d' $BASE/util/ubuntu-18.04-packages.txt)"
+else
+	PACKAGES="$(sed 's/#.*//;/^$/d' $BASE/util/ubuntu-packages.txt)"
+fi
 
 # install all of the packages listed in required_packages.txt
 apt-get install $ARGS $PACKAGES
+
+if [ "$SYSTEM" = "ubuntu-18.04" ]; then
+	echo "-- pinning arm toolchain"
+	apt-mark hold $TOOLCHAIN_PACKAGES
+fi
 
 # Use ubuntu's 'update-alternatives' to select the newer compiler as the default
 # See issue #468 on GitHub
