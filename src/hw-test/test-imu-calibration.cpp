@@ -14,7 +14,7 @@
 
 // Amount of readings used to average, make it higher to get more precision but 
 // program will be slower  (default:1000)
-int buffer_size = 10000;
+int buffer_size = 1000;
 // Accelerometer error allowed, make it lower to get more precision, but may
 // not converge  (default:8)
 int accel_deadzone = 8;
@@ -122,7 +122,7 @@ void sample(){
     long buff_ax = 0, buff_ay = 0, buff_az = 0,
          buff_gx = 0, buff_gy = 0, buff_gz = 0;
 
-    const int skip_dst = 1000;
+    const int skip_dst = 100;
 
     while (i < (buffer_size + skip_dst + 1)) {
         // read raw accel/gyro measurements from device

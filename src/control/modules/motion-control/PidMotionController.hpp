@@ -19,11 +19,11 @@ public:
     { 
         setPidValues(1.0, 0, 0, 50, 0);
 
-        rotation_pid.kp = 8;
-        rotation_pid.ki = 4;
-        rotation_pid.kd = 0;
+        rotation_pid.kp = 15;
+        rotation_pid.ki = 0;
+        rotation_pid.kd = 300;
         rotation_pid.setWindup(40);
-        // rotation.derivAlpha = .05;
+        rotation_pid.derivAlpha = .10; // 1 is all old, 0 is all new
     }
 
     // can't init gyro in constructor because i2c not fully up?
@@ -120,8 +120,6 @@ public:
         // current rotation estimate
         rotation += angular_vel * dt;
 
-        rotation = std::remainder(rotation, 2*M_PI);
-
         // printf("%f\r\n", rotation * 180.0f / M_PI);
 
         auto target_vel_act = _targetVel;
@@ -130,7 +128,7 @@ public:
         float rot_error = std::atan2(std::sin(target_rotation - rotation),
                                      std::cos(target_rotation - rotation));
         // std::printf("%f\r\n", rot_error);
-        target_vel_act[2] += rotation_pid.run(rot_error);
+        target_vel_act[2] = rotation_pid.run(rot_error);
 
         // conversion to commanded wheel velocities
         Eigen::Vector4d targetWheelVels = RobotModel::get().BotToWheel * target_vel_act.cast<double>();
