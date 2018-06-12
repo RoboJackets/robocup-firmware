@@ -30,7 +30,8 @@ int mean_ax = 0, mean_ay = 0, mean_az = 0,
 int ax_offset = 0, ay_offset = 0, az_offset = 0,
     gx_offset = 0, gy_offset = 0, gz_offset = 0;
 
-MPU6050 imu(MPU6050_DEFAULT_ADDRESS, RJ_I2C_SDA, RJ_I2C_SCL);
+std::shared_ptr<SharedI2C> shared_i2c = make_shared<SharedI2C>(RJ_I2C_SDA, RJ_I2C_SCL, RJ_I2C_FREQ);
+MPU6050 imu(shared_i2c, MPU6050_DEFAULT_ADDRESS);
 
 Serial pc(RJ_SERIAL_RXTX);
 

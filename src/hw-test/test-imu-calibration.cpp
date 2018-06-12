@@ -40,7 +40,9 @@ void calibration();
 
 Serial pc(RJ_SERIAL_RXTX);
 
-MPU6050 imu(MPU6050_DEFAULT_ADDRESS, RJ_I2C_SDA, RJ_I2C_SCL);
+
+std::shared_ptr<SharedI2C> shared_i2c = make_shared<SharedI2C>(RJ_I2C_SDA, RJ_I2C_SCL, RJ_I2C_FREQ);
+MPU6050 imu(shared_i2c, MPU6050_DEFAULT_ADDRESS);
 LocalFileSystem local("local");
 
 int main() {
