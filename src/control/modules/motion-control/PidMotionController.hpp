@@ -89,6 +89,10 @@ public:
                                Eigen::Vector4d* wheelVelsOut = nullptr,
                                Eigen::Vector4d* targetWheelVelsOut = nullptr) {
         // update control targets
+        // in the future, we can get the rotation angle soccer wants and directly command that
+        // as our target, or integrate the rotational velocities given to us to create the target.
+        // For now though, we only do an angle hold when soccer is not commanding rotational velocities
+        // (this should help with strafing quickly)
         // target_rotation += _targetVel[2] * dt;
 
         // get sensor data
@@ -194,7 +198,6 @@ public:
 
             dc += _controllers[i].run(wheelVelErr[i]);
 
-
             if (std::abs(dc) > FPGA::MAX_DUTY_CYCLE) {
                 // Limit to max duty cycle
                 dc = copysign(FPGA::MAX_DUTY_CYCLE, dc);
@@ -204,10 +207,7 @@ public:
                 _controllers[i].set_saturated(false);
             }
 
-            if (i == 0) {
-                // printf("%d\r\n", static_cast<int16_t>(dc));
-            }
-            dutyCycles[i] = (int16_t)dc;
+            dutyCycles[i] = static_cast<int16_t>(dc);
         }
 
         return dutyCycles;
