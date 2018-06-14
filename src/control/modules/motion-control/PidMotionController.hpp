@@ -15,7 +15,8 @@ class PidMotionController {
 public:
     PidMotionController() : imu(shared_i2c, MPU6050_DEFAULT_ADDRESS),
         ax_offset(0), ay_offset(0), az_offset(0), gx_offset(0), gy_offset(0), gz_offset(0),
-        ax(0), ay(0), az(0), gx(0), gy(0), gz(0), rotation(0), angular_vel(0), target_rotation(0)
+        ax(0), ay(0), az(0), gx(0), gy(0), gz(0), rotation(0), target_rotation(0), angular_vel(0),
+        angle_hold(false)
     { 
         setPidValues(1.0, 0, 0, 50, 0);
 
@@ -23,7 +24,7 @@ public:
         rotation_pid.ki = 0;
         rotation_pid.kd = 300;
         rotation_pid.setWindup(40);
-        rotation_pid.derivAlpha = .10; // 1 is all old, 0 is all new
+        rotation_pid.derivAlpha = .60; // 1 is all old, 0 is all new
     }
 
     // can't init gyro in constructor because i2c not fully up?
@@ -124,11 +125,23 @@ public:
 
         auto target_vel_act = _targetVel;
 
-        // rotation controller
-        float rot_error = std::atan2(std::sin(target_rotation - rotation),
-                                     std::cos(target_rotation - rotation));
         // std::printf("%f\r\n", rot_error);
-        target_vel_act[2] = rotation_pid.run(rot_error);
+        
+        const auto epsilon = 0.0001f;
+        if (std::abs(target_vel_act[2]) < epsilon) {
+            
+            if (!angle_hold) {
+                target_rotation = rotation;
+                angle_hold = true;
+            }
+
+            float rot_error = std::atan2(std::sin(target_rotation - rotation),
+                                         std::cos(target_rotation - rotation));
+
+            target_vel_act[2] = rotation_pid.run(rot_error);
+        } else {
+            angle_hold = false;
+        }
 
         // conversion to commanded wheel velocities
         Eigen::Vector4d targetWheelVels = RobotModel::get().BotToWheel * target_vel_act.cast<double>();
@@ -215,4 +228,5 @@ private:
     // for now, so that requires us to have a separate estimate of soccer's desired rotation
     float target_rotation;
     float angular_vel;
+    bool angle_hold;
 };
