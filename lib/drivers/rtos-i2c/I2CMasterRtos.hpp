@@ -18,9 +18,8 @@ public:
     *  @note Has to be created in a thread context, i.e. within the main or some
     * other function. A global delaration does not work
     */
-    I2CMasterRtos(std::shared_ptr<SharedI2C> sharedI2C) : SharedI2CDevice(sharedI2C) {
-        
-    }
+    I2CMasterRtos(std::shared_ptr<SharedI2C> sharedI2C)
+        : SharedI2CDevice(sharedI2C) {}
 
     /** Set the frequency of the I2C interface
      *

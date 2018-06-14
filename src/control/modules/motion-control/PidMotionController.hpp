@@ -13,22 +13,36 @@
  */
 class PidMotionController {
 public:
-    PidMotionController() : imu(shared_i2c, MPU6050_DEFAULT_ADDRESS),
-        ax_offset(0), ay_offset(0), az_offset(0), gx_offset(0), gy_offset(0), gz_offset(0),
-        ax(0), ay(0), az(0), gx(0), gy(0), gz(0), rotation(0), target_rotation(0), angular_vel(0),
-        angle_hold(false)
-    { 
+    PidMotionController()
+        : imu(shared_i2c, MPU6050_DEFAULT_ADDRESS),
+          ax_offset(0),
+          ay_offset(0),
+          az_offset(0),
+          gx_offset(0),
+          gy_offset(0),
+          gz_offset(0),
+          ax(0),
+          ay(0),
+          az(0),
+          gx(0),
+          gy(0),
+          gz(0),
+          rotation(0),
+          target_rotation(0),
+          angular_vel(0),
+          angle_hold(false) {
         setPidValues(1.0, 0, 0, 50, 0);
 
         rotation_pid.kp = 15;
         rotation_pid.ki = 0;
         rotation_pid.kd = 300;
         rotation_pid.setWindup(40);
-        rotation_pid.derivAlpha = 0.0f; // 1 is all old, 0 is all new
+        rotation_pid.derivAlpha = 0.0f;  // 1 is all old, 0 is all new
     }
 
     // can't init gyro in constructor because i2c not fully up?
-    void startGyro(int16_t ax, int16_t ay, int16_t az, int16_t gx, int16_t gy, int16_t gz) {
+    void startGyro(int16_t ax, int16_t ay, int16_t az, int16_t gx, int16_t gy,
+                   int16_t gz) {
         imu.initialize();
 
         // Thread::wait(100);
@@ -89,9 +103,12 @@ public:
                                Eigen::Vector4d* wheelVelsOut = nullptr,
                                Eigen::Vector4d* targetWheelVelsOut = nullptr) {
         // update control targets
-        // in the future, we can get the rotation angle soccer wants and directly command that
-        // as our target, or integrate the rotational velocities given to us to create the target.
-        // For now though, we only do an angle hold when soccer is not commanding rotational velocities
+        // in the future, we can get the rotation angle soccer wants and
+        // directly command that
+        // as our target, or integrate the rotational velocities given to us to
+        // create the target.
+        // For now though, we only do an angle hold when soccer is not
+        // commanding rotational velocities
         // (this should help with strafing quickly)
         // target_rotation += _targetVel[2] * dt;
 
@@ -100,9 +117,10 @@ public:
 
         // convert sensor readings to mathematically valid values
         Eigen::Vector4d wheelVels;
-        wheelVels << encoderDeltas[0], encoderDeltas[1], encoderDeltas[2], encoderDeltas[3];
+        wheelVels << encoderDeltas[0], encoderDeltas[1], encoderDeltas[2],
+            encoderDeltas[3];
         wheelVels *= 2.0 * M_PI / ENC_TICKS_PER_TURN / dt;
-        
+
         auto bot_vel = RobotModel::get().WheelToBot * wheelVels;
 
         // we have two redundent sensor measurements for rotation
@@ -114,33 +132,37 @@ public:
         // std::printf("%f %f\r\n", ang_vel_gyro, ang_vel_enc);
 
         // perform sensor fusion
-        // the higher this is, the more gyro measurements are used instead of encoders
+        // the higher this is, the more gyro measurements are used instead of
+        // encoders
         float sensor_fuse_ratio = 1;
-        float ang_vel_update = ang_vel_gyro * sensor_fuse_ratio
-                             + ang_vel_enc * (1 - sensor_fuse_ratio);
+        float ang_vel_update = ang_vel_gyro * sensor_fuse_ratio +
+                               ang_vel_enc * (1 - sensor_fuse_ratio);
 
-        // perform state update based on fused value, passed through a low passed filter
-        
-        // so far noise on the gyro seems pretty minimal, that's why this filter is off
-        float alpha = 1.0; // 0->1 (higher means less filtering)
+        // perform state update based on fused value, passed through a low
+        // passed filter
+
+        // so far noise on the gyro seems pretty minimal, that's why this filter
+        // is off
+        float alpha = 1.0;  // 0->1 (higher means less filtering)
         angular_vel = (alpha * ang_vel_update + (1 - alpha) * angular_vel);
         // current rotation estimate
         rotation += angular_vel * dt;
 
         // printf("%f\r\n", rotation * 180.0f / M_PI);
 
-        // velocity we are actually basing control off of, not the latest command
+        // velocity we are actually basing control off of, not the latest
+        // command
         auto target_vel_act = _targetVel;
 
         // std::printf("%f\r\n", rot_error);
-        
+
         const auto epsilon = 0.0001f;
-        // soccer tells us to "halt" by sending 0 vel commands, we want to freeze the
+        // soccer tells us to "halt" by sending 0 vel commands, we want to
+        // freeze the
         // rotational controller too so bots dont' react when getting handled
-        bool soccer_stop = (std::abs(target_vel_act[0]) < epsilon)
-                           && (std::abs(target_vel_act[1]) < epsilon);
+        bool soccer_stop = (std::abs(target_vel_act[0]) < epsilon) &&
+                           (std::abs(target_vel_act[1]) < epsilon);
         if (!soccer_stop && std::abs(target_vel_act[2]) < epsilon) {
-            
             if (!angle_hold) {
                 target_rotation = rotation;
                 angle_hold = true;
@@ -157,7 +179,8 @@ public:
         }
 
         // conversion to commanded wheel velocities
-        Eigen::Vector4d targetWheelVels = RobotModel::get().BotToWheel * target_vel_act.cast<double>();
+        Eigen::Vector4d targetWheelVels =
+            RobotModel::get().BotToWheel * target_vel_act.cast<double>();
 
         if (targetWheelVelsOut) {
             *targetWheelVelsOut = targetWheelVels;
@@ -227,14 +250,14 @@ private:
 
     MPU6050 imu;
 
-    int ax_offset, ay_offset, az_offset,
-        gx_offset, gy_offset, gz_offset;
-    int16_t ax, ay, az,
-            gx, gy, gz;
+    int ax_offset, ay_offset, az_offset, gx_offset, gy_offset, gz_offset;
+    int16_t ax, ay, az, gx, gy, gz;
 
-    float rotation; // state estimate for rotation
-    // We want to preserve the interface of soccer commanding rotational velocities
-    // for now, so that requires us to have a separate estimate of soccer's desired rotation
+    float rotation;  // state estimate for rotation
+    // We want to preserve the interface of soccer commanding rotational
+    // velocities
+    // for now, so that requires us to have a separate estimate of soccer's
+    // desired rotation
     float target_rotation;
     float angular_vel;
     bool angle_hold;

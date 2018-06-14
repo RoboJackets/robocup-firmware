@@ -17,20 +17,24 @@ bool batchedResult = false;
 std::vector<unsigned int> freq1;
 std::vector<unsigned int> freq2;
 
-int buffersize=1000;     //Amount of readings used to average, make it higher to get more precision but sketch will be slower  (default:1000)
-int acel_deadzone=8;     //Acelerometer error allowed, make it lower to get more precision, but sketch may not converge  (default:8)
-int giro_deadzone=1;     //Giro error allowed, make it lower to get more precision, but sketch may not converge  (default:1)
+int buffersize = 1000;  // Amount of readings used to average, make it higher to
+                        // get more precision but sketch will be slower
+                        // (default:1000)
+int acel_deadzone = 8;  // Acelerometer error allowed, make it lower to get more
+                        // precision, but sketch may not converge  (default:8)
+int giro_deadzone = 1;  // Giro error allowed, make it lower to get more
+                        // precision, but sketch may not converge  (default:1)
 
-int16_t ax = 0, ay = 0, az = 0,
-        gx = 0, gy = 0, gz = 0;
+int16_t ax = 0, ay = 0, az = 0, gx = 0, gy = 0, gz = 0;
 
-int mean_ax = 0, mean_ay = 0, mean_az = 0,
-    mean_gx = 0, mean_gy = 0, mean_gz = 0;
+int mean_ax = 0, mean_ay = 0, mean_az = 0, mean_gx = 0, mean_gy = 0,
+    mean_gz = 0;
 
-int ax_offset = 0, ay_offset = 0, az_offset = 0,
-    gx_offset = 0, gy_offset = 0, gz_offset = 0;
+int ax_offset = 0, ay_offset = 0, az_offset = 0, gx_offset = 0, gy_offset = 0,
+    gz_offset = 0;
 
-std::shared_ptr<SharedI2C> shared_i2c = make_shared<SharedI2C>(RJ_I2C_SDA, RJ_I2C_SCL, RJ_I2C_FREQ);
+std::shared_ptr<SharedI2C> shared_i2c =
+    make_shared<SharedI2C>(RJ_I2C_SDA, RJ_I2C_SCL, RJ_I2C_FREQ);
 MPU6050 imu(shared_i2c, MPU6050_DEFAULT_ADDRESS);
 
 Serial pc(RJ_SERIAL_RXTX);
@@ -43,15 +47,17 @@ int main() {
     printf("Starting.\r\n");
 
     imu.initialize();
-    
+
     int success = 0;
 
-    FILE *fp = fopen("/local/offsets.txt", "r");  // Open "out.txt" on the local file system for writing
+    FILE* fp =
+        fopen("/local/offsets.txt",
+              "r");  // Open "out.txt" on the local file system for writing
 
     printf("open\r\n");
     if (fp != nullptr) {
-        success = fscanf(fp, "%d %d %d %d %d %d", &ax_offset, &ay_offset, &az_offset,
-                                                  &gx_offset, &gy_offset, &gz_offset);
+        success = fscanf(fp, "%d %d %d %d %d %d", &ax_offset, &ay_offset,
+                         &az_offset, &gx_offset, &gy_offset, &gz_offset);
         printf("fscanf done\r\n");
         fclose(fp);
         printf("closed\r\n");
@@ -70,7 +76,8 @@ int main() {
     if (success == 6) {
         printf("Successfully imported offsets from offsets.txt\r\n");
     } else {
-        printf("Failed to import offsets from offsets.txt, defaulting to 0\r\n");
+        printf(
+            "Failed to import offsets from offsets.txt, defaulting to 0\r\n");
     }
 
     Thread::wait(2000);

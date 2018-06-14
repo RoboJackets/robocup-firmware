@@ -22,9 +22,7 @@ class SharedI2CDevice {
 public:
     using I2CPtrT = std::shared_ptr<SharedI2C>;
 
-    SharedI2CDevice(I2CPtrT i2c) : m_i2c(i2c) {
-        ASSERT(i2c != nullptr);
-    }
+    SharedI2CDevice(I2CPtrT i2c) : m_i2c(i2c) { ASSERT(i2c != nullptr); }
 
 protected:
     I2CPtrT m_i2c;
