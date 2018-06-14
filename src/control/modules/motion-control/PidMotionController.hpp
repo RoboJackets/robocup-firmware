@@ -24,7 +24,7 @@ public:
         rotation_pid.ki = 0;
         rotation_pid.kd = 300;
         rotation_pid.setWindup(40);
-        rotation_pid.derivAlpha = .60; // 1 is all old, 0 is all new
+        rotation_pid.derivAlpha = 0.0f; // 1 is all old, 0 is all new
     }
 
     // can't init gyro in constructor because i2c not fully up?
@@ -89,7 +89,7 @@ public:
                                Eigen::Vector4d* wheelVelsOut = nullptr,
                                Eigen::Vector4d* targetWheelVelsOut = nullptr) {
         // update control targets
-        target_rotation += _targetVel[2] * dt;
+        // target_rotation += _targetVel[2] * dt;
 
         // get sensor data
         imu.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);
@@ -116,6 +116,8 @@ public:
                              + ang_vel_enc * (1 - sensor_fuse_ratio);
 
         // perform state update based on fused value, passed through a low passed filter
+        
+        // so far noise on the gyro seems pretty minimal, that's why this filter is off
         float alpha = 1.0; // 0->1 (higher means less filtering)
         angular_vel = (alpha * ang_vel_update + (1 - alpha) * angular_vel);
         // current rotation estimate
@@ -123,23 +125,30 @@ public:
 
         // printf("%f\r\n", rotation * 180.0f / M_PI);
 
+        // velocity we are actually basing control off of, not the latest command
         auto target_vel_act = _targetVel;
 
         // std::printf("%f\r\n", rot_error);
         
         const auto epsilon = 0.0001f;
-        if (std::abs(target_vel_act[2]) < epsilon) {
+        // soccer tells us to "halt" by sending 0 vel commands, we want to freeze the
+        // rotational controller too so bots dont' react when getting handled
+        bool soccer_stop = (std::abs(target_vel_act[0]) < epsilon)
+                           && (std::abs(target_vel_act[1]) < epsilon);
+        if (!soccer_stop && std::abs(target_vel_act[2]) < epsilon) {
             
             if (!angle_hold) {
                 target_rotation = rotation;
                 angle_hold = true;
             }
 
+            // get the smallest difference between two angles
             float rot_error = std::atan2(std::sin(target_rotation - rotation),
                                          std::cos(target_rotation - rotation));
 
             target_vel_act[2] = rotation_pid.run(rot_error);
         } else {
+            // let target_vel_act be exactly what soccer commanded
             angle_hold = false;
         }
 
