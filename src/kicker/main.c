@@ -40,6 +40,7 @@ volatile int post_kick_cooldown_ = 0;
 volatile int kick_wait = 0;
 
 // Used to keep track of current button state
+volatile int dbg_switched = 0;
 volatile int kick_db_down_ = 0;
 volatile int chip_db_down_ = 0;
 volatile int charge_db_down_ = 0;
@@ -138,7 +139,8 @@ void main() {
         // if we dropped below acceptable voltage, then this will catch it
         if (last_voltage_ > 239 || !charge_allowed_ || !charge_commanded_) {
             PORTB &= ~(_BV(CHARGE_PIN));
-        } else if (!charging_hardware_fault
+        } else if ((dbg_switched || !charging_hardware_fault)
+
                    && last_voltage_ < 232 
                    && charge_allowed_ 
                    && charge_commanded_) {
@@ -287,7 +289,7 @@ ISR(SPI_STC_vect) {
  */
 ISR(PCINT0_vect) {
     // First we get the current state of each button, active low
-    int dbg_switched = !(PINB & _BV(DB_SWITCH));
+    dbg_switched = !(PINB & _BV(DB_SWITCH));
 
     if (!dbg_switched) return;
     int kick_db_pressed = !(PINA & _BV(DB_KICK_PIN));
