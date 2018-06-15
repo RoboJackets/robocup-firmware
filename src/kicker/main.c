@@ -8,17 +8,28 @@
 #include "kicker_commands.h"
 #include "pins.h"
 
+// kicker parameters
+#define MAX_KICK_STRENGTH 255.0f
+#define MIN_EFFECTIVE_KICK_FET_EN_TIME 0.8f
+#define MAX_EFFECTIVE_KICK_FET_EN_TIME 9.0f
+#define KICK_COOLDOWN_MS 2000
+#define PRE_KICK_SAFETY_MARGIN_MS 5
+#define POST_KICK_SAFETY_MARGIN_MS 5
+
 #define NO_COMMAND 0
 
-#define TIMING_CONSTANT 125
+#define TIMING_CONSTANT 10
 #define VOLTAGE_READ_DELAY_MS 40
+
+// 1 ms / 80 us = 12.5
+#define MS_TO_TIMER 12.5f
 
 // get different ball reading for 20 * 100 us = 2 ms before switching
 #define BALL_SENSE_MAX_SAMPLES 5
 
 // Used to time kick and chip durations
 volatile int pre_kick_cooldown_ = 0;
-volatile int millis_left_ = 0;
+volatile int timer_cnts_left_ = 0;
 volatile int post_kick_cooldown_ = 0;
 volatile int kick_wait = 0;
 
@@ -51,22 +62,37 @@ unsigned time = 0;
 // executes a command coming from SPI
 uint8_t execute_cmd(uint8_t, uint8_t);
 
+/*
+ * Checks and returns if we're in the middle of a kick
+ */
 bool is_kicking() {
-    return pre_kick_cooldown_ || millis_left_ || post_kick_cooldown_ ||
+    return pre_kick_cooldown_ || timer_cnts_left_ || post_kick_cooldown_ ||
            kick_wait;
 }
 
+/*
+ * start the kick FSM for desired strength. If the FSM is already running,
+ * the call will be ignored.
+ */
 void kick(uint8_t strength) {
+    // check if the kick FSM is running
     if (is_kicking()) return;
-    pre_kick_cooldown_ = 5;
-    // minimum of 6 ms, we were breaking kickers with low duty cycles
-    // maximum of 6 + 7 == 13 ms
-    // millis_left_ = (int) ((strength / 255.0) * 6.0) + 7;
-    millis_left_ = 13;  // always full kick speed
-    post_kick_cooldown_ = 5;
-    kick_wait = 2000;
 
-    TCCR0B |= _BV(CS01);  // start timer /8 prescale
+    // initialize the countdowns for pre and post kick
+    pre_kick_cooldown_ = (PRE_KICK_SAFETY_MARGIN_MS * MS_TO_TIMER);
+    post_kick_cooldown_ = (POST_KICK_SAFETY_MARGIN_MS * MS_TO_TIMER);
+    kick_wait = (KICK_COOLDOWN_MS * MS_TO_TIMER);
+
+    // compute time the solenoid FET is turned on, in milliseconds, based on
+    // min and max effective FET enabled times
+    float strength_pct = (strength / MAX_KICK_STRENGTH);
+    float time_cnt_flt_ms = ((strength_pct * MAX_EFFECTIVE_KICK_FET_EN_TIME) +
+                             MIN_EFFECTIVE_KICK_FET_EN_TIME);
+    float time_cnt_flt = time_cnt_flt_ms * MS_TO_TIMER;
+    timer_cnts_left_ = (int)(time_cnt_flt + 0.5f);  // round
+
+    // start timer to enable the kick FSM processing interrupt
+    TCCR0B |= _BV(CS01);
 }
 
 void init();
@@ -139,31 +165,34 @@ void main() {
             kick_on_breakbeam_ = false;
         }
 
-        _delay_us(100);  // 0.1 ms
+        _delay_us(10);
     }
 }
 
 void init() {
-    cli();  // disable interrupts
+    // disable interrupts
+    cli();
 
     // disable watchdog
     wdt_reset();
     MCUSR &= ~(_BV(WDRF));
     WDTCR |= (_BV(WDCE)) | (_BV(WDE));
     WDTCR = 0x00;
-    /* Outputs */
+
+    // configure output pins
     DDRA |= _BV(KICK_MISO_PIN);
     DDRB |= _BV(KICK_PIN) | _BV(CHARGE_PIN) | _BV(BALL_SENSE_TX);
 
+    // enable ball sense LED
     PORTB |= _BV(BALL_SENSE_TX);
 
-    /* Inputs */
+    // configure input pins
     DDRA &= ~(_BV(N_KICK_CS_PIN) | _BV(V_MONITOR_PIN) | _BV(KICK_MOSI_PIN));
 
     PORTB &= ~(_BV(BALL_SENSE_RX));
     DDRB &= ~(_BV(BALL_SENSE_RX));
 
-    /* SPI Init */
+    // configure SPI
     SPCR = _BV(SPE) | _BV(SPIE);
     SPCR &= ~(_BV(MSTR));  // ensure we are a slave SPI device
 
@@ -173,19 +202,33 @@ void init() {
     // enable interrupts on debug buttons
     PCMSK0 = _BV(INT_DB_KICK) | _BV(INT_DB_CHG);
 
+    ///////////////////////////////////////////////////////////////////////////
+    //  TIMER INITIALIZATION
+    //
+    //  The timer works by interrupt callback. The timer is based off of an
+    //  accumulator register that is incremented per clock tick. When the
+    //  accumulator register reaches the value in the target register,
+    //  the interrupt fires.
+    //
+    //  Initialization
+    //  1) The interrupt enable bit is set in TIMSK0
+    //  2) Clear the bit indicating timer matched the target/compare register
+    //  3) Set the value of the target/compare register
+    //
+    //  Callback
+    //  ISR(TIMER0_COMPA_vect)
+    //
+    //  Start/Global
+    //  kick()
+    //
+    //  initialize timer
+    TIMSK0 |= _BV(OCIE0A);    // Interrupt on TIMER 0
+    TCCR0A |= _BV(WGM01);     // CTC - Clear Timer on Compare Match
+    OCR0A = TIMING_CONSTANT;  // OCR0A is max val of timer before reset
+    ///////////////////////////////////////////////////////////////////////////
+
     // Set low bits corresponding to pin we read from
     ADMUX |= _BV(ADLAR) | 0x00;  // connect PA0 (V_MONITOR_PIN) to ADC
-
-    // Interrupt on TIMER 0
-    TIMSK0 |= _BV(OCIE0A);
-
-    // CTC - Clear Timer on Compare Match
-    TCCR0A |= _BV(WGM01);
-
-    // OCR0A is max val of timer before reset
-    // we need 1000 clocks at 1 Mhz to get 1 millisecond
-    // if we prescale by 8, then we need 125 on timer to get 1 ms exactly
-    OCR0A = TIMING_CONSTANT;  // reset every millisecond
 
     // ensure ADC isn't shut off
     PRR &= ~_BV(PRADC);
@@ -257,24 +300,69 @@ ISR(PCINT0_vect) {
  * Timer interrupt for chipping/kicking - called every millisecond by timer
  *
  * ISR for TIMER 0
+ *
+ * Pre and post cool downs add time between kicking and charging
+ *
+ * Charging while kicking is destructive to the charging circuitry
+ * If no outstanding coutners are running from the timer, the pre, active, post,
+ *and cooldown
+ * states are all finished. We disable the timer to avoid unnecessary ISR
+ *invocations when
+ * there's nothing to do. The kick function will reinstate the timer.
+ *
+ * TCCR0B:
+ * CS00 bit stays at zero
+ * When CS01 is also zero, the clk is diabled
+ * When CS01 is one, the clk is prescaled by 8
+ * (When CS00 is one, and CS01 is 0, no prescale. We don't use this)
  */
 ISR(TIMER0_COMPA_vect) {
     if (pre_kick_cooldown_ > 0) {
-        pre_kick_cooldown_--;
+        /* PRE KICKING STATE
+             * stop charging
+             * wait between stopping charging and kicking for safety
+             */
+
         // disable charging
         charge_allowed_ = false;
-    } else if (millis_left_ > 0) {
-        millis_left_--;
-        PORTB |= _BV(KICK_PIN);  // set KICK pin
+
+        pre_kick_cooldown_--;
+    } else if (timer_cnts_left_ > 0) {
+        /* KICKING STATE
+             * assert the kick pin, enabling the kick FET
+             * wait for kick interval to end
+             */
+
+        // set KICK pin
+        PORTB |= _BV(KICK_PIN);
+
+        timer_cnts_left_--;
     } else if (post_kick_cooldown_ > 0) {
+        /* POST KICKING STATE
+         * deassert the kick pin, disabling the kick FET
+         * wait between stopping the FET and reenabling charging in the next
+         * state
+         */
+
         // kick is done
         PORTB &= ~_BV(KICK_PIN);
+
         post_kick_cooldown_--;
     } else if (kick_wait > 0) {
-        // don't allow super repeated kicking
-        kick_wait--;
+        /* POST KICK COOLDOWN
+         * enable charging
+         * don't allow kicking during the cooldown
+         */
+
+        // reenable charching
         charge_allowed_ = true;
+
+        kick_wait--;
     } else {
+        /* IDLE/NOT RUNNING
+         * stop timer
+         */
+
         // stop prescaled timer
         TCCR0B &= ~_BV(CS01);
     }
@@ -331,8 +419,7 @@ uint8_t execute_cmd(uint8_t cmd, uint8_t arg) {
 
         default:
             // return error value to show arg wasn't recognized
-            ret_val =
-                0xCC;  // return a weird value to show arg wasn't recognized
+            ret_val = 0xCC;
             break;
     }
 
