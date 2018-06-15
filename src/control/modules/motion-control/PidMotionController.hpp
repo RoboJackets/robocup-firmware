@@ -169,8 +169,9 @@ public:
             }
 
             // get the smallest difference between two angles
-            float rot_error = std::atan2(std::sin(target_rotation - rotation),
-                                         std::cos(target_rotation - rotation));
+            float rot_error = target_rotation - rotation;
+            while (rot_error < -M_PI) rot_error += 2 * M_PI;
+            while (rot_error > M_PI) rot_error -= 2 * M_PI;
 
             target_vel_act[2] = rotation_pid.run(rot_error);
         } else {
