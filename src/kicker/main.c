@@ -21,6 +21,12 @@
 #define TIMING_CONSTANT 10
 #define VOLTAGE_READ_DELAY_MS 40
 
+// if the HV rail doesn't reach CHARGING_OK_VOLTAGE_THRESHOLD volts by 
+// CHARGING_TIMEOUT_MS milliseconds, the boost isn't working and we'll
+// flag a failure to prevent permanent damage to the system
+#define CHARGING_TIMEOUT_MS 1000
+#define CHARGING_OK_VOLTAGE_THRESHOLD 30
+
 // 1 ms / 80 us = 12.5
 #define MS_TO_TIMER 12.5f
 
@@ -44,6 +50,8 @@ volatile uint8_t cur_command_ = NO_COMMAND;
 
 // always up-to-date voltage so we don't have to get_voltage() inside interupts
 volatile uint8_t last_voltage_ = 0;
+volatile uint8_t charging_hardware_fault = 0;
+volatile int charging_ticks_below_threshold = 0;
 
 volatile bool ball_sensed_ = 0;
 
@@ -130,8 +138,10 @@ void main() {
         // if we dropped below acceptable voltage, then this will catch it
         if (last_voltage_ > 239 || !charge_allowed_ || !charge_commanded_) {
             PORTB &= ~(_BV(CHARGE_PIN));
-        } else if (last_voltage_ < 232 && charge_allowed_ &&
-                   charge_commanded_) {
+        } else if (!charging_hardware_fault
+                   && last_voltage_ < 232 
+                   && charge_allowed_ 
+                   && charge_commanded_) {
             PORTB |= _BV(CHARGE_PIN);
         }
 
@@ -317,6 +327,21 @@ ISR(PCINT0_vect) {
  * (When CS00 is one, and CS01 is 0, no prescale. We don't use this)
  */
 ISR(TIMER0_COMPA_vect) {
+    // check for hardware faults on the boost converter
+    // if we're allowed to charge and command it, ensure the HV rail reaches a
+    // threshold voltage by a certain time. If we can make it, the switch mode
+    // supply has clearly failed somewhere and is likely dissipating energy 
+    // into D1 or Q1 OR the transformer has broken down
+    if (charge_allowed_ && charge_commanded_ && last_voltage_ < CHARGING_OK_VOLTAGE_THRESHOLD) {
+        charging_ticks_below_threshold++;
+
+        if (charging_ticks_below_threshold > CHARGING_TIMEOUT_MS * ((int) MS_TO_TIMER)) {
+            charging_hardware_fault = 1;
+        }
+    } else {
+        charging_ticks_below_threshold = 0;
+    }
+
     if (pre_kick_cooldown_ > 0) {
         /* PRE KICKING STATE
              * stop charging
@@ -375,6 +400,11 @@ ISR(TIMER0_COMPA_vect) {
  * short!
  */
 uint8_t execute_cmd(uint8_t cmd, uint8_t arg) {
+    if (charging_hardware_fault) {
+        // permanently return failure code
+        return (0xCC);
+    }
+    
     // if we don't change ret_val by setting it to voltage or
     // something, then we'll just return the command we got as
     // an acknowledgement.
