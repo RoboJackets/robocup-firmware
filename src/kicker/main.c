@@ -11,15 +11,29 @@
 // kicker parameters
 #define MAX_KICK_STRENGTH 255.0f
 #define MIN_EFFECTIVE_KICK_FET_EN_TIME 0.8f
-#define MAX_EFFECTIVE_KICK_FET_EN_TIME 9.0f
+#define MAX_EFFECTIVE_KICK_FET_EN_TIME 10.0f
+#define KICK_TIME_SLOPE \
+    (MAX_EFFECTIVE_KICK_FET_EN_TIME - MIN_EFFECTIVE_KICK_FET_EN_TIME)
+
 #define KICK_COOLDOWN_MS 2000
 #define PRE_KICK_SAFETY_MARGIN_MS 5
 #define POST_KICK_SAFETY_MARGIN_MS 5
 
 #define NO_COMMAND 0
 
-#define TIMING_CONSTANT 10
-#define VOLTAGE_READ_DELAY_MS 40
+// number of steps of resolution we want per millisecond
+#define TIMER_PER_MS 20
+
+// calculate our TIMING_CONSTANT (timer cmp val) from the desired resolution
+#define CLK_FREQ 8000000  // after removing default CLKDIV8 prescale
+#define TIMER_PRESCALE \
+    8  // set by TCCR0B |= _BV(CS01) which also starts the timer
+#define MS_PER_SECOND 1000
+
+#define MAX_TIMER_FREQ (CLK_FREQ / TIMER_PRESCALE)
+#define DESIRED_TIMER_FREQ (TIMER_PER_MS * MS_PER_SECOND)
+
+#define TIMING_CONSTANT ((MAX_TIMER_FREQ / DESIRED_TIMER_FREQ) - 1)
 
 // if the HV rail doesn't reach CHARGING_OK_VOLTAGE_THRESHOLD volts by 
 // CHARGING_TIMEOUT_MS milliseconds, the boost isn't working and we'll
@@ -33,11 +47,11 @@
 // get different ball reading for 20 * 100 us = 2 ms before switching
 #define BALL_SENSE_MAX_SAMPLES 5
 
-// Used to time kick and chip durations
-volatile int pre_kick_cooldown_ = 0;
-volatile int timer_cnts_left_ = 0;
-volatile int post_kick_cooldown_ = 0;
-volatile int kick_wait = 0;
+// Used to time kick and chip durations, -1 indicates inactive state
+volatile int32_t pre_kick_cooldown_ = -1;
+volatile int32_t timer_cnts_left_ = -1;
+volatile int32_t post_kick_cooldown_ = -1;
+volatile int32_t kick_wait_ = -1;
 
 // Used to keep track of current button state
 volatile int dbg_switched = 0;
@@ -66,7 +80,7 @@ volatile uint8_t kick_on_breakbeam_strength_ = 0;
 
 unsigned ball_sense_change_count_ = 0;
 
-unsigned time = 0;
+uint32_t time = 0;
 
 // executes a command coming from SPI
 uint8_t execute_cmd(uint8_t, uint8_t);
@@ -75,8 +89,8 @@ uint8_t execute_cmd(uint8_t, uint8_t);
  * Checks and returns if we're in the middle of a kick
  */
 bool is_kicking() {
-    return pre_kick_cooldown_ || timer_cnts_left_ || post_kick_cooldown_ ||
-           kick_wait;
+    return pre_kick_cooldown_ >= 0 || timer_cnts_left_ >= 0 ||
+           post_kick_cooldown_ >= 0 || kick_wait_ >= 0;
 }
 
 /*
@@ -88,16 +102,17 @@ void kick(uint8_t strength) {
     if (is_kicking()) return;
 
     // initialize the countdowns for pre and post kick
-    pre_kick_cooldown_ = (PRE_KICK_SAFETY_MARGIN_MS * MS_TO_TIMER);
-    post_kick_cooldown_ = (POST_KICK_SAFETY_MARGIN_MS * MS_TO_TIMER);
-    kick_wait = (KICK_COOLDOWN_MS * MS_TO_TIMER);
+    pre_kick_cooldown_ = (PRE_KICK_SAFETY_MARGIN_MS * TIMER_PER_MS);
+    post_kick_cooldown_ = (POST_KICK_SAFETY_MARGIN_MS * TIMER_PER_MS);
+    // force to int32_t, default word size too small
+    kick_wait_ = ((int32_t)KICK_COOLDOWN_MS) * TIMER_PER_MS;
 
     // compute time the solenoid FET is turned on, in milliseconds, based on
     // min and max effective FET enabled times
-    float strength_pct = (strength / MAX_KICK_STRENGTH);
-    float time_cnt_flt_ms = ((strength_pct * MAX_EFFECTIVE_KICK_FET_EN_TIME) +
-                             MIN_EFFECTIVE_KICK_FET_EN_TIME);
-    float time_cnt_flt = time_cnt_flt_ms * MS_TO_TIMER;
+    float strength_ratio = (strength / MAX_KICK_STRENGTH);
+    float time_cnt_flt_ms =
+        KICK_TIME_SLOPE * strength_ratio + MIN_EFFECTIVE_KICK_FET_EN_TIME;
+    float time_cnt_flt = time_cnt_flt_ms * TIMER_PER_MS;
     timer_cnts_left_ = (int)(time_cnt_flt + 0.5f);  // round
 
     // start timer to enable the kick FSM processing interrupt
@@ -130,13 +145,17 @@ void main() {
         // get a voltage reading by weighing in a new reading, same concept as
         // TCP RTT estimates (exponentially weighted sum)
 
-        if (time % 400 == 0) {
+        // don't run the adc every loop
+        if (time % 1000 == 0) {
             int voltage_accum =
                 (255 - kalpha) * last_voltage_ + kalpha * get_voltage();
             last_voltage_ = voltage_accum / 255;
         }
+        time++;
 
         // if we dropped below acceptable voltage, then this will catch it
+        // note: these aren't true voltages, just ADC output, but it matches
+        // fairly close
         if (last_voltage_ > 239 || !charge_allowed_ || !charge_commanded_) {
             PORTB &= ~(_BV(CHARGE_PIN));
         } else if ((dbg_switched || !charging_hardware_fault)
@@ -190,6 +209,14 @@ void init() {
     MCUSR &= ~(_BV(WDRF));
     WDTCR |= (_BV(WDCE)) | (_BV(WDE));
     WDTCR = 0x00;
+
+    // change our clock speed from 1 Mhz to 8 Mhz (there's a default CLKDIV8)
+    // 1. write the Clock Prescaler Change Enable (CLKPCE) bit to one and all
+    //    other bits in CLKPR to zero.
+    // 2. within four cycles, write the desired value to CLKPS while writing a
+    //    zero to CLKPCE.
+    CLKPR = _BV(CLKPCE);
+    CLKPR = 0;  // corresponds to CLKDIV1 prescale, also keeps CLKPCE low
 
     // configure output pins
     DDRA |= _BV(KICK_MISO_PIN);
@@ -261,24 +288,22 @@ ISR(SPI_STC_vect) {
     // increment our received byte count and take appropriate action
     if (byte_cnt == 0) {
         cur_command_ = recv_data;
-        // kicker status fields
-        SPDR |= ACK;
+        SPDR = ACK;
     } else if (byte_cnt == 1) {
         // execute the currently set command with
         // the newly given argument, set the response
         // buffer to our return value
         SPDR = execute_cmd(cur_command_, recv_data);
     } else if (byte_cnt == 2) {
+        // return kicker state
         SPDR = ((ball_sensed_ ? 1 : 0) << BALL_SENSE_FIELD) |
                ((charge_commanded_ ? 1 : 0) << CHARGE_FIELD) |
                ((kick_on_breakbeam_ ? 1 : 0) << KICK_ON_BREAKBEAM_FIELD) |
                ((is_kicking() ? 1 : 0) << KICKING_FIELD);
-    } else if (byte_cnt == 4) {
-        // no-op
     }
-    int NUM_BYTES = 4;
+    int MAX_NUM_BYTES = 4;
     byte_cnt++;
-    byte_cnt %= NUM_BYTES;
+    byte_cnt %= MAX_NUM_BYTES;
 }
 
 /*
@@ -344,27 +369,27 @@ ISR(TIMER0_COMPA_vect) {
         charging_ticks_below_threshold = 0;
     }
 
-    if (pre_kick_cooldown_ > 0) {
+    if (pre_kick_cooldown_ >= 0) {
         /* PRE KICKING STATE
-             * stop charging
-             * wait between stopping charging and kicking for safety
-             */
+         * stop charging
+         * wait between stopping charging and kicking for safety
+         */
 
         // disable charging
         charge_allowed_ = false;
 
         pre_kick_cooldown_--;
-    } else if (timer_cnts_left_ > 0) {
+    } else if (timer_cnts_left_ >= 0) {
         /* KICKING STATE
-             * assert the kick pin, enabling the kick FET
-             * wait for kick interval to end
-             */
+         * assert the kick pin, enabling the kick FET
+         * wait for kick interval to end
+         */
 
         // set KICK pin
         PORTB |= _BV(KICK_PIN);
 
         timer_cnts_left_--;
-    } else if (post_kick_cooldown_ > 0) {
+    } else if (post_kick_cooldown_ >= 0) {
         /* POST KICKING STATE
          * deassert the kick pin, disabling the kick FET
          * wait between stopping the FET and reenabling charging in the next
@@ -375,16 +400,16 @@ ISR(TIMER0_COMPA_vect) {
         PORTB &= ~_BV(KICK_PIN);
 
         post_kick_cooldown_--;
-    } else if (kick_wait > 0) {
+    } else if (kick_wait_ >= 0) {
         /* POST KICK COOLDOWN
          * enable charging
          * don't allow kicking during the cooldown
          */
 
-        // reenable charching
+        // reenable charging
         charge_allowed_ = true;
 
-        kick_wait--;
+        kick_wait_--;
     } else {
         /* IDLE/NOT RUNNING
          * stop timer

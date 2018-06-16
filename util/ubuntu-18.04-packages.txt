@@ -1,0 +1,93 @@
+# This is the list of all required packages
+# place each package on its own line
+# these get installed using 'apt-get install ______' whenever the ubuntu-setup
+#   script is run
+
+# Build system
+ninja-build
+cmake
+ccache
+
+# required for compiling gcc
+libgmp3-dev
+libmpfr-dev
+libmpc-dev
+
+# arm toolchain for compiling for mbed
+libnewlib-dev=2.2.0+git20150830.5a3d536-1
+libnewlib-arm-none-eabi=2.2.0+git20150830.5a3d536-1
+gcc-arm-none-eabi=15:4.9.3+svn231177-1
+libstdc++-arm-none-eabi-newlib=15:4.9.3+svn227297-1+8
+
+# program to generate api documentation from comments in code files
+doxygen
+
+# linear algebra library
+libeigen3-dev
+
+# C/C++ compiler
+# tends to be faster and have more helpful error messages than gcc
+clang
+
+# for newer C++ stdlib
+g++-5
+
+# C/C++ (and more) code-formatting tool
+clang-format-3.9
+
+# contains a ton of great C++ libraries
+libboost-all-dev
+
+# Google Protobuf
+# used for communication: vision system <--> computer <--> robots
+protobuf-compiler
+libprotobuf-dev
+
+# Graphviz - makes pretty neat graph/web/diagram things
+graphviz
+
+# AVR
+avr-libc
+avrdude
+
+# SDL
+libsdl2-dev
+libsdl1.2-dev
+
+# QT
+qt5-default
+
+# Python stuff
+python-pip
+python-dev
+python3
+python3-pip
+python3-dev
+python3-setuptools
+python3-pyqt5
+python-serial
+
+# everything else...
+build-essential
+libusb-1.0-0-dev
+libgtkmm-2.4-dev
+libpcap-dev
+binutils-dev
+curl
+texinfo
+dfu-programmer
+libreadline-dev
+libgtest-dev
+autoconf
+libtool
+autopoint
+flex
+openocd
+iverilog
+gtkwave
+picocom
+python-numpy
+python-matplotlib
+python-usb
+freeglut3-dev
+mercurial
