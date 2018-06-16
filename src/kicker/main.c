@@ -1,8 +1,8 @@
 #include <stdbool.h>
 
-#include <avr/wdt.h>
 #include <avr/interrupt.h>
 #include <avr/io.h>
+#include <avr/wdt.h>
 #include <util/delay.h>
 
 #include "kicker_commands.h"
@@ -35,7 +35,7 @@
 
 #define TIMING_CONSTANT ((MAX_TIMER_FREQ / DESIRED_TIMER_FREQ) - 1)
 
-// if the HV rail doesn't reach CHARGING_OK_VOLTAGE_THRESHOLD volts by 
+// if the HV rail doesn't reach CHARGING_OK_VOLTAGE_THRESHOLD volts by
 // CHARGING_TIMEOUT_MS milliseconds, the boost isn't working and we'll
 // flag a failure to prevent permanent damage to the system
 #define CHARGING_TIMEOUT_MS 1000
@@ -160,9 +160,8 @@ void main() {
             PORTB &= ~(_BV(CHARGE_PIN));
         } else if ((dbg_switched || !charging_hardware_fault)
 
-                   && last_voltage_ < 232 
-                   && charge_allowed_ 
-                   && charge_commanded_) {
+                   && last_voltage_ < 232 && charge_allowed_ &&
+                   charge_commanded_) {
             PORTB |= _BV(CHARGE_PIN);
         }
 
@@ -357,12 +356,14 @@ ISR(TIMER0_COMPA_vect) {
     // check for hardware faults on the boost converter
     // if we're allowed to charge and command it, ensure the HV rail reaches a
     // threshold voltage by a certain time. If we can make it, the switch mode
-    // supply has clearly failed somewhere and is likely dissipating energy 
+    // supply has clearly failed somewhere and is likely dissipating energy
     // into D1 or Q1 OR the transformer has broken down
-    if (charge_allowed_ && charge_commanded_ && last_voltage_ < CHARGING_OK_VOLTAGE_THRESHOLD) {
+    if (charge_allowed_ && charge_commanded_ &&
+        last_voltage_ < CHARGING_OK_VOLTAGE_THRESHOLD) {
         charging_ticks_below_threshold++;
 
-        if (charging_ticks_below_threshold > CHARGING_TIMEOUT_MS * ((int) MS_TO_TIMER)) {
+        if (charging_ticks_below_threshold >
+            CHARGING_TIMEOUT_MS * ((int)MS_TO_TIMER)) {
             charging_hardware_fault = 1;
         }
     } else {
@@ -431,7 +432,7 @@ uint8_t execute_cmd(uint8_t cmd, uint8_t arg) {
         // permanently return failure code
         return (0xCC);
     }
-    
+
     // if we don't change ret_val by setting it to voltage or
     // something, then we'll just return the command we got as
     // an acknowledgement.
