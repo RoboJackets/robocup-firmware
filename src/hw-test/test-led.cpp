@@ -10,6 +10,9 @@
 // For some reason, the linker fails if there is no call to Thread::wait()...
 void fix() { Thread::wait(1); }
 
+std::shared_ptr<SharedI2C> shared_i2c =
+    make_shared<SharedI2C>(RJ_I2C_SDA, RJ_I2C_SCL, RJ_I2C_FREQ);
+
 /*
  * This demo program lights up an error led on the control board corresponding
  * to the positin of the rotary selector (shell id dial).  The rotary selector
@@ -24,7 +27,7 @@ int main(int argc, char** argv) {
     // Init IO Expander and turn all LEDs on.  The first parameter to config()
     // sets the first 8 lines to input and the last 8 to output.  The pullup
     // resistors and polarity swap are enabled for the 4 rotary selector lines.
-    MCP23017 ioExpander(RJ_I2C_SDA, RJ_I2C_SCL, RJ_IO_EXPANDER_I2C_ADDRESS);
+    MCP23017 ioExpander(shared_i2c, RJ_IO_EXPANDER_I2C_ADDRESS);
     ioExpander.config(0x00FF, 0x00f0, 0x00f0);
     ioExpander.writeMask((uint16_t)~IOExpanderErrorLEDMask,
                          IOExpanderErrorLEDMask);

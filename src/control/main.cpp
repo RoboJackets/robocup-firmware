@@ -15,6 +15,7 @@
 #include "RotarySelector.hpp"
 #include "Rtos.hpp"
 #include "RtosTimerHelper.hpp"
+#include "SharedI2C.hpp"
 #include "SharedSPI.hpp"
 #include "TaskSignals.hpp"
 #include "Watchdog.hpp"
@@ -76,10 +77,16 @@ void Task_Simulate_RX_Packet(const void* args) {
 void Task_Controller(const void* args);
 void Task_Controller_UpdateTarget(Eigen::Vector3f targetVel);
 void Task_Controller_UpdateDribbler(uint8_t dribbler);
+void Task_Controller_UpdateOffsets(int16_t ax, int16_t ay, int16_t az,
+                                   int16_t gx, int16_t gy, int16_t gz);
 std::array<int16_t, 4> Task_Controller_EncGetClear();
 void InitializeCommModule(SharedSPIDevice<>::SpiPtrT sharedSPI);
 
 extern std::array<WheelStallDetection, 4> wheelStallDetection;
+
+// A shared I2C bus
+std::shared_ptr<SharedI2C> shared_i2c =
+    make_shared<SharedI2C>(RJ_I2C_SDA, RJ_I2C_SCL, RJ_I2C_FREQ);
 
 /**
  * @brief Sets the hardware configurations for the status LEDs & places
@@ -227,12 +234,41 @@ int main() {
     }
     rgbLED.write();
 
+    int16_t ax_offset, ay_offset, az_offset, gx_offset, gy_offset, gz_offset;
+
+    FILE* fp =
+        fopen("/local/offsets.txt",
+              "r");  // Open "out.txt" on the local file system for writing
+    int success = 0;
+    // printf("opening gyro offsets file\r\n");
+    if (fp != nullptr) {
+        success = fscanf(fp, "%d %d %d %d %d %d", &ax_offset, &ay_offset,
+                         &az_offset, &gx_offset, &gy_offset, &gz_offset);
+        printf("fscanf done of gyro offsets\r\n");
+        fclose(fp);
+        printf("closed gyro offset file\r\n");
+    }
+
+    printf("vals: %d %d %d %d %d %d\r\n", ax_offset, ay_offset, az_offset,
+           gx_offset, gy_offset, gz_offset);
+
+    if (success == 6) {
+        printf("Successfully imported offsets from offsets.txt\r\n");
+    } else {
+        printf(
+            "Failed to import offsets from offsets.txt, defaulting to 0\r\n");
+    }
+    // -1825 2134 6841 27 0 28
+    // Task_Controller_UpdateOffsets(-1825, 2134, 6841, 27, 0, 28);
+    Task_Controller_UpdateOffsets(ax_offset, ay_offset, az_offset, gx_offset,
+                                  gy_offset, gz_offset);
+
     // DigitalOut rdy_led(RJ_RDY_LED, !fpgaInitialized);
 
     // Init IO Expander and turn all LEDs on.  The first parameter to config()
     // sets the first 8 lines to input and the last 8 to output.  The pullup
     // resistors and polarity swap are enabled for the 4 rotary selector lines.
-    MCP23017 ioExpander(RJ_I2C_SDA, RJ_I2C_SCL, RJ_IO_EXPANDER_I2C_ADDRESS);
+    MCP23017 ioExpander(shared_i2c, RJ_IO_EXPANDER_I2C_ADDRESS);
     ioExpander.config(0x00FF, 0x00ff, 0x00ff);
     ioExpander.writeMask(static_cast<uint16_t>(~IOExpanderErrorLEDMask),
                          IOExpanderErrorLEDMask);
@@ -267,9 +303,9 @@ int main() {
     Thread::signal_wait(MAIN_TASK_CONTINUE, osWaitForever);
 
 #ifndef NDEBUG
-    // Start the thread task for the serial console
-    Thread console_task(Task_SerialConsole, mainID, osPriorityBelowNormal);
-    Thread::signal_wait(MAIN_TASK_CONTINUE, osWaitForever);
+// Start the thread task for the serial console
+// Thread console_task(Task_SerialConsole, mainID, osPriorityBelowNormal);
+// Thread::signal_wait(MAIN_TASK_CONTINUE, osWaitForever);
 #endif
 
     // Initialize CommModule and radio
@@ -391,7 +427,7 @@ int main() {
     // Release each thread into its operations in a structured manner
     controller_task.signal_set(SUB_TASK_CONTINUE);
 #ifndef NDEBUG
-    console_task.signal_set(SUB_TASK_CONTINUE);
+// console_task.signal_set(SUB_TASK_CONTINUE);
 #endif
 
 // #pragma for gcc has bugs in it for selectively disabling warnings

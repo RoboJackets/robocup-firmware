@@ -3,8 +3,8 @@
 #include "Logger.hpp"
 #include "Mbed.hpp"
 
-MCP23017::MCP23017(PinName sda, PinName scl, int i2cAddress)
-    : _i2c(sda, scl), _i2cAddress(i2cAddress) {
+MCP23017::MCP23017(std::shared_ptr<SharedI2C> sharedI2C, int i2cAddress)
+    : _i2c(sharedI2C), _i2cAddress(i2cAddress) {
     _i2c.frequency(400000);
     reset();
 }

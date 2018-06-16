@@ -49,6 +49,11 @@ void Task_Controller_UpdateTarget(Eigen::Vector3f targetVel) {
         commandTimeoutTimer->start(COMMAND_TIMEOUT_INTERVAL);
 }
 
+void Task_Controller_UpdateOffsets(int16_t ax, int16_t ay, int16_t az,
+                                   int16_t gx, int16_t gy, int16_t gz) {
+    pidController.startGyro(ax, ay, az, gx, gy, gz);
+}
+
 constexpr uint8_t DRIBBLER_SPEED_UPPERBOUND = 128;
 constexpr uint8_t DRIBBLER_SPEED_LOWERBOUND = 0;
 constexpr float DRIBBLER_FULL_RAMP_TIME_MS = 500;
@@ -170,6 +175,7 @@ void Task_Controller(const void* args) {
          *
          */
         const float dt = enc_deltas.back() * (1 / 18.432e6) * 2 * 128;
+        // const float dt = 1.0f / (CONTROL_LOOP_WAIT_MS / 1000.0f);
 
         // take first 4 encoder deltas
         std::array<int16_t, 4> driveMotorEnc;
