@@ -48,9 +48,6 @@ public:
     std::function<std::vector<uint8_t>(const rtp::ControlMessage* msg,
                                        const bool addresed)> rxCallback;
 
-    std::function<void(const rtp::ConfMessage& msg)> confCallback;
-    std::function<void(const rtp::DebugMessage& msg)> debugCallback;
-
     void start() {
         m_state = State::DISCONNECTED;
 
@@ -117,24 +114,6 @@ public:
             m_reply = rxCallback(controlMessage, controlMessage != nullptr);
         } else {
             LOG(WARN, "no callback set");
-        }
-
-        for (size_t i = 0; i < 6; i++) {
-            auto msg = std::next(messages, i);
-            if (msg->uid == m_uid || msg->uid == rtp::ANY_ROBOT_UID) {
-                if (msg->messageType == rtp::RobotTxMessage::ConfMessageType) {
-                    if (confCallback) {
-                        const auto confMessage = msg->message.confMessage;
-                        confCallback(confMessage);
-                    }
-                } else if (msg->messageType ==
-                           rtp::RobotTxMessage::DebugMessageType) {
-                    if (debugCallback) {
-                        const auto debugMessage = msg->message.debugMessage;
-                        debugCallback(debugMessage);
-                    }
-                }
-            }
         }
     }
 

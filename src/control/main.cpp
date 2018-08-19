@@ -3,8 +3,8 @@
 // ** DON'T INCLUDE <iostream>! THINGS WILL BREAK! **
 #include "Assert.hpp"
 #include "BallSensor.hpp"
+#include "Battery.hpp"
 #include "Commands.hpp"
-#include "ConfigStore.hpp"
 #include "Decawave.hpp"
 #include "FPGA.hpp"
 #include "HelperFuncs.hpp"
@@ -12,22 +12,23 @@
 #include "KickerBoard.hpp"
 #include "RadioProtocol.hpp"
 #include "RobotDevices.hpp"
-#include "RobotModel.hpp"
 #include "RotarySelector.hpp"
 #include "Rtos.hpp"
 #include "RtosTimerHelper.hpp"
+#include "SharedI2C.hpp"
 #include "SharedSPI.hpp"
 #include "TaskSignals.hpp"
 #include "Watchdog.hpp"
 #include "io-expander.hpp"
 #include "motors.hpp"
 #include "neostrip.hpp"
-//#include "mpu-6050.hpp"
 
+// some versions of gcc don't have std::round despite compiling c++11?
+#define EIGEN_HAS_CXX11_MATH 0
+#include <Eigen/Dense>
 #include <array>
 #include <ctime>
 #include <string>
-#include <configuration/ConfigStore.hpp>
 #include <stall/stall.hpp>
 
 // set to 1 to enable CommModule rx/tx stress test
@@ -76,9 +77,16 @@ void Task_Simulate_RX_Packet(const void* args) {
 void Task_Controller(const void* args);
 void Task_Controller_UpdateTarget(Eigen::Vector3f targetVel);
 void Task_Controller_UpdateDribbler(uint8_t dribbler);
+void Task_Controller_UpdateOffsets(int16_t ax, int16_t ay, int16_t az,
+                                   int16_t gx, int16_t gy, int16_t gz);
+std::array<int16_t, 4> Task_Controller_EncGetClear();
 void InitializeCommModule(SharedSPIDevice<>::SpiPtrT sharedSPI);
 
 extern std::array<WheelStallDetection, 4> wheelStallDetection;
+
+// A shared I2C bus
+std::shared_ptr<SharedI2C> shared_i2c =
+    make_shared<SharedI2C>(RJ_I2C_SDA, RJ_I2C_SCL, RJ_I2C_FREQ);
 
 /**
  * @brief Sets the hardware configurations for the status LEDs & places
@@ -169,7 +177,6 @@ int main() {
     auto defaultBrightness = 0.02f;
     rgbLED.brightness(3 * defaultBrightness);
     rgbLED.setPixel(0, NeoColorBlue);
-    rgbLED.setPixel(1, NeoColorBlue);
     rgbLED.write();
 
     // Set pixel 1 to colors corresponding to github hash values
@@ -227,12 +234,41 @@ int main() {
     }
     rgbLED.write();
 
+    int16_t ax_offset, ay_offset, az_offset, gx_offset, gy_offset, gz_offset;
+
+    FILE* fp =
+        fopen("/local/offsets.txt",
+              "r");  // Open "out.txt" on the local file system for writing
+    int success = 0;
+    // printf("opening gyro offsets file\r\n");
+    if (fp != nullptr) {
+        success = fscanf(fp, "%d %d %d %d %d %d", &ax_offset, &ay_offset,
+                         &az_offset, &gx_offset, &gy_offset, &gz_offset);
+        printf("fscanf done of gyro offsets\r\n");
+        fclose(fp);
+        printf("closed gyro offset file\r\n");
+    }
+
+    printf("vals: %d %d %d %d %d %d\r\n", ax_offset, ay_offset, az_offset,
+           gx_offset, gy_offset, gz_offset);
+
+    if (success == 6) {
+        printf("Successfully imported offsets from offsets.txt\r\n");
+    } else {
+        printf(
+            "Failed to import offsets from offsets.txt, defaulting to 0\r\n");
+    }
+    // -1825 2134 6841 27 0 28
+    // Task_Controller_UpdateOffsets(-1825, 2134, 6841, 27, 0, 28);
+    Task_Controller_UpdateOffsets(ax_offset, ay_offset, az_offset, gx_offset,
+                                  gy_offset, gz_offset);
+
     // DigitalOut rdy_led(RJ_RDY_LED, !fpgaInitialized);
 
     // Init IO Expander and turn all LEDs on.  The first parameter to config()
     // sets the first 8 lines to input and the last 8 to output.  The pullup
     // resistors and polarity swap are enabled for the 4 rotary selector lines.
-    MCP23017 ioExpander(RJ_I2C_SDA, RJ_I2C_SCL, RJ_IO_EXPANDER_I2C_ADDRESS);
+    MCP23017 ioExpander(shared_i2c, RJ_IO_EXPANDER_I2C_ADDRESS);
     ioExpander.config(0x00FF, 0x00ff, 0x00ff);
     ioExpander.writeMask(static_cast<uint16_t>(~IOExpanderErrorLEDMask),
                          IOExpanderErrorLEDMask);
@@ -267,9 +303,9 @@ int main() {
     Thread::signal_wait(MAIN_TASK_CONTINUE, osWaitForever);
 
 #ifndef NDEBUG
-    // Start the thread task for the serial console
-    Thread console_task(Task_SerialConsole, mainID, osPriorityBelowNormal);
-    Thread::signal_wait(MAIN_TASK_CONTINUE, osWaitForever);
+// Start the thread task for the serial console
+// Thread console_task(Task_SerialConsole, mainID, osPriorityBelowNormal);
+// Thread::signal_wait(MAIN_TASK_CONTINUE, osWaitForever);
 #endif
 
     // Initialize CommModule and radio
@@ -280,8 +316,8 @@ int main() {
 
     // setup analog in on battery sense pin
     // the value is updated in the main loop below
-    AnalogIn batt(RJ_BATT_SENSE);
-    uint8_t battVoltage = 0;
+    Battery battery;
+    Battery::globBatt = &battery;
 
     // Radio timeout timer
     const auto RadioTimeout = 100;
@@ -300,22 +336,6 @@ int main() {
     RadioProtocol radioProtocol(CommModule::Instance);
     radioProtocol.setUID(robotShellID);
     radioProtocol.start();
-
-    radioProtocol.debugCallback = [&](const rtp::DebugMessage& msg) {
-        //            DebugCommunication::debugResponses = msg.keys;
-    };
-
-    radioProtocol.confCallback = [&](const rtp::ConfMessage& msg) {
-        for (int i = 0; i < rtp::ConfMessage::length; i++) {
-            auto configCommunication = msg.keys[i];
-            if (configCommunication != DebugCommunication::ConfigCommunication::
-                                           CONFIG_COMMUNICATION_NONE) {
-                const auto index = static_cast<int>(configCommunication);
-                DebugCommunication::configStore[index] = msg.values[i];
-                DebugCommunication::configStoreIsValid[index] = true;
-            }
-        }
-    };
 
     radioProtocol.rxCallback =
         [&](const rtp::ControlMessage* msg, const bool addressed) {
@@ -358,7 +378,7 @@ int main() {
 
             rtp::RobotStatusMessage reply;
             reply.uid = robotShellID;
-            reply.battVoltage = battVoltage;
+            reply.battVoltage = Battery::globBatt->getRaw();
             reply.ballSenseStatus = KickerBoard::Instance->isBallSensed();
 
             // report any motor errors
@@ -368,7 +388,7 @@ int main() {
                 if (err) reply.motorErrors |= (1 << i);
             }
 
-            for (auto i = 0; i < wheelStallDetection.size(); i++) {
+            for (std::size_t i = 0; i < wheelStallDetection.size(); i++) {
                 if (wheelStallDetection[i].stalled) {
                     reply.motorErrors |= (1 << i);
                 }
@@ -387,17 +407,11 @@ int main() {
             reply.kickStatus = KickerBoard::Instance->getVoltage() > 230;
             reply.kickHealthy = KickerBoard::Instance->isHealthy();
 
-            //            for (int i=0;
-            //            i<rtp::RobotStatusMessage::debug_data_length; i++) {
-            //                auto debugType =
-            //                DebugCommunication::debugResponses[i];
-            //                if (debugType != 0) {
-            //                    reply.debug_data[i] =
-            //                    DebugCommunication::debugStore[debugType];
-            //                } else {
-            //                    reply.debug_data[i] =  -1;
-            //                }
-            //            }
+            // note: this clears the encoder count
+            auto enc_array = Task_Controller_EncGetClear();
+            for (std::size_t i = 0; i < enc_array.size(); ++i) {
+                reply.encDeltas[i] = enc_array[i];
+            }
 
             vector<uint8_t> replyBuf;
             rtp::serializeToVector(reply, &replyBuf);
@@ -413,7 +427,7 @@ int main() {
     // Release each thread into its operations in a structured manner
     controller_task.signal_set(SUB_TASK_CONTINUE);
 #ifndef NDEBUG
-    console_task.signal_set(SUB_TASK_CONTINUE);
+// console_task.signal_set(SUB_TASK_CONTINUE);
 #endif
 
 // #pragma for gcc has bugs in it for selectively disabling warnings
@@ -483,7 +497,18 @@ int main() {
         }
 
         // get the battery voltage
-        battVoltage = (batt.read_u16() >> 8);
+        Battery::globBatt->update();
+        if (Battery::globBatt->isBattCritical()) {
+            rgbLED.brightness(6 * defaultBrightness);
+            rgbLED.setPixel(1, NeoColorRed);
+        } else {
+            rgbLED.brightness(3 * defaultBrightness);
+            uint8_t red = static_cast<uint8_t>(
+                (1.0f - Battery::globBatt->getBattPercentage()) * 255.0f);
+            uint8_t green = static_cast<uint8_t>(
+                Battery::globBatt->getBattPercentage() * 255.0f);
+            rgbLED.setPixel(1, red, green, 0);
+        }
 
         LOG(DEBUG, "Kicker voltage: %u", KickerBoard::Instance->getVoltage());
 

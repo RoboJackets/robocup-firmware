@@ -1,16 +1,14 @@
 #pragma once
 
 #include "I2CDriver.hpp"
+#include "SharedI2C.hpp"
 
 namespace mbed {
 
 /// I2C master interface to the RTOS-I2CDriver.
 /// The interface is compatible to the original mbed I2C class.
 /// Provides an additonal "read from register"-function.
-class I2CMasterRtos {
-protected:
-    I2CDriver m_drv;
-
+class I2CMasterRtos : public SharedI2CDevice {
 public:
     /** Create an I2C Master interface, connected to the specified pins
     *
@@ -20,14 +18,14 @@ public:
     *  @note Has to be created in a thread context, i.e. within the main or some
     * other function. A global delaration does not work
     */
-    I2CMasterRtos(PinName sda, PinName scl, int freq = 400000)
-        : m_drv(sda, scl, freq) {}
+    I2CMasterRtos(std::shared_ptr<SharedI2C> sharedI2C)
+        : SharedI2CDevice(sharedI2C) {}
 
     /** Set the frequency of the I2C interface
      *
      *  @param hz The bus frequency in hertz
      */
-    void frequency(int hz) { m_drv.frequency(hz); }
+    void frequency(int hz) { m_i2c->frequency(hz); }
 
     /** Read from an I2C slave
      *
@@ -44,7 +42,7 @@ public:
      *   non-0 on failure (nack)
      */
     int read(int address, char* data, int length = 1, bool repeated = false) {
-        return m_drv.readMaster(address, data, length, repeated);
+        return m_i2c->readMaster(address, data, length, repeated);
     }
 
     /** Read from a given I2C slave register
@@ -65,7 +63,7 @@ public:
     */
     int read(int address, uint8_t _register, char* data, int length = 1,
              bool repeated = false) {
-        return m_drv.readMaster(address, _register, data, length, repeated);
+        return m_i2c->readMaster(address, _register, data, length, repeated);
     }
 
     /** Read a single byte from the I2C bus
@@ -75,7 +73,7 @@ public:
      *  @returns
      *    the byte read
      */
-    int read(int ack) { return m_drv.readMaster(ack); }
+    int read(int ack) { return m_i2c->readMaster(ack); }
 
     /** Write to an I2C slave
      *
@@ -93,7 +91,7 @@ public:
      */
     int write(int address, const char* data, int length = 1,
               bool repeated = false) {
-        return m_drv.writeMaster(address, data, length, repeated);
+        return m_i2c->writeMaster(address, data, length, repeated);
     }
 
     /** Write single byte out on the I2C bus
@@ -104,19 +102,19 @@ public:
      *    '1' if an ACK was received,
      *    '0' otherwise
      */
-    int write(int data) { return m_drv.writeMaster(data); }
+    int write(int data) { return m_i2c->writeMaster(data); }
 
     /** Creates a start condition on the I2C bus
      */
 
-    void start() { m_drv.startMaster(); }
+    void start() { m_i2c->startMaster(); }
 
     /// Creates a stop condition on the I2C bus
     /// If unsccessful because someone on the bus holds the scl line down it
     /// returns "false" after 23µs
     /// In normal operation the stop shouldn't take longer than 12µs @ 100kHz
     /// and 3-4µs @ 400kHz.
-    bool stop() { return m_drv.stopMaster(); }
+    bool stop() { return m_i2c->stopMaster(); }
 
     /// Wait until the interface becomes available.
     ///
@@ -125,9 +123,9 @@ public:
     /// There's no need to call this function for running single request,
     /// because all driver functions
     /// will lock the device for exclusive access automatically.
-    void lock() { m_drv.lock(); }
+    void lock() { m_i2c->lock(); }
 
     /// Unlock the interface that has previously been locked by the same thread.
-    void unlock() { m_drv.unlock(); }
+    void unlock() { m_i2c->unlock(); }
 };
 }

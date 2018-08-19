@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "firmware-common/rtp.hpp"
+#include "rc-fshare/rtp.hpp"
 
 #include <string>
 
@@ -14,14 +14,6 @@ TEST(rtp, RobotStatusMessage_IsdefaultConstructable) {
 TEST(rtp, Header_IsCorrectSize) {
     EXPECT_EQ(sizeof(rtp::Header), 2);
     EXPECT_EQ(sizeof(rtp::Header), rtp::HeaderSize);
-}
-
-// TODO: make sure this test is correct
-TEST(rtp, ControlMessage_IsCorrectSize) {
-    EXPECT_EQ(sizeof(rtp::ControlMessage), 9);
-}
-TEST(rtp, RobotStatusMessage_IsCorrectSize) {
-    EXPECT_EQ(sizeof(rtp::RobotStatusMessage), 4);
 }
 
 TEST(rtp, PortType_HasCorrectValues) {

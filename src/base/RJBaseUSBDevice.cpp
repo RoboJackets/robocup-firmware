@@ -2,7 +2,7 @@
 #include <USBDescriptor.h>
 #include <USBDevice_Types.h>
 #include "Logger.hpp"
-#include "firmware-common/base/usb-interface.hpp"
+#include "rc-fshare/usb-interface.hpp"
 
 bool RJBaseUSBDevice::USBCallback_setConfiguration(uint8_t configuration) {
     LOG(DEBUG, "RJBaseUSBDevice::USBCallback_setConfiguration() called");

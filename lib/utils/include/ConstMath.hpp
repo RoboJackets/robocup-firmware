@@ -8,8 +8,6 @@
 
 #include <limits>  // nan
 
-#include <Geometry2d/Util.hpp>
-
 constexpr double tol = 0.001;
 
 constexpr double abs_const(const double x) { return x < 0.0 ? -x : x; }

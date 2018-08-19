@@ -1,6 +1,3 @@
-[submodule "common"]
-	path = lib/common
-	url = https://github.com/RoboJackets/robocup-common.git
 [submodule "external/mbed_lib_build_tools"]
 	path = external/mbed_lib_build_tools
 	url = https://github.com/mbedmicro/mbed.git
@@ -10,3 +7,6 @@
 [submodule "external/style-configs"]
 	path = external/style-configs
 	url = https://github.com/RoboJackets/style-configs.git
+[submodule "lib/robocup-fshare"]
+	path = lib/robocup-fshare
+	url = https://github.com/robojackets/robocup-fshare

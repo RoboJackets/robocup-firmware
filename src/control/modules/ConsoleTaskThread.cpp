@@ -4,7 +4,7 @@
 #include "Logger.hpp"
 #include "Rtos.hpp"
 #include "TaskSignals.hpp"
-#include "git_version.hpp"
+#include "rc-fshare/git_version.hpp"
 #include "mbed_rpc.h"
 
 /**
