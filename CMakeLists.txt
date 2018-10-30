@@ -18,13 +18,14 @@ set (CMAKE_EXE_LINKER_FLAGS "-g -Wl,--gc-sections -mthumb -mcpu=cortex-m7 \
     -mfpu=fpv5-sp-d16 -mfloat-abi=softfp -mabi=aapcs"
     CACHE INTERNAL "executable linker flags")
 set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} \
--T ${CMAKE_SOURCE_DIR}/library/Drivers/STM32F769NIHx_FLASH.ld")
+-T ${CMAKE_SOURCE_DIR}/BSP/STM32F769NIHx_FLASH.ld")
 
 # TODO: What does the "USE_HAL_DRIVER" flag do?
 set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D USE_HAL_DRIVER -D STM32F769xx")
 
-add_subdirectory(library/Drivers)
-add_subdirectory(library/Middleware/FreeRTOS)
+add_subdirectory(BSP)
 
-add_subdirectory(library/Drivers/BSP/STM32F769I_EVAL)
-add_subdirectory(test)
+add_subdirectory(external/middleware/FreeRTOS)
+
+add_subdirectory(BSP/STM32F769I_EVAL)
+add_subdirectory(tests)
