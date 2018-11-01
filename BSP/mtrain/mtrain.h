@@ -6,7 +6,9 @@
 #endif
 
 #include "stm32f7xx_hal.h"
-#include "stm32f769i_eval.h"
+// #include "stm32f769i_eval.h"
+
+extern void bsp_config(void);
 
 void SystemClock_Config(void);
 void Error_Handler(void);

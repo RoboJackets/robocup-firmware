@@ -1,13 +1,15 @@
 project(Test LANGUAGES C)
 
-# add_executable(test.elf main.c)
-# add_custom_target (test.bin ALL arm-none-eabi-objcopy -Obinary "test.elf" "test.bin" DEPENDS test.elf)
+function(add_test test_file)
+    get_filename_component(test_name ${test_file} NAME_WE)
 
-add_executable(test.elf
-    main.c
-)
+    add_executable(${test_name}.elf
+        ${test_file}
+    )
 
-target_include_directories(test.elf PUBLIC Inc)
-target_link_libraries(test.elf STM32F7xx STM32F769I_EVAL_BSP)
+    target_link_libraries(${test_name}.elf STM32F7xx)
 
-add_custom_target (test.bin ALL arm-none-eabi-objcopy -Obinary "test.elf" "test.bin" DEPENDS test.elf)
+    add_custom_target (${test_name}.bin ALL arm-none-eabi-objcopy -Obinary "${test_name}.elf" "${test_name}.bin" DEPENDS ${test_name}.elf)
+endfunction()
+
+add_test("blink.c")

@@ -2,10 +2,10 @@
 
 int main(void)
 {
-  MPU_Config();
-  CPU_CACHE_Enable();
-  HAL_Init();
-  SystemClock_Config();
+  // MPU_Config();
+  // CPU_CACHE_Enable();
+  // HAL_Init();
+  // SystemClock_Config();
 
   GPIO_InitTypeDef GPIO_InitStruct;
   

@@ -1,5 +1,12 @@
 #include "mtrain.h"
 
+void bsp_config(void) {
+  MPU_Config();
+  CPU_CACHE_Enable();
+  HAL_Init();
+  SystemClock_Config();
+}
+
 /**
   * @brief  System Clock Configuration
   *         The system Clock is configured as follow : 
