@@ -23,6 +23,8 @@ set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} \
 # TODO: What does the "USE_HAL_DRIVER" flag do?
 set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D USE_HAL_DRIVER -D STM32F769xx")
 
+set(FLASH_COPY_SCRIPT python3 ${PROJECT_SOURCE_DIR}/util/flash.py)
+
 add_subdirectory(external)
 add_subdirectory(BSP)
 

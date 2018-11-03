@@ -2,6 +2,11 @@
 
 int main(void)
 {
+  // MPU_Config();
+  // CPU_CACHE_Enable();
+  // HAL_Init();
+  // SystemClock_Config();
+
   GPIO_InitTypeDef GPIO_InitStruct;
   
   uint32_t leds[4] = {GPIO_PIN_4, GPIO_PIN_3, GPIO_PIN_6, GPIO_PIN_5};
@@ -16,7 +21,7 @@ int main(void)
   int id = 0;
   int forward = 1;
   while (1) {
-    for (int i = 0; i < 3000000; i++) {
+    for (int i = 0; i < 1000000; i++) {
     }
     HAL_GPIO_WritePin(GPIOE, leds[id], GPIO_PIN_RESET);
     if (id == 3) {
