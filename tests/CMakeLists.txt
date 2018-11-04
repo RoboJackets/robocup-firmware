@@ -5,7 +5,7 @@ function(add_test test_file)
 
     add_executable(${test_name}.elf EXCLUDE_FROM_ALL
         ${test_file}
-        ${CMAKE_SOURCE_DIR}/BSP/mtrain/stm32f7xx_it.c #TODO: Fix
+        ${CMAKE_SOURCE_DIR}/BSP/Src/stm32f7xx_it.c #TODO: Fix
     )
 
     target_link_libraries(${test_name}.elf STM32F7xx)
@@ -24,4 +24,4 @@ endfunction()
 # TODO: better way to do this without redefining every test
 add_test("blink.c")
 add_test("flash.c")
-add_test("usb.c")
+add_test("usb_serial.c")

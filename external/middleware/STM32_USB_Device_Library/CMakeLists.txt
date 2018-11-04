@@ -13,11 +13,11 @@ target_include_directories(STM32_USB_Device PUBLIC
 )
 
 # Include HAL configuration from BSP
-target_include_directories(STM32_USB_Device PUBLIC ${CMAKE_SOURCE_DIR}/BSP/mtrain/usb/config)
+target_include_directories(STM32_USB_Device PUBLIC ${CMAKE_SOURCE_DIR}/BSP/config/usb)
 
 target_sources(STM32_USB_Device PUBLIC
-    ${CMAKE_SOURCE_DIR}/BSP/mtrain/usb/config/usbd_conf.c
-    ${CMAKE_SOURCE_DIR}/BSP/mtrain/usb/config/usbd_desc.c
+    ${CMAKE_SOURCE_DIR}/BSP/config/usb/usbd_conf.c
+    ${CMAKE_SOURCE_DIR}/BSP/config/usb/usbd_desc.c
 )
 
 

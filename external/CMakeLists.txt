@@ -17,7 +17,7 @@ target_include_directories(STM32F7xx_HAL PUBLIC
 )
 
 # Include HAL configuration from BSP
-target_include_directories(STM32F7xx_HAL PUBLIC ${CMAKE_SOURCE_DIR}/BSP)
+target_include_directories(STM32F7xx_HAL PUBLIC ${CMAKE_SOURCE_DIR}/BSP/config/hal)
 
 target_link_libraries(STM32F7xx_HAL PUBLIC DSP)
 

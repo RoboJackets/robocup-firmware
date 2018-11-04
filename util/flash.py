@@ -21,8 +21,8 @@ testString = (
 
 p = subprocess.Popen('JLinkExe', stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT)
 pOut = p.communicate(input=testString.encode())[0].decode()
-if 'Connecting to J-Link via USB...FAILED' in pOut:
-    print('Connection to J-Link failed')
+if 'Connecting to J-Link via USB...FAILED' in pOut or 'Cannot connect to J-Link via USB' in pOut:
+    sys.exit('Connection to J-Link failed')
 if 'Cannot connect to target' in pOut:
-    print('Connection to MCU failed')
+    sys.exit('Connection to MCU failed')
 # TODO: more checks if something failed
