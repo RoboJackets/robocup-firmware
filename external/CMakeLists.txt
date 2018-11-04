@@ -20,3 +20,5 @@ target_include_directories(STM32F7xx_HAL PUBLIC
 target_include_directories(STM32F7xx_HAL PUBLIC ${CMAKE_SOURCE_DIR}/BSP)
 
 target_link_libraries(STM32F7xx_HAL PUBLIC DSP)
+
+add_subdirectory(middleware/STM32_USB_Device_Library)

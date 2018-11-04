@@ -23,4 +23,5 @@ endfunction()
 
 # TODO: better way to do this without redefining every test
 add_test("blink.c")
-add_test("blink2.c")
+add_test("flash.c")
+add_test("usb.c")
