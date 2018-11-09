@@ -5,7 +5,7 @@ function(add_test test_file)
 
     add_executable(${test_name}.elf EXCLUDE_FROM_ALL
         ${test_file}
-        ${CMAKE_SOURCE_DIR}/BSP/Src/stm32f7xx_it.c #TODO: Fix
+        # ${CMAKE_SOURCE_DIR}/BSP/Src/stm32f7xx_it.c #TODO: Fix
     )
 
     target_link_libraries(${test_name}.elf STM32F7xx)

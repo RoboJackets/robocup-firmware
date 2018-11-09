@@ -858,6 +858,7 @@ HAL_StatusTypeDef HAL_QSPI_Transmit(QSPI_HandleTypeDef *hqspi, uint8_t *pData, u
       /* Configure QSPI: CCR register with functional as indirect write */
       MODIFY_REG(hqspi->Instance->CCR, QUADSPI_CCR_FMODE, QSPI_FUNCTIONAL_MODE_INDIRECT_WRITE);
 
+      uint8_t write = 1;
       while(hqspi->TxXferCount > 0)
       {
         /* Wait until FT flag is set to send data */
@@ -869,6 +870,14 @@ HAL_StatusTypeDef HAL_QSPI_Transmit(QSPI_HandleTypeDef *hqspi, uint8_t *pData, u
         }
 
         *(__IO uint8_t *)data_reg = *hqspi->pTxBuffPtr++;
+
+        // TODO: remove hack
+        if (write) {
+          hqspi->pTxBuffPtr--;
+          write = 0;
+        } else {
+          write = 1;
+        }
         hqspi->TxXferCount--;
       }
     
@@ -947,6 +956,7 @@ HAL_StatusTypeDef HAL_QSPI_Receive(QSPI_HandleTypeDef *hqspi, uint8_t *pData, ui
       /* Start the transfer by re-writing the address in AR register */
       WRITE_REG(hqspi->Instance->AR, addr_reg);
       
+      uint8_t read = 1;
       while(hqspi->RxXferCount > 0)
       {
         /* Wait until FT or TC flag is set to read received data */
@@ -957,7 +967,14 @@ HAL_StatusTypeDef HAL_QSPI_Receive(QSPI_HandleTypeDef *hqspi, uint8_t *pData, ui
           break;
         }
 
-        *hqspi->pRxBuffPtr++ = *(__IO uint8_t *)data_reg;
+        // TODO: remove this hack when dual memory gets fixed
+        if (read) {
+          *hqspi->pRxBuffPtr++ = *(__IO uint8_t *)data_reg;
+          read = 0;
+        } else {
+          read = *(__IO uint8_t *)data_reg;
+          read = 1;
+        }
         hqspi->RxXferCount--;
       }
     
