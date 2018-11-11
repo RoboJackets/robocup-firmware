@@ -35,6 +35,8 @@
   ******************************************************************************
   */
 /* Includes ------------------------------------------------------------------*/
+#if defined(USE_FULL_LL_DRIVER)
+
 #include "stm32f7xx_ll_utils.h"
 #include "stm32f7xx_ll_rcc.h"
 #include "stm32f7xx_ll_system.h"
@@ -753,5 +755,7 @@ static ErrorStatus UTILS_EnablePLLAndSwitchSystem(uint32_t SYSCLK_Frequency, LL_
 /**
   * @}
   */
+
+ #endif
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
