@@ -58,8 +58,8 @@ public:
     /// Set the SPI frequency for this device
     void setSPIFrequency(int hz) { m_frequency = hz; }
 
-protected:
     SpiPtrT m_spi;
+protected:
     DIGITAL_OUT m_cs;
 
 private:
