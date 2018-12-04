@@ -19,15 +19,24 @@ const PinName RADIO_SPI_NCS = p20;
 const PinName RADIO_DATA_RDY = p21;
 const PinName RADIO_RST = p22;
 
-uint8_t readBuffer[128];
+uint16_t readBuffer[128];
+
+DigitalIn dataReady(RADIO_DATA_RDY);
+
+inline uint16_t endian(uint16_t num) {
+    return (num>>8) | (num<<8);
+}
 
 void printGet(SharedSPIDevice<> radioSPI) {
+    printf("In printGet\r\n");
+    wait_ms(100);
+
     radioSPI.chipSelect();
 
     int count = 0;
     uint16_t character = 0;
 
-    while (character != 0x15 || count % 2) {
+    while (dataReady.read() != 0) {
         character = radioSPI.m_spi->write('\n');
         readBuffer[count] = character;
         count++;
@@ -39,10 +48,10 @@ void printGet(SharedSPIDevice<> radioSPI) {
         printf("%x ", readBuffer[i]);
     }
     printf("\r\n");
+    wait_ms(100);
 }
 
 int main() {
-    
     const auto mainID = Thread::gettid();
     ASSERT(mainID != nullptr);
 
@@ -60,32 +69,43 @@ int main() {
     spiBus->frequency(6'000'000);
 
     auto radioSPI = SharedSPIDevice<>(spiBus, RADIO_SPI_NCS, true);
-
-    DigitalIn dataReady(RADIO_DATA_RDY);
-
     DigitalOut radioRST(RADIO_RST);
     radioRST = 0;
     radioRST = 1;
 
+    printf("%d\r\n", int(dataReady.read()));
+    wait_ms(100);
+
     while (dataReady.read() != 1) {
         wait_ms(10);
     }
+
     printf("ready\r\n");
+    wait_ms(100);
 
     printGet(radioSPI);
 
-    // while (dataReady.read() != 1) {
-    //     wait_ms(10);
-    // }
+    const std::string showSettings = "C?\n\r";
 
-    // const std::string showSettings = "C?\n\r";
+    while (dataReady.read() != 1) {
+        wait_ms(10);
+    }
 
-    // radioSPI.chipSelect();
-    // // for (char c : showSettings) {
-    // //     uint8_t returns = radioSPI.m_spi->write(c);
-    // //     printf("%x ", returns);
-    // // }
-    // // printf("\r\n");
+    radioSPI.chipSelect();
+    for (uint16_t c : showSettings) {
+        uint16_t returns = radioSPI.m_spi->write(endian(c));
+        printf("%x ", returns);
+    }
+    printf("\r\n");
+    wait_ms(100);
+
+    radioSPI.chipDeselect();
+
+    while (dataReady.read() != 1) {
+        wait_ms(10);
+    }
+
+    printGet(radioSPI);
 
     // uint16_t returns = radioSPI.m_spi->write(('C' << 8) + '?');
     // printf("%x ", returns);
@@ -101,8 +121,6 @@ int main() {
     // //     wait_ms(100);
     // // }
     // // printf("\r\n");
-
-    // radioSPI.chipDeselect();
 
     // printf("data: %d\r\n", dataReady.read());
 
