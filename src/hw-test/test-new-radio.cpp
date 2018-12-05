@@ -40,14 +40,14 @@ void printGet(SharedSPIDevice<> radioSPI) {
     uint16_t character = 0;
 
     while (dataReady.read() != 0) {
-        std::string lineOut = "\n\n";
-        character = radioSPI.m_spi->write(lineOut);
-        readBuffer[count] = character;
+        character = radioSPI.m_spi->write(0x0a0a);
+        readBuffer[count] = endian(character);
         count++;
     }
 
     radioSPI.chipDeselect();
 
+    printf("Received Data: ");
     for (int i = 0; i < count; i++) {
         printf("%x ", readBuffer[i]);
     }
@@ -70,7 +70,7 @@ int main() {
 
     auto spiBus = std::make_shared<SharedSPI>(RADIO_SPI_MOSI, RADIO_SPI_MISO, RADIO_SPI_SCK);
     spiBus->format(16, 0);  // 16 bits per transfer
-    spiBus->frequency(6'000'000);
+    spiBus->frequency(115200);
 
     auto radioSPI = SharedSPIDevice<>(spiBus, RADIO_SPI_NCS, true);
     DigitalOut radioRST(RADIO_RST);
@@ -81,7 +81,7 @@ int main() {
     wait_ms(mbedPrintWait);
 
     while (dataReady.read() != 1) {
-        wait_ms(10);
+        // wait_ms(10);
     }
 
     printf("Booted: %d\r\n", int(dataReady.read()));
@@ -91,21 +91,24 @@ int main() {
     printGet(radioSPI);
 
     // command phase
-    const std::string command = "ZR\r\n";
+    char* command = "AS=0,ABC\r\n";
 
     while (dataReady.read() != 1) {
         wait_ms(10);
     }
 
-    printf("Command Phase\r\n");
-    wait_ms(mbedPrintWait);
+    // printf("Command Phase\r\n");
+    // wait_ms(mbedPrintWait);
 
     radioSPI.chipSelect();
     uint8_t lastC = 0;
-    for (uint8_t c : command) {
+    for (uint8_t i = 0; i < 10; i++) {
+        char c = command[i];
         if (lastC != 0) {
             // NOTE:check memory space
-            uint16_t data = c | lastC;
+            uint16_t data = (c << 8) | lastC;
+            printf("Data to be sent: %x,%x\r\n", c, lastC);
+            wait_ms(mbedPrintWait);
             uint16_t returns = endian(radioSPI.m_spi->write(data)); // data write doesnt have to be flipped because of the order we merged it. Returns does.
             printf("%x ", returns);
             lastC = 0;
@@ -113,7 +116,6 @@ int main() {
             lastC = c;
         }
     }
-    // wait_ms(100);
     radioSPI.chipDeselect();
 
     printf("\r\n");
@@ -128,7 +130,7 @@ int main() {
     wait_ms(mbedPrintWait);
 
     while (dataReady.read() != 1) {
-        wait_ms(10);
+        // wait_ms(10);
     }
 
     printf("data ready: %d\r\n", int(dataReady.read()));
