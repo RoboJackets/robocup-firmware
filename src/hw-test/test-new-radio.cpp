@@ -22,14 +22,17 @@ const PinName RADIO_RST = p22;
 uint16_t readBuffer[128];
 
 DigitalIn dataReady(RADIO_DATA_RDY);
+DigitalOut ssn(RADIO_SPI_NCS);
 
-inline uint16_t endian(uint16_t num) {
-    return (num>>8) | (num<<8);
+inline uint16_t endian(uint16_t val) {
+    return (val>>8) | (val<<8);
 }
 
+uint32_t mbedPrintWait = 50;
+
 void printGet(SharedSPIDevice<> radioSPI) {
-    printf("In printGet\r\n");
-    wait_ms(100);
+    printf("Data Phase\r\n");
+    wait_ms(mbedPrintWait);
 
     radioSPI.chipSelect();
 
@@ -37,7 +40,8 @@ void printGet(SharedSPIDevice<> radioSPI) {
     uint16_t character = 0;
 
     while (dataReady.read() != 0) {
-        character = radioSPI.m_spi->write('\n');
+        std::string lineOut = "\n\n";
+        character = radioSPI.m_spi->write(lineOut);
         readBuffer[count] = character;
         count++;
     }
@@ -48,7 +52,7 @@ void printGet(SharedSPIDevice<> radioSPI) {
         printf("%x ", readBuffer[i]);
     }
     printf("\r\n");
-    wait_ms(100);
+    wait_ms(mbedPrintWait);
 }
 
 int main() {
@@ -73,38 +77,64 @@ int main() {
     radioRST = 0;
     radioRST = 1;
 
-    printf("%d\r\n", int(dataReady.read()));
-    wait_ms(100);
+    printf("\r\n");
+    wait_ms(mbedPrintWait);
 
     while (dataReady.read() != 1) {
         wait_ms(10);
     }
 
-    printf("ready\r\n");
-    wait_ms(100);
+    printf("Booted: %d\r\n", int(dataReady.read()));
+    wait_ms(mbedPrintWait);
 
+    // data phase (prompt)
     printGet(radioSPI);
 
-    const std::string showSettings = "C?\n\r";
+    // command phase
+    const std::string command = "ZR\r\n";
 
     while (dataReady.read() != 1) {
         wait_ms(10);
     }
+
+    printf("Command Phase\r\n");
+    wait_ms(mbedPrintWait);
 
     radioSPI.chipSelect();
-    for (uint16_t c : showSettings) {
-        uint16_t returns = radioSPI.m_spi->write(endian(c));
-        printf("%x ", returns);
+    uint8_t lastC = 0;
+    for (uint8_t c : command) {
+        if (lastC != 0) {
+            // NOTE:check memory space
+            uint16_t data = c | lastC;
+            uint16_t returns = endian(radioSPI.m_spi->write(data)); // data write doesnt have to be flipped because of the order we merged it. Returns does.
+            printf("%x ", returns);
+            lastC = 0;
+        } else {
+            lastC = c;
+        }
     }
-    printf("\r\n");
-    wait_ms(100);
-
+    // wait_ms(100);
     radioSPI.chipDeselect();
+
+    printf("\r\n");
+    wait_ms(mbedPrintWait);
+
+    // end command phase
+
+    printf("ssn: %d\r\n", int(ssn.read()));
+    wait_ms(mbedPrintWait);
+
+    printf("data ready: %d\r\n", int(dataReady.read()));
+    wait_ms(mbedPrintWait);
 
     while (dataReady.read() != 1) {
         wait_ms(10);
     }
 
+    printf("data ready: %d\r\n", int(dataReady.read()));
+    wait_ms(mbedPrintWait);
+
+    // data phase
     printGet(radioSPI);
 
     // uint16_t returns = radioSPI.m_spi->write(('C' << 8) + '?');
