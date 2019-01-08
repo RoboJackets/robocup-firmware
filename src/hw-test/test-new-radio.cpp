@@ -55,13 +55,15 @@ void receiveData(SharedSPIDevice<> radioSPI) {
     wait_ms(mbedPrintWait);
 }
 
-void sendCmd (SharedSPIDevice<> radioSPI, char* command, int length) {
+void sendCmd(SharedSPIDevice<> radioSPI, char* command) {
     while (dataReady.read() != 1) {
         wait_ms(10);
     }
 
     printf("Command Phase\r\n");
     wait_ms(mbedPrintWait);
+
+    int length = strlen(command);
 
     radioSPI.chipSelect();
     char lastC = 0;
@@ -121,60 +123,119 @@ int main() {
     // data phase (prompt)
     receiveData(radioSPI);
 
-
-    char* cmd0 = "$$$\r";
+    char cmdReset[] = "ZR\r\n";
     // command phase
-    sendCmd(radioSPI, cmd0, 12);
+    sendCmd(radioSPI, cmdReset);
 
     // data phase
     receiveData(radioSPI);
 
-    char* cmd1 = "C1=Pixel\r\n";
+
+    char cmdSSID[] = "C1=rjwifi\r";
     // command phase
-    sendCmd(radioSPI, cmd1, 10);
+    sendCmd(radioSPI, cmdSSID);
 
     // data phase
     receiveData(radioSPI);
 
-    char* cmd2 = "C2=Helloworld\r";
+
+    char cmdSetPassword[] = "C2=61E880222C\r";
     // command phase
-    sendCmd(radioSPI, cmd2, 16);
+    sendCmd(radioSPI, cmdSetPassword);
 
     // data phase
     receiveData(radioSPI);
 
-    char* cmd3 = "C3=3\r\n";
+
+    char cmdSetSecurity[] = "C3=4\r\n";
     // command phase
-    sendCmd(radioSPI, cmd3, 16);
+    sendCmd(radioSPI, cmdSetSecurity);
 
     // data phase
     receiveData(radioSPI);
 
-    char* cmd4 = "C4=1\r\n";
+
+    char cmdSetDHCP[] = "C4=1\r\n";
     // command phase
-    sendCmd(radioSPI, cmd4, 16);
+    sendCmd(radioSPI, cmdSetDHCP);
 
     // data phase
     receiveData(radioSPI);
 
-    char* cmd5 = "C?\r\n";
+
+    char cmdSetHumanReadable[] = "$$$\r";
     // command phase
-    sendCmd(radioSPI, cmd5, 4);
+    sendCmd(radioSPI, cmdSetHumanReadable);
 
     // data phase
     receiveData(radioSPI);
 
-    char* cmd6 = "C0\r\n";
+
+    char cmdConnectionInfo[] = "C?\r\n";
     // command phase
-    sendCmd(radioSPI, cmd6, 4);
+    sendCmd(radioSPI, cmdConnectionInfo);
 
     // data phase
     receiveData(radioSPI);
 
-    while (true) {
-        wait_ms(4000);
-        // printf("Still Waiting\r\n");
+    char cmdSetMachineReadable[] = "---\r";
+    // command phase
+    sendCmd(radioSPI, cmdSetMachineReadable);
+
+    // data phase
+    receiveData(radioSPI);
+
+    char cmdJoinNetwork[] = "C0\r\n";
+    // command phase
+    sendCmd(radioSPI, cmdJoinNetwork);
+
+    // data phase
+    receiveData(radioSPI);
+
+    if ((int)readBuffer[0] == 0) {
+		printf("ERROR: Failed to join network\n");
+		return(-1);
     }
 
+    //PINGING
+    // char cmdSetPingTarget[] = "T1=192.168.1.1\r\n";
+    // // command phase
+    // sendCmd(radioSPI, cmdSetPingTarget);
+
+    // // data phase
+    // receiveData(radioSPI);
+
+
+    // char cmdShowPingSettings[] = "T?\r\n";
+    // // command phase
+    // sendCmd(radioSPI, cmdShowPingSettings);
+
+    // // data phase
+    // receiveData(radioSPI);
+
+
+    // char cmdPing[] = "T0\r\n";
+    // // command phase
+    // sendCmd(radioSPI, cmdPing);
+
+    // // data phase
+    // receiveData(radioSPI);
+
+    //TCP!!!
+    char cmdSetProtocol[] = "P1=0\r\n";
+    // command phase
+    sendCmd(radioSPI, cmdSetProtocol);
+
+    // data phase
+    receiveData(radioSPI);
+
+    char cmdJoinNetwork[] = "P3=";
+    // command phase
+    sendCmd(radioSPI, cmdJoinNetwork);
+
+    // data phase
+    receiveData(radioSPI);
+
+    printf("Done\r\n");
     return 0;
 }
