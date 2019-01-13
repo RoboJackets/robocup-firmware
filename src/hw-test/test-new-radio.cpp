@@ -26,6 +26,8 @@ inline uint16_t endian(uint16_t val) {
 uint8_t readBuffer[1024];
 int packetCount = 0;
 
+Timer timer;
+
 DigitalIn dataReady(RADIO_DATA_RDY);
 DigitalOut ssn(RADIO_SPI_NCS);
 
@@ -33,20 +35,17 @@ uint32_t mbedPrintWait = 50;
 
 void receiveData(SharedSPIDevice<> radioSPI) {
     while (dataReady.read() != 1) {
-        wait_ms(10);
     }
 
-    printf("Data Phase:\r\n");
-    wait_ms(mbedPrintWait);
+    // printf("Data Phase\r\n");
+    // wait_ms(mbedPrintWait);
 
     packetCount = 0;
     radioSPI.chipSelect();
-    printf("Chip Selected\r\n");
-    wait_ms(mbedPrintWait);
     while (dataReady.read() != 0) {
         uint16_t data = radioSPI.m_spi->write(0x0a0a);
-        readBuffer[packetCount] = (uint8_t)((0x00FF && (data));
-        readBuffer[packetCount + 1] = (uint8_t)(0x00FF && (data >> 8));
+        readBuffer[packetCount] = (uint8_t)(data);
+        readBuffer[packetCount + 1] = (uint8_t)(data >> 8);
         packetCount += 2;
     }
     radioSPI.chipDeselect();
@@ -54,11 +53,10 @@ void receiveData(SharedSPIDevice<> radioSPI) {
 
 void sendCmd(SharedSPIDevice<> radioSPI, char* command) {
     while (dataReady.read() != 1) {
-        wait_ms(10);
     }
 
-    printf("Command Phase:\r\n");
-    wait_ms(mbedPrintWait);
+    // printf("Command Phase\r\n");
+    // wait_ms(mbedPrintWait);
 
     int length = strlen(command);
 
@@ -66,8 +64,6 @@ void sendCmd(SharedSPIDevice<> radioSPI, char* command) {
 
     char lastC = 0;
     radioSPI.chipSelect();
-    printf("Chip Selected\r\n");
-    wait_ms(mbedPrintWait);
     for (int i = 0; i < length; i++) {
         char c = command[i];
         if (lastC != 0) {
@@ -85,9 +81,12 @@ void sendCmd(SharedSPIDevice<> radioSPI, char* command) {
 void printReadBuffer() {
     printf("Received Data: ");
     for (int i = 0; i < packetCount; i++) {
-        printf("%c", readBuffer[i]);
+        printf("%x", readBuffer[i]);
     }
     printf("\r\n");
+
+    printf("Byte Count: %d", packetCount);
+
     wait_ms(mbedPrintWait);
 }
 
@@ -106,7 +105,8 @@ int main() {
 
     auto spiBus = std::make_shared<SharedSPI>(RADIO_SPI_MOSI, RADIO_SPI_MISO, RADIO_SPI_SCK);
     spiBus->format(16, 0);  // 16 bits per transfer
-    spiBus->frequency(115200);
+    //spiBus->frequency(115200);
+    spiBus->frequency(6'000'000);
 
     auto radioSPI = SharedSPIDevice<>(spiBus, RADIO_SPI_NCS, true);
     DigitalOut radioRST(RADIO_RST);
@@ -135,7 +135,7 @@ int main() {
     receiveData(radioSPI);
 
 
-    char cmdSSID[] = "C1=rjwifi\r\n";
+    char cmdSSID[] = "C1=rjwifi\r";
     // command phase
     sendCmd(radioSPI, cmdSSID);
 
@@ -151,7 +151,7 @@ int main() {
     receiveData(radioSPI);
 
 
-    char cmdSetSecurity[] = "C3=4\r\n";
+    char cmdSetSecurity[] = "C3=3\r\n";
     // command phase
     sendCmd(radioSPI, cmdSetSecurity);
 
@@ -180,14 +180,12 @@ int main() {
     // data phase
     receiveData(radioSPI);
 
-    printf("receivedData");
-    wait_ms(5000);
 
-    if ((int)readBuffer[0] == 0) {
-		printf("ERROR: Failed to join network\r\n");
-        wait_ms(3000);
-		return(0);
-    }
+    // if ((int)readBuffer[0] == 0) {
+	// 	printf("ERROR: Failed to join network\r\n");
+    //     wait_ms(3000);
+	// 	return(0);
+    // }
 
 
     char cmdSetHumanReadable[] = "$$$\r";
@@ -248,22 +246,22 @@ int main() {
     receiveData(radioSPI);
 
 
+    timer.reset();
     for (int iter = 0; iter < 10; iter++) {
-        time_t t = clock();
+        timer.start();
 
         //Transport data
-        char cmdSendData[] = "S3=10\r0123456789";
+        char cmdSendData[] = "S3=42\r012345678901234567890123456789012345678912";
         // command phase
         sendCmd(radioSPI, cmdSendData);
 
         // data phase
         receiveData(radioSPI);
 
-
-        t = clock() - t;
-        double elapsedTime = ((double)t)/CLOCKS_PER_SEC;
-        printf("Seconds Elapsed: %f\r\n", elapsedTime);
+        timer.stop();
+        printf("Micro Seconds Elapsed: %d\r\n", timer.read_us());
         wait_ms(mbedPrintWait);
+        timer.reset();
     }
 
     printf("Done\r\n");
