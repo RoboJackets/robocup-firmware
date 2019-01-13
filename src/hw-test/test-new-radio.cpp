@@ -4,9 +4,11 @@
 #include "Rtos.hpp"
 // #include <cmsis_os.h>
 #include "SharedSPI.hpp"
+#include <chrono>
 
 #include "PinNames.h"
 #include "RobotDevices.hpp"
+#include "time.h"
 
 #define RJ_ENABLE_ROBOT_CONSOLE
 
@@ -17,14 +19,15 @@ const PinName RADIO_SPI_NCS = p20;
 const PinName RADIO_DATA_RDY = p21;
 const PinName RADIO_RST = p22;
 
-uint16_t readBuffer[512];
-
-DigitalIn dataReady(RADIO_DATA_RDY);
-DigitalOut ssn(RADIO_SPI_NCS);
-
 inline uint16_t endian(uint16_t val) {
     return (val>>8) | (val<<8);
 }
+
+uint8_t readBuffer[1024];
+int packetCount = 0;
+
+DigitalIn dataReady(RADIO_DATA_RDY);
+DigitalOut ssn(RADIO_SPI_NCS);
 
 uint32_t mbedPrintWait = 50;
 
@@ -33,26 +36,20 @@ void receiveData(SharedSPIDevice<> radioSPI) {
         wait_ms(10);
     }
 
-    printf("Data Phase\r\n");
+    printf("Data Phase:\r\n");
     wait_ms(mbedPrintWait);
 
-    int count = 0;
-    uint16_t character = 0;
-
+    packetCount = 0;
     radioSPI.chipSelect();
+    printf("Chip Selected\r\n");
+    wait_ms(mbedPrintWait);
     while (dataReady.read() != 0) {
-        character = radioSPI.m_spi->write(0x0a0a);
-        readBuffer[count] = endian(character);
-        count++;
+        uint16_t data = radioSPI.m_spi->write(0x0a0a);
+        readBuffer[packetCount] = (uint8_t)((0x00FF && (data));
+        readBuffer[packetCount + 1] = (uint8_t)(0x00FF && (data >> 8));
+        packetCount += 2;
     }
     radioSPI.chipDeselect();
-
-    printf("Received Data: ");
-    for (int i = 0; i < count; i++) {
-        printf("%04x ", readBuffer[i]);
-    }
-    printf("\r\n");
-    wait_ms(mbedPrintWait);
 }
 
 void sendCmd(SharedSPIDevice<> radioSPI, char* command) {
@@ -60,28 +57,36 @@ void sendCmd(SharedSPIDevice<> radioSPI, char* command) {
         wait_ms(10);
     }
 
-    printf("Command Phase\r\n");
+    printf("Command Phase:\r\n");
     wait_ms(mbedPrintWait);
 
     int length = strlen(command);
 
-    radioSPI.chipSelect();
+    // Concatenate newline if necessary
+
     char lastC = 0;
+    radioSPI.chipSelect();
+    printf("Chip Selected\r\n");
+    wait_ms(mbedPrintWait);
     for (int i = 0; i < length; i++) {
         char c = command[i];
         if (lastC != 0) {
-            // NOTE:check memory space
-            uint16_t data = (c << 8) | lastC;
-            wait_ms(mbedPrintWait);
-            uint16_t returns = endian(radioSPI.m_spi->write(data)); // data write doesnt have to be flipped because of the order we merged it. Returns does.
-            printf("%x ", returns);
+            uint16_t packet = (c << 8) | lastC;
+            //Due to the fact the SPI protocol for this takes turns the return can be ignored
+            radioSPI.m_spi->write(packet);
             lastC = 0;
         } else {
             lastC = c;
         }
     }
     radioSPI.chipDeselect();
+}
 
+void printReadBuffer() {
+    printf("Received Data: ");
+    for (int i = 0; i < packetCount; i++) {
+        printf("%c", readBuffer[i]);
+    }
     printf("\r\n");
     wait_ms(mbedPrintWait);
 }
@@ -92,8 +97,6 @@ int main() {
 
     {
         // clear any extraneous rx serial bytes
-
-
         Serial s(RJ_SERIAL_RXTX);
         while (s.readable()) s.getc();
 
@@ -123,6 +126,7 @@ int main() {
     // data phase (prompt)
     receiveData(radioSPI);
 
+
     char cmdReset[] = "ZR\r\n";
     // command phase
     sendCmd(radioSPI, cmdReset);
@@ -131,7 +135,7 @@ int main() {
     receiveData(radioSPI);
 
 
-    char cmdSSID[] = "C1=rjwifi\r";
+    char cmdSSID[] = "C1=rjwifi\r\n";
     // command phase
     sendCmd(radioSPI, cmdSSID);
 
@@ -163,6 +167,29 @@ int main() {
     receiveData(radioSPI);
 
 
+    printf("AboutToJoin\r\n");
+    wait_ms(mbedPrintWait);
+
+    char cmdJoinNetwork[] = "C0\r\n";
+    // command phase
+    sendCmd(radioSPI, cmdJoinNetwork);
+
+    printf("commandSent\r\n");
+    wait_ms(mbedPrintWait);
+
+    // data phase
+    receiveData(radioSPI);
+
+    printf("receivedData");
+    wait_ms(5000);
+
+    if ((int)readBuffer[0] == 0) {
+		printf("ERROR: Failed to join network\r\n");
+        wait_ms(3000);
+		return(0);
+    }
+
+
     char cmdSetHumanReadable[] = "$$$\r";
     // command phase
     sendCmd(radioSPI, cmdSetHumanReadable);
@@ -177,6 +204,8 @@ int main() {
 
     // data phase
     receiveData(radioSPI);
+    printReadBuffer();
+
 
     char cmdSetMachineReadable[] = "---\r";
     // command phase
@@ -185,43 +214,8 @@ int main() {
     // data phase
     receiveData(radioSPI);
 
-    char cmdJoinNetwork[] = "C0\r\n";
-    // command phase
-    sendCmd(radioSPI, cmdJoinNetwork);
 
-    // data phase
-    receiveData(radioSPI);
-
-    if ((int)readBuffer[0] == 0) {
-		printf("ERROR: Failed to join network\n");
-		return(-1);
-    }
-
-    //PINGING
-    // char cmdSetPingTarget[] = "T1=192.168.1.1\r\n";
-    // // command phase
-    // sendCmd(radioSPI, cmdSetPingTarget);
-
-    // // data phase
-    // receiveData(radioSPI);
-
-
-    // char cmdShowPingSettings[] = "T?\r\n";
-    // // command phase
-    // sendCmd(radioSPI, cmdShowPingSettings);
-
-    // // data phase
-    // receiveData(radioSPI);
-
-
-    // char cmdPing[] = "T0\r\n";
-    // // command phase
-    // sendCmd(radioSPI, cmdPing);
-
-    // // data phase
-    // receiveData(radioSPI);
-
-    //TCP!!!
+    //TCP client setup
     char cmdSetProtocol[] = "P1=0\r\n";
     // command phase
     sendCmd(radioSPI, cmdSetProtocol);
@@ -229,12 +223,48 @@ int main() {
     // data phase
     receiveData(radioSPI);
 
-    char cmdJoinNetwork[] = "P3=";
+
+    char cmdSetHostIP[] = "P3=192.168.1.108\r\n";
     // command phase
-    sendCmd(radioSPI, cmdJoinNetwork);
+    sendCmd(radioSPI, cmdSetHostIP);
 
     // data phase
     receiveData(radioSPI);
+
+
+    char cmdSetPort[] = "P4=25565\r\n";
+    // command phase
+    sendCmd(radioSPI, cmdSetPort);
+
+    // data phase
+    receiveData(radioSPI);
+
+
+    char cmdStartClient[] = "P6=1\r\n";
+    // command phase
+    sendCmd(radioSPI, cmdStartClient);
+
+    // data phase
+    receiveData(radioSPI);
+
+
+    for (int iter = 0; iter < 10; iter++) {
+        time_t t = clock();
+
+        //Transport data
+        char cmdSendData[] = "S3=10\r0123456789";
+        // command phase
+        sendCmd(radioSPI, cmdSendData);
+
+        // data phase
+        receiveData(radioSPI);
+
+
+        t = clock() - t;
+        double elapsedTime = ((double)t)/CLOCKS_PER_SEC;
+        printf("Seconds Elapsed: %f\r\n", elapsedTime);
+        wait_ms(mbedPrintWait);
+    }
 
     printf("Done\r\n");
     return 0;
