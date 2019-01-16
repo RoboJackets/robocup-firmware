@@ -1,5 +1,5 @@
-#ifndef __MTRAIN_H
-#define __MTRAIN_H
+#ifndef __BSP_H
+#define __BSP_H
 
 #ifdef __cplusplus
  extern "C" {
