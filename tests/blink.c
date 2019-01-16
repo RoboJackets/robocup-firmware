@@ -4,19 +4,19 @@ int main(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct;
   
-  uint32_t leds[4] = {LED1_PIN, LED2_PIN, LED3_PIN, LED4_PIN};
+  uint32_t leds[4] = {LED1.number, LED2.number, LED3.number, LED4.number};
 
   GPIO_InitStruct.Pin = leds[0] | leds[1] | leds[2] | leds[3];
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-  HAL_GPIO_Init(LED_PORT, &GPIO_InitStruct);
+  HAL_GPIO_Init(LED1.bank, &GPIO_InitStruct);
 
   int id = 0;
   int forward = 1;
   while (1) {
     HAL_Delay(100);
-    HAL_GPIO_WritePin(LED_PORT, leds[id], GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(LED1.bank, leds[id], GPIO_PIN_RESET);
     if (id == 3) {
       forward = 0;
     } else if (id == 0) {
@@ -29,6 +29,6 @@ int main(void)
       id--;
     }
 
-    HAL_GPIO_WritePin(LED_PORT, leds[id], GPIO_PIN_SET);
+    HAL_GPIO_WritePin(LED1.bank, leds[id], GPIO_PIN_SET);
   }
 }

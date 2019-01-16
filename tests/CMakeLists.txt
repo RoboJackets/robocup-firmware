@@ -8,7 +8,7 @@ function(add_test test_file)
         # ${CMAKE_SOURCE_DIR}/BSP/Src/stm32f7xx_it.c #TODO: Fix
     )
 
-    target_link_libraries(${test_name}.elf STM32F7xx)
+    target_link_libraries(${test_name}.elf STM32F7xx STM32F7_API_C)
 
     add_custom_target(test-${test_name}
         arm-none-eabi-objcopy -Obinary "${test_name}.elf" "${test_name}.bin"

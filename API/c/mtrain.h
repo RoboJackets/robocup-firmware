@@ -36,6 +36,11 @@ typedef struct pin_name {
 #define PIN35 (pin_name) {GPIOB, GPIO_PIN_4}
 #define PIN36 (pin_name) {GPIOC, GPIO_PIN_12}
 
+#define LED1 (pin_name) {GPIOE, GPIO_PIN_4}
+#define LED2 (pin_name) {GPIOE, GPIO_PIN_3}
+#define LED3 (pin_name) {GPIOE, GPIO_PIN_6}
+#define LED4 (pin_name) {GPIOE, GPIO_PIN_5}
+
 typedef enum {
     PULL_NONE = GPIO_NOPULL,
     PULL_UP = GPIO_PULLUP,
