@@ -1,9 +1,9 @@
-#include "mtrain.h"
+include "mtrain.h"
 
 int main(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct;
-  
+
   uint32_t leds[4] = {LED1_PIN, LED2_PIN, LED3_PIN, LED4_PIN};
 
   GPIO_InitStruct.Pin = leds[0] | leds[1] | leds[2] | leds[3];
