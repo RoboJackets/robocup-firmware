@@ -1,0 +1,1 @@
+/usr/bin/cc     CMakeFiles/usb_serial.elf.dir/usb_serial.c.o  -o usb_serial.elf -lSTM32F7xx 

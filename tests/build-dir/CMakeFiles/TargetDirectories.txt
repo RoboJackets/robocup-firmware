@@ -1,0 +1,14 @@
+/home/apachetest/Documents/mtrain/tests/build-dir/CMakeFiles/rebuild_cache.dir
+/home/apachetest/Documents/mtrain/tests/build-dir/CMakeFiles/test-adc-prog.dir
+/home/apachetest/Documents/mtrain/tests/build-dir/CMakeFiles/test-flash.dir
+/home/apachetest/Documents/mtrain/tests/build-dir/CMakeFiles/adc.elf.dir
+/home/apachetest/Documents/mtrain/tests/build-dir/CMakeFiles/test-adc.dir
+/home/apachetest/Documents/mtrain/tests/build-dir/CMakeFiles/test-blink-prog.dir
+/home/apachetest/Documents/mtrain/tests/build-dir/CMakeFiles/test-blink.dir
+/home/apachetest/Documents/mtrain/tests/build-dir/CMakeFiles/edit_cache.dir
+/home/apachetest/Documents/mtrain/tests/build-dir/CMakeFiles/blink.elf.dir
+/home/apachetest/Documents/mtrain/tests/build-dir/CMakeFiles/usb_serial.elf.dir
+/home/apachetest/Documents/mtrain/tests/build-dir/CMakeFiles/test-flash-prog.dir
+/home/apachetest/Documents/mtrain/tests/build-dir/CMakeFiles/test-usb_serial.dir
+/home/apachetest/Documents/mtrain/tests/build-dir/CMakeFiles/flash.elf.dir
+/home/apachetest/Documents/mtrain/tests/build-dir/CMakeFiles/test-usb_serial-prog.dir

@@ -1,5 +1,7 @@
 project(Test LANGUAGES C)
 
+cmake_minimum_required(VERSION 3.5)
+
 function(add_test test_file)
     get_filename_component(test_name ${test_file} NAME_WE)
 

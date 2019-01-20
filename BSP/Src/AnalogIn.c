@@ -25,7 +25,8 @@ int main(void) {
 
 //reads in a float
 //currently prints the value
-void read(float pin)
+void read(float pin) {
+  printf(desc, "Here");
   HAL_ADC_Start_DMA(&ADC_InitStruct, (uint32_t*)&ConvertedValue, 1);
   while (1)
   {
@@ -44,14 +45,14 @@ void read_u16(unsigned short pin) {
 
    HAL_ADC_Start_DMA(&ADC_InitStruct, &ConvertedValue, 1);
    while (1)
-  {
+   {
     /* Insert a delay define on REFRESH_PERIOD */
     HAL_Delay(REFRESH_PERIOD);
 
     /* Display the  Value */
     sprintf(desc, "value is %ld", readValue);
-;
    // HAL_ADC_Stop();
+   }
 }
 
 //configures the clock (obviously)

@@ -1,0 +1,1 @@
+/usr/bin/cc     CMakeFiles/blink.elf.dir/blink.c.o  -o blink.elf -lSTM32F7xx 
