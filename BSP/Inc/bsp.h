@@ -1,5 +1,5 @@
-#ifndef __MTRAIN_H
-#define __MTRAIN_H
+#ifndef __BSP_H
+#define __BSP_H
 
 #ifdef __cplusplus
  extern "C" {
@@ -19,14 +19,6 @@ void SystemClock_Config(void);
 void Error_Handler(void);
 void MPU_Config(void);
 void CPU_CACHE_Enable(void);
-
-
-// Definitions for LED
-#define LED_PORT    GPIOE
-#define LED1_PIN    GPIO_PIN_4
-#define LED2_PIN    GPIO_PIN_3
-#define LED3_PIN    GPIO_PIN_6
-#define LED4_PIN    GPIO_PIN_5
 
 #ifdef __cplusplus
 }
