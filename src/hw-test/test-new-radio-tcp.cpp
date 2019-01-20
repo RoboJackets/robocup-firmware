@@ -134,7 +134,6 @@ int main() {
     // data phase
     receiveData(radioSPI);
 
-
     char cmdSSID[] = "C1=rjwifi\r";
     // command phase
     sendCmd(radioSPI, cmdSSID);
@@ -165,7 +164,6 @@ int main() {
 
     // data phase
     receiveData(radioSPI);
-
 
     printf("AboutToJoin\r\n");
     wait_ms(mbedPrintWait);
