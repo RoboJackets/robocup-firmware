@@ -1,4 +1,6 @@
-#include "mtrain.hpp"
+#pragma once
+
+#include "PinDefs.hpp"
 
 class DigitalIn {
 public:
