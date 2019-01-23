@@ -1,53 +1,20 @@
 #include "analog_in.h"
 
-ADC_TypeDef adcs = [, ADC2, ADC3];
+
 ADC_HandleTypeDef ADC_InitStruct;
 
 __IO int32_t readValue = 0;
 __IO uint16_t unsignedReadValue = 0;
-REFRESH_PERIOD = 10;
+const int REFRESH_PERIOD = 10;
 //used for sprintf later
 char desc[50];
 
-void init(float pin) {
-  //configures the Analog to Digital Conversion
-  ADC_Config(pin);
-}
-
-//reads in a float
-//currently prints the value
-void read(float pin) {
-  init(pin);
-  HAL_ADC_Start_DMA(&ADC_InitStruct, (uint32_t*)&unsignedReadValue, 1);
-  while (1)
-  {
-    HAL_Delay(REFRESH_PERIOD);
-    sprintf(desc, "value is %ld", unsignedReadValue);
-  }
-
-}
-
-//read in unsigned 16 bit Value
-//currently just prints the value
-void read_u16(unsigned short pin) {
-   init(pin);
-   HAL_ADC_Start_DMA(&ADC_InitStruct, &readValue, 1);
-   while (1)
-   {
-    HAL_Delay(REFRESH_PERIOD);
-    sprintf(desc, "value is %ld", readValue);
-   // HAL_ADC_Stop();
-   }
-}
-
-
-
-//configures the ADC and the channel
-static void ADC_Config(float pin) {
+static void ADC_Config(int pin) {
   //structure for initializing ADC channel
+  struct ADC_TypeDef adcs[3] = {ADC1, ADC2, ADC3};
   ADC_ChannelConfTypeDef sConfig;
 
-  ADC_InitStruct.Instance                   = adcs[pin];
+  ADC_InitStruct.Instance                   = &adcs[pin];
   ADC_InitStruct.Init.ClockPrescaler        = ADC_CLOCKPRESCALER_PCLK_DIV4;
   ADC_InitStruct.Init.Resolution            = ADC_RESOLUTION_12B;
   ADC_InitStruct.Init.ScanConvMode          = DISABLE;                       /* Sequencer disabled (ADC conversion on only 1 channel: channel set on rank 1) */
@@ -61,12 +28,43 @@ static void ADC_Config(float pin) {
   ADC_InitStruct.Init.DMAContinuousRequests = ENABLE;
   ADC_InitStruct.Init.EOCSelection          = DISABLE;
   //initializes the ADC given the structure that defines it
-  HAL_ADC_Init(ADC_InitStruct);
+  HAL_ADC_Init(&ADC_InitStruct);
 
-  sConfig.Channel       = ADC_IN3;
+  sConfig.Channel       = ADC_CHANNEL_0;
   sConfig.Rank          = 1;
   sConfig.SamplingTime  = ADC_SAMPLETIME_56CYCLES;
   sConfig.Offset        = 0;
   //configures the channel for the ADC, given the input structure
-  HAL_ADC_ConfigChannel(&ADC_InitStruct, sConfig)
+  HAL_ADC_ConfigChannel(&ADC_InitStruct, &sConfig);
 }
+
+
+//reads in a float
+//currently prints the value
+void read(int pin) {
+  ADC_Config(pin);
+  HAL_ADC_Start_DMA(&ADC_InitStruct, (uint32_t*)&readValue, 1);
+  while (1)
+  {
+    HAL_Delay(REFRESH_PERIOD);
+    sprintf(desc, "value is %d", readValue);
+  }
+
+}
+
+//read in unsigned 16 bit Value
+//currently just prints the value
+void read_u16(int pin) {
+   ADC_Config(pin);
+   HAL_ADC_Start_DMA(&ADC_InitStruct, (uint32_t*)&unsignedReadValue, 1);
+   while (1)
+   {
+    HAL_Delay(REFRESH_PERIOD);
+    sprintf(desc, "value is %u", unsignedReadValue);
+   // HAL_ADC_Stop();
+   }
+}
+
+
+
+//configures the ADC and the channel

@@ -1,8 +1,7 @@
 #ifndef AnalogIn
 #define AnalogIn
-#include "mtrain.h"
-#include "bsp.h"
-void init()
-void read(float pin)
-void read_u16(unsigned short pin)
+#include "pin_defs.h"
+void read(int pin);
+void read_u16(int pin);
+
 #endif
