@@ -10,8 +10,8 @@ const int REFRESH_PERIOD = 10;
 char desc[50];
 
 static void ADC_Config(int pin) {
+  ADC_TypeDef adcs[3] = {*ADC1, *ADC2, *ADC3};
   //structure for initializing ADC channel
-  struct ADC_TypeDef adcs[3] = {ADC1, ADC2, ADC3};
   ADC_ChannelConfTypeDef sConfig;
 
   ADC_InitStruct.Instance                   = &adcs[pin];
@@ -47,7 +47,7 @@ void read(int pin) {
   while (1)
   {
     HAL_Delay(REFRESH_PERIOD);
-    sprintf(desc, "value is %d", readValue);
+    sprintf(desc, "value is %ld", readValue);
   }
 
 }
