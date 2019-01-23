@@ -1,4 +1,4 @@
-#include "mtrain.h"
+#include "pin_defs.h"
 
 void digitalin_init(pin_name p);
 void digitalin_init_ex(pin_name p, pull_type pull);

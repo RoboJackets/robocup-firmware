@@ -1,4 +1,5 @@
 #include "mtrain.h"
+#include "bsp.h"
 #include  <unistd.h>
 
 USBD_HandleTypeDef USBD_Device;
@@ -18,11 +19,11 @@ int main(void)
 
     // GPIO_InitTypeDef GPIO_InitStruct;
 
-    GPIO_InitStruct.Pin = LED1_PIN;
+    GPIO_InitStruct.Pin = LED1.pin;
     GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
     GPIO_InitStruct.Pull = GPIO_PULLUP;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-    HAL_GPIO_Init(LED_PORT, &GPIO_InitStruct);
+    HAL_GPIO_Init(LED1.port, &GPIO_InitStruct);
 
     fflush(stdout);
     HAL_Delay(3000);
@@ -85,7 +86,7 @@ int main(void)
 
 
 
-    HAL_GPIO_WritePin(LED_PORT, LED1_PIN, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(LED1.port, LED1.pin, GPIO_PIN_SET);
 
     printf("\r\n");
 
