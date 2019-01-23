@@ -17,6 +17,7 @@ void init(float pin) {
 //reads in a float
 //currently prints the value
 void read(float pin) {
+  init(pin);
   HAL_ADC_Start_DMA(&ADC_InitStruct, (uint32_t*)&unsignedReadValue, 1);
   while (1)
   {
@@ -29,7 +30,7 @@ void read(float pin) {
 //read in unsigned 16 bit Value
 //currently just prints the value
 void read_u16(unsigned short pin) {
-
+   init(pin);
    HAL_ADC_Start_DMA(&ADC_InitStruct, &readValue, 1);
    while (1)
    {
