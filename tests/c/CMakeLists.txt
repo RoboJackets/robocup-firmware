@@ -2,6 +2,7 @@ project(Test LANGUAGES C)
 
 function(add_test test_file)
     get_filename_component(test_name ${test_file} NAME_WE)
+    set(test_name ${test_name}-c)
 
     add_executable(${test_name}.elf EXCLUDE_FROM_ALL
         ${test_file}

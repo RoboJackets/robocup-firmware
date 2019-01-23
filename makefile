@@ -7,10 +7,17 @@ endef
 all:
 	$(call cmake_build_target, all)
 
-FIRMWARE_TESTS = blink flash usb_serial
-$(FIRMWARE_TESTS:%=test-%):
+C_FIRMWARE_TESTS = blink flash usb_serial
+CPP_FIRMWARE_TESTS = blink
+
+$(C_FIRMWARE_TESTS:%=test-%-c):
 	$(call cmake_build_target, $(@F))
-$(FIRMWARE_TESTS:%=test-%-prog):
+$(C_FIRMWARE_TESTS:%=test-%-c-prog):
+	$(call cmake_build_target, $(@F))
+
+$(CPP_FIRMWARE_TESTS:%=test-%):
+	$(call cmake_build_target, $(@F))
+$(CPP_FIRMWARE_TESTS:%=test-%-prog):
 	$(call cmake_build_target, $(@F))
 
 clean:

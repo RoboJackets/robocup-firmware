@@ -38,4 +38,5 @@ add_subdirectory(API/C)
 add_subdirectory(API/CPP)
 add_subdirectory(BSP)
 
-add_subdirectory(tests)
+add_subdirectory(tests/c)
+add_subdirectory(tests/cpp)
