@@ -1,4 +1,4 @@
-project(Test LANGUAGES C)
+project(Test LANGUAGES C CXX)
 
 function(add_test test_file)
     get_filename_component(test_name ${test_file} NAME_WE)
@@ -9,7 +9,7 @@ function(add_test test_file)
         # ${CMAKE_SOURCE_DIR}/BSP/Src/stm32f7xx_it.c #TODO: Fix
     )
 
-    target_link_libraries(${test_name}.elf STM32F7xx STM32F7_API_C)
+    target_link_libraries(${test_name}.elf STM32F7xx STM32F7_API_C STM32F7_API_CPP)
 
     add_custom_target(test-${test_name}
         arm-none-eabi-objcopy -Obinary "${test_name}.elf" "${test_name}.bin"
@@ -24,5 +24,6 @@ endfunction()
 
 # TODO: better way to do this without redefining every test
 add_test("blink.c")
+add_test("gpio.c")
 add_test("flash.c")
 add_test("usb_serial.c")

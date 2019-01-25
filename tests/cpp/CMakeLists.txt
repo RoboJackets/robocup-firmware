@@ -23,3 +23,4 @@ endfunction()
 
 # TODO: better way to do this without redefining every test
 add_test("blink.cpp")
+add_test("gpio.cpp")

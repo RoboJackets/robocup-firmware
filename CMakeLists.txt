@@ -13,6 +13,8 @@ add_definitions(-Wall)
 # TODO: don't leave this here
 set(CMAKE_BUILD_TYPE Debug)
 
+set (CMAKE_CXX_STANDARD 14)
+
 # Flags for machine options for STM32F769xx
 set (C_MACHINE_OPTIONS "-mthumb -mcpu=cortex-m7 -mfpu=fpv5-sp-d16 -mfloat-abi=softfp -mabi=aapcs")
 
