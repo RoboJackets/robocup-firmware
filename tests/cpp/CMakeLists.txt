@@ -21,6 +21,7 @@ function(add_test test_file)
         COMMENT "Copying binary to MCU")
 endfunction()
 
-# TODO: better way to do this without redefining every test
-add_test("blink.cpp")
-add_test("gpio.cpp")
+file(GLOB files "./*.cpp")
+foreach(file ${files})
+    add_test(${file})
+endforeach()

@@ -3,63 +3,55 @@
 #include "PinDefs.hpp"
 
 typedef enum {
-    PUSH_PULL = GPIO_MODE_OUTPUT_PP,
-    OPEN_DRAIN = GPIO_MODE_OUTPUT_OD
+    PushPull = GPIO_MODE_OUTPUT_PP,
+    OpenDrain = GPIO_MODE_OUTPUT_OD
 } PinMode;
 
 typedef enum {
-    LOW = GPIO_SPEED_FREQ_LOW,
-    MEDIUM = GPIO_SPEED_FREQ_MEDIUM,
-    HIGH = GPIO_SPEED_FREQ_HIGH,
-    VERY_HIGH = GPIO_SPEED_FREQ_VERY_HIGH
+    Low = GPIO_SPEED_FREQ_LOW,
+    Medium = GPIO_SPEED_FREQ_MEDIUM,
+    High = GPIO_SPEED_FREQ_HIGH,
+    VeryHigh = GPIO_SPEED_FREQ_VERY_HIGH
 } PinSpeed;
 
 class DigitalOut {
 public:
-    /**
-    * Initializes Digital Out
-    *
-    * @param PinName pin
-    * @default PullType PULL_NONE, PinMode PUSH_PULL, PinSpeed LOW, bool false
-    */
+    /** Configures GPIO pin for digital in
+     *
+     * @param pin Pin def external to board
+     * @param pull Pin pull type
+     * @param mode Output mode (push-pull or open-drain)
+     * @param speed GPIO frequency
+     * @param inverted Inverts output value of pin
+     */
     DigitalOut(PinName pin, PullType pull = PullType::PullNone,
-        PinMode mode = PinMode::PUSH_PULL, PinSpeed speed = PinSpeed::LOW,
+        PinMode mode = PinMode::PushPull, PinSpeed speed = PinSpeed::Low,
         bool inverted = false);
     
-    /**
-    * Deinitalizes Digital Out
-    */
     ~DigitalOut();
 
-    /**
-    * Writes pin state
-    *
-    * @param bool state as true (high) or false (low), opposite if inverted
-    */
+    /** Change output state of pin
+     *
+     * @param state Set output value of pin (0 or 1)
+     *     In open-drain 0 is high-z, 1 is drive low
+     */
     void write(bool state);
-    /**
-    * Toggles pin state
-    */
+
+    /** Toggle pin output
+     * 
+     */
     void toggle();
     
-    /**
-    * Returns pin state
-    *
-    * @return bool as true (high) or false (low)
-    */
+    /** Read current value of pin
+     *
+     * @return true (high) or false (low)
+     */
     bool read();
     
-    /**
-    * Overloads assignment operation, runs write()
-    */
     void operator =(bool rhs) {
         write(rhs);
     }
-    /**
-    * Overloads bool operation, returns read()
-    *
-    * @return bool pin state as true (high) or false (low)
-    */
+
     operator bool() {
         return read();
     }

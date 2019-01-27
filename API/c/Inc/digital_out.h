@@ -15,45 +15,49 @@ typedef enum {
     VERY_HIGH = GPIO_SPEED_FREQ_VERY_HIGH
 } pin_speed;
 
-/**
-* Initializes Digital Out
-*
-* @param pin_name pin
-* @default pull_type PULL_NONE, pin_mode PUSH_PULL, pin_speed LOW
-*/
+/** Configures GPIO pin for digital out, push pull
+ *
+ * Defaults to push-pull mode, no pull type, low gpio frequency
+ * 
+ * @param pin Pin def external to board
+ */
 void digitalout_init(pin_name pin);
-/**
-* Initializes Digital Out
-*
-* @param pin_name pin, pull_type type, pin_mode mode, pin_speed speed
-*/
-void digitalout_init_ex(pin_name pin, pull_type type,
+
+/** Configures GPIO pin for digital out
+ *
+ * @param pin Pin def external to board
+ * @param pull Pin pull type
+ * @param mode Output mode (push-pull or open-drain)
+ * @param speed GPIO frequency
+ */
+void digitalout_init_ex(pin_name pin, pull_type pull,
     pin_mode mode, pin_speed speed);
-/**
-* Deinitalizes Digital Out
-*
-* @param pin_name pin
-*/
+
+/** Deinit GPIO pin
+ *
+ * @param pin Pin def external to board
+ */
 void digitalout_deinit(pin_name pin);
 
-/**
-* Writes pin state
-*
-* @param pin_name pin, int state as 1 (high) or 0 (low)
-*/
+/** Change output state of pin
+ *
+ * @param pin Pin def external to board
+ * @param state Set output value of pin (0 or 1)
+ *     In open-drain 0 is high-z, 1 is drive low
+ */
 void digitalout_write(pin_name pin, int state);
-/**
-* Toggles pin state
-*
-* @param pin_name pin
-*/
+
+/** Toggle pin output
+ *
+ * @param pin Pin def external to board
+ */
 void digitalout_toggle(pin_name pin);
-/**
-* Returns pin state
-*
-* @param pin_name pin
-* @return int as 1 (high) or 0 (low)
-*/
+
+/** Read current value of pin
+ * 
+ * @param pin  Pin def external to board
+ * @return 1 (high) or 0 (low)
+ */
 int digitalout_read(pin_name p);
 
 #endif

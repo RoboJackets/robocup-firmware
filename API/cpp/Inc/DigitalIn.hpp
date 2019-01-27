@@ -4,31 +4,21 @@
 
 class DigitalIn {
 public:
-    /**
-    * Initializes Digital In
-    *
-    * @param PinName pin
-    * @default PullType PULL_NONE
-    */
+    /** Configures GPIO pin for digital in
+     *
+     * @param pin Pin def external to board
+     * @param pull Pin pull type
+     */
     DigitalIn(PinName pin, PullType pull = PullType::PullNone);
     
-    /**
-    * Deinitalizes Digital In
-    */
     ~DigitalIn();
     
-    /**
-    * Returns pin state
-    *
-    * @return bool as true (high) or false (low)
-    */
+    /** Read current value of pin
+     *
+     * @return true (high) or false (low)
+     */
     bool read();
     
-    /**
-    * Overloads bool operation, returns read()
-    *
-    * @return bool as true (high) or false (low)
-    */
     operator bool() {
         return read();
     }
