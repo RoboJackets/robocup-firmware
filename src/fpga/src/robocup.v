@@ -80,7 +80,7 @@ reg sys_rdy = 0;
 
 // Input register synchronization declarations - for the notation, we add a '_s' after the name indicating it is synced
 reg [ 2:0 ] hall_s  [ NUM_HALL_SENS - 1 : 0 ];
-reg [ 1:0 ] enc_s   [ NUM_ENCODERS  - 1 : 0 ];
+reg [ 1:0 ] enc_s   drv_ncs_odrv_ncs_o[ NUM_ENCODERS  - 1 : 0 ];
 reg         spi_slave_sck_s,
             spi_slave_mosi_s,
             spi_slave_ncs_s,
@@ -184,9 +184,11 @@ localparam CMD_GATE_DRV_STATUS  = CMD_RW_TYPE_BASE + 6;
 localparam CMD_STROBE_START         = CMD_RW_TYPE_BASE + 'h10;
 localparam CMD_TOGGLE_MOTOR_EN      = CMD_RW_TYPE_BASE + CMD_STROBE_START;
 // Response & request buffer sizes
-localparam SPI_SLAVE_RES_BUF_LEN = 12;
+localparam SPI_SLAVE_RES_BUF_LEN = 24;
 localparam SPI_SLAVE_REQ_BUF_LEN = SPI_SLAVE_RES_BUF_LEN;
 localparam SPI_SLAVE_COUNTER_WIDTH = `LOG2(SPI_SLAVE_RES_BUF_LEN);
+
+localparam CMD_READ_ADC         = CMD_RW_TYPE_BASE + 7;
 
 // These are for triggering the storage of values outside of the SPI's SCK domain
 reg                                     rx_vals_flag            = 0,
@@ -234,9 +236,86 @@ SPI_Master spi_master_module (
     .DATA_IN        ( spi_master_di         )
 );
 
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////SPI_MASTER
+
+// Put on constraints' file: two_periods | sensor_data | CS1 | CS2
+
+reg [1:0]  two_periods = 0;
+reg [15:0] sensor_data [0:11];
+reg        CS1 = 0;
+reg        CS2 = 1;
+
+
+assign spi_master_di = (two_periods == 0) ? 16'b1011111100000000 : 0;
+
+assign adc_ncs_o[0] = CS1;
+assign adc_ncs_o[1] = CS2;
+
+always @(posedge sysclk) begin
+    if(spi_master_busy == 0 & two_periods != 2'b11) // It can't read the first two data frames, because the sensor is still converting the valid data.
+        two_periods = two_periods + 1;
+
+    if (CS1 == 0 & two_periods > 2'b10) begin // We add the data that we get in the sensors in registers
+        case (spi_master_d0[15:12]) // We use the data address in the first 4 bits to identify the values and put the in the right indexes of the sensor_data.
+            4'b0000: sensor_data[0] <= spi_master_d0[15:0];
+            4'b0001: sensor_data[1] <= spi_master_d0[15:0];
+            4'b0010: sensor_data[2] <= spi_master_d0[15:0];
+            4'b0011: sensor_data[3] <= spi_master_d0[15:0];
+            4'b0100: sensor_data[4] <= spi_master_d0[15:0];
+            4'b0101:
+                begin
+                    sensor_data[5] <= spi_master_d0[15:0]; //In the last channel of a sensor, change the sensor chip
+                    CS1 <= 1;
+                    CS2 <= 0;
+                    two_periods <= 0;
+                end
+        endcase
+    end else if (CS2 == 0 & two_periods > 2'b10) begin
+        case(spi_master_d0[15:12])
+            4'b0000: sensor_data[6] <= spi_master_d0[15:0];
+            4'b0001: sensor_data[7] <= spi_master_d0[15:0];
+            4'b0010: sensor_data[8] <= spi_master_d0[15:0];
+            4'b0011: sensor_data[9] <= spi_master_d0[15:0];
+            4'b0100: sensor_data[10] <= spi_master_d0[15:0];
+            4'b0101:
+                begin
+                    sensor_data[11] <= spi_master_d0[15:0];
+                    CS1 <= 0;
+                    CS2 <= 1;
+                    two_periods <= 0;
+                end
+        endcase
+    end
+end
+
+
+// /////////////////////////////////////////////////////////// SPI_SLAVE
+// reg [4:0] counter_24 = 0;
+// wire index_24;
+// assign index_24 = counter_24;  // for sending separating the current sensor's data in 24 bytes
+
+// always @(posedge spi_slave_byte_done)
+//     if(counter_24 == 5'b10111) begin // after that, we send 0s
+//     spi_slave_di <= sensor_data[11][7:0];
+//     counter_24 <= 0;
+//     end else if (counter_24[0]==0) begin
+//     spi_slave_di <= sensor_data[index_24/2][15:8];
+//     counter_24 <= counter_24 + 1;
+//     end else begin
+//     spi_slave_di <= sensor_data[index_24/2][7:0];
+//     counter_24 <= counter_24 + 1;
+//     end
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // The DRV8303 config values we write to each driver
 reg [SPI_MASTER_DATA_WIDTH-1:0] spi_master_data_array_out [2:0];
-reg [11:0] spi_master_data_array_in  [NUM_MOTORS - 1:0];
+reg [11:0] spi_master_data_array_outy_in  [NUM_MOTORS - 1:0];
 reg spi_master_config_state;
 
 // latch in the valid signal on the falling edges
@@ -486,6 +565,17 @@ begin : SPI_SLAVE_LOAD_RESPONSE_BUFFER
                     end
                 end
 
+                CMD_READ_ADC:
+                begin
+                    for (j = 0; j < SPI_SLAVE_RES_BUF_LEN;j = j +1) begin
+                        if (j%2 == 0) begin // We divide the sensor_data values in bytes
+                            spi_slave_res_buf <= sensor_data[j][15:8];
+                        end else begin
+                            spi_slave_res_buf <= sensor_data[j][7:0];
+                        end
+                    end
+                end
+
 `ifdef GIT_VERSION_HASH
                 CMD_VERSION1 :
                 begin
@@ -664,4 +754,4 @@ BLDC_Motor_No_Encoder #(
 );
 `endif  // DRIBBLER_MOTOR_DISABLE
 
-endmodule   // RoboCup
+endmodule // RoboCup
