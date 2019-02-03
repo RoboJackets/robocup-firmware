@@ -1,4 +1,5 @@
-#include <iostream>;
+#include <iostream>
+#include "AnalogIn.hpp"
 using namespace std;
 class AnalogIn {
    private: 
@@ -30,6 +31,9 @@ class AnalogIn {
          //configures the channel for the ADC, given the input structure
          HAL_ADC_ConfigChannel(&ADC_InitStruct, &sConfig); 
       }
+      
+      ~AnalogIn() {}
+
       void read () {
          HAL_ADC_Start_DMA(&ADC_InitStruct, (uint32_t*)&readValue, 1);
          while (1)
@@ -37,7 +41,8 @@ class AnalogIn {
             HAL_Delay(REFRESH_PERIOD);
             cout << "Current value is " << readValue << endl;
          }
-      } 
+      }
+ 
       void read_u16 () {
          HAL_ADC_Start_DMA(&ADC_InitStruct, (uint32_t*)&readValue, 1);
          while (1)
