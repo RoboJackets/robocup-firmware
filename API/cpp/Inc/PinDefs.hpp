@@ -3,8 +3,8 @@
 #include "stm32f7xx_hal.h"
 
 typedef struct PinName {
-    GPIO_TypeDef* bank;
-    uint16_t number;
+    GPIO_TypeDef* port;
+    uint16_t pin;
 } PinName;
 
 constexpr PinName p3  = { GPIOA, GPIO_PIN_8  };

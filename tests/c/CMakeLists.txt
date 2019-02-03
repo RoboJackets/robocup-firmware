@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 3.5)
 
 function(add_test test_file)
     get_filename_component(test_name ${test_file} NAME_WE)
+    set(test_name ${test_name}-c)
 
     add_executable(${test_name}.elf EXCLUDE_FROM_ALL
         ${test_file}
@@ -23,8 +24,7 @@ function(add_test test_file)
         COMMENT "Copying binary to MCU")
 endfunction()
 
-# TODO: better way to do this without redefining every test
-add_test("blink.c")
-add_test("flash.c")
-add_test("usb_serial.c")
-add_test("adc.c")
+file(GLOB files "./*.c")
+foreach(file ${files})
+    add_test(${file})
+endforeach()
