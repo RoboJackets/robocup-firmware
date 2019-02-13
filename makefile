@@ -8,7 +8,7 @@ all:
 	$(call cmake_build_target, all)
 
 C_FIRMWARE_TESTS = blink gpio flash usb_serial adc
-CPP_FIRMWARE_TESTS = blink gpio
+CPP_FIRMWARE_TESTS = blink gpio adc
 
 $(C_FIRMWARE_TESTS:%=test-%-c):
 	$(call cmake_build_target, $(@F))

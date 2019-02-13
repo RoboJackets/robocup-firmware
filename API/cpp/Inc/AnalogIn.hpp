@@ -8,7 +8,7 @@ class AnalogIn {
       int32_t readValue;
       uint16_t unsignedReadValue;
    public:
-      AnalogIn(PinName pin);
+      AnalogIn(ADCPinName pin);
       ~AnalogIn();
       void read();
       void read_u16();   
