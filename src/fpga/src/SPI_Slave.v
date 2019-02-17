@@ -1,12 +1,15 @@
 `ifndef _SPI_SLAVE_
 `define _SPI_SLAVE_
 
-module SPI_Slave ( clk, SCK, MOSI, MISO, SSEL, DONE, DATA_OUT, DATA_IN );
+module SPI_Slave #(parameter DATA_BIT_WIDTH = 8) ( clk, SCK, MOSI, MISO, SSEL, DONE, DATA_OUT, DATA_IN );
 
 input         clk, SCK, SSEL, MOSI;
-input  [7:0]  DATA_OUT;
+input  [DATA_BIT_WIDTH - 1:0]  DATA_OUT;
 output        MISO, DONE;
-output [7:0]  DATA_IN;
+output [DATA_BIT_WIDTH - 1:0]  DATA_IN;
+
+localparam DATA_BIT_COUNTER_WIDTH = $clog2(DATA_BIT_WIDTH);
+localparam ONE = {{(DATA_BIT_COUNTER_WIDTH - 1){1'b0}}, {1'b1}};
 
 // sync SCK to the FPGA clock using a 3-bits shift register
 reg [2:0] SCKr;  always @(posedge clk) SCKr <= {SCKr[1:0], SCK};
@@ -26,25 +29,25 @@ wire MOSI_data = MOSIr[1];
 reg [1:0] DONE_d; always @(posedge clk) DONE_d <= {DONE_d[0], DONE};
 
 // we handle SPI in 8-bits format, so we need a 3 bits counter to count the bits as they come in
-reg [2:0] bitcnt;
-reg [7:0] byte_data_received,
+reg [DATA_BIT_COUNTER_WIDTH-1:0] bitcnt;
+reg [DATA_BIT_WIDTH - 1:0] byte_data_received,
                     byte_data_sent,
                     byte_rec_;
 
-assign MISO = byte_data_sent[7];  // send MSB first
+assign MISO = byte_data_sent[DATA_BIT_WIDTH - 1];  // send MSB first
 // signal out to load the next byte half an SCK period before we latch it
-assign DONE = (SSEL_active && SCK_fallingedge && (bitcnt==3'b000));
+assign DONE = (SSEL_active && SCK_fallingedge && (bitcnt == 0));
 assign DATA_IN = byte_rec_;
 
 always @(posedge clk)
 begin
     if (~SSEL_active)
-        bitcnt <= 3'b000;
+        bitcnt <= 0;
 
     else if(SCK_risingedge) begin
-        bitcnt <= bitcnt + 3'b001;
+        bitcnt <= bitcnt + ONE;
         // shift reg. for data being received
-        byte_data_received <= {byte_data_received[6:0], MOSI_data};
+        byte_data_received <= {byte_data_received[DATA_BIT_WIDTH - 2:0], MOSI_data};
     end
 end
 
@@ -53,12 +56,12 @@ always @(negedge clk) byte_rec_ <= DONE ? byte_data_received : byte_rec_;
 always @(negedge clk)
 if(SSEL_active)
 begin
-    if ( (bitcnt == 3'b000 && DONE_d == 2'b10) || SSEL_startmessage ) begin
-        byte_data_sent <= DATA_OUT;  // after that, we send 0s   
+    if ( (bitcnt == 0 && DONE_d == 2'b10) || SSEL_startmessage ) begin
+        byte_data_sent <= DATA_OUT;  // after that, we send 0s
 
     end else if ( SCK_fallingedge ) begin
-        if ( bitcnt != 3'b000 ) begin
-            byte_data_sent <= {byte_data_sent[6:0], 1'b0};
+        if ( bitcnt != 0 ) begin
+            byte_data_sent <= {byte_data_sent[DATA_BIT_WIDTH - 2:0], 1'b0};
         end
     end
 end
