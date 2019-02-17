@@ -1,6 +1,9 @@
 `ifndef _SPI_SLAVE_
 `define _SPI_SLAVE_
 
+
+`include "log2-macro.v"
+
 module SPI_Slave #(parameter DATA_BIT_WIDTH = 8) ( clk, SCK, MOSI, MISO, SSEL, DONE, DATA_OUT, DATA_IN );
 
 input         clk, SCK, SSEL, MOSI;
@@ -8,7 +11,7 @@ input  [DATA_BIT_WIDTH - 1:0]  DATA_OUT;
 output        MISO, DONE;
 output [DATA_BIT_WIDTH - 1:0]  DATA_IN;
 
-localparam DATA_BIT_COUNTER_WIDTH = $clog2(DATA_BIT_WIDTH);
+localparam DATA_BIT_COUNTER_WIDTH = `LOG2(DATA_BIT_WIDTH);
 localparam ONE = {{(DATA_BIT_COUNTER_WIDTH - 1){1'b0}}, {1'b1}};
 
 // sync SCK to the FPGA clock using a 3-bits shift register
