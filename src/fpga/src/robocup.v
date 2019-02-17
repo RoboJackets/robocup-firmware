@@ -80,7 +80,7 @@ reg sys_rdy = 0;
 
 // Input register synchronization declarations - for the notation, we add a '_s' after the name indicating it is synced
 reg [ 2:0 ] hall_s  [ NUM_HALL_SENS - 1 : 0 ];
-reg [ 1:0 ] enc_s   drv_ncs_odrv_ncs_o[ NUM_ENCODERS  - 1 : 0 ];
+reg [ 1:0 ] enc_s   [ NUM_ENCODERS  - 1 : 0 ];
 reg         spi_slave_sck_s,
             spi_slave_mosi_s,
             spi_slave_ncs_s,
@@ -292,30 +292,11 @@ always @(posedge sysclk) begin
 end
 
 
-// /////////////////////////////////////////////////////////// SPI_SLAVE
-// reg [4:0] counter_24 = 0;
-// wire index_24;
-// assign index_24 = counter_24;  // for sending separating the current sensor's data in 24 bytes
-
-// always @(posedge spi_slave_byte_done)
-//     if(counter_24 == 5'b10111) begin // after that, we send 0s
-//     spi_slave_di <= sensor_data[11][7:0];
-//     counter_24 <= 0;
-//     end else if (counter_24[0]==0) begin
-//     spi_slave_di <= sensor_data[index_24/2][15:8];
-//     counter_24 <= counter_24 + 1;
-//     end else begin
-//     spi_slave_di <= sensor_data[index_24/2][7:0];
-//     counter_24 <= counter_24 + 1;
-//     end
-
-
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // The DRV8303 config values we write to each driver
 reg [SPI_MASTER_DATA_WIDTH-1:0] spi_master_data_array_out [2:0];
-reg [11:0] spi_master_data_array_outy_in  [NUM_MOTORS - 1:0];
+reg [11:0] spi_master_data_array_in  [NUM_MOTORS - 1:0];
 reg spi_master_config_state;
 
 // latch in the valid signal on the falling edges
@@ -567,13 +548,9 @@ begin : SPI_SLAVE_LOAD_RESPONSE_BUFFER
 
                 CMD_READ_ADC:
                 begin
-                    for (j = 0; j < SPI_SLAVE_RES_BUF_LEN;j = j +1) begin
-                        if (j%2 == 0) begin // We divide the sensor_data values in bytes
-                            spi_slave_res_buf <= sensor_data[j][15:8];
-                        end else begin
-                            spi_slave_res_buf <= sensor_data[j][7:0];
-                        end
-                    end
+                    for (j = 0; j < 12;j = j + 1)
+                        for (k = 0; k < 16;k = k + 1)
+                            spi_slave_res_buf[16*j+k] <= sensor_data[j][15 - k];
                 end
 
 `ifdef GIT_VERSION_HASH
