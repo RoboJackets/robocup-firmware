@@ -5,11 +5,15 @@
 // SPI Slave module
 // Change SPI slave length of DATA_OUT and DATA_IN
 
-module CS_sim(spi_slave_do, spi_slave_di, spi_slave_byte_done);
+module CS_sim(sysclk, spi_slave_do, spi_slave_di, spi_slave_byte_done);
 
-input [15:0] spi_slave_do;
+localparam FPGA_CMD_LEN = 16;
+localparam NUM_OF_SENSORS = 8;
+
+input sysclk;
+input [FPGA_CMD_LEN - 1:0] spi_slave_do;
 input spi_slave_byte_done;
-output reg [15:0] spi_slave_di;
+output reg [FPGA_CMD_LEN - 1:0] spi_slave_di;
 
 
 SPI_Slave #(.DATA_BIT_WIDTH(16)) spi_slave_module (
@@ -23,8 +27,6 @@ SPI_Slave #(.DATA_BIT_WIDTH(16)) spi_slave_module (
     .DATA_OUT       ( spi_slave_di          )
 );
 
-localparam FPGA_CMD_LEN = 16;
-localparam NUM_OF_SENSORS = 8;
 
 
 
