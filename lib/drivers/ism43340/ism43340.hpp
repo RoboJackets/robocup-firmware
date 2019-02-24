@@ -2,9 +2,9 @@
 
 #include "CommLink.hpp"
 
-class Ism43340 : public CommLink {
+class ISM43340 : public CommLink {
 public:
-    Ism43340(SpiPtrT sharedSPI, PinName nCs, PinName intPin, PinName _nReset);
+    ISM43340(SpiPtrT sharedSPI, PinName nCs, PinName intPin, PinName _nReset);
 
     virtual int32_t sendPacket(const rtp::Packet* pkt) override;
 
@@ -19,10 +19,9 @@ public:
 
     virtual void setAddress(int addr) override;
 
-    virtual int writetospi(uint16 headerLength, const uint8* headerBuffer,
-                           uint32 bodylength, const uint8* bodyBuffer) override;
-    virtual int readfromspi(uint16 headerLength, const uint8* headerBuffer,
-                            uint32 readlength, uint8* readBuffer) override;
+    virtual int writetospi(char* command, int commandLength);
+
+    virtual int readfromspi(uint8* readbuffer, uint32* readlength);
 
     void setLED(bool ledOn) { dwt_setleds(ledOn); };
 

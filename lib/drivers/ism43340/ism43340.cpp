@@ -21,41 +21,50 @@
 
 #define CMD_SEND_DATA "S3="
 
-Ism43340::Ism43340(SpiPtrT sharedSPI, PinName nCs, PinName intPin,
+inline uint16_t swapendian(uint16_t val) {
+    return (val>>8) | (val<<8);
+}
+
+ISM43340::ISM43340(SpiPtrT sharedSPI, PinName nCs, PinName intPin,
                    PinName _nReset)
     : CommLink(sharedSPI, nCs, intPin), nReset(_nReset) {
     reset();
 }
 
-inline void Ism43340::formatCommand(std::string* command) {
-    if (command->size() % 2 == 0) {
-        command->append("\r\n");
+int ISM43340::writetospi(char* command, int commandLength) {
+    // pad command if needed
+    if (commandLength % 2 == 0) {
+        strcat(command, "\r\n");
     } else {
-        command->append("\r");
-    }
-}
-
-int Ism43340::writetospi(std::string* command) {
-    while (dataready.read() != 1) {
+        strcat(command, "\r");
     }
 
-    uint8_t lastc = 0;
-    radiospi.chipselect();
-    for (int i = 0; i < command->size(); i++) {
-        uint8_t c = command[i];
-        if (lastc != 0) {
-            uint16_t packet = (c << 8) | lastc;
-            radiospi.m_spi->write(packet);
-            lastc = 0;
-        } else {
-            lastc = c;
-        }
+    // endianness conversion from the char array. It is cast to 16 bits
+    for (uint32_t i = 0; i < commandLength; i + 2) {
+        *((uint16_t*)command[i]) = endian(*((uint16_t*)command[i]));
     }
+
+
+    // TODO: implement spi transfer from SPI.cpp
+
+    // Original write function
+    // uint8_t lastc = 0;
+    // radiospi.chipselect();
+    // for (int i = 0; i < command->size(); i++) {
+    //     uint8_t c = command[i];
+    //     if (lastc != 0) {
+    //         uint16_t packet = (c << 8) | lastc;
+    //         radiospi.m_spi->write(packet);
+    //         lastc = 0;
+    //     } else {
+    //         lastc = c;
+    //     }
+    // }
     radiospi.chipdeselect();
     return 0;
 }
 
-int Ism43340::readfromspi(uint8* readbuffer, uint32* readlength) {
+int ISM43340::readfromspi(uint8* readbuffer, uint32* readlength) {
     while (dataready.read() != 1) {
     }
 
@@ -86,9 +95,6 @@ inline checkPrompt () {
 // Set Human Readable
 inline setHumanReadable() {
     std::string compositeString(CMD_SET_HUMAN_READABLE);
-
-    // formats command adding /r and /n when needed
-    formatCommand(&compositeString);
 
     // write composite string to the radio
     writetospi(&compositeString);
@@ -126,7 +132,7 @@ inline showNetworkSettings() {
 }
 
 
-int32_t Ism43340::sendPacket(const rtp::Packet* pkt) {
+int32_t ISM43340::sendPacket(const rtp::Packet* pkt) {
     // Return failutre if not initialized
     if (!m_isInit) return COMM_FAILURE;
 
@@ -171,7 +177,7 @@ int32_t Ism43340::sendPacket(const rtp::Packet* pkt) {
 }
 
 // No clue how this works
-CommLink::BufferT Ism43340::getData() {
+CommLink::BufferT ISM43340::getData() {
     BufferT buf{};
 
     // Return empty data if not initialized
@@ -196,7 +202,7 @@ CommLink::BufferT Ism43340::getData() {
     return std::move(buf);
 }
 
-int32_t Ism43340::selfTest() {
+int32_t ISM43340::selfTest() {
     // ISM read device number
     m_chipVersion = dwt_readdevid();
 
@@ -215,7 +221,7 @@ int32_t Ism43340::selfTest() {
 }
 
 // Essentially the init function
-void Ism43340::reset() {
+void ISM43340::reset() {
     nReset = 0;
     wait_ms(3);
     nReset = 1;
@@ -265,6 +271,6 @@ void Ism43340::reset() {
         dwt_forcetrxoff();  // TODO: Better way than force off then reset?
         dwt_rxreset();
 
-        LOG(INFO, "Ism43340 ready!");
+        LOG(INFO, "ISM43340 ready!");
         CommLink::ready();
     }
