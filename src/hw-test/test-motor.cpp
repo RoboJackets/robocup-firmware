@@ -56,37 +56,37 @@ void motors_show() {
     std::array<int16_t, NUM_MOTORS> enc_deltas = {0};
 
     FPGA::Instance->read_duty_cycles(duty_cycles.data(), duty_cycles.size());
-    FPGA::Instance->read_halls(halls.data(), halls.size());
-    FPGA::Instance->read_encs(enc_deltas.data(), enc_deltas.size());
+    // FPGA::Instance->read_halls(halls.data(), halls.size());
+    // FPGA::Instance->read_encs(enc_deltas.data(), enc_deltas.size());
 
     // get the driver register values from the fpga
-    std::vector<uint16_t> driver_regs;
-    FPGA::Instance->gate_drivers(driver_regs);
+    // std::vector<uint16_t> driver_regs;
+    // FPGA::Instance->gate_drivers(driver_regs);
 
     // The status byte fields:
     //   { sys_rdy, watchdog_trigger, motors_en, is_connected[4:0] }
-    uint8_t status_byte = FPGA::Instance->watchdog_reset();
+    // uint8_t status_byte = FPGA::Instance->watchdog_reset();
 
-    printf("\033[?25l\033[25mStatus:\033[K\t\t\t%s\033E",
-           status_byte & 0x20 ? "ENABLED" : "DISABLED");
-    printf(
-        "\033[KLast Update:\t\t%-6.2fms\t%s\033E",
-        (static_cast<float>(enc_deltas.back()) * (1 / 18.432) * 2 * 64) / 1000,
-        status_byte & 0x40 ? "[EXPIRED]" : "[OK]     ");
-    printf("\033[K    ID\t\tVEL\tHALL\tENC\tDIR\tSTATUS\t\tFAULTS\033E");
-    for (size_t i = 0; i < duty_cycles.size() - 1; i++) {
-        printf("\033[K    %s\t%-3d\t%-3u\t%-5d\t%s\t%s\t0x%03X\033E",
-               global_motors[i].desc.c_str(), duty_cycles[i], halls[i],
-               enc_deltas[i], duty_cycles[i] < 0 ? "CW" : "CCW",
-               (status_byte & (1 << i)) ? "[OK]    " : "[UNCONN]",
-               driver_regs[i]);
-    }
-    printf("\033[K    %s\t%-3u\t%-3u\tN/A\t%s\t%s\t0x%03X\033E",
-           global_motors.back().desc.c_str(), duty_cycles.back() & 0x1FF,
-           halls.back(), duty_cycles.back() < 0 ? "CW" : "CCW",
-           (status_byte & (1 << (enc_deltas.size() - 1))) ? "[OK]    "
-                                                          : "[UNCONN]",
-           driver_regs.back());
+    // printf("\033[?25l\033[25mStatus:\033[K\t\t\t%s\033E",
+    //        status_byte & 0x20 ? "ENABLED" : "DISABLED");
+    // printf(
+    //     "\033[KLast Update:\t\t%-6.2fms\t%s\033E",
+    //     (static_cast<float>(enc_deltas.back()) * (1 / 18.432) * 2 * 64) / 1000,
+    //     status_byte & 0x40 ? "[EXPIRED]" : "[OK]     ");
+    // printf("\033[K    ID\t\tVEL\tHALL\tENC\tDIR\tSTATUS\t\tFAULTS\033E");
+    // for (size_t i = 0; i < duty_cycles.size() - 1; i++) {
+    //     printf("\033[K    %s\t%-3d\t%-3u\t%-5d\t%s\t%s\t0x%03X\033E",
+    //            global_motors[i].desc.c_str(), duty_cycles[i], halls[i],
+    //            enc_deltas[i], duty_cycles[i] < 0 ? "CW" : "CCW",
+    //            (status_byte & (1 << i)) ? "[OK]    " : "[UNCONN]",
+    //            driver_regs[i]);
+    // }
+    // printf("\033[K    %s\t%-3u\t%-3u\tN/A\t%s\t%s\t0x%03X\033E",
+    //        global_motors.back().desc.c_str(), duty_cycles.back() & 0x1FF,
+    //        halls.back(), duty_cycles.back() < 0 ? "CW" : "CCW",
+    //        (status_byte & (1 << (enc_deltas.size() - 1))) ? "[OK]    "
+    //                                                       : "[UNCONN]",
+    //        driver_regs.back());
 }
 
 int main() {
@@ -127,8 +127,16 @@ int main() {
     // Init IO Expander and turn all LEDs on.  The first parameter to config()
     // sets the first 8 lines to input and the last 8 to output.  The pullup
     // resistors and polarity swap are enabled for the 4 rotary selector lines.
-    MCP23017 ioExpander(RJ_I2C_SDA, RJ_I2C_SCL, RJ_IO_EXPANDER_I2C_ADDRESS);
-    ioExpander.config(0x00FF, 0x00f0, 0x00f0);
+    // MCP23017 ioExpander(RJ_I2C_SDA, RJ_I2C_SCL, RJ_IO_EXPANDER_I2C_ADDRESS);
+    // ioExpander.config(0x00FF, 0x00f0, 0x00f0);
+    // ioExpander.writeMask(static_cast<uint16_t>(~IOExpanderErrorLEDMask),
+    //                      IOExpanderErrorLEDMask);
+
+    std::shared_ptr<SharedI2C> shared_i2c =
+        make_shared<SharedI2C>(RJ_I2C_SDA, RJ_I2C_SCL, RJ_I2C_FREQ);
+
+    MCP23017 ioExpander(shared_i2c, RJ_IO_EXPANDER_I2C_ADDRESS);
+    ioExpander.config(0x00FF, 0x00ff, 0x00ff);
     ioExpander.writeMask(static_cast<uint16_t>(~IOExpanderErrorLEDMask),
                          IOExpanderErrorLEDMask);
 
@@ -143,7 +151,13 @@ int main() {
          IOExpanderDigitalInOut(&ioExpander, RJ_HEX_SWITCH_BIT3,
                                 MCP23017::DIR_INPUT)});
 
-    uint16_t duty_cycle_all = 0;
+    uint8_t rotary_start = rotarySelector.read();
+    while (rotary_start != 0) {
+        wait_ms(10);
+        rotary_start = rotarySelector.read();
+    }
+
+    int16_t duty_cycle_all = 0;
 
     std::vector<int16_t> duty_cycles;
     duty_cycles = {0, 0, 0, 0, 0};
@@ -162,27 +176,31 @@ int main() {
         // increasing from 0 for both CW & CCW spins of the
         // rotary selector
         const uint8_t duty_cycle_multiplier =
-            0x07 &
-            static_cast<uint8_t>(8 - abs(8 - static_cast<int>(rotary_vel)));
+            0x07 & static_cast<uint8_t>(8 - abs(8 - static_cast<int>(rotary_vel)));
+        
 
         // calculate a duty cycle in steps of 73, this means max is 73 * 7 = 511
         duty_cycle_all = duty_cycle_multiplier * 73;
 
-        // set the direction, the bit shifting should be self explanatory here
-        // (that was a joke guys...calm down)
-        duty_cycle_all |= (((rotary_vel & (1 << 3)) >> 3) << 9);
+        // set the direction
+        if (rotary_vel >= 9) {
+            duty_cycle_all *= -1;
+        } else if (rotary_vel == 8) {
+            // TODO: be better for motors
+            duty_cycle_all = 0;
+        }
 
         // limit max value
-        duty_cycle_all =
-            100;  // std::min(duty_cycle_all, static_cast<uint16_t>(511));
+        // duty_cycle_all = std::min(duty_cycle_all, static_cast<uint16_t>(511));
 
         // set the duty cycle values all to our determined value according to
         // the rotary selector
         std::fill(duty_cycles.begin(), duty_cycles.end(), duty_cycle_all);
-        motors_show();
+        duty_cycles[4] = std::abs(duty_cycles[4]);
+        // motors_show();
 
         // move cursor back 8 rows
-        printf("\033[%uA", 8);
+        // printf("\033[%uA", 8);
         // Console::Instance()->Flush();
         wait_ms(3);
     }
