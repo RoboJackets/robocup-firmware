@@ -1,8 +1,8 @@
 #include "Assert.hpp"
 #include "Logger.hpp"
-
+#include "ISM43340.hpp"
 #include <memory>
-
+#include "PinNames.h"
 
 inline uint16_t changeEndianess(uint16_t val) {
     return (val>>8) | (val<<8);
@@ -10,45 +10,87 @@ inline uint16_t changeEndianess(uint16_t val) {
 
 ISM43340::ISM43340(SpiPtrT sharedSPI, PinName nCs, PinName intPin,
                    PinName _nReset)
-    : CommLink(sharedSPI, nCs, intPin), nReset(_nReset) {
+  : CommLink(sharedSPI, nCs, intPin), nReset(_nReset), dataReady(p21) {
     reset();
 }
 
-uint32_t ISM43340::writeToSpi(uint8_t* command, uint32_t commandLength) {
+int ISM43340::writeToSpi(char* command, int commandLength) {
 
+
+  while (dataReady.read() != 1) {
+  }
+
+  // printf("Command Phase\r\n");
+  // wait_ms(mbedPrintWait);
+
+  int length = strlen(command);
+
+  // Concatenate newline if necessary
+
+  char lastC = 0;
+  chipSelect();
+  for (int i = 0; i < length; i++) {
+    char c = command[i];
+    if (lastC != 0) {
+      uint16_t packet = (c << 8) | lastC;
+      //Due to the fact the SPI protocol for this takes turns the return can be ignored
+      m_spi->write(packet);
+      lastC = 0;
+    } else {
+      lastC = c;
+    }
+  }
+  chipDeselect();
+
+  //what am I returning here? probably a status code I guess
+  return 0;
+
+  /* I think this stuff is old
     // endianess conversion from the char array. It is cast to 16 bits
     for (uint32_t i = 0; i < commandLength; i + 2) {
         *((uint16_t*)command[i]) = changeEndianess(*((uint16_t*)command[i]));
     }
 
     uint8_t lastc = 0;
-    radiospi.chipselect();
+    chipSelect();
     for (int i = 0; i < command->size(); i++) {
         uint8_t c = command[i];
         if (lastc != 0) {
             uint16_t packet = (c << 8) | lastc;
-            radiospi.m_spi->write(packet);
+            m_spi->write(packet);
             lastc = 0;
         } else {
             lastc = c;
         }
     }
-    radiospi.chipdeselect();
+    chipDeselect();
     return 0;
+  */
 }
 
 uint32_t ISM43340::readFromSpi(uint8* readbuffer, uint32* readlength) {
 
-    packetcount = 0;
-    radiospi.chipselect();
-    while (dataready.read() != 0) {
-        uint16_t data = radiospi.m_spi->write(EMPTY_TRANSFER);
-        readbuffer[packetcount] = (uint8_t)(data >> 8);
-        readbuffer[packetcount+ 1] = (uint8_t)(data & 0xFF);
-        packetcount += 2;
-    }
-    radiospi.chipdeselect();
-    return 0;
+  while (dataReady.read() != 1) {
+  }
+
+  // printf("Data Phase\r\n");
+  // wait_ms(mbedPrintWait);
+
+  int packetCount = 0;
+  //I need to make this a class variable at some point
+  uint8_t readBuffer[1024];
+  chipSelect();
+  while (dataReady.read() != 0) {
+    //I have no clue what 0x0a0a translates to... best guess is \n\n
+    uint16_t data = m_spi->write(0x0a0a);
+    readBuffer[packetCount] = (uint8_t)(data);
+    readBuffer[packetCount + 1] = (uint8_t)(data >> 8);
+    packetCount += 2;
+  }
+  chipDeselect();
+
+  //is this a status again? this is weird
+  return 0;
 }
 
 void ISM43340::fmtCmd(BufferT& command, BufferT& payload) {
@@ -242,7 +284,9 @@ void ISM43340::reset() {
 
         dwt_setautorxreenable(1);
 
-        setLED(true);
+        //not sure I need this
+        //setLED(true);
+
         //
         dwt_forcetrxoff();  // TODO: Better way than force off then reset?
         dwt_rxreset();

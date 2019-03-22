@@ -1,6 +1,8 @@
 #pragma once
 
 #include "CommLink.hpp"
+#include "ISM43340_api.hpp"
+
 
 namespace ISMConstants {
     static const std::string OK = "OK\r\n\>";
@@ -49,12 +51,19 @@ public:
 
     virtual int writeToSpi(char* command, int commandLength);
 
-    virtual int readFromSpi();
+    virtual uint32_t readFromSpi(uint8* readbuffer, uint32* readlength);
 
-    void setLED(bool ledOn) { dwt_setleds(ledOn); };
+    virtual void fmtCmd(BufferT& command, BufferT& payload);
+
+  //Not sure I need this
+  //void setLED(bool ledOn) { dwt_setleds(ledOn); };
 
 private:
-    InterruptIn dataReady();
+
+
+    DigitalIn dataReady;
+    //Pretty sure this should just be a input pin
+    //InterruptIn dataReady();
 
     BufferPtrT m_rxBufferPtr = nullptr;
     BufferPtrT m_txBufferPtr = nullptr;
