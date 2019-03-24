@@ -49,6 +49,7 @@ target_include_directories( firm-lib PUBLIC
     drivers/decawave
     drivers/ds2411
     drivers/fpga
+    drivers/ism43340
     drivers/kicker-board
     drivers/mcp23017
     drivers/mpu-6050

@@ -8,121 +8,101 @@ inline uint16_t changeEndianess(uint16_t val) {
     return (val>>8) | (val<<8);
 }
 
-ISM43340::ISM43340(SpiPtrT sharedSPI, PinName nCs, PinName intPin,
-                   PinName _nReset)
+uint32_t mbedPrintWait2 = 50;
+ISM43340::ISM43340(SpiPtrT sharedSPI, PinName nCs, PinName _nReset, PinName intPin)
   : CommLink(sharedSPI, nCs, intPin), nReset(_nReset), dataReady(p21) {
     reset();
 }
 
-int ISM43340::writeToSpi(char* command, int commandLength) {
-
+int ISM43340::writeToSpi(uint8_t* command, int length) {
 
   while (dataReady.read() != 1) {
   }
 
-  // printf("Command Phase\r\n");
-  // wait_ms(mbedPrintWait);
 
-  int length = strlen(command);
-
-  // Concatenate newline if necessary
-
-  char lastC = 0;
   chipSelect();
-  for (int i = 0; i < length; i++) {
-    char c = command[i];
-    if (lastC != 0) {
-      uint16_t packet = (c << 8) | lastC;
-      //Due to the fact the SPI protocol for this takes turns the return can be ignored
-      m_spi->write(packet);
-      lastC = 0;
-    } else {
-      lastC = c;
-    }
+  for (int i = 0; i < length; i += 2) {
+      if (i < length) {
+          uint8_t c1 = command[i];
+          uint8_t c2 = 0;
+          if (i + 1 < length) {
+              c2 = command[i + 1];
+          }
+
+          //Swap endianess
+          uint16_t packet = (c2 << 8) | c1;
+          //Due to the fact the SPI protocol for this takes turns the return can be ignored
+          m_spi->write(packet);
+      }
   }
   chipDeselect();
 
   //what am I returning here? probably a status code I guess
   return 0;
+}
 
-  /* I think this stuff is old
-    // endianess conversion from the char array. It is cast to 16 bits
-    for (uint32_t i = 0; i < commandLength; i + 2) {
-        *((uint16_t*)command[i]) = changeEndianess(*((uint16_t*)command[i]));
+uint32_t ISM43340::readFromSpi() {
+
+    while (dataReady.read() != 1) {
     }
 
-    uint8_t lastc = 0;
+    readBuffer.clear();
     chipSelect();
-    for (int i = 0; i < command->size(); i++) {
-        uint8_t c = command[i];
-        if (lastc != 0) {
-            uint16_t packet = (c << 8) | lastc;
-            m_spi->write(packet);
-            lastc = 0;
-        } else {
-            lastc = c;
+    while (dataReady.read() != 0) {
+        uint16_t data = m_spi->write(0x0a0a);
+
+        //ignore '> ' which is the prompt
+        if (data != 0x203e){
+            readBuffer.push_back((uint8_t)(data));
+            readBuffer.push_back((uint8_t)(data >> 8));
         }
     }
     chipDeselect();
+
+    //is this a status again? this is weird
     return 0;
-  */
 }
 
-uint32_t ISM43340::readFromSpi(uint8* readbuffer, uint32* readlength) {
+void ISM43340::sendCommand(std::string command, std::string arg) {
+    command = command + arg;
 
-  while (dataReady.read() != 1) {
-  }
-
-  // printf("Data Phase\r\n");
-  // wait_ms(mbedPrintWait);
-
-  int packetCount = 0;
-  //I need to make this a class variable at some point
-  uint8_t readBuffer[1024];
-  chipSelect();
-  while (dataReady.read() != 0) {
-    //I have no clue what 0x0a0a translates to... best guess is \n\n
-    uint16_t data = m_spi->write(0x0a0a);
-    readBuffer[packetCount] = (uint8_t)(data);
-    readBuffer[packetCount + 1] = (uint8_t)(data >> 8);
-    packetCount += 2;
-  }
-  chipDeselect();
-
-  //is this a status again? this is weird
-  return 0;
-}
-
-void ISM43340::fmtCmd(BufferT& command, BufferT& payload) {
-    command.insert(payload.end(), std::make_move_iterator(payload.begin()), std::make_move_iterator(payload.end()));
-    // pad command if needed
-    if (command % 2 == 0) {
-        command[commandLength] = "\r";
-        command[commandLength] = "\n";
-    } else {
-        command[commandLength] = "\r";
+    // Add delimiter and keep command of even length
+    if (command.length() % 2 == 0) {
+        command += "\r\n";
     }
+    else {
+        command += "\r";
+    }
+
+    writeToSpi((uint8_t*) command.data(), command.length());
+    readFromSpi();
 }
+
 
 /* COMMAND SET DEFINITIONS */
 
-//Check prompt
-inline checkPrompt () {
-    // read the initial prompt into a buffer
-    readfromspi();
-    // check the buffer for the response sequence of the prompt (Not the same as the OK)
-    readbuffer
-    // you could probably have read spi return an int as a status code for both cant decide
-}
 
-// This command will probably not be used but is here as an example command
-// Set Human Readable
-inline setHumanReadable () {
-    // write composite string to the radio
-    writetospi(&compositeString);
-    // read to global buffer
-    readfromspi();
-}
+
+// //Check prompt
+// inline void checkPrompt () {
+//     // read the initial prompt into a buffer
+//     readfromspi();
+//     // check the buffer for the response sequence of the prompt (Not the same as the OK)
+//     readbuffer
+//     // you could probably have read spi return an int as a status code for both cant decide
+// }
+
+// // This command will probably not be used but is here as an example command
+// // Set Human Readable
+// inline setHumanReadable () {
+//     std::string compositeString(CMD_SET_HUMAN_READABLE);
+//     // write composite string to the radio
+//     writetospi(&compositeString);
+//     // read to global buffer
+//     readfromspi();
+// }
+
+
 
 //Set Machine Readable
 
@@ -139,28 +119,22 @@ inline setHumanReadable () {
 //Show connection status
 
 //Send Data TCP
-inline sendDataSPI (BufferT txBuffer) {
 
-    // write composite string to the radio
-    writetospi(&compositeString);
-    // read to global buffer
-    readfromspi();
-}
 
-// This one is here as an example as well
-//Show network settings
-inline showNetworkSettings() {
-    std::string compositeString(CMD_SHOW_NETWORK_SETTINGS);
+// // This one is here as an example as well
+// //Show network settings
+// inline showNetworkSettings() {
+//     std::string compositeString(CMD_SHOW_NETWORK_SETTINGS);
 
-    writetospi(&compositeString);
-    readfromspi();
-    // the returned buffer from this is of unknown length. However it is well bounded by the length of possible network information
-}
+//     writetospi(&compositeString);
+//     readfromspi();
+//     // the returned buffer from this is of unknown length. However it is well bounded by the length of possible network information
+// }
 
 
 int32_t ISM43340::sendPacket(const rtp::Packet* pkt) {
     // Return failure if not initialized
-    if (!m_isInit) return COMM_FAILURE;
+    if (!isInit) return COMM_FAILURE;
 
     BufferT txBuffer;
 
@@ -179,84 +153,79 @@ int32_t ISM43340::sendPacket(const rtp::Packet* pkt) {
     txBuffer.insert(txBuffer.end(), pkt->payload.begin(), pkt->payload.end());
 
     // ISM Stuff
-    txBuffer.insert(CMD_SEND_DATA, 0);
+    txBuffer.insert(txBuffer.begin(), ISMConstants::CMD_SEND_DATA.begin(), ISMConstants::CMD_SEND_DATA.end());
 
+    // Add delimiter and keep command of even length
+
+
+    if (txBuffer.size() % 2 == 0) {
+        txBuffer.push_back('\r');
+        txBuffer.push_back('\n');
+    }
+    else {
+        txBuffer.push_back('\r');
+    }
     writeToSpi(txBuffer.data(), txBuffer.size());
 
-
-
-
-    // This error code can be replaced with the return of calling send transport data
-    const auto sentStatus =
-        dwt_starttx(DWT_START_TX_IMMEDIATE | DWT_RESPONSE_EXPECTED);
-    const auto hadError = sentStatus != DWT_SUCCESS;
-
-    return hadError ? COMM_DEV_BUF_ERR : COMM_SUCCESS;
+    //is this a status?
+    return 0;
 }
 
-// No clue how this works
-CommLink::BufferT ISM43340::getData() {
-    BufferT buf{};
-
-    // Return empty data if not initialized
-    if (!m_isInit) return std::move(buf);
-
-    // set the m_rxBuffer's pointer to our vector before calling the isr
-    // function
-    m_rxBufferPtr = &buf;
-
-    // manually invoke the isr routine & set back into RX mode
-    dwt_isr();
-    // our buffer is now filled with the received bytes if everything went ok
-    dwt_rxenable(DWT_START_RX_IMMEDIATE);
-
-    // return empty buffer if the isr routine failed to fill it with anything
-    if (buf.empty()) return std::move(buf);
-
-    // remove the last 2 elements
-    buf.erase(buf.end() - 2, buf.end());
-
-    // move the buffer to the caller
-    return std::move(buf);
+void ISM43340::setAddress(int addr) {
+    //I have no clue what this does
 }
 
 int32_t ISM43340::selfTest() {
-    // ISM read device number
-    m_chipVersion = dwt_readdevid();
+    //I don't really have anything for this right now
+    printf("Starting Self Test\r\n");
+    wait_ms(mbedPrintWait2);
+    sendCommand(ISMConstants::CMD_SET_HUMAN_READABLE);
+    readFromSpi();
 
-    // Compare return buffer from read device id
-    if (m_chipVersion != DWT_DEVICE_ID) {
-        LOG(SEVERE,
-            "Decawave part number error:\r\n"
-            "    Found:\t0x%02X (expected 0x%02X)",
-            m_chipVersion, DWT_DEVICE_ID);
+    printf("Human Readble, getting connection info\r\n");
+    wait_ms(mbedPrintWait2);
+    sendCommand(ISMConstants::CMD_GET_CONNECTION_INFO);
+    readFromSpi();
 
-        return -1;
-    } else {
-        m_isInit = true;
+    printf("Received Data:\r\n");
+    wait_ms(mbedPrintWait2);
+    for (int i = 0; i < readBuffer.size(); i++) {
+        printf("%c", (char) readBuffer[i]);
+        wait_ms(mbedPrintWait2);
+    }
+    printf("\r\n");
+    wait_ms(mbedPrintWait2);
+
+
+    //This isn't a good measure of correctness
+    isInit = readBuffer.size() > 0;
+
+    sendCommand(ISMConstants::CMD_SET_MACHINE_READABLE);
+    readFromSpi();
+
+    if (isInit){
         return 0;
     }
+
+    return -1;
 }
 
 // Essentially the init function
 void ISM43340::reset() {
     nReset = 0;
-    wait_ms(3);
     nReset = 1;
 
-    m_isInit = 0;
-    setSPIFrequency(2'000'000);
+    setSPIFrequency(6'000'000);
 
-    // check for prompt
-    if () {
-        LOG(SEVERE, "ISM43340 not initialized");
-        return;
+    int i = 0;
+    while (dataReady.read() != 1 and i < 100) {
+      wait_ms(10);
+      i++;
     }
 
-    // Attempt retrieval of device id
-    selfTest();
+    isInit = dataReady.read();
 
-    if (m_isInit) {
+    if (isInit) {
         // Access point config from hwtest
         // char cmdSSID[] = "C1=rjwifi\r";
         // char cmdSetPassword[] = "C2=61E880222C\r";
@@ -270,27 +239,40 @@ void ISM43340::reset() {
         // char cmdSetPort[] = "P4=25565\r\n";
         // char cmdStartClient[] = "P6=1\r\n";
 
-        // I dont think any of the rest of this except the log and CommLink::ready() matter
-        dwt_configure(&config);
-        dwt_configuretxrf(&txconfig);
+        readFromSpi();
 
-        setSPIFrequency(6'000'000);  // won't work after 8MHz
+        //Configure Network
+        sendCommand(ISMConstants::CMD_RESET_SOFT);
 
-        dwt_setrxaftertxdelay(TX_TO_RX_DELAY_UUS);
-        dwt_setcallbacks(
-            nullptr, static_cast<dwt_cb_t>(&Decawave::getDataSuccess), nullptr,
-            static_cast<dwt_cb_t>(&Decawave::getDataFail));
-        dwt_setinterrupt(DWT_INT_RFCG, 1);
+        sendCommand(ISMConstants::CMD_SET_SSID, "rjwifi");
+        sendCommand(ISMConstants::CMD_SET_PASSWORD, "61E880222C");
 
-        dwt_setautorxreenable(1);
+        sendCommand(ISMConstants::CMD_SET_SECURITY, "3");
 
-        //not sure I need this
-        //setLED(true);
+        sendCommand(ISMConstants::CMD_SET_DHCP, "1");
 
-        //
-        dwt_forcetrxoff();  // TODO: Better way than force off then reset?
-        dwt_rxreset();
+
+        //Connect to network
+        sendCommand(ISMConstants::CMD_JOIN_NETWORK);
+
+        if ((int)readBuffer[0] == 0) {
+            //Failed to connect to network
+            //not sure what to have it do here
+            LOG(INFO, "ISM43340 failed to connect");
+            return;
+        }
+
+        printf("joined\r\n");
+
+        sendCommand(ISMConstants::CMD_SET_TRANSPORT_PROTOCOL, "0");
+
+        sendCommand(ISMConstants::CMD_SET_HOST_IP, "192.168.1.108");
+
+        sendCommand(ISMConstants::CMD_SET_PORT, "25565");
+
+        sendCommand(ISMConstants::CMD_START_CLIENT, "1");
 
         LOG(INFO, "ISM43340 ready!");
         CommLink::ready();
     }
+}

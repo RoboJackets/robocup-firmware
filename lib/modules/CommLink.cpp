@@ -28,7 +28,7 @@ void CommLink::rxThread() {
     // ASSERT(threadPriority != osPriorityError);
 
     // Set the function to call on an interrupt trigger
-    m_intIn.rise(this, &CommLink::ISR);
+    // m_intIn.rise(this, &CommLink::ISR);
 
     // Only continue past this point once the hardware link is initialized
     Thread::signal_wait(SIGNAL_START);

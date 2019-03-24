@@ -15,7 +15,8 @@ namespace ISMConstants {
 
     static const std::string CMD_SET_HUMAN_READABLE = "$$$";
     static const std::string CMD_SET_MACHINE_READABLE = "---";
-    static const std::string CMD_RESET_SETTINGS = "Z0";
+    static const std::string CMD_RESET_FACTORY = "Z0";
+    static const std::string CMD_RESET_SOFT = "ZR";
 
     static const std::string CMD_JOIN_NETWORK = "C0";
     static const std::string CMD_SET_SSID = "C1=";
@@ -34,30 +35,26 @@ namespace ISMConstants {
 
 class ISM43340 : public CommLink {
 public:
-    ISM43340(SpiPtrT sharedSPI, PinName nCs, PinName intPin, PinName _nReset);
+  ISM43340(SpiPtrT sharedSPI, PinName nCs,  PinName _nReset, PinName intPin = NC);
 
-    virtual int32_t sendPacket(const rtp::Packet* pkt) override;
+    int32_t sendPacket(const rtp::Packet* pkt) override;
 
-    virtual BufferT getData() override;
+    BufferT getData() { return readBuffer; }
 
-    // virtual void reset() override { dwt_softreset(); }
-    virtual void reset() override;
+    void reset() override;
 
-    virtual int32_t selfTest() override;
+    int32_t selfTest() override;
 
-    virtual bool isConnected() const override { return m_isInit; }
+    bool isConnected() const override { return isInit; }
 
-    virtual void setAddress(int addr) override;
+    void setAddress(int addr) override;
 
-    virtual int writeToSpi(char* command, int commandLength);
+    int writeToSpi(uint8_t* command, int length);
 
-    virtual uint32_t readFromSpi(uint8* readbuffer, uint32* readlength);
+    uint32_t readFromSpi();
 
-    virtual void fmtCmd(BufferT& command, BufferT& payload);
-
-  //Not sure I need this
-  //void setLED(bool ledOn) { dwt_setleds(ledOn); };
-
+    //I could add a status return to this but meh
+    void sendCommand(std::string command, std::string arg = "");
 private:
 
 
@@ -65,12 +62,13 @@ private:
     //Pretty sure this should just be a input pin
     //InterruptIn dataReady();
 
-    BufferPtrT m_rxBufferPtr = nullptr;
-    BufferPtrT m_txBufferPtr = nullptr;
+    BufferT readBuffer;
+
     uint32_t m_chipVersion;
-    bool m_isInit = false;
+    bool isInit = false;
     DigitalOut nReset;
 
     void getDataSuccess(const dwt_cb_data_t* cb_data);
     void getDataFail(const dwt_cb_data_t* cb_data);
+
 };
