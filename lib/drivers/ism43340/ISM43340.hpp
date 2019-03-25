@@ -1,8 +1,6 @@
 #pragma once
 
 #include "CommLink.hpp"
-#include "ISM43340_api.hpp"
-
 
 namespace ISMConstants {
     static const std::string OK = "OK\r\n\>";
