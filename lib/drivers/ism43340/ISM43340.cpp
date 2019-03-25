@@ -1,9 +1,9 @@
+#include "ISM43340.hpp"
 #include "Assert.hpp"
 #include "Logger.hpp"
-#include "ISM43340.hpp"
 #include <memory>
+#include <string>
 #include "PinNames.h"
-
 
 uint32_t mbedPrintWait2 = 50;
 ISM43340::ISM43340(SpiPtrT sharedSPI, PinName nCs, PinName _nReset, PinName intPin)
@@ -78,7 +78,7 @@ int32_t ISM43340::sendPacket(const rtp::Packet* pkt) {
     BufferT txBuffer;
 
     // Reserve memory for AT command header, packet, and delimiter
-    const auto bufferSize = 5 + std::to_string(pkt->size()).size() + pkt->size() + 2;
+    const auto bufferSize = 5 + pkt->size() + 2;
     txBuffer.reserve(bufferSize);
 
     const auto headerFirstPtr = reinterpret_cast<const uint8_t*>(&pkt->header);
