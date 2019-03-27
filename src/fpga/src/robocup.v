@@ -190,6 +190,8 @@ localparam SPI_SLAVE_COUNTER_WIDTH = `LOG2(SPI_SLAVE_RES_BUF_LEN);
 
 localparam CMD_READ_ADC         = CMD_RW_TYPE_BASE + 7;
 
+localparam DEFAULT_CMD = 16'b1011111100000000;
+
 // These are for triggering the storage of values outside of the SPI's SCK domain
 reg                                     rx_vals_flag            = 0,
                                         motors_en               = 0,
@@ -247,47 +249,58 @@ reg [1:0]  two_periods = 0;
 reg [15:0] sensor_data [0:11];
 reg        CS1 = 0;
 reg        CS2 = 1;
+reg        FPGA_CS_DONE = 0;
 
-
-assign spi_master_di = (two_periods == 0) ? 16'b1011111100000000 : 0;
+assign spi_master_di = (two_periods == 0) ? DEFAULT_CMD : 0;
 
 assign adc_ncs_o[0] = CS1;
 assign adc_ncs_o[1] = CS2;
 
 always @(posedge sysclk) begin
-    if(spi_master_busy == 0 & two_periods != 2'b11) // It can't read the first two data frames, because the sensor is still converting the valid data.
-        two_periods = two_periods + 1;
+    if(spi_master_busy == 0 && FPGA_CS_DONE == 0) begin// It can't read the first two data frames, because the sensor is still converting the valid data.
 
-    if (CS1 == 0 & two_periods > 2'b10) begin // We add the data that we get in the sensors in registers
-        case (spi_master_d0[15:12]) // We use the data address in the first 4 bits to identify the values and put the in the right indexes of the sensor_data.
-            4'b0000: sensor_data[0] <= spi_master_d0[15:0];
-            4'b0001: sensor_data[1] <= spi_master_d0[15:0];
-            4'b0010: sensor_data[2] <= spi_master_d0[15:0];
-            4'b0011: sensor_data[3] <= spi_master_d0[15:0];
-            4'b0100: sensor_data[4] <= spi_master_d0[15:0];
-            4'b0101:
-                begin
-                    sensor_data[5] <= spi_master_d0[15:0]; //In the last channel of a sensor, change the sensor chip
-                    CS1 <= 1;
-                    CS2 <= 0;
-                    two_periods <= 0;
-                end
-        endcase
-    end else if (CS2 == 0 & two_periods > 2'b10) begin
-        case(spi_master_d0[15:12])
-            4'b0000: sensor_data[6] <= spi_master_d0[15:0];
-            4'b0001: sensor_data[7] <= spi_master_d0[15:0];
-            4'b0010: sensor_data[8] <= spi_master_d0[15:0];
-            4'b0011: sensor_data[9] <= spi_master_d0[15:0];
-            4'b0100: sensor_data[10] <= spi_master_d0[15:0];
-            4'b0101:
-                begin
-                    sensor_data[11] <= spi_master_d0[15:0];
-                    CS1 <= 0;
-                    CS2 <= 1;
-                    two_periods <= 0;
-                end
-        endcase
+        if (two_periods != 2'b11) begin
+            two_periods = two_periods + 1;
+        end
+
+        if (CS1 == 0 && two_periods > 2'b10) begin // We add the data that we get in the sensors in registers
+            case (spi_master_d0[15:12]) // We use the data address in the first 4 bits to identify the values and put the in the right indexes of the sensor_data.
+                4'h0: sensor_data[0] <= spi_master_d0[15:0];
+                4'h1: sensor_data[1] <= spi_master_d0[15:0];
+                4'h2: sensor_data[2] <= spi_master_d0[15:0];
+                4'h3: sensor_data[3] <= spi_master_d0[15:0];
+                4'h4: sensor_data[4] <= spi_master_d0[15:0];
+                4'h5:
+                    begin
+                        sensor_data[5] <= spi_master_d0[15:0]; //In the last channel of a sensor, change the sensor chip
+                        two_periods <= 0;
+                        CS1 = 1;
+                        CS2 = 0;
+                    end
+            endcase
+        end else if (CS2 == 0 && two_periods > 2'b10) begin
+            case(spi_master_d0[15:12])
+                4'h0: sensor_data[6] <= spi_master_d0[15:0];
+                4'h1: sensor_data[7] <= spi_master_d0[15:0];
+                4'h2: sensor_data[8] <= spi_master_d0[15:0];
+                4'h3: sensor_data[9] <= spi_master_d0[15:0];
+                4'h4: sensor_data[10] <= spi_master_d0[15:0];
+                4'h5:
+                    begin
+                        sensor_data[11] <= spi_master_d0[15:0];
+                        two_periods <= 0;
+                        CS1 = 0;
+                        CS2 = 1;
+                    end
+            endcase
+        end
+    end
+    FPGA_CS_DONE = 1;
+end
+
+always @(posedge sysclk) begin
+    if (FPGA_CS_DONE == 1 && spi_master_busy == 1) begin
+        FPGA_CS_DONE = 0;
     end
 end
 
