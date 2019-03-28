@@ -29,6 +29,9 @@ namespace ISMConstants {
     static const std::string CMD_START_CLIENT = "P6=";
 
     static const std::string CMD_SEND_DATA = "S3=";
+
+    static const std::string CMD_RECEIVE_DATA = "R0";
+    static const std::string CMD_SET_READ_SIZE = "R1=";
 }
 
 class ISM43340 : public CommLink {
@@ -45,8 +48,6 @@ public:
 
     bool isConnected() const override { return isInit; }
 
-    void setAddress(int addr) override;
-
     int writeToSpi(uint8_t* command, int length);
 
     uint32_t readFromSpi();
@@ -54,7 +55,12 @@ public:
     //I could add a status return to this but meh
     void sendCommand(std::string command, std::string arg = "");
 private:
-
+    typedef struct {
+        unsigned long status;      //initial value of register as ISR is entered
+        unsigned short datalength;  //length of frame
+        unsigned char fctrl[2];    //frame control bytes
+        unsigned char rx_flags;    //RX frame flags, see above
+    } dwt_cb_data_t;
 
     DigitalIn dataReady;
     //Pretty sure this should just be a input pin

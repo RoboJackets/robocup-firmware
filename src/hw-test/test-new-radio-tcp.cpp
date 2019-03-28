@@ -33,7 +33,7 @@ Timer timer;
 DigitalIn dataReady(RADIO_DATA_RDY);
 DigitalOut ssn(RADIO_SPI_NCS);
 
-uint32_t mbedPrintWait = 50;
+uint32_t mbedPrintWait = 100;
 
 void printReadBuffer(std::vector<uint8_t> readBuffer) {
     printf("Received Data: ");
@@ -50,7 +50,6 @@ void printReadBuffer(std::vector<uint8_t> readBuffer) {
 int main() {
     const auto mainID = Thread::gettid();
     ASSERT(mainID != nullptr);
-
     {
         // clear any extraneous rx serial bytes
         Serial s(RJ_SERIAL_RXTX);
@@ -75,8 +74,6 @@ int main() {
     printf("ISM43340 Constructed\r\n");
     wait_ms(mbedPrintWait);
 
-    radioDriver.reset();
-
     // bool booted = false;
     // int attempt = 0;
     // while (!booted){
@@ -89,6 +86,7 @@ int main() {
     // }
 
     printf("reset complete\r\n");
+    printf("does this make it print if I say more things\r\n");
     wait_ms(mbedPrintWait);
 
     bool test = radioDriver.selfTest();
@@ -104,9 +102,6 @@ int main() {
         radioDriver.sendCommand("S3=", cmdSendData);
         // command phase
         printf("Sent Data #%d\r\n", iter);
-
-        // data phase
-        radioDriver.readFromSpi();
 
         timer.stop();
         printf("Micro Seconds Elapsed: %d\r\n", timer.read_us());

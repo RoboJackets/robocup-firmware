@@ -93,6 +93,13 @@ int32_t ISM43340::sendPacket(const rtp::Packet* pkt) {
     // Insert \r
     txBuffer.insert(txBuffer.end(), ISMConstants::ODD_DELIMITER.begin(), ISMConstants::ODD_DELIMITER.end());
 
+    // FOR DEBUGGING
+    for (int i = 0; i < txBuffer.size(); i++) {
+        printf("%c", txBuffer[i]);
+    }
+    printf("\r\n");
+    wait_ms(mbedPrintWait2);
+
     // insert the rtp header
     txBuffer.insert(txBuffer.end(), headerFirstPtr, headerLastPtr);
     // insert the rtp payload
@@ -100,37 +107,33 @@ int32_t ISM43340::sendPacket(const rtp::Packet* pkt) {
 
     // NOTE: THIS MAY BE INCORRECT TO ADD A DELIMITER AT ALL REFERENCE PG 11 OF AT COMMAND SET
     // Add delimiter and keep command of even length
-    if (txBuffer.size() % 2 == 0) {
-        txBuffer.push_back('\r');
-        txBuffer.push_back('\n');
-    }
-    else {
-        txBuffer.push_back('\r');
-    }
+    // if (txBuffer.size() % 2 == 0) {
+    //     txBuffer.push_back('\r');
+    //     txBuffer.push_back('\n');
+    // }
+    // else {
+    //     txBuffer.push_back('\r');
+    // }
 
     writeToSpi(txBuffer.data(), txBuffer.size());
 
     return 0;
 }
 
-
 int32_t ISM43340::selfTest() {
     //I don't really have anything for this right now
     printf("Starting Self Test\r\n");
     wait_ms(mbedPrintWait2);
     sendCommand(ISMConstants::CMD_SET_HUMAN_READABLE);
-    readFromSpi();
 
     printf("Human Readble, getting connection info\r\n");
     wait_ms(mbedPrintWait2);
     sendCommand(ISMConstants::CMD_GET_CONNECTION_INFO);
-    readFromSpi();
 
     printf("Received Data:\r\n");
     wait_ms(mbedPrintWait2);
     for (int i = 0; i < readBuffer.size(); i++) {
         printf("%c", (char) readBuffer[i]);
-        wait_ms(mbedPrintWait2);
     }
     printf("\r\n");
     wait_ms(mbedPrintWait2);
@@ -140,7 +143,6 @@ int32_t ISM43340::selfTest() {
     isInit = readBuffer.size() > 0;
 
     sendCommand(ISMConstants::CMD_SET_MACHINE_READABLE);
-    readFromSpi();
 
     if (isInit){
         return 0;
@@ -168,15 +170,15 @@ void ISM43340::reset() {
 
         readFromSpi();
 
-        // TODO: Check for Prompt
+        // TODO: Check for \r\n in buffer
 
         //Configure Network
         sendCommand(ISMConstants::CMD_RESET_SOFT);
 
-        sendCommand(ISMConstants::CMD_SET_SSID, "rjwifi");
-        sendCommand(ISMConstants::CMD_SET_PASSWORD, "61E880222C");
+        sendCommand(ISMConstants::CMD_SET_SSID, "Hello");
+        sendCommand(ISMConstants::CMD_SET_PASSWORD, "");
 
-        sendCommand(ISMConstants::CMD_SET_SECURITY, "3");
+        sendCommand(ISMConstants::CMD_SET_SECURITY, "0");
 
         sendCommand(ISMConstants::CMD_SET_DHCP, "1");
 
@@ -191,17 +193,23 @@ void ISM43340::reset() {
             return;
         }
 
-        printf("joined\r\n");
+        for (int i = 0; i < readBuffer.size(); i++) {
+            printf("%c", readBuffer[i]);
+        }
 
-        sendCommand(ISMConstants::CMD_SET_TRANSPORT_PROTOCOL, "0");
+        sendCommand(ISMConstants::CMD_SET_TRANSPORT_PROTOCOL, "1");
+        printf("set protocol/r/n");
 
-        sendCommand(ISMConstants::CMD_SET_HOST_IP, "192.168.1.108");
+        sendCommand(ISMConstants::CMD_SET_HOST_IP, "192.168.43.3");
+        printf("set host ip/r/n");
 
         sendCommand(ISMConstants::CMD_SET_PORT, "25565");
+        printf("set port/r/n");
 
         sendCommand(ISMConstants::CMD_START_CLIENT, "1");
 
+        printf("IT DO BE LIKE THAT\r\n");
         LOG(INFO, "ISM43340 ready!");
-        CommLink::ready();
+        // CommLink::ready();
     }
 }
