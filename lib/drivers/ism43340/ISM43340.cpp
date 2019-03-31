@@ -121,7 +121,7 @@ int32_t ISM43340::sendPacket(const rtp::Packet* pkt) {
 }
 
 int32_t ISM43340::selfTest() {
-    //I don't really have anything for this right now
+    // I don't really have anything for this right now
     printf("Starting Self Test\r\n");
     wait_ms(mbedPrintWait2);
     sendCommand(ISMConstants::CMD_SET_HUMAN_READABLE);
@@ -175,7 +175,7 @@ void ISM43340::reset() {
         //Configure Network
         sendCommand(ISMConstants::CMD_RESET_SOFT);
 
-        sendCommand(ISMConstants::CMD_SET_SSID, "Hello");
+        sendCommand(ISMConstants::CMD_SET_SSID, "ThePromisedLan");
         sendCommand(ISMConstants::CMD_SET_PASSWORD, "");
 
         sendCommand(ISMConstants::CMD_SET_SECURITY, "0");
