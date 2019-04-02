@@ -36,8 +36,8 @@ set(FLASH_COPY_SCRIPT python3 ${PROJECT_SOURCE_DIR}/util/flash.py)
 add_definitions(-DSTM32F769xx -DUSE_USB_HS)
 add_subdirectory(external)
 
-add_subdirectory(API/C)
-add_subdirectory(API/CPP)
+add_subdirectory(API/c)
+add_subdirectory(API/cpp)
 add_subdirectory(BSP)
 
 add_subdirectory(tests/c)
