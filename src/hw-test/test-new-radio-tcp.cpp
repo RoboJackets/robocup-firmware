@@ -93,16 +93,14 @@ int main() {
     printf("Self Test: %b", test);
     wait_ms(mbedPrintWait);
 
+
+    rtp::Packet pkt;
+
     timer.reset();
     for (int iter = 0; iter < 10; iter++) {
         timer.start();
 
-        //Transport data
-        std::string cmdSendData = "42\r012345678901234567890123456789012345678912";
-        radioDriver.sendCommand("S3=", cmdSendData);
-        // command phase
-        printf("Sent Data #%d\r\n", iter);
-        radioDriver.testPrint();
+        radioDriver.sendPacket(&pkt);
         timer.stop();
         printf("Micro Seconds Elapsed: %d\r\n", timer.read_us());
         wait_ms(mbedPrintWait);
