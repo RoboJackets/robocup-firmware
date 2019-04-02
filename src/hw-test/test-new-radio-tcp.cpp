@@ -102,7 +102,7 @@ int main() {
         radioDriver.sendCommand("S3=", cmdSendData);
         // command phase
         printf("Sent Data #%d\r\n", iter);
-
+        radioDriver.testPrint();
         timer.stop();
         printf("Micro Seconds Elapsed: %d\r\n", timer.read_us());
         wait_ms(mbedPrintWait);

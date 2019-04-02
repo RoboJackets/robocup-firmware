@@ -60,13 +60,14 @@ void ISM43340::sendCommand(std::string command, std::string arg) {
     command = command + arg;
 
     // Add delimiter and keep command of even length
-    if (command.length() % 2 == 0) {
-        command += "\r\n";
+    if (command.compare("S3=") != 0) {
+        if (command.length() % 2 == 0) {
+            command += "\r\n";
+        }
+        else {
+            command += "\r";
+        }
     }
-    else {
-        command += "\r";
-    }
-
     writeToSpi((uint8_t*) command.data(), command.length());
     readFromSpi();
 }
@@ -93,30 +94,24 @@ int32_t ISM43340::sendPacket(const rtp::Packet* pkt) {
     // Insert \r
     txBuffer.insert(txBuffer.end(), ISMConstants::ODD_DELIMITER.begin(), ISMConstants::ODD_DELIMITER.end());
 
-    // FOR DEBUGGING
-    for (int i = 0; i < txBuffer.size(); i++) {
-        printf("%c", txBuffer[i]);
-    }
-    printf("\r\n");
-    wait_ms(mbedPrintWait2);
-
     // insert the rtp header
     txBuffer.insert(txBuffer.end(), headerFirstPtr, headerLastPtr);
     // insert the rtp payload
     txBuffer.insert(txBuffer.end(), pkt->payload.begin(), pkt->payload.end());
 
-    // NOTE: THIS MAY BE INCORRECT TO ADD A DELIMITER AT ALL REFERENCE PG 11 OF AT COMMAND SET
-    // Add delimiter and keep command of even length
-    // if (txBuffer.size() % 2 == 0) {
-    //     txBuffer.push_back('\r');
-    //     txBuffer.push_back('\n');
-    // }
-    // else {
-    //     txBuffer.push_back('\r');
-    // }
-
     writeToSpi(txBuffer.data(), txBuffer.size());
 
+    return 0;
+}
+
+int32_t ISM43340::testPrint() {
+    printf("Readbuffer Contains:\r\n");
+    wait_ms(mbedPrintWait2);
+    for (int i = 0; i < readBuffer.size(); i++) {
+        printf("%c", (char) readBuffer[i]);
+    }
+    printf("\r\n");
+    wait_ms(mbedPrintWait2);
     return 0;
 }
 
@@ -198,17 +193,10 @@ void ISM43340::reset() {
         }
 
         sendCommand(ISMConstants::CMD_SET_TRANSPORT_PROTOCOL, "1");
-        printf("set protocol/r/n");
-
-        sendCommand(ISMConstants::CMD_SET_HOST_IP, "192.168.43.3");
-        printf("set host ip/r/n");
-
+        sendCommand(ISMConstants::CMD_SET_HOST_IP, "192.168.43.252");
         sendCommand(ISMConstants::CMD_SET_PORT, "25565");
-        printf("set port/r/n");
-
         sendCommand(ISMConstants::CMD_START_CLIENT, "1");
 
-        printf("IT DO BE LIKE THAT\r\n");
         LOG(INFO, "ISM43340 ready!");
         // CommLink::ready();
     }

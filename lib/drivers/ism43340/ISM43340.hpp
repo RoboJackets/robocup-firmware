@@ -26,6 +26,7 @@ namespace ISMConstants {
     static const std::string CMD_SET_TRANSPORT_PROTOCOL = "P1=";
     static const std::string CMD_SET_HOST_IP = "P3=";
     static const std::string CMD_SET_PORT = "P4=";
+    static const std::string CMD_START_SERVER = "P5=";
     static const std::string CMD_START_CLIENT = "P6=";
 
     static const std::string CMD_SEND_DATA = "S3=";
@@ -49,6 +50,8 @@ public:
     bool isConnected() const override { return isInit; }
 
     int writeToSpi(uint8_t* command, int length);
+
+    int32_t testPrint();
 
     uint32_t readFromSpi();
 
