@@ -33,7 +33,8 @@ enum {
     CMD_READ_DUTY = 0x93,
     CMD_READ_HASH1 = 0x94,
     CMD_READ_HASH2 = 0x95,
-    CMD_CHECK_DRV = 0x96
+    CMD_CHECK_DRV = 0x96,
+    CMD_READ_ADC = 0x97
 };
 }
 
@@ -160,6 +161,36 @@ bool FPGA::send_config(const std::string& filepath) {
         filepath.c_str());
 
     return false;
+}
+
+uint8_t FPGA::read_adc(int16_t* adc_data[12]) {
+    uint8_t status;
+
+    chipSelect();
+    status = m_spi->write(CMD_READ_ADC);
+
+    for (size_t i = 0; i < 12; i++) {
+        uint16_t adc = m_spi->write(0x00) << 8;
+        adc |= m_spi->write(0x00);
+
+        uint16_t address = adc;
+        if (i % 6 == (address >> 12)) {
+            adc =<< 4;
+
+            int16_t value = static_cast<int16_t>(adc);
+
+            adc_data[i] = (value >> 4);
+        } else {
+            LOG(WARN, "adc_data invalid");
+
+        }
+
+    }
+
+
+    chipDeselect();
+
+    return status;
 }
 
 uint8_t FPGA::read_halls(uint8_t* halls, size_t size) {
