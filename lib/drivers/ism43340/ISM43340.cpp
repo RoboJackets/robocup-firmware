@@ -79,7 +79,7 @@ int32_t ISM43340::sendPacket(const rtp::Packet* pkt) {
     BufferT txBuffer;
 
     // Reserve memory for AT command header, packet, and delimiter
-    const auto bufferSize = 5 + pkt->size() + 2;
+    int bufferSize = 5 + pkt->size();
     txBuffer.reserve(bufferSize);
 
     const auto headerFirstPtr = reinterpret_cast<const uint8_t*>(&pkt->header);
@@ -90,7 +90,13 @@ int32_t ISM43340::sendPacket(const rtp::Packet* pkt) {
 
     // Insert ISM AT string and payload length
     txBuffer.insert(txBuffer.end(), ISMConstants::CMD_SEND_DATA.begin(), ISMConstants::CMD_SEND_DATA.end());
-    txBuffer.insert(txBuffer.end(), pkt->size());
+
+    char size [5];
+    sprintf(size, "%d", pkt->size());
+
+    std::string sizeButAString = size;
+
+    txBuffer.insert(txBuffer.end(), sizeButAString.begin(), sizeButAString.end());
     // Insert \r
     txBuffer.insert(txBuffer.end(), ISMConstants::ODD_DELIMITER.begin(), ISMConstants::ODD_DELIMITER.end());
 
@@ -99,7 +105,25 @@ int32_t ISM43340::sendPacket(const rtp::Packet* pkt) {
     // insert the rtp payload
     txBuffer.insert(txBuffer.end(), pkt->payload.begin(), pkt->payload.end());
 
+    printf("preparing to send %d bytes\r\n", txBuffer.size());
+
+    for (int i = 0; i < txBuffer.size(); i++) {
+      char c = txBuffer[i];
+      if (c == '\r') {
+        printf("\\r");
+
+      }
+      else if(c == '\n') {
+        printf("\\n");
+      }
+      else {
+        printf("%c", c);
+      }
+    }
+    printf("\r\n");
+
     writeToSpi(txBuffer.data(), txBuffer.size());
+    readFromSpi();
 
     return 0;
 }

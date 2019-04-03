@@ -102,6 +102,7 @@ int main() {
 
         radioDriver.sendPacket(&pkt);
         timer.stop();
+        radioDriver.testPrint();
         printf("Micro Seconds Elapsed: %d\r\n", timer.read_us());
         wait_ms(mbedPrintWait);
         timer.reset();
