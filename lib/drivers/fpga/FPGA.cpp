@@ -174,12 +174,12 @@ uint8_t FPGA::read_adc(int16_t* adc_data[12]) {
         adc |= m_spi->write(0x00);
 
         uint16_t address = adc;
-        if (i % 6 == (address >> 12)) {
-            adc =<< 4;
+        if (static_cast<uint16_t>(i % 6) == (address >> 12)) {
+            adc = adc << 4;
 
-            int16_t value = static_cast<int16_t>(adc);
+            *adc_data[i] = static_cast<int16_t>(adc);
 
-            adc_data[i] = (value >> 4);
+            *adc_data[i] = *adc_data[i] >> 4;
         } else {
             LOG(WARN, "adc_data invalid");
 
