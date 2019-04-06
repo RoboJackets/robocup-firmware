@@ -16,8 +16,8 @@ int main(void)
 
   while (true) {
     // Read pins and assign values to LEDs
-    led1 = (bool)pin35;
-    led2 = (bool)pin36;
+    led1 = pin35;
+    led2 = pin36;
     HAL_Delay(10);
   }
 }

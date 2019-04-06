@@ -2,7 +2,7 @@
 
 DigitalOut::DigitalOut(PinName pin, PullType pull, PinMode mode, PinSpeed speed,
         bool inverted) : pin(pin), inverted(inverted) {
-    GPIO_InitTypeDef pin_structure;
+    GPIO_InitTypeDef pin_structure = {};
     pin_structure.Pin = pin.pin;
     pin_structure.Mode = mode;
     pin_structure.Pull = pull;

@@ -49,7 +49,6 @@
 .thumb
 
 .global  g_pfnVectors
-.global  Default_Handler
 
 /* start address for the initialization values of the .data section.
 defined in linker script */
@@ -107,29 +106,12 @@ LoopFillZerobss:
     cmp  r2, r3
     bcc  FillZerobss
     bl  SystemInit  /* Call the clock system intitialization function.*/
-    bl  bsp_config
     bl __libc_init_array /* Call static constructors */
+    bl  bsp_config
     bl  main  /* Call the application's entry point.*/
     bx  lr
 
 .size  Reset_Handler, .-Reset_Handler
-
-
-/**
- * @brief  This is the code that gets called when the processor receives an
- *         unexpected interrupt.  This simply enters an infinite loop, preserving
- *         the system state for examination by a debugger.
- * @param  None
- * @retval None
-*/
-.section  .text.Default_Handler,"ax",%progbits
-
-Default_Handler:
-Infinite_Loop:
-    b  Infinite_Loop
-
-.size  Default_Handler, .-Default_Handler
-
 
 /******************************************************************************
 *

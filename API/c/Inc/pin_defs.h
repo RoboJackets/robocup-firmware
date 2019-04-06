@@ -1,6 +1,7 @@
 #ifndef __PIN_DEFS_H
 #define __PIN_DEFS_H
 
+// TODO: find a way to scope this
 #include "stm32f7xx_hal.h"
 
 typedef struct pin_name {
