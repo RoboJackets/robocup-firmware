@@ -3,9 +3,8 @@ C_MACHINE_OPTIONS="-mthumb -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard"
 [settings]
 os_build=Macos
 arch_build=x86_64
-arch=armv7e-m/hf
-compiler=arm-none-eabi-gcc
-compiler.version=7.3
+arch=armv7hf
+compiler=gcc
 build_type=Release
 
 [options]
