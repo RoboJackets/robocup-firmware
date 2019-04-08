@@ -1,0 +1,23 @@
+C_MACHINE_OPTIONS="-mthumb -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard"
+
+[settings]
+os_build=Macos
+arch_build=x86_64
+arch=armv7e-m/hf
+compiler=arm-none-eabi-gcc
+compiler.version=7.3
+build_type=Release
+
+[options]
+[build_requires]
+
+[env]
+CONAN_CMAKE_FIND_ROOT_PATH=/usr/local/bin
+CC=arm-none-eabi-gcc
+CXX=arm-none-eabi-g++
+OBJCOPY=arm-none-eabi-objcopy
+SIZE_UTIL=arm-none-eabi-size
+LDFLAGS="--specs=nosys.specs"
+CFLAGS="$C_MACHINE_OPTIONS"
+CXXFLAGS="$C_MACHINE_OPTIONS"
+ASMFLAGS="$C_MACHINE_OPTIONS"
