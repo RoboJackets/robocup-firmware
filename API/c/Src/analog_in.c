@@ -32,7 +32,7 @@ void ADC_Config(adc_pin_name pin) {
    sConfig.SamplingTime  =  ADC_SAMPLETIME_56CYCLES;
    sConfig.Offset        = 0;
    //configures the channel for the ADC, given the input structure
-   HAL_ADC_ConfigChannel(&ADC_InitStruct, &sConfig); 
+   HAL_ADC_ConfigChannel(&ADC_InitStruct, &sConfig);
 }
 
 
@@ -40,12 +40,7 @@ void ADC_Config(adc_pin_name pin) {
 //currently prints the value
 void read(adc_pin_name pin) {
   ADC_Config(pin);
-  HAL_ADC_Start_DMA(&ADC_InitStruct, (uint32_t*)&readValue, 1);
-  while (1)
-  {
-    HAL_Delay(REFRESH_PERIOD);
-    sprintf(desc, "value is %ld", readValue);
-  }
+  readValue = ((float)HAL_ADC_GetValue(&ADC_InitStruct)) / (1 << 12);
 
 }
 
@@ -53,14 +48,7 @@ void read(adc_pin_name pin) {
 //currently just prints the value
 void read_u16(adc_pin_name pin) {
    ADC_Config(pin);
-   HAL_ADC_Start_DMA(&ADC_InitStruct, (uint32_t*)&unsignedReadValue, 1);
-   while (1)
-   {
-    HAL_Delay(REFRESH_PERIOD);
-    sprintf(desc, "value is %u", unsignedReadValue);
-   // HAL_ADC_Stop();
-   }
-}
+   //TODO
 
 
 

@@ -48,7 +48,7 @@ typedef struct adc_pin_name {
 #define LED3 (pin_name) {GPIOE, GPIO_PIN_6}
 #define LED4 (pin_name) {GPIOE, GPIO_PIN_5}
 
-#define ADCPINF6 (adc_pin_name) {ADC1}
+#define ADCPINF6 (adc_pin_name) {ADC3}
 typedef enum {
     PULL_NONE = GPIO_NOPULL,
     PULL_UP = GPIO_PULLUP,
