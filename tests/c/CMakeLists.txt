@@ -17,8 +17,9 @@ function(add_test test_file)
         DEPENDS ${test_name}.elf
         COMMENT "objcopying to make binary executable for ${test_name}")
 
-    add_custom_target(test-${test_name}-prog
-        COMMAND ${FLASH_COPY_SCRIPT} ${CMAKE_CURRENT_BINARY_DIR}/${test_name}.bin
+    add_custom_target(upload-${test_name}
+        COMMAND ${FLASH_COPY_SCRIPT} "${test_name}.bin"
+        WORKING_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
         DEPENDS test-${test_name}
         COMMENT "Copying binary ${test_name} to MCU")
 endfunction()

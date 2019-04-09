@@ -1,9 +1,12 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.4)
 
-project( mTrain
-         VERSION ${mTrain_VERSION} # set by Conan
-         LANGUAGES     C  CXX
+project(
+    mTrain
+    LANGUAGES C CXX
 )
+
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup(TARGETS)
 
 # TODO: don't leave these here
 add_definitions(-Wall)
