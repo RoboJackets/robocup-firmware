@@ -5,6 +5,8 @@ os_build=Macos
 arch_build=x86_64
 arch=armv7hf
 compiler=gcc
+compiler.version=7.3
+compiler.libcxx=libstdc++11
 build_type=Release
 
 [options]
