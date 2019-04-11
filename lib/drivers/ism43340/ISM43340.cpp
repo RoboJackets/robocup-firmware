@@ -142,7 +142,7 @@ int32_t ISM43340::testPrint() {
 int32_t ISM43340::selfTest() {
     // I don't really have anything for this right now
     printf("Starting Self Test\r\n");
-    wait_ms(mbedPrintWait2);
+    //wait_ms(mbedPrintWait2);
     sendCommand(ISMConstants::CMD_SET_HUMAN_READABLE);
 
     printf("Human Readble, getting connection info\r\n");
