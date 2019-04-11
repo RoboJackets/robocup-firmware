@@ -194,7 +194,7 @@ void ISM43340::reset() {
         //Configure Network
         sendCommand(ISMConstants::CMD_RESET_SOFT);
 
-        sendCommand(ISMConstants::CMD_SET_SSID, "ThePromisedLan");
+        sendCommand(ISMConstants::CMD_SET_SSID, "DokiDokiNetworkClub");
         sendCommand(ISMConstants::CMD_SET_PASSWORD, "");
 
         sendCommand(ISMConstants::CMD_SET_SECURITY, "0");
@@ -216,12 +216,26 @@ void ISM43340::reset() {
             printf("%c", readBuffer[i]);
         }
 
+        // Port initialization
+        // UDP receive
+        sendCommand(ISMConstants::CMD_SET_RADIO_SOCKET, "0");
         sendCommand(ISMConstants::CMD_SET_TRANSPORT_PROTOCOL, "1");
         sendCommand(ISMConstants::CMD_SET_HOST_IP, "192.168.43.252");
         sendCommand(ISMConstants::CMD_SET_PORT, "25565");
         sendCommand(ISMConstants::CMD_START_CLIENT, "1");
 
+        // UDP send
+        sendCommand(ISMConstants::CMD_SET_RADIO_SOCKET, "1");
+        sendCommand(ISMConstants::CMD_SET_TRANSPORT_PROTOCOL, "1");
+        sendCommand(ISMConstants::CMD_SET_HOST_IP, "192.168.43.252");
+        sendCommand(ISMConstants::CMD_SET_PORT, "25565");
+        sendCommand(ISMConstants::CMD_START_SERVER, "1");
+
+        // Set Back to udp receive so we dont break tests until we implement get data
+        sendCommand(ISMConstants::CMD_SET_RADIO_SOCKET, "0");
+
         LOG(INFO, "ISM43340 ready!");
+        // TODO: renable this when done
         // CommLink::ready();
     }
 }

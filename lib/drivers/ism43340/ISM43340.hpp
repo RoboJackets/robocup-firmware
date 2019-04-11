@@ -23,6 +23,8 @@ namespace ISMConstants {
     static const std::string CMD_SET_DHCP = "C4=";
     static const std::string CMD_GET_CONNECTION_INFO = "C?";
 
+    static const std::string CMD_GET_RADIO_SOCKET = "P0";
+    static const std::string CMD_SET_RADIO_SOCKET = "P0=";
     static const std::string CMD_SET_TRANSPORT_PROTOCOL = "P1=";
     static const std::string CMD_SET_HOST_IP = "P3=";
     static const std::string CMD_SET_PORT = "P4=";
