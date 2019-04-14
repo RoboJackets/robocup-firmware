@@ -38,7 +38,7 @@ AnalogIn::AnalogIn(ADCPinName pin) {
    HAL_ADC_Init(&ADC_InitStruct);
 
    ADC_ChannelConfTypeDef sConfig;
-   sConfig.Channel       = ADC_CHANNEL_11;
+   sConfig.Channel       = ADC_CHANNEL_4;
    sConfig.Rank          = 1;
    sConfig.SamplingTime  =  ADC_SAMPLETIME_480CYCLES;
    sConfig.Offset        = 0;
