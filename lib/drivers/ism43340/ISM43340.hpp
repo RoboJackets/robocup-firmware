@@ -43,7 +43,9 @@ public:
 
     int32_t sendPacket(const rtp::Packet* pkt) override;
 
-    BufferT getData() { return readBuffer; }
+    BufferT getData();
+
+    BufferT getReadBuffer() { return readBuffer; }
 
     void reset() override;
 

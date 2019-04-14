@@ -78,6 +78,11 @@ int32_t ISM43340::sendPacket(const rtp::Packet* pkt) {
 
     BufferT txBuffer;
 
+    //Transmit using socket #1
+    //Could increase efficiency by tracking if this needs to be set
+    sendCommand(ISMConstants::CMD_SET_RADIO_SOCKET, "1");
+
+
     // Reserve memory for AT command header, packet, and delimiter
     int bufferSize = 5 + pkt->size();
     txBuffer.reserve(bufferSize);
@@ -128,6 +133,18 @@ int32_t ISM43340::sendPacket(const rtp::Packet* pkt) {
     return 0;
 }
 
+CommLink::BufferT ISM43340::getData() {
+    //Receive using socket #0
+    //Could increase efficiency by tracking if this needs to be set
+    sendCommand(ISMConstants::CMD_SET_RADIO_SOCKET, "0");
+
+    //Should add some sort of check to see if data is ready to be read here
+
+    sendCommand(ISMConstants::CMD_RECEIVE_DATA);
+
+    return readBuffer;
+}
+
 int32_t ISM43340::testPrint() {
     printf("Readbuffer Contains:\r\n");
     wait_ms(mbedPrintWait2);
@@ -145,7 +162,7 @@ int32_t ISM43340::selfTest() {
     wait_ms(mbedPrintWait2);
     sendCommand(ISMConstants::CMD_SET_HUMAN_READABLE);
 
-    printf("Human Readble, getting connection info\r\n");
+    printf("Human Readable, getting connection info\r\n");
     wait_ms(mbedPrintWait2);
     sendCommand(ISMConstants::CMD_GET_CONNECTION_INFO);
 
@@ -201,7 +218,6 @@ void ISM43340::reset() {
 
         sendCommand(ISMConstants::CMD_SET_DHCP, "1");
 
-
         //Connect to network
         sendCommand(ISMConstants::CMD_JOIN_NETWORK);
 
@@ -215,6 +231,8 @@ void ISM43340::reset() {
         for (int i = 0; i < readBuffer.size(); i++) {
             printf("%c", readBuffer[i]);
         }
+
+
 
         // Port initialization
         // UDP receive
@@ -233,6 +251,8 @@ void ISM43340::reset() {
 
         // Set Back to udp receive so we dont break tests until we implement get data
         sendCommand(ISMConstants::CMD_SET_RADIO_SOCKET, "0");
+
+
 
         LOG(INFO, "ISM43340 ready!");
         // TODO: renable this when done

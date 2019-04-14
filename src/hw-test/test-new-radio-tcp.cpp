@@ -86,18 +86,17 @@ int main() {
     // }
 
     printf("reset complete\r\n");
-    printf("does this make it print if I say more things\r\n");
     wait_ms(mbedPrintWait);
 
     bool test = radioDriver.selfTest();
-    printf("Self Test: %b", test);
+    printf("Self Test: %x\r\n", test);
     wait_ms(mbedPrintWait);
 
 
     rtp::Packet pkt;
 
     timer.reset();
-    for (int iter = 0; iter < 10; iter++) {
+    for (int iter = 0; iter < 3; iter++) {
         timer.start();
 
         radioDriver.sendPacket(&pkt);
@@ -106,6 +105,11 @@ int main() {
         printf("Micro Seconds Elapsed: %d\r\n", timer.read_us());
         wait_ms(mbedPrintWait);
         timer.reset();
+
+        printf("receiving:\r\n");
+        radioDriver.getData();
+        radioDriver.testPrint();
+        printf("data received\r\n");
     }
 
     printf("Done\r\n");
