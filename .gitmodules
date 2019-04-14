@@ -1,15 +1,6 @@
-[submodule "external/mbed_lib_build_tools"]
-	path = external/mbed_lib_build_tools
-	url = https://github.com/mbedmicro/mbed.git
-[submodule "external/googletest"]
-	path = external/googletest
-	url = https://github.com/google/googletest
 [submodule "external/DoCIF"]
-	path = external/DoCIF
+	path = util/DoCIF
 	url = https://github.com/jgkamat/DoCIF.git
-[submodule "external/style-configs"]
-	path = external/style-configs
-	url = https://github.com/RoboJackets/style-configs.git
 [submodule "lib/robocup-fshare"]
-	path = lib/robocup-fshare
+	path = robot/lib/robocup-fshare
 	url = https://github.com/robojackets/robocup-fshare

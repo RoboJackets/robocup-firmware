@@ -6,6 +6,7 @@
 
 # build directories
 /build
+*/build
 /gmon.out
 *.swp
 /.settings
@@ -14,6 +15,7 @@
 
 # sublime-text
 *.sublime-workspace
+.vscode
 
 # Python
 __pycache__/
