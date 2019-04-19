@@ -2,7 +2,6 @@
 `define _SPI_SLAVE_
 
 
-`include "log2-macro.v"
 
 module SPI_Slave #(parameter DATA_BIT_WIDTH = 8) ( clk, SCK, MOSI, MISO, SSEL, DONE, DATA_OUT, DATA_IN );
 
@@ -11,6 +10,7 @@ input  [DATA_BIT_WIDTH - 1:0]  DATA_OUT;
 output        MISO, DONE;
 output [DATA_BIT_WIDTH - 1:0]  DATA_IN;
 
+`include "log2-macro.v"
 localparam DATA_BIT_COUNTER_WIDTH = `LOG2(DATA_BIT_WIDTH);
 localparam ONE = {{(DATA_BIT_COUNTER_WIDTH - 1){1'b0}}, {1'b1}};
 
