@@ -99,10 +99,13 @@ int main() {
     for (int iter = 0; iter < 3; iter++) {
         timer.start();
 
-        radioDriver.sendPacket(&pkt);
+        //radioDriver.sendPacket(&pkt);
+        // Apparently you can't set both sockets to the same port
+        radioDriver.sendCommand("P0=", "1");
+        radioDriver.sendCommand("S3=", "25\rtest packet please ignore");
         timer.stop();
         radioDriver.testPrint();
-        printf("Micro Seconds Elapsed: %d\r\n", timer.read_us());
+        printf("Micro Seconds Elapsed %d: %d\r\n", iter, timer.read_us());
         wait_ms(mbedPrintWait);
         timer.reset();
 

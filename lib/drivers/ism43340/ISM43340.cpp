@@ -57,16 +57,19 @@ uint32_t ISM43340::readFromSpi() {
 }
 
 void ISM43340::sendCommand(std::string command, std::string arg) {
-    command = command + arg;
 
     // Add delimiter and keep command of even length
     if (command.compare("S3=") != 0) {
+        command = command + arg;
         if (command.length() % 2 == 0) {
             command += "\r\n";
         }
         else {
             command += "\r";
         }
+    }
+    else {
+      command = command + arg;
     }
     writeToSpi((uint8_t*) command.data(), command.length());
     readFromSpi();
@@ -159,15 +162,16 @@ int32_t ISM43340::testPrint() {
 int32_t ISM43340::selfTest() {
     // I don't really have anything for this right now
     printf("Starting Self Test\r\n");
-    //wait_ms(mbedPrintWait2);
+    wait_ms(mbedPrintWait2);
     sendCommand(ISMConstants::CMD_SET_HUMAN_READABLE);
 
     printf("Human Readable, getting connection info\r\n");
     wait_ms(mbedPrintWait2);
     sendCommand(ISMConstants::CMD_GET_CONNECTION_INFO);
 
-    printf("Received Data:\r\n");
+    printf("Received Data: %d\r\n", readBuffer.size());
     wait_ms(mbedPrintWait2);
+
     for (int i = 0; i < readBuffer.size(); i++) {
         printf("%c", (char) readBuffer[i]);
     }
@@ -211,17 +215,17 @@ void ISM43340::reset() {
         //Configure Network
         sendCommand(ISMConstants::CMD_RESET_SOFT);
 
-        sendCommand(ISMConstants::CMD_SET_SSID, "DokiDokiNetworkClub");
-        sendCommand(ISMConstants::CMD_SET_PASSWORD, "");
+        sendCommand(ISMConstants::CMD_SET_SSID, "rj-rc-field");
+        sendCommand(ISMConstants::CMD_SET_PASSWORD, "r0b0jackets");
 
-        sendCommand(ISMConstants::CMD_SET_SECURITY, "0");
+        sendCommand(ISMConstants::CMD_SET_SECURITY, "4");
 
         sendCommand(ISMConstants::CMD_SET_DHCP, "1");
 
         //Connect to network
         sendCommand(ISMConstants::CMD_JOIN_NETWORK);
 
-        if ((int)readBuffer[0] == 0) {
+        if (readBuffer.size() == 0 || (int)readBuffer[0] == 0) {
             //Failed to connect to network
             //not sure what to have it do here
             LOG(INFO, "ISM43340 failed to connect");
@@ -233,25 +237,35 @@ void ISM43340::reset() {
         }
 
 
+        printf("requesting radio socket\r\n");
+
+        sendCommand(ISMConstants::CMD_GET_RADIO_SOCKET);
+
+        printf("radio socket: ");
+        for (int i = 0; i < readBuffer.size(); i++) {
+          printf("%c", readBuffer[i]);
+        }
+        printf("\r\n");
+
 
         // Port initialization
         // UDP receive
         sendCommand(ISMConstants::CMD_SET_RADIO_SOCKET, "0");
         sendCommand(ISMConstants::CMD_SET_TRANSPORT_PROTOCOL, "1");
-        sendCommand(ISMConstants::CMD_SET_HOST_IP, "192.168.43.252");
-        sendCommand(ISMConstants::CMD_SET_PORT, "25565");
+        sendCommand(ISMConstants::CMD_SET_HOST_IP, "172.16.1.22");
+        sendCommand(ISMConstants::CMD_SET_PORT, "25566");
         sendCommand(ISMConstants::CMD_START_CLIENT, "1");
+
+        printf("finished receive setup\r\n");
 
         // UDP send
         sendCommand(ISMConstants::CMD_SET_RADIO_SOCKET, "1");
         sendCommand(ISMConstants::CMD_SET_TRANSPORT_PROTOCOL, "1");
-        sendCommand(ISMConstants::CMD_SET_HOST_IP, "192.168.43.252");
+        sendCommand(ISMConstants::CMD_SET_HOST_IP, "172.16.1.22");
         sendCommand(ISMConstants::CMD_SET_PORT, "25565");
-        sendCommand(ISMConstants::CMD_START_SERVER, "1");
+        sendCommand(ISMConstants::CMD_START_CLIENT, "1");
 
-        // Set Back to udp receive so we dont break tests until we implement get data
-        sendCommand(ISMConstants::CMD_SET_RADIO_SOCKET, "0");
-
+        printf("finished send setup\r\n");
 
 
         LOG(INFO, "ISM43340 ready!");
