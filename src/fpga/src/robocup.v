@@ -174,6 +174,7 @@ localparam CMD_UPDATE_MTRS      = 0;
 localparam CMD_WRITE_TYPE       = 0;
 localparam CMD_READ_TYPE        = 1;
 localparam CMD_RW_TYPE_BASE     = 'h10;
+
 localparam CMD_ENCODER_COUNT    = CMD_RW_TYPE_BASE + 1;
 localparam CMD_HALL_COUNT       = CMD_RW_TYPE_BASE + 2;
 localparam CMD_DUTY_CYCLE       = CMD_RW_TYPE_BASE + 3;
@@ -241,10 +242,6 @@ SPI_Master spi_master_module (
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////SPI_MASTER
-
-// Put on constraints' file: two_periods | sensor_data | CS1 | CS2
-
 reg [1:0]  two_periods = 0;
 reg [15:0] sensor_data [0:11];
 reg        CS1 = 0;
@@ -260,7 +257,7 @@ always @(posedge sysclk) begin
     if(spi_master_busy == 0 && FPGA_CS_DONE == 0) begin// It can't read the first two data frames, because the sensor is still converting the valid data.
 
         if (two_periods != 2'b11) begin
-            two_periods = two_periods + 1;
+            two_periods <= two_periods + 1;
         end
 
         if (CS1 == 0 && two_periods > 2'b10) begin // We add the data that we get in the sensors in registers
@@ -296,14 +293,11 @@ always @(posedge sysclk) begin
         end
     end
     FPGA_CS_DONE = 1;
-end
 
-always @(posedge sysclk) begin
     if (FPGA_CS_DONE == 1 && spi_master_busy == 1) begin
         FPGA_CS_DONE = 0;
     end
 end
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -559,13 +553,6 @@ begin : SPI_SLAVE_LOAD_RESPONSE_BUFFER
                     end
                 end
 
-                CMD_READ_ADC:
-                begin
-                    for (j = 0; j < 12;j = j + 1)
-                        for (k = 0; k < 16;k = k + 1)
-                            spi_slave_res_buf[16*j+k] <= sensor_data[j][15 - k];
-                end
-
 `ifdef GIT_VERSION_HASH
                 CMD_VERSION1 :
                 begin
@@ -591,6 +578,18 @@ begin : SPI_SLAVE_LOAD_RESPONSE_BUFFER
                     begin : LATCH_GATE_DRV_STATUS
                         spi_slave_res_buf[2*j+1]    <=  spi_master_data_array_in[j][7:0];
                         spi_slave_res_buf[2*j+2]    <=  { 4'b0, spi_master_data_array_in[j][11:8] };
+                    end
+                end
+
+                CMD_READ_ADC:
+                begin
+                    for (j = 0; j < 24;j = j + 2)
+                    begin : ADC_BYTE_EVEN
+                        spi_slave_res_buf[j] <= sensor_data[j/2][15:8];
+                    end
+                    for (j = 1; j < 24;j = j + 2)
+                    begin : ADC_BYTE_ODD
+                        spi_slave_res_buf[j] <= sensor_data[j/2][7:0];
                     end
                 end
 
