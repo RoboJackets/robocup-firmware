@@ -4,14 +4,18 @@
 
 class AnalogIn {
    private:
-      ADC_HandleTypeDef ADC_InitStruct;
-      float readValue;
+
+      ADC_HandleTypeDef ADC_InitStruct = {};
+      uint16_t readValue;
       uint16_t unsignedReadValue;
+      void ADC_Init(ADCPinName pin);
+      void DMA_Init();
+
    public:
       AnalogIn(ADCPinName pin);
       ~AnalogIn();
-      void read();
-      void read_u16();
-      void stop();
+
+      uint32_t read();
+      uint16_t read_u16();
       float getValue();
 };
