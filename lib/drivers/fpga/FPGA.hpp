@@ -27,6 +27,7 @@ public:
     uint8_t set_duty_cycles(int16_t* duty_cycles, size_t size);
     uint8_t read_duty_cycles(int16_t* duty_cycles, size_t size);
     uint8_t read_encs(int16_t* enc_counts, size_t size);
+    uint8_t read_adc(int16_t* adc_data[12]);
     uint8_t read_halls(uint8_t* halls, size_t size);
     uint8_t motors_en(bool state);
     uint8_t watchdog_reset();

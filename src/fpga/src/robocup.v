@@ -174,6 +174,7 @@ localparam CMD_UPDATE_MTRS      = 0;
 localparam CMD_WRITE_TYPE       = 0;
 localparam CMD_READ_TYPE        = 1;
 localparam CMD_RW_TYPE_BASE     = 'h10;
+
 localparam CMD_ENCODER_COUNT    = CMD_RW_TYPE_BASE + 1;
 localparam CMD_HALL_COUNT       = CMD_RW_TYPE_BASE + 2;
 localparam CMD_DUTY_CYCLE       = CMD_RW_TYPE_BASE + 3;
@@ -184,9 +185,13 @@ localparam CMD_GATE_DRV_STATUS  = CMD_RW_TYPE_BASE + 6;
 localparam CMD_STROBE_START         = CMD_RW_TYPE_BASE + 'h10;
 localparam CMD_TOGGLE_MOTOR_EN      = CMD_RW_TYPE_BASE + CMD_STROBE_START;
 // Response & request buffer sizes
-localparam SPI_SLAVE_RES_BUF_LEN = 12;
+localparam SPI_SLAVE_RES_BUF_LEN = 24;
 localparam SPI_SLAVE_REQ_BUF_LEN = SPI_SLAVE_RES_BUF_LEN;
 localparam SPI_SLAVE_COUNTER_WIDTH = `LOG2(SPI_SLAVE_RES_BUF_LEN);
+
+localparam CMD_READ_ADC         = CMD_RW_TYPE_BASE + 7;
+
+localparam DEFAULT_CMD = 16'b1011111100000000;
 
 // These are for triggering the storage of values outside of the SPI's SCK domain
 reg                                     rx_vals_flag            = 0,
@@ -233,6 +238,68 @@ SPI_Master spi_master_module (
     .DATA_OUT       ( spi_master_d0         ) ,
     .DATA_IN        ( spi_master_di         )
 );
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+reg [1:0]  two_periods = 0;
+reg [15:0] sensor_data [0:11];
+reg        CS1 = 0;
+reg        CS2 = 1;
+reg        FPGA_CS_DONE = 0;
+
+assign spi_master_di = (two_periods == 0) ? DEFAULT_CMD : 0;
+
+assign adc_ncs_o[0] = CS1;
+assign adc_ncs_o[1] = CS2;
+
+always @(posedge sysclk) begin
+    if(spi_master_busy == 0 && FPGA_CS_DONE == 0) begin// It can't read the first two data frames, because the sensor is still converting the valid data.
+
+        if (two_periods != 2'b11) begin
+            two_periods <= two_periods + 1;
+        end
+
+        if (CS1 == 0 && two_periods > 2'b10) begin // We add the data that we get in the sensors in registers
+            case (spi_master_d0[15:12]) // We use the data address in the first 4 bits to identify the values and put the in the right indexes of the sensor_data.
+                4'h0: sensor_data[0] <= spi_master_d0[15:0];
+                4'h1: sensor_data[1] <= spi_master_d0[15:0];
+                4'h2: sensor_data[2] <= spi_master_d0[15:0];
+                4'h3: sensor_data[3] <= spi_master_d0[15:0];
+                4'h4: sensor_data[4] <= spi_master_d0[15:0];
+                4'h5:
+                    begin
+                        sensor_data[5] <= spi_master_d0[15:0]; //In the last channel of a sensor, change the sensor chip
+                        two_periods <= 0;
+                        CS1 = 1;
+                        CS2 = 0;
+                    end
+            endcase
+        end else if (CS2 == 0 && two_periods > 2'b10) begin
+            case(spi_master_d0[15:12])
+                4'h0: sensor_data[6] <= spi_master_d0[15:0];
+                4'h1: sensor_data[7] <= spi_master_d0[15:0];
+                4'h2: sensor_data[8] <= spi_master_d0[15:0];
+                4'h3: sensor_data[9] <= spi_master_d0[15:0];
+                4'h4: sensor_data[10] <= spi_master_d0[15:0];
+                4'h5:
+                    begin
+                        sensor_data[11] <= spi_master_d0[15:0];
+                        two_periods <= 0;
+                        CS1 = 0;
+                        CS2 = 1;
+                    end
+            endcase
+        end
+    end
+    FPGA_CS_DONE = 1;
+
+    if (FPGA_CS_DONE == 1 && spi_master_busy == 1) begin
+        FPGA_CS_DONE = 0;
+    end
+end
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // The DRV8303 config values we write to each driver
 reg [SPI_MASTER_DATA_WIDTH-1:0] spi_master_data_array_out [2:0];
@@ -514,6 +581,18 @@ begin : SPI_SLAVE_LOAD_RESPONSE_BUFFER
                     end
                 end
 
+                CMD_READ_ADC:
+                begin
+                    for (j = 0; j < 24;j = j + 2)
+                    begin : ADC_BYTE_EVEN
+                        spi_slave_res_buf[j] <= sensor_data[j/2][15:8];
+                    end
+                    for (j = 1; j < 24;j = j + 2)
+                    begin : ADC_BYTE_ODD
+                        spi_slave_res_buf[j] <= sensor_data[j/2][7:0];
+                    end
+                end
+
                 default :
                 begin
                     // Default is to set everything in the response buffer to 0xAA. This makes is a bit easier to debug the SPI protocol.
@@ -664,4 +743,4 @@ BLDC_Motor_No_Encoder #(
 );
 `endif  // DRIBBLER_MOTOR_DISABLE
 
-endmodule   // RoboCup
+endmodule // RoboCup
