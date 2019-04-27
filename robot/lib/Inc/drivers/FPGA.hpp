@@ -1,20 +1,20 @@
 #pragma once
 
-#include "Mbed.hpp"
-#include "Rtos.hpp"
-#include "SharedSPI.hpp"
-
-#include <array>
+#include <algorithm>
+#include <iostream>
 #include <memory>
-#include <string>
 #include <vector>
+
+#include <SPI.hpp>
+#include <DigitalIn.hpp>
+#include <DigitalOut.hpp>
 
 class FPGA { 
 public:
     // Global fpga instance.  Must be set to an initialized fpga instance.
     static FPGA* Instance;
 
-    FPGA(std::shared_ptr<SharedSPI> sharedSPI, PinName nCs, PinName initB,
+    FPGA(std::shared_ptr<SPI> spi_bus, PinName nCs, PinName initB,
          PinName progB, PinName done);
 
     /// Configure the fpga with the bitfile at the given path
@@ -33,13 +33,17 @@ public:
     bool git_hash(std::vector<uint8_t>&);
     void gate_drivers(std::vector<uint16_t>&);
     bool send_config(const std::string& filepath);
+    void chip_select();
+    void chip_deselect();
 
+    static constexpr int FPGA_SPI_FREQ = 1'000'000;
     static const int16_t MAX_DUTY_CYCLE = 511;
 
 private:
     bool _isInit = false;
 
+    std::shared_ptr<SPI> _spi_bus;
     DigitalIn _initB;
     DigitalIn _done;
-    DigitalInOut _progB;
+    DigitalOut _progB;
 };
