@@ -1,4 +1,3 @@
-/*
 #include "FPGA.hpp"
 
 #include <algorithm>
@@ -327,4 +326,3 @@ uint8_t FPGA::watchdog_reset() {
 
 bool FPGA::isReady() { return _isInit; }
 
-*/

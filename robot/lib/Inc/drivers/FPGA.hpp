@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 
-class FPGA : public SharedSPIDevice<> {
+class FPGA { 
 public:
     // Global fpga instance.  Must be set to an initialized fpga instance.
     static FPGA* Instance;

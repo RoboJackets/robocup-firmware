@@ -15,6 +15,9 @@ libmpc-dev
 
 # arm toolchain for compiling for mbed
 gcc-arm-none-eabi
+libnewlib-dev
+libnewlib-arm-none-eabi
+libstdc++-arm-none-eabi-newlib
 
 # program to generate api documentation from comments in code files
 doxygen
@@ -24,13 +27,13 @@ libeigen3-dev
 
 # C/C++ compiler
 # tends to be faster and have more helpful error messages than gcc
-clang-3.6
+clang
 
 # for newer C++ stdlib
-g++-4.9
+g++
 
 # C/C++ (and more) code-formatting tool
-clang-format-3.6
+clang-format
 
 # contains a ton of great C++ libraries
 libboost-all-dev
