@@ -1,5 +1,9 @@
 add_executable(control.elf 
     main.cpp
+    modules/motion-control/MotionControl.cpp
+    modules/motion-control/RobotModel.cpp
+    modules/motion-control/RobotEstimator.cpp
+    modules/motion-control/RobotController.cpp
 )
 target_link_libraries(control.elf firm-lib)
 
