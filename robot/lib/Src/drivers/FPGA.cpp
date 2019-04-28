@@ -1,4 +1,5 @@
 #include "FPGA.hpp"
+#include <DigitalOut.hpp>
 
 #include <memory>
 #include <stdint.h>
@@ -59,6 +60,7 @@ FPGA::FPGA(std::shared_ptr<SPI> spi_bus, PinName nCs, PinName initB,
       _done(done),
       _progB(progB, PullType::PullNone, PinMode::OpenDrain, PinSpeed::Low, false) {
     _spi_bus->frequency(FPGA_SPI_FREQ);
+    _progB = 1;
 }
 
 bool FPGA::configure() {
@@ -86,6 +88,8 @@ bool FPGA::configure() {
         return false;
     }
 
+
+
     // Configure the FPGA with the bitstream file, this returns false if file
     // can't be opened
     const auto sendSuccess = send_config();
@@ -95,7 +99,7 @@ bool FPGA::configure() {
         for (auto i = 0; i < 1000; i++) {
             HAL_Delay(1);
             if (_done == true) {
-                configSuccess = !_initB;
+                configSuccess = _initB;
                 break;
             }
         }
@@ -120,9 +124,9 @@ bool FPGA::send_config() {
     chip_select();
     
     for (size_t i = 0; i < FPGA_BYTES_LEN; i++) {
-        if (!_initB || _done) {
-            break;
-        }
+	if (_done) {
+		break;
+	}
         
         _spi_bus->transmit(FPGA_BYTES[i]);
     }
@@ -185,9 +189,9 @@ uint8_t FPGA::set_duty_cycles(int16_t* duty_cycles, size_t size) {
     uint8_t status;
 
     //ASSERT(size == 5);
-    if (size != 5) {
+    //if (size != 5) {
         //LOG(WARN, "set_duty_cycles() requires input buffer to be of size 5");
-    }
+    //}
 
     // Check for valid duty cycles values
     for (size_t i = 0; i < size; i++)

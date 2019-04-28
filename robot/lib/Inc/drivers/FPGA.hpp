@@ -38,7 +38,7 @@ public:
     void chip_select();
     void chip_deselect();
 
-    static constexpr int FPGA_SPI_FREQ = 1'000'000;
+    static constexpr int FPGA_SPI_FREQ = 100'000;
     static const int16_t MAX_DUTY_CYCLE = 511;
 
 private:

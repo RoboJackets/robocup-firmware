@@ -15,38 +15,57 @@ std::shared_ptr<SPI> _radio_spi_bus;
 std::shared_ptr<SPI> _dot_star_spi_bus;
 
 std::shared_ptr<FPGA> _fpga;
+std::shared_ptr<std::array<int16_t, 5>> _duty_cycles;
 
-void init();
+bool init();
 void loop();
 
 int main() {
-	init();
+	DigitalOut led1(LED1);
+	DigitalOut led2(LED2);
+	DigitalOut led4(LED4);
+	
+	led1 = 1;
 
+	bool r = init();
+	if (r) {
+		led2 = 1;
+	}
+
+	led4 = 1;
 	while (true) {
-		loop();
+		//loop();
+		HAL_Delay(100);
+		led4.toggle();
 	}
 }
 
-void init() {
+bool init() {
 	// initialize the SPI busses
 	_fpga_kicker_spi_bus = std::make_shared<SPI>(FPGA_KICKER_SPI_BUS);
 	_radio_spi_bus = std::make_shared<SPI>(RADIO_SPI_BUS);
 	_dot_star_spi_bus = std::make_shared<SPI>(DOT_STAR_SPI_BUS);
 
+	_duty_cycles = std::make_shared<std::array<int16_t, 5>>();
+
 	// create and program the FPGA
 	_fpga = std::make_shared<FPGA>(_fpga_kicker_spi_bus, FPGA_CS, FPGA_INIT, FPGA_DONE, FPGA_PROG);
 	FPGA::Instance = _fpga;
-	FPGA::Instance->configure();
+	bool res = FPGA::Instance->configure();
+	if (res) {
+		return true;
+	}
 
-	//motors_Init();
+	return false;
 }
 
 void loop() {
-	std::array<int16_t, 5> duty_cycles;
-	duty_cycles[0] = 0x30;
-	uint8_t sb = FPGA::Instance->read_duty_cycles(duty_cycles.data(), duty_cycles.size());
-	if (sb != 0x7F) {
-		FPGA::Instance->set_duty_cycles(duty_cycles.data(), duty_cycles.size());	
-	}
+	//uint8_t sb = FPGA::Instance->read_duty_cycles(_duty_cycles->data(), _duty_cycles->size());
+	//if (sb != 0x7F) {
+		for (int i = 0; i < 5; i++) {
+			_duty_cycles->at(i) = 0x7F;
+		}
+		FPGA::Instance->set_duty_cycles(_duty_cycles->data(), _duty_cycles->size());	
+	//}
 }
 
