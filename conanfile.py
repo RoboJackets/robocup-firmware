@@ -29,7 +29,7 @@ class MtrainConan(ConanFile):
     def package_info(self):
         self.cpp_info.includedirs = ['API/c/Inc', 'API/cpp/Inc', 'BSP/config/hal', 'BSP/config/usb', 'BSP/Inc', 
             'external/CMSIS/Device/STM32F7xx/Include', 'external/CMSIS/Include', 'external/middleware', 'external/STM32F7xx_HAL_Drivers/Inc']
-        self.cpp_info.exelinkflags.append('-F %s/flash.ld' % self.package_folder)
+        self.cpp_info.exelinkflags.append('-T %s/flash.ld' % self.package_folder)
         self.cpp_info.libs = ['STM32F7xx', 'STM32F7_API_CPP', 'STM32F7_API_C', 'STM32_USB_Device', 'STM32F7xx_HAL', 'DSP']
 
         self.env_info.FLASH_COPY_SCRIPT = '%s/flash.py' % self.package_folder
