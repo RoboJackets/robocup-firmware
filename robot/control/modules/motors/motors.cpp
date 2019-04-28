@@ -1,12 +1,11 @@
 #include "motors.hpp"
 
+#include "FPGA.hpp"
+
 #include "Console.hpp"
 #include "HelperFuncs.hpp"
-#include "Mbed.hpp"
-#include "Rtos.hpp"
 
 #include "Commands.hpp"
-#include "FPGA.hpp"
 
 namespace {
 constexpr auto NUM_MOTORS = 5;

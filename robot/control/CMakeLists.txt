@@ -1,6 +1,12 @@
 add_executable(control.elf 
     main.cpp
+    #modules/motors/motors.cpp
 )
+
+include_directories(
+    #modules/motors/
+)
+
 target_link_libraries(control.elf firm-lib)
 
 add_custom_target(control ALL

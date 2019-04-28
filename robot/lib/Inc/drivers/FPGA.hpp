@@ -9,17 +9,19 @@
 #include <DigitalIn.hpp>
 #include <DigitalOut.hpp>
 
+#include "fpga_bin.h"
+
 class FPGA { 
 public:
     // Global fpga instance.  Must be set to an initialized fpga instance.
-    static FPGA* Instance;
+    static std::shared_ptr<FPGA> Instance;
 
     FPGA(std::shared_ptr<SPI> spi_bus, PinName nCs, PinName initB,
          PinName progB, PinName done);
 
     /// Configure the fpga with the bitfile at the given path
     /// @return true if successful
-    bool configure(const std::string& filepath);
+    bool configure();
 
     bool isReady();
     uint8_t set_duty_get_enc(int16_t* duty_cycles, size_t size_dut,
@@ -32,7 +34,7 @@ public:
     uint8_t watchdog_reset();
     bool git_hash(std::vector<uint8_t>&);
     void gate_drivers(std::vector<uint16_t>&);
-    bool send_config(const std::string& filepath);
+    bool send_config();
     void chip_select();
     void chip_deselect();
 
@@ -43,6 +45,7 @@ private:
     bool _isInit = false;
 
     std::shared_ptr<SPI> _spi_bus;
+    DigitalOut _nCs;
     DigitalIn _initB;
     DigitalIn _done;
     DigitalOut _progB;

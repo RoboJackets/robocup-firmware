@@ -1,31 +1,52 @@
-#include "mtrain.hpp"
-#include "SPI.hpp"
+#include <mtrain.hpp>
+#include <SPI.hpp>
+
+#include <array>
+#include <memory>
 #include <vector>
 
+#include "FPGA.hpp"
+
+#include "iodefs.h"
+//#include "motors.hpp"
+
+std::shared_ptr<SPI> _fpga_kicker_spi_bus;
+std::shared_ptr<SPI> _radio_spi_bus;
+std::shared_ptr<SPI> _dot_star_spi_bus;
+
+std::shared_ptr<FPGA> _fpga;
+
+void init();
+void loop();
+
 int main() {
-        {
-        SPI spi2(SpiBus5, p26, 2'000'000);
+	init();
 
-        for (int i = 0; i <= 100; i++) {
-            spi2.transmitReceive(i);
-        }
-        
-        spi2.frequency(8'000'000);
-
-        std::vector<uint8_t> nums;
-        for (int i = 1; i <= 100; i++) {
-            nums.push_back(i);
-        }
-        spi2.transmitReceive(nums);
-
-        spi2.frequency(1);
-        for (uint8_t i = 0; i <= 100; i++) {
-            spi2.transmit(i);
-        }
-
-        spi2.frequency(15'000'000);
-        spi2.transmit(nums);
-    }
-
-    while (true) { }
+	while (true) {
+		loop();
+	}
 }
+
+void init() {
+	// initialize the SPI busses
+	_fpga_kicker_spi_bus = std::make_shared<SPI>(FPGA_KICKER_SPI_BUS);
+	_radio_spi_bus = std::make_shared<SPI>(RADIO_SPI_BUS);
+	_dot_star_spi_bus = std::make_shared<SPI>(DOT_STAR_SPI_BUS);
+
+	// create and program the FPGA
+	_fpga = std::make_shared<FPGA>(_fpga_kicker_spi_bus, FPGA_CS, FPGA_INIT, FPGA_DONE, FPGA_PROG);
+	FPGA::Instance = _fpga;
+	FPGA::Instance->configure();
+
+	//motors_Init();
+}
+
+void loop() {
+	std::array<int16_t, 5> duty_cycles;
+	duty_cycles[0] = 0x30;
+	uint8_t sb = FPGA::Instance->read_duty_cycles(duty_cycles.data(), duty_cycles.size());
+	if (sb != 0x7F) {
+		FPGA::Instance->set_duty_cycles(duty_cycles.data(), duty_cycles.size());	
+	}
+}
+

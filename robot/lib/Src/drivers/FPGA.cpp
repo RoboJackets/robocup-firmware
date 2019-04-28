@@ -17,7 +17,7 @@ int16_t fromSignMag(uint16_t val) {
     return val;
 }
 
-FPGA* FPGA::Instance = nullptr;
+std::shared_ptr<FPGA> FPGA::Instance = nullptr;
 
 /**
  * This command set represents the commands that can
@@ -54,22 +54,14 @@ enum {
 FPGA::FPGA(std::shared_ptr<SPI> spi_bus, PinName nCs, PinName initB,
            PinName progB, PinName done)
     : _spi_bus(spi_bus),
+      _nCs(nCs, PullType::PullNone, PinMode::PushPull, PinSpeed::Low, true),
       _initB(initB),
       _done(done),
-      _progB(progB, PullType::PullNone, PinMode::OpenDrain) {
+      _progB(progB, PullType::PullNone, PinMode::OpenDrain, PinSpeed::Low, false) {
     _spi_bus->frequency(FPGA_SPI_FREQ);
 }
 
-bool FPGA::configure(const std::string& filepath) {
-    // make sure the binary exists before doing anything
-    auto fp = fopen(filepath.c_str(), "r");
-    if (fp == nullptr) {
-        //LOG(SEVERE, "No FPGA bitfile!");
-
-        return false;
-    }
-    fclose(fp);
-
+bool FPGA::configure() {
     // toggle PROG_B to clear out anything prior
     _progB = 0;
     HAL_Delay(1);
@@ -96,7 +88,7 @@ bool FPGA::configure(const std::string& filepath) {
 
     // Configure the FPGA with the bitstream file, this returns false if file
     // can't be opened
-    const auto sendSuccess = send_config(filepath);
+    const auto sendSuccess = send_config();
     if (sendSuccess) {
         // Wait some extra time in case the _done pin needs time to be asserted
         auto configSuccess = false;
@@ -124,56 +116,22 @@ bool FPGA::configure(const std::string& filepath) {
     return false;
 }
 
-bool FPGA::send_config(const std::string& filepath) {
-    constexpr auto bufSize = 50;
-
-    // open the bitstream file
-    auto fp = fopen(filepath.c_str(), "r");
-
-    // send it out if successfully opened
-    if (fp != nullptr) {
-        size_t filesize;
-        char buf[bufSize];
-
-        chip_select();
-
-        fseek(fp, 0, SEEK_END);
-        filesize = ftell(fp);
-        fseek(fp, 0, SEEK_SET);
-
-        //LOG(DEBUG, "Sending %s (%u bytes) out to the FPGA", filepath.c_str(),
-        //    filesize);
-
-        for (size_t i = 0; i < filesize; i++) {
-            bool breakOut = false;
-            size_t readSize = fread(buf, 1, bufSize, fp);
-
-            if (!readSize) break;
-
-            for (size_t j = 0; j < bufSize; j++) {
-                if (!_initB || _done) {
-                    breakOut = true;
-                    break;
-                }
-
-                _spi_bus->transmit(buf[j]);
-            }
-
-            if (breakOut) break;
+bool FPGA::send_config() {
+    chip_select();
+    
+    for (size_t i = 0; i < FPGA_BYTES_LEN; i++) {
+        if (!_initB || _done) {
+            break;
         }
-
-        // SPI dummySPI(RJ_SPI_MOSI, RJ_SPI_MISO, RJ_SPI_SCK);
-
-        chip_deselect();
-        fclose(fp);
-
-        return true;
+        
+        _spi_bus->transmit(FPGA_BYTES[i]);
     }
-
-    //LOG(SEVERE, "FPGA configuration failed\r\n    Unable to open %s",
-    //    filepath.c_str());
-
-    return false;
+    
+    // SPI dummySPI(RJ_SPI_MOSI, RJ_SPI_MISO, RJ_SPI_SCK);
+    
+    chip_deselect();
+    
+    return true;
 }
 
 uint8_t FPGA::read_halls(uint8_t* halls, size_t size) {
@@ -340,11 +298,12 @@ uint8_t FPGA::watchdog_reset() {
 }
 
 void FPGA::chip_select() {
-    return;
+    _spi_bus->frequency(FPGA_SPI_FREQ);
+    _nCs = 1;
 }
 
 void FPGA::chip_deselect() {
-    return;
+    _nCs = 0;
 }
 
 bool FPGA::isReady() { return _isInit; }
