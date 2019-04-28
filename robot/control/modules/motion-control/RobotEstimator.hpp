@@ -12,8 +12,8 @@ public:
     explicit RobotEstimator(RobotPose x0, RobotTwist v0);
 
     void predict(MotorVoltage u);
-    void update_odometry(Vector<5> odometry);
-    void update_camera(Vector<3> camera_measurements, double time_since);
+    void update_odometry(Odometry odometry);
+    void update_camera(Camera camera_measurements, double time_since);
 
     Vector<6> get_x() const { return x; }
 

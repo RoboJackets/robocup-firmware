@@ -48,7 +48,7 @@ RobotTwist RobotModel::forward_dynamics(RobotTwist v, MotorVoltage u) {
         kMotorTorqueConstant * (u - kMotorSpeedConstant * motor_velocity) / kMotorResistance;
 
     Vector<4> wheel_torque = motor_torque / kGearRatio;
-    RobotEffort effort = G.transpose() * wheel_torque;
+    Vector<3> effort = G.transpose() * wheel_torque;
 
     Matrix<3, 3> coriolis = (Matrix<3, 3>() <<
         0, -v(2), 0,
@@ -115,7 +115,7 @@ MotorVoltage RobotModel::inverse_dynamics_world(RobotPose x, RobotTwist v, Robot
     return inverse_dynamics(velocity_body, acceleration_body);
 }
 
-Vector<5> RobotModel::read_odom(RobotTwist body_velocity) {
+Odometry RobotModel::read_odom(RobotTwist body_velocity) {
     Vector<4> wheel_velocity = G * body_velocity;
     return (Vector<5>() <<
             wheel_velocity(0),
@@ -125,7 +125,7 @@ Vector<5> RobotModel::read_odom(RobotTwist body_velocity) {
             body_velocity(2)).finished();
 }
 
-Vector<3> RobotModel::read_cam(RobotPose x, RobotTwist v) {
+Camera RobotModel::read_cam(RobotPose x, RobotTwist v) {
     // TODO(Kyle): Subtract `camera lag * v` from x to extrapolate
     // backwards to compensate.
     return x;

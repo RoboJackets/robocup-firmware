@@ -11,11 +11,6 @@ using Matrix = Eigen::Matrix<double, N, M>;
 template<int N>
 using Vector = Matrix<N, 1>;
 
-using MotorVoltage = Vector<4>;
-using RobotPose = Vector<3>;
-using RobotTwist = Vector<3>;
-using RobotEffort = Vector<3>;
-
 constexpr double to_radians(double degrees) {
     return degrees * M_PI / 180;
 }
@@ -24,45 +19,23 @@ constexpr double kLoopTime = 0.005;
 
 // Configuration (all values in world space):
 // q = [ x y theta].T
+using RobotPose = Vector<3>;
+
 // q' = [ vx vy theta].T
-//
+using RobotTwist = Vector<3>;
+
 // Input:
 // u = [ tau_1 tau_2 tau_3 tau_4 ].T
-//
+using MotorVoltage = Vector<4>;
+
 // Odometry Output:
-// y = [ omega_1 omega_2 omega_3 omega_4 gyro_rate ]
-//
+// z_o = [ omega_1 omega_2 omega_3 omega_4 gyro_rate ]
+using Odometry = Vector<5>;
+
 // Camera Output:
-// z = [ x y phi ]
-//
-// A matrix (6x6):
-// [ I_3 I_3dt ]
-// [  0  RAR.T ]
-//
-// B matrix (6x4):
-// [R 0][ 1/2 J^{-1}G.T dt^2 ]
-// [0 R][    J^{-1}G.T dt    ]
-//
-// C_odom matrix (5x6), v_odom = Gv_world:
-// [ 0_3   GR.T  ]
-// [ 0 0 0 0 0 1 ]
-//
-// C_cam matrix (3x6)
-// [ I_3 0_3 ]
-//
-// Q matrix (6x6):
-// Qd = A.T Q A
-//    = [  Qp  Qpdt   ]
-//      [ Qpdt P.TQvP ]
-// (With P = RAvR.T)
-//
-// R_odom matrix (4x4):
-// I_4 r_odom
-//
-// R_cam matrix (3x3):
-// [ r_x   0   0  ]
-// [  0   r_y  0  ]
-// [  0    0  r_h ]
+// z_c = [ x y phi ]
+using Camera = Vector<3>;
+
 class RobotModel {
 public:
     RobotModel();
@@ -79,10 +52,10 @@ public:
     MotorVoltage inverse_dynamics_world(RobotPose x, RobotTwist v, RobotTwist a);
 
     // Get the odometry readings for a certain body velocity
-    Vector<5> read_odom(RobotTwist body_velocity);
+    Odometry read_odom(RobotTwist body_velocity);
 
     // Get the camera readings given by a certain state
-    Vector<3> read_cam(RobotPose x, RobotTwist v);
+    Camera read_cam(RobotPose x, RobotTwist v);
 
 private:
     Matrix<4, 3> G, GT_inv;
