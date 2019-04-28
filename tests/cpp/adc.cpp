@@ -11,7 +11,7 @@ int main(void){
       HAL_Delay(100);
       leds[1].toggle();
     }
-    else if (pin.read() < 0.8) {
+    else if (pin.read() < 8570) {
       leds[2].toggle();
       HAL_Delay(100);
       leds[2].toggle();

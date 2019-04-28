@@ -6,7 +6,7 @@ class AnalogIn {
    private:
 
       ADC_HandleTypeDef ADC_InitStruct = {};
-      uint16_t readValue;
+      uint32_t readValue;
       uint16_t unsignedReadValue;
       void ADC_Init(ADCPinName pin);
       void DMA_Init();

@@ -11,7 +11,7 @@ AnalogIn::AnalogIn(ADCPinName pin) {
    ADC_Init(pin);
    __enable_irq();
    HAL_ADC_MspInit(&ADC_InitStruct);
-   HAL_ADC_Start_DMA(&ADC_InitStruct, (uint32_t*)&readValue, 1);  //third argument is length, idk what that is
+   HAL_ADC_Start_DMA(&ADC_InitStruct, &readValue, 1);  //third argument is length, idk what that is
 
 }
 
