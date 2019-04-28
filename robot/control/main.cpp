@@ -6,9 +6,11 @@
 
 int main() {
 
-
-   ISM43340 radioDriver(LED1);
-
+    //I have no clue what pins the radio is on
+    SPI spi2(SpiBus5, p26, 6'000'000);
+    ISM43340 radioDriver(spi2, p20, p22, p21);
+   
+   //todo: replace spi reads and writes with transmitRecieve?
 
   while (true) { }
   /*

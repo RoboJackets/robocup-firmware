@@ -43,8 +43,44 @@ namespace ISMConstants {
 
 class ISM43340 {
 public:
-  ISM43340(PinName testPin);
+    ISM43340(SPI radioSPI, PinName nCsPin, PinName nResetPin, pinName dataReadyPin);
 
+    //I'm assuming we are still using RTP packets
+    int32_t sendPacket(const rtp::Packet* pkt);
+    
+    BufferT getData();
+
+    BufferT getReadBuffer() { return readBuffer; }
+
+    void reset() override;
+
+    int32_t selfTest() override;
+
+    bool isConnected() const override { return isInit; }
+
+    int writeToSpi(uint8_t* command, int length);
+
+    //Printing isn't implemented  yet
+    //int32_t testPrint();
+
+    uint32_t readFromSpi();
+
+    //I could add a status return to this but meh
+    void sendCommand(std::string command, std::string arg = "");
+    
 private:
-  DigitalOut test;
+    
+    SPI radioSpi;
+
+    DigitalIn dataReady;
+    DigitalOut nCs;
+    
+    DigitalOut nReset;
+    //Need to convert to use interrupts
+    //InterruptIn dataReady();
+
+    //Need to define BufferT
+    BufferT readBuffer;
+
+    bool isInit = false;
 };
