@@ -11,8 +11,14 @@ using Matrix = Eigen::Matrix<double, N, M>;
 template<int N>
 using Vector = Matrix<N, 1>;
 
+// Convert degrees to radians
 constexpr double to_radians(double degrees) {
     return degrees * M_PI / 180;
+}
+
+// Wrap theta to the range [-pi, pi]
+constexpr double bound_angle(double theta) {
+    return std::remainder(theta, to_radians(360));
 }
 
 constexpr double kLoopTime = 0.005;

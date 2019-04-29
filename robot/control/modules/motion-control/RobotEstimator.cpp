@@ -36,8 +36,10 @@ void RobotEstimator::update_odometry(Odometry odometry) {
     RobotTwist body_velocity = rotation_matrix.transpose() * extract_velocity(x);
     Odometry expected = robot_model.read_odom(body_velocity);
 
+    Odometry error = odometry - expected;
+
     x += pack_pose_velocity(
-            RobotPose::Zero(), rotation_matrix * K_odom * (odometry - expected));
+            RobotPose::Zero(), rotation_matrix * K_odom * error);
 }
 
 void RobotEstimator::update_camera(Camera camera_measurements, double time_since) {
@@ -45,7 +47,13 @@ void RobotEstimator::update_camera(Camera camera_measurements, double time_since
     RobotPose pose = extract_pose(x);
     RobotTwist velocity = extract_velocity(x);
     Camera expected = robot_model.read_cam(pose, velocity);
-    x += K_cam * (camera_measurements - expected);
+
+    Camera error = camera_measurements - expected;
+
+    // The camera might be measuring in a different frame, so wrap the angle.
+    error(2) = bound_angle(error(2));
+
+    x += K_cam * error;
 }
 
 }
