@@ -3,16 +3,27 @@
 
 namespace motion {
 
+Vector<6> pack_pose_velocity(RobotPose x, RobotTwist v) {
+    Vector<6> state;
+    state.block<3, 1>(0, 0) = x;
+    state.block<3, 1>(3, 0) = v;
+    return state;
+}
+
+RobotPose extract_pose(Vector<6> state) {
+    return state.block<3, 1>(0, 0);
+}
+
+RobotTwist extract_velocity(Vector<6> state) {
+    return state.block<3, 1>(3, 0);
+}
+
 Matrix<3> make_rotation_matrix(double phi) {
     return (Matrix<3>() <<
             std::cos(phi), -std::sin(phi), 0,
             std::sin(phi), std::cos(phi), 0,
             0, 0, 1
         ).finished();
-}
-
-constexpr double radians(double degrees) {
-    return degrees * M_PI / 180;
 }
 
 RobotModel::RobotModel() {
@@ -117,7 +128,7 @@ MotorVoltage RobotModel::inverse_dynamics_world(RobotPose x, RobotTwist v, Robot
 
 Odometry RobotModel::read_odom(RobotTwist body_velocity) {
     Vector<4> wheel_velocity = G * body_velocity;
-    return (Vector<5>() <<
+    return (Odometry() <<
             wheel_velocity(0),
             wheel_velocity(1),
             wheel_velocity(2),

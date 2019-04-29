@@ -16,16 +16,16 @@ RobotEstimator::RobotEstimator(RobotPose x0, RobotTwist v0) {
             0, 0, 0,
             0, 0, 0
             ).finished();
-    x.block<3, 1>(0, 0) = x0;
-    x.block<3, 1>(3, 0) = v0;
+    x = pack_pose_velocity(x0, v0);
 }
 
-void RobotEstimator::predict(Vector<4> u) {
-    RobotTwist acceleration = robot_model.forward_dynamics_world(
-            x.block<3, 1>(0, 0), x.block<3, 1>(3, 0), u);
-    x.block<3, 1>(0, 0) += x.block<3, 1>(3, 0) * kLoopTime
-        + acceleration * kLoopTime * kLoopTime;
-    x.block<3, 1>(3, 0) += acceleration * kLoopTime;
+void RobotEstimator::predict(MotorVoltage u) {
+    RobotPose pose = extract_pose(x);
+    RobotTwist velocity = extract_velocity(x);
+    RobotTwist acceleration = robot_model.forward_dynamics_world(pose, velocity, u);
+    x += pack_pose_velocity(
+            velocity * kLoopTime + acceleration * kLoopTime * kLoopTime,
+            acceleration * kLoopTime);
 }
 
 void RobotEstimator::update_odometry(Odometry odometry) {
@@ -33,15 +33,18 @@ void RobotEstimator::update_odometry(Odometry odometry) {
     // then rotate back to apply changes.
     Matrix<3> rotation_matrix = make_rotation_matrix(x(2));
 
-    RobotTwist body_velocity = rotation_matrix.transpose() * x.block<3, 1>(3, 0);
+    RobotTwist body_velocity = rotation_matrix.transpose() * extract_velocity(x);
     Odometry expected = robot_model.read_odom(body_velocity);
 
-    x.block<3, 1>(3, 0) += rotation_matrix * K_odom * (odometry - expected);
+    x += pack_pose_velocity(
+            RobotPose::Zero(), rotation_matrix * K_odom * (odometry - expected));
 }
 
 void RobotEstimator::update_camera(Camera camera_measurements, double time_since) {
     // TODO(Kyle): Figure out something clever to do with camera times here.
-    Camera expected = robot_model.read_cam(x.block<3, 1>(0, 0), x.block<3, 1>(3, 0));
+    RobotPose pose = extract_pose(x);
+    RobotTwist velocity = extract_velocity(x);
+    Camera expected = robot_model.read_cam(pose, velocity);
     x += K_cam * (camera_measurements - expected);
 }
 

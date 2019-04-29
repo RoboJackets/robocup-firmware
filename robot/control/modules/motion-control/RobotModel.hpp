@@ -36,6 +36,10 @@ using Odometry = Vector<5>;
 // z_c = [ x y phi ]
 using Camera = Vector<3>;
 
+Vector<6> pack_pose_velocity(RobotPose x, RobotTwist v);
+RobotPose extract_pose(Vector<6> state);
+RobotTwist extract_velocity(Vector<6> state);
+
 class RobotModel {
 public:
     RobotModel();

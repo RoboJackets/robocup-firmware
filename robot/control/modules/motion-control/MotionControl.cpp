@@ -5,7 +5,7 @@ namespace motion {
 
 using namespace std::chrono;
 
-Vector<4> MotionControl::update_control(Vector<5> odometry, time_point now) {
+MotorVoltage MotionControl::update_control(Odometry odometry, time_point now) {
     // Run the estimator
     estimator.predict(last_u);
     estimator.update_odometry(odometry);
@@ -19,15 +19,15 @@ Vector<4> MotionControl::update_control(Vector<5> odometry, time_point now) {
     RobotPose ra = waypoint.acceleration;
 
     // Get estimate from the filter
-    RobotPose x = estimator.get_x().block<3, 1>(0, 0);
-    RobotTwist v = estimator.get_x().block<3, 1>(3, 0);
+    RobotPose x = extract_pose(estimator.get_x());
+    RobotTwist v = extract_velocity(estimator.get_x());
 
     last_u = controller.calculate(x, v, rx, rv, ra);
 
     return last_u;
 }
 
-void MotionControl::update_camera(Vector<3> camera, time_point camera_time, time_point now) {
+void MotionControl::update_camera(Camera camera, time_point camera_time, time_point now) {
     double time_seconds = duration_cast<microseconds>(now - camera_time).count() * 1e-6;
     estimator.update_camera(camera, time_seconds);
 }

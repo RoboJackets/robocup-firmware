@@ -9,7 +9,7 @@ public:
 
     // Calculate the controller's values given pose and velocity
     // as well as reference pose, velocity, and acceleration.
-    Vector<4> calculate(
+    MotorVoltage calculate(
             RobotPose x, RobotTwist v,
             RobotPose rx, RobotTwist rv, RobotTwist ra);
 
