@@ -6,15 +6,19 @@
 
 int main() {
 
-    //I have no clue what pins the radio is on
-    SPI spi2(SpiBus5, p26, 6'000'000);
-    ISM43340 radioDriver(spi2, p20, p22, p21);
-   
-   //todo: replace spi reads and writes with transmitRecieve?
+    SPI radioSPI(SpiBus5, p17, 6'000'000);
+    ISM43340 radioDriver(radioSPI, p17, p19, p18);
+
+    bool test = radioDriver.selfTest();
+    // bool test = true;
+
+    DigitalOut l1 = DigitalOut(LED1);
+    DigitalOut l2 = DigitalOut(LED2);
+    l1 = 1;
+    l2 = test;
 
   while (true) { }
   /*
-        SPI spi2(SpiBus5, p26, 2'000'000);
 
         for (int i = 0; i <= 100; i++) {
             spi2.transmitReceive(i);

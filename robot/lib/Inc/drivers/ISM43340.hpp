@@ -3,7 +3,7 @@
 #include "mtrain.hpp"
 #include "SPI.hpp"
 #include <vector>
-
+#include "rc-fshare/rtp.hpp"
 
 namespace ISMConstants {
     static const std::string OK = "OK\r\n\>";
@@ -43,20 +43,21 @@ namespace ISMConstants {
 
 class ISM43340 {
 public:
-    ISM43340(SPI radioSPI, PinName nCsPin, PinName nResetPin, pinName dataReadyPin);
+
+    ISM43340(SPI radioSPI, PinName nCsPin, PinName nResetPin, PinName dataReadyPin);
 
     //I'm assuming we are still using RTP packets
     int32_t sendPacket(const rtp::Packet* pkt);
-    
-    BufferT getData();
 
-    BufferT getReadBuffer() { return readBuffer; }
+    std::vector<uint8_t> getData();
 
-    void reset() override;
+    std::vector<uint8_t> getReadBuffer() { return readBuffer; }
 
-    int32_t selfTest() override;
+    void reset();
 
-    bool isConnected() const override { return isInit; }
+    int32_t selfTest();
+
+    bool isConnected() const { return isInit; }
 
     int writeToSpi(uint8_t* command, int length);
 
@@ -67,20 +68,19 @@ public:
 
     //I could add a status return to this but meh
     void sendCommand(std::string command, std::string arg = "");
-    
+
 private:
-    
-    SPI radioSpi;
+
+    SPI radioSPI;
 
     DigitalIn dataReady;
     DigitalOut nCs;
-    
+
     DigitalOut nReset;
     //Need to convert to use interrupts
     //InterruptIn dataReady();
 
-    //Need to define BufferT
-    BufferT readBuffer;
+    std::vector<uint8_t> readBuffer;
 
     bool isInit = false;
 };

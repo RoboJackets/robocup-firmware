@@ -1,16 +1,40 @@
 #include "drivers/ISM43340.hpp"
 
-ISM43340::ISM43340(SPI radioSPI, PinName nCsPin, PinName nResetPin, pinName dataReadyPin) : 
-nCs(nCsPin), nReset(nResetPin), dataReady(dataReadyPin){
-    this->radioSPI = radioSPI;
+ISM43340::ISM43340(SPI radioSPI, PinName nCsPin, PinName nResetPin, PinName dataReadyPin) :
+  radioSPI(radioSPI), nCs(nCsPin), nReset(nResetPin), dataReady(dataReadyPin){
+    //This should really be implemented
+    //this->radioSPI.format(16);
+
     reset();
 }
 
+// 8 bit incorrect version
+int ISM43340::writeToSpi(uint8_t* command, int length) {
+
+  while (dataReady.read() != 1);
+  for (int i = 0; i < length; i += 2) {
+    if (i < length) {
+      uint8_t c1 = command[i];
+      uint8_t c2 = 0;
+      if (i + 1 < length) {
+        c2 = command[i + 1];
+      }
+
+      //Swap endianess
+      uint16_t packet = (c2 << 8) | c1;
+
+      radioSPI.transmit(c2);
+      radioSPI.transmit(c1);
+    }
+  }
+
+  return 0;
+}
+
+/* 16 BIT CORRECT VERSION
 int ISM43340::writeToSpi(uint8_t* command, int length) {
 
     while (dataReady.read() != 1);
-
-    chipSelect();
     for (int i = 0; i < length; i += 2) {
         if (i < length) {
             uint8_t c1 = command[i];
@@ -23,22 +47,42 @@ int ISM43340::writeToSpi(uint8_t* command, int length) {
             uint16_t packet = (c2 << 8) | c1;
 
             //Due to the fact the SPI protocol for this takes turns the return can be ignored
-            m_spi->write(packet);
+            radioSPI.transmit(packet);
         }
     }
-    chipDeselect();
 
     return 0;
 }
+*/
 
+
+// 8 bit incorrect version
+uint32_t ISM43340::readFromSpi() {
+
+  while (dataReady.read() != 1);
+
+  readBuffer.clear();
+
+  while (dataReady.read() != 0) {
+      uint8_t data1 = radioSPI.transmitReceive(0x0a);
+      uint8_t data2 = radioSPI.transmitReceive(0x0a);
+
+      readBuffer.push_back(data2);
+      readBuffer.push_back(data1);
+  }
+
+  return 0;
+}
+
+/* 16 BIT CORRECT VERSION
 uint32_t ISM43340::readFromSpi() {
 
     while (dataReady.read() != 1);
 
     readBuffer.clear();
-    chipSelect();
+
     while (dataReady.read() != 0) {
-        uint16_t data = m_spi->write(0x0a0a);
+        uint16_t data = radioSPI.transmitReceive(0x0a0a);
 
         //ignore '> ' which is the prompt
         if (data != 0x203e){
@@ -46,10 +90,10 @@ uint32_t ISM43340::readFromSpi() {
             readBuffer.push_back((uint8_t)(data >> 8));
         }
     }
-    chipDeselect();
 
     return 0;
 }
+*/
 
 void ISM43340::sendCommand(std::string command, std::string arg) {
 
@@ -72,9 +116,9 @@ void ISM43340::sendCommand(std::string command, std::string arg) {
 
 int32_t ISM43340::sendPacket(const rtp::Packet* pkt) {
     // Return failure if not initialized
-    if (!isInit) return COMM_FAILURE;
+    if (!isInit) return -1;
 
-    BufferT txBuffer;
+    std::vector<uint8_t> txBuffer;
 
     //Transmit using socket #1
     //Could increase efficiency by tracking if this needs to be set
@@ -130,7 +174,8 @@ int32_t ISM43340::sendPacket(const rtp::Packet* pkt) {
     return 0;
 }
 
-BufferT ISM43340::getData() {
+
+std::vector<uint8_t> ISM43340::getData() {
     //Receive using socket #0
     //Could increase efficiency by tracking if this needs to be set
     sendCommand(ISMConstants::CMD_SET_RADIO_SOCKET, "0");
@@ -209,7 +254,8 @@ void ISM43340::reset() {
         if (readBuffer.size() == 0 || (int)readBuffer[0] == 0) {
             //Failed to connect to network
             //not sure what to have it do here
-            LOG(INFO, "ISM43340 failed to connect");
+
+            //LOG(INFO, "ISM43340 failed to connect"); //not sure logging is implemented yet
             return;
         }
 
@@ -233,6 +279,6 @@ void ISM43340::reset() {
 
 
         //is logging implemented yet?
-        LOG(INFO, "ISM43340 ready!");
+        //LOG(INFO, "ISM43340 ready!");
         }
 }
