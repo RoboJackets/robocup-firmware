@@ -176,7 +176,7 @@ uint8_t SPI::transmitReceive(uint8_t data) {
         HAL_GPIO_WritePin(chipSelect->port, chipSelect->pin, (GPIO_PinState)0);
     }
 
-    SPI5->CR1 |= SPI_CR1_SPE;
+    spiHandle.Instance->CR1 |= SPI_CR1_SPE;
 
     /* Wait for TX queue to empty */
     while (READ_BIT(spiHandle.Instance->SR, SPI_SR_TXE) == 0) {}
@@ -191,17 +191,22 @@ uint8_t SPI::transmitReceive(uint8_t data) {
     return recievedData;
 }
 
-std::vector<uint8_t> SPI::transmitReceive(std::vector<uint8_t>& data) {
-    int size = data.size();
+std::vector<uint8_t> SPI::transmitReceive(const std::vector<uint8_t>& data) {
+    size_t size = data.size();
     std::vector<uint8_t> dataOut(size);
+    transmitReceive(data.data(), dataOut.data(), size);
 
+    return dataOut;
+}
+
+void SPI::transmitReceive(const uint8_t* dataIn, uint8_t* dataOut, size_t size) {
     SET_BIT(spiHandle.Instance->CR2, SPI_RXFIFO_THRESHOLD);
     LL_SPI_Enable(spiHandle.Instance);
 
-    uint8_t* txPtr = data.data();
-    uint8_t* txPtrEnd = txPtr + size;
+    const uint8_t* txPtr = dataIn;
+    const uint8_t* txPtrEnd = txPtr + size;
 
-    uint8_t* rxPtr = dataOut.data();
+    uint8_t* rxPtr = dataOut;
 
     if (chipSelect) {
         HAL_GPIO_WritePin(chipSelect->port, chipSelect->pin, (GPIO_PinState)0);
@@ -240,22 +245,24 @@ std::vector<uint8_t> SPI::transmitReceive(std::vector<uint8_t>& data) {
     if (chipSelect) {
         HAL_GPIO_WritePin(chipSelect->port, chipSelect->pin, (GPIO_PinState)1);
     }
-
-    return dataOut;
 }
 
 void SPI::transmit(uint8_t data) {
     transmitReceive(data);
 }
 
-void SPI::transmit(std::vector<uint8_t>& data) {
-    int size = data.size();
+void SPI::transmit(const std::vector<uint8_t>& data) {
+    transmit(data.data(), data.size());
+}
+
+void SPI::transmit(const uint8_t* data, size_t size) {
+    // int size = data.size();
 
     SET_BIT(spiHandle.Instance->CR2, SPI_RXFIFO_THRESHOLD);
     LL_SPI_Enable(spiHandle.Instance);
 
-    uint8_t* txPtr = data.data();
-    uint8_t* txPtrEnd = txPtr + size;
+    const uint8_t* txPtr = data;
+    const uint8_t* txPtrEnd = txPtr + size;
 
     if (chipSelect) {
         HAL_GPIO_WritePin(chipSelect->port, chipSelect->pin, (GPIO_PinState)0);

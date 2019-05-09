@@ -2,7 +2,7 @@ from conans import ConanFile, CMake
 
 class MtrainConan(ConanFile):
     name = "mTrain"
-    version = "0.1.0"
+    version = "0.1.1"
     url = "https://github.com/RoboJackets/mtrain-firmware"
     description = "mTrain description"
     settings = {"build_type": None, "compiler": None, "arch": ["armv7hf"]}
@@ -27,7 +27,7 @@ class MtrainConan(ConanFile):
         self.copy(pattern='flash.py', dst='.', src='util')
 
     def package_info(self):
-        self.cpp_info.includedirs = ['API/c/Inc', 'API/cpp/Inc', 'BSP/config/hal', 'BSP/config/usb', 'BSP/Inc', 
+        self.cpp_info.includedirs = ['API/c/Inc', 'API/cpp/Inc', 'BSP/config/hal', 'BSP/config/usb', 'BSP/Inc',
             'external/CMSIS/Device/STM32F7xx/Include', 'external/CMSIS/Include', 'external/middleware', 'external/STM32F7xx_HAL_Drivers/Inc']
         self.cpp_info.exelinkflags.append('-T %s/flash.ld' % self.package_folder)
         self.cpp_info.libs = ['STM32F7xx', 'STM32F7_API_CPP', 'STM32F7_API_C', 'STM32_USB_Device', 'STM32F7xx_HAL', 'DSP']
