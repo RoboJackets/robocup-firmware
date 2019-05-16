@@ -104,7 +104,7 @@ void CommTask::sendRecievePackets() {
             if (sendBuffer.size() > 0) {
 
                 std::array<uint8_t, rtp::ReverseSize> packet = sendBuffer.front();
-                
+
                 radio->send(packet.data(), rtp::ReverseSize);
 
                 sendBuffer.pop();
@@ -113,7 +113,7 @@ void CommTask::sendRecievePackets() {
 
         {
             std::lock_guard<std::mutex> lock(receiveLock);
-            if (receiveBuffer.size() < MAX_BUFFER_SIZE - 1) {
+            if (receiveBuffer.size() < MAX_BUFFER_SIZE - 1 && radio->isAvailable()) {
 
                 std::array<uint8_t, rtp::ForwardSize> packet;
 
