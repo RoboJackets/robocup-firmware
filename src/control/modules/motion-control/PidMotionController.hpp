@@ -85,6 +85,14 @@ public:
         {
             error[i] = target_rotation(i) - maxCurrents[i];
             dutyCycles[i] = current_pid.run(error[i]);
+            if(dutyCycles[i] > 1)
+            {
+                dutyCycles[i] = 1;
+            }
+            else if(dutyCycles[i] < 0)
+            {
+                dutyCycles[i] = 0;
+            }
         }
         return dutyCycles;
 
