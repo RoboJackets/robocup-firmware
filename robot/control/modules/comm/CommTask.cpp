@@ -1,5 +1,10 @@
 #include "CommTask.hpp"
 
+// Comm thread constants
+#define STACK_SIZE 100
+#define TASK_PRIORITY 2
+#define TASK_LOOP_FREQ 100
+
 #define MAX_BUFFER_SIZE 10
 
 // Temp thing just to make sure it compiles
@@ -13,7 +18,15 @@ class NewRadioDriver : public GenericRadio {
 CommTask::CommTask() {
     radio = std::make_unique<NewRadioDriver>();
 
-    radioCommunicator = std::thread(&CommTask::sendRecievePackets, this);
+    // TODO: Make static? Or is dynamic fine?
+    BaseType_t pdPass = xTaskCreate(&CommTask::sendReceivePackets,
+                                    "radio",
+                                    STACK_SIZE,
+                                    nullptr,
+                                    ((UBaseType_t) TASK_PRIORITY) | portPRIVLEGE_BIT),
+                                    &radioCommunicator)
+
+    configASSERT(pdPass);
 }
 
 void CommTask::send(const KickerStatus& kickerStatus,
@@ -62,11 +75,12 @@ bool CommTask::receive(KickerCommand& kickerCommand,
     {
         // No packets to grab, zero everything and return false
         if (receiveBuffer.size() == 0) {
-            
+            kickerCommand.valid = false;
             kickerCommand.shootMode = KickerCommand::ShootMode::KICK;
             kickerCommand.triggerMode = KickerCommand::TriggerMode::OFF;
             kickerCommand.kickStrength = 0;
 
+            motorCommand.valid = true;
             motorCommand.bodyX = 0.0;
             motorCommand.bodyY = 0.0;
             motorCommand.bodyW = 0.0;
@@ -84,11 +98,13 @@ bool CommTask::receive(KickerCommand& kickerCommand,
     rtp::RobotTxMessage* tx = reinterpret_cast<rtp::RobotTxMessage*>(&p[rtp::HeaderSize]);
     rtp::ControlMessage* control = reinterpret_cast<rtp::ControlMessage*>(&tx->message);
 
+    kickerCommand.valid = true;
     // All possible values must be defined in the enum otherwise this is undefined behavior
     kickerCommand.shootMode = static_cast<KickerCommand::ShootMode>(control->shootMode);
     kickerCommand.triggerMode = static_cast<KickerCommand::TriggerMode>(control->triggerMode);
     kickerCommand.kickStrength = control->kickStrength;
 
+    motorCommand.valid = true;
     motorCommand.bodyX = static_cast<float>(control->bodyX / rtp::ControlMessage::VELOCITY_SCALE_FACTOR);
     motorCommand.bodyY = static_cast<float>(control->bodyY / rtp::ControlMessage::VELOCITY_SCALE_FACTOR);
     motorCommand.bodyW = static_cast<float>(control->bodyW / rtp::ControlMessage::VELOCITY_SCALE_FACTOR);
@@ -97,7 +113,9 @@ bool CommTask::receive(KickerCommand& kickerCommand,
     return true;
 }
 
-void CommTask::sendRecievePackets() {
+void CommTask::sendReceivePackets(void * pvParameters) {
+    TickType_t prevWakeTime = xTaskGetTickCount();
+    const TickType_t timeIncrement = 1000/TASK_LOOP_FREQ / portTICK_PERIOD_MS;
     while (true) {
         {
             std::lock_guard<std::mutex> lock(sendLock);
@@ -124,5 +142,7 @@ void CommTask::sendRecievePackets() {
         }
 
         // do a wait / yield
+        vTaskDelayUntil();
+        taskYIELD();
     }
 }

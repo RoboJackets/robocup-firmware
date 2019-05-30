@@ -1,3 +1,5 @@
+#pragma once
+
 #include <cstdint>
 
 // Mirror the the packets found in rtp
@@ -19,6 +21,8 @@
 
 // Bundle up commands from the rtc
 struct KickerCommand {
+    bool valid;
+
     // Enum underlying type should be the same as the values found
     // in the packets
     enum ShootMode { KICK = 0, CHIP = 1 };
@@ -31,6 +35,8 @@ struct KickerCommand {
 };
 
 struct MotorCommand {
+    bool valid;
+
     double bodyX;
     double bodyY;
     double bodyW;

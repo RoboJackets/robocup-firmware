@@ -1,31 +1,27 @@
 #include "mtrain.hpp"
-#include "SPI.hpp"
-#include <vector>
+#include "modules/comm/CommTask.hpp"
+#include "modules/comm/CommMicroPackets.hpp"
 
 int main() {
-        {
-        SPI spi2(SpiBus5, p26, 2'000'000);
+    KickerCommand kickerCommand;
+    MotorCommand motorCommand;
 
-        for (int i = 0; i <= 100; i++) {
-            spi2.transmitReceive(i);
-        }
-        
-        spi2.frequency(8'000'000);
+    KickerStatus kickerStatus;
+    MotorStatus motorStatus;
+    RobotStatus robotStatus;
 
-        std::vector<uint8_t> nums;
-        for (int i = 1; i <= 100; i++) {
-            nums.push_back(i);
-        }
-        spi2.transmitReceive(nums);
+    {
+        CommTask comm;
 
-        spi2.frequency(1);
-        for (uint8_t i = 0; i <= 100; i++) {
-            spi2.transmit(i);
-        }
+        comm.receive(kickerCommand, motorCommand);
 
-        spi2.frequency(15'000'000);
-        spi2.transmit(nums);
+        // Transfer commands to other modules
+        // Let them deal with whether it's invalid or not
+
+        // Get status from the modules
+        // Should just be able to pull
+
+        comm.send(kickerStatus, motorStatus, robotStatus);
     }
-
     while (true) { }
 }

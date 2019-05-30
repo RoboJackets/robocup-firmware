@@ -1,11 +1,12 @@
 #pragma once
 
 #include <memory>
-#include <mutex>
 #include <queue>
-#include <thread>
 
-#include "lib/robocup-fshare/include/rc-fshare/rtp.hpp"
+
+#include <cmsis_os.h>
+// TODO: Figure out how to do this correctly
+#include "../../lib/robocup-fshare/include/rc-fshare/rtp.hpp"
 
 #include "CommMicroPackets.hpp"
 #include "GenericRadio.hpp"
@@ -35,13 +36,15 @@ public:
                  MotorCommand& motorCommand);
 
 private:
-    // Constantly send and recieve packets from the radio
+    // Note: Threading 
+
+    // Constantly send and receive packets from the radio
     // filling the inter
-    void sendRecievePackets();
+    static void sendReceivePackets(void * pvParameters);
 
-    std::thread radioCommunicator;
+    osThreadId radioCommunicator = nullptr;
 
-    std::mutex receiveLock;
+    osMutexId receiveLock;
     std::mutex sendLock;
 
     std::queue<std::array<uint8_t, rtp::ForwardSize>> receiveBuffer;
