@@ -18,7 +18,7 @@ CC=arm-none-eabi-gcc
 CXX=arm-none-eabi-g++
 OBJCOPY=arm-none-eabi-objcopy
 SIZE_UTIL=arm-none-eabi-size
-LDFLAGS="--specs=nosys.specs"
+LDFLAGS="--specs=nosys.specs --specs=nano.specs"
 CFLAGS="$C_MACHINE_OPTIONS"
-CXXFLAGS="$C_MACHINE_OPTIONS"
+CXXFLAGS="$C_MACHINE_OPTIONS -fno-exceptions -fno-rtti"
 ASMFLAGS="$C_MACHINE_OPTIONS"
