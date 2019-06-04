@@ -10,17 +10,18 @@ class NewRadioDriver : public GenericRadio {
     bool isAvailable() { return true; }
 };
 
-CommTask::CommTask() {
-    radio = std::make_unique<NewRadioDriver>();
+CommTask::CommTask(const KickerStatus* kickerStatus,
+                   const MotorStatus* motorStatus,
+                   const RobotStatus* robotStatus) {
 
-    radioCommunicator = std::thread(&CommTask::sendRecievePackets, this);
+    this.kickerStatus = kickerStatus;
+    this.motorStatus = motorStatus;
+    this.robotStatus = robotStatus;
+
+    radio = std::make_unique<NewRadioDriver>();
 }
 
-void CommTask::send(const KickerStatus& kickerStatus,
-                    const MotorStatus& motorStatus,
-                    const RobotStatus& robotStatus) {
-    std::lock_guard<std::mutex> lock(sendLock);
-    {
+void CommTask::send() {
         // Make sure the buffer isn't already full
         if (sendBuffer.size() >= MAX_BUFFER_SIZE - 1) {
             // Do some warning here
@@ -36,7 +37,7 @@ void CommTask::send(const KickerStatus& kickerStatus,
         header->type    = rtp::MessageType::CONTROL;
 
         uint8_t motorErrors = 0;
-        for (int i = 0; i < 4; i++) 
+        for (int i = 0; i < 4; i++)
             motorErrors |= static_cast<int>(motorStatus.motorErrors[i]) << i;
 
         status->uid             = robotStatus.uid;
@@ -51,32 +52,26 @@ void CommTask::send(const KickerStatus& kickerStatus,
             status->encDeltas[i] = motorStatus.encDeltas[i];
 
         sendBuffer.push(buffer);
-    }
 }
 
-bool CommTask::receive(KickerCommand& kickerCommand,
-                       MotorCommand& motorCommand) {
+bool CommTask::receive(){
     std::array<uint8_t, rtp::ForwardSize> p;
+    // No packets to grab, zero everything and return false
+    if (receiveBuffer.size() == 0) {
 
-    std::lock_guard<std::mutex> lock(receiveLock);
-    {
-        // No packets to grab, zero everything and return false
-        if (receiveBuffer.size() == 0) {
-            
-            kickerCommand.shootMode = KickerCommand::ShootMode::KICK;
-            kickerCommand.triggerMode = KickerCommand::TriggerMode::OFF;
-            kickerCommand.kickStrength = 0;
+        kickerCommand.shootMode = KickerCommand::ShootMode::KICK;
+        kickerCommand.triggerMode = KickerCommand::TriggerMode::OFF;
+        kickerCommand.kickStrength = 0;
 
-            motorCommand.bodyX = 0.0;
-            motorCommand.bodyY = 0.0;
-            motorCommand.bodyW = 0.0;
-            motorCommand.dribbler = 0;
+        motorCommand.bodyX = 0.0;
+        motorCommand.bodyY = 0.0;
+        motorCommand.bodyW = 0.0;
+        motorCommand.dribbler = 0;
 
-            return false;
-        } else { // There's something to grab
-            p = receiveBuffer.front();
-            receiveBuffer.pop();
-        }
+        return false;
+    } else { // There's something to grab
+        p = receiveBuffer.front();
+        receiveBuffer.pop();
     }
 
     // In the udp radio, only 1 robot's data is sent at a time
@@ -98,9 +93,6 @@ bool CommTask::receive(KickerCommand& kickerCommand,
 }
 
 void CommTask::sendRecievePackets() {
-    while (true) {
-        {
-            std::lock_guard<std::mutex> lock(sendLock);
             if (sendBuffer.size() > 0) {
 
                 std::array<uint8_t, rtp::ReverseSize> packet = sendBuffer.front();
@@ -109,10 +101,7 @@ void CommTask::sendRecievePackets() {
 
                 sendBuffer.pop();
             }
-        }
 
-        {
-            std::lock_guard<std::mutex> lock(receiveLock);
             if (receiveBuffer.size() < MAX_BUFFER_SIZE - 1 && radio->isAvailable()) {
 
                 std::array<uint8_t, rtp::ForwardSize> packet;
@@ -121,8 +110,5 @@ void CommTask::sendRecievePackets() {
 
                 receiveBuffer.push(packet);
             }
-        }
 
-        // do a wait / yield
-    }
 }

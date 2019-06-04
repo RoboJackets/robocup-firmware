@@ -22,30 +22,26 @@ public:
     /**
      * Sends a packet of data to the radio
      */
-    void send(const KickerStatus& kickerStatus,
-              const MotorStatus& motorStatus,
-              const RobotStatus& robotStatus);
+    void send();
 
     /**
      * Receive the latest packet from the radio
-     * 
+     *
      * @return true if it returned a valid packet, false if there is no packet to return
      */
-    bool receive(KickerCommand& kickerCommand,
-                 MotorCommand& motorCommand);
+    bool receive();
 
 private:
     // Constantly send and recieve packets from the radio
     // filling the inter
     void sendRecievePackets();
 
-    std::thread radioCommunicator;
-
-    std::mutex receiveLock;
-    std::mutex sendLock;
-
     std::queue<std::array<uint8_t, rtp::ForwardSize>> receiveBuffer;
     std::queue<std::array<uint8_t, rtp::ReverseSize>> sendBuffer;
+
+    const KickerStatus* kickerStatus;
+    const MotorStatus* motorStatus;
+    const RobotStatus* robotStatus;
 
     std::unique_ptr<GenericRadio> radio;
 };
