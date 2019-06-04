@@ -1,4 +1,8 @@
 #include "bsp.h"
+#include  <unistd.h>
+
+// TODO: make this better
+USBD_HandleTypeDef USBD_Device;
 
 void bsp_config(void) {
   MPU_Config();
@@ -16,6 +20,22 @@ void bsp_config(void) {
   __HAL_RCC_GPIOG_CLK_ENABLE();
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOI_CLK_ENABLE();
+
+  USBD_Init(&USBD_Device, &VCP_Desc, 0);
+  USBD_RegisterClass(&USBD_Device, USBD_CDC_CLASS);
+  USBD_CDC_RegisterInterface(&USBD_Device, &USBD_CDC_fops);
+  USBD_Start(&USBD_Device);
+}
+
+// TODO: find better spot for this
+int _write(int file, char *data, int len)
+{
+    if (file == STDOUT_FILENO) {
+        USBD_CDC_SetTxBuffer(&USBD_Device, (uint8_t*)data, len);
+        USBD_CDC_TransmitPacket(&USBD_Device);
+        HAL_Delay(1); // TODO: why not blocking?
+    }
+    return 0;
 }
 
 /**

@@ -1,8 +1,6 @@
 #include "mtrain.h"
 #include "bsp.h"
-#include  <unistd.h>
 
-USBD_HandleTypeDef USBD_Device;
 
 #define BUFFER_SIZE 10
 #define ADDR 0x0000
@@ -10,14 +8,6 @@ USBD_HandleTypeDef USBD_Device;
 int main(void)
 {
     GPIO_InitTypeDef  GPIO_InitStruct;
-    
-    USBD_Init(&USBD_Device, &VCP_Desc, 0);
-    USBD_RegisterClass(&USBD_Device, USBD_CDC_CLASS);
-    USBD_CDC_RegisterInterface(&USBD_Device, &USBD_CDC_fops);
-    USBD_Start(&USBD_Device);
-
-
-    // GPIO_InitTypeDef GPIO_InitStruct;
 
     GPIO_InitStruct.Pin = LED1.pin;
     GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -92,14 +82,4 @@ int main(void)
 
     while(1) {
     }
-}
-
-int _write(int file, char *data, int len)
-{
-    if (file == STDOUT_FILENO) {
-        USBD_CDC_SetTxBuffer(&USBD_Device, (uint8_t*)data, len);
-        USBD_CDC_TransmitPacket(&USBD_Device);
-        HAL_Delay(1); // TODO: why not blocking?
-    }
-    return 0;
 }

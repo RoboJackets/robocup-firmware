@@ -13,7 +13,6 @@ build_type=Release
 [build_requires]
 
 [env]
-CONAN_CMAKE_FIND_ROOT_PATH=/usr/local/bin
 CC=arm-none-eabi-gcc
 CXX=arm-none-eabi-g++
 OBJCOPY=arm-none-eabi-objcopy

@@ -2,16 +2,16 @@ from conans import ConanFile, CMake
 
 class MtrainConan(ConanFile):
     name = "mTrain"
-    version = "0.1.1"
+    version = "0.1.2"
     url = "https://github.com/RoboJackets/mtrain-firmware"
     description = "mTrain description"
+    license = "Apache"
     settings = {"build_type": None, "compiler": None, "arch": ["armv7hf"]}
     generators = "cmake"
     exports_sources = ['CMakeLists.txt', 'API*', 'BSP*', 'external*', 'util/flash.py']
 
     def build(self):
         cmake = CMake(self)
-        # cmake.verbose = True
         cmake.configure(args=['--no-warn-unused-cli'])
         cmake.build()
 
@@ -35,4 +35,4 @@ class MtrainConan(ConanFile):
         self.env_info.FLASH_COPY_SCRIPT = '%s/flash.py' % self.package_folder
 
         #TODO: Make not needed
-        self.cpp_info.defines = ['STM32F769xx']
+        self.cpp_info.defines = ['STM32F769xx', 'DUSE_USB_HS']
