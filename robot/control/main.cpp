@@ -28,12 +28,11 @@ int main() {
 
     fflush(stdout);
 
-    SPI radioSPI(SpiBus5, std::nullopt, 1'000'000);
-    ISM43340 radioDriver(radioSPI, p17, p19, p30);//p18);
+    std::shared_ptr<SPI> radioSPI = std::make_shared<SPI>(SpiBus5, std::nullopt, 1'000'000);
+    ISM43340 radioDriver(radioSPI, p17, p19, p30);
 
-    //bool test = radioDriver.selfTest();
-
-    l1 = 0;
+    radioDriver.pingRouter();
+    radioDriver.testPrint();
 
     LOG(LOG_INFO, LOG_MAIN, "Finished\r\n");
 
