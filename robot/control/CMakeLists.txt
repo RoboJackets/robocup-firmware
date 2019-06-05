@@ -1,6 +1,12 @@
 add_executable(control.elf 
     main.cpp
 )
+
+target_include_directories(control.elf PUBLIC
+	"${CONAN_MTRAIN_ROOT}/external/middleware/STM32_USB_Device_Library/Core/Inc/"
+	"${CONAN_MTRAIN_ROOT}/external/middleware/STM32_USB_Device_Library/Class/CDC/Inc"
+)
+
 target_link_libraries(control.elf firm-lib)
 
 add_custom_target(control ALL
