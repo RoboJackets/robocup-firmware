@@ -1,0 +1,23 @@
+#include "GenericModule.hpp"
+#include "mtrain.h"
+#include "../MicroPackets.hpp" //todo setup include dir correctly
+#include "drivers/RotarySelector.hpp"
+
+class RotaryDialModule : public GenericModule {
+public:
+    // How many times per second this module should run
+    const static float freq = 1.0f; // Hz
+    const static uint32_t period = (uint32_t) (1000 / freq);
+
+    // How long a single call to this module takes
+    const static uint32_t runtime = 1; // ms
+
+    RotaryDialModule(RobotID *const robotID);
+
+    virtual void entry(void);
+
+private:
+    RobotID *const robotID;
+    
+    RotarySelector<DigitalIn> dial;
+};

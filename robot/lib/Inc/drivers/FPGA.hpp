@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Mbed.hpp"
-#include "Rtos.hpp"
 #include "SharedSPI.hpp"
 
 #include <array>
@@ -11,9 +9,6 @@
 
 class FPGA : public SharedSPIDevice<> {
 public:
-    // Global fpga instance.  Must be set to an initialized fpga instance.
-    static FPGA* Instance;
-
     FPGA(std::shared_ptr<SharedSPI> sharedSPI, PinName nCs, PinName initB,
          PinName progB, PinName done);
 
