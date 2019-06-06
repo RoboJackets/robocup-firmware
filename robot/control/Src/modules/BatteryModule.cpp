@@ -1,5 +1,5 @@
 #include "modules/BatteryModule.hpp"
-#include "mtrain.h"
+#include "mtrain.hpp"
 
 BatteryModule::BatteryModule(BatteryVoltage *const batteryVoltage)
     : batteryVoltage(batteryVoltage) {

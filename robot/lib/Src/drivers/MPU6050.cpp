@@ -44,9 +44,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ===============================================
 */
-#include "MPU6050.h"
-
-#include "SharedI2C.hpp"
+#include "drivers/MPU6050.h"
 
 // instead of using pgmspace.h
 typedef const unsigned char prog_uchar;

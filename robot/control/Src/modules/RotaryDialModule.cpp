@@ -1,7 +1,7 @@
 #include "modules/RotaryDialModule.hpp"
 
 RotaryDialModule::RotaryDialModule(RobotID *const robotID)
-    : robotID(robotID), dial({}) {
+    : robotID(robotID)/**, dial({})*/ {
     // todo setup dial
 
     robotID->isValid = false;
@@ -12,5 +12,5 @@ RotaryDialModule::RotaryDialModule(RobotID *const robotID)
 void RotaryDialModule::entry(void) {
     robotID->isValid = true;
     robotID->lastUpdate = HAL_GetTick();
-    robotID->robotID = dial.read();
+    robotID->robotID = 0;//dial.read();
 }

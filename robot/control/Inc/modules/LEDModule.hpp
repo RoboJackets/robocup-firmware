@@ -1,14 +1,18 @@
+#pragma once
+
+#include "mtrain.hpp"
 #include "GenericModule.hpp"
-#include "../MicroPackets.hpp" //todo setup include dir correctly
+#include "MicroPackets.hpp"
+#include <array>
 
 class LEDModule : public GenericModule {
 public:
     // How many times per second this module should run
-    const static float freq = 1.0f; // Hz
-    const static uint32_t period = (uint32_t) (1000 / freq);
+    static constexpr float freq = 1.0f; // Hz
+    static constexpr uint32_t period = static_cast<uint32_t>(1000 / freq);
 
     // How long a single call to this module takes
-    const static uint32_t runtime = 0; // ms
+    static constexpr uint32_t runtime = 0; // ms
 
     LEDModule(BatteryVoltage *const batteryVoltage,
               FPGAStatus *const fpgaStatus,
@@ -49,6 +53,7 @@ private:
     FPGAStatus *const fpgaStatus;
     RadioError *const radioError;
     
-    // All the leds
-    // state variables    
+    std::array<DigitalOut, 4> leds;
+    bool missedSuperLoopToggle;
+    bool missedModuleRunToggle;
 };

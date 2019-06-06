@@ -33,7 +33,7 @@
  * http://www.atmel.com/dyn/resources/prod_documents/doc0943.pdf
  */
 
-#include "AVR910.hpp"
+#include "drivers/AVR910.hpp"
 
 using namespace std;
 

@@ -1,4 +1,5 @@
 #include "modules/IMUModule.hpp"
+#include "mtrain.hpp"
 
 IMUModule::IMUModule(IMUData *const imuData)
     : imuData(imuData) /**, imu()**/ {
@@ -19,7 +20,7 @@ IMUModule::IMUModule(IMUData *const imuData)
 void IMUModule::entry(void) {
     int16_t motion[6];
 
-    imu.getMotion(&motion[0], &motion[1], &motion[2],
+    imu.getMotion6(&motion[0], &motion[1], &motion[2],
                   &motion[3], &motion[4], &motion[5]);
 
     // todo convert to float

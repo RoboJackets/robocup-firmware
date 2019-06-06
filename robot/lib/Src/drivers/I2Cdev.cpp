@@ -4,7 +4,7 @@
 // Changelog:
 // 2013-01-08 - first release
 
-#include "I2Cdev.h"
+#include "drivers/Internal/I2Cdev.h"
 
 /** Read a single bit from an 8-bit device register.
  * @param devAddr I2C slave device address

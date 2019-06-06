@@ -1,4 +1,5 @@
 #include "modules/MotionControlModule.hpp"
+#include "mtrain.hpp"
 
 MotionControlModule::MotionControlModule(BatteryVoltage *const batteryVoltage,
                                          IMUData *const imuData,
@@ -35,7 +36,7 @@ void MotionControlModule::entry(void) {
         // rip battery
         // stop
         for (int i = 0; i < 4; i++) {
-            motorCommand->wheels = 0;
+            motorCommand->wheels[i] = 0;
         }
         motorCommand->dribbler = 0;
     }

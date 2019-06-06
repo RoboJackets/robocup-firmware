@@ -48,8 +48,8 @@ THE SOFTWARE.
 #ifndef _MPU6050_H_
 #define _MPU6050_H_
 
-#include "I2Cdev.h"
-#include "helper_3dmath.h"
+#include "Internal/I2Cdev.h"
+#include "Internal/helper_3dmath.h"
 
 #define MPU6050_ADDRESS_AD0_LOW \
     0x68  // address pin low (GND), default for InvenSense evaluation board
@@ -416,10 +416,11 @@ private:
     I2Cdev* i2Cdev;
 
 public:
-    MPU6050(std::shared_ptr<SharedI2C> sharedI2C);
-    MPU6050(std::shared_ptr<SharedI2C> sharedI2C, uint8_t address);
+    MPU6050() {} // todo: fix these
+    //MPU6050(std::shared_ptr<SharedI2C> sharedI2C);
+    //MPU6050(std::shared_ptr<SharedI2C> sharedI2C, uint8_t address);
 
-    void initialize();
+    void initialize() {}
     bool testConnection();
 
     // AUX_VDDIO register
@@ -596,7 +597,7 @@ public:
                     int16_t* gy, int16_t* gz, int16_t* mx, int16_t* my,
                     int16_t* mz);
     void getMotion6(int16_t* ax, int16_t* ay, int16_t* az, int16_t* gx,
-                    int16_t* gy, int16_t* gz);
+                    int16_t* gy, int16_t* gz) {}
     void getAcceleration(int16_t* x, int16_t* y, int16_t* z);
     int16_t getAccelerationX();
     int16_t getAccelerationY();

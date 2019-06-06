@@ -1,7 +1,9 @@
+#pragma once
+
 #include "cstdint"
 
 // Micropackets are shared memory locations for values
-// where only the latest matters. There is no gurentee that
+// where only the latest matters. There is no guarantee that
 // data is not lost between reads.
 //
 // The "producer" of the data must initialize the micropacket
@@ -17,8 +19,6 @@ struct MotionCommand {
     float bodyXVel; // m/s
     float bodyYVel; // m/s
     float bodyWVel; // rad/s
-
-
 
     // Limited from 0-128
     uint8_t dribbler; // lsb
@@ -101,7 +101,13 @@ struct KickerCommand {
     bool isValid = false;
     uint32_t lastUpdate;
 
-    // TODO: Fill with enums etc
+    enum ShootMode { KICK = 0, CHIP = 1 };
+    enum TriggerMode { OFF = 0, IMMEDIATE = 1, ON_BREAK_BEAM = 2, INVALID = 3 };
+
+    ShootMode shootMode;
+    TriggerMode triggerMode;
+
+    uint8_t kickStrength;
 };
 
 // Status of kicker and breakbeam status
@@ -110,5 +116,7 @@ struct KickerInfo {
     bool isValid = false;
     uint32_t lastUpdate;
 
-    // TODO: Fill
+    bool kickerHasError;
+    bool kickerCharged;
+    bool ballSenseTriggered;
 };

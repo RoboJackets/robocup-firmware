@@ -1,12 +1,22 @@
 #pragma once
 
-#include "SharedSPI.hpp"
+//#include "SharedSPI.hpp"
 
 #include <array>
 #include <memory>
 #include <string>
 #include <vector>
 
+class FPGA {
+public:
+    FPGA() {};
+    bool configure(const std::string& filepath) { return true; };
+
+    uint8_t set_duty_get_enc(int16_t* duty_cycles, size_t size_dut,
+                             int16_t* enc_deltas, size_t size_enc) { return 0; }
+};
+
+/*
 class FPGA : public SharedSPIDevice<> {
 public:
     FPGA(std::shared_ptr<SharedSPI> sharedSPI, PinName nCs, PinName initB,
@@ -38,3 +48,4 @@ private:
     DigitalIn _done;
     DigitalInOut _progB;
 };
+*/

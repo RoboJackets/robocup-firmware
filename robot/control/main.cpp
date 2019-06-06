@@ -2,14 +2,15 @@
 
 #include "MicroPackets.hpp"
 
-#include "BatteryModule.hpp"
-#include "FPGAModule.hpp"
-#include "IMUModule.hpp"
-#include "KickerModule.hpp"
-#include "LEDModule.hpp"
-#include "MotionControlModule.hpp"
-#include "RadioModule.hpp"
-#include "RotaryDialModule.hpp"
+#include "modules/GenericModule.hpp"
+#include "modules/BatteryModule.hpp"
+#include "modules/FPGAModule.hpp"
+#include "modules/IMUModule.hpp"
+#include "modules/KickerModule.hpp"
+#include "modules/LEDModule.hpp"
+#include "modules/MotionControlModule.hpp"
+#include "modules/RadioModule.hpp"
+#include "modules/RotaryDialModule.hpp"
 
 #define SUPER_LOOP_FREQ 1
 #define SUPER_LOOP_PERIOD (1000 / SUPER_LOOP_FREQ)
@@ -32,12 +33,12 @@ struct MODULE_META_DATA {
     // Estimate in ms of module runtime 
     const uint8_t moduleRunTime;
 
-    Module* module;
+    GenericModule* module;
 
     MODULE_META_DATA(uint32_t lastRunTime,
                      uint32_t modulePeriod,
                      uint32_t moduleRunTime,
-                     Module* module)
+                     GenericModule* module)
         : lastRunTime(lastRunTime),
           nextRunTime(lastRunTime + modulePeriod),
           modulePeriod(modulePeriod),
@@ -106,22 +107,14 @@ int main() {
     moduleList.emplace_back(curTime, RadioModule::period,         RadioModule::runtime,         &radio);
     moduleList.emplace_back(curTime, KickerModule::period,        KickerModule::runtime,        &kicker);
     moduleList.emplace_back(curTime, BatteryModule::period,       BatteryModule::runtime,       &battery);
-    moduleList.emplace_back(curTime, RotaryDialModule::period,    RotaryDialModule::runtime,    &selector);
+    moduleList.emplace_back(curTime, RotaryDialModule::period,    RotaryDialModule::runtime,    &dial);
     moduleList.emplace_back(curTime, LEDModule::period,           LEDModule::runtime,           &led);
-
-    DigitalOut l1(LED1);
-    DigitalOut l2(LED2);
-    DigitalOut l3(LED3);
-    DigitalOut l4(LED4);
-
-    bool misTiming = false;
-    bool misRun = false;
 
     while (true) {
         uint32_t loopStartTime = HAL_GetTick();
         uint32_t loopEndTime = HAL_GetTick() + SUPER_LOOP_PERIOD;
 
-        for (int i = 0; i < moduleList.size(); i++) {
+        for (unsigned int i = 0; i < moduleList.size(); i++) {
             MODULE_META_DATA& module = moduleList.at(i);
             uint32_t currentTime = HAL_GetTick();
 
@@ -144,12 +137,7 @@ int main() {
             // Check if we missed a module X times in a row
             if ((int32_t)(currentTime - module.nextRunTime) > MAX_MISS_CNT*module.moduleRunTime) {
                 // missed
-                l1 = !misRun;
-                l2 = misRun;
-                l3 = !misRun;
-                l4 = misRun;
-
-                misRun = !misRun;
+                led.missedModuleRun();
             }
         }
 
@@ -158,12 +146,7 @@ int main() {
             HAL_Delay(SUPER_LOOP_PERIOD - elapsed);
         } else {
             // danger
-            l1 = !misTiming;
-            l2 = !misTiming;
-            l3 = !misTiming;
-            l4 = !misTiming;
-
-            misTiming = !misTiming;
+            led.missedSuperLoop();
         }
         
     }

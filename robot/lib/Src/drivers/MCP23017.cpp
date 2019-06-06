@@ -1,4 +1,4 @@
-#include "mcp23017.hpp"
+#include "drivers/Internal/MCP23017.hpp"
 
 #include "Logger.hpp"
 #include "Mbed.hpp"

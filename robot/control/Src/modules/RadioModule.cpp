@@ -10,9 +10,7 @@ RadioModule::RadioModule(BatteryVoltage *const batteryVoltage,
     : batteryVoltage(batteryVoltage), fpgaStatus(fpgaStatus),
       kickerInfo(kickerInfo), robotID(robotID),
       kickerCommand(kickerCommand), motionCommand(motionCommand),
-      radioError(radioError) /**, radio **/ {
-
-    // todo init radio
+      radioError(radioError), link() {
 
     // todo fill out more kicker stuff
     kickerCommand->isValid = false;
@@ -33,7 +31,9 @@ RadioModule::RadioModule(BatteryVoltage *const batteryVoltage,
 void RadioModule::entry(void) {
     // if all data is valid
     // send it over
+    // link.send()
     
     // Try read
     // set data correctly
+    // link.recieve()
 }

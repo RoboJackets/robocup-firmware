@@ -1,11 +1,16 @@
 #include "modules/LEDModule.hpp"
+#include "mtrain.hpp"
 
 LEDModule::LEDModule(BatteryVoltage *const batteryVoltage,
                      FPGAStatus *const fpgaStatus,
                      RadioError *const radioError)
     : batteryVoltage(batteryVoltage), fpgaStatus(fpgaStatus),
-      radioError(radioError) /**, all leds **/ {
-    // todo init leds
+      radioError(radioError), leds({LED1, LED2, LED3, LED4}),
+      missedSuperLoopToggle(false), missedModuleRunToggle(false)  /**, all leds **/ {
+}
+
+void LEDModule::entry(void) {
+    // update battery, fpga, and radio status leds
 }
 
 void LEDModule::fpgaInitialized() {
@@ -25,11 +30,21 @@ void LEDModule::fullyInitialized() {
 }
 
 void LEDModule::missedSuperLoop() {
-    // toggle all together
-    // state var != state var
+    for (int i = 0; i < 4; i++) {
+        leds[i] = missedSuperLoopToggle;
+    }
+
+    missedSuperLoopToggle = !missedSuperLoopToggle;
 }
 
 void LEDModule::missedModuleRun() {
-    // toggle alternating
-    // state var != state var
+    for (int i = 0; i < 4; i++) {
+        if (i % 2 == 0) {
+            leds[i] = missedModuleRunToggle;
+        } else {
+            leds[i] = !missedSuperLoopToggle;
+        }
+    }
+
+    missedModuleRunToggle = !missedModuleRunToggle;
 }
