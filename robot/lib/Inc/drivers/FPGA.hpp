@@ -13,7 +13,7 @@ public:
     bool configure(const std::string& filepath) { return true; };
 
     uint8_t set_duty_get_enc(int16_t* duty_cycles, size_t size_dut,
-                             int16_t* enc_deltas, size_t size_enc) { return 0; }
+                             int16_t* enc_deltas, size_t size_enc) { return 0xFF; }
 };
 
 /*

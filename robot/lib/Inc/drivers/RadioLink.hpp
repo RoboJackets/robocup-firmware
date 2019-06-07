@@ -1,7 +1,8 @@
 #pragma once
 
-// TODO: Figure out how to do this correctly
-#include "../../lib/robocup-fshare/include/rc-fshare/rtp.hpp"
+#include "mtrain.hpp"
+#include "SPI.hpp"
+#include "rc-fshare/rtp.hpp"
 #include <memory>
 #include "Internal/GenericRadio.hpp"
 #include "MicroPackets.hpp"
@@ -9,7 +10,8 @@
 
 /**
  * Sends and receives data to/from the radio
- * Converts the simplified structures to the rtp packet to send
+ * Converts the simplified structures to the rtp packet to send to the radio driver
+ * Reverse happens on receive, raw data -> rtp packet -> simplified structures
  */
 class RadioLink {
 public:
@@ -36,4 +38,5 @@ public:
 
 private:
     std::unique_ptr<GenericRadio> radio;
+    std::shared_ptr<SPI> radioSPI;
 };

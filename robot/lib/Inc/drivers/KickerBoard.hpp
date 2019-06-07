@@ -15,8 +15,8 @@ public:
     void kickOnBreakbeam(uint8_t strength) {}
     void cancelBreakbeam() {}
     bool isCharging() { return true; }
-    bool isBallSensed() { return true; }
-    uint8_t getVoltage() { return 0; }
+    bool isBallSensed() { return false; }
+    uint8_t getVoltage() { return 255; }
     void setChargeAllowed(bool chargeAllowed) {}
     bool isHealthy() { return true; }
 

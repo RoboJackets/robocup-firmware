@@ -12,7 +12,7 @@
 #include "modules/RadioModule.hpp"
 #include "modules/RotaryDialModule.hpp"
 
-#define SUPER_LOOP_FREQ 1
+#define SUPER_LOOP_FREQ 10
 #define SUPER_LOOP_PERIOD (1000 / SUPER_LOOP_FREQ)
 
 // Max number of super loop cycles a proc can miss if it
@@ -140,6 +140,8 @@ int main() {
                 led.missedModuleRun();
             }
         }
+
+        led.missedModuleRun();
 
         uint32_t elapsed = HAL_GetTick() - loopStartTime;
         if (elapsed < SUPER_LOOP_PERIOD) {

@@ -31,9 +31,20 @@ RadioModule::RadioModule(BatteryVoltage *const batteryVoltage,
 void RadioModule::entry(void) {
     // if all data is valid
     // send it over
-    // link.send()
-    
+    if (batteryVoltage->isValid &&
+        fpgaStatus->isValid &&
+        kickerInfo->isValid &&
+        robotID->isValid) {
+      link.send(*batteryVoltage, *fpgaStatus, *kickerInfo, *robotID);
+    }
+
     // Try read
     // set data correctly
-    // link.recieve()
+    //link.receive(*kickerCommand, *motionCommand);
+    
+    kickerCommand->isValid = true;
+    kickerCommand->lastUpdate = HAL_GetTick();
+
+    motionCommand->isValid = true;
+    motionCommand->lastUpdate = HAL_GetTick();
 }

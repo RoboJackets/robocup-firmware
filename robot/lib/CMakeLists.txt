@@ -19,4 +19,5 @@ target_link_libraries(firm-lib
 
 target_include_directories( firm-lib PUBLIC
     Inc
+    robocup-fshare/include
 )

@@ -1,6 +1,7 @@
 #include "drivers/RadioLink.hpp"
 
 #include "mtrain.hpp"
+#include "drivers/ISM43340.hpp"
 
 // Temp thing just to make sure it compiles
 // Should be replaced with the real radio driver
@@ -11,7 +12,10 @@ class NewRadioDriver : public GenericRadio {
 };
 
 RadioLink::RadioLink() {
-    radio = std::make_unique<NewRadioDriver>();
+    // Create spi
+    // Create ISM
+    radioSPI = std::make_shared<SPI>(SpiBus5, std::nullopt, 1'000'000);
+    radio = std::make_unique<ISM43340>(radioSPI, p17, p19, p30);
 }
 
 void RadioLink::send(const BatteryVoltage& batteryVoltage,
@@ -44,6 +48,12 @@ void RadioLink::send(const BatteryVoltage& batteryVoltage,
 
 bool RadioLink::receive(KickerCommand& kickerCommand,
                        MotionCommand& motionCommand) {
+
+    // Make sure there is actually data to read
+    if (!radio->isAvailable()) {
+        return false;
+    }
+
     std::array<uint8_t, rtp::ForwardSize> packet;
 
     radio->receive(packet.data(), rtp::ForwardSize);

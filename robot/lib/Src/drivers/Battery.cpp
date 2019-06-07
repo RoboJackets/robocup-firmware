@@ -7,8 +7,8 @@ Battery::Battery()
 
 void Battery::update() {
     // read analog pin
-    lastReadPercentage = 0;
-    rawVoltage = 0;
+    lastReadPercentage = 100.0;
+    rawVoltage = 255;
 }
 
 float Battery::getBattPercentage() {

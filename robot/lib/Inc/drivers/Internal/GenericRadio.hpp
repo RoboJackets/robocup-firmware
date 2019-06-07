@@ -14,7 +14,7 @@ public:
      * 
      * @note It is assumed that `data` is at least X bytes long
      */
-    virtual int send(const uint8_t* data, const int numBytes) = 0;
+    virtual unsigned int send(const uint8_t* data, const unsigned int numBytes) = 0;
 
     /**
      * Blocking call to write up to `maxNumBytes` into `data` from the radio
@@ -28,7 +28,7 @@ public:
      *  if the entire message is not read. It is undefined behavior based on
      *  the specific device
      */
-    virtual int receive(uint8_t* data, const int maxNumBytes) = 0;
+    virtual unsigned int receive(uint8_t* data, const unsigned int maxNumBytes) = 0;
 
     /**
      * Returns true when there is data to read from the radio
