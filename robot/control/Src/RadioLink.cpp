@@ -1,21 +1,17 @@
-#include "drivers/RadioLink.hpp"
+#include "RadioLink.hpp"
 
 #include "mtrain.hpp"
+#include "SPI.hpp"
+
+#include "iodefs.h"
 #include "drivers/ISM43340.hpp"
 
-// Temp thing just to make sure it compiles
-// Should be replaced with the real radio driver
-class NewRadioDriver : public GenericRadio {
-    int send(const uint8_t* data, const int numBytes) { return 0; }
-    int receive(uint8_t* data, const int maxNumBytes) { return 0; }
-    bool isAvailable() { return true; }
-};
-
 RadioLink::RadioLink() {
-    // Create spi
-    // Create ISM
-    radioSPI = std::make_shared<SPI>(SpiBus5, std::nullopt, 1'000'000);
-    radio = std::make_unique<ISM43340>(radioSPI, p17, p19, p30);
+    std::unique_ptr radioSPI = std::make_unique<SPI>(SpiBus5, std::nullopt, 1'000'000);
+    radio = std::make_unique<ISM43340>(std::move(radioSPI),
+                                       RADIO_R0_CS,
+                                       RADIO_GLB_RST,
+                                       RADIO_R0_INT);
 }
 
 void RadioLink::send(const BatteryVoltage& batteryVoltage,

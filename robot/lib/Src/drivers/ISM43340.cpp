@@ -1,9 +1,9 @@
 #include "drivers/ISM43340.hpp"
 #include <cstring>
 
-ISM43340::ISM43340(std::shared_ptr<SPI> radioSPI, PinName nCsPin, PinName nResetPin,
+ISM43340::ISM43340(std::unique_ptr<SPI> radioSPI, PinName nCsPin, PinName nResetPin,
                    PinName dataReadyPin)
-    : radioSPI(radioSPI),
+    : radioSPI(std::move(radioSPI)),
       nCs(nCsPin),
       nReset(nResetPin),
       dataReady(dataReadyPin),

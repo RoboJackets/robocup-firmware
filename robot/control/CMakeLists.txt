@@ -1,5 +1,6 @@
 add_executable(control.elf 
     main.cpp
+    Src/RadioLink.cpp
     Src/modules/BatteryModule.cpp
     Src/modules/FPGAModule.cpp
     Src/modules/IMUModule.cpp

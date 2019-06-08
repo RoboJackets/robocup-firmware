@@ -1,6 +1,8 @@
 #include "mtrain.hpp"
+#include "SPI.hpp"
 
 #include "MicroPackets.hpp"
+#include "iodefs.h"
 
 #include "modules/GenericModule.hpp"
 #include "modules/BatteryModule.hpp"
@@ -60,6 +62,9 @@ KickerInfo kickerInfo;
 
 
 int main() {
+    // todo get right freq
+    std::shared_ptr<SPI> fpgaKickerSPI = std::make_shared<SPI>(FPGA_KICKER_SPI_BUS, std::nullopt, 1'000'000);
+
     std::vector<MODULE_META_DATA> moduleList;
 
     // Init led first to show startup progress with LED's
@@ -67,7 +72,8 @@ int main() {
                   &fpgaStatus,
                   &radioError);
 
-    FPGAModule fpga(&motorCommand,
+    FPGAModule fpga(fpgaKickerSPI,
+                    &motorCommand,
                     &fpgaStatus,
                     &motorFeedback);
 

@@ -4,6 +4,11 @@
 #include "MicroPackets.hpp" 
 #include "drivers/FPGA.hpp"
 
+#include "mtrain.hpp"
+#include "SPI.hpp"
+
+#include <memory>
+
 class FPGAModule : public GenericModule {
 public:
     // How many times per second this module should run
@@ -13,7 +18,8 @@ public:
     // How long a single call to this module takes
     static constexpr uint32_t runtime = 1; // ms
 
-    FPGAModule(MotorCommand *const motorCommand,
+    FPGAModule(std::shared_ptr<SPI> spi,
+               MotorCommand *const motorCommand,
                FPGAStatus *const fpgaStatus,
                MotorFeedback *const motorFeedback);
 

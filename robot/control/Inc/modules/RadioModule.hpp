@@ -2,7 +2,7 @@
 
 #include "GenericModule.hpp"
 #include "MicroPackets.hpp" 
-#include "drivers/RadioLink.hpp"
+#include "RadioLink.hpp"
 
 class RadioModule : public GenericModule {
 public:

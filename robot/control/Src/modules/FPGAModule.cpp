@@ -1,14 +1,16 @@
 #include "modules/FPGAModule.hpp"
-#include "mtrain.hpp"
+#include "iodefs.h"
 
-FPGAModule::FPGAModule(MotorCommand *const motorCommand,
+FPGAModule::FPGAModule(std::shared_ptr<SPI> spi,
+                       MotorCommand *const motorCommand,
                        FPGAStatus *const fpgaStatus,
                        MotorFeedback *const motorFeedback) 
     : motorCommand(motorCommand), motorFeedback(motorFeedback),
-      fpgaStatus(fpgaStatus), fpga() {
+      fpgaStatus(fpgaStatus),
+      fpga(spi, FPGA_CS, FPGA_INIT, FPGA_PROG, FPGA_DONE) {
 
     // todo configure fpga using new header
-    if (fpga.configure("")) {
+    if (fpga.configure()) {
         // we good
     } else {
         // rip

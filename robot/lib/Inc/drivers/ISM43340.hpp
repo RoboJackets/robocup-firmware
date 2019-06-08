@@ -2,7 +2,7 @@
 
 #include "mtrain.hpp"
 #include "SPI.hpp"
-#include "Internal/GenericRadio.hpp"
+#include "GenericRadio.hpp"
 #include <vector>
 #include <memory>
 
@@ -321,7 +321,7 @@ namespace ISMConstants {
 class ISM43340 : public GenericRadio {
 public:
 
-    ISM43340(std::shared_ptr<SPI> radioSPI, PinName nCsPin, PinName nResetPin, PinName dataReadyPin);
+    ISM43340(std::unique_ptr<SPI> radioSPI, PinName nCsPin, PinName nResetPin, PinName dataReadyPin);
 
     /**
      * Blocking call to send X number of bytes from `data` over the radio
@@ -412,7 +412,7 @@ private:
     void sendCommand(const std::string& command, const std::string& arg = "");
 
     // todo switch to unique ptr
-    std::shared_ptr<SPI> radioSPI;
+    std::unique_ptr<SPI> radioSPI;
 
     DigitalOut nCs;
     DigitalOut nReset;

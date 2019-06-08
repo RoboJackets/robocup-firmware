@@ -1,30 +1,25 @@
 #pragma once
 
-//#include "SharedSPI.hpp"
-
-#include <array>
+#include <algorithm>
+#include <iostream>
 #include <memory>
-#include <string>
 #include <vector>
 
-class FPGA {
-public:
-    FPGA() {};
-    bool configure(const std::string& filepath) { return true; };
+#include "mtrain.hpp"
+#include "SPI.hpp"
+#include "DigitalIn.hpp"
+#include "DigitalOut.hpp"
 
-    uint8_t set_duty_get_enc(int16_t* duty_cycles, size_t size_dut,
-                             int16_t* enc_deltas, size_t size_enc) { return 0xFF; }
-};
+#include "fpga_bin.h"
 
-/*
-class FPGA : public SharedSPIDevice<> {
+class FPGA { 
 public:
-    FPGA(std::shared_ptr<SharedSPI> sharedSPI, PinName nCs, PinName initB,
+    FPGA(std::shared_ptr<SPI> spi_bus, PinName nCs, PinName initB,
          PinName progB, PinName done);
 
     /// Configure the fpga with the bitfile at the given path
     /// @return true if successful
-    bool configure(const std::string& filepath);
+    bool configure();
 
     bool isReady();
     uint8_t set_duty_get_enc(int16_t* duty_cycles, size_t size_dut,
@@ -37,15 +32,19 @@ public:
     uint8_t watchdog_reset();
     bool git_hash(std::vector<uint8_t>&);
     void gate_drivers(std::vector<uint16_t>&);
-    bool send_config(const std::string& filepath);
+    bool send_config();
+    void chip_select();
+    void chip_deselect();
 
+    static constexpr int FPGA_SPI_FREQ = 100'000;
     static const int16_t MAX_DUTY_CYCLE = 511;
 
 private:
     bool _isInit = false;
 
+    std::shared_ptr<SPI> _spi_bus;
+    DigitalOut _nCs;
     DigitalIn _initB;
     DigitalIn _done;
-    DigitalInOut _progB;
+    DigitalOut _progB;
 };
-*/

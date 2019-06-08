@@ -1,10 +1,9 @@
 #pragma once
 
 #include "mtrain.hpp"
-#include "SPI.hpp"
 #include "rc-fshare/rtp.hpp"
 #include <memory>
-#include "Internal/GenericRadio.hpp"
+#include "drivers/GenericRadio.hpp"
 #include "MicroPackets.hpp"
 
 
@@ -38,5 +37,4 @@ public:
 
 private:
     std::unique_ptr<GenericRadio> radio;
-    std::shared_ptr<SPI> radioSPI;
 };
