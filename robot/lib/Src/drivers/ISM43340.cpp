@@ -53,12 +53,12 @@ unsigned int ISM43340::send(const uint8_t* data, const unsigned int numBytes) {
 
     // Num digits written, not including null termination
     unsigned int numDigitsWritten = snprintf(reinterpret_cast<char*>(&arg[0]), maxNumDigits, "%d", numBytes);
-    
+
     // Copy delimiter
-    memcpy(&arg[numDigitsWritten - 1], &ISMConstants::ODD_DELIMITER[0], oddDelimiterSize);
+    memcpy(&arg[numDigitsWritten], &ISMConstants::ODD_DELIMITER[0], oddDelimiterSize);
 
     // Copy data
-    memcpy(&arg[numDigitsWritten + oddDelimiterSize - 1], &data[0], numBytes);
+    memcpy(&arg[numDigitsWritten + oddDelimiterSize], &data[0], numBytes);
 
     // Send it
     sendCommand(ISMConstants::CMD_WRITE_TRANSPORT_DATA_INLINE, &arg[0], argSize);
