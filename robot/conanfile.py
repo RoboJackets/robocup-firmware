@@ -8,7 +8,9 @@ class RoboCupFirmwareConan(ConanFile):
     settings = {"build_type": None, "compiler": None, "arch": ["armv7hf"]}
     generators = "cmake"
 
-    requires = 'mTrain/[0.1.0]@robojackets/stable'
+    requires = (('mTrain/[0.1.1]@joe/testing'),
+                ('eigen/[3.3.7]@conan/stable'))
+
 
     def build(self):
         cmake = CMake(self)
