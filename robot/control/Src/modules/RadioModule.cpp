@@ -40,11 +40,11 @@ void RadioModule::entry(void) {
 
     // Try read
     // set data correctly
-    //link.receive(*kickerCommand, *motionCommand);
-    
-    kickerCommand->isValid = true;
-    kickerCommand->lastUpdate = HAL_GetTick();
+    if (link.receive(*kickerCommand, *motionCommand)) {
+      kickerCommand->isValid = true;
+      kickerCommand->lastUpdate = HAL_GetTick();
 
-    motionCommand->isValid = true;
-    motionCommand->lastUpdate = HAL_GetTick();
+      motionCommand->isValid = true;
+      motionCommand->lastUpdate = HAL_GetTick();
+    }
 }

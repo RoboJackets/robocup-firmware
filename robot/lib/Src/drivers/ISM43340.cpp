@@ -31,7 +31,7 @@ bool ISM43340::isAvailable() {
     sendCommand(ISMConstants::CMD_READ_TRANSPORT_DATA);
 
     // todo fix me. Assumption that all data received is at least 10 bytes    
-    return readBuffer.size() <= 10;
+    return readBuffer.size() > 10;
 }
 
 unsigned int ISM43340::send(const uint8_t* data, const unsigned int numBytes) {
@@ -67,16 +67,15 @@ unsigned int ISM43340::send(const uint8_t* data, const unsigned int numBytes) {
 }
 
 unsigned int ISM43340::receive(uint8_t* data, const unsigned int maxNumBytes) {
-    unsigned int amntToCopy = readBuffer.size();
+    // There's an extra 0x0a 0x0d on the front of the packet
+    unsigned int amntToCopy = readBuffer.size() - 2;
     
     // limit to their buffer size
     if (amntToCopy > maxNumBytes) {
         amntToCopy = maxNumBytes;
     }
 
-    // TODO: check that data in readBuffer is raw packet data
-    // with nothing extra
-    memcpy(&data[0], &readBuffer[0], amntToCopy);
+    memcpy(data, readBuffer.data() + 2, amntToCopy);
 
     return amntToCopy;
 }
@@ -323,6 +322,7 @@ void ISM43340::reset() {
 
     // Port initialization
     // UDP receive
+    
     sendCommand(ISMConstants::CMD_SET_COMMUNICATION_SOCKET,
                 ISMConstants::RECEIVE_SOCKET);
     
@@ -338,7 +338,14 @@ void ISM43340::reset() {
     sendCommand(ISMConstants::CMD_START_STOP_TRANSPORT_CLIENT,
                 ISMConstants::TYPE_TRANSPORT_CLIENT::ENABLE);
 
+    sendCommand(ISMConstants::CMD_SET_READ_TRANSPORT_PACKET_SIZE, "12");
+
+    sendCommand(ISMConstants::CMD_SET_READ_TRANSPORT_TIMEOUT, "1");
+
+    sendCommand(ISMConstants::CMD_SET_RECEIVE_MODE, "0");
+
     // UDP send
+    
     sendCommand(ISMConstants::CMD_SET_COMMUNICATION_SOCKET,
                 ISMConstants::SEND_SOCKET);
 

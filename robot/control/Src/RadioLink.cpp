@@ -37,7 +37,7 @@ void RadioLink::send(const BatteryVoltage& batteryVoltage,
     status->ballSenseStatus = kickerInfo.ballSenseTriggered;
     status->kickStatus      = kickerInfo.kickerCharged;
     status->kickHealthy     = !kickerInfo.kickerHasError;
-    status->fpgaStatus      = !fpgaStatus.FPGAHasError;
+    status->fpgaStatus      = fpgaStatus.FPGAHasError;
 
     radio->send(packet.data(), rtp::ReverseSize);
 }
@@ -49,10 +49,14 @@ bool RadioLink::receive(KickerCommand& kickerCommand,
     if (!radio->isAvailable()) {
         return false;
     }
+    // todo, make sure the size is correct
 
     std::array<uint8_t, rtp::ForwardSize> packet;
 
-    radio->receive(packet.data(), rtp::ForwardSize);
+    if (radio->receive(packet.data(), rtp::ForwardSize) != rtp::ForwardSize) {
+        // didn't get enough bytes
+        return false;
+    }
 
     // In the udp radio, only 1 robot's data is sent at a time
     // Dangerous: Should probably check size to make sure we got a valid packet

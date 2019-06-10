@@ -15,18 +15,22 @@ void LEDModule::entry(void) {
 
 void LEDModule::fpgaInitialized() {
     // neo pixel stuff
+    leds[0] = 1;
 }
 
 void LEDModule::radioInitialized() {
     // neo pixel stuff
+    leds[1] = 1;
 }
 
 void LEDModule::kickerInitialized() {
     // neo pixel stuff
+    leds[2] = 1;
 }
 
 void LEDModule::fullyInitialized() {
     // green neo pixel
+    leds[3] = 1;
 }
 
 void LEDModule::missedSuperLoop() {

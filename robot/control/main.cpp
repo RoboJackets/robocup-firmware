@@ -14,7 +14,13 @@
 #include "modules/RadioModule.hpp"
 #include "modules/RotaryDialModule.hpp"
 
-#define SUPER_LOOP_FREQ 10
+#include "bsp.h"
+
+//for debugging
+#include  <unistd.h>
+USBD_HandleTypeDef USBD_Device;
+
+#define SUPER_LOOP_FREQ 20
 #define SUPER_LOOP_PERIOD (1000 / SUPER_LOOP_FREQ)
 
 // Max number of super loop cycles a proc can miss if it
@@ -62,6 +68,11 @@ KickerInfo kickerInfo;
 
 
 int main() {
+
+    USBD_Init(&USBD_Device, &VCP_Desc, 0);
+    USBD_RegisterClass(&USBD_Device, USBD_CDC_CLASS);
+    USBD_CDC_RegisterInterface(&USBD_Device, &USBD_CDC_fops);
+    USBD_Start(&USBD_Device);
     // todo get right freq
     std::shared_ptr<SPI> fpgaKickerSPI = std::make_shared<SPI>(FPGA_KICKER_SPI_BUS, std::nullopt, 1'000'000);
 
@@ -143,11 +154,10 @@ int main() {
             // Check if we missed a module X times in a row
             if ((int32_t)(currentTime - module.nextRunTime) > MAX_MISS_CNT*module.moduleRunTime) {
                 // missed
+                printf("Missed module run %d times in a row\r\n", MAX_MISS_CNT);
                 led.missedModuleRun();
             }
         }
-
-        led.missedModuleRun();
 
         uint32_t elapsed = HAL_GetTick() - loopStartTime;
         if (elapsed < SUPER_LOOP_PERIOD) {
@@ -158,4 +168,18 @@ int main() {
         }
         
     }
+}
+
+
+extern "C" {
+
+int _write(int file, char *data, int len)
+{
+    if (file == STDOUT_FILENO) {
+        USBD_CDC_SetTxBuffer(&USBD_Device, (uint8_t*)data, len);
+        USBD_CDC_TransmitPacket(&USBD_Device);
+    }
+    return 0;
+}
+
 }

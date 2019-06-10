@@ -45,6 +45,7 @@ void FPGAModule::entry(void) {
         dutyCycles.at(4) = motorCommand->dribbler;
     }
 
+    fpga.watchdog_reset();
     uint8_t status = fpga.set_duty_get_enc(
         dutyCycles.data(), dutyCycles.size(),
         encDeltas.data(), encDeltas.size());
@@ -66,4 +67,6 @@ void FPGAModule::entry(void) {
     for (int i = 0; i < 4; i++) {
         fpgaStatus->motorHasErrors[i] = (status & (1 << i)) == 1;
     }
+    
+    //printf("%0x %0x %0x %0x %0x\r\n", status, encDeltas[0], encDeltas[1], encDeltas[2], encDeltas[3]);
 }
