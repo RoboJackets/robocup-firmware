@@ -10,8 +10,6 @@
 #include "DigitalIn.hpp"
 #include "DigitalOut.hpp"
 
-#include "fpga_bin.h"
-
 class FPGA { 
 public:
     FPGA(std::shared_ptr<SPI> spi_bus, PinName nCs, PinName initB,

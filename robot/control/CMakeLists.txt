@@ -1,6 +1,6 @@
 add_executable(control.elf 
     main.cpp
-    Src/RadioLink.cpp
+    Src/radio/RadioLink.cpp
     Src/modules/BatteryModule.cpp
     Src/modules/FPGAModule.cpp
     Src/modules/IMUModule.cpp
@@ -9,6 +9,9 @@ add_executable(control.elf
     Src/modules/MotionControlModule.cpp
     Src/modules/RadioModule.cpp
     Src/modules/RotaryDialModule.cpp
+    Src/motion-control/DribblerController.cpp
+    Src/motion-control/RobotController.cpp
+    Src/motion-control/RobotEstimator.cpp
 )
 
 target_include_directories(control.elf PUBLIC

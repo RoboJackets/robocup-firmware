@@ -1,7 +1,11 @@
 #pragma once
 
-#include "GenericModule.hpp"
-#include "MicroPackets.hpp" 
+#include "modules/GenericModule.hpp"
+#include "MicroPackets.hpp"
+
+#include "motion-control/DribblerController.hpp"
+#include "motion-control/RobotController.hpp"
+#include "motion-control/RobotEstimator.hpp"
 
 class MotionControlModule : public GenericModule {
 public:
@@ -27,6 +31,16 @@ private:
     MotorFeedback *const motorFeedback;
     MotorCommand *const motorCommand;
 
-    // Estimator
-    // Controller    
+    DribblerController dribblerController;
+    RobotController robotController;
+    RobotEstimator robotEstimator;
+
+    /**
+     * Max amount of time that can elapse from the latest
+     * command from the radio
+     * 
+     * This is a safety feature to prevent the motors from moving
+     * if the motion control dies
+     */
+    const static uint32_t COMMAND_TIMEOUT = 250; // ms
 };

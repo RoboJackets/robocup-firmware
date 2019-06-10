@@ -1,6 +1,8 @@
 #include "modules/FPGAModule.hpp"
 #include "iodefs.h"
 
+#include <cmath>
+
 FPGAModule::FPGAModule(std::shared_ptr<SPI> spi,
                        MotorCommand *const motorCommand,
                        FPGAStatus *const fpgaStatus,
@@ -53,7 +55,7 @@ void FPGAModule::entry(void) {
     // Make sure commands are valid
     // If they are not valid, we automatically send a 0 duty cycle
     if (motorCommand->isValid &&
-        (HAL_GetTick() - motorCommand) < COMMAND_TIMEOUT) {
+        (HAL_GetTick() - motorCommand->lastUpdate) < COMMAND_TIMEOUT) {
 
         for (int i = 0; i < 4; i++)
             dutyCycles.at(i) = motorCommand->wheels[i];
@@ -94,7 +96,7 @@ void FPGAModule::entry(void) {
      *     time_precision = 6.94us
      *
      */
-    const float dt = enc_deltas[4] * (1 / 18.432e6) * 2 * 128;
+    const float dt = encDeltas[4] * (1 / 18.432e6) * 2 * 128;
 
     // Convert encoders to rad/sec from enc ticks since last readin
     for (int i = 0; i < 4; i++) {

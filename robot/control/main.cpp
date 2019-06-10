@@ -1,5 +1,8 @@
 #include "mtrain.hpp"
 #include "SPI.hpp"
+#include "bsp.h"
+
+#include  <unistd.h>
 
 #include "MicroPackets.hpp"
 #include "iodefs.h"
@@ -14,11 +17,7 @@
 #include "modules/RadioModule.hpp"
 #include "modules/RotaryDialModule.hpp"
 
-#include "bsp.h"
 
-//for debugging
-#include  <unistd.h>
-USBD_HandleTypeDef USBD_Device;
 
 #define SUPER_LOOP_FREQ 20
 #define SUPER_LOOP_PERIOD (1000 / SUPER_LOOP_FREQ)
@@ -26,6 +25,7 @@ USBD_HandleTypeDef USBD_Device;
 // Max number of super loop cycles a proc can miss if it
 // needs to run
 #define MAX_MISS_CNT 5
+
 
 
 struct MODULE_META_DATA {
@@ -55,6 +55,8 @@ struct MODULE_META_DATA {
 };
 
 
+USBD_HandleTypeDef USBD_Device;
+
 MotionCommand motionCommand;
 MotorCommand motorCommand;
 MotorFeedback motorFeedback;
@@ -68,15 +70,13 @@ KickerInfo kickerInfo;
 
 
 int main() {
-
     USBD_Init(&USBD_Device, &VCP_Desc, 0);
     USBD_RegisterClass(&USBD_Device, USBD_CDC_CLASS);
     USBD_CDC_RegisterInterface(&USBD_Device, &USBD_CDC_fops);
     USBD_Start(&USBD_Device);
+
     // todo get right freq
     std::shared_ptr<SPI> fpgaKickerSPI = std::make_shared<SPI>(FPGA_KICKER_SPI_BUS, std::nullopt, 1'000'000);
-
-    std::vector<MODULE_META_DATA> moduleList;
 
     // Init led first to show startup progress with LED's
     LEDModule led(&batteryVoltage,
@@ -117,6 +117,8 @@ int main() {
     led.fullyInitialized();
     
 
+    std::vector<MODULE_META_DATA> moduleList;
+    
     uint32_t curTime = HAL_GetTick();
     moduleList.emplace_back(curTime, MotionControlModule::period, MotionControlModule::runtime, &motion);
     moduleList.emplace_back(curTime, IMUModule::period,           IMUModule::runtime,           &imu);
@@ -143,18 +145,16 @@ int main() {
             // then convertion to signed allows simple comparison
             if ((int32_t)(currentTime - module.nextRunTime) >= 0 &&
                 (int32_t)(loopEndTime - currentTime) >= module.moduleRunTime) {
+                
                 module.lastRunTime = currentTime;
-                module.nextRunTime = currentTime + module.modulePeriod;
-                // todo add delta to nextruntime to take into account runs
-                // at end of loop
+                module.nextRunTime = loopStartTime + module.modulePeriod;
 
                 module.module->entry();
             }
 
             // Check if we missed a module X times in a row
             if ((int32_t)(currentTime - module.nextRunTime) > MAX_MISS_CNT*module.moduleRunTime) {
-                // missed
-                printf("Missed module run %d times in a row\r\n", MAX_MISS_CNT);
+                printf("WARNING: Missed module run %d times in a row\r\n", MAX_MISS_CNT);
                 led.missedModuleRun();
             }
         }
@@ -163,7 +163,7 @@ int main() {
         if (elapsed < SUPER_LOOP_PERIOD) {
             HAL_Delay(SUPER_LOOP_PERIOD - elapsed);
         } else {
-            // danger
+            printf("WARNING: Overran super loop time\r\n");
             led.missedSuperLoop();
         }
         

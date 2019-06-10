@@ -3,6 +3,8 @@
 #include <memory>
 #include <stdint.h>
 
+#include "device-bins/fpga_bin.h"
+
 template <size_t SIGN_INDEX>
 uint16_t toSignMag(int16_t val) {
     return static_cast<uint16_t>((val < 0) ? ((-val) | 1 << SIGN_INDEX) : val);
