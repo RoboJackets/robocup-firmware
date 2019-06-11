@@ -1,14 +1,15 @@
 #include "modules/KickerModule.hpp"
-#include "mtrain.hpp"
 
-KickerModule::KickerModule(KickerCommand *const kickerCommand,
+#include "mtrain.hpp"
+#include "iodefs.h"
+
+KickerModule::KickerModule(std::shared_ptr<SPI> spi,
+                           KickerCommand *const kickerCommand,
                            KickerInfo *const kickerInfo)
     : kickerCommand(kickerCommand), kickerInfo(kickerInfo),
-      prevKickTime(0), kicker() {
-    // todo init kicker
-    kicker.flash(true, false);
+      prevKickTime(0), kicker(spi, KICKER_CS, KICKER_RST, BALL_SENSE_LED) {
 
-    kicker.start();
+    kicker.flash(true, false);
 
     kickerInfo->isValid = false;
     kickerInfo->lastUpdate = 0;
@@ -29,7 +30,6 @@ void KickerModule::entry(void) {
         
         switch (kickerCommand->triggerMode) {
             case KickerCommand::TriggerMode::OFF:
-                kicker.setChargeAllowed(false); // todo: check this
                 kicker.cancelBreakbeam();
                 break;
 
@@ -51,9 +51,12 @@ void KickerModule::entry(void) {
         }
     }
 
+    // Do all the commands
+    kicker.service();
+
     kickerInfo->isValid = true;
     kickerInfo->lastUpdate = HAL_GetTick();
     kickerInfo->kickerHasError = !kicker.isHealthy();
     kickerInfo->ballSenseTriggered = kicker.isBallSensed();
-    kickerInfo->kickerCharged = kicker.getVoltage() > KickerBoard::ChargedVoltageCutoff;
+    kickerInfo->kickerCharged = kicker.isCharged();
 }

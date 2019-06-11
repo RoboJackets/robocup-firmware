@@ -38,10 +38,10 @@
 
 #pragma once
 
-#include <mbed.h>
-#include <rtos.h>
-
-#include "SharedSPI.hpp"
+#include "mtrain.hpp"
+#include "SPI.hpp"
+#include "DigitalOut.hpp"
+#include <memory>
 
 // AVR SPI Commands
 #define ATMEL_VENDOR_CODE 0x1E
@@ -64,20 +64,19 @@
  *
  * This class facilitates loading a program onto an AVR chip's flash memory.
  */
-class AVR910 : public SharedSPIDevice<> {
+class AVR910 {
 public:
     /**
      * Constructor.
      *
-     * @param mosi mbed pin for MOSI SPI line.
-     * @param miso mbed pin for MISO SPI line.
-     * @param sclk mbed pin for SCLK SPI line.
-     * @param nReset mbed pin for not reset line on the ISP interface.
+     * @param spi SPI bus being used for this device
+     * @param nCs Chip select pin on mtrain
+     * @param nReset mtrain pin for not reset line on the ISP interface.
      *
      * Sends an enable programming command, allowing device registers to be
      * read and commands sent.
      */
-    AVR910(std::shared_ptr<SharedSPI> spi, PinName nCs, PinName nReset);
+    AVR910(std::shared_ptr<SPI> spi, PinName nCs, PinName nReset);
 
     /**
      * Program the AVR microcontroller connected to the mbed.
@@ -97,6 +96,27 @@ public:
      * @return  boolean value indicating success
      */
     bool program(FILE* binary, int pageSize, int numPages = 1);
+
+    /**
+     * Program the AVR microcontroller connected to the mbed.
+     *
+     * Sends a chip erase command followed by writing the binary to the AVR
+     * page buffer and writing the page buffer to flash memory whenever it is
+     * full.
+     *
+     * @param binary Array pointer to the start binary to be loaded onto the
+     *               AVR microcontroller
+     * @param length Length of the binary array being loaded onto the AVR
+     *               microcontroller
+     * @param pageSize The size of one page on the device in words. If the
+     *                 device does not use paged memory, set this as the size
+     *                 of memory of the device in words.
+     * @param numPages The number of pages on the device. If the device does
+     *                 not use paged memory, set this to 1 (default).
+     *
+     * @return  boolean value indicating success
+     */
+    bool program(uint8_t* binary, unsigned int length, int pageSize, int numPages = 1);
 
     /**
      * Read the vendor code of the device.
@@ -138,6 +158,19 @@ protected:
      */
     bool checkMemory(int numPages, int pageSize, FILE* binary,
                      bool verbose = false);
+
+    /**
+     * Check the binary has been written correctly.
+     *
+     * @param numPages The number of pages written to the AVR microcontroller.
+     * @param pageSize The size of a page in words
+     * @param binary Byte array pointer to the binary used
+     * @param length Length of the binary byte array used
+     *
+     * @return boolean indicating success
+     */
+    bool checkMemory(int numPages, int pageSize, uint8_t* binary,
+                     unsigned int length, bool verbose = false);
 
     /**
      * Brings the reset line high to exit programming mode.  The program()
@@ -202,5 +235,7 @@ private:
      */
     char readProgramMemory(int highLow, char pageNumber, char pageOffset);
 
+    std::shared_ptr<SPI> spi_;
+    DigitalOut nCs_;
     DigitalOut nReset_;
 };

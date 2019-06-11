@@ -6,7 +6,7 @@
  * the argument, even if that argument is not really needed like in the
  * get_voltage command.
  *
- * If getting a varible, it will be returned on the spi write after the
+ * If getting a variable, it will be returned on the spi write after the
  * command write and the argument write.
  */
 
@@ -30,7 +30,8 @@
 #define KICKING_FIELD 0x03
 
 /* Commands */
-#define KICK_IMMEDIATE_CMD 0xAA
+#define KICK_TYPE_CMD 0xAA
+#define KICK_IMMEDIATE_CMD 0xBB //todo note this change from AA to BB somewhere
 #define KICK_BREAKBEAM_CMD 0xCC
 #define KICK_BREAKBEAM_CANCEL_CMD 0x03
 #define SET_CHARGE_CMD 0x04
@@ -39,6 +40,9 @@
 
 /* Arguments */
 #define BLANK 0x00  // Used for clarity when passing useless arguments
+// Kick Type arguments
+#define DO_KICK 0x0A
+#define DO_CHIP 0xA0
 // Kick/Chip arguments
 #define MAX_TIME_ARG 0xFF  // Used if we want to wait max time
 #define DB_KICK_TIME 8     // Used for button press kick

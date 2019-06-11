@@ -100,7 +100,8 @@ int main() {
 
     led.radioInitialized();
 
-    KickerModule kicker(&kickerCommand,
+    KickerModule kicker(fpgaKickerSPI,
+                        &kickerCommand,
                         &kickerInfo);
 
     led.kickerInitialized();

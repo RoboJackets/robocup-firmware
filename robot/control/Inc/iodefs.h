@@ -17,3 +17,4 @@
 #define KICKER_CS p8
 #define KICKER_RST p7
 
+#define BALL_SENSE_LED p10 // todo: really check this
