@@ -32,7 +32,8 @@ void RobotController::calculate(Eigen::Matrix<double, numStates, 1> pv,
     // todo explore windup
     errorSum += dt*saturated.cwiseProduct(error);
 
-    Eigen::Matrix<double, numStates, 1> outputSpeed = Kp*error + Ki*errorSum;
+    // FF + PI
+    Eigen::Matrix<double, numStates, 1> outputSpeed = dampedTarget + Kp*error + Ki*errorSum;
 
     // Note: If num states ever changes, this must be changed as well
     double maxSpeeds[numStates] = {maxLinearSpeed, maxLinearSpeed, maxAngularSpeed};
