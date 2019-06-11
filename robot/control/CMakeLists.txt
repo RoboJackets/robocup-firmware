@@ -20,7 +20,11 @@ target_include_directories(control.elf PUBLIC
 	"${CONAN_MTRAIN_ROOT}/external/middleware/STM32_USB_Device_Library/Class/CDC/Inc"
 )
 
-target_link_libraries(control.elf firm-lib CONAN_PKG::eigen)
+target_link_libraries(control.elf
+    firm-lib
+    CONAN_PKG::eigen
+    rc-fshare
+)
 
 add_custom_target(control ALL
     arm-none-eabi-objcopy -Obinary "control.elf" "control.bin"
