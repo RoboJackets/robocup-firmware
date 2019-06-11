@@ -44,11 +44,11 @@ void RobotController::calculate(Eigen::Matrix<double, numStates, 1> pv,
     for (int i = 0; i < 3; i++) {
         // Push speed back into real range
         // Disable the integral on that channel if saturated
-        if (abs(outputSpeed(i, 1)) >= maxSpeeds[i]) {
-            outputSpeed(i, 1) = sgn(outputSpeed(i, 1)) * maxSpeeds[i];
-            saturated(i, 1) = 0;
+        if (abs(outputSpeed(i, 0)) >= maxSpeeds[i]) {
+            outputSpeed(i, 0) = sgn(outputSpeed(i, 0)) * maxSpeeds[i];
+            saturated(i, 0) = 0;
         } else {
-            saturated(i, 1) = 1;
+            saturated(i, 0) = 1;
         }
     }
 
@@ -67,11 +67,11 @@ void RobotController::limitAccel(const Eigen::Matrix<double, numStates, 1> curre
         // If we broke the accel limit
         // just dampen that axis
         // We can assume the path planner gives us a valid path
-        if (abs(delta(i, 1)) > dt*deltaV[i]) {
-            dampened(i, 1) = currentState(i, 1) + sgn(delta(i,1))*dt*deltaV[i];
+        if (abs(delta(i, 0)) > dt*deltaV[i]) {
+            dampened(i, 0) = currentState(i, 0) + sgn(delta(i, 0))*dt*deltaV[i];
         } else {
             // If we good, just use the final target
-            dampened(i, 1) = finalTarget(i, 1);
+            dampened(i, 0) = finalTarget(i, 0);
         }
     }
 }

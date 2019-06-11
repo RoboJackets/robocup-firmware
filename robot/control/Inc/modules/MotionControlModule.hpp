@@ -7,6 +7,8 @@
 #include "motion-control/RobotController.hpp"
 #include "motion-control/RobotEstimator.hpp"
 
+#include <Eigen/Dense>
+
 class MotionControlModule : public GenericModule {
 public:
     // How many times per second this module should run
@@ -25,6 +27,11 @@ public:
     virtual void entry(void);
 
 private:
+    /**
+     * Checks the update time versus the current time and timout given below
+     */
+    bool isRecentUpdate(uint32_t lastUpdateTime);
+
     BatteryVoltage *const batteryVoltage;
     IMUData *const imuData;
     MotionCommand *const motionCommand;
@@ -34,6 +41,8 @@ private:
     DribblerController dribblerController;
     RobotController robotController;
     RobotEstimator robotEstimator;
+
+    Eigen::Matrix<double, 4, 1> prevCommand;
 
     /**
      * Max amount of time that can elapse from the latest

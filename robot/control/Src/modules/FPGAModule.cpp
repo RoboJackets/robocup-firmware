@@ -58,7 +58,8 @@ void FPGAModule::entry(void) {
         (HAL_GetTick() - motorCommand->lastUpdate) < COMMAND_TIMEOUT) {
 
         for (int i = 0; i < 4; i++)
-            dutyCycles.at(i) = motorCommand->wheels[i];
+            dutyCycles.at(i) = static_cast<int16_t>(
+                motorCommand->wheels[i] * fpga.MAX_DUTY_CYCLE);
         dutyCycles.at(4) = motorCommand->dribbler;
 
     }

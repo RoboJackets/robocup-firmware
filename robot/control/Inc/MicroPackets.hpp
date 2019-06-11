@@ -30,8 +30,8 @@ struct MotorCommand {
     bool isValid = false;
     uint32_t lastUpdate;
 
-    uint16_t wheels[4]; // duty cycle * 254 ???
-    uint16_t dribbler; // duty cycle * 254 ???
+    float wheels[4]; // % max duty cycle (-1 to 1)
+    uint16_t dribbler; // lsb (0 to 128)
 };
 
 // Current and enc data
