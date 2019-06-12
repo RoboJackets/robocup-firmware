@@ -8,7 +8,7 @@ add_executable(kicker.elf
 )
 
 target_include_directories(kicker.elf PUBLIC
-    ${PROJECT_SOURCE_DIR}/../robot/lib/Inc
+    ${PROJECT_SOURCE_DIR}/../robot/lib/Inc/drivers/Internal
 )
 
 # custom target to convert kicker.elf to the kickerFW binary file and place it in the 'run' directory
