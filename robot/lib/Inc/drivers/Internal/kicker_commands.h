@@ -41,8 +41,8 @@
 /* Arguments */
 #define BLANK 0x00  // Used for clarity when passing useless arguments
 // Kick Type arguments
-#define DO_KICK 0x0A
-#define DO_CHIP 0xA0
+#define DO_KICK 0x00
+#define DO_CHIP 0x01
 // Kick/Chip arguments
 #define MAX_TIME_ARG 0xFF  // Used if we want to wait max time
 #define DB_KICK_TIME 8     // Used for button press kick

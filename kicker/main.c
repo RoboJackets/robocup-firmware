@@ -49,6 +49,13 @@ volatile int32_t timer_cnts_left_ = -1;
 volatile int32_t post_kick_cooldown_ = -1;
 volatile int32_t kick_wait_ = -1;
 
+// Used to keep track of current kick type (chip or kick)
+// will not change during a kick
+volatile bool kick_type_is_chip_ = false;
+
+// Used to keep track of current kick type command from mtrain
+volatile bool kick_type_is_chip_command_ = false;
+
 // Used to keep track of current button state
 volatile int kick_db_down_ = 0;
 volatile int chip_db_down_ = 0;
@@ -85,13 +92,13 @@ uint8_t execute_cmd(uint8_t, uint8_t);
  */
 bool is_kicking() {
     return pre_kick_cooldown_ >= 0 || timer_cnts_left_ >= 0 || post_kick_cooldown_ >= 0 || kick_wait_ >= 0;
-	}
+}
 
 /*
  * start the kick FSM for desired strength. If the FSM is already running,
  * the call will be ignored.
  */
-void kick(uint8_t strength) {
+void kick(uint8_t strength, bool is_chip) {
 
     // check if the kick FSM is running
     if (is_kicking()) return;
@@ -109,6 +116,10 @@ void kick(uint8_t strength) {
         KICK_TIME_SLOPE * strength_ratio + MIN_EFFECTIVE_KICK_FET_EN_TIME;
     float time_cnt_flt = time_cnt_flt_ms * TIMER_PER_MS;
     timer_cnts_left_ = (int)(time_cnt_flt + 0.5f);  // round
+
+    // Set chip type after we have commited to the kick
+    // such that it doesn't change halfway through the kick
+    kick_type_is_chip_ = is_chip;
 
     // start timer to enable the kick FSM processing interrupt
     //TCCR0 |= _BV(CS01);
@@ -134,39 +145,43 @@ uint8_t get_voltage() {
 void main() {
     init();
 
-    //PORTD |= _BV(MCU_RED);
+    PORTD |= _BV(MCU_RED);
 
     // needs to be int to force voltage_accum calculation to use ints
     const int kalpha = 64;
 
     // We handle voltage readings here
     while (true) {
-	
+
         if (_in_debug_mode) {
-            //PORTD |= (_BV(MCU_YELLOW));
-	    char kick_db_pressed = !(PINC & _BV(DB_KICK_PIN));
+            PORTD |= (_BV(MCU_YELLOW));
+            char kick_db_pressed = !(PINC & _BV(DB_KICK_PIN));
+            char chip_db_pressed = !(PINC & _BV(DB_CHIP_PIN));
             char charge_db_pressed = !(PINC & _BV(DB_CHG_PIN));
 
             if (!kick_db_down_ && kick_db_pressed) 
-                kick(255);
-		
+                kick(255, false);
+
+            if (!chip_db_down_ && chip_db_pressed)
+                kick(255, true);
+
             if (!charge_db_down_ && charge_db_pressed)
                 charge_commanded_ = !charge_commanded_;
 
             kick_db_down_ = kick_db_pressed;
+            chip_db_down_ = chip_db_pressed;
             charge_db_down_ = charge_db_pressed;
-            
-	}  
+        }
 
         if (PINA & _BV(BALL_SENSE_RX))
             PORTD &= ~(_BV(BALL_SENSE_LED));
         else
             PORTD |= _BV(BALL_SENSE_LED);
 
-	if (is_kicking())
-	    PORTD &= ~(_BV(MCU_YELLOW));
-	else
-		PORTD |= _BV(MCU_YELLOW);
+        if (is_kicking())
+            PORTD &= ~(_BV(MCU_YELLOW));
+        else
+            PORTD |= _BV(MCU_YELLOW);
         // get a voltage reading by weighing in a new reading, same concept as
         // TCP RTT estimates (exponentially weighted sum)
 
@@ -220,7 +235,7 @@ void main() {
 
         if (ball_sensed_ && kick_on_breakbeam_) {
             // pow
-            kick(kick_on_breakbeam_strength_);
+            kick(kick_on_breakbeam_strength_, kick_type_is_chip_command_);
             kick_on_breakbeam_ = false;
         }
 
@@ -394,7 +409,7 @@ ISR(PCINT0_vect) {
  * (When CS00 is one, and CS01 is 0, no prescale. We don't use this)
  */
 ISR(TIMER0_COMP_vect) {
-        if (pre_kick_cooldown_ >= 0) {
+    if (pre_kick_cooldown_ >= 0) {
         /* PRE KICKING STATE
          * stop charging
          * wait between stopping charging and kicking for safety
@@ -410,8 +425,13 @@ ISR(TIMER0_COMP_vect) {
          */
 
         // set KICK pin
-	PORTD |= (_BV(MCU_RED));
-	//PORTC |= _BV(KICK_PIN);
+        PORTD |= (_BV(MCU_RED));
+
+        if (kick_type_is_chip_) {
+            //PORTC |= _BV(CHIP_PIN);
+        } else {
+            //PORTC |= _BV(KICK_PIN);
+        }
 
         timer_cnts_left_--;
     } else if (post_kick_cooldown_ >= 0) {
@@ -423,7 +443,12 @@ ISR(TIMER0_COMP_vect) {
 
         // kick is done
         PORTD &= ~(_BV(MCU_RED));
-	//PORTC &= ~_BV(KICK_PIN);
+
+        if (kick_type_is_chip_) {
+            //PORTC &= ~_BV(CHIP_PIN);
+        } else {
+            //PORTC &= ~_BV(KICK_PIN);
+        }
 
         post_kick_cooldown_--;
     } else if (kick_wait_ >= 0) {
@@ -443,7 +468,7 @@ ISR(TIMER0_COMP_vect) {
 
         // stop prescaled timer
         //TCCR0 &= ~_BV(CS01);
-	TCCR0 &= 0b00;
+        TCCR0 &= 0b00;
     }
 }
 
@@ -460,6 +485,10 @@ uint8_t execute_cmd(uint8_t cmd, uint8_t arg) {
     uint8_t ret_val = BLANK;
 
     switch (cmd) {
+        case KICK_TYPE_CMD:
+            kick_type_is_chip_command_ = arg;
+            break;
+
         case KICK_BREAKBEAM_CMD:
             kick_on_breakbeam_ = true;
             kick_on_breakbeam_strength_ = arg;
@@ -471,7 +500,7 @@ uint8_t execute_cmd(uint8_t cmd, uint8_t arg) {
             break;
 
         case KICK_IMMEDIATE_CMD:
-            kick(arg);
+            kick(arg, kick_type_is_chip_command_);
             break;
 
         case SET_CHARGE_CMD:
