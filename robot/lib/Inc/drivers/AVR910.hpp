@@ -55,9 +55,9 @@
 
 #define AVR_FAMILY_MASK 0xF0
 #define AVR_FAMILY_ID 0x90
-#define ATTINY_DEVICE_ID 0x87
+#define ATTINY_DEVICE_ID 0x02
 #define ATTINY_PAGESIZE 64  // Size in words (word = 2 bytes)
-#define ATTINY_NUM_PAGES 128
+#define ATTINY_NUM_PAGES 256
 
 /**
  * @brief AVR910 ISP
@@ -145,6 +145,8 @@ public:
     int readPartNumber();
 
 protected:
+    void writeFuseBitsLow();
+
     int readRegister(int reg);
 
     /**
@@ -190,7 +192,7 @@ private:
     /**
      * Poll the device until it has finished its current operation.
      */
-    void poll();
+    void poll(int high_low, char page_number, char page_offset);
 
     /**
      * Issue a chip erase command to the AVR microcontroller.
@@ -221,7 +223,7 @@ private:
      *
      * @param pageNumber The page number to write to in flash memory.
      */
-    void writeFlashMemoryPage(char pageNumber);
+    void writeFlashMemoryPage(char pageNumber, char lc_offset, int lc_highLow);
 
     /**
      * Read a byte from program memory.

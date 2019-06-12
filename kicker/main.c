@@ -3,10 +3,14 @@
 #include <avr/wdt.h>
 #include <avr/interrupt.h>
 #include <avr/io.h>
+#include <stddef.h>
+#include <stdlib.h>
 #include <util/delay.h>
 
-#include "drivers/Internal/kicker_commands.h"
+#include "kicker_config.h"
+#include "kicker_commands.h"
 #include "pins.h"
+#include "util.h"
 
 // kicker parameters
 #define MAX_KICK_STRENGTH 255.0f
@@ -23,12 +27,12 @@
 #define NO_COMMAND 0
 
 // number of steps of resolution we want per millisecond
-#define TIMER_PER_MS 20
+#define TIMER_PER_MS 4
 
 // calculate our TIMING_CONSTANT (timer cmp val) from the desired resolution
 #define CLK_FREQ 8000000  // after removing default CLKDIV8 prescale
 #define TIMER_PRESCALE \
-    8  // set by TCCR0B |= _BV(CS01) which also starts the timer
+   8  // set by TCCR0B |= _BV(CS01) which also starts the timer
 #define MS_PER_SECOND 1000
 
 #define MAX_TIMER_FREQ (CLK_FREQ / TIMER_PRESCALE)
@@ -67,6 +71,8 @@ volatile bool charge_allowed_ = true;
 volatile bool kick_on_breakbeam_ = false;
 volatile uint8_t kick_on_breakbeam_strength_ = 0;
 
+volatile bool _in_debug_mode = false;
+
 unsigned ball_sense_change_count_ = 0;
 
 uint32_t time = 0;
@@ -78,15 +84,15 @@ uint8_t execute_cmd(uint8_t, uint8_t);
  * Checks and returns if we're in the middle of a kick
  */
 bool is_kicking() {
-    return pre_kick_cooldown_ >= 0 || timer_cnts_left_ >= 0 ||
-           post_kick_cooldown_ >= 0 || kick_wait_ >= 0;
-}
+    return pre_kick_cooldown_ >= 0 || timer_cnts_left_ >= 0 || post_kick_cooldown_ >= 0 || kick_wait_ >= 0;
+	}
 
 /*
  * start the kick FSM for desired strength. If the FSM is already running,
  * the call will be ignored.
  */
 void kick(uint8_t strength) {
+
     // check if the kick FSM is running
     if (is_kicking()) return;
 
@@ -105,7 +111,9 @@ void kick(uint8_t strength) {
     timer_cnts_left_ = (int)(time_cnt_flt + 0.5f);  // round
 
     // start timer to enable the kick FSM processing interrupt
-    TCCR0B |= _BV(CS01);
+    //TCCR0 |= _BV(CS01);
+    TCCR0 |= 0b01;
+
 }
 
 void init();
@@ -126,11 +134,39 @@ uint8_t get_voltage() {
 void main() {
     init();
 
+    //PORTD |= _BV(MCU_RED);
+
     // needs to be int to force voltage_accum calculation to use ints
-    const int kalpha = 32;
+    const int kalpha = 64;
 
     // We handle voltage readings here
     while (true) {
+	
+        if (_in_debug_mode) {
+            //PORTD |= (_BV(MCU_YELLOW));
+	    char kick_db_pressed = !(PINC & _BV(DB_KICK_PIN));
+            char charge_db_pressed = !(PINC & _BV(DB_CHG_PIN));
+
+            if (!kick_db_down_ && kick_db_pressed) 
+                kick(255);
+		
+            if (!charge_db_down_ && charge_db_pressed)
+                charge_commanded_ = !charge_commanded_;
+
+            kick_db_down_ = kick_db_pressed;
+            charge_db_down_ = charge_db_pressed;
+            
+	}  
+
+        if (PINA & _BV(BALL_SENSE_RX))
+            PORTD &= ~(_BV(BALL_SENSE_LED));
+        else
+            PORTD |= _BV(BALL_SENSE_LED);
+
+	if (is_kicking())
+	    PORTD &= ~(_BV(MCU_YELLOW));
+	else
+		PORTD |= _BV(MCU_YELLOW);
         // get a voltage reading by weighing in a new reading, same concept as
         // TCP RTT estimates (exponentially weighted sum)
 
@@ -139,24 +175,30 @@ void main() {
             int voltage_accum =
                 (255 - kalpha) * last_voltage_ + kalpha * get_voltage();
             last_voltage_ = voltage_accum / 255;
+
+            int num_lights = ((int) last_voltage_ / 47);
+            
+            PORTA |= (0x1F << 1);
+            PORTA &= ~((0xFF >> abs(num_lights - (sizeof(unsigned char) * 8))) << 1);
         }
         time++;
 
         // if we dropped below acceptable voltage, then this will catch it
         // note: these aren't true voltages, just ADC output, but it matches
         // fairly close
-        if (last_voltage_ > 239 || !charge_allowed_ || !charge_commanded_) {
-            PORTB &= ~(_BV(CHARGE_PIN));
+        
+        if (!(PIND & _BV(LT_DONE_N)) || last_voltage_ > 239 || !charge_allowed_ || !charge_commanded_) {
+            PORTD &= ~(_BV(LT_CHARGE));
         } else if (last_voltage_ < 232 && charge_allowed_ &&
                    charge_commanded_) {
-            PORTB |= _BV(CHARGE_PIN);
+            PORTD |= _BV(LT_CHARGE);
         }
 
-        if (PINA & _BV(N_KICK_CS_PIN)) {
+        if (PINB & _BV(N_KICK_CS_PIN)) {
             byte_cnt = 0;
         }
 
-        bool bs = PINB & _BV(BALL_SENSE_RX);
+        bool bs = PINA & _BV(BALL_SENSE_RX);
         if (ball_sensed_) {
             if (!bs)
                 ball_sense_change_count_++;  // wrong reading, inc counter
@@ -192,40 +234,50 @@ void init() {
 
     // disable watchdog
     wdt_reset();
-    MCUSR &= ~(_BV(WDRF));
-    WDTCR |= (_BV(WDCE)) | (_BV(WDE));
+    WDTCR |= (_BV(WDTOE) | _BV(WDE));
     WDTCR = 0x00;
 
-    // change our clock speed from 1 Mhz to 8 Mhz (there's a default CLKDIV8)
-    // 1. write the Clock Prescaler Change Enable (CLKPCE) bit to one and all
-    //    other bits in CLKPR to zero.
-    // 2. within four cycles, write the desired value to CLKPS while writing a
-    //    zero to CLKPCE.
-    CLKPR = _BV(CLKPCE);
-    CLKPR = 0;  // corresponds to CLKDIV1 prescale, also keeps CLKPCE low
+    SFIOR |= _BV(PUD);
 
-    // configure output pins
-    DDRA |= _BV(KICK_MISO_PIN);
-    DDRB |= _BV(KICK_PIN) | _BV(CHARGE_PIN) | _BV(BALL_SENSE_TX);
+    // config status LEDs and set ERR/WARN until init done
+    DDRD |= _BV(MCU_GREEN);
+    DDRD |= _BV(MCU_YELLOW);
+    DDRD |= _BV(MCU_RED);
 
-    // enable ball sense LED
-    PORTB |= _BV(BALL_SENSE_TX);
+    PORTD &= ~(_BV(MCU_YELLOW));
+    PORTD &= ~(_BV(MCU_RED));
 
-    // configure input pins
-    DDRA &= ~(_BV(N_KICK_CS_PIN) | _BV(V_MONITOR_PIN) | _BV(KICK_MOSI_PIN));
+    // latch debug state
+    _in_debug_mode = (PINC & _BV(DB_SWITCH));
 
-    PORTB &= ~(_BV(BALL_SENSE_RX));
-    DDRB &= ~(_BV(BALL_SENSE_RX));
+    // configure core io
+    DDRB |= _BV(KICK_MISO_PIN);
+    DDRB &= ~(_BV(N_KICK_CS_PIN) | _BV(KICK_MOSI_PIN));
 
+    // configure hv mon
+    DDRA &= ~(_BV(V_MONITOR_PIN));
+    DDRA |= (_BV(HV_IND_MAX) | _BV(HV_IND_HIGH) | _BV(HV_IND_MID) | _BV(HV_IND_LOW) | _BV(HV_IND_MIN));
+
+    // configure LT3751 
+    DDRD |= _BV(LT_CHARGE);
+    DDRD &= ~(_BV(LT_DONE_N) | _BV(LT_FAULT_N));
+
+    // configure ball sense
+    DDRD |= (_BV(BALL_SENSE_TX) | _BV(BALL_SENSE_LED));
+    //PORTD &= ~(_BV(BALL_SENSE_TX));
+    PORTD |= _BV(BALL_SENSE_LED);
+    PORTD |= _BV(BALL_SENSE_TX);
+    DDRA &= ~(_BV(BALL_SENSE_RX));
+
+    // configure debug
+    DDRC &= ~(_BV(DB_SWITCH) | _BV(DB_CHG_PIN) | _BV(DB_KICK_PIN) | _BV(DB_CHIP_PIN));
+
+   // disable JTAG
+    MCUCSR |= (1<<JTD);
+    MCUCSR |= (1<<JTD);
     // configure SPI
-    SPCR = _BV(SPE) | _BV(SPIE);
-    SPCR &= ~(_BV(MSTR));  // ensure we are a slave SPI device
-
-    // enable interrupts for PCINT0-PCINT7
-    PCICR |= _BV(PCIE0);
-
-    // enable interrupts on debug buttons
-    PCMSK0 = _BV(INT_DB_KICK) | _BV(INT_DB_CHG);
+    //SPCR = _BV(SPE) | _BV(SPIE);
+    //SPCR &= ~(_BV(MSTR));  // ensure we are a slave SPI device
 
     ///////////////////////////////////////////////////////////////////////////
     //  TIMER INITIALIZATION
@@ -247,16 +299,16 @@ void init() {
     //  kick()
     //
     //  initialize timer
-    TIMSK0 |= _BV(OCIE0A);    // Interrupt on TIMER 0
-    TCCR0A |= _BV(WGM01);     // CTC - Clear Timer on Compare Match
-    OCR0A = TIMING_CONSTANT;  // OCR0A is max val of timer before reset
+    TIMSK |= _BV(OCIE0);    // Interrupt on TIMER 0
+    TCCR0 |= _BV(COM01);     // COM01 - Clear Timer on Compare Match
+    OCR0 = TIMING_CONSTANT;  // OCR0A is max val of timer before reset
     ///////////////////////////////////////////////////////////////////////////
 
     // Set low bits corresponding to pin we read from
-    ADMUX |= _BV(ADLAR) | 0x00;  // connect PA0 (V_MONITOR_PIN) to ADC
+    ADMUX |= _BV(ADLAR) | 0x06;  // connect PA6 (V_MONITOR_PIN) to ADC
 
     // ensure ADC isn't shut off
-    PRR &= ~_BV(PRADC);
+    // PRR &= ~_BV(PRADC);
     ADCSRA |= _BV(ADEN);  // enable the ADC - Pg. 133
 
     // enable global interrupts
@@ -298,6 +350,7 @@ ISR(SPI_STC_vect) {
  *
  * ISR for PCINT8 - PCINT11
  */
+/*
 ISR(PCINT0_vect) {
     // First we get the current state of each button, active low
     int dbg_switched = !(PINB & _BV(DB_SWITCH));
@@ -318,6 +371,7 @@ ISR(PCINT0_vect) {
     kick_db_down_ = kick_db_pressed;
     charge_db_down_ = charge_db_pressed;
 }
+*/
 
 /*
  * Timer interrupt for chipping/kicking - called every millisecond by timer
@@ -339,13 +393,12 @@ ISR(PCINT0_vect) {
  * When CS01 is one, the clk is prescaled by 8
  * (When CS00 is one, and CS01 is 0, no prescale. We don't use this)
  */
-ISR(TIMER0_COMPA_vect) {
-    if (pre_kick_cooldown_ >= 0) {
+ISR(TIMER0_COMP_vect) {
+        if (pre_kick_cooldown_ >= 0) {
         /* PRE KICKING STATE
          * stop charging
          * wait between stopping charging and kicking for safety
          */
-
         // disable charging
         charge_allowed_ = false;
 
@@ -357,7 +410,8 @@ ISR(TIMER0_COMPA_vect) {
          */
 
         // set KICK pin
-        PORTB |= _BV(KICK_PIN);
+	PORTD |= (_BV(MCU_RED));
+	//PORTC |= _BV(KICK_PIN);
 
         timer_cnts_left_--;
     } else if (post_kick_cooldown_ >= 0) {
@@ -368,7 +422,8 @@ ISR(TIMER0_COMPA_vect) {
          */
 
         // kick is done
-        PORTB &= ~_BV(KICK_PIN);
+        PORTD &= ~(_BV(MCU_RED));
+	//PORTC &= ~_BV(KICK_PIN);
 
         post_kick_cooldown_--;
     } else if (kick_wait_ >= 0) {
@@ -387,7 +442,8 @@ ISR(TIMER0_COMPA_vect) {
          */
 
         // stop prescaled timer
-        TCCR0B &= ~_BV(CS01);
+        //TCCR0 &= ~_BV(CS01);
+	TCCR0 &= 0b00;
     }
 }
 

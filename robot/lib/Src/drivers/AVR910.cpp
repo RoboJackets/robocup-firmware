@@ -41,24 +41,30 @@ AVR910::AVR910(shared_ptr<SPI> spi, PinName nCs, PinName nReset)
     : spi_(spi), nCs_(nCs), nReset_(nReset) {
     spi_->frequency(100'000);
 
+    // Force reset on the device
+    nReset_ = 1;
+
+    // Make sure full poweroff and caps discharge
+    HAL_Delay(25);
+
     // Enter serial programming mode by pulling reset line low.
     nReset_ = 0;
 
-    // Wait 20ms before issuing first command.
-    HAL_Delay(20);
+    // Wait 25ms before issuing first command.
+    HAL_Delay(25);
 
     // Enable programming mode on the chip
     // It's possible for it to fail, so try it a few times.
     bool enabled = false;
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 20; i++) {
         enabled = enableProgramming();
         if (enabled) break;
 
         // Give nReset a positive pulse.
         nReset_ = 1;
-        HAL_Delay(20);
+        HAL_Delay(21);
         nReset_ = 0;
-        HAL_Delay(20);
+        HAL_Delay(21);
     }
 
     if (!enabled) {
@@ -78,6 +84,9 @@ bool AVR910::program(FILE* binary, int pageSize, int numPages) {
     int c = 0;
     int highLow = 0;
 
+    char lc_offset = 0xFF;
+    int lc_highlow = 0xFF;
+
     fseek(binary, 0, SEEK_SET);
     // We're dealing with paged memory.
     if (numPages > 1) {
@@ -86,7 +95,9 @@ bool AVR910::program(FILE* binary, int pageSize, int numPages) {
             // printf("page size: %d\r\n", pageSize);
             // printf("page offset: %d\r\n", pageOffset);
             if (pageOffset == (pageSize)) {
-                writeFlashMemoryPage(pageNumber);
+                writeFlashMemoryPage(pageNumber, lc_offset, lc_highlow);
+                lc_offset = 0xFF;
+                lc_highLow = 0xFF;
 
                 pageNumber++;
                 if (pageNumber > numPages) {
@@ -96,6 +107,15 @@ bool AVR910::program(FILE* binary, int pageSize, int numPages) {
                     return false;
                 }
                 pageOffset = 0;
+            }
+
+            if (lc_offset == 0xFF && c != 0xFF) {
+                lc_offset = pageOffset;
+                if (!highLow) {
+                    lc_highlow = READ_LOW_BYTE;
+                } else {
+                    lc_highlow = READ_HIGH_BYTE;
+                }
             }
 
             // Write low byte.
@@ -142,7 +162,7 @@ bool AVR910::program(FILE* binary, int pageSize, int numPages) {
     }
 
     // We might have partially filled up a page.
-    writeFlashMemoryPage(pageNumber);
+    writeFlashMemoryPage(pageNumber, lc_offset, lc_highLow);
 
     bool success = checkMemory(pageSize, pageNumber + 1, binary, true);
 
@@ -163,6 +183,9 @@ bool AVR910::program(uint8_t* binary, unsigned int length, int pageSize, int num
     int highLow = 0;
     unsigned int binaryLoc = 0;
 
+    char lc_offset = 0xFF;
+    int lc_highLow = 0xFF;
+
     // We're dealing with paged memory.
     if (numPages > 1) {
         while (binaryLoc < length) {
@@ -173,7 +196,10 @@ bool AVR910::program(uint8_t* binary, unsigned int length, int pageSize, int num
             // printf("page size: %d\r\n", pageSize);
             // printf("page offset: %d\r\n", pageOffset);
             if (pageOffset == (pageSize)) {
-                writeFlashMemoryPage(pageNumber);
+                writeFlashMemoryPage(pageNumber, lc_offset, lc_highLow);
+                lc_offset = 0xFF;
+                lc_highLow = 0xFF
+
 
                 pageNumber++;
                 if (pageNumber > numPages) {
@@ -183,6 +209,15 @@ bool AVR910::program(uint8_t* binary, unsigned int length, int pageSize, int num
                     return false;
                 }
                 pageOffset = 0;
+            }
+
+            if (lc_offset == 0xFF && c != 0xFF) {
+                lc_offset = pageOffset;
+                if (!highLow) {
+                    lc_highLow = READ_LOW_BYTE;
+                } else {
+                    lc_highLow = READ_HIGH_BYTE;
+                }
             }
 
             // Write low byte.
@@ -232,7 +267,7 @@ bool AVR910::program(uint8_t* binary, unsigned int length, int pageSize, int num
     }
 
     // We might have partially filled up a page.
-    writeFlashMemoryPage(pageNumber);
+    writeFlashMemoryPage(pageNumber, lc_offset, lc_highLow);
 
     bool success = checkMemory(pageSize, pageNumber + 1, binary, true);
 
@@ -248,8 +283,9 @@ bool AVR910::enableProgramming() {
     nCs_ = 0;
     spi_->transmit(0xAC);
     spi_->transmit(0x53);
-    int response = spi_->transmitReceive(0x00);
+    int response = spi_->transmitReceive(0x33);
     spi_->transmit(0x00);
+    HAL_Delay(1);
     nCs_ = 1;
 
     if (response == 0x53) {
@@ -259,17 +295,9 @@ bool AVR910::enableProgramming() {
     }
 }
 
-void AVR910::poll() {
-    // Query the chip until it indicates it's ready by setting the busy bit to 0
-    int response = 0;
-    nCs_ = 0;
-    do {
-        spi_->transmit(0xF0);
-        spi_->transmit(0x00);
-        spi_->transmit(0x00);
-        response = spi_->transmitReceive(0x00);
-    } while ((response & 0x01) != 0);
-    nCs_ = 1;
+void AVR910::poll(int high_low, char page_number, char page_offset) {
+    while (readProgramMemory(high_low, page_number, page_offset) == 0xFF);
+    return;
 }
 
 int AVR910::readRegister(int reg) {
@@ -310,8 +338,6 @@ void AVR910::chipErase() {
     spi_->transmit(0x00);
     nCs_ = 1;
 
-    poll();
-
     // Temporarily release reset line.
     nReset_ = 1;
     nReset_ = 0;
@@ -324,8 +350,6 @@ void AVR910::loadMemoryPage(int highLow, char address, char data) {
     spi_->transmit(address & 0x3F);  // flash has 64 words, so 6 bits to address all
     spi_->transmit(data);
     nCs_ = 1;
-
-    poll();
 }
 
 void AVR910::writeFlashMemoryByte(int highLow, int address, char data) {
@@ -334,6 +358,15 @@ void AVR910::writeFlashMemoryByte(int highLow, int address, char data) {
     spi_->transmit(address & 0xFF00 >> 8);
     spi_->transmit(address & 0x00FF);
     spi_->transmit(data);
+    nCs_ = 1;
+}
+
+void AVR910::writeFuseBitsLow() {
+    nCs_ = 0;
+    spi_->transmit(0xAC);
+    spi_->transmit(0xA0);
+    spi_->transmit(0x33);
+    spi_->transmit(0xE4);
     nCs_ = 1;
 }
 
@@ -363,8 +396,6 @@ char AVR910::readProgramMemory(int highLow, char pageNumber, char pageOffset) {
     spi_->transmit((pageNumber << 6) | (pageOffset & 0x3F));
     char response = spi_->transmitReceive(0x00);
     nCs_ = 1;
-
-    poll();
 
     return response;
 }

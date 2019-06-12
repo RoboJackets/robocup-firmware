@@ -1,7 +1,9 @@
 set(CMAKE_SYSTEM_NAME       Generic)
 set(CMAKE_SYSTEM_PROCESSOR  avr)
 set(CMAKE_SYSTEM_VERSION    1)
-set(AVR_TARGET_ARCH         attiny167)
+# the docs aren't installed to man
+# refer to http://www.nongnu.org/avr-libc/user-manual/using_tools.html
+set(AVR_TARGET_ARCH         atmega32a)
 
 # narrow down the search scope of where cmake looks for programs/libraries
 # for cross compilation
@@ -25,4 +27,4 @@ set(CMAKE_CXX_COMPILER  ${AVR_CXX_COMPILER})
 # change above to match ATTINY84A =====================================================================
 # to keep timing for neopixel
 # The -O2 turns on optimizations, which are required to use the delay_*() functions
-set(CMAKE_C_FLAGS "-std=c11 -O2 -mmcu=attiny167 -DF_CPU=8000000")
+list(APPEND CMAKE_C_FLAGS "-std=c11 -O2 -mmcu=${AVR_TARGET_ARCH} -DF_CPU=8000000")
