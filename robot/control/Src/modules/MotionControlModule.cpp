@@ -27,7 +27,7 @@ MotionControlModule::MotionControlModule(BatteryVoltage *const batteryVoltage,
 void MotionControlModule::entry(void) {
     // No radio comm in a little while
     // return and die
-    if (!motionCommand->isValid || !isRecentUpdate(motionCommand->lastUpdate)) {
+    if (!motionCommand->isValid /*|| !isRecentUpdate(motionCommand->lastUpdate)*/) {
         motorCommand->isValid = false;
         motorCommand->lastUpdate = HAL_GetTick();
     }
@@ -85,7 +85,7 @@ void MotionControlModule::entry(void) {
 
         // set motors to real targets
         for (int i = 0; i < 4; i++) {
-            motorCommand->wheels[i] = 0;
+            motorCommand->wheels[i] = motionCommand->dribbler / 128.0;
         }
         motorCommand->dribbler = dribblerCommand;
 

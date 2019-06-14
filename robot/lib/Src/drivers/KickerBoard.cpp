@@ -1,11 +1,12 @@
 #include "drivers/KickerBoard.hpp"
+#include "device-bins/kicker_bin.h"
 #include <tuple>
 
 using namespace std;
 
-KickerBoard::KickerBoard(shared_ptr<SPI> spi, PinName nCs,
+KickerBoard::KickerBoard(shared_ptr<SPI> spi, std::shared_ptr<DigitalOut> nCs,
                          PinName nReset, PinName ball_led)
-    : AVR910(spi, nCs, nReset), _spi(spi), _nCs(nCs) {}
+    : AVR910(spi, nCs, nReset), _nCs(nCs), _spi(spi)  {}
       //ballSenseLED(ball_led) {} todo figure out which pin this is
 
 bool KickerBoard::verify_param(const char* name, char expected,
@@ -98,8 +99,8 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
         }
     }
 
-    uint8_t* progBinary = 0; // todo use script
-    unsigned int length = 0;
+    const uint8_t* progBinary = KICKER_BYTES;
+    unsigned int length = KICKER_BYTES_LEN;
 
     // Program it!
     printf("Attempting to program kicker.\r\n");
@@ -130,11 +131,12 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
 }
 
 void KickerBoard::service() {
+    _spi->frequency(100'000);
     // function that actually executes commands given to kicker
     //wait_us(100);
     HAL_Delay(1); // todo replace with us wait
 
-    _nCs = 0;
+    _nCs->write(0);
     if (_kick_type_commanded) {
         _kick_type_commanded = false;
         if (_is_chip) {
@@ -187,7 +189,7 @@ void KickerBoard::service() {
 
     //wait_us(100);
     HAL_Delay(1);
-    _nCs = 1;
+    _nCs->write(1);
 }
 
 bool KickerBoard::send_to_kicker(uint8_t cmd, uint8_t arg, uint8_t* ret_val) {

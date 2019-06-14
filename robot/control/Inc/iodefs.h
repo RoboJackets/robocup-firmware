@@ -1,4 +1,7 @@
 #pragma once
+#include "drivers/MCP23017.hpp"
+
+#define SHARED_I2C_BUS I2CBus::I2CBus1
 
 #define DOT_STAR_SPI_BUS SpiBus::SpiBus2
 
@@ -18,3 +21,13 @@
 #define KICKER_RST p7
 
 #define BALL_SENSE_LED p10 // todo: really check this
+
+#define ERR_LED_M1 MCP23017::ExpPinName::PinB6
+#define ERR_LED_M2 MCP23017::ExpPinName::PinB5
+#define ERR_LED_M3 MCP23017::ExpPinName::PinB3
+#define ERR_LED_M4 MCP23017::ExpPinName::PinB4
+#define ERR_LED_MPU MCP23017::ExpPinName::PinB2
+// #define ERR_LED_BSENSE = MCP23017::PinB4; NOT CONNECTED
+#define ERR_LED_DRIB MCP23017::ExpPinName::PinB7
+#define ERR_LED_RADIO MCP23017::ExpPinName::PinB1
+#define ERR_LED_KICK MCP23017::ExpPinName::PinB0

@@ -146,6 +146,9 @@ void main() {
     init();
 
     PORTD |= _BV(MCU_RED);
+    PORTD &= ~_BV(MCU_YELLOW);
+
+    while(true);
 
     // needs to be int to force voltage_accum calculation to use ints
     const int kalpha = 64;
@@ -250,7 +253,7 @@ void init() {
     // disable watchdog
     wdt_reset();
     WDTCR |= (_BV(WDTOE) | _BV(WDE));
-    WDTCR = 0x00;
+    WDTCR &= !_BV(WDE);
 
     SFIOR |= _BV(PUD);
 
@@ -263,33 +266,33 @@ void init() {
     PORTD &= ~(_BV(MCU_RED));
 
     // latch debug state
-    _in_debug_mode = (PINC & _BV(DB_SWITCH));
+    //_in_debug_mode = (PINC & _BV(DB_SWITCH));
 
     // configure core io
-    DDRB |= _BV(KICK_MISO_PIN);
-    DDRB &= ~(_BV(N_KICK_CS_PIN) | _BV(KICK_MOSI_PIN));
+    //DDRB |= _BV(KICK_MISO_PIN);
+    //DDRB &= ~(_BV(N_KICK_CS_PIN) | _BV(KICK_MOSI_PIN));
 
     // configure hv mon
-    DDRA &= ~(_BV(V_MONITOR_PIN));
-    DDRA |= (_BV(HV_IND_MAX) | _BV(HV_IND_HIGH) | _BV(HV_IND_MID) | _BV(HV_IND_LOW) | _BV(HV_IND_MIN));
+    //DDRA &= ~(_BV(V_MONITOR_PIN));
+    //DDRA |= (_BV(HV_IND_MAX) | _BV(HV_IND_HIGH) | _BV(HV_IND_MID) | _BV(HV_IND_LOW) | _BV(HV_IND_MIN));
 
     // configure LT3751 
-    DDRD |= _BV(LT_CHARGE);
-    DDRD &= ~(_BV(LT_DONE_N) | _BV(LT_FAULT_N));
+    //DDRD |= _BV(LT_CHARGE);
+    //DDRD &= ~(_BV(LT_DONE_N) | _BV(LT_FAULT_N));
 
     // configure ball sense
     DDRD |= (_BV(BALL_SENSE_TX) | _BV(BALL_SENSE_LED));
     //PORTD &= ~(_BV(BALL_SENSE_TX));
     PORTD |= _BV(BALL_SENSE_LED);
-    PORTD |= _BV(BALL_SENSE_TX);
-    DDRA &= ~(_BV(BALL_SENSE_RX));
+    //PORTD |= _BV(BALL_SENSE_TX);
+    //DDRA &= ~(_BV(BALL_SENSE_RX));
 
     // configure debug
-    DDRC &= ~(_BV(DB_SWITCH) | _BV(DB_CHG_PIN) | _BV(DB_KICK_PIN) | _BV(DB_CHIP_PIN));
+    //DDRC &= ~(_BV(DB_SWITCH) | _BV(DB_CHG_PIN) | _BV(DB_KICK_PIN) | _BV(DB_CHIP_PIN));
 
    // disable JTAG
-    MCUCSR |= (1<<JTD);
-    MCUCSR |= (1<<JTD);
+    //MCUCSR |= _BV(JTD);
+    //MCUCSR |= _BV(JTD);
     // configure SPI
     //SPCR = _BV(SPE) | _BV(SPIE);
     //SPCR &= ~(_BV(MSTR));  // ensure we are a slave SPI device
@@ -314,20 +317,20 @@ void init() {
     //  kick()
     //
     //  initialize timer
-    TIMSK |= _BV(OCIE0);    // Interrupt on TIMER 0
-    TCCR0 |= _BV(COM01);     // COM01 - Clear Timer on Compare Match
-    OCR0 = TIMING_CONSTANT;  // OCR0A is max val of timer before reset
+    //TIMSK |= _BV(OCIE0);    // Interrupt on TIMER 0
+    //TCCR0 |= _BV(COM01);     // COM01 - Clear Timer on Compare Match
+    //OCR0 = TIMING_CONSTANT;  // OCR0A is max val of timer before reset
     ///////////////////////////////////////////////////////////////////////////
 
     // Set low bits corresponding to pin we read from
-    ADMUX |= _BV(ADLAR) | 0x06;  // connect PA6 (V_MONITOR_PIN) to ADC
+    //ADMUX |= _BV(ADLAR) | 0x06;  // connect PA6 (V_MONITOR_PIN) to ADC
 
     // ensure ADC isn't shut off
     // PRR &= ~_BV(PRADC);
-    ADCSRA |= _BV(ADEN);  // enable the ADC - Pg. 133
+    //ADCSRA |= _BV(ADEN);  // enable the ADC - Pg. 133
 
     // enable global interrupts
-    sei();
+    //sei();
 }
 
 /*
@@ -468,7 +471,7 @@ ISR(TIMER0_COMP_vect) {
 
         // stop prescaled timer
         //TCCR0 &= ~_BV(CS01);
-        TCCR0 &= 0b00;
+        TCCR0 &= ~_BV(CS00);
     }
 }
 

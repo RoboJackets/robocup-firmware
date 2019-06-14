@@ -22,7 +22,7 @@ public:
      * @param nReset mtrain pin for not reset line on the ISP interface.
      * @param ball_led mtrain pin for the ball sensed led
      */
-    KickerBoard(std::shared_ptr<SPI> spi, PinName nCs, PinName nReset,
+    KickerBoard(std::shared_ptr<SPI> spi, std::shared_ptr<DigitalOut> nCs, PinName nReset,
                 PinName ball_led);
 
     /**
@@ -138,8 +138,8 @@ protected:
 private:
     bool verbose;
 
+    std::shared_ptr<DigitalOut> _nCs;
     std::shared_ptr<SPI> _spi;
-    DigitalOut _nCs;
     // DigitalOut ballSenseLED;
 
     const uint8_t isChargedCutoff = 230;

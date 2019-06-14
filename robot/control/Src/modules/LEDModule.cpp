@@ -1,16 +1,39 @@
 #include "modules/LEDModule.hpp"
-#include "mtrain.hpp"
+#include "iodefs.h"
 
-LEDModule::LEDModule(BatteryVoltage *const batteryVoltage,
+LEDModule::LEDModule(std::shared_ptr<MCP23017> ioExpander,
+                     BatteryVoltage *const batteryVoltage,
                      FPGAStatus *const fpgaStatus,
                      RadioError *const radioError)
     : batteryVoltage(batteryVoltage), fpgaStatus(fpgaStatus),
-      radioError(radioError), leds({LED1, LED2, LED3, LED4}),
-      missedSuperLoopToggle(false), missedModuleRunToggle(false)  /**, all leds **/ {
+      radioError(radioError), ioExpander(ioExpander),
+      leds({LED1, LED2, LED3, LED4}),
+      missedSuperLoopToggle(false), missedModuleRunToggle(false) {
+
+    ioExpander->writeMask(static_cast<uint16_t>(~IOExpanderErrorLEDMask), IOExpanderErrorLEDMask);
 }
 
 void LEDModule::entry(void) {
     // update battery, fpga, and radio status leds
+    uint16_t errors = 0;
+    int motors[5] = {ERR_LED_M1, ERR_LED_M2, ERR_LED_M3, ERR_LED_M4, ERR_LED_DRIB};
+
+    if (!fpgaStatus->isValid || fpgaStatus->FPGAHasError) {
+        for (int i = 0; i < 5; i++) {
+            errors |= (1 << motors[i]);
+        }
+    } else { 
+        for (int i = 0; i < 5; i++) {
+            errors |= (fpgaStatus->motorHasErrors[i] << motors[i]);
+        }
+    }
+
+    if (!radioError->isValid || radioError->hasError) {
+        errors |= (1 << ERR_LED_RADIO);
+    }
+
+    ioExpander->writeMask(~errors, IOExpanderErrorLEDMask);
+    printf("%4x \r\n", errors);
 }
 
 void LEDModule::fpgaInitialized() {

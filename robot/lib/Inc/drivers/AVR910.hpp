@@ -76,7 +76,7 @@ public:
      * Sends an enable programming command, allowing device registers to be
      * read and commands sent.
      */
-    AVR910(std::shared_ptr<SPI> spi, PinName nCs, PinName nReset);
+    AVR910(std::shared_ptr<SPI> spi, std::shared_ptr<DigitalOut> nCs, PinName nReset);
 
     /**
      * Program the AVR microcontroller connected to the mbed.
@@ -116,7 +116,7 @@ public:
      *
      * @return  boolean value indicating success
      */
-    bool program(uint8_t* binary, unsigned int length, int pageSize, int numPages = 1);
+    bool program(const uint8_t* binary, unsigned int length, int pageSize, int numPages = 1);
 
     /**
      * Read the vendor code of the device.
@@ -171,7 +171,7 @@ protected:
      *
      * @return boolean indicating success
      */
-    bool checkMemory(int numPages, int pageSize, uint8_t* binary,
+    bool checkMemory(int numPages, int pageSize, const uint8_t* binary,
                      unsigned int length, bool verbose = false);
 
     /**
@@ -238,6 +238,6 @@ private:
     char readProgramMemory(int highLow, char pageNumber, char pageOffset);
 
     std::shared_ptr<SPI> spi_;
-    DigitalOut nCs_;
+    std::shared_ptr<DigitalOut> nCs_;
     DigitalOut nReset_;
 };

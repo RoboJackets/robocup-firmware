@@ -7,9 +7,9 @@ KickerModule::KickerModule(std::shared_ptr<SPI> spi,
                            KickerCommand *const kickerCommand,
                            KickerInfo *const kickerInfo)
     : kickerCommand(kickerCommand), kickerInfo(kickerInfo),
-      prevKickTime(0), kicker(spi, KICKER_CS, KICKER_RST, BALL_SENSE_LED) {
+      prevKickTime(0), nCs(std::make_shared<DigitalOut>(KICKER_CS)), kicker(spi, nCs, KICKER_RST, BALL_SENSE_LED) {
 
-    kicker.flash(true, false);
+    kicker.flash(false, true);
 
     kickerInfo->isValid = false;
     kickerInfo->lastUpdate = 0;
@@ -19,6 +19,7 @@ KickerModule::KickerModule(std::shared_ptr<SPI> spi,
 }
 
 void KickerModule::entry(void) {
+    return;
     // Check if valid
     // and within the last few ms
     // and not same as previous command

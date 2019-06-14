@@ -45,6 +45,7 @@ THE SOFTWARE.
 ===============================================
 */
 #include "drivers/MPU6050.h"
+#include <cstring>
 
 // instead of using pgmspace.h
 typedef const unsigned char prog_uchar;
@@ -54,7 +55,7 @@ typedef const unsigned char prog_uchar;
 /** Default constructor, uses default I2C address.
  * @see MPU6050_DEFAULT_ADDRESS
  */
-MPU6050::MPU6050(std::shared_ptr<SharedI2C> sharedI2C) {
+MPU6050::MPU6050(std::shared_ptr<I2C> sharedI2C) {
     this->i2Cdev = new I2Cdev(sharedI2C);
     devAddr = MPU6050_DEFAULT_ADDRESS;
 }
@@ -67,7 +68,7 @@ MPU6050::MPU6050(std::shared_ptr<SharedI2C> sharedI2C) {
  * @param i2c sda
  * @param i2c scl
  */
-MPU6050::MPU6050(std::shared_ptr<SharedI2C> sharedI2C, uint8_t address) {
+MPU6050::MPU6050(std::shared_ptr<I2C> sharedI2C, uint8_t address) {
     this->i2Cdev = new I2Cdev(sharedI2C);
     devAddr = address;
 }

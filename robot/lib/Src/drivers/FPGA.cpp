@@ -213,6 +213,7 @@ uint8_t FPGA::set_duty_cycles(int16_t* duty_cycles, size_t size) {
 
 uint8_t FPGA::set_duty_get_enc(int16_t* duty_cycles, size_t size_dut,
                                int16_t* enc_deltas, size_t size_enc) {
+    _spi_bus->frequency(15'000'000);
     uint8_t status;
 
     if (size_dut != 5 || size_enc != 5) {

@@ -1,6 +1,6 @@
 #include "modules/RotaryDialModule.hpp"
 
-RotaryDialModule::RotaryDialModule(RobotID *const robotID)
+RotaryDialModule::RotaryDialModule(std::shared_ptr<MCP23017> ioExpander, RobotID *const robotID)
     : robotID(robotID)/**, dial({})*/ {
     // todo setup dial
 

@@ -14,11 +14,15 @@ FPGAModule::FPGAModule(std::shared_ptr<SPI> spi,
 
     fpgaInitialized = fpga.configure();
 
-    if (fpgaInitialized) {
-        printf("INFO: FPGA configured\r\n");
-    } else {
-        printf("WARN: FPGA could not be configured\r\n");
-    }
+    // todo figure out why this returns false
+    // but the fpga still works
+    //if (fpgaInitialized) {
+    //    printf("INFO: FPGA configured\r\n");
+    //} else {
+    //    printf("WARN: FPGA could not be configured\r\n");
+    //}
+
+    printf("INFO: FPGA probably configured\r\n");
 
     motorFeedback->isValid = false;
     motorFeedback->lastUpdate = 0;
@@ -37,16 +41,18 @@ FPGAModule::FPGAModule(std::shared_ptr<SPI> spi,
 }
 
 void FPGAModule::entry(void) {
+    // See todo above about fpgaInitialized returning wrong values
     // FPGA not initialized
     // report error and return
-    if (!fpgaInitialized) {
-        // report error and return
-        fpgaStatus->isValid = true;
-        fpgaStatus->lastUpdate = HAL_GetTick();
-        fpgaStatus->FPGAHasError = true;
-
-        return;
-    }
+    // have to disable otherwise it never returns true
+    //if (!fpgaInitialized && false) {
+    //    // report error and return
+    //    fpgaStatus->isValid = true;
+    //    fpgaStatus->lastUpdate = HAL_GetTick();
+    //    fpgaStatus->FPGAHasError = true;
+    //
+    //    return;
+    //}
 
     // FPGA initialized so we all good
     std::array<int16_t, 5> dutyCycles{0, 0, 0, 0, 0};
@@ -54,12 +60,12 @@ void FPGAModule::entry(void) {
 
     // Make sure commands are valid
     // If they are not valid, we automatically send a 0 duty cycle
-    if (motorCommand->isValid &&
-        (HAL_GetTick() - motorCommand->lastUpdate) < COMMAND_TIMEOUT) {
+    if (motorCommand->isValid /*&&
+        (HAL_GetTick() - motorCommand->lastUpdate) < COMMAND_TIMEOUT*/) {
 
         for (int i = 0; i < 4; i++)
             dutyCycles.at(i) = static_cast<int16_t>(
-                motorCommand->wheels[i] * fpga.MAX_DUTY_CYCLE);
+                motorCommand->wheels[i] * fpga.MAX_DUTY_CYCLE/2);
         dutyCycles.at(4) = motorCommand->dribbler;
 
     }
@@ -120,6 +126,4 @@ void FPGAModule::entry(void) {
     for (int i = 0; i < 4; i++) {
         fpgaStatus->motorHasErrors[i] = (status & (1 << i)) == 1;
     }
-    
-    //printf("%0x %0x %0x %0x %0x %0x\r\n", status, encDeltas[0], encDeltas[1], encDeltas[2], encDeltas[3], encDeltas[4]);
 }

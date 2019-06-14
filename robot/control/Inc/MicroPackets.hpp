@@ -73,7 +73,7 @@ struct FPGAStatus {
     bool isValid = false;
     uint32_t lastUpdate;
 
-    bool motorHasErrors[4];
+    bool motorHasErrors[5];
     bool FPGAHasError;
 };
 

@@ -1,8 +1,6 @@
 #pragma once
 
-#include "Mbed.hpp"
-
-#include "mcp23017.hpp"
+#include "drivers/mcp23017.hpp"
 
 /**
  * A DigitalInOut class meant to replicate basic functionality of the

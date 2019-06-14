@@ -1,6 +1,6 @@
 #include "mtrain.hpp"
 #include "SPI.hpp"
-#include "bsp.h"
+#include "I2C.hpp"
 
 #include  <unistd.h>
 
@@ -54,9 +54,6 @@ struct MODULE_META_DATA {
           module(module) {}
 };
 
-
-USBD_HandleTypeDef USBD_Device;
-
 MotionCommand motionCommand;
 MotorCommand motorCommand;
 MotorFeedback motorFeedback;
@@ -70,16 +67,15 @@ KickerInfo kickerInfo;
 
 
 int main() {
-    USBD_Init(&USBD_Device, &VCP_Desc, 0);
-    USBD_RegisterClass(&USBD_Device, USBD_CDC_CLASS);
-    USBD_CDC_RegisterInterface(&USBD_Device, &USBD_CDC_fops);
-    USBD_Start(&USBD_Device);
+    std::shared_ptr<I2C> sharedI2C = std::make_shared<I2C>(SHARED_I2C_BUS);
+    std::shared_ptr<SPI> fpgaKickerSPI = std::make_shared<SPI>(FPGA_KICKER_SPI_BUS, std::nullopt, 15'000'000);
 
-    // todo get right freq
-    std::shared_ptr<SPI> fpgaKickerSPI = std::make_shared<SPI>(FPGA_KICKER_SPI_BUS, std::nullopt, 1'000'000);
+    std::shared_ptr<MCP23017> ioExpander = std::make_shared<MCP23017>(sharedI2C, 0x42);
+    ioExpander->config(0x00FF, 0x00FF, 0x00FF);
 
     // Init led first to show startup progress with LED's
-    LEDModule led(&batteryVoltage,
+    LEDModule led(ioExpander,
+                  &batteryVoltage,
                   &fpgaStatus,
                   &radioError);
 
@@ -107,13 +103,15 @@ int main() {
     led.kickerInitialized();
 
     BatteryModule battery(&batteryVoltage);
-    RotaryDialModule dial(&robotID);
+    RotaryDialModule dial(ioExpander,
+                          &robotID);
     MotionControlModule motion(&batteryVoltage,
                                &imuData,
                                &motionCommand,
                                &motorFeedback,
                                &motorCommand);
-    IMUModule imu(&imuData);
+    IMUModule imu(sharedI2C,
+                  &imuData);
 
     led.fullyInitialized();
     
@@ -147,15 +145,16 @@ int main() {
             if ((int32_t)(currentTime - module.nextRunTime) >= 0 &&
                 (int32_t)(loopEndTime - currentTime) >= module.moduleRunTime) {
                 
+                // todo change to loop start time
                 module.lastRunTime = currentTime;
-                module.nextRunTime = loopStartTime + module.modulePeriod;
+                module.nextRunTime = currentTime + module.modulePeriod;
 
                 module.module->entry();
             }
 
             // Check if we missed a module X times in a row
             if ((int32_t)(currentTime - module.nextRunTime) > MAX_MISS_CNT*module.moduleRunTime) {
-                printf("WARNING: Missed module run %d times in a row\r\n", MAX_MISS_CNT);
+                printf("WARNING: Missed module #%d run %d times in a row\r\n", i+1, MAX_MISS_CNT);
                 led.missedModuleRun();
             }
         }
@@ -169,18 +168,4 @@ int main() {
         }
         
     }
-}
-
-
-extern "C" {
-
-int _write(int file, char *data, int len)
-{
-    if (file == STDOUT_FILENO) {
-        USBD_CDC_SetTxBuffer(&USBD_Device, (uint8_t*)data, len);
-        USBD_CDC_TransmitPacket(&USBD_Device);
-    }
-    return 0;
-}
-
 }

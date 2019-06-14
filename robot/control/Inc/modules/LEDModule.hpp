@@ -1,9 +1,13 @@
 #pragma once
 
-#include "mtrain.hpp"
+#include <array>
+#include <memory>
+
+#include "DigitalOut.hpp"
+#include "I2C.hpp"
 #include "GenericModule.hpp"
 #include "MicroPackets.hpp"
-#include <array>
+#include "drivers/MCP23017.hpp"
 
 class LEDModule : public GenericModule {
 public:
@@ -14,7 +18,8 @@ public:
     // How long a single call to this module takes
     static constexpr uint32_t runtime = 0; // ms
 
-    LEDModule(BatteryVoltage *const batteryVoltage,
+    LEDModule(std::shared_ptr<MCP23017> ioExpander,
+              BatteryVoltage *const batteryVoltage,
               FPGAStatus *const fpgaStatus,
               RadioError *const radioError);
 
@@ -49,10 +54,14 @@ public:
     void missedModuleRun();
 
 private:
+    const static uint16_t IOExpanderErrorLEDMask = 0xFF00;
+
     BatteryVoltage *const batteryVoltage;
     FPGAStatus *const fpgaStatus;
     RadioError *const radioError;
-    
+
+    std::shared_ptr<MCP23017> ioExpander;
+
     std::array<DigitalOut, 4> leds;
     bool missedSuperLoopToggle;
     bool missedModuleRunToggle;

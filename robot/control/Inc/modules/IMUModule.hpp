@@ -1,8 +1,10 @@
 #pragma once
 
+#include "I2C.hpp"
 #include "GenericModule.hpp"
 #include "MicroPackets.hpp" 
 #include "drivers/MPU6050.h"
+#include <memory>
 
 class IMUModule : public GenericModule {
 public:
@@ -13,7 +15,7 @@ public:
     // How long a single call to this module takes
     static constexpr uint32_t runtime = 0; // ms
 
-    IMUModule(IMUData *const imuData);
+    IMUModule(std::shared_ptr<I2C> sharedI2C, IMUData *const imuData);
 
     virtual void entry(void);
 

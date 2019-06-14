@@ -1,9 +1,7 @@
 #pragma once
 
 #include <memory>
-#include "Mbed.hpp"
-
-#include "I2CMasterRtos.hpp"
+#include "I2C.hpp"
 
 /**
  * Allow access to an I2C-connected MCP23017 16-bit I/O extender chip
@@ -47,7 +45,7 @@ public:
         PinB7 = 15
     } ExpPinName;
 
-    MCP23017(std::shared_ptr<SharedI2C> sharedI2C, int i2cAddress);
+    MCP23017(std::shared_ptr<I2C> sharedI2C, int i2cAddress);
 
     /** Reset MCP23017 device to its power-on state
      */
@@ -114,7 +112,7 @@ public:
     void internalPullupMask(uint16_t mask);
 
 private:
-    I2CMasterRtos _i2c;
+    std::shared_ptr<I2C> _i2c;
     int _i2cAddress;  // physical I2C address
 
     // Cached copies of the register values

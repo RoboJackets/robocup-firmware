@@ -1,8 +1,8 @@
 #pragma once
 
 #include "GenericModule.hpp"
-#include "mtrain.hpp"
 #include "MicroPackets.hpp" 
+#include "drivers/MCP23017.hpp"
 #include "drivers/RotarySelector.hpp"
 
 class RotaryDialModule : public GenericModule {
@@ -14,7 +14,7 @@ public:
     // How long a single call to this module takes
     static constexpr uint32_t runtime = 0; // ms
 
-    RotaryDialModule(RobotID *const robotID);
+    RotaryDialModule(std::shared_ptr<MCP23017> ioExpander, RobotID *const robotID);
 
     virtual void entry(void);
 

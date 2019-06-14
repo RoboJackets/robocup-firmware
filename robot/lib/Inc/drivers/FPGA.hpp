@@ -20,6 +20,8 @@ public:
      * Must be called to initialize the fpga
      * 
      * @return true if configured correctly, false if not
+     * 
+     * @note this may return bad values
      */
     bool configure();
 
