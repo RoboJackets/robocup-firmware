@@ -22,6 +22,15 @@
 
 #define BALL_SENSE_LED p10 // todo: really check this
 
+#define HEX_SWITCH_BIT0 MCP23017::ExpPinName::PinA7
+#define HEX_SWITCH_BIT1 MCP23017::ExpPinName::PinA4
+#define HEX_SWITCH_BIT2 MCP23017::ExpPinName::PinA6
+#define HEX_SWITCH_BIT3 MCP23017::ExpPinName::PinA5
+#define DIP_SWITCH_1 MCP23017::ExpPinName::PinA1
+#define DIP_SWITCH_2 MCP23017::ExpPinName::PinA2
+#define DIP_SWITCH_3 MCP23017::ExpPinName::PinA3
+#define PUSHBUTTON MCP23017::ExpPinName::PinA0
+
 #define ERR_LED_M1 MCP23017::ExpPinName::PinB6
 #define ERR_LED_M2 MCP23017::ExpPinName::PinB5
 #define ERR_LED_M3 MCP23017::ExpPinName::PinB3

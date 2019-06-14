@@ -1,6 +1,7 @@
 #pragma once
 
-#include "drivers/mcp23017.hpp"
+#include "drivers/MCP23017.hpp"
+#include <memory>
 
 /**
  * A DigitalInOut class meant to replicate basic functionality of the
@@ -9,7 +10,7 @@
 class IOExpanderDigitalInOut {
 public:
     /// Other constructors for creating objects for pinouts
-    IOExpanderDigitalInOut(MCP23017* mcp, MCP23017::ExpPinName pin,
+    IOExpanderDigitalInOut(std::shared_ptr<MCP23017> mcp, MCP23017::ExpPinName pin,
                            MCP23017::PinMode mode, bool state = false)
         : _pin(pin), _mcp23017(mcp) {
         pinMode(mode);
@@ -36,5 +37,5 @@ public:
 
 private:
     MCP23017::ExpPinName _pin;
-    MCP23017* _mcp23017;
+    std::shared_ptr<MCP23017> _mcp23017;
 };

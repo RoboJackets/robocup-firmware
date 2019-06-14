@@ -4,6 +4,7 @@
 #include "MicroPackets.hpp" 
 #include "drivers/MCP23017.hpp"
 #include "drivers/RotarySelector.hpp"
+#include "drivers/IOExpanderDigitalInOut.hpp"
 
 class RotaryDialModule : public GenericModule {
 public:
@@ -21,5 +22,5 @@ public:
 private:
     RobotID *const robotID;
     
-    //RotarySelector<DigitalIn> dial;
+    RotarySelector<IOExpanderDigitalInOut> dial;
 };
