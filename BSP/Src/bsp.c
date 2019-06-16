@@ -9,6 +9,7 @@ void bsp_config(void) {
   CPU_CACHE_Enable();
   HAL_Init();
   SystemClock_Config();
+  DWT_Config();
 
   // Enable all needed system clocks
   __HAL_RCC_GPIOA_CLK_ENABLE();
@@ -165,6 +166,14 @@ void CPU_CACHE_Enable(void)
 
   /* Enable D-Cache */
   SCB_EnableDCache();
+}
+
+void DWT_Config(void)
+{
+  CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
+  DWT->LAR = 0xC5ACCE55; 
+  DWT->CYCCNT = 0;
+  DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
 }
 
 #ifdef  USE_FULL_ASSERT
