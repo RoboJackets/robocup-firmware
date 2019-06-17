@@ -19,7 +19,7 @@
 
 
 
-#define SUPER_LOOP_FREQ 20
+#define SUPER_LOOP_FREQ 50
 #define SUPER_LOOP_PERIOD (1000 / SUPER_LOOP_FREQ)
 
 // Max number of super loop cycles a proc can miss if it
