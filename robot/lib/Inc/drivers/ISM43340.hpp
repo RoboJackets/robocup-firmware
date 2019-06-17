@@ -20,7 +20,6 @@ namespace ISMConstants {
     static const unsigned int SPI_FREQ = 1'000'000;
 
     static const unsigned int RESET_DELAY = 500;
-    static const unsigned int SPI_DELAY = 1;
 
     // Network config
     static const std::string NETWORK_SSID = "rj-rc-field";

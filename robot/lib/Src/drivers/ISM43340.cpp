@@ -1,4 +1,5 @@
 #include "drivers/ISM43340.hpp"
+#include "delay.hpp"
 #include <cstring>
 
 ISM43340::ISM43340(std::unique_ptr<SPI> radioSPI, PinName nCsPin, PinName nResetPin,
@@ -80,13 +81,19 @@ unsigned int ISM43340::receive(uint8_t* data, const unsigned int maxNumBytes) {
     return amntToCopy;
 }
 
+
+/**
+ * Note: All delays in the function below have been tuned
+ * to work correctly. The data sheet misses some key ones
+ * and the ones given are partially wrong
+ */
 void ISM43340::writeToSpi(uint8_t* command, int length) {
-    HAL_Delay(ISMConstants::SPI_DELAY);
+    DWT_Delay(4); // th (ssn)
     while (dataReady.read() != 1);
-    HAL_Delay(ISMConstants::SPI_DELAY);
+    DWT_Delay(4); // tsu (ssn)
 
     nCs = ISMConstants::CHIP_SELECT;
-    HAL_Delay(ISMConstants::SPI_DELAY);
+    DWT_Delay(50); // tsu (sck)
 
     for (int i = 0; i < length; i += 2) {
         uint8_t c1 = command[i];
@@ -100,9 +107,9 @@ void ISM43340::writeToSpi(uint8_t* command, int length) {
         radioSPI->transmit(c1);
     }
 
-    HAL_Delay(ISMConstants::SPI_DELAY);
+    DWT_Delay(65);
     nCs = ISMConstants::CHIP_DESELECT;
-    HAL_Delay(ISMConstants::SPI_DELAY);
+    DWT_Delay(40); // min time between two commands
 }
 
 uint32_t ISM43340::readFromSpi() {
@@ -110,12 +117,12 @@ uint32_t ISM43340::readFromSpi() {
 
     readBuffer.clear();
 
-    HAL_Delay(ISMConstants::SPI_DELAY);
+    DWT_Delay(4); // th (ssn)
     while (dataReady.read() != 1);
-    HAL_Delay(ISMConstants::SPI_DELAY);
+    DWT_Delay(4); // tsu (ssn)
     
     nCs = ISMConstants::CHIP_SELECT;
-    HAL_Delay(ISMConstants::SPI_DELAY);
+    DWT_Delay(50); // tsu (sck)
 
     // Once we find any data on the bus
     // 0x25 0x25 is a valid character combination in the packet
@@ -141,9 +148,9 @@ uint32_t ISM43340::readFromSpi() {
         }
     }
 
-    HAL_Delay(ISMConstants::SPI_DELAY);
+    DWT_Delay(65);
     nCs = ISMConstants::CHIP_DESELECT;
-    HAL_Delay(ISMConstants::SPI_DELAY);
+    DWT_Delay(40); // min time between two commands
 
     return bytesRead;
 }

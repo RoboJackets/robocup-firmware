@@ -29,14 +29,12 @@ RadioModule::RadioModule(BatteryVoltage *const batteryVoltage,
 }
 
 void RadioModule::entry(void) {
-    // if all data is valid
-    // send it over
-    //if (batteryVoltage->isValid &&
-    //    fpgaStatus->isValid &&
-    //    kickerInfo->isValid &&
-    //    robotID->isValid) {
+    // Just check to see if our robot id is valid
+    // That way we don't conflict with other robots on the network
+    // that are working
+    if (robotID->isValid) {
       link.send(*batteryVoltage, *fpgaStatus, *kickerInfo, *robotID);
-    //}
+    }
 
     // Try read
     // set data correctly
