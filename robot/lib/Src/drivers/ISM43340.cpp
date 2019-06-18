@@ -376,9 +376,9 @@ void ISM43340::reset() {
     sendCommand(ISMConstants::CMD_SET_TRANSPORT_REMOTE_PORT_NUMBER,
                 ISMConstants::LOCAL_PORT);
 
-    sendCommand(ISMConstants::CMD_SET_READ_TRANSPORT_PACKET_SIZE, "12");
+    sendCommand(ISMConstants::CMD_SET_READ_TRANSPORT_PACKET_SIZE, "12");//12
 
-    sendCommand(ISMConstants::CMD_SET_READ_TRANSPORT_TIMEOUT, "0");
+    sendCommand(ISMConstants::CMD_SET_READ_TRANSPORT_TIMEOUT, "1");
 
     sendCommand(ISMConstants::CMD_SET_RECEIVE_MODE, "0");
 

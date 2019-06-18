@@ -29,6 +29,15 @@ RadioModule::RadioModule(BatteryVoltage *const batteryVoltage,
 }
 
 void RadioModule::entry(void) {
+    // Clear buffer of old packets such that we can get the lastest packet
+    // what the fuck is this shit
+    // pls send help
+    // If you don't do this there is a significant lag of 300ms or more
+    // This is related to how many packets we receive per second
+    // and how often this is run
+    link.receive(*kickerCommand, *motionCommand);
+    link.receive(*kickerCommand, *motionCommand);
+
     // Just check to see if our robot id is valid
     // That way we don't conflict with other robots on the network
     // that are working

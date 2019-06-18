@@ -7,7 +7,7 @@
 class RadioModule : public GenericModule {
 public:
     // How many times per second this module should run
-    static constexpr float freq = 30.0f; // Hz
+    static constexpr float freq = 60.0f; // Hz
     static constexpr uint32_t period = static_cast<uint32_t>(1000 / freq);
 
     // How long a single call to this module takes
