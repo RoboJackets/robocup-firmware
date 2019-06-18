@@ -24,7 +24,7 @@ void KickerModule::entry(void) {
     // and within the last few ms
     // and not same as previous command
     if (kickerCommand->isValid &&
-        static_cast<int32_t>(HAL_GetTick() - kickerCommand->lastUpdate) < 100 &&
+        static_cast<int32_t>(HAL_GetTick() - kickerCommand->lastUpdate) < 1000 &&
         kickerCommand->lastUpdate != prevKickTime) {
         
         kicker.kickType(kickerCommand->shootMode == KickerCommand::ShootMode::CHIP);
@@ -57,7 +57,7 @@ void KickerModule::entry(void) {
 
     kickerInfo->isValid = true;
     kickerInfo->lastUpdate = HAL_GetTick();
-    kickerInfo->kickerHasError = !kicker.isHealthy();
+    kickerInfo->kickerHasError = kicker.isHealthy();
     kickerInfo->ballSenseTriggered = kicker.isBallSensed();
     kickerInfo->kickerCharged = kicker.isCharged();
 }

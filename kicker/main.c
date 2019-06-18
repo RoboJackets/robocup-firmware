@@ -115,16 +115,14 @@ void kick(uint8_t strength, bool is_chip) {
     float time_cnt_flt_ms =
         KICK_TIME_SLOPE * strength_ratio + MIN_EFFECTIVE_KICK_FET_EN_TIME;
     float time_cnt_flt = time_cnt_flt_ms * TIMER_PER_MS;
-    timer_cnts_left_ = (int)(time_cnt_flt + 0.5f);  // round
+    timer_cnts_left_ = (int)(time_cnt_flt + 0.5f);  //_BV(CS01) round
 
     // Set chip type after we have commited to the kick
     // such that it doesn't change halfway through the kick
     kick_type_is_chip_ = is_chip;
 
     // start timer to enable the kick FSM processing interrupt
-    //TCCR0 |= _BV(CS01);
-    TCCR0 |= 0b01;
-
+    TCCR0 |= _BV(CS00) & 0b01;
 }
 
 void init();
@@ -135,8 +133,7 @@ uint8_t get_voltage() {
     ADCSRA |= _BV(ADSC);
 
     // Wait for ADSC bit to clear
-    while (ADCSRA & _BV(ADSC))
-        ;
+    while (ADCSRA & _BV(ADSC));
 
     // ADHC will range from 0 to 255 corresponding to 0 through VCC
     return ADCH;
@@ -145,11 +142,6 @@ uint8_t get_voltage() {
 void main() {
     init();
 
-    PORTD |= _BV(MCU_RED);
-    PORTD &= ~_BV(MCU_YELLOW);
-
-    while(true);
-
     // needs to be int to force voltage_accum calculation to use ints
     const int kalpha = 64;
 
@@ -157,11 +149,12 @@ void main() {
     while (true) {
 
         if (_in_debug_mode) {
-            PORTD |= (_BV(MCU_YELLOW));
+            // Check if the buttons are pressed
             char kick_db_pressed = !(PINC & _BV(DB_KICK_PIN));
             char chip_db_pressed = !(PINC & _BV(DB_CHIP_PIN));
             char charge_db_pressed = !(PINC & _BV(DB_CHG_PIN));
 
+            // Simple rising edge triggers
             if (!kick_db_down_ && kick_db_pressed) 
                 kick(255, false);
 
@@ -169,35 +162,73 @@ void main() {
                 kick(255, true);
 
             if (!charge_db_down_ && charge_db_pressed)
-                charge_commanded_ = !charge_commanded_;
+                charge_commanded_ = true;
 
             kick_db_down_ = kick_db_pressed;
             chip_db_down_ = chip_db_pressed;
             charge_db_down_ = charge_db_pressed;
         }
 
+        // Check ball sense
+        // Turn on led if we see something
         if (PINA & _BV(BALL_SENSE_RX))
+            // turn on led
             PORTD &= ~(_BV(BALL_SENSE_LED));
         else
             PORTD |= _BV(BALL_SENSE_LED);
 
+
+        // If we are kicking, turn on yellow
         if (is_kicking())
             PORTD &= ~(_BV(MCU_YELLOW));
         else
             PORTD |= _BV(MCU_YELLOW);
-        // get a voltage reading by weighing in a new reading, same concept as
-        // TCP RTT estimates (exponentially weighted sum)
+
+
+        if (kick_type_is_chip_)
+            PORTD &= ~(_BV(MCU_RED));
+        else
+            PORTD |= _BV(MCU_RED);
+
 
         // don't run the adc every loop
         if (time % 1000 == 0) {
-            int voltage_accum =
-                (255 - kalpha) * last_voltage_ + kalpha * get_voltage();
+            // get a voltage reading by weighing in a new reading, same concept as
+            // TCP RTT estimates (exponentially weighted sum)
+            int voltage_accum = (255 - kalpha) * last_voltage_ +
+                                kalpha * get_voltage();
             last_voltage_ = voltage_accum / 255;
 
-            int num_lights = ((int) last_voltage_ / 47);
+            // 1 light on at 0-50
+            // 2 light on at 51-101
+            // 3 light on at 102-152
+            // 4 light on at 153-203
+            // 5 light on at 204-255
+            // At 255, num lights = 6, but default case allows same
+            // behavior
+            uint8_t num_lights = ((uint8_t) last_voltage_ / 51) + 1;
             
-            PORTA |= (0x1F << 1);
-            PORTA &= ~((0xFF >> abs(num_lights - (sizeof(unsigned char) * 8))) << 1);
+            // Clear charge level led's
+            PORTA |= _BV(HV_IND_MIN);
+            PORTA |= _BV(HV_IND_LOW);
+            PORTA |= _BV(HV_IND_MID);
+            PORTA |= _BV(HV_IND_HIGH);
+            PORTA |= _BV(HV_IND_MAX);
+
+            // Toggle them on as the reaches different levels
+            switch (num_lights) {
+            default:
+            case 5:
+                PORTA &= ~(_BV(HV_IND_MAX));
+            case 4:
+                PORTA &= ~(_BV(HV_IND_HIGH));
+            case 3:
+                PORTA &= ~(_BV(HV_IND_MID));
+            case 2:
+                PORTA &= ~(_BV(HV_IND_LOW));
+            case 1:
+                PORTA &= ~(_BV(HV_IND_MIN));
+            }
         }
         time++;
 
@@ -205,6 +236,7 @@ void main() {
         // note: these aren't true voltages, just ADC output, but it matches
         // fairly close
         
+        // Charge if we are commanded
         if (!(PIND & _BV(LT_DONE_N)) || last_voltage_ > 239 || !charge_allowed_ || !charge_commanded_) {
             PORTD &= ~(_BV(LT_CHARGE));
         } else if (last_voltage_ < 232 && charge_allowed_ &&
@@ -216,6 +248,8 @@ void main() {
             byte_cnt = 0;
         }
 
+        // Filter ball value
+        // Want X amount in a row to be the same
         bool bs = PINA & _BV(BALL_SENSE_RX);
         if (ball_sensed_) {
             if (!bs)
@@ -254,48 +288,117 @@ void init() {
     wdt_reset();
     WDTCR |= (_BV(WDTOE) | _BV(WDE));
     WDTCR &= !_BV(WDE);
-
+    
+    // Disable pullups globally
     SFIOR |= _BV(PUD);
 
-    // config status LEDs and set ERR/WARN until init done
+
+    /**
+     * LED Initialization
+     */
+
+    // Setup default values for output LED pins
+    PORTD &= ~(_BV(MCU_GREEN));
+    PORTD &= ~(_BV(MCU_YELLOW));
+    PORTD &= ~(_BV(MCU_RED));
+
+    // config output pins for status LEDs
     DDRD |= _BV(MCU_GREEN);
     DDRD |= _BV(MCU_YELLOW);
     DDRD |= _BV(MCU_RED);
 
+    // and set ERR/WARN until init done
+    // Essentially same as default, but this
+    // makes it obvious to people reading this
     PORTD &= ~(_BV(MCU_YELLOW));
     PORTD &= ~(_BV(MCU_RED));
 
-    // latch debug state
-    //_in_debug_mode = (PINC & _BV(DB_SWITCH));
 
-    // configure core io
-    //DDRB |= _BV(KICK_MISO_PIN);
-    //DDRB &= ~(_BV(N_KICK_CS_PIN) | _BV(KICK_MOSI_PIN));
+    /**
+     * Input button initialization
+     */
 
-    // configure hv mon
-    //DDRA &= ~(_BV(V_MONITOR_PIN));
-    //DDRA |= (_BV(HV_IND_MAX) | _BV(HV_IND_HIGH) | _BV(HV_IND_MID) | _BV(HV_IND_LOW) | _BV(HV_IND_MIN));
+    DDRC &= ~(_BV(DB_SWITCH));
+    DDRC &= ~(_BV(DB_CHG_PIN));
+    DDRC &= ~(_BV(DB_KICK_PIN));
+    DDRC &= ~(_BV(DB_CHIP_PIN));
 
-    // configure LT3751 
-    //DDRD |= _BV(LT_CHARGE);
-    //DDRD &= ~(_BV(LT_DONE_N) | _BV(LT_FAULT_N));
 
-    // configure ball sense
+    /**
+     * SPI initialization
+     */
+
+    // MISO as output
+    // CS and MOSI as input
+    DDRB |= _BV(KICK_MISO_PIN);
+    DDRB &= ~(_BV(N_KICK_CS_PIN));
+    DDRB &= ~(_BV(KICK_MOSI_PIN));
+
+
+    /**
+     * HV Monitor initialization
+     */
+    // Default values for HV LED display
+    PORTA &= ~(_BV(HV_IND_MIN));
+    PORTA &= ~(_BV(HV_IND_LOW));
+    PORTA &= ~(_BV(HV_IND_MID));
+    PORTA &= ~(_BV(HV_IND_HIGH));
+    PORTA &= ~(_BV(HV_IND_MAX));
+
+    // Voltage monitor pin as input
+    // HV LED display as output
+    DDRA &= ~(_BV(V_MONITOR_PIN));
+    DDRA |= _BV(HV_IND_MIN);
+    DDRA |= _BV(HV_IND_LOW);
+    DDRA |= _BV(HV_IND_MID);
+    DDRA |= _BV(HV_IND_HIGH);
+    DDRA |= _BV(HV_IND_MAX);
+
+
+    /**
+     * LT3751 initialization
+     */
+    // Default values for charge
+    PORTD |= _BV(LT_CHARGE);
+    
+    // Charge command output
+    // Done and fault as input
+    DDRD |= _BV(LT_CHARGE);
+    DDRD &= ~(_BV(LT_DONE_N) | _BV(LT_FAULT_N));
+
+
+    /**
+     * Ball sense initialization
+     */
+    // Default ball sense on startup
+    PORTD &= ~(_BV(BALL_SENSE_TX));
+    PORTD &= ~(_BV(BALL_SENSE_LED));
+
+    // tx and led as output
+    // RX as intput
     DDRD |= (_BV(BALL_SENSE_TX) | _BV(BALL_SENSE_LED));
-    //PORTD &= ~(_BV(BALL_SENSE_TX));
+    DDRA &= ~(_BV(BALL_SENSE_RX));
+
+    // Enable the LED and TX until first loop
+    // This is because you cannot go from {input, tristate} -> {output, high}
+    // in a single step
+    PORTD |= _BV(BALL_SENSE_TX);
     PORTD |= _BV(BALL_SENSE_LED);
-    //PORTD |= _BV(BALL_SENSE_TX);
-    //DDRA &= ~(_BV(BALL_SENSE_RX));
 
-    // configure debug
-    //DDRC &= ~(_BV(DB_SWITCH) | _BV(DB_CHG_PIN) | _BV(DB_KICK_PIN) | _BV(DB_CHIP_PIN));
-
-   // disable JTAG
-    //MCUCSR |= _BV(JTD);
-    //MCUCSR |= _BV(JTD);
-    // configure SPI
-    //SPCR = _BV(SPE) | _BV(SPIE);
-    //SPCR &= ~(_BV(MSTR));  // ensure we are a slave SPI device
+    
+    /**
+     * JTAG disable
+     */
+    // Must write twice in 4 cycles to write value to register
+    MCUCSR |= _BV(JTD);
+    MCUCSR |= _BV(JTD);
+    
+    /**
+     * Enable SPI slave
+     */
+    // Assume default spi mode
+    SPCR = _BV(SPE) | _BV(SPIE);
+    SPCR &= ~(_BV(MSTR));  // ensure we are a slave SPI device
 
     ///////////////////////////////////////////////////////////////////////////
     //  TIMER INITIALIZATION
@@ -317,20 +420,38 @@ void init() {
     //  kick()
     //
     //  initialize timer
-    //TIMSK |= _BV(OCIE0);    // Interrupt on TIMER 0
-    //TCCR0 |= _BV(COM01);     // COM01 - Clear Timer on Compare Match
-    //OCR0 = TIMING_CONSTANT;  // OCR0A is max val of timer before reset
+    TIMSK |= _BV(OCIE0);    // Interrupt on TIMER 0
+    TCCR0 |= _BV(WGM01);
+    TCCR0 &= ~(_BV(WGM00)); // COM01 - Clear Timer on Compare Match
+    OCR0 = TIMING_CONSTANT;  // OCR0A is max val of timer before reset
     ///////////////////////////////////////////////////////////////////////////
 
-    // Set low bits corresponding to pin we read from
-    //ADMUX |= _BV(ADLAR) | 0x06;  // connect PA6 (V_MONITOR_PIN) to ADC
 
-    // ensure ADC isn't shut off
-    // PRR &= ~_BV(PRADC);
-    //ADCSRA |= _BV(ADEN);  // enable the ADC - Pg. 133
+    /**
+     * ADC Initialization
+     */
+    // Allow us to just read a single register to get the analog output
+    // instead of having to read 2 registers
+    // We don't care about the full 10 bit width, only the top 8
+    // Setup voltage monitor as input to adc
+    ADMUX |= _BV(ADLAR);
+    ADMUX |= _BV(V_MONITOR_PIN);
+
+    // Enable adc
+    ADCSRA |= _BV(ADEN);
+
+    /**
+     * Button logic
+     */
+    // latch debug state
+    _in_debug_mode = (PINC & _BV(DB_SWITCH));
+
+    // Turn off the two led's since we finished startup
+    PORTD |= _BV(MCU_YELLOW);
+    PORTD |= _BV(MCU_RED);
 
     // enable global interrupts
-    //sei();
+    sei();
 }
 
 /*
@@ -465,12 +586,12 @@ ISR(TIMER0_COMP_vect) {
 
         kick_wait_--;
     } else {
-        /* IDLE/NOT RUNNING
+        /**
+         * IDLE/NOT RUNNING
          * stop timer
          */
 
         // stop prescaled timer
-        //TCCR0 &= ~_BV(CS01);
         TCCR0 &= ~_BV(CS00);
     }
 }

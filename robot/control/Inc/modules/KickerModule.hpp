@@ -12,7 +12,7 @@ public:
     static constexpr uint32_t period = static_cast<uint32_t>(1000 / freq);
 
     // How long a single call to this module takes
-    static constexpr uint32_t runtime = 0; // ms
+    static constexpr uint32_t runtime = 1; // ms
 
     KickerModule(std::shared_ptr<SPI> spi,
                  KickerCommand *const kickerCommand,

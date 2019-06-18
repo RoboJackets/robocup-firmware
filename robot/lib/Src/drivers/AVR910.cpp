@@ -41,31 +41,21 @@ AVR910::AVR910(shared_ptr<SPI> spi, std::shared_ptr<DigitalOut> nCs, PinName nRe
     : spi_(spi), nCs_(nCs), nReset_(nReset) {
     spi_->frequency(100'000);
 
-    // Force reset on the device
-    nReset_ = 1;
-
-    // Make sure full poweroff and caps discharge
-    HAL_Delay(25);
-
-    // Enter serial programming mode by pulling reset line low.
-    nReset_ = 0;
-
-    // Wait 25ms before issuing first command.
-    HAL_Delay(25);
-
-    // Enable programming mode on the chip
-    // It's possible for it to fail, so try it a few times.
+    int tryCnt = 0;
     bool enabled = false;
-    for (int i = 0; i < 20; i++) {
-        enabled = enableProgramming();
-        if (enabled) break;
-
-        // Give nReset a positive pulse.
+    do {
+        // Give nReset a positive pulse for at least two CPU clock cycles
         nReset_ = 1;
-        HAL_Delay(21);
+        HAL_Delay(100);
         nReset_ = 0;
-        HAL_Delay(21);
-    }
+
+        // Wait at least 20 ms
+        HAL_Delay(100);
+
+        // Enable SPI Serial Programming
+        // may not be synced so toggle and try again
+        enabled = enableProgramming();
+    } while (!enabled && tryCnt < 20);
 
     if (!enabled) {
         printf(
@@ -174,6 +164,7 @@ bool AVR910::program(FILE* binary, int pageSize, int numPages) {
 
 bool AVR910::program(const uint8_t* binary, unsigned int length, int pageSize, int numPages) {
     // Clear memory contents.
+    // should automatically be cleared
     chipErase();
 
     char pageOffset = 0;
@@ -212,7 +203,7 @@ bool AVR910::program(const uint8_t* binary, unsigned int length, int pageSize, i
 
             if (lc_offset == 0xFF && c != 0xFF) {
                 lc_offset = pageOffset;
-                if (!highLow) {
+                if (highLow == 0) {
                     lc_highlow = READ_LOW_BYTE;
                 } else {
                     lc_highlow = READ_HIGH_BYTE;
@@ -234,7 +225,6 @@ bool AVR910::program(const uint8_t* binary, unsigned int length, int pageSize, i
             }
             // printf("PageNumber: %d\r\n", pageNumber);
         }
-
     } else {
         // We're dealing with non-paged memory.
 
@@ -268,7 +258,7 @@ bool AVR910::program(const uint8_t* binary, unsigned int length, int pageSize, i
     // We might have partially filled up a page.
     writeFlashMemoryPage(pageNumber, lc_offset, lc_highlow);
 
-    bool success = checkMemory(pageSize, pageNumber + 1, binary, true);
+    bool success = checkMemory(pageSize, pageNumber + 1, binary, length, true);
 
     // Leave serial programming mode by toggling reset
     exitProgramming();
@@ -294,7 +284,11 @@ bool AVR910::enableProgramming() {
 }
 
 void AVR910::poll(int high_low, char page_number, char page_offset) {
-    while (readProgramMemory(high_low, page_number, page_offset) == 0xFF);
+    if (page_number == 0xFF && page_offset == 0xFF) {
+        HAL_Delay(10);
+    } else {
+        while (readProgramMemory(high_low, page_number, page_offset) == 0xFF);
+    }
     return;
 }
 
@@ -339,12 +333,31 @@ void AVR910::chipErase() {
     HAL_Delay(15); // 9 ms min
 }
 
+/**
+ * Load program memory page
+ * 
+ * @param highLog first byte of the command, whether low or high byte
+ *                0100 0000 for low byte
+ *                0100 1000 for high byte
+ * @param address 6 lsbs of the word address
+ *                AKA location in the current page
+ * @param data byte of data to be stored
+ * 
+ * @note load low before high
+ */
 void AVR910::loadMemoryPage(int highLow, char address, char data) {
+    // Load program memory page command
+    // Write H (high or low) data i to Program
+    // Memory page at word address b. Data
+    // low byte must be loaded before Data
+    // high byte is applied within the same
+    // address.
     nCs_->write(0);
-    spi_->transmit(0x40 | (highLow << 3)); // 0100 H000
-    spi_->transmit(0x00);
-    spi_->transmit(address & 0x3F);  // flash has 64 words, so 6 bits to address all
-    spi_->transmit(data);
+    spi_->transmit(highLow); // 0100 H000
+    spi_->transmit(0x00); // 00xx xxxx
+    // flash has 64 words, so 6 bits to address all
+    spi_->transmit(address & 0x3F); // xxbb bbbb
+    spi_->transmit(data); // iiii iiii
     nCs_->write(1);
 }
 
@@ -366,31 +379,48 @@ void AVR910::writeFuseBitsLow() {
     nCs_->write(1);
 }
 
-//
-// 12,11,10,9,8,7,6,5,4,3,2,1,0
+/**
+ * Write program memory page
+ * 
+ * @param pageNumber page number to write
+ */
 void AVR910::writeFlashMemoryPage(char pageNumber, char pageOffset, int highlow) {
+    // Write program memory page command
+    // Write Program Memory Page at
+    // address a:b.
     nCs_->write(0);
-    spi_->transmit(0x4C);
-    // spi_->write(0x00);
+    spi_->transmit(0x4C); // 0100 1100
     // 13 bits total, 6 for page offset, 7 for page number
     // top 5 bits stored in bottom of byte
-    spi_->transmit(pageNumber >> 2);
+    spi_->transmit((pageNumber >> 2) & 0x3F); // 00aa aaaa
     // top 2 bits stored in top of byte
-    spi_->transmit(pageNumber << 6);
-    // spi_->write(pageNumber >> 3);  // top 5 bits stored in bottom of byte
-    // spi_->write(pageNumber << 5);  // bottom 3 bits stored in top of byte
-    spi_->transmit(0x00);
+    spi_->transmit((pageNumber << 6) & 0xC0); // bbxx xxxx
+    spi_->transmit(0x00); // xxxx xxxx
     nCs_->write(1);
 
     poll(highlow, pageNumber, pageOffset);
 }
 
+/**
+ * Read program memory
+ * 
+ * @param highLow First byte of command
+ *                0100 0000 for low byte
+ *                0100 0100 for high byte
+ * @param pageNumber Page number from [0 - N]
+ * @param pageOffset location in words in page to read
+ * 
+ * @return value read
+ */
 char AVR910::readProgramMemory(int highLow, char pageNumber, char pageOffset) {
+    // Read program memory command
+    // Read H (high or low) data o from
+    // Program memory at word address a:b
     nCs_->write(0);
-    spi_->transmit(0x40 | (highLow << 3));
-    spi_->transmit(pageNumber >> 2);
-    spi_->transmit((pageNumber << 6) | (pageOffset & 0x3F));
-    char response = spi_->transmitReceive(0x00);
+    spi_->transmit(highLow); // 0100 0H00
+    spi_->transmit(pageNumber >> 2); // 00aa aaaa
+    spi_->transmit((pageNumber << 6) | (pageOffset & 0x3F)); // aabb bbbb
+    char response = spi_->transmitReceive(0x00); // oooo oooo
     nCs_->write(1);
 
     return response;
@@ -466,8 +496,10 @@ bool AVR910::checkMemory(int pageSize, int numPages, const uint8_t* binary,
             char c = binary[binaryLoc];
             binaryLoc++;
 
-            if (binaryLoc >= length)
+            if (binaryLoc >= length) {
+                printf("Done reading\r\n");
                 break;
+            }
 
             // Read program memory low byte.
             response = readProgramMemory(READ_LOW_BYTE, page, offset);
@@ -511,6 +543,6 @@ bool AVR910::checkMemory(int pageSize, int numPages, const uint8_t* binary,
 
 void AVR910::exitProgramming() {
     nReset_ = 0;
-    HAL_Delay(25);
+    HAL_Delay(100);
     nReset_ = 1;
 }

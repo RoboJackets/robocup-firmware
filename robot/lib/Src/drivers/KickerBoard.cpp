@@ -1,4 +1,6 @@
 #include "drivers/KickerBoard.hpp"
+
+#include "delay.hpp"
 #include "device-bins/kicker_bin.h"
 #include <tuple>
 
@@ -7,7 +9,6 @@ using namespace std;
 KickerBoard::KickerBoard(shared_ptr<SPI> spi, std::shared_ptr<DigitalOut> nCs,
                          PinName nReset, PinName ball_led)
     : AVR910(spi, nCs, nReset), _nCs(nCs), _spi(spi)  {}
-      //ballSenseLED(ball_led) {} todo figure out which pin this is
 
 bool KickerBoard::verify_param(const char* name, char expected,
                                int (AVR910::*paramMethod)(), char mask,
@@ -134,7 +135,7 @@ void KickerBoard::service() {
     _spi->frequency(100'000);
     // function that actually executes commands given to kicker
     //wait_us(100);
-    HAL_Delay(1); // todo replace with us wait
+    DWT_Delay(10);
 
     _nCs->write(0);
     if (_kick_type_commanded) {
@@ -187,27 +188,21 @@ void KickerBoard::service() {
 
     _is_healthy = send_to_kicker(GET_VOLTAGE_CMD, BLANK, &_current_voltage);
 
-    //wait_us(100);
-    HAL_Delay(1);
+    DWT_Delay(10);
     _nCs->write(1);
 }
 
 bool KickerBoard::send_to_kicker(uint8_t cmd, uint8_t arg, uint8_t* ret_val) {
     //LOG(DEBUG, "Sending: CMD:%02X, ARG:%02X", cmd, arg);
-    //wait_us(100);
-    HAL_Delay(1);
+    DWT_Delay(10);
     _spi->transmit(cmd);
-    //wait_us(100);
-    HAL_Delay(1);
+    DWT_Delay(100);
     uint8_t command_resp = _spi->transmitReceive(arg);
-    //wait_us(600);
-    HAL_Delay(1);
+    DWT_Delay(600);
     uint8_t ret = _spi->transmitReceive(BLANK);
-    //wait_us(600);
-    HAL_Delay(1);
+    DWT_Delay(600);
     uint8_t state = _spi->transmitReceive(BLANK);
-    //wait_us(100);
-    HAL_Delay(1);
+    DWT_Delay(100);
 
     _is_charging = state & (1 << CHARGE_FIELD);
     _ball_sensed = state & (1 << BALL_SENSE_FIELD);
