@@ -31,8 +31,33 @@ bool ISM43340::isAvailable() {
     // If there is data, device returns raw data
     sendCommand(ISMConstants::CMD_READ_TRANSPORT_DATA);
 
-    // todo fix me. Assumption that all data received is at least 10 bytes    
-    return readBuffer.size() > 10;
+    // Check to see if it's the normal prompt
+    std::string noData = "\r\n\r\nOK\r\n> ";
+    std::string err = "-1";
+    
+    bool matchNoData = true;
+    for (unsigned int i = 0; i < noData.size(); i++) {
+        if (i >= readBuffer.size()) {
+            matchNoData = false;
+            break;
+        } else if (readBuffer.at(i) != noData.at(i)) {
+            matchNoData = false;
+            break;
+        }
+    }
+
+    bool matchErr = true;
+    for (unsigned int i = 0; i < err.size(); i++) {
+        if (i >= readBuffer.size()) {
+            matchErr = false;
+            break;
+        } else if (readBuffer.at(i) != err.at(i)) {
+            matchErr = false;
+            break;
+        }
+    }
+
+    return !matchNoData && !matchErr;
 }
 
 unsigned int ISM43340::send(const uint8_t* data, const unsigned int numBytes) {
@@ -81,19 +106,27 @@ unsigned int ISM43340::receive(uint8_t* data, const unsigned int maxNumBytes) {
     return amntToCopy;
 }
 
-
 /**
  * Note: All delays in the function below have been tuned
  * to work correctly. The data sheet misses some key ones
  * and the ones given are partially wrong
+ * 
+ * Bump the super loop call rate until it just barely works
+ * Drop these delays until it just barely works
+ * Bump the super loop call rate again until it works
+ * repeat
+ * 
+ * Let it run for a minute or so to see if it breaks eventually
  */
 void ISM43340::writeToSpi(uint8_t* command, int length) {
-    DWT_Delay(4); // th (ssn)
-    while (dataReady.read() != 1);
-    DWT_Delay(4); // tsu (ssn)
+    uint32_t startTime = HAL_GetTick();
+
+    DWT_Delay(20); // th (ssn)
+    while (dataReady.read() != 1); // && (HAL_GetTick() - startTime) < 1000
+    DWT_Delay(50); // tsu (ssn)
 
     nCs = ISMConstants::CHIP_SELECT;
-    DWT_Delay(50); // tsu (sck)
+    DWT_Delay(400); // tsu (sck)
 
     for (int i = 0; i < length; i += 2) {
         uint8_t c1 = command[i];
@@ -107,28 +140,29 @@ void ISM43340::writeToSpi(uint8_t* command, int length) {
         radioSPI->transmit(c1);
     }
 
-    DWT_Delay(65);
+    DWT_Delay(20);
     nCs = ISMConstants::CHIP_DESELECT;
-    DWT_Delay(40); // min time between two commands
+    DWT_Delay(150); // min time between two commands
 }
 
 uint32_t ISM43340::readFromSpi() {
     unsigned int bytesRead = 0;
+    uint32_t startTime = HAL_GetTick();
 
     readBuffer.clear();
 
-    DWT_Delay(4); // th (ssn)
-    while (dataReady.read() != 1);
-    DWT_Delay(4); // tsu (ssn)
+    DWT_Delay(20); // th (ssn)
+    while (dataReady.read() != 1); // && (HAL_GetTick() - startTime) < 1000
+    DWT_Delay(50); // tsu (ssn)
     
     nCs = ISMConstants::CHIP_SELECT;
-    DWT_Delay(50); // tsu (sck)
+    DWT_Delay(400); // tsu (sck)
 
     // Once we find any data on the bus
     // 0x25 0x25 is a valid character combination in the packet
     bool foundAnyData = false;
 
-    while (dataReady.read() == 1) {
+    while (dataReady.read() == 1) { //  && (HAL_GetTick() - startTime) < 1000
         uint8_t data1 = radioSPI->transmitReceive(ISMConstants::READ);
         uint8_t data2 = radioSPI->transmitReceive(ISMConstants::READ);
 
@@ -148,9 +182,9 @@ uint32_t ISM43340::readFromSpi() {
         }
     }
 
-    DWT_Delay(65);
+    DWT_Delay(20);
     nCs = ISMConstants::CHIP_DESELECT;
-    DWT_Delay(40); // min time between two commands
+    DWT_Delay(150); // min time between two commands
 
     return bytesRead;
 }
@@ -341,15 +375,16 @@ void ISM43340::reset() {
     
     sendCommand(ISMConstants::CMD_SET_TRANSPORT_REMOTE_PORT_NUMBER,
                 ISMConstants::LOCAL_PORT);
-    
-    sendCommand(ISMConstants::CMD_START_STOP_TRANSPORT_CLIENT,
-                ISMConstants::TYPE_TRANSPORT_CLIENT::ENABLE);
 
     sendCommand(ISMConstants::CMD_SET_READ_TRANSPORT_PACKET_SIZE, "12");
 
-    sendCommand(ISMConstants::CMD_SET_READ_TRANSPORT_TIMEOUT, "1");
+    sendCommand(ISMConstants::CMD_SET_READ_TRANSPORT_TIMEOUT, "0");
 
     sendCommand(ISMConstants::CMD_SET_RECEIVE_MODE, "0");
+
+    sendCommand(ISMConstants::CMD_START_STOP_TRANSPORT_CLIENT,
+                ISMConstants::TYPE_TRANSPORT_CLIENT::ENABLE);
+
 
     // UDP send
     

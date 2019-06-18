@@ -7,7 +7,7 @@
 #include "drivers/ISM43340.hpp"
 
 RadioLink::RadioLink() {
-    std::unique_ptr radioSPI = std::make_unique<SPI>(SpiBus5, std::nullopt, 1'000'000);
+    std::unique_ptr radioSPI = std::make_unique<SPI>(SpiBus5, std::nullopt, 15'000'000);
     radio = std::make_unique<ISM43340>(std::move(radioSPI),
                                        RADIO_R0_CS,
                                        RADIO_GLB_RST,
@@ -18,7 +18,6 @@ void RadioLink::send(const BatteryVoltage& batteryVoltage,
                      const FPGAStatus& fpgaStatus,
                      const KickerInfo& kickerInfo,
                      const RobotID& robotID) {
-
     std::array<uint8_t, rtp::ReverseSize> packet;
     rtp::Header* header = reinterpret_cast<rtp::Header*>(&packet[0]);
     rtp::RobotStatusMessage* status = reinterpret_cast<rtp::RobotStatusMessage*>(&packet[rtp::HeaderSize]);
@@ -44,12 +43,10 @@ void RadioLink::send(const BatteryVoltage& batteryVoltage,
 
 bool RadioLink::receive(KickerCommand& kickerCommand,
                        MotionCommand& motionCommand) {
-
     // Make sure there is actually data to read
     if (!radio->isAvailable()) {
         return false;
     }
-    // todo, make sure the size is correct
 
     std::array<uint8_t, rtp::ForwardSize> packet;
 

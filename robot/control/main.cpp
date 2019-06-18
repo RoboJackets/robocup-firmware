@@ -2,7 +2,7 @@
 #include "SPI.hpp"
 #include "I2C.hpp"
 
-#include  <unistd.h>
+#include <unistd.h>
 
 #include "MicroPackets.hpp"
 #include "iodefs.h"
@@ -19,7 +19,7 @@
 
 
 
-#define SUPER_LOOP_FREQ 50
+#define SUPER_LOOP_FREQ 70
 #define SUPER_LOOP_PERIOD (1000 / SUPER_LOOP_FREQ)
 
 // Max number of super loop cycles a proc can miss if it
@@ -77,6 +77,7 @@ int main() {
     LEDModule led(ioExpander,
                   &batteryVoltage,
                   &fpgaStatus,
+                  &kickerInfo,
                   &radioError);
 
     FPGAModule fpga(fpgaKickerSPI,
