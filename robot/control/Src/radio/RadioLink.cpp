@@ -7,7 +7,7 @@
 #include "drivers/ISM43340.hpp"
 
 RadioLink::RadioLink() {
-    std::unique_ptr radioSPI = std::make_unique<SPI>(SpiBus5, std::nullopt, 15'000'000);
+    std::unique_ptr radioSPI = std::make_unique<SPI>(SpiBus5, std::nullopt, 20'000'000);
     radio = std::make_unique<ISM43340>(std::move(radioSPI),
                                        RADIO_R0_CS,
                                        RADIO_GLB_RST,
