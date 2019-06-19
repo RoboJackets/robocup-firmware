@@ -19,7 +19,7 @@
 
 
 
-#define SUPER_LOOP_FREQ 70
+#define SUPER_LOOP_FREQ 50
 #define SUPER_LOOP_PERIOD (1000 / SUPER_LOOP_FREQ)
 
 // Max number of super loop cycles a proc can miss if it
@@ -155,7 +155,7 @@ int main() {
 
             // Check if we missed a module X times in a row
             if ((int32_t)(currentTime - module.nextRunTime) > MAX_MISS_CNT*module.moduleRunTime) {
-                printf("WARNING: Missed module #%d run %d times in a row\r\n", i+1, MAX_MISS_CNT);
+                //printf("WARNING: Missed module #%d run %d times in a row\r\n", i+1, MAX_MISS_CNT);
                 led.missedModuleRun();
             }
         }
@@ -164,7 +164,7 @@ int main() {
         if (elapsed < SUPER_LOOP_PERIOD) {
             HAL_Delay(SUPER_LOOP_PERIOD - elapsed);
         } else {
-            printf("WARNING: Overran super loop time\r\n");
+            //printf("WARNING: Overran super loop time\r\n");
             led.missedSuperLoop();
         }
         

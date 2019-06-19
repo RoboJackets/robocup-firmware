@@ -53,8 +53,8 @@ private:
     static constexpr double maxAngularDeltaVel =
         (maxAngularSpeed - minAngularSpeed) / angularAccelTime;
 
-    double Kp = 0;
-    double Ki = 0;
+    double Kp = 1;
+    double Ki = 0.01;
 
     double dt;
 

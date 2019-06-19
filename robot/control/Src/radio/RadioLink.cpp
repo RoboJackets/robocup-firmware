@@ -33,10 +33,10 @@ void RadioLink::send(const BatteryVoltage& batteryVoltage,
     status->uid             = robotID.robotID;
     status->battVoltage     = batteryVoltage.rawVoltage;
     status->motorErrors     = motorErrors;
-    status->ballSenseStatus = kickerInfo.ballSenseTriggered;
-    status->kickStatus      = kickerInfo.kickerCharged;
-    status->kickHealthy     = !kickerInfo.kickerHasError;
-    status->fpgaStatus      = fpgaStatus.FPGAHasError;
+    status->ballSenseStatus = static_cast<uint8_t>(kickerInfo.ballSenseTriggered);
+    status->kickStatus      = static_cast<uint8_t>(kickerInfo.kickerCharged);
+    status->kickHealthy     = static_cast<uint8_t>(kickerInfo.kickerHasError);
+    status->fpgaStatus      = static_cast<uint8_t>(fpgaStatus.FPGAHasError);
 
     radio->send(packet.data(), rtp::ReverseSize);
 }
@@ -69,9 +69,9 @@ bool RadioLink::receive(KickerCommand& kickerCommand,
 
     motionCommand.isValid = true;
     motionCommand.lastUpdate = HAL_GetTick();
-    motionCommand.bodyXVel = static_cast<float>(control->bodyX / rtp::ControlMessage::VELOCITY_SCALE_FACTOR);
-    motionCommand.bodyYVel = static_cast<float>(control->bodyY / rtp::ControlMessage::VELOCITY_SCALE_FACTOR);
-    motionCommand.bodyWVel = static_cast<float>(control->bodyW / rtp::ControlMessage::VELOCITY_SCALE_FACTOR);
+    motionCommand.bodyXVel = static_cast<float>(control->bodyX) / rtp::ControlMessage::VELOCITY_SCALE_FACTOR;
+    motionCommand.bodyYVel = static_cast<float>(control->bodyY) / rtp::ControlMessage::VELOCITY_SCALE_FACTOR;
+    motionCommand.bodyWVel = static_cast<float>(control->bodyW) / rtp::ControlMessage::VELOCITY_SCALE_FACTOR;
     motionCommand.dribbler = control->dribbler;
 
     return true;

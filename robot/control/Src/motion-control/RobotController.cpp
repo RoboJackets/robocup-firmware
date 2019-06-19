@@ -1,5 +1,6 @@
 #include "motion-control/RobotController.hpp"
 #include "rc-fshare/robot_model.hpp"
+#include "mtrain.hpp"
 
 /**
  * Edited sign function to always return -1 or 1
@@ -26,15 +27,22 @@ void RobotController::calculate(Eigen::Matrix<double, numStates, 1> pv,
     limitAccel(pv, sp, dampedTarget);
 
     // get error
-    Eigen::Matrix<double, numStates, 1> error = dampedTarget - pv;
+    // todo, replace with sp with damped target
+    Eigen::Matrix<double, numStates, 1> error = sp - pv;
 
+    
     // Add to the sum only if not saturated
     // todo explore windup
     errorSum += dt*saturated.cwiseProduct(error);
 
     // FF + PI
-    Eigen::Matrix<double, numStates, 1> outputSpeed = dampedTarget + Kp*error + Ki*errorSum;
+    Eigen::Matrix<double, numStates, 1> outputSpeed = sp + Kp*error + Ki*errorSum;
 
+    printf("%u,w1,%7.4f,w2,%7.4f,w3,%7.4f\r\n",
+            HAL_GetTick(), error(0,0), error(1,0), error(2,0));
+
+
+    /*
     // Note: If num states ever changes, this must be changed as well
     double maxSpeeds[numStates] = {maxLinearSpeed, maxLinearSpeed, maxAngularSpeed};
 
@@ -52,8 +60,21 @@ void RobotController::calculate(Eigen::Matrix<double, numStates, 1> pv,
             saturated(i, 0) = 1;
         }
     }
+    */
 
-    outputs = RobotModel::get().BotToWheel * outputSpeed;
+    // todo make sure no specific wheel goes over max duty cycle
+    // todo replace 512 with duty cycle max
+    // clean up clip code
+    outputs = RobotModel::get().BotToWheel * outputSpeed * RobotModel::get().SpeedToDutyCycle / 512;
+/*
+    for (int i = 0; i < 4; i++) {
+        if (outputs(i,0) > 1.0f) {
+            outputs(i,0) = 1.0f;
+        } else if (outputs(i,0) < -1.0f) {
+            outputs(i,0) = -1.0f;
+        }
+    }
+*/
 }
 
 void RobotController::limitAccel(const Eigen::Matrix<double, numStates, 1> currentState,

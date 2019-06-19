@@ -103,12 +103,12 @@ void FPGAModule::entry(void) {
      *     time_precision = 6.94us
      *
      */
-    const float dt = encDeltas[4] * (1 / 18.432e6) * 2 * 128;
+    const float dt = static_cast<float>(encDeltas[4]) * (1 / 18.432e6) * 2 * 128;
 
     // Convert encoders to rad/sec from enc ticks since last readin
     for (int i = 0; i < 4; i++) {
         // (rad / s) = (enc) * (rev / enc) * (rad / rev) * (1 / sec)
-        motorFeedback->encoders[i] = encDeltas[i] * (1 / ENC_TICK_PER_REV) * (2*M_PI / 1) * (1 / dt);
+        motorFeedback->encoders[i] = static_cast<float>(encDeltas[i]) * (1 / static_cast<float>(ENC_TICK_PER_REV)) * (2*M_PI / 1) * (1 / dt);
     }
 
     // Convert from adc lsb to amp

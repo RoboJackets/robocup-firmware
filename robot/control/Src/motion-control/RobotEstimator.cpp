@@ -40,6 +40,7 @@ void RobotEstimator::predict(Eigen::Matrix<double, numInputs, 1> u) {
     // x_hat = F*x_hat + B*last command
     // P = F*P*F' + Q
     x_hat = F*x_hat + B*u;
+    P = F*P*F.transpose() + Q;
 }
 
 void RobotEstimator::update(Eigen::Matrix<double, numOutputs, 1> z) {
