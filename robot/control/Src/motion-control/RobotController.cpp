@@ -28,7 +28,7 @@ void RobotController::calculate(Eigen::Matrix<double, numStates, 1> pv,
 
     // get error
     // todo, replace with sp with damped target
-    Eigen::Matrix<double, numStates, 1> error = sp - pv;
+    Eigen::Matrix<double, numStates, 1> error = dampedTarget - pv;
 
     
     // Add to the sum only if not saturated
@@ -36,7 +36,7 @@ void RobotController::calculate(Eigen::Matrix<double, numStates, 1> pv,
     errorSum += dt*saturated.cwiseProduct(error);
 
     // FF + PI
-    Eigen::Matrix<double, numStates, 1> outputSpeed = sp + Kp*error + Ki*errorSum;
+    Eigen::Matrix<double, numStates, 1> outputSpeed = dampedTarget + Kp*error + Ki*errorSum;
 
     printf("%u,w1,%7.4f,w2,%7.4f,w3,%7.4f\r\n",
             HAL_GetTick(), error(0,0), error(1,0), error(2,0));

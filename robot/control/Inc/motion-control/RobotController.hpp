@@ -37,7 +37,7 @@ private:
                     const Eigen::Matrix<double, numStates, 1> finalTarget,
                     Eigen::Matrix<double, numStates, 1>& dampened);
 
-    static constexpr double maxLinearSpeed = 5; // m/s
+    static constexpr double maxLinearSpeed = 8; // m/s
     static constexpr double minLinearSpeed = -maxLinearSpeed;
     // Time to go from full reverse to full forward in each linear direction
     static constexpr double linearAccelTime = 1; // s
@@ -45,7 +45,7 @@ private:
     static constexpr double maxLinearDeltaVel = 
         (maxLinearSpeed - minLinearSpeed) / linearAccelTime;
 
-    static constexpr double maxAngularSpeed = 10; // rad/s
+    static constexpr double maxAngularSpeed = 60; // rad/s
     static constexpr double minAngularSpeed = -maxAngularSpeed;
     // Time to go from full left rotation to full right
     static constexpr double angularAccelTime = 1; // s
@@ -53,8 +53,8 @@ private:
     static constexpr double maxAngularDeltaVel =
         (maxAngularSpeed - minAngularSpeed) / angularAccelTime;
 
-    double Kp = 1;
-    double Ki = 0.01;
+    static constexpr double Kp = 1;
+    static constexpr double Ki = 0.01;
 
     double dt;
 
