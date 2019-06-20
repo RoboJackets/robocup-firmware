@@ -2,7 +2,7 @@
 
 #define I2C_TIMING 0x10A60D20
 
-I2C::I2C(I2CBus i2cBus, uint8_t address) : address(address << 1) {
+I2C::I2C(I2CBus i2cBus) {
     RCC_PeriphCLKInitTypeDef  RCC_PeriphCLKInitStruct;
     GPIO_InitTypeDef GPIO_InitStruct;
 
@@ -60,21 +60,21 @@ I2C::~I2C() {
 }
 
 
-void I2C::transmit(uint8_t regAddr, uint8_t data) {
+void I2C::transmit(uint8_t address, uint8_t regAddr, uint8_t data) {
     HAL_I2C_Mem_Write(&i2cHandle, address, regAddr, 1, &data, 1, 20);
 }
 
-void I2C::transmit(uint8_t regAddr, const std::vector<uint8_t>& data) {
+void I2C::transmit(uint8_t address, uint8_t regAddr, const std::vector<uint8_t>& data) {
     HAL_I2C_Mem_Write(&i2cHandle, address, regAddr, 1, (uint8_t*)(data.data()), data.size(), 20);
 }
 
-uint8_t I2C::receive(uint8_t regAddr) {
+uint8_t I2C::receive(uint8_t address, uint8_t regAddr) {
     uint8_t data = 0;
     HAL_I2C_Mem_Read(&i2cHandle, address, regAddr, 1, &data, 1, 20);
     return data;
 }
 
-std::vector<uint8_t> I2C::receive(uint8_t regAddr, size_t count) {
+std::vector<uint8_t> I2C::receive(uint8_t address, uint8_t regAddr, size_t count) {
     std::vector<uint8_t> data(count);
     HAL_I2C_Mem_Read(&i2cHandle, address, regAddr, 1, data.data(), count, 20);
     return data;

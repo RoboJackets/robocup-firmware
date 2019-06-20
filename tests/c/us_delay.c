@@ -18,7 +18,7 @@ int main(void)
 
   while (1) {
     digitalout_toggle(leds[id]);
-    DWT_Delay(100000);
+    DWT_Delay(10000);
     digitalout_toggle(leds[id]);
 
     if (id == 3) {
