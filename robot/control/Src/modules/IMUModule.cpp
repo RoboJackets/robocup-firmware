@@ -28,7 +28,7 @@ IMUModule::IMUModule(std::shared_ptr<I2C> sharedI2C, IMUData *const imuData)
 
     // Set to most sensitive since we will most likely stay
     // below these rangets
-    imu.setFullScaleGyroRange(MPU6050_GYRO_FS_250);
+    imu.setFullScaleGyroRange(MPU6050_GYRO_FS_1000);
     imu.setFullScaleAccelRange(MPU6050_ACCEL_FS_2);
 
     printf("INFO: IMU initialized\r\n");
@@ -48,14 +48,14 @@ void IMUModule::entry(void) {
     // +- 4g = 8192 lsb/g
     // +- 8g = 4096 lsb/g
     // +- 16g = 2048 lsb/g
-    const float convertAccel = 1.0f / 16384;
+    const float convertAccel = 1.0f / 16384.0f;
 
     // Gyro lsb -> deg/s conversions
     // +- 250 = 131 lsb/deg/s
     // +- 500 = 65.5 lsb/deg/s
     // +- 1000 = 32.8 lsb/deg/s
     // +- 2000 = 16.4 lsb/deg/s
-    const float convertGyro = 1.0f / 131;
+    const float convertGyro = 1.0f / 32.8f;
     const float degToRad = M_PI / 180.0f;
 
 

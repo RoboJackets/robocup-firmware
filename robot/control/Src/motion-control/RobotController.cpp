@@ -1,6 +1,9 @@
 #include "motion-control/RobotController.hpp"
 #include "rc-fshare/robot_model.hpp"
 #include "mtrain.hpp"
+#include "MicroPackets.hpp"
+
+extern DebugInfo debugInfo;
 
 /**
  * Edited sign function to always return -1 or 1
@@ -14,8 +17,7 @@ template <typename T> int sgn(T val) {
 RobotController::RobotController(uint32_t dt_ms)
     : dt(dt_ms/1000.0) {
 
-    saturated << 1, 1, 1;
-    errorSum << 0, 0, 0;
+    Kp << 1, 1.5, 1;
 }
 
 void RobotController::calculate(Eigen::Matrix<double, numStates, 1> pv,
@@ -28,53 +30,43 @@ void RobotController::calculate(Eigen::Matrix<double, numStates, 1> pv,
 
     // get error
     // todo, replace with sp with damped target
-    Eigen::Matrix<double, numStates, 1> error = dampedTarget - pv;
+    Eigen::Matrix<double, numStates, 1> error = sp - pv;
 
-    
-    // Add to the sum only if not saturated
-    // todo explore windup
-    errorSum += dt*saturated.cwiseProduct(error);
-
-    // FF + PI
-    Eigen::Matrix<double, numStates, 1> outputSpeed = dampedTarget + Kp*error + Ki*errorSum;
-
-    printf("%u,w1,%7.4f,w2,%7.4f,w3,%7.4f\r\n",
-            HAL_GetTick(), error(0,0), error(1,0), error(2,0));
-
-
-    /*
-    // Note: If num states ever changes, this must be changed as well
-    double maxSpeeds[numStates] = {maxLinearSpeed, maxLinearSpeed, maxAngularSpeed};
-
-    // Disable integral on next iteration if we are above the max
-    // Also limit speeds back into the max speed range
-    // TODO: See how the 1 frame lag affects performance
-    // TODO: See if need to check signs to add to integral if error in other direction
-    for (int i = 0; i < 3; i++) {
-        // Push speed back into real range
-        // Disable the integral on that channel if saturated
-        if (abs(outputSpeed(i, 0)) >= maxSpeeds[i]) {
-            outputSpeed(i, 0) = sgn(outputSpeed(i, 0)) * maxSpeeds[i];
-            saturated(i, 0) = 0;
-        } else {
-            saturated(i, 0) = 1;
-        }
-    }
-    */
+    // FF + P
+    Eigen::Matrix<double, numStates, 1> outputSpeed = sp + Kp.cwiseProduct(error);
 
     // todo make sure no specific wheel goes over max duty cycle
     // todo replace 512 with duty cycle max
     // clean up clip code
     outputs = RobotModel::get().BotToWheel * outputSpeed * RobotModel::get().SpeedToDutyCycle / 512;
-/*
+
+    debugInfo.val[0] = sp(0, 0) * 100;
+    debugInfo.val[1] = sp(1, 0) * 100;
+    debugInfo.val[2] = dampedTarget(0, 0) * 100;
+    debugInfo.val[3] = dampedTarget(1, 0) * 100;
+
+    /*
+    static Eigen::Matrix<double, 4, 1> current = outputs;
+
     for (int i = 0; i < 4; i++) {
+        // limit to X% duty cycle change per frame
+        double limit = 0.025;
+        if (outputs(i,0) - current(i, 0) > limit) {
+            outputs(i,0) = current(i, 0) + limit;
+        }
+
+        if (current(i,0) - outputs(i, 0) > limit) {
+            outputs(i,0) = current(i, 0) - limit;
+        }
+
         if (outputs(i,0) > 1.0f) {
             outputs(i,0) = 1.0f;
         } else if (outputs(i,0) < -1.0f) {
             outputs(i,0) = -1.0f;
         }
     }
-*/
+    current = outputs;
+    */
 }
 
 void RobotController::limitAccel(const Eigen::Matrix<double, numStates, 1> currentState,
@@ -85,15 +77,15 @@ void RobotController::limitAccel(const Eigen::Matrix<double, numStates, 1> curre
     // Note: If num states ever changes, this must be changed as well
     double deltaV[numStates] = {maxLinearDeltaVel, maxLinearDeltaVel, maxAngularDeltaVel};
 
+    double percentPastMax = 1.0;
+
     for (int i = 0; i < numStates; i++) {
         // If we broke the accel limit
-        // just dampen that axis
-        // We can assume the path planner gives us a valid path
+        // Scale everything back
         if (abs(delta(i, 0)) > dt*deltaV[i]) {
-            dampened(i, 0) = currentState(i, 0) + sgn(delta(i, 0))*dt*deltaV[i];
-        } else {
-            // If we good, just use the final target
-            dampened(i, 0) = finalTarget(i, 0);
+            percentPastMax = abs(delta(i, 0)) / (dt*deltaV[i]);
         }
     }
+
+    dampened = (1.0 / percentPastMax) * delta + currentState;
 }

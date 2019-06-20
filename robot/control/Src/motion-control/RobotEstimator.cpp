@@ -1,5 +1,8 @@
 #include "motion-control/RobotEstimator.hpp"
 #include "rc-fshare/robot_model.hpp"
+#include "MicroPackets.hpp"
+
+extern DebugInfo debugInfo;
 
 RobotEstimator::RobotEstimator(uint32_t dt_ms) {
     const double dt = dt_ms/1000.0;
@@ -55,6 +58,13 @@ void RobotEstimator::update(Eigen::Matrix<double, numOutputs, 1> z) {
 
     x_hat += K*y;
     P = (I - K*H)*P;
+
+    //Eigen::Matrix<double, 3, 1> temp = RobotModel::get().WheelToBot * z.block<4,1>(0,0);
+
+    //debugInfo.val[0] = temp(0,0) * 100;
+    //debugInfo.val[1] = temp(1,0) * 100;
+    //debugInfo.val[2] = x_hat(0,0) * 100;
+    //debugInfo.val[3] = x_hat(1,0) * 100;
 }
 
 void RobotEstimator::getState(Eigen::Matrix<double, numStates, 1>& state) {

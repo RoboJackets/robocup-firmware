@@ -6,6 +6,10 @@
 #include "iodefs.h"
 #include "drivers/ISM43340.hpp"
 
+#include "MicroPackets.hpp"
+
+extern DebugInfo debugInfo;
+
 RadioLink::RadioLink() {
     std::unique_ptr radioSPI = std::make_unique<SPI>(SpiBus5, std::nullopt, 20'000'000);
     radio = std::make_unique<ISM43340>(std::move(radioSPI),
@@ -37,6 +41,10 @@ void RadioLink::send(const BatteryVoltage& batteryVoltage,
     status->kickStatus      = static_cast<uint8_t>(kickerInfo.kickerCharged);
     status->kickHealthy     = static_cast<uint8_t>(kickerInfo.kickerHasError);
     status->fpgaStatus      = static_cast<uint8_t>(fpgaStatus.FPGAHasError);
+    status->encDeltas[0] = debugInfo.val[0];
+    status->encDeltas[1] = debugInfo.val[1];
+    status->encDeltas[2] = debugInfo.val[2];
+    status->encDeltas[3] = debugInfo.val[3];
 
     radio->send(packet.data(), rtp::ReverseSize);
 }

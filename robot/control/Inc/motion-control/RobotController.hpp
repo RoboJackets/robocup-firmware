@@ -45,26 +45,19 @@ private:
     static constexpr double maxLinearDeltaVel = 
         (maxLinearSpeed - minLinearSpeed) / linearAccelTime;
 
-    static constexpr double maxAngularSpeed = 60; // rad/s
+    static constexpr double maxAngularSpeed = 20; // rad/s
     static constexpr double minAngularSpeed = -maxAngularSpeed;
     // Time to go from full left rotation to full right
-    static constexpr double angularAccelTime = 1; // s
+    static constexpr double angularAccelTime = 0.5; // s
     // Max change in angular velocity per second
     static constexpr double maxAngularDeltaVel =
         (maxAngularSpeed - minAngularSpeed) / angularAccelTime;
 
-    static constexpr double Kp = 1;
-    static constexpr double Ki = 0.01;
+    Eigen::Matrix<double, numStates, 1> Kp;
 
     double dt;
 
     // Target that we are trying to hit
     // Usually same as sp unless the acceleration is too high
     Eigen::Matrix<double, numStates, 1> dampedTarget;
-
-    // Whether each direction is at max speed or not
-    // 1 if not saturated, 0 if saturated
-    Eigen::Matrix<double, numStates, 1> saturated;
-    // Integral component
-    Eigen::Matrix<double, numStates, 1> errorSum;
 };

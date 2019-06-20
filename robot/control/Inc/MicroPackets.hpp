@@ -120,3 +120,7 @@ struct KickerInfo {
     bool kickerCharged;
     bool ballSenseTriggered;
 };
+
+struct DebugInfo {
+    int16_t val[4];
+};

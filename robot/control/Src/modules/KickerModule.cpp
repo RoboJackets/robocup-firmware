@@ -9,13 +9,15 @@ KickerModule::KickerModule(std::shared_ptr<SPI> spi,
     : kickerCommand(kickerCommand), kickerInfo(kickerInfo),
       prevKickTime(0), nCs(std::make_shared<DigitalOut>(KICKER_CS)), kicker(spi, nCs, KICKER_RST, BALL_SENSE_LED) {
 
-    kicker.flash(false, true);
+    //kicker.flash(false, true);
 
     kickerInfo->isValid = false;
     kickerInfo->lastUpdate = 0;
     kickerInfo->kickerHasError = false;
     kickerInfo->kickerCharged = false;
     kickerInfo->ballSenseTriggered = false;
+
+    printf("INFO: Kicker initialized\r\n");
 }
 
 void KickerModule::entry(void) {
@@ -24,7 +26,6 @@ void KickerModule::entry(void) {
     // and within the last few ms
     // and not same as previous command
     if (kickerCommand->isValid &&
-        static_cast<int32_t>(HAL_GetTick() - kickerCommand->lastUpdate) < 1000 &&
         kickerCommand->lastUpdate != prevKickTime) {
         
         kicker.kickType(kickerCommand->shootMode == KickerCommand::ShootMode::CHIP);

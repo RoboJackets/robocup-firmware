@@ -2,6 +2,9 @@
 #include "mtrain.hpp"
 #include "rc-fshare/robot_model.hpp"
 #include <math.h>
+#include "MicroPackets.hpp"
+
+extern DebugInfo debugInfo;
 
 MotionControlModule::MotionControlModule(BatteryVoltage *const batteryVoltage,
                                          IMUData *const imuData,

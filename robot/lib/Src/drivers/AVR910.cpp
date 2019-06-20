@@ -41,6 +41,8 @@ AVR910::AVR910(shared_ptr<SPI> spi, std::shared_ptr<DigitalOut> nCs, PinName nRe
     : spi_(spi), nCs_(nCs), nReset_(nReset) {
     spi_->frequency(100'000);
 
+    return;// todo remove this
+
     int tryCnt = 0;
     bool enabled = false;
     do {

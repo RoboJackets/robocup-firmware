@@ -65,6 +65,7 @@ RobotID robotID;
 KickerCommand kickerCommand;
 KickerInfo kickerInfo;
 
+DebugInfo debugInfo;
 
 int main() {
     std::shared_ptr<I2C> sharedI2C = std::make_shared<I2C>(SHARED_I2C_BUS);

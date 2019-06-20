@@ -134,7 +134,6 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
 void KickerBoard::service() {
     _spi->frequency(100'000);
     // function that actually executes commands given to kicker
-    //wait_us(100);
     DWT_Delay(10);
 
     _nCs->write(0);
@@ -194,7 +193,7 @@ void KickerBoard::service() {
 
 bool KickerBoard::send_to_kicker(uint8_t cmd, uint8_t arg, uint8_t* ret_val) {
     //LOG(DEBUG, "Sending: CMD:%02X, ARG:%02X", cmd, arg);
-    DWT_Delay(10);
+    DWT_Delay(100);
     _spi->transmit(cmd);
     DWT_Delay(100);
     uint8_t command_resp = _spi->transmitReceive(arg);
@@ -213,15 +212,10 @@ bool KickerBoard::send_to_kicker(uint8_t cmd, uint8_t arg, uint8_t* ret_val) {
         *ret_val = ret;
     }
 
-    if (_ball_sensed) {
-        //ballSenseLED = 0;
-    } else {
-        //ballSenseLED = 1;
-    }
-
     bool command_acked = command_resp == ACK;
     //LOG(DEBUG, "ACK?:%s, CMD:%02X, RET:%02X, STT:%02X",
     //    command_acked ? "true" : "false", command_resp, ret, state);
+    printf("%x\r\n", command_resp);
 
     return command_acked;
 }

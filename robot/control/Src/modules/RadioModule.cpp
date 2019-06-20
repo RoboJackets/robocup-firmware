@@ -26,6 +26,8 @@ RadioModule::RadioModule(BatteryVoltage *const batteryVoltage,
     radioError->isValid = false;
     radioError->lastUpdate = 0;
     radioError->hasError = false;
+
+    printf("INFO: Radio initialized\r\n");
 }
 
 void RadioModule::entry(void) {
