@@ -133,117 +133,75 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
 
 void KickerBoard::service() {
     _spi->frequency(100'000);
-    // function that actually executes commands given to kicker
-    DWT_Delay(10);
+
+    uint8_t command = 0x00;
+
+    if (_is_kick)
+        command |= TYPE_KICK;
+    else
+        command |= TYPE_CHIP;
+
+    if (_kick_immediate) {
+        command |= KICK_IMMEDIATE;
+        _kick_immediate = false;
+    }
+
+    if (_kick_breakbeam) {
+        command |= KICK_ON_BREAKBEAM;
+        _kick_breakbeam = false;
+    }
+
+    if (_cancel_kick) {
+        command |= CANCEL_KICK;
+        _cancel_kick = false;
+    }
+
+    if (_charge_allowed) {
+        command |= CHARGE_ALLOWED;
+    }
+
+    command |= _kick_strength & KICK_POWER_MASK;
 
     _nCs->write(0);
-    if (_kick_type_commanded) {
-        _kick_type_commanded = false;
-        if (_is_chip) {
-            send_to_kicker(KICK_TYPE_CMD, DO_CHIP, nullptr);
-        } else {
-            send_to_kicker(KICK_TYPE_CMD, DO_KICK, nullptr);
-        }
-        _is_chip = false;
-    }
+    DWT_Delay(10);
 
-    if (_kick_immediate_commanded) {
-        _kick_immediate_commanded = false;
-        send_to_kicker(KICK_IMMEDIATE_CMD, _kick_strength, nullptr);
-        _kick_strength = 0;
-    }
-
-    if (_kick_breakbeam_commanded) {
-        _kick_breakbeam_commanded = false;
-
-        send_to_kicker(KICK_BREAKBEAM_CMD, _kick_strength, nullptr);
-
-        _kick_strength = 0;
-    }
-
-    if (_cancel_breakbeam_commanded) {
-        _cancel_breakbeam_commanded = false;
-
-        if (_is_breakbeam_armed) {
-            send_to_kicker(KICK_BREAKBEAM_CANCEL_CMD, BLANK, nullptr);
-        }
-    }
-
-    if (_charging_commanded) {
-        _charging_commanded = false;
-
-        if (!_is_charging) {
-            send_to_kicker(SET_CHARGE_CMD, ON_ARG, nullptr);
-        }
-    }
-
-    if (_stop_charging_commanded) {
-        _stop_charging_commanded = false;
-
-        if (_is_charging) {
-            send_to_kicker(SET_CHARGE_CMD, OFF_ARG, nullptr);
-        }
-    }
-
-    _is_healthy = send_to_kicker(GET_VOLTAGE_CMD, BLANK, &_current_voltage);
+    uint8_t resp = _spi->transmitReceive(command);
 
     DWT_Delay(10);
     _nCs->write(1);
+
+
+    _current_voltage = (resp & VOLTAGE_MASK) * VOLTAGE_SCALE;
+
+    _ball_sensed = resp & BREAKBEAM_TRIPPED;
+
+    // Assume healthy if we get some voltage back
+    _is_healthy = _current_voltage > 0;
 }
 
-bool KickerBoard::send_to_kicker(uint8_t cmd, uint8_t arg, uint8_t* ret_val) {
-    //LOG(DEBUG, "Sending: CMD:%02X, ARG:%02X", cmd, arg);
-    DWT_Delay(100);
-    _spi->transmit(cmd);
-    DWT_Delay(100);
-    uint8_t command_resp = _spi->transmitReceive(arg);
-    DWT_Delay(600);
-    uint8_t ret = _spi->transmitReceive(BLANK);
-    DWT_Delay(600);
-    uint8_t state = _spi->transmitReceive(BLANK);
-    DWT_Delay(100);
-
-    _is_charging = state & (1 << CHARGE_FIELD);
-    _ball_sensed = state & (1 << BALL_SENSE_FIELD);
-    _is_breakbeam_armed = state & (1 << KICK_ON_BREAKBEAM_FIELD);
-    _is_kicking = state & (1 << KICKING_FIELD);
-
-    if (ret_val != nullptr) {
-        *ret_val = ret;
-    }
-
-    bool command_acked = command_resp == ACK;
-    //LOG(DEBUG, "ACK?:%s, CMD:%02X, RET:%02X, STT:%02X",
-    //    command_acked ? "true" : "false", command_resp, ret, state);
-    printf("%x\r\n", command_resp);
-
-    return command_acked;
-}
-
-void KickerBoard::kickType(bool isChip) {
-    if (!_is_kicking) {
-        _kick_type_commanded = true;
-        _is_chip = isChip;
-    }
+void KickerBoard::kickType(bool isKick) {
+    _is_kick = isKick;
 }
 
 void KickerBoard::kick(uint8_t strength) {
-    if (!_is_kicking) {
-        _kick_immediate_commanded = true;
-        _kick_strength = strength;
-    }
+    _kick_immediate = true;
+    _kick_breakbeam = false;
+    _kick_strength = strength;
+    _cancel_kick = false;
 }
 
 void KickerBoard::kickOnBreakbeam(uint8_t strength) {
-    if (!_is_kicking) {
-        _kick_breakbeam_commanded = true;
-        _kick_strength = strength;
-    }
+    _kick_immediate = false;
+    _kick_breakbeam = true;
+    _kick_strength = strength;
+    _cancel_kick = false;
 }
 
-void KickerBoard::cancelBreakbeam() { _cancel_breakbeam_commanded = true; }
-
-bool KickerBoard::isCharging() { return _is_charging; }
+void KickerBoard::cancelBreakbeam() {
+    _kick_immediate = false;
+    _kick_breakbeam = false;
+    _cancel_kick = true;
+}
 
 bool KickerBoard::isBallSensed() { return _ball_sensed; }
 
@@ -254,9 +212,5 @@ uint8_t KickerBoard::getVoltage() { return _current_voltage; }
 bool KickerBoard::isCharged() { return getVoltage() > isChargedCutoff; }
 
 void KickerBoard::setChargeAllowed(bool chargeAllowed) {
-    if (chargeAllowed) {
-        _charging_commanded = true;
-    } else {
-        _stop_charging_commanded = true;
-    }
+    _charge_allowed = chargeAllowed;
 }

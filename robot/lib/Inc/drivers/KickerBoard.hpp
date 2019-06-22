@@ -57,10 +57,10 @@ public:
     /**
      * Sets whether the KickerBoard should chip or kick
      * 
-     * @param isChip true to chip on next kick command,
-     *               false to linear kick on next kick command
+     * @param isKick true to linear kick on next kick command,
+     *               false to chip on next kick command
      */
-    void kickType(bool isChip);
+    void kickType(bool isKick);
 
     /**
      * Sends the KickerBoard a command to kick for the allotted time in
@@ -84,11 +84,6 @@ public:
      * the break beam triggers
      */
     void cancelBreakbeam();
-
-    /**
-     * @return true when the KickerBoard is charging the caps
-     */
-    bool isCharging();
 
     /**
      * @return true if the ball triggers the breakbeam
@@ -144,37 +139,15 @@ private:
 
     const uint8_t isChargedCutoff = 230;
 
-    // Note, these fields only updated after some command is send to kicker
-    bool _is_charging = false;
     bool _ball_sensed = false;
-    bool _is_breakbeam_armed = false;
-    bool _is_kicking = false;
-
     bool _is_healthy = true;
 
     uint8_t _current_voltage = 0;
 
-    bool _kick_type_commanded = false;
-    bool _kick_immediate_commanded = false;
-    bool _kick_breakbeam_commanded = false;
-    bool _cancel_breakbeam_commanded = false;
-    bool _is_chip = false;
+    bool _is_kick        = false;
+    bool _kick_immediate = false;
+    bool _kick_breakbeam = false;
+    bool _cancel_kick    = false;
+    bool _charge_allowed = false;
     uint8_t _kick_strength = 0;
-
-    bool _charging_commanded = false;
-    bool _stop_charging_commanded = false;
-
-    /**
-     * This function enforces the design choice that each cmd must have an arg
-     * and return a value
-     * @brief Send a command to the kicker.
-     *
-     * @param cmd Command to send
-     * @param arg Command argument, ignored by kicker if command doesn't require
-     * it.
-     * @param ret_val Value returned by kicker
-     * @param verbose Whether or not to print debug messages
-     * @return Whether the command was acknowledged by the kickerboard.
-     */
-    bool send_to_kicker(const uint8_t cmd, const uint8_t arg, uint8_t* ret_val);
 };
