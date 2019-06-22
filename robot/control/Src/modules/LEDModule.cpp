@@ -71,7 +71,7 @@ void LEDModule::fullyInitialized() {
 }
 
 void LEDModule::missedSuperLoop() {
-    for (int i = 0; i < 4; i++) {
+    for (int i = 1; i < 4; i++) {
         leds[i] = missedSuperLoopToggle;
     }
 
@@ -82,7 +82,7 @@ void LEDModule::missedSuperLoop() {
 }
 
 void LEDModule::missedModuleRun() {
-    for (int i = 0; i < 4; i++) {
+    for (int i = 1; i < 4; i++) {
         if (i % 2 == 0) {
             leds[i] = (int)missedModuleRunToggle;
         } else {
@@ -97,6 +97,7 @@ void LEDModule::missedModuleRun() {
 }
 
 void LEDModule::setColor(uint32_t led0, uint32_t led1) {
+    return;
     // 0 - 31
     uint8_t brightness = 2 | 0xE0;
 

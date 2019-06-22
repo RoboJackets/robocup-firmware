@@ -121,12 +121,10 @@ unsigned int ISM43340::receive(uint8_t* data, const unsigned int maxNumBytes) {
 void ISM43340::writeToSpi(uint8_t* command, int length) {
     uint32_t startTime = HAL_GetTick();
 
-    DWT_Delay(20); // th (ssn)
     while (dataReady.read() != 1); // && (HAL_GetTick() - startTime) < 1000
-    DWT_Delay(50); // tsu (ssn)
 
     nCs = ISMConstants::CHIP_SELECT;
-    DWT_Delay(400); // tsu (sck)
+    DWT_Delay(60); // Must be 50 us or more. Measure first response on logic analyzer
 
     for (int i = 0; i < length; i += 2) {
         uint8_t c1 = command[i];
@@ -140,9 +138,9 @@ void ISM43340::writeToSpi(uint8_t* command, int length) {
         radioSPI->transmit(c1);
     }
 
-    DWT_Delay(20);
     nCs = ISMConstants::CHIP_DESELECT;
-    DWT_Delay(150); // min time between two commands
+
+    while (dataReady.read() != 0);
 }
 
 uint32_t ISM43340::readFromSpi() {
@@ -151,12 +149,10 @@ uint32_t ISM43340::readFromSpi() {
 
     readBuffer.clear();
 
-    DWT_Delay(20); // th (ssn)
     while (dataReady.read() != 1); // && (HAL_GetTick() - startTime) < 1000
-    DWT_Delay(50); // tsu (ssn)
     
     nCs = ISMConstants::CHIP_SELECT;
-    DWT_Delay(400); // tsu (sck)
+    DWT_Delay(60); // Must be 50 us or more. Measure first response on logic analyzer
 
     // Once we find any data on the bus
     // 0x25 0x25 is a valid character combination in the packet
@@ -182,9 +178,7 @@ uint32_t ISM43340::readFromSpi() {
         }
     }
 
-    DWT_Delay(20);
     nCs = ISMConstants::CHIP_DESELECT;
-    DWT_Delay(150); // min time between two commands
 
     return bytesRead;
 }
@@ -304,6 +298,10 @@ void ISM43340::reset() {
         printf("Could not initialize radio\r\n");
         return;
     }
+    
+
+    nCs = ISMConstants::CHIP_SELECT;
+    DWT_Delay(500);
 
     // Get the first prompt
     readFromSpi();
@@ -376,7 +374,7 @@ void ISM43340::reset() {
     sendCommand(ISMConstants::CMD_SET_TRANSPORT_REMOTE_PORT_NUMBER,
                 ISMConstants::LOCAL_PORT);
 
-    sendCommand(ISMConstants::CMD_SET_READ_TRANSPORT_PACKET_SIZE, "12");//12
+    sendCommand(ISMConstants::CMD_SET_READ_TRANSPORT_PACKET_SIZE, "12");
 
     sendCommand(ISMConstants::CMD_SET_READ_TRANSPORT_TIMEOUT, "1");
 

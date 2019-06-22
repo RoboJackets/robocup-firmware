@@ -3,6 +3,7 @@
 #include "rc-fshare/robot_model.hpp"
 #include <math.h>
 #include "MicroPackets.hpp"
+#include "DigitalOut.hpp"
 
 extern DebugInfo debugInfo;
 
@@ -60,9 +61,9 @@ void MotionControlModule::entry(void) {
                   motionCommand->bodyWVel;
     }
 
-
     // Run estimators
     robotEstimator.predict(prevCommand);
+
 
     // Only use the feedback if we have good inputs
     // todo figure out where the nan's are coming in
@@ -77,15 +78,12 @@ void MotionControlModule::entry(void) {
         //printf("%u,w1,%7.4f,w2,%7.4f,w3,%7.4f,w4,%7.4f,gz,%7.4f\r\n",
         //    HAL_GetTick(), measurements(0,0), measurements(1,0), measurements(2,0), measurements(3,0), measurements(4,0));
     }
-    
+
     Eigen::Matrix<double, 3, 1> currentState;
     robotEstimator.getState(currentState);
 
-
     //printf("%u,x,%7.4f,y,%7.4f,w,%7.4f\r\n",
     //        HAL_GetTick(), currentState(0,0), currentState(1,0), currentState(2,0));
-    
-    
 
     // Run controllers
     uint8_t dribblerCommand = 0;
@@ -94,6 +92,7 @@ void MotionControlModule::entry(void) {
     Eigen::Matrix<double, 4, 1> motorCommands;
     robotController.calculate(currentState, target, motorCommands);
     prevCommand = motorCommands;
+
 
     motorCommand->isValid = true;
     motorCommand->lastUpdate = HAL_GetTick();

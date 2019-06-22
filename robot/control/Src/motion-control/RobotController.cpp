@@ -14,10 +14,18 @@ template <typename T> int sgn(T val) {
     return (T(0) <= val) - (val < T(0));
 }
 
-RobotController::RobotController(uint32_t dt_ms)
-    : dt(dt_ms/1000.0) {
+template <typename T> T bounded(T val, T min, T max) {
+    return (val < max && val > min);
+}
 
-    Kp << 1, 1.5, 1;
+RobotController::RobotController(uint32_t dt_ms)
+    : useILimit(true), inputLimited(false), outputLimited(false), dt(dt_ms/1000.0) {
+
+    Kp << 1.5, 2, 1.5;
+    Ki << 0.02, 0.02, 0;
+
+    errorSum << 0, 0, 0;
+    iLimit << 0.5, 0.5, 0.5;
 }
 
 void RobotController::calculate(Eigen::Matrix<double, numStates, 1> pv,
@@ -32,18 +40,28 @@ void RobotController::calculate(Eigen::Matrix<double, numStates, 1> pv,
     // todo, replace with sp with damped target
     Eigen::Matrix<double, numStates, 1> error = sp - pv;
 
+    // Don't allow the integral to keep going if we limit
+    // either side
+    for (int i = 0; i < numStates; i++) {
+        if (bounded(error(i,0), -iLimit(i,0), iLimit(i,0))) {
+            errorSum(i,0) += error(i,0);
+        } else {
+            errorSum(i,0) = error(i,0);
+        }
+    }
+
     // FF + P
-    Eigen::Matrix<double, numStates, 1> outputSpeed = sp + Kp.cwiseProduct(error);
+    Eigen::Matrix<double, numStates, 1> outputSpeed = sp + Kp.cwiseProduct(error) + Ki.cwiseProduct(errorSum);
 
     // todo make sure no specific wheel goes over max duty cycle
     // todo replace 512 with duty cycle max
     // clean up clip code
     outputs = RobotModel::get().BotToWheel * outputSpeed * RobotModel::get().SpeedToDutyCycle / 512;
 
-    debugInfo.val[0] = sp(0, 0) * 100;
-    debugInfo.val[1] = sp(1, 0) * 100;
-    debugInfo.val[2] = dampedTarget(0, 0) * 100;
-    debugInfo.val[3] = dampedTarget(1, 0) * 100;
+    debugInfo.val[0] = pv(0, 0) * 1000;
+    debugInfo.val[1] = pv(1, 0) * 1000;
+    debugInfo.val[2] = pv(2, 0) * 1000;
+    debugInfo.val[3] = sp(1, 0) * 1000;
 
     /*
     static Eigen::Matrix<double, 4, 1> current = outputs;

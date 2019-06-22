@@ -122,13 +122,8 @@ bool FPGA::configure() {
 bool FPGA::send_config() {
     chip_select();
     
-    for (size_t i = 0; i < FPGA_BYTES_LEN; i++) {
-	if (_done) {
-		break;
-	}
-        
-        _spi_bus->transmit(FPGA_BYTES[i]);
-    }
+    _spi_bus->frequency(16'000'000);
+    _spi_bus->transmit(FPGA_BYTES, FPGA_BYTES_LEN);
     
     // SPI dummySPI(RJ_SPI_MOSI, RJ_SPI_MISO, RJ_SPI_SCK);
     
@@ -213,7 +208,7 @@ uint8_t FPGA::set_duty_cycles(int16_t* duty_cycles, size_t size) {
 
 uint8_t FPGA::set_duty_get_enc(int16_t* duty_cycles, size_t size_dut,
                                int16_t* enc_deltas, size_t size_enc) {
-    _spi_bus->frequency(15'000'000);
+    _spi_bus->frequency(400'000);
     uint8_t status;
 
     if (size_dut != 5 || size_enc != 5) {
@@ -302,7 +297,7 @@ uint8_t FPGA::watchdog_reset() {
 }
 
 void FPGA::chip_select() {
-    _spi_bus->frequency(FPGA_SPI_FREQ);
+    //_spi_bus->frequency(FPGA_SPI_FREQ);
     _nCs = 1;
 }
 

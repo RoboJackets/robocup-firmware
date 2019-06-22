@@ -35,8 +35,21 @@
 #define KICK_BREAKBEAM_CMD 0xCC
 #define KICK_BREAKBEAM_CANCEL_CMD 0x03
 #define SET_CHARGE_CMD 0x04
-#define GET_VOLTAGE_CMD 0x05
-#define PING_CMD 0x06
+#define GET_VOLTAGE_CMD 0x05 //
+#define PING_CMD 0x06 //
+
+/**
+ * :1 type 0 kick 1 chip
+ * :1 immediate 1 kick 0 nah
+ * :1 break 0 cancel
+ * :1 charge
+ * :4 power
+ */
+
+/**
+ * :1 breakbeam
+ * :7 voltage
+ */
 
 /* Arguments */
 #define BLANK 0x00  // Used for clarity when passing useless arguments

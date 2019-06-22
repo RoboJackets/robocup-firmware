@@ -19,7 +19,7 @@
 
 
 
-#define SUPER_LOOP_FREQ 50
+#define SUPER_LOOP_FREQ 300
 #define SUPER_LOOP_PERIOD (1000 / SUPER_LOOP_FREQ)
 
 // Max number of super loop cycles a proc can miss if it
@@ -69,7 +69,7 @@ DebugInfo debugInfo;
 
 int main() {
     std::shared_ptr<I2C> sharedI2C = std::make_shared<I2C>(SHARED_I2C_BUS);
-    std::shared_ptr<SPI> fpgaKickerSPI = std::make_shared<SPI>(FPGA_KICKER_SPI_BUS, std::nullopt, 15'000'000);
+    std::shared_ptr<SPI> fpgaKickerSPI = std::make_shared<SPI>(FPGA_KICKER_SPI_BUS, std::nullopt, 16'000'000);
 
     std::shared_ptr<MCP23017> ioExpander = std::make_shared<MCP23017>(sharedI2C, 0x42);
     ioExpander->config(0x00FF, 0x00FF, 0x00FF);

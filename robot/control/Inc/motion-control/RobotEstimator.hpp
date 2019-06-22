@@ -43,9 +43,9 @@ public:
     void getState(Eigen::Matrix<double, numStates, 1>& state);
 
 private:
-    static constexpr double processNoise = 0.01;
-    static constexpr double encoderNoise = 0.4;
-    static constexpr double gyroNoise = 0.001;
+    static constexpr double processNoise = 0.0001;
+    static constexpr double encoderNoise = 4;
+    static constexpr double gyroNoise = 0.1;
     static constexpr double initCovariance = 10.0;
 
     Eigen::Matrix<double, numStates,  numStates>  F;

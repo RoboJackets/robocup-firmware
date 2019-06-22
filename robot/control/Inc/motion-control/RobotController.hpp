@@ -37,6 +37,25 @@ private:
                     const Eigen::Matrix<double, numStates, 1> finalTarget,
                     Eigen::Matrix<double, numStates, 1>& dampened);
 
+    Eigen::Matrix<double, numStates, 1> Kp;
+    Eigen::Matrix<double, numStates, 1> Ki;
+    
+    Eigen::Matrix<double, numStates, 1> errorSum;
+
+    // Restrict the i term from contributing more than
+    // this amount to the output
+    Eigen::Matrix<double, numStates, 1> iLimit;
+    bool useILimit;
+    bool inputLimited;
+    bool outputLimited;
+
+
+    double dt;
+
+    // Target that we are trying to hit
+    // Usually same as sp unless the acceleration is too high
+    Eigen::Matrix<double, numStates, 1> dampedTarget;
+
     static constexpr double maxLinearSpeed = 8; // m/s
     static constexpr double minLinearSpeed = -maxLinearSpeed;
     // Time to go from full reverse to full forward in each linear direction
@@ -52,12 +71,4 @@ private:
     // Max change in angular velocity per second
     static constexpr double maxAngularDeltaVel =
         (maxAngularSpeed - minAngularSpeed) / angularAccelTime;
-
-    Eigen::Matrix<double, numStates, 1> Kp;
-
-    double dt;
-
-    // Target that we are trying to hit
-    // Usually same as sp unless the acceleration is too high
-    Eigen::Matrix<double, numStates, 1> dampedTarget;
 };
