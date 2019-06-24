@@ -4,8 +4,8 @@
 
 extern DebugInfo debugInfo;
 
-RobotEstimator::RobotEstimator(uint32_t dt_ms) {
-    const double dt = dt_ms/1000.0;
+RobotEstimator::RobotEstimator(uint32_t dt_us) {
+    const double dt = dt_us/1000000.0;
 
     // Assume constant velocity
     F << 1,  0,  0,
@@ -61,12 +61,12 @@ void RobotEstimator::update(Eigen::Matrix<double, numOutputs, 1> z) {
     x_hat += K*y;
     P = (I - K*H)*P;
 
-    //Eigen::Matrix<double, 3, 1> temp = RobotModel::get().WheelToBot * z.block<4,1>(0,0);
+    Eigen::Matrix<double, 3, 1> temp = RobotModel::get().WheelToBot * z.block<4,1>(0,0);
 
-    //debugInfo.val[0] = temp(0,0) * 100;
-    //debugInfo.val[1] = temp(1,0) * 100;
-    //debugInfo.val[2] = x_hat(0,0) * 100;
-    //debugInfo.val[3] = x_hat(1,0) * 100;
+    //debugInfo.val[0] = temp(2,0) * 1000;
+    //debugInfo.val[1] = z(4,0) * 1000;
+    //debugInfo.val[2] = x_hat(2,0) * 1000;
+    //debugInfo.val[3] = z(1,0) * 1000;
 }
 
 void RobotEstimator::getState(Eigen::Matrix<double, numStates, 1>& state) {

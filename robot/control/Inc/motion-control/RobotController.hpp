@@ -12,7 +12,7 @@ private:
     const static int numOutputs = 4;
 
 public:
-    RobotController(uint32_t dt_ms);
+    RobotController(uint32_t dt_us);
 
     /**
      * Updates the controller with the latest input and calculates
@@ -30,11 +30,10 @@ public:
     // try to move to setpoint speed
 private:
     /**
-     * Limits the difference between our current state and target
+     * Limits the difference between the previous target and the new target
      * such that the acceleration limits below are never broken
      */
-    void limitAccel(const Eigen::Matrix<double, numStates, 1> currentState,
-                    const Eigen::Matrix<double, numStates, 1> finalTarget,
+    bool limitAccel(const Eigen::Matrix<double, numStates, 1> finalTarget,
                     Eigen::Matrix<double, numStates, 1>& dampened);
 
     Eigen::Matrix<double, numStates, 1> Kp;
@@ -49,6 +48,7 @@ private:
     bool inputLimited;
     bool outputLimited;
 
+    Eigen::Matrix<double, numStates, 1> prevTarget;
 
     double dt;
 
@@ -56,19 +56,11 @@ private:
     // Usually same as sp unless the acceleration is too high
     Eigen::Matrix<double, numStates, 1> dampedTarget;
 
-    static constexpr double maxLinearSpeed = 8; // m/s
-    static constexpr double minLinearSpeed = -maxLinearSpeed;
-    // Time to go from full reverse to full forward in each linear direction
-    static constexpr double linearAccelTime = 1; // s
-    // Max change in velocity per second
-    static constexpr double maxLinearDeltaVel = 
-        (maxLinearSpeed - minLinearSpeed) / linearAccelTime;
+    // Max acceleration (meters per second^2)
+    static constexpr double maxForwardAccel = 8;//4;
+    // Max acceleration (meters per second^2)
+    static constexpr double maxSideAccel = 8;//2.2;
 
-    static constexpr double maxAngularSpeed = 20; // rad/s
-    static constexpr double minAngularSpeed = -maxAngularSpeed;
-    // Time to go from full left rotation to full right
-    static constexpr double angularAccelTime = 0.5; // s
-    // Max change in angular velocity per second
-    static constexpr double maxAngularDeltaVel =
-        (maxAngularSpeed - minAngularSpeed) / angularAccelTime;
+    // Max angular acceleration (rad per second^2)
+    static constexpr double maxAngularAccel = 40.0;
 };

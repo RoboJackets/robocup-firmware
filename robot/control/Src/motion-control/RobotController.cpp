@@ -2,6 +2,7 @@
 #include "rc-fshare/robot_model.hpp"
 #include "mtrain.hpp"
 #include "MicroPackets.hpp"
+#include <cmath>
 
 extern DebugInfo debugInfo;
 
@@ -18,14 +19,16 @@ template <typename T> T bounded(T val, T min, T max) {
     return (val < max && val > min);
 }
 
-RobotController::RobotController(uint32_t dt_ms)
-    : useILimit(true), inputLimited(false), outputLimited(false), dt(dt_ms/1000.0) {
+RobotController::RobotController(uint32_t dt_us)
+    : useILimit(true), inputLimited(false), outputLimited(false), dt(dt_us/1000000.0) {
 
-    Kp << 1.5, 2, 1.5;
-    Ki << 0.02, 0.02, 0;
+    Kp << 1, 1.5, 1;
+    Ki << 0.02, 0.02, 0.04;
 
     errorSum << 0, 0, 0;
-    iLimit << 0.5, 0.5, 0.5;
+    iLimit << 0.5, 0.5, 2;
+
+    prevTarget << 0, 0, 0;
 }
 
 void RobotController::calculate(Eigen::Matrix<double, numStates, 1> pv,
@@ -34,76 +37,75 @@ void RobotController::calculate(Eigen::Matrix<double, numStates, 1> pv,
     // Force accel to be in robot physical limits
     // Assume we can limit linear accel and thats good enough
     // to limit wheel accel correctly to not slip
-    limitAccel(pv, sp, dampedTarget);
+    inputLimited = limitAccel(sp, dampedTarget);
 
     // get error
     // todo, replace with sp with damped target
-    Eigen::Matrix<double, numStates, 1> error = sp - pv;
+    Eigen::Matrix<double, numStates, 1> error = dampedTarget - pv;
 
-    // Don't allow the integral to keep going if we limit
-    // either side
+    // Don't allow the integral to keep going unless we are within a range
+    // and not saturated
+    // TODO: Stop the problem where output limits reset integral such that it integrates
+    // up to max again
     for (int i = 0; i < numStates; i++) {
-        if (bounded(error(i,0), -iLimit(i,0), iLimit(i,0))) {
-            errorSum(i,0) += error(i,0);
-        } else {
-            errorSum(i,0) = error(i,0);
+        if (!inputLimited && !outputLimited) {
+            if (bounded(error(i,0), -iLimit(i,0), iLimit(i,0))) {
+                errorSum(i,0) += error(i,0);
+            } else {
+                errorSum(i,0) = error(i,0);
+            }
         }
     }
 
     // FF + P
-    Eigen::Matrix<double, numStates, 1> outputSpeed = sp + Kp.cwiseProduct(error) + Ki.cwiseProduct(errorSum);
+    Eigen::Matrix<double, numStates, 1> outputSpeed = dampedTarget + Kp.cwiseProduct(error) + Ki.cwiseProduct(errorSum);
 
     // todo make sure no specific wheel goes over max duty cycle
     // todo replace 512 with duty cycle max
     // clean up clip code
     outputs = RobotModel::get().BotToWheel * outputSpeed * RobotModel::get().SpeedToDutyCycle / 512;
 
-    debugInfo.val[0] = pv(0, 0) * 1000;
-    debugInfo.val[1] = pv(1, 0) * 1000;
-    debugInfo.val[2] = pv(2, 0) * 1000;
-    debugInfo.val[3] = sp(1, 0) * 1000;
-
-    /*
-    static Eigen::Matrix<double, 4, 1> current = outputs;
-
     for (int i = 0; i < 4; i++) {
-        // limit to X% duty cycle change per frame
-        double limit = 0.025;
-        if (outputs(i,0) - current(i, 0) > limit) {
-            outputs(i,0) = current(i, 0) + limit;
-        }
-
-        if (current(i,0) - outputs(i, 0) > limit) {
-            outputs(i,0) = current(i, 0) - limit;
-        }
-
-        if (outputs(i,0) > 1.0f) {
-            outputs(i,0) = 1.0f;
-        } else if (outputs(i,0) < -1.0f) {
-            outputs(i,0) = -1.0f;
+        if (outputs(i,0) > 1.0) {
+            outputs(i,0) = 1.0;
+            outputLimited = true;
+        } else if (outputs(i,0) < -1.0) {
+            outputs(i,0) = -1.0;
+            outputLimited = true;
+        } else {
+            outputLimited = false;
         }
     }
-    current = outputs;
-    */
+
+    prevTarget = dampedTarget;
+
+    debugInfo.val[0] = pv(1, 0) * 1000;
+    debugInfo.val[1] = sp(1, 0) * 1000;
+    debugInfo.val[3] = dampedTarget(1, 0) * 1000;
 }
 
-void RobotController::limitAccel(const Eigen::Matrix<double, numStates, 1> currentState,
-                                 const Eigen::Matrix<double, numStates, 1> finalTarget,
+bool RobotController::limitAccel(const Eigen::Matrix<double, numStates, 1> finalTarget,
                                  Eigen::Matrix<double, numStates, 1>& dampened) {
-    Eigen::Matrix<double, numStates, 1> delta = finalTarget - currentState;
+    Eigen::Matrix<double, numStates, 1> delta = finalTarget - prevTarget;
 
-    // Note: If num states ever changes, this must be changed as well
-    double deltaV[numStates] = {maxLinearDeltaVel, maxLinearDeltaVel, maxAngularDeltaVel};
+    double accel[numStates] = {maxForwardAccel, maxSideAccel, maxAngularAccel};
 
-    double percentPastMax = 1.0;
+    bool limited = false;
 
     for (int i = 0; i < numStates; i++) {
         // If we broke the accel limit
-        // Scale everything back
-        if (abs(delta(i, 0)) > dt*deltaV[i]) {
-            percentPastMax = abs(delta(i, 0)) / (dt*deltaV[i]);
+        if (delta(i, 0) > dt*accel[i]) {
+            delta(i,0) = dt*accel[i];
+            limited = true;
+        }
+
+        if (delta(i, 0) < -dt*accel[i]) {
+            delta(i,0) = -dt*accel[i];
+            limited = true;
         }
     }
 
-    dampened = (1.0 / percentPastMax) * delta + currentState;
+    dampened = delta + prevTarget;
+
+    return limited = true;
 }
