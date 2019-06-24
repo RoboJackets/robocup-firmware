@@ -9,10 +9,10 @@ class KickerModule : public GenericModule {
 public:
     // How many times per second this module should run
     static constexpr float freq = 25.0f; // Hz
-    static constexpr uint32_t period = static_cast<uint32_t>(1000 / freq);
+    static constexpr uint32_t period = static_cast<uint32_t>(1000000L / freq);
 
     // How long a single call to this module takes
-    static constexpr uint32_t runtime = 1; // ms
+    static constexpr uint32_t runtime = 1000; // us
 
     KickerModule(std::shared_ptr<SPI> spi,
                  KickerCommand *const kickerCommand,

@@ -1,6 +1,8 @@
 #include "mtrain.hpp"
 #include "SPI.hpp"
 #include "I2C.hpp"
+#include "delay.h"
+#include "DigitalOut.hpp"
 
 #include <unistd.h>
 
@@ -19,8 +21,8 @@
 
 
 
-#define SUPER_LOOP_FREQ 300
-#define SUPER_LOOP_PERIOD (1000 / SUPER_LOOP_FREQ)
+#define SUPER_LOOP_FREQ 200
+#define SUPER_LOOP_PERIOD (1000000L / SUPER_LOOP_FREQ)
 
 // Max number of super loop cycles a proc can miss if it
 // needs to run
@@ -29,28 +31,31 @@
 
 
 struct MODULE_META_DATA {
-    // Time in ms of last module execution
+    // Time in sysclock ticks of last module execution
     uint32_t lastRunTime;
 
-    // Time in ms of next module execution
+    // Time in sysclock ticks of next module execution
     uint32_t nextRunTime;
 
-    // Time in ms between module executions
+    // Time in sysclock ticks between module executions
     const uint32_t modulePeriod;
 
-    // Estimate in ms of module runtime 
-    const uint8_t moduleRunTime;
+    // Estimate in sysclock ticks of module runtime 
+    const uint32_t moduleRunTime;
 
     GenericModule* module;
 
-    MODULE_META_DATA(uint32_t lastRunTime,
+    /**
+     * Period and runtime in us
+     */
+    MODULE_META_DATA(uint64_t lastRunTime,
                      uint32_t modulePeriod,
                      uint32_t moduleRunTime,
                      GenericModule* module)
         : lastRunTime(lastRunTime),
-          nextRunTime(lastRunTime + modulePeriod),
-          modulePeriod(modulePeriod),
-          moduleRunTime(moduleRunTime),
+          nextRunTime(lastRunTime + modulePeriod*DWT_SysTick_To_us()),
+          modulePeriod(modulePeriod*DWT_SysTick_To_us()),
+          moduleRunTime(moduleRunTime*DWT_SysTick_To_us()),
           module(module) {}
 };
 
@@ -66,6 +71,7 @@ KickerCommand kickerCommand;
 KickerInfo kickerInfo;
 
 DebugInfo debugInfo;
+
 
 int main() {
     std::shared_ptr<I2C> sharedI2C = std::make_shared<I2C>(SHARED_I2C_BUS);
@@ -120,7 +126,7 @@ int main() {
 
     std::vector<MODULE_META_DATA> moduleList;
     
-    uint32_t curTime = HAL_GetTick();
+    uint64_t curTime = DWT_GetTick();
     moduleList.emplace_back(curTime, MotionControlModule::period, MotionControlModule::runtime, &motion);
     moduleList.emplace_back(curTime, IMUModule::period,           IMUModule::runtime,           &imu);
     moduleList.emplace_back(curTime, FPGAModule::period,          FPGAModule::runtime,          &fpga);
@@ -131,12 +137,12 @@ int main() {
     moduleList.emplace_back(curTime, LEDModule::period,           LEDModule::runtime,           &led);
 
     while (true) {
-        uint32_t loopStartTime = HAL_GetTick();
-        uint32_t loopEndTime = HAL_GetTick() + SUPER_LOOP_PERIOD;
+        uint32_t loopStartTime = DWT_GetTick();
+        uint32_t loopEndTime = DWT_GetTick() + SUPER_LOOP_PERIOD*DWT_SysTick_To_us();
 
         for (unsigned int i = 0; i < moduleList.size(); i++) {
             MODULE_META_DATA& module = moduleList.at(i);
-            uint32_t currentTime = HAL_GetTick();
+            uint32_t currentTime = DWT_GetTick();
 
             // Check if we should run the module
             //      It's time to run it and
@@ -148,8 +154,8 @@ int main() {
                 (int32_t)(loopEndTime - currentTime) >= module.moduleRunTime) {
                 
                 // todo change to loop start time
-                module.lastRunTime = currentTime;
-                module.nextRunTime = currentTime + module.modulePeriod;
+                module.lastRunTime = loopStartTime;
+                module.nextRunTime = loopStartTime + module.modulePeriod;
 
                 module.module->entry();
             }
@@ -161,9 +167,9 @@ int main() {
             }
         }
 
-        uint32_t elapsed = HAL_GetTick() - loopStartTime;
-        if (elapsed < SUPER_LOOP_PERIOD) {
-            HAL_Delay(SUPER_LOOP_PERIOD - elapsed);
+        int32_t elapsed = DWT_GetTick() - loopStartTime;
+        if (elapsed < SUPER_LOOP_PERIOD*DWT_SysTick_To_us()) {
+            DWT_Delay_Sys(SUPER_LOOP_PERIOD*DWT_SysTick_To_us() - elapsed);
         } else {
             //printf("WARNING: Overran super loop time\r\n");
             led.missedSuperLoop();

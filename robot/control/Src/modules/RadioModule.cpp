@@ -1,4 +1,5 @@
 #include "modules/RadioModule.hpp"
+#include "iodefs.h"
 
 RadioModule::RadioModule(BatteryVoltage *const batteryVoltage,
                          FPGAStatus *const fpgaStatus,
@@ -10,7 +11,10 @@ RadioModule::RadioModule(BatteryVoltage *const batteryVoltage,
     : batteryVoltage(batteryVoltage), fpgaStatus(fpgaStatus),
       kickerInfo(kickerInfo), robotID(robotID),
       kickerCommand(kickerCommand), motionCommand(motionCommand),
-      radioError(radioError), link() {
+      radioError(radioError), link(),
+      secondRadioCS(RADIO_R1_CS) {
+
+    secondRadioCS = 1;
 
     // todo fill out more kicker stuff
     kickerCommand->isValid = false;
@@ -31,6 +35,7 @@ RadioModule::RadioModule(BatteryVoltage *const batteryVoltage,
 }
 
 void RadioModule::entry(void) {
+    secondRadioCS = 1;
 
     // Just check to see if our robot id is valid
     // That way we don't conflict with other robots on the network

@@ -1,5 +1,5 @@
 #include "drivers/ISM43340.hpp"
-#include "delay.hpp"
+#include "delay.h"
 #include <cstring>
 
 ISM43340::ISM43340(std::unique_ptr<SPI> radioSPI, PinName nCsPin, PinName nResetPin,
@@ -140,6 +140,7 @@ void ISM43340::writeToSpi(uint8_t* command, int length) {
 
     nCs = ISMConstants::CHIP_DESELECT;
 
+    // Wait till data ready goes to 0
     while (dataReady.read() != 0);
 }
 
@@ -149,6 +150,7 @@ uint32_t ISM43340::readFromSpi() {
 
     readBuffer.clear();
 
+    // Wait till data ready goes to 1
     while (dataReady.read() != 1); // && (HAL_GetTick() - startTime) < 1000
     
     nCs = ISMConstants::CHIP_SELECT;
@@ -176,6 +178,8 @@ uint32_t ISM43340::readFromSpi() {
 
             foundAnyData = true;
         }
+
+        //DWT_Delay(1);
     }
 
     nCs = ISMConstants::CHIP_DESELECT;

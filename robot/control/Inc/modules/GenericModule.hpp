@@ -12,16 +12,16 @@ public:
 
     // How many times per second this module should run
     static constexpr float freq = 1.0f; // Hz
-    static constexpr uint32_t period = static_cast<uint32_t>(1000 / freq);
+    static constexpr uint32_t period = static_cast<uint32_t>(1000000L / freq);
 
     // How long a single call to this module takes
     // Take the safe estimate since any time over may
     // cause the loop to run long
-    // Can be 0ms if no long IO is done
+    // Can be 0us if no long IO is done
     //
     // Note: Even if this is less than the super loop time,
     // it may not run due to the priority of the module
-    static constexpr uint32_t runtime = 10; // ms
+    static constexpr uint32_t runtime = 10; // us
 
     // Called at most once a frame to execute the module
     virtual void entry(void) = 0;

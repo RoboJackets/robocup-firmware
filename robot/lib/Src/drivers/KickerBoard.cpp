@@ -1,6 +1,6 @@
 #include "drivers/KickerBoard.hpp"
 
-#include "delay.hpp"
+#include "delay.h"
 #include "device-bins/kicker_bin.h"
 #include <tuple>
 
@@ -163,11 +163,7 @@ void KickerBoard::service() {
     command |= _kick_strength & KICK_POWER_MASK;
 
     _nCs->write(0);
-    DWT_Delay(10);
-
     uint8_t resp = _spi->transmitReceive(command);
-
-    DWT_Delay(10);
     _nCs->write(1);
 
 
