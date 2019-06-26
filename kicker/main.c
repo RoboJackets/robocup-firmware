@@ -48,19 +48,19 @@
 
 // Used to time kick and chip durations, -1 indicates inactive state
 volatile struct {
-    int32_t stop_charge_phase; // Allow time for main loop to stop charge
-    int32_t flow_phase;        // Let current flow during this phase
-    int32_t stop_flow_phase;   // Allow time for current to stop flowing
-    int32_t charge_phase;      // Allow time for caps to charge back up
+    volatile int32_t stop_charge_phase; // Allow time for main loop to stop charge
+    volatile int32_t flow_phase;        // Let current flow during this phase
+    volatile int32_t stop_flow_phase;   // Allow time for current to stop flowing
+    volatile int32_t charge_phase;      // Allow time for caps to charge back up
 } time = {-1, -1, -1, -1};
 
 // Latest command from mtrain
 volatile struct {
-    bool kick_type_is_kick; // chip or kick?
-    bool kick_immediate; // Kick immediately?
-    bool kick_on_breakbeam; // Kick when breakbeam triggers?
-    bool commanded_charge; // Commanded to charge the caps?
-    uint8_t kick_power; // Commanded power to kick at
+    volatile bool kick_type_is_kick; // chip or kick?
+    volatile bool kick_immediate; // Kick immediately?
+    volatile bool kick_on_breakbeam; // Kick when breakbeam triggers?
+    volatile bool commanded_charge; // Commanded to charge the caps?
+    volatile uint8_t kick_power; // Commanded power to kick at
 } command = {false, false, false, false, 0};
 
 // Current kick command
@@ -164,14 +164,7 @@ void try_read_voltage() {
     // Don't run the adc every loop
     // 1000 * 10 us = 10 ms
     if (time % 1000 == 0) {
-        // needs to be int to force voltage_accum calculation to use ints
-        const int kalpha = 192;
-
-        // get a voltage reading by weighing in a new reading, same concept as
-        // TCP RTT estimates (exponentially weighted sum)
-        int voltage_accum = (255 - kalpha) * current_voltage +
-                            kalpha * get_voltage();
-        current_voltage = voltage_accum / 255;
+        current_voltage = get_voltage();
     }
     time++;
 }
@@ -206,15 +199,13 @@ void charge_caps() {
     // fairly close
     
     // Stop charging if we are at the voltage target
-    if (//current_voltage > 239 ||
-        !charge_allowed ||
+    if (!charge_allowed ||
         !command.commanded_charge) {
 
         HAL_ClearPin(LT_CHARGE);
 
     // Charge if we are too low
-    } else if (//current_voltage < 232 &&
-               charge_allowed &&
+    } else if (charge_allowed &&
                command.commanded_charge) {
 
         HAL_SetPin(LT_CHARGE);
@@ -224,8 +215,8 @@ void charge_caps() {
 void fill_spi_return() {
     uint8_t ret_byte = 0x00;
 
-    if (ball_sensed)
-        ret_byte |= BREAKBEAM_TRIPPED;
+    //if (ball_sensed)
+    //    ret_byte |= BREAKBEAM_TRIPPED;
 
     ret_byte |= VOLTAGE_MASK & (current_voltage >> 1);
 
@@ -271,18 +262,17 @@ ISR(SPI_STC_vect) {
     // Don't take commands in debug mode
     if (in_debug_mode)
         return;
-
-    return;
+    
     uint8_t recv_data = SPDR;
-
+    
     // Fill our globals with the commands
-    command.kick_type_is_kick = recv_data & TYPE_KICK;
+    command.kick_type_is_kick = (recv_data & TYPE_FIELD) == TYPE_KICK;
     command.commanded_charge  = recv_data & CHARGE_ALLOWED;
     command.kick_power        = recv_data & KICK_POWER_MASK;
 
     // If we get a cancel kick command
     // Stop the kicks
-    if (recv_data & CANCEL_KICK == CANCEL_KICK) {
+    if ((recv_data & CANCEL_KICK) == CANCEL_KICK) {
         command.kick_immediate = false;
         command.kick_on_breakbeam = false;
 
@@ -417,9 +407,10 @@ void init() {
 
     // MISO as output
     // CS and MOSI as input
+    HAL_SetInputPin(KICK_MOSI_PIN);
     HAL_SetOutputPin(KICK_MISO_PIN); // must be configured manually
-    //HAL_SetInputPin(N_KICK_CS_PIN);
-    //HAL_SetInputPin(KICK_MOSI_PIN);
+    HAL_SetInputPin(N_KICK_CS_PIN);
+    HAL_SetInputPin(KICK_MOSI_PIN);
     // All other autoconfigured on spi enable
 
     /**
@@ -458,7 +449,8 @@ void init() {
      */
     // Assume default spi mode
     // Allow interrupts, enable, and force slave SPI device
-    SPCR = _BV(SPE) | _BV(SPIE) | ~_BV(MSTR);
+    SPCR &= ~_BV(MSTR);
+    SPCR |= _BV(SPE) | _BV(SPIE);
 
     ///////////////////////////////////////////////////////////////////////////
     //  TIMER INITIALIZATION
@@ -493,8 +485,10 @@ void init() {
     // instead of having to read 2 registers
     // We don't care about the full 10 bit width, only the top 8
     // Setup voltage monitor as input to adc
-    ADMUX |= _BV(ADLAR);
-    ADMUX |= _BV(V_MONITOR_PIN.pin);
+    ADMUX |= _BV(ADLAR) | 0x00;//_BV(V_MONITOR_PIN.pin);
+
+    //  Ensure ADC isn't off
+    PRR &= ~_BV(PRADC);
 
     // Enable adc
     ADCSRA |= _BV(ADEN);
@@ -503,7 +497,7 @@ void init() {
      * Button logic
      */
     // latch debug state
-    in_debug_mode = true;// !HAL_IsSet(DB_SWITCH);
+    in_debug_mode = !HAL_IsSet(DB_SWITCH);
 
     // enable global interrupts
     sei();

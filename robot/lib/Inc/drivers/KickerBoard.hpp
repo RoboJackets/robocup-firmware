@@ -147,7 +147,7 @@ private:
     bool _is_kick        = false;
     bool _kick_immediate = false;
     bool _kick_breakbeam = false;
-    bool _cancel_kick    = false;
+    bool _cancel_kick    = true;
     bool _charge_allowed = false;
     uint8_t _kick_strength = 0;
 };

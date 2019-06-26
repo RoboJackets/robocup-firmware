@@ -19,6 +19,9 @@ RadioModule::RadioModule(BatteryVoltage *const batteryVoltage,
     // todo fill out more kicker stuff
     kickerCommand->isValid = false;
     kickerCommand->lastUpdate = 0;
+    kickerCommand->shootMode = KickerCommand::ShootMode::KICK;
+    kickerCommand->triggerMode = KickerCommand::TriggerMode::OFF;
+    kickerCommand->kickStrength = 0;
 
     motionCommand->isValid = false;
     motionCommand->lastUpdate = 0;

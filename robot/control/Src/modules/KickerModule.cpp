@@ -21,15 +21,18 @@ KickerModule::KickerModule(std::shared_ptr<SPI> spi,
 }
 
 void KickerModule::entry(void) {
-    return;
+
+    kicker.setChargeAllowed(true);
     // Check if valid
     // and within the last few ms
     // and not same as previous command
-    if (kickerCommand->isValid &&
-        kickerCommand->lastUpdate != prevKickTime) {
+    if (kickerCommand->isValid) {
+        kickerCommand->isValid = false;
+
+        kicker.kickType(kickerCommand->shootMode == KickerCommand::ShootMode::KICK);
         
-        kicker.kickType(kickerCommand->shootMode == KickerCommand::ShootMode::CHIP);
-        
+        kicker.setChargeAllowed(true);
+
         switch (kickerCommand->triggerMode) {
             case KickerCommand::TriggerMode::OFF:
                 kicker.cancelBreakbeam();
@@ -37,7 +40,6 @@ void KickerModule::entry(void) {
 
             case KickerCommand::TriggerMode::IMMEDIATE:
                 kicker.setChargeAllowed(true);
-                kicker.cancelBreakbeam();
                 kicker.kick(kickerCommand->kickStrength);
                 break;
 

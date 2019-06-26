@@ -1,6 +1,7 @@
 #pragma once
 
 // Whether the kick should be a chip or kick
+#define TYPE_FIELD (1 << 7)
 #define TYPE_KICK (0 << 7)
 #define TYPE_CHIP (1 << 7)
 
@@ -17,7 +18,7 @@
 #define KICK_ON_BREAKBEAM (1 << 5)
 
 // Cancel any kick commands already sent
-#define CANCEL_KICK (0x2 << 5)
+#define CANCEL_KICK (0b11 << 5)
 
 // Allow the kicker to charge
 #define CHARGE_ALLOWED (1 << 4)

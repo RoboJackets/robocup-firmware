@@ -16,17 +16,14 @@ KickerBoard::KickerBoard(shared_ptr<SPI> spi, std::shared_ptr<DigitalOut> nCs,
 bool KickerBoard::verify_param(const char* name, char expected,
                                int (AVR910::*paramMethod)(), char mask,
                                bool verbose) {
-    debugInfo.val[1] = 5000;
     if (verbose) printf("Checking %s...", name);
     int val = (*this.*paramMethod)();
     bool success = ((val & mask) == expected);
     if (verbose) {
         if (success) {
             printf("done\r\n");
-            debugInfo.val[2] = 1000;
         } else {
             printf("Got unexpected value: 0x%X\r\n", val);
-            debugInfo.val[2] = val*1000;
         }
     }
 
@@ -117,7 +114,6 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
         (checkMemory(ATTINY_PAGESIZE, ATTINY_NUM_PAGES, progBinary, length, false) == 0))
         shouldProgram = false;
     
-    debugInfo.val[0] = 3000;
     if (!shouldProgram) {
         //LOG(INFO, "Kicker up-to-date, no need to flash.");
         printf("Kicker up-to-date, no need to flash.\r\n");
@@ -128,11 +124,9 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
         bool success = program(progBinary, length, ATTINY_PAGESIZE, ATTINY_NUM_PAGES);
 
         if (!success) {
-            debugInfo.val[0] = 2000;
             //LOG(WARN, "Failed to program kicker.");
             printf("Failed to program kicker.\r\n");
         } else {
-            debugInfo.val[0] = 1000;
             //LOG(INFO, "Kicker successfully programmed.");
             printf("Kicker successfully programmed.\r\n");
         }
@@ -172,8 +166,12 @@ void KickerBoard::service() {
 
     command |= _kick_strength & KICK_POWER_MASK;
 
+    // Transmit byte over to kicker
+    // Must wait 10 us such that the isr actually triggers
     _nCs->write(0);
+    DWT_Delay(10);
     uint8_t resp = _spi->transmitReceive(command);
+    DWT_Delay(10);
     _nCs->write(1);
 
 
@@ -181,8 +179,11 @@ void KickerBoard::service() {
 
     _ball_sensed = resp & BREAKBEAM_TRIPPED;
 
+
     // Assume healthy if we get some voltage back
-    _is_healthy = _current_voltage > 0;
+    _is_healthy = _current_voltage > 100;
+
+    debugInfo.val[1] = _current_voltage * 100;
 }
 
 void KickerBoard::kickType(bool isKick) {
@@ -194,6 +195,7 @@ void KickerBoard::kick(uint8_t strength) {
     _kick_breakbeam = false;
     _kick_strength = strength;
     _cancel_kick = false;
+    debugInfo.val[1] = strength * 100;
 }
 
 void KickerBoard::kickOnBreakbeam(uint8_t strength) {
