@@ -63,7 +63,7 @@ void RobotController::calculate(Eigen::Matrix<double, numStates, 1> pv,
     // todo make sure no specific wheel goes over max duty cycle
     // todo replace 512 with duty cycle max
     // clean up clip code
-    outputs = RobotModel::get().BotToWheel * outputSpeed * RobotModel::get().SpeedToDutyCycle / 512;
+    outputs = RobotModel::get().BotToWheel * outputSpeed * RobotModel::get().SpeedToDutyCycle / 511;
 
     for (int i = 0; i < 4; i++) {
         if (outputs(i,0) > 1.0) {
@@ -77,11 +77,20 @@ void RobotController::calculate(Eigen::Matrix<double, numStates, 1> pv,
         }
     }
 
-    prevTarget = dampedTarget;
+    /*debugInfo.val[4] = outputs(0, 0) * 1000;
+    debugInfo.val[5] = outputs(1, 0) * 1000;
+    debugInfo.val[6] = outputs(2, 0) * 1000;
+    debugInfo.val[7] = outputs(3, 0) * 1000;
 
-    debugInfo.val[0] = pv(1, 0) * 1000;
-    debugInfo.val[1] = sp(1, 0) * 1000;
-    debugInfo.val[3] = dampedTarget(1, 0) * 1000;
+    debugInfo.val[8] = dampedTarget(0, 0) * 1000;
+    debugInfo.val[9] = dampedTarget(1, 0) * 1000;
+    debugInfo.val[10] = dampedTarget(2, 0) * 1000;
+
+    debugInfo.val[11] = pv(0, 0) * 1000;
+    debugInfo.val[12] = pv(1, 0) * 1000;
+    debugInfo.val[13] = pv(2, 0) * 1000; */
+
+    prevTarget = dampedTarget;
 }
 
 bool RobotController::limitAccel(const Eigen::Matrix<double, numStates, 1> finalTarget,

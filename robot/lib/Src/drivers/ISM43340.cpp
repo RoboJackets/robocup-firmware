@@ -124,7 +124,7 @@ void ISM43340::writeToSpi(uint8_t* command, int length) {
     while (dataReady.read() != 1); // && (HAL_GetTick() - startTime) < 1000
 
     nCs = ISMConstants::CHIP_SELECT;
-    DWT_Delay(60); // Must be 50 us or more. Measure first response on logic analyzer
+    DWT_Delay(70); // Must be 50 us or more. Measure first response on logic analyzer
 
     for (int i = 0; i < length; i += 2) {
         uint8_t c1 = command[i];
@@ -154,7 +154,7 @@ uint32_t ISM43340::readFromSpi() {
     while (dataReady.read() != 1); // && (HAL_GetTick() - startTime) < 1000
     
     nCs = ISMConstants::CHIP_SELECT;
-    DWT_Delay(60); // Must be 50 us or more. Measure first response on logic analyzer
+    DWT_Delay(70); // Must be 50 us or more. Measure first response on logic analyzer
 
     // Once we find any data on the bus
     // 0x25 0x25 is a valid character combination in the packet
@@ -378,7 +378,7 @@ void ISM43340::reset() {
     sendCommand(ISMConstants::CMD_SET_TRANSPORT_REMOTE_PORT_NUMBER,
                 ISMConstants::LOCAL_PORT);
 
-    sendCommand(ISMConstants::CMD_SET_READ_TRANSPORT_PACKET_SIZE, "12");
+    sendCommand(ISMConstants::CMD_SET_READ_TRANSPORT_PACKET_SIZE, "12"); // 12
 
     sendCommand(ISMConstants::CMD_SET_READ_TRANSPORT_TIMEOUT, "1");
 

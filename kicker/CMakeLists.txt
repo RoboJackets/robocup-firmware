@@ -5,7 +5,7 @@ set( CMAKE_RUNTIME_OUTPUT_DIRECTORY  "${CMAKE_BINARY_DIR}/bin" )
 # compile executable for kicker firmware
 add_executable(kicker.elf
     main.c
-    HAL_atmega32a.c
+    HAL_attiny167.c
 )
 
 target_include_directories(kicker.elf PUBLIC

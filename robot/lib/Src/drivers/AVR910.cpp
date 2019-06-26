@@ -41,8 +41,6 @@ AVR910::AVR910(shared_ptr<SPI> spi, std::shared_ptr<DigitalOut> nCs, PinName nRe
     : spi_(spi), nCs_(nCs), nReset_(nReset) {
     spi_->frequency(100'000);
 
-    return;// todo remove this
-
     int tryCnt = 0;
     bool enabled = false;
     do {
@@ -286,12 +284,16 @@ bool AVR910::enableProgramming() {
 }
 
 void AVR910::poll(int high_low, char page_number, char page_offset) {
-    if (page_number == 0xFF && page_offset == 0xFF) {
-        HAL_Delay(10);
-    } else {
-        while (readProgramMemory(high_low, page_number, page_offset) == 0xFF);
-    }
-    return;
+    // Query the chip until it indicates it's ready by setting the busy bit to 0
+    int response = 0;
+    nCs_->write(0);
+    do {
+        spi_->transmit(0xF0);
+        spi_->transmit(0x00);
+        spi_->transmit(0x00);
+        response = spi_->transmitReceive(0x00);
+    } while ((response & 0x01) != 0);
+    nCs_->write(0);
 }
 
 int AVR910::readRegister(int reg) {
@@ -357,17 +359,16 @@ void AVR910::loadMemoryPage(int highLow, char address, char data) {
     nCs_->write(0);
     spi_->transmit(highLow); // 0100 H000
     spi_->transmit(0x00); // 00xx xxxx
-    // flash has 64 words, so 6 bits to address all
-    spi_->transmit(address & 0x3F); // xxbb bbbb
+    spi_->transmit(address & 0x3F); // xxxb bbbb
     spi_->transmit(data); // iiii iiii
     nCs_->write(1);
 }
 
 void AVR910::writeFlashMemoryByte(int highLow, int address, char data) {
     nCs_->write(0);
-    spi_->transmit(highLow);
+    spi_->transmit(0x4C);
     spi_->transmit(address & 0xFF00 >> 8);
-    spi_->transmit(address & 0x00FF);
+    spi_->transmit(address & 0x003F);
     spi_->transmit(data);
     nCs_->write(1);
 }
@@ -392,11 +393,9 @@ void AVR910::writeFlashMemoryPage(char pageNumber, char pageOffset, int highlow)
     // address a:b.
     nCs_->write(0);
     spi_->transmit(0x4C); // 0100 1100
-    // 13 bits total, 6 for page offset, 7 for page number
-    // top 5 bits stored in bottom of byte
-    spi_->transmit((pageNumber >> 2) & 0x3F); // 00aa aaaa
-    // top 2 bits stored in top of byte
-    spi_->transmit((pageNumber << 6) & 0xC0); // bbxx xxxx
+    // 11 bits total, 5 for page offset, 6 for page number
+    spi_->transmit(pageNumber >> 2); // 0000 0000
+    spi_->transmit(pageNumber << 6); // 0x00aa aaaa
     spi_->transmit(0x00); // xxxx xxxx
     nCs_->write(1);
 

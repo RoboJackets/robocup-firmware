@@ -3,7 +3,7 @@ set(CMAKE_SYSTEM_PROCESSOR  avr)
 set(CMAKE_SYSTEM_VERSION    1)
 # the docs aren't installed to man
 # refer to http://www.nongnu.org/avr-libc/user-manual/using_tools.html
-set(AVR_TARGET_ARCH         atmega32a)
+set(AVR_TARGET_ARCH         attiny167)
 
 # narrow down the search scope of where cmake looks for programs/libraries
 # for cross compilation

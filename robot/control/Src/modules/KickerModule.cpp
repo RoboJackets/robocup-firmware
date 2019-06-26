@@ -9,7 +9,7 @@ KickerModule::KickerModule(std::shared_ptr<SPI> spi,
     : kickerCommand(kickerCommand), kickerInfo(kickerInfo),
       prevKickTime(0), nCs(std::make_shared<DigitalOut>(KICKER_CS)), kicker(spi, nCs, KICKER_RST, BALL_SENSE_LED) {
 
-    //kicker.flash(false, true);
+    kicker.flash(false, true);
 
     kickerInfo->isValid = false;
     kickerInfo->lastUpdate = 0;

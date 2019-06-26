@@ -3,6 +3,9 @@
 #include "delay.h"
 #include "device-bins/kicker_bin.h"
 #include <tuple>
+#include "MicroPackets.hpp"
+
+extern DebugInfo debugInfo;
 
 using namespace std;
 
@@ -13,14 +16,18 @@ KickerBoard::KickerBoard(shared_ptr<SPI> spi, std::shared_ptr<DigitalOut> nCs,
 bool KickerBoard::verify_param(const char* name, char expected,
                                int (AVR910::*paramMethod)(), char mask,
                                bool verbose) {
+    debugInfo.val[1] = 5000;
     if (verbose) printf("Checking %s...", name);
     int val = (*this.*paramMethod)();
     bool success = ((val & mask) == expected);
     if (verbose) {
-        if (success)
+        if (success) {
             printf("done\r\n");
-        else
+            debugInfo.val[2] = 1000;
+        } else {
             printf("Got unexpected value: 0x%X\r\n", val);
+            debugInfo.val[2] = val*1000;
+        }
     }
 
     return success;
@@ -109,7 +116,8 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
     if (onlyIfDifferent &&
         (checkMemory(ATTINY_PAGESIZE, ATTINY_NUM_PAGES, progBinary, length, false) == 0))
         shouldProgram = false;
-
+    
+    debugInfo.val[0] = 3000;
     if (!shouldProgram) {
         //LOG(INFO, "Kicker up-to-date, no need to flash.");
         printf("Kicker up-to-date, no need to flash.\r\n");
@@ -120,9 +128,11 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
         bool success = program(progBinary, length, ATTINY_PAGESIZE, ATTINY_NUM_PAGES);
 
         if (!success) {
+            debugInfo.val[0] = 2000;
             //LOG(WARN, "Failed to program kicker.");
             printf("Failed to program kicker.\r\n");
         } else {
+            debugInfo.val[0] = 1000;
             //LOG(INFO, "Kicker successfully programmed.");
             printf("Kicker successfully programmed.\r\n");
         }

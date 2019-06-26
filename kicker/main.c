@@ -7,12 +7,11 @@
 #include <stdlib.h>
 #include <util/delay.h>
 
-#include "HAL_atmega32a.h"
+#include "HAL_attiny167.h"
 
 #include "kicker_config.h"
 #include "kicker_commands.h"
 #include "pins.h"
-#include "util.h"
 
 // kicker parameters
 #define MAX_KICK_STRENGTH 15.0f //2^4 - 1
@@ -62,7 +61,7 @@ volatile struct {
     bool kick_on_breakbeam; // Kick when breakbeam triggers?
     bool commanded_charge; // Commanded to charge the caps?
     uint8_t kick_power; // Commanded power to kick at
-} command = {true, false, false, false, 0};
+} command = {false, false, false, false, 0};
 
 // Current kick command
 volatile bool current_kick_type_is_kick = true;
@@ -116,14 +115,14 @@ void kick(uint8_t strength, bool is_kick) {
     current_kick_type_is_kick = is_kick;
 
     // start timer to enable the kick FSM processing interrupt
-    TCCR0 |= _BV(CS00) & 0b01;
+    TCCR0B |= _BV(CS01); // No prescale
 }
 
 void handle_debug_mode() {
     // Used to keep track of current button state
-    static bool kick_db_down = false;
-    static bool chip_db_down = false;
-    static bool charge_db_down = false;
+    static bool kick_db_down = true;
+    static bool chip_db_down = true;
+    static bool charge_db_down = true;
 
     if (in_debug_mode) {
         // Check if the buttons are pressed
@@ -140,26 +139,12 @@ void handle_debug_mode() {
 
         // If we should be charging
         if (!charge_db_down && charge_db_pressed)
-            command.commanded_charge = true;
+            command.commanded_charge = !command.commanded_charge;
 
         kick_db_down = kick_db_pressed;
         chip_db_down = chip_db_pressed;
         charge_db_down = charge_db_pressed;
     }
-}
-
-void set_state_LEDs() {
-    // Check ball sense
-    // Turn on led if we see something
-    HAL_SetLED(BALL_SENSE_LED, HAL_IsSet(BALL_SENSE_RX));
-
-    // If we are kicking, turn on yellow
-    HAL_SetLED(MCU_YELLOW, is_kicking());
-
-    // If we are chipping, bring up the red led
-    // for debug purposes
-    // todo remove this
-    HAL_SetLED(MCU_RED, !current_kick_type_is_kick);
 }
 
 uint8_t get_voltage() {
@@ -187,37 +172,6 @@ void try_read_voltage() {
         int voltage_accum = (255 - kalpha) * current_voltage +
                             kalpha * get_voltage();
         current_voltage = voltage_accum / 255;
-
-        // 1 light on at 0-50
-        // 2 light on at 51-101
-        // 3 light on at 102-152
-        // 4 light on at 153-203
-        // 5 light on at 204-255
-        // At 255, num lights = 6, but default case allows same
-        // behavior
-        uint8_t num_lights = ((uint8_t) current_voltage / 51) + 1;
-
-        // Clear charge level led's
-        HAL_SetLED(HV_IND_MIN,  false);
-        HAL_SetLED(HV_IND_LOW,  false);
-        HAL_SetLED(HV_IND_MID,  false);
-        HAL_SetLED(HV_IND_HIGH, false);
-        HAL_SetLED(HV_IND_MAX,  false);
-
-        // Toggle them on as the reaches different levels
-        switch (num_lights) {
-        default:
-        case 5:
-            HAL_SetLED(HV_IND_MAX, true);
-        case 4:
-            HAL_SetLED(HV_IND_HIGH, true);
-        case 3:
-            HAL_SetLED(HV_IND_MID, true);
-        case 2:
-            HAL_SetLED(HV_IND_LOW, true);
-        case 1:
-            HAL_SetLED(HV_IND_MIN, true);
-        }
     }
     time++;
 }
@@ -252,15 +206,14 @@ void charge_caps() {
     // fairly close
     
     // Stop charging if we are at the voltage target
-    if (!HAL_IsSet(LT_DONE_N) ||
-        current_voltage > 239 ||
+    if (//current_voltage > 239 ||
         !charge_allowed ||
         !command.commanded_charge) {
 
         HAL_ClearPin(LT_CHARGE);
 
     // Charge if we are too low
-    } else if (current_voltage < 232 &&
+    } else if (//current_voltage < 232 &&
                charge_allowed &&
                command.commanded_charge) {
 
@@ -285,8 +238,6 @@ void main() {
     while (true) {
 
         handle_debug_mode();
-
-        set_state_LEDs();
 
         try_read_voltage();
 
@@ -321,11 +272,12 @@ ISR(SPI_STC_vect) {
     if (in_debug_mode)
         return;
 
+    return;
     uint8_t recv_data = SPDR;
 
     // Fill our globals with the commands
     command.kick_type_is_kick = recv_data & TYPE_KICK;
-    command.commanded_charge  = recv_data & START_CHARGE;
+    command.commanded_charge  = recv_data & CHARGE_ALLOWED;
     command.kick_power        = recv_data & KICK_POWER_MASK;
 
     // If we get a cancel kick command
@@ -364,7 +316,7 @@ ISR(SPI_STC_vect) {
  * When CS01 is one, the clk is prescaled by 8
  * (When CS00 is one, and CS01 is 0, no prescale. We don't use this)
  */
-ISR(TIMER0_COMP_vect) {
+ISR(TIMER0_COMPA_vect) {
     if (time.stop_charge_phase >= 0) {
         /**
          * PRE KICKING STATE
@@ -382,8 +334,7 @@ ISR(TIMER0_COMP_vect) {
          * wait for kick interval to end
          */
 
-        HAL_SetLED(MCU_RED, true);
-
+        // todo
         if (current_kick_type_is_kick) {
             HAL_SetPin(KICK_PIN);
         } else {
@@ -399,8 +350,7 @@ ISR(TIMER0_COMP_vect) {
          * state
          */
 
-        HAL_SetLED(MCU_RED, false);
-
+        // todo
         if (current_kick_type_is_kick) {
             HAL_ClearPin(KICK_PIN);
         } else {
@@ -426,52 +376,39 @@ ISR(TIMER0_COMP_vect) {
          */
 
         // stop prescaled timer
-        TCCR0 &= ~_BV(CS00);
+        TCCR0B &= ~_BV(CS01); // todo
     }
 }
 
 void init() {
+    // Disable pullups globally
+    MCUCR |= _BV(PUD);
+    
     // disable interrupts
     cli();
 
     // disable watchdog
     wdt_reset();
-    WDTCR |= (_BV(WDTOE) | _BV(WDE));
-    WDTCR &= !_BV(WDE);
+    MCUSR &= !_BV(WDRF);
+    WDTCR |= (_BV(WDCE) | _BV(WDE));
+    WDTCR = 0x00; // WDTON WDE WDIE have to be disabled
     
-    // Disable pullups globally
-    SFIOR |= _BV(PUD);
-
-
-    /**
-     * LED Initialization
-     */
-
-    // Setup default values for output LED pins
-    HAL_SetLED(MCU_GREEN, false);
-    HAL_SetLED(MCU_YELLOW, true);
-    HAL_SetLED(MCU_RED, true);
-
-    // config output pins for status LEDs
-    DDRD |= _BV(MCU_GREEN.pin);
-    DDRD |= _BV(MCU_YELLOW.pin);
-    DDRD |= _BV(MCU_RED.pin);
-
-    // and set ERR/WARN until init done
-    // Essentially same as default, but this
-    // makes it obvious to people reading this
-    HAL_SetLED(MCU_YELLOW, true);
-    HAL_SetLED(MCU_RED, true);
-
+    // change our clock speed from 1 Mhz to 8 Mhz (there's a default CLKDIV8)
+    // 1. write the Clock Prescaler Change Enable (CLKPCE) bit to one and all
+    //    other bits in CLKPR to zero.
+    // 2. within four cycles, write the desired value to CLKPS while writing a
+    //    zero to CLKPCE.
+    CLKPR = _BV(CLKPCE);
+    CLKPR = 0;  // corresponds to CLKDIV1 prescale, also keeps CLKPCE low
 
     /**
      * Input button initialization
      */
 
-    DDRC &= ~(_BV(DB_SWITCH.pin));
-    DDRC &= ~(_BV(DB_CHG_PIN.pin));
-    DDRC &= ~(_BV(DB_KICK_PIN.pin));
-    DDRC &= ~(_BV(DB_CHIP_PIN.pin));
+    HAL_SetInputPin(DB_SWITCH);
+    HAL_SetInputPin(DB_CHG_PIN);
+    HAL_SetInputPin(DB_KICK_PIN);
+    HAL_SetInputPin(DB_CHIP_PIN);
 
 
     /**
@@ -480,74 +417,48 @@ void init() {
 
     // MISO as output
     // CS and MOSI as input
-    DDRB |= _BV(KICK_MISO_PIN.pin);
-    DDRB &= ~(_BV(N_KICK_CS_PIN.pin));
-    DDRB &= ~(_BV(KICK_MOSI_PIN.pin));
-
-
-    /**
-     * HV Monitor initialization
-     */
-    // Default values for HV LED display
-    HAL_SetLED(HV_IND_MIN, true);
-    HAL_SetLED(HV_IND_LOW, true);
-    HAL_SetLED(HV_IND_MID, true);
-    HAL_SetLED(HV_IND_HIGH, true);
-    HAL_SetLED(HV_IND_MAX, true);
-
-    // Voltage monitor pin as input
-    // HV LED display as output
-    DDRA &= ~(_BV(V_MONITOR_PIN.pin));
-    DDRA |= _BV(HV_IND_MIN.pin);
-    DDRA |= _BV(HV_IND_LOW.pin);
-    DDRA |= _BV(HV_IND_MID.pin);
-    DDRA |= _BV(HV_IND_HIGH.pin);
-    DDRA |= _BV(HV_IND_MAX.pin);
-
+    HAL_SetOutputPin(KICK_MISO_PIN); // must be configured manually
+    //HAL_SetInputPin(N_KICK_CS_PIN);
+    //HAL_SetInputPin(KICK_MOSI_PIN);
+    // All other autoconfigured on spi enable
 
     /**
      * LT3751 initialization
      */
     // Default values for charge
-    HAL_SetPin(LT_CHARGE);
-    
-    // Charge command output
-    // Done and fault as input
-    DDRD |= _BV(LT_CHARGE.pin);
-    DDRD &= ~(_BV(LT_DONE_N.pin) | _BV(LT_FAULT_N.pin));
+    HAL_ClearPin(LT_CHARGE);
 
+    // Charge command output
+    HAL_SetOutputPin(LT_CHARGE);
+
+    HAL_ClearPin(KICK_PIN);
+    HAL_ClearPin(CHIP_PIN);
+
+    HAL_SetOutputPin(KICK_PIN);
+    HAL_SetOutputPin(CHIP_PIN);
 
     /**
      * Ball sense initialization
      */
     // Default ball sense on startup
-    HAL_SetLED(BALL_SENSE_LED, false);
     HAL_ClearPin(BALL_SENSE_TX);
 
     // tx and led as output
     // RX as intput
-    DDRD |= (_BV(BALL_SENSE_TX.pin) | _BV(BALL_SENSE_LED.pin));
-    DDRA &= ~(_BV(BALL_SENSE_RX.pin));
+    HAL_SetInputPin(BALL_SENSE_RX);
+    HAL_SetOutputPin(BALL_SENSE_TX);
 
     // Enable the LED and TX until first loop
     // This is because you cannot go from {input, tristate} -> {output, high}
     // in a single step
-    HAL_SetLED(BALL_SENSE_LED, true);
     HAL_SetPin(BALL_SENSE_TX);
-    
-    /**
-     * JTAG disable
-     */
-    // Must write twice in 4 cycles to write value to register
-    MCUCSR |= _BV(JTD);
-    MCUCSR |= _BV(JTD);
     
     /**
      * Enable SPI slave
      */
     // Assume default spi mode
-    SPCR = _BV(SPE) | _BV(SPIE);
-    SPCR &= ~(_BV(MSTR));  // ensure we are a slave SPI device
+    // Allow interrupts, enable, and force slave SPI device
+    SPCR = _BV(SPE) | _BV(SPIE) | ~_BV(MSTR);
 
     ///////////////////////////////////////////////////////////////////////////
     //  TIMER INITIALIZATION
@@ -569,10 +480,9 @@ void init() {
     //  kick()
     //
     //  initialize timer
-    TIMSK |= _BV(OCIE0);    // Interrupt on TIMER 0
-    TCCR0 |= _BV(WGM01);
-    TCCR0 &= ~(_BV(WGM00)); // COM01 - Clear Timer on Compare Match
-    OCR0 = TIMING_CONSTANT;  // OCR0A is max val of timer before reset
+    TIMSK0 |= _BV(OCIE0A);    // Interrupt on TIMER 0
+    TCCR0A |= _BV(WGM01); // CTC
+    OCR0A = TIMING_CONSTANT;  // OCR0A is max val of timer before reset
     ///////////////////////////////////////////////////////////////////////////
 
 
@@ -593,11 +503,7 @@ void init() {
      * Button logic
      */
     // latch debug state
-    in_debug_mode = HAL_IsSet(DB_SWITCH);
-
-    // Turn off the two led's since we finished startup
-    HAL_SetLED(MCU_YELLOW, false);
-    HAL_SetLED(MCU_RED, false);
+    in_debug_mode = true;// !HAL_IsSet(DB_SWITCH);
 
     // enable global interrupts
     sei();
