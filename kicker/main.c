@@ -215,8 +215,8 @@ void charge_caps() {
 void fill_spi_return() {
     uint8_t ret_byte = 0x00;
 
-    //if (ball_sensed)
-    //    ret_byte |= BREAKBEAM_TRIPPED;
+    if (ball_sensed)
+        ret_byte |= BREAKBEAM_TRIPPED;
 
     ret_byte |= VOLTAGE_MASK & (current_voltage >> 1);
 

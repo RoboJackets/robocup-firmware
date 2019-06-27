@@ -126,9 +126,11 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
         if (!success) {
             //LOG(WARN, "Failed to program kicker.");
             printf("Failed to program kicker.\r\n");
+            debugInfo.val[0] = 0;
         } else {
             //LOG(INFO, "Kicker successfully programmed.");
             printf("Kicker successfully programmed.\r\n");
+            debugInfo.val[0] = 10 * 1000;
         }
     }
 
@@ -169,9 +171,9 @@ void KickerBoard::service() {
     // Transmit byte over to kicker
     // Must wait 10 us such that the isr actually triggers
     _nCs->write(0);
-    DWT_Delay(10);
+    DWT_Delay(50);//10
     uint8_t resp = _spi->transmitReceive(command);
-    DWT_Delay(10);
+    DWT_Delay(50);
     _nCs->write(1);
 
 
@@ -181,7 +183,7 @@ void KickerBoard::service() {
 
 
     // Assume healthy if we get some voltage back
-    _is_healthy = _current_voltage > 100;
+    _is_healthy = _current_voltage > 0;
 
     debugInfo.val[1] = _current_voltage * 100;
 }

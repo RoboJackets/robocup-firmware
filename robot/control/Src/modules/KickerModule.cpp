@@ -21,7 +21,6 @@ KickerModule::KickerModule(std::shared_ptr<SPI> spi,
 }
 
 void KickerModule::entry(void) {
-
     kicker.setChargeAllowed(true);
     // Check if valid
     // and within the last few ms
@@ -35,6 +34,7 @@ void KickerModule::entry(void) {
 
         switch (kickerCommand->triggerMode) {
             case KickerCommand::TriggerMode::OFF:
+                kicker.setChargeAllowed(true);
                 kicker.cancelBreakbeam();
                 break;
 
