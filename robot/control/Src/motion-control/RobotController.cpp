@@ -111,8 +111,8 @@ void RobotController::calculateWheel(Eigen::Matrix<double, numWheels, 1> pv,
 
     Eigen::Matrix<double, numWheels, 1> error = sp - pv;
 
-    outputs = sp + WheelKp.cwiseProduct(error));
-    outputs = outputs * RobotModel::get().SpeedToDutyCycle / 511
+    outputs = sp + WheelKp.cwiseProduct(error);
+    outputs = outputs * RobotModel::get().SpeedToDutyCycle / 511;
 
     // todo, calc actual max body vel somewhere else
     for (int i = 0; i < 4; i++) {

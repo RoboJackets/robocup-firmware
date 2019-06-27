@@ -109,7 +109,7 @@ void FPGAModule::entry(void) {
      *     time_precision = 6.94us
      *
      */
-    const float dt = static_cast<float>(encDeltas[4]) * (1 / 18.432e6) * 2 * 128;
+    float dt = static_cast<float>(encDeltas[4]) * (1 / 18.432e6) * 2 * 128;
 
     // Force dt to be nonzero
     // so nan's don't filter up
