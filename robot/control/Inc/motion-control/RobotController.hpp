@@ -9,46 +9,62 @@ private:
     const static int numStates = 3;
 
     // Wheel 1-4 duty cycle % max
-    const static int numOutputs = 4;
+    const static int numWheels = 4;
 
 public:
     RobotController(uint32_t dt_us);
 
     /**
      * Updates the controller with the latest input and calculates
-     * the correct motor commands to reach this target
+     * the correct wheel velocities to reach this target
      * 
      * @param pv Current state (XYW vel in m/s or rad/s)
      * @param sp Current target (XYW vel in m/s or rad/s)
+     * @param output Motor targets (rad/s)
+     */
+    void calculateBody(Eigen::Matrix<double, numStates, 1> pv,
+                       Eigen::Matrix<double, numStates, 1> sp,
+                       Eigen::Matrix<double, numWheels, 1>& outputs);
+
+    /**
+     * Updates the wheels such that they try to follow the target
+     * Outputs the correct motor commands to do this
+     * 
+     * @param pv Current state (W1-4 in rad/s)
+     * @param sp Current target (W1-4 in rad/s)
      * @param output Motor duty cycles in % max (-1 to 1)
      */
-    void calculate(Eigen::Matrix<double, numStates, 1> pv,
-                   Eigen::Matrix<double, numStates, 1> sp,
-                   Eigen::Matrix<double, numOutputs, 1>& outputs);
+    void calculateWheel(Eigen::Matrix<double, numWheels, 1> pv,
+                         Eigen::Matrix<double, numWheels, 1> sp,
+                         Eigen::Matrix<double, numWheels, 1>& outputs);
 
-    // Using the current speed
-    // try to move to setpoint speed
 private:
     /**
      * Limits the difference between the previous target and the new target
      * such that the acceleration limits below are never broken
      */
-    bool limitAccel(const Eigen::Matrix<double, numStates, 1> finalTarget,
-                    Eigen::Matrix<double, numStates, 1>& dampened);
+    bool limitBodyAccel(const Eigen::Matrix<double, numStates, 1> finalTarget,
+                        Eigen::Matrix<double, numStates, 1>& dampened);
 
-    Eigen::Matrix<double, numStates, 1> Kp;
-    Eigen::Matrix<double, numStates, 1> Ki;
+
+    // Body Vel
+    Eigen::Matrix<double, numStates, 1> BodyKp;
+    Eigen::Matrix<double, numStates, 1> BodyKi;
     
-    Eigen::Matrix<double, numStates, 1> errorSum;
+    Eigen::Matrix<double, numStates, 1> BodyErrorSum;
 
     // Restrict the i term from contributing more than
     // this amount to the output
-    Eigen::Matrix<double, numStates, 1> iLimit;
-    bool useILimit;
-    bool inputLimited;
-    bool outputLimited;
+    Eigen::Matrix<double, numStates, 1> BodyILimit;
+    bool BodyUseILimit;
+    bool BodyInputLimited;
+    bool BodyOutputLimited;
 
-    Eigen::Matrix<double, numStates, 1> prevTarget;
+    Eigen::Matrix<double, numStates, 1> BodyPrevTarget;
+
+
+    // Wheel Vel
+    Eigen::Matrix<double, numWheels, 1> WheelKp;
 
     double dt;
 

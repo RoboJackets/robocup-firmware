@@ -20,24 +20,31 @@ template <typename T> T bounded(T val, T min, T max) {
 }
 
 RobotController::RobotController(uint32_t dt_us)
-    : useILimit(true), inputLimited(false), outputLimited(false), dt(dt_us/1000000.0) {
+    : BodyUseILimit(true), BodyInputLimited(false),
+      BodyOutputLimited(false), dt(dt_us/1000000.0) {
 
-    Kp << 1, 1.5, 1;
-    Ki << 0.02, 0.02, 0.04;
+    // Body
+    // todo drop these gains when turning on wheel controllers
+    BodyKp << 1, 1.5, 1;
+    BodyKi << 0.02, 0.02, 0.04;
 
-    errorSum << 0, 0, 0;
-    iLimit << 0.5, 0.5, 2;
+    BodyErrorSum << 0, 0, 0;
+    BodyILimit << 0.5, 0.5, 2;
 
-    prevTarget << 0, 0, 0;
+    BodyPrevTarget << 0, 0, 0;
+
+    // Wheel
+    // Gains should be the same across all wheels for now
+    WheelKp << 1, 1, 1, 1;
 }
 
-void RobotController::calculate(Eigen::Matrix<double, numStates, 1> pv,
-                                Eigen::Matrix<double, numStates, 1> sp,
-                                Eigen::Matrix<double, numOutputs, 1>& outputs) {
+void RobotController::calculateBody(Eigen::Matrix<double, numStates, 1> pv,
+                                    Eigen::Matrix<double, numStates, 1> sp,
+                                    Eigen::Matrix<double, numWheels, 1>& outputs) {
     // Force accel to be in robot physical limits
     // Assume we can limit linear accel and thats good enough
     // to limit wheel accel correctly to not slip
-    inputLimited = limitAccel(sp, dampedTarget);
+    BodyInputLimited = limitBodyAccel(sp, dampedTarget);
 
     // get error
     // todo, replace with sp with damped target
@@ -48,39 +55,42 @@ void RobotController::calculate(Eigen::Matrix<double, numStates, 1> pv,
     // TODO: Stop the problem where output limits reset integral such that it integrates
     // up to max again
     for (int i = 0; i < numStates; i++) {
-        if (!inputLimited && !outputLimited) {
-            if (bounded(error(i,0), -iLimit(i,0), iLimit(i,0))) {
-                errorSum(i,0) += error(i,0);
+        if (!BodyInputLimited && !BodyOutputLimited) {
+            if (bounded(error(i,0), -BodyILimit(i,0), BodyILimit(i,0))) {
+                BodyErrorSum(i,0) += error(i,0);
             } else {
-                errorSum(i,0) = error(i,0);
+                BodyErrorSum(i,0) = error(i,0);
             }
         }
     }
 
     // FF + P
-    Eigen::Matrix<double, numStates, 1> outputSpeed = dampedTarget + Kp.cwiseProduct(error) + Ki.cwiseProduct(errorSum);
+    Eigen::Matrix<double, numStates, 1> outputSpeed = dampedTarget +
+                                                      BodyKp.cwiseProduct(error) +
+                                                      BodyKi.cwiseProduct(BodyErrorSum);
+
+    // todo, clip max vel
+    // 3m/s and 20rad/s?
 
     // todo make sure no specific wheel goes over max duty cycle
-    // todo replace 512 with duty cycle max
+    // todo replace 511 with duty cycle max
     // clean up clip code
+    // remove the last two to output rad/s
     outputs = RobotModel::get().BotToWheel * outputSpeed * RobotModel::get().SpeedToDutyCycle / 511;
 
     for (int i = 0; i < 4; i++) {
         if (outputs(i,0) > 1.0) {
             outputs(i,0) = 1.0;
-            outputLimited = true;
+            BodyOutputLimited = true;
         } else if (outputs(i,0) < -1.0) {
             outputs(i,0) = -1.0;
-            outputLimited = true;
+            BodyOutputLimited = true;
         } else {
-            outputLimited = false;
+            BodyOutputLimited = false;
         }
     }
 
-    /*debugInfo.val[4] = outputs(0, 0) * 1000;
-    debugInfo.val[5] = outputs(1, 0) * 1000;
-    debugInfo.val[6] = outputs(2, 0) * 1000;
-    debugInfo.val[7] = outputs(3, 0) * 1000;
+    /*
 
     debugInfo.val[8] = dampedTarget(0, 0) * 1000;
     debugInfo.val[9] = dampedTarget(1, 0) * 1000;
@@ -90,12 +100,49 @@ void RobotController::calculate(Eigen::Matrix<double, numStates, 1> pv,
     debugInfo.val[12] = pv(1, 0) * 1000;
     debugInfo.val[13] = pv(2, 0) * 1000; */
 
-    prevTarget = dampedTarget;
+    BodyPrevTarget = dampedTarget;
 }
 
-bool RobotController::limitAccel(const Eigen::Matrix<double, numStates, 1> finalTarget,
+void RobotController::calculateWheel(Eigen::Matrix<double, numWheels, 1> pv,
+                                     Eigen::Matrix<double, numWheels, 1> sp,
+                                     Eigen::Matrix<double, numWheels, 1>& outputs) {
+    return; // disable until we have time to tune
+    // todo check for nan?
+
+    Eigen::Matrix<double, numWheels, 1> error = sp - pv;
+
+    outputs = sp + WheelKp.cwiseProduct(error));
+    outputs = outputs * RobotModel::get().SpeedToDutyCycle / 511
+
+    // todo, calc actual max body vel somewhere else
+    for (int i = 0; i < 4; i++) {
+        if (outputs(i,0) > 1.0) {
+            outputs(i,0) = 1.0;
+            BodyOutputLimited = true;
+        } else if (outputs(i,0) < -1.0) {
+            outputs(i,0) = -1.0;
+            BodyOutputLimited = true;
+        } else {
+            BodyOutputLimited = false;
+        }
+    }
+
+    /*
+    debugInfo.val[0] = pv(0, 0) * 1000;
+    debugInfo.val[1] = pv(1, 0) * 1000;
+    debugInfo.val[2] = pv(2, 0) * 1000;
+    debugInfo.val[3] = pv(3, 0) * 1000;
+
+    debugInfo.val[4] = sp(0, 0) * 1000;
+    debugInfo.val[5] = sp(1, 0) * 1000;
+    debugInfo.val[6] = sp(2, 0) * 1000;
+    debugInfo.val[7] = sp(3, 0) * 1000;
+    */
+}
+
+bool RobotController::limitBodyAccel(const Eigen::Matrix<double, numStates, 1> finalTarget,
                                  Eigen::Matrix<double, numStates, 1>& dampened) {
-    Eigen::Matrix<double, numStates, 1> delta = finalTarget - prevTarget;
+    Eigen::Matrix<double, numStates, 1> delta = finalTarget - BodyPrevTarget;
 
     double accel[numStates] = {maxForwardAccel, maxSideAccel, maxAngularAccel};
 
@@ -114,7 +161,7 @@ bool RobotController::limitAccel(const Eigen::Matrix<double, numStates, 1> final
         }
     }
 
-    dampened = delta + prevTarget;
+    dampened = delta + BodyPrevTarget;
 
-    return limited = true;
+    return limited;
 }

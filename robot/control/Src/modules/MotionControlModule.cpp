@@ -40,11 +40,14 @@ void MotionControlModule::entry(void) {
 
     // Fill data from shared mem
     Eigen::Matrix<double, 5, 1> measurements;
+    Eigen::Matrix<double, 4, 1> currentWheels;
     measurements << 0, 0, 0, 0, 0;
+    currentWheels << 0, 0, 0, 0;
     
     if (motorFeedback->isValid/** && isRecentUpdate(motorFeedback->lastUpdate)*/) {
         for (int i = 0; i < 4; i++) {
             measurements(i, 0) = motorFeedback->encoders[i];
+            currentWheels(i, 0) = motorFeedback->encoders[i];
         }
     }
 
@@ -52,13 +55,14 @@ void MotionControlModule::entry(void) {
         measurements(4, 0) = imuData->omegas[2]; // Z gyro
     }
 
-    Eigen::Matrix<double, 3, 1> target;
-    target << 0, 0, 0;
+    // Update targets
+    Eigen::Matrix<double, 3, 1> targetState;
+    targetState << 0, 0, 0;
     
     if (motionCommand->isValid/* && isRecentUpdate(motionCommand->lastUpdate)*/) {
-        target << motionCommand->bodyXVel,
-                  motionCommand->bodyYVel,
-                  motionCommand->bodyWVel;
+        targetState << motionCommand->bodyXVel,
+                       motionCommand->bodyYVel,
+                       motionCommand->bodyWVel;
     }
 
     // Run estimators
@@ -75,22 +79,21 @@ void MotionControlModule::entry(void) {
         !isnan(measurements(4,0))){
 
         robotEstimator.update(measurements);
-        //printf("%u,w1,%7.4f,w2,%7.4f,w3,%7.4f,w4,%7.4f,gz,%7.4f\r\n",
-        //    HAL_GetTick(), measurements(0,0), measurements(1,0), measurements(2,0), measurements(3,0), measurements(4,0));
     }
 
     Eigen::Matrix<double, 3, 1> currentState;
     robotEstimator.getState(currentState);
 
-    //printf("%u,x,%7.4f,y,%7.4f,w,%7.4f\r\n",
-    //        HAL_GetTick(), currentState(0,0), currentState(1,0), currentState(2,0));
-
     // Run controllers
     uint8_t dribblerCommand = 0;
     dribblerController.calculate(motionCommand->dribbler, dribblerCommand);
 
+    Eigen::Matrix<double, 4, 1> targetWheels;
     Eigen::Matrix<double, 4, 1> motorCommands;
-    robotController.calculate(currentState, target, motorCommands);
+
+    robotController.calculateBody(currentState, targetState, motorCommands);
+    robotController.calculateWheel(currentWheels, targetWheels, motorCommands);
+
     prevCommand = motorCommands;
 
 

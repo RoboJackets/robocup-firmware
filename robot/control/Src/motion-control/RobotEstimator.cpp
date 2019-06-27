@@ -60,13 +60,6 @@ void RobotEstimator::update(Eigen::Matrix<double, numOutputs, 1> z) {
 
     x_hat += K*y;
     P = (I - K*H)*P;
-
-    //Eigen::Matrix<double, 3, 1> temp = RobotModel::get().WheelToBot * z.block<4,1>(0,0);
-
-    //debugInfo.val[0] = z(0,0) * 1000;
-    //debugInfo.val[1] = z(1,0) * 1000;
-    //debugInfo.val[2] = z(2,0) * 1000;
-    //debugInfo.val[3] = z(3,0) * 1000;
 }
 
 void RobotEstimator::getState(Eigen::Matrix<double, numStates, 1>& state) {

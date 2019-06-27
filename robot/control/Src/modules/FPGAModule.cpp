@@ -111,6 +111,15 @@ void FPGAModule::entry(void) {
      */
     const float dt = static_cast<float>(encDeltas[4]) * (1 / 18.432e6) * 2 * 128;
 
+    // Force dt to be nonzero
+    // so nan's don't filter up
+    // If it's too small, just assume dt is massive
+    // so theres no recordered encoder outut since it's
+    // probably junk data
+    if (dt < 0.0001) {
+        dt = 1;
+    }
+
     // Convert encoders to rad/sec from enc ticks since last readin
     for (int i = 0; i < 4; i++) {
         // (rad / s) = (enc) * (rev / enc) * (rad / rev) * (1 / sec)
