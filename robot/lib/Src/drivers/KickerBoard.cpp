@@ -3,9 +3,6 @@
 #include "delay.h"
 #include "device-bins/kicker_bin.h"
 #include <tuple>
-#include "MicroPackets.hpp"
-
-extern DebugInfo debugInfo;
 
 using namespace std;
 
@@ -126,11 +123,9 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
         if (!success) {
             //LOG(WARN, "Failed to program kicker.");
             printf("Failed to program kicker.\r\n");
-            debugInfo.val[0] = 0;
         } else {
             //LOG(INFO, "Kicker successfully programmed.");
             printf("Kicker successfully programmed.\r\n");
-            debugInfo.val[0] = 10 * 1000;
         }
     }
 
@@ -184,8 +179,6 @@ void KickerBoard::service() {
 
     // Assume healthy if we get some voltage back
     _is_healthy = _current_voltage > 0;
-
-    debugInfo.val[1] = _current_voltage * 100;
 }
 
 void KickerBoard::kickType(bool isKick) {
@@ -197,7 +190,6 @@ void KickerBoard::kick(uint8_t strength) {
     _kick_breakbeam = false;
     _kick_strength = strength;
     _cancel_kick = false;
-    debugInfo.val[1] = strength * 100;
 }
 
 void KickerBoard::kickOnBreakbeam(uint8_t strength) {
