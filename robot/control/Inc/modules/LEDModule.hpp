@@ -78,7 +78,7 @@ private:
     KickerInfo *const kickerInfo;
     RadioError *const radioError;
 
-    SPI dot_star_spi;
+    //SPI dot_star_spi;
 
     std::shared_ptr<MCP23017> ioExpander;
 

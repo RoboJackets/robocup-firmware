@@ -8,7 +8,7 @@ LEDModule::LEDModule(std::shared_ptr<MCP23017> ioExpander,
                      RadioError *const radioError)
     : batteryVoltage(batteryVoltage), fpgaStatus(fpgaStatus),
       kickerInfo(kickerInfo), radioError(radioError),
-      dot_star_spi(DOT_STAR_SPI_BUS, std::nullopt, 1'000'000), ioExpander(ioExpander),
+      ioExpander(ioExpander), //dot_star_spi(DOT_STAR_SPI_BUS, std::nullopt, 1'000'000)
       leds({LED1, LED2, LED3, LED4}),
       missedSuperLoopToggle(false), missedModuleRunToggle(false) {
 
@@ -123,5 +123,5 @@ void LEDModule::setColor(uint32_t led0, uint32_t led1) {
     data.push_back(0xFF);
     data.push_back(0xFF);
 
-    dot_star_spi.transmit(data);
+    //dot_star_spi.transmit(data);
 }

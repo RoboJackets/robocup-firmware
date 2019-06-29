@@ -46,6 +46,9 @@ private:
     bool limitBodyAccel(const Eigen::Matrix<double, numStates, 1> finalTarget,
                         Eigen::Matrix<double, numStates, 1>& dampened);
 
+    bool limitWheelAccel(const Eigen::Matrix<double, numWheels, 1> finalTarget,
+                        Eigen::Matrix<double, numWheels, 1>& dampened);
+
 
     // Body Vel
     Eigen::Matrix<double, numStates, 1> BodyKp;
@@ -66,11 +69,12 @@ private:
     // Wheel Vel
     Eigen::Matrix<double, numWheels, 1> WheelKp;
 
+    Eigen::Matrix<double, numWheels, 1> WheelPrevTarget;
+
     double dt;
 
-    // Target that we are trying to hit
-    // Usually same as sp unless the acceleration is too high
-    Eigen::Matrix<double, numStates, 1> dampedTarget;
+    // Max wheel acceleration rad per second^2)
+    static constexpr double maxWheelAccel = 160;//60//120
 
     // Max acceleration (meters per second^2)
     static constexpr double maxForwardAccel = 8;//4;

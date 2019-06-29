@@ -46,8 +46,13 @@ void MotionControlModule::entry(void) {
     
     if (motorFeedback->isValid/** && isRecentUpdate(motorFeedback->lastUpdate)*/) {
         for (int i = 0; i < 4; i++) {
-            measurements(i, 0) = motorFeedback->encoders[i];
-            currentWheels(i, 0) = motorFeedback->encoders[i];
+            if (!isnan(measurements(i,0))) {
+                measurements(i, 0) = motorFeedback->encoders[i];
+                currentWheels(i, 0) = motorFeedback->encoders[i];
+            } else {
+                measurements(i, 0) = 0;
+                currentWheels(i, 0) = 0;
+            }
         }
     }
 
@@ -91,7 +96,7 @@ void MotionControlModule::entry(void) {
     Eigen::Matrix<double, 4, 1> targetWheels;
     Eigen::Matrix<double, 4, 1> motorCommands;
 
-    robotController.calculateBody(currentState, targetState, motorCommands);
+    robotController.calculateBody(currentState, targetState, targetWheels);
     robotController.calculateWheel(currentWheels, targetWheels, motorCommands);
 
     prevCommand = motorCommands;

@@ -199,13 +199,15 @@ void charge_caps() {
     // fairly close
     
     // Stop charging if we are at the voltage target
-    if (!charge_allowed ||
+    if (current_voltage > 244 ||
+        !charge_allowed ||
         !command.commanded_charge) {
 
         HAL_ClearPin(LT_CHARGE);
 
     // Charge if we are too low
-    } else if (charge_allowed &&
+    } else if (current_voltage < 239 &&
+               charge_allowed &&
                command.commanded_charge) {
 
         HAL_SetPin(LT_CHARGE);
@@ -269,6 +271,16 @@ ISR(SPI_STC_vect) {
     command.kick_type_is_kick = (recv_data & TYPE_FIELD) == TYPE_KICK;
     command.commanded_charge  = recv_data & CHARGE_ALLOWED;
     command.kick_power        = recv_data & KICK_POWER_MASK;
+
+    // force min power of 50%
+    if (command.kick_power < 0x03) {
+        command.kick_power = 0x03;
+    }
+
+    // If chip, force max power
+    if (!command.kick_type_is_kick) {
+        command.kick_power = 0xF;
+    }
 
     // If we get a cancel kick command
     // Stop the kicks

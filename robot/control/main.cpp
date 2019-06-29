@@ -77,14 +77,15 @@ int main() {
     HAL_Delay(100);
     std::shared_ptr<I2C> sharedI2C = std::make_shared<I2C>(SHARED_I2C_BUS);
     std::shared_ptr<SPI> fpgaKickerSPI = std::make_shared<SPI>(FPGA_KICKER_SPI_BUS, std::nullopt, 16'000'000);
+    std::shared_ptr<SPI> dot_star_spi = std::make_shared<SPI>(DOT_STAR_SPI_BUS, std::nullopt, 100'000);
 
     // TODO: Fix me such that we init all the devices
     // then call a config to flash them correctly
     // this will allow us to force the CS lines into the correct
     // position before doing anything like flashing other
     // devices on the bus
-    DigitalOut kickerCS(KICKER_CS);
-    kickerCS = 1;
+    //DigitalOut kickerCS(KICKER_CS);
+    //kickerCS = 1;
 
     HAL_Delay(100);
 
@@ -115,7 +116,7 @@ int main() {
 
     led.radioInitialized();
 
-    KickerModule kicker(fpgaKickerSPI,
+    KickerModule kicker(dot_star_spi,
                         &kickerCommand,
                         &kickerInfo);
 
