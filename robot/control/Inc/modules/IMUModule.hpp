@@ -15,12 +15,12 @@ public:
     // How long a single call to this module takes
     static constexpr uint32_t runtime = 333; // us
 
-    IMUModule(std::shared_ptr<I2C> sharedI2C, IMUData *const imuData);
+    IMUModule(std::shared_ptr<I2C> sharedI2C, IMUData * imuData);
 
     virtual void entry(void);
 
 private:
-    IMUData *const imuData;
+    //IMUData *const imuData;
 
-    MPU6050 imu;
+    //MPU6050 imu;
 };

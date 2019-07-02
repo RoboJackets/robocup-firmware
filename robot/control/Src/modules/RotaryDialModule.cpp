@@ -10,12 +10,12 @@ RotaryDialModule::RotaryDialModule(std::shared_ptr<MCP23017> ioExpander, RobotID
 
     robotID->isValid = false;
     robotID->lastUpdate = 0;
-    robotID->robotID = 0;
+    robotID->robotID = dial.read(); //0;
 }
 
 void RotaryDialModule::entry(void) {
-    if (!robotID->isValid)
-        robotID->robotID = dial.read();
+    //if (!robotID->isValid)
+    //    robotID->robotID = dial.read();
     robotID->isValid = true;
     robotID->lastUpdate = HAL_GetTick();
 }
