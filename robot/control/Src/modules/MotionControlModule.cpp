@@ -64,7 +64,7 @@ void MotionControlModule::entry(void) {
     Eigen::Matrix<double, 3, 1> targetState;
     targetState << 0, 0, 0;
     
-    if (motionCommand->isValid/* && isRecentUpdate(motionCommand->lastUpdate)*/) {
+    if (motionCommand->isValid && isRecentUpdate(motionCommand->lastUpdate)) {
         targetState << motionCommand->bodyXVel,
                        motionCommand->bodyYVel,
                        motionCommand->bodyWVel;

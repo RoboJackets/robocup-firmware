@@ -42,7 +42,7 @@ void LEDModule::entry(void) {
         errors |= (1 << ERR_LED_KICK);
     }
 
-    ioExpander->writeMask(errors, IOExpanderErrorLEDMask);
+    //ioExpander->writeMask(errors, IOExpanderErrorLEDMask);
     leds[0].toggle();
 }
 
