@@ -122,5 +122,5 @@ struct KickerInfo {
 };
 
 struct DebugInfo {
-    int16_t val[14];
+    int16_t val[18];
 };

@@ -24,7 +24,7 @@ RobotController::RobotController(uint32_t dt_us)
       BodyOutputLimited(false), dt(dt_us/1000000.0) {
 
     // Body
-    BodyKp << 0, 0, 0; //1, 1.5, 1;
+    BodyKp << 0, 0, 0.5; // 1, 1.5, 1;
     BodyKi << 0, 0, 0; //0.02, 0.02, 0.02;
 
     BodyErrorSum << 0, 0, 0;
@@ -34,7 +34,7 @@ RobotController::RobotController(uint32_t dt_us)
 
     // Wheel
     // Gains should be the same across all wheels for now
-    WheelKp << 1.5, 1.5, 1.5, 1.5; //1.5
+    WheelKp << 1.0, 1.0, 1.0, 1.0; //1.5
 
     WheelPrevTarget << 0, 0, 0, 0;
 }
@@ -121,6 +121,11 @@ void RobotController::calculateWheel(Eigen::Matrix<double, numWheels, 1> pv,
     debugInfo.val[5] = dampedTarget(1, 0) * 100;
     debugInfo.val[6] = -dampedTarget(2, 0) * 100;
     debugInfo.val[7] = -dampedTarget(3, 0) * 100;
+
+    for (int i = 14; i < 18; i++)
+    {
+        debugInfo.val[i] = outputs(i-14, 0) * 100;
+    }
 
     WheelPrevTarget = dampedTarget;
 }

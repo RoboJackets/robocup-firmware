@@ -44,7 +44,7 @@ public:
 
 private:
     static constexpr double processNoise = 0.01;
-    static constexpr double encoderNoise = 0.4;
+    static constexpr double encoderNoise = 0.04;
     static constexpr double gyroNoise = 0.001;
     static constexpr double initCovariance = 10.0;
 

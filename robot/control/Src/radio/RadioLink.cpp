@@ -42,7 +42,7 @@ void RadioLink::send(const BatteryVoltage& batteryVoltage,
     status->kickHealthy     = static_cast<uint8_t>(kickerInfo.kickerHasError);
     status->fpgaStatus      = static_cast<uint8_t>(fpgaStatus.FPGAHasError);
 
-    for (int i = 0; i < 14; i++)
+    for (int i = 0; i < 18; i++)
         status->encDeltas[i] = debugInfo.val[i];
 
     radio->send(packet.data(), rtp::ReverseSize);

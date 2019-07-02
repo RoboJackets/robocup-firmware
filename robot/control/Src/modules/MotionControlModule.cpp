@@ -76,7 +76,7 @@ void MotionControlModule::entry(void) {
 
     // Only use the feedback if we have good inputs
     // todo figure out where the nan's are coming in
-    if (motorFeedback->isValid && imuData->isValid &&
+    if (motorFeedback->isValid && // imuData->isValid &&
         !isnan(measurements(0,0)) &&
         !isnan(measurements(1,0)) &&
         !isnan(measurements(2,0)) &&

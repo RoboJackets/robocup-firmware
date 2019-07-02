@@ -26,4 +26,4 @@ add_subdirectory(lib)
 
 add_subdirectory(control)
 add_subdirectory(base)
-add_subdirectory(hw-test)
+# add_subdirectory(hw-test)
