@@ -1,15 +1,30 @@
 #include "drivers/ISM43340.hpp"
 #include "delay.h"
 #include <cstring>
+#include "interrupt_in.h"
+
+volatile ISMConstants::State currentState;
+
+// Callback on every state change on data ready
+void dataReady_cb() {
+    // lmao
+    // this should be obvious
+    currentState =  static_cast<ISMConstants::State>(
+                        (static_cast<uint8_t>(currentState) + 1) %
+                         static_cast<uint8_t>(ISMConstants::State::NumStates));
+}
 
 ISM43340::ISM43340(std::unique_ptr<SPI> radioSPI, PinName nCsPin, PinName nResetPin,
                    PinName dataReadyPin)
     : radioSPI(std::move(radioSPI)),
       nCs(nCsPin),
       nReset(nResetPin),
-      dataReady(dataReadyPin),
+      dataReady{dataReadyPin.port, dataReadyPin.pin},
       currentSocket(SOCKET_TYPE::SEND),
       cmdStart(nullptr) {
+
+    currentState = ISMConstants::State::CommandReady;
+    interruptin_init_ex(dataReady, &dataReady_cb, PULL_DOWN, INTERRUPT_RISING_FALLING);
 
     nCs = ISMConstants::CHIP_DESELECT;
 
@@ -121,7 +136,8 @@ unsigned int ISM43340::receive(uint8_t* data, const unsigned int maxNumBytes) {
 void ISM43340::writeToSpi(uint8_t* command, int length) {
     uint32_t startTime = HAL_GetTick();
 
-    while (dataReady.read() != 1); // && (HAL_GetTick() - startTime) < 1000
+    //while (dataReady.read() != 1); // && (HAL_GetTick() - startTime) < 1000
+    while (currentState != ISMConstants::State::CommandReady);
 
     nCs = ISMConstants::CHIP_SELECT;
     DWT_Delay(100); // Must be 50 us or more. Measure first response on logic analyzer
@@ -141,7 +157,8 @@ void ISM43340::writeToSpi(uint8_t* command, int length) {
     nCs = ISMConstants::CHIP_DESELECT;
 
     // Wait till data ready goes to 0
-    while (dataReady.read() != 0);
+    //while (dataReady.read() != 0);
+    while (currentState != ISMConstants::State::CommandAck);
 }
 
 uint32_t ISM43340::readFromSpi() {
@@ -151,8 +168,9 @@ uint32_t ISM43340::readFromSpi() {
     readBuffer.clear();
 
     // Wait till data ready goes to 1
-    while (dataReady.read() != 1); // && (HAL_GetTick() - startTime) < 1000
-    
+    //while (dataReady.read() != 1); // && (HAL_GetTick() - startTime) < 1000
+    while (currentState != ISMConstants::State::ResponseReady);
+
     nCs = ISMConstants::CHIP_SELECT;
     DWT_Delay(100); // Must be 50 us or more. Measure first response on logic analyzer
 
@@ -160,7 +178,7 @@ uint32_t ISM43340::readFromSpi() {
     // 0x25 0x25 is a valid character combination in the packet
     bool foundAnyData = false;
 
-    while (dataReady.read() == 1) { //  && (HAL_GetTick() - startTime) < 1000
+    while (currentState != ISMConstants::State::ResponseDone) { //dataReady.read() == 1) { //  && (HAL_GetTick() - startTime) < 1000
         uint8_t data1 = radioSPI->transmitReceive(ISMConstants::READ);
         uint8_t data2 = radioSPI->transmitReceive(ISMConstants::READ);
 
@@ -291,12 +309,12 @@ void ISM43340::reset() {
 
     // Wait for device to turn on
     int i = 0;
-    while (dataReady.read() != 1 && i < 100) {
+    while (interruptin_read(dataReady) != 1 && i < 100) {
         HAL_Delay(10);
         i++;
     }
 
-    isInit = !dataReady.read();
+    isInit = !interruptin_read(dataReady);
 
     if (isInit) {
         printf("Could not initialize radio\r\n");
@@ -308,6 +326,7 @@ void ISM43340::reset() {
     DWT_Delay(500);
 
     // Get the first prompt
+    currentState = ISMConstants::State::ResponseReady;
     readFromSpi();
 
     // Send invalid command

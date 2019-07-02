@@ -5,6 +5,7 @@
 #include "GenericRadio.hpp"
 #include <vector>
 #include <memory>
+#include "pin_defs.h"
 
 namespace ISMConstants {
     // Hardware/driver config values
@@ -315,6 +316,16 @@ namespace ISMConstants {
     static const std::string CMD_FIRMWARE_UPDATE             = "ZU";
     static const std::string CMD_SET_OTA_METHOD              = "ZV=";
     static const std::string CMD_SHOW_SYSTEM_SETTINGS        = "Z?";
+
+    enum State {
+        CommandReady = 0,
+        CommandAck = 1,
+        ResponseReady = 2,
+        ResponseDone = 3,
+
+        
+        NumStates = 4 // DONT USE
+    };
 };
 
 class ISM43340 : public GenericRadio {
@@ -415,7 +426,8 @@ private:
 
     DigitalOut nCs;
     DigitalOut nReset;
-    DigitalIn dataReady;
+    pin_name dataReady;
+    //DigitalIn dataReady;
 
     // Current socket selected on the device
     enum SOCKET_TYPE { SEND = 0, RECEIVE = 1 };
