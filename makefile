@@ -3,7 +3,7 @@ all : build/conaninfo.txt
 	conan build . -bf build
 
 C_FIRMWARE_TESTS = blink blink_interrupt gpio flash usb_serial spi us_delay
-CPP_FIRMWARE_TESTS = blink gpio spi usb_serial i2c
+CPP_FIRMWARE_TESTS = blink gpio spi usb_serial i2c i2c_bus_recovery
 
 $(C_FIRMWARE_TESTS:%=upload-%-c): configure
 	cd build; make $(@F)

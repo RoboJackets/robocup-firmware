@@ -1,4 +1,5 @@
 #include "I2C.hpp"
+#include "delay.h"
 
 #define I2C_TIMING 0x10A60D20
 
@@ -32,6 +33,7 @@ I2C::I2C(I2CBus i2cBus) {
             HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
             // Configure SCL
+            // Same pin modes as above
             GPIO_InitStruct.Pin       = GPIO_PIN_6;
             HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
@@ -60,22 +62,95 @@ I2C::~I2C() {
 }
 
 
+void I2C::recover_bus() {
+    GPIO_InitTypeDef GPIO_InitStruct;
+
+    // Revert scl back to gpio
+    HAL_GPIO_DeInit(GPIOB, GPIO_PIN_6);
+    GPIO_InitStruct.Pin       = GPIO_PIN_6;
+    GPIO_InitStruct.Mode      = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Pull      = GPIO_PULLUP;
+    GPIO_InitStruct.Speed     = GPIO_SPEED_HIGH;
+    GPIO_InitStruct.Pin       = GPIO_PIN_6;
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+    // todo select correct pins/port
+    for (unsigned i = 0; i < 20; i++) {
+        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PinState::GPIO_PIN_RESET);
+        DWT_Delay(9); // Actually 9.54 us
+        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PinState::GPIO_PIN_SET);
+        DWT_Delay(9);
+    }
+
+    
+    // Configure SDA pin for i2c again
+    HAL_GPIO_DeInit(GPIOB, GPIO_PIN_6);
+    GPIO_InitStruct.Pin       = GPIO_PIN_6;
+    GPIO_InitStruct.Mode      = GPIO_MODE_AF_OD;
+    GPIO_InitStruct.Pull      = GPIO_PULLUP;
+    GPIO_InitStruct.Speed     = GPIO_SPEED_HIGH;
+    GPIO_InitStruct.Alternate = GPIO_AF4_I2C1;
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+}
+
 void I2C::transmit(uint8_t address, uint8_t regAddr, uint8_t data) {
-    HAL_I2C_Mem_Write(&i2cHandle, address, regAddr, 1, &data, 1, 20);
+    HAL_StatusTypeDef ret = HAL_I2C_Mem_Write(&i2cHandle, address,
+                                              regAddr, 1,
+                                              &data, 1,
+                                              5);
+
+    // Possibly a bus error?
+    // Try to do a bus recovery
+    // by sending some clock cycles out
+    if (ret != HAL_OK) {
+        recover_bus();
+    }
 }
 
 void I2C::transmit(uint8_t address, uint8_t regAddr, const std::vector<uint8_t>& data) {
-    HAL_I2C_Mem_Write(&i2cHandle, address, regAddr, 1, (uint8_t*)(data.data()), data.size(), 20);
+    HAL_StatusTypeDef ret = HAL_I2C_Mem_Write(&i2cHandle, address,
+                                              regAddr, 1,
+                                              (uint8_t*)(data.data()), data.size(),
+                                              5);
+
+    // Possibly a bus error?
+    // Try to do a bus recovery
+    // by sending some clock cycles out
+    if (ret != HAL_OK) {
+        recover_bus();
+    }
 }
 
 uint8_t I2C::receive(uint8_t address, uint8_t regAddr) {
     uint8_t data = 0;
-    HAL_I2C_Mem_Read(&i2cHandle, address, regAddr, 1, &data, 1, 20);
+    HAL_StatusTypeDef ret = HAL_I2C_Mem_Read(&i2cHandle, address,
+                                             regAddr, 1,
+                                             &data, 1,
+                                             5);
+
+    // Possibly a bus error?
+    // Try to do a bus recovery
+    // by sending some clock cycles out
+    if (ret != HAL_OK) {
+        recover_bus();
+    }
+
     return data;
 }
 
 std::vector<uint8_t> I2C::receive(uint8_t address, uint8_t regAddr, size_t count) {
     std::vector<uint8_t> data(count);
-    HAL_I2C_Mem_Read(&i2cHandle, address, regAddr, 1, data.data(), count, 20);
+    HAL_StatusTypeDef ret = HAL_I2C_Mem_Read(&i2cHandle, address,
+                                             regAddr, 1,
+                                             data.data(), count,
+                                             5);
+
+    // Possibly a bus error?
+    // Try to do a bus recovery
+    // by sending some clock cycles out
+    if (ret != HAL_OK) {
+        recover_bus();
+    }
+
     return data;
 }

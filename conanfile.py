@@ -2,7 +2,7 @@ from conans import ConanFile, CMake
 
 class MtrainConan(ConanFile):
     name = "mTrain"
-    version = "0.1.5"
+    version = "0.1.6"
     url = "https://github.com/RoboJackets/mtrain-firmware"
     description = "mTrain description"
     license = "Apache"

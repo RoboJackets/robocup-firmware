@@ -20,6 +20,9 @@ public:
     uint8_t receive(uint8_t address, uint8_t regAddr);
     std::vector<uint8_t> receive(uint8_t address, uint8_t regAddr, size_t count);
 
+    void recover_bus();
+
 private:
+
     I2C_HandleTypeDef i2cHandle = {};
 };
