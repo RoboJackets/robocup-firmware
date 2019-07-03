@@ -161,7 +161,7 @@ void KickerBoard::service() {
         command |= CHARGE_ALLOWED;
     }
 
-    command |= _kick_strength & KICK_POWER_MASK;
+    command |= static_cast<uint8_t>(static_cast<float>(_kick_strength)/255 * 0xF) & KICK_POWER_MASK;
 
     // Transmit byte over to kicker
     // Must wait 10 us such that the isr actually triggers
