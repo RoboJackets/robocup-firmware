@@ -24,7 +24,7 @@ RobotController::RobotController(uint32_t dt_us)
       BodyOutputLimited(false), dt(dt_us/1000000.0) {
 
     // Body
-    BodyKp << 0, 0, 0.5; // 1, 1.5, 1;
+    BodyKp << 0, 0, 0.0; //1, 1.5, 1;
     BodyKi << 0, 0, 0; //0.02, 0.02, 0.02;
 
     BodyErrorSum << 0, 0, 0;
@@ -164,12 +164,13 @@ bool RobotController::limitWheelAccel(const Eigen::Matrix<double, numWheels, 1> 
 
     for (int i = 0; i < numWheels; i++) {
         if (delta(i, 0) > dt*maxWheelAccel) {
-            delta(i, 0) = dt*maxWheelAccel;
+            // delta(i, 0) = dt*maxWheelAccel;
+            delta *= dt*maxWheelAccel / delta(i, 0);
             limited = true;
         }
 
         if (delta(i, 0) < -dt*maxWheelAccel) {
-            delta(i, 0) = -dt*maxWheelAccel;
+            delta *= -dt*maxWheelAccel / delta(i, 0);
             limited = true;
         }
     }

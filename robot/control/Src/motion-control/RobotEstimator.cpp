@@ -60,6 +60,7 @@ void RobotEstimator::update(Eigen::Matrix<double, numOutputs, 1> z) {
 
     x_hat += K*y;
     P = (I - K*H)*P;
+    x_hat(2, 0) = z(4);
 }
 
 void RobotEstimator::getState(Eigen::Matrix<double, numStates, 1>& state) {

@@ -78,6 +78,7 @@ IMUModule::IMUModule(std::shared_ptr<I2C> sharedI2C, IMUData * imuData){ //, imu
 }
 
 void IMUModule::entry(void) {
+    return;
     // Accel lsb -> g conversions
     // +- 2g = 16384 lsb/g
     // +- 4g = 8192 lsb/g
