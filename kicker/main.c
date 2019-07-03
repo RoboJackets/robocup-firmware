@@ -273,9 +273,9 @@ ISR(SPI_STC_vect) {
     command.kick_power        = recv_data & KICK_POWER_MASK;
 
     // force min power of 50%
-    if (command.kick_power < 0x03) {
-        command.kick_power = 0x03;
-    }
+    //if (command.kick_power < 0x03) {
+    //    command.kick_power = 0x03;
+    //}
 
     // If chip, force max power
     if (!command.kick_type_is_kick) {
