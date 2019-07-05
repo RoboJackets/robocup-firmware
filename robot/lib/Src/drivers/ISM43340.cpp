@@ -308,10 +308,8 @@ void ISM43340::reset() {
     radioSPI->frequency(ISMConstants::SPI_FREQ);
 
     // Wait for device to turn on
-    int i = 0;
-    while (interruptin_read(dataReady) != 1 && i < 100) {
+    while (interruptin_read(dataReady) != 1) {
         HAL_Delay(10);
-        i++;
     }
 
     isInit = !interruptin_read(dataReady);
