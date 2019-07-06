@@ -19,6 +19,34 @@ template <typename T> T bounded(T val, T min, T max) {
     return (val < max && val > min);
 }
 
+double limit(double val, double maxabs) {
+    if (val > maxabs) {
+        return maxabs;
+    } else if (val < -maxabs) {
+        return -maxabs;
+    } else {
+        return val;
+    }
+}
+
+double JERK_LIMIT = 10.0;
+double TICK_TIME = 5e-3;
+double ROBOT_MASS_X = 6.35;
+double ROBOT_MASS_Y = 6.35;
+double ROBOT_MASS_H = 6.35 * 0.37;
+double ROBOT_RADIUS = 0.0794;
+
+void apply_wheel_force(const Eigen::Matrix<double, 4, 1> force, const Eigen::Matrix<double, 4, 1> speeds, Eigen::Matrix<double, 4, 1>& outputs) {
+    double CURRENT_PER_TORQUE = 1.0 / 25.1e-3;
+    double PHASE_RESISTANCE = 0.464;
+    for (int i = 0; i < 4; i++) {
+        double torque = force(i) * RobotModel::get().WheelRadius / 3.0;
+        double voltage = torque * CURRENT_PER_TORQUE * PHASE_RESISTANCE / 24.0;
+        double back_emf = (double) speeds(i) * RobotModel::get().SpeedToDutyCycle / 512.0;
+        outputs(i, 0) = 0.14 * voltage + back_emf * 0.7;
+    }
+}
+
 RobotController::RobotController(uint32_t dt_us)
     : BodyUseILimit(true), BodyInputLimited(false),
       BodyOutputLimited(false), dt(dt_us/1000000.0) {
@@ -42,92 +70,69 @@ RobotController::RobotController(uint32_t dt_us)
 void RobotController::calculateBody(Eigen::Matrix<double, numStates, 1> pv,
                                     Eigen::Matrix<double, numStates, 1> sp,
                                     Eigen::Matrix<double, numWheels, 1>& outputs) {
-    Eigen::Matrix<double, numStates, 1> dampedTarget;
+    if (std::abs(sp(0)) > 6.0) {
+        sp(0) = sgn(sp(0)) * 6.0;
+    }
+    
+    Eigen::Matrix<double, numStates, 1> linear_accel = (sp - pv) / dt * 0.02; 
 
-    // Force accel to be in robot physical limits
-    // Assume we can limit linear accel and thats good enough
-    // to limit wheel accel correctly to not slip
-    BodyInputLimited = limitBodyAccel(sp, dampedTarget);
 
-    // get error
-    Eigen::Matrix<double, numStates, 1> error = dampedTarget - pv;
+    static Eigen::Matrix<double, numStates, 1> prev_linear_accel(0, 0, 0);
 
-    // Don't allow the integral to keep going unless we are within a range
-    // and not saturated
-    // TODO: Stop the problem where output limits reset integral such that it integrates
-    // up to max again
-    for (int i = 0; i < numStates; i++) {
-        if (!BodyInputLimited && !BodyOutputLimited) {
-            if (bounded(error(i,0), -BodyILimit(i,0), BodyILimit(i,0))) {
-                BodyErrorSum(i,0) += error(i,0);
-            } else {
-                BodyErrorSum(i,0) = error(i,0);
-            }
-        }
+    Eigen::Matrix<double, numStates, 1> linear_diff = linear_accel - prev_linear_accel;
+
+    linear_diff(0, 0) = limit(linear_diff(0, 0), JERK_LIMIT * TICK_TIME);
+
+    linear_diff(1, 0) = limit(linear_diff(1, 0), JERK_LIMIT * TICK_TIME);
+
+    linear_diff(2, 0) = limit(linear_diff(2, 0), JERK_LIMIT * TICK_TIME * 10);
+
+    linear_accel = prev_linear_accel + linear_diff;
+
+    // Eigen::Matrix<double, 4, 1> wheel_accel = RobotModel::get().BotToWheel * linear_accel;
+    // for (int i = 0; i < numStates; i++) {
+    //     if (fabs(wheel_accel(i, 0)) > 30.0) {
+    //         double factor  =fabs(30.0 / wheel_accel(i, 0));
+    //         wheel_accel *= factor;
+    //         linear_accel *= factor;
+    //     }
+    // }
+
+    if (std::abs(linear_accel(0)) > 1.5) {
+        linear_accel(0) = 1.5 * sgn(linear_accel(0));
     }
 
-    // FF + P
-    Eigen::Matrix<double, numStates, 1> outputSpeed = dampedTarget +
-                                                      BodyKp.cwiseProduct(error) +
-                                                      BodyKi.cwiseProduct(BodyErrorSum);
+    prev_linear_accel = linear_accel;
+    linear_accel(2, 0) = sp(2) - pv(2);
 
-    // todo, clip max vel
-    // 3m/s and 20rad/s?
-    outputs = RobotModel::get().BotToWheel * outputSpeed;
+    Eigen::Matrix<double, numStates, 1> robot_force = Eigen::Matrix<double, 3, 1>(ROBOT_MASS_X, ROBOT_MASS_Y, 30 * ROBOT_MASS_H * ROBOT_RADIUS).cwiseProduct(linear_accel);
 
-    debugInfo.val[8] = pv(0, 0) * 100;
-    debugInfo.val[9] = pv(1, 0) * 100;
-    debugInfo.val[10] = pv(2, 0) * 100;
+    Eigen::Matrix<double, numWheels, 1> wheel_force = RobotModel::get().BotToWheel * robot_force;
 
-    debugInfo.val[11] = dampedTarget(0, 0) * 100;
-    debugInfo.val[12] = dampedTarget(1, 0) * 100;
-    debugInfo.val[13] = dampedTarget(2, 0) * 100;
+    debugInfo.val[0] = linear_accel(0,0) * 1000;
+    debugInfo.val[1] = linear_accel(1,0) * 1000;
+    debugInfo.val[2] = linear_accel(2,0) * 1000;
+    debugInfo.val[3] = sp(0,0) * 1000;
+    debugInfo.val[4] = sp(1,0) * 1000;
+    debugInfo.val[5] = sp(2,0) * 1000;
+    debugInfo.val[6] = pv(0,0) * 1000;
+    debugInfo.val[7] = pv(1,0) * 1000;
+    debugInfo.val[8] = pv(2,0) * 1000;
+    debugInfo.val[9] = 420 * 1000;
+    
+    apply_wheel_force(wheel_force, RobotModel::get().BotToWheel * pv, outputs);
 
-    BodyPrevTarget = dampedTarget;
+    debugInfo.val[10] = outputs(0, 0) * 1000;
+    debugInfo.val[11] = outputs(1, 0) * 1000;
+    debugInfo.val[12] = outputs(2, 0) * 1000;
+    debugInfo.val[13] = outputs(3, 0) * 1000;
 }
 
 void RobotController::calculateWheel(Eigen::Matrix<double, numWheels, 1> pv,
                                      Eigen::Matrix<double, numWheels, 1> sp,
                                      Eigen::Matrix<double, numWheels, 1>& outputs) {
-    Eigen::Matrix<double, numWheels, 1> dampedTarget;
-    limitWheelAccel(sp, dampedTarget);
-
-    Eigen::Matrix<double, numWheels, 1> error = dampedTarget - pv;
-
-    // todo replace 511 with duty cycle max
-    // clean up clip code
-    outputs = dampedTarget + WheelKp.cwiseProduct(error);
-    outputs = outputs * RobotModel::get().SpeedToDutyCycle / 511;
-
-    // todo, calc actual max body vel somewhere else
-    for (int i = 0; i < 4; i++) {
-        if (outputs(i,0) > 1.0) {
-            outputs(i,0) = 1.0;
-            BodyOutputLimited = true;
-        } else if (outputs(i,0) < -1.0) {
-            outputs(i,0) = -1.0;
-            BodyOutputLimited = true;
-        } else {
-            BodyOutputLimited = false;
-        }
-    }
-
-    debugInfo.val[0] = pv(0, 0) * 100;
-    debugInfo.val[1] = pv(1, 0) * 100;
-    debugInfo.val[2] = -pv(2, 0) * 100;
-    debugInfo.val[3] = -pv(3, 0) * 100;
-
-    debugInfo.val[4] = dampedTarget(0, 0) * 100;
-    debugInfo.val[5] = dampedTarget(1, 0) * 100;
-    debugInfo.val[6] = -dampedTarget(2, 0) * 100;
-    debugInfo.val[7] = -dampedTarget(3, 0) * 100;
-
-    for (int i = 14; i < 18; i++)
-    {
-        debugInfo.val[i] = outputs(i-14, 0) * 100;
-    }
-
-    WheelPrevTarget = dampedTarget;
+    outputs = sp;
+    return;
 }
 
 bool RobotController::limitBodyAccel(const Eigen::Matrix<double, numStates, 1> finalTarget,
