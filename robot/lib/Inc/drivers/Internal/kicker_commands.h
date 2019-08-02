@@ -1,5 +1,33 @@
 #pragma once
 
+// Kicker packet definition
+// |---------------------------------------|
+// | (7) | (6) (5) | (4) | (3) (2) (1) (0) |
+// |---------------------------------------| 
+//
+// Bits 0-3
+//  Power of kick
+//      0 - 15
+//      0 is min power
+//      15 is max power
+//
+// Bits 4
+//  Charge Allowed
+//      Whether the kicker can start charging the caps
+//      1 Charge allowed
+//      0 Charge not allowed
+//
+// Bits 5-6
+//  Type of kick activation
+//      0b01 Kick on breakbeam
+//      0b10 Kick immediately
+//      0b11 Cancel all current kick commands
+//
+// Bits 7
+//  Type of kick
+//      1 Chip
+//      0 Kick
+
 // Whether the kick should be a chip or kick
 #define TYPE_FIELD (1 << 7)
 #define TYPE_KICK (0 << 7)
