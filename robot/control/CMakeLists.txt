@@ -15,7 +15,7 @@ add_executable(control.elf
 )
 
 target_include_directories(control.elf PUBLIC
-    Inc
+	Inc
 	"${CONAN_MTRAIN_ROOT}/external/middleware/STM32_USB_Device_Library/Core/Inc/"
 	"${CONAN_MTRAIN_ROOT}/external/middleware/STM32_USB_Device_Library/Class/CDC/Inc"
 )
