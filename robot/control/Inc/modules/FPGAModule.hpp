@@ -40,12 +40,12 @@ private:
      * This is a safety feature to prevent the motors from moving
      * if the motion control dies
      */
-    const static uint32_t COMMAND_TIMEOUT = 250; // ms
+    static constexpr uint32_t COMMAND_TIMEOUT = 250; // ms
 
     /**
      * Number of enc ticks per revolution of the wheel
      * Encoder is on the motor before the gear ratio
      */
-    const static uint32_t GEAR_RATIO = 3;
-    const static uint32_t ENC_TICK_PER_REV = 2048 * GEAR_RATIO;
+    static constexpr uint32_t GEAR_RATIO = 3;
+    static constexpr uint32_t ENC_TICK_PER_REV = 2048 * GEAR_RATIO;
 };
