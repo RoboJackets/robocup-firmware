@@ -51,5 +51,5 @@ private:
      * This is a safety feature to prevent the motors from moving
      * if the motion control dies
      */
-    const static uint32_t COMMAND_TIMEOUT = 250; // ms
+    static constexpr uint32_t COMMAND_TIMEOUT = 250; // ms
 };
