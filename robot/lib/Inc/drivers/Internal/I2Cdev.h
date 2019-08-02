@@ -8,8 +8,6 @@
 #ifndef I2Cdev_h
 #define I2Cdev_h
 
-//#include "mbed.h"
-//#include "I2CMasterRtos.hpp"
 #include "I2C.hpp"
 #include <memory>
 
