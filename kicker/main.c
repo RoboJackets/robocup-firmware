@@ -135,10 +135,10 @@ void handle_debug_mode() {
 
         // Simple rising edge triggers
         if (!kick_db_down && kick_db_pressed) 
-            kick(255, true);
+            kick(255, IS_KICK);
 
         if (!chip_db_down && chip_db_pressed)
-            kick(255, false);
+            kick(255, IS_CHIP);
 
         // If we should be charging
         if (!charge_db_down && charge_db_pressed)
