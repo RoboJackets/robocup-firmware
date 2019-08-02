@@ -75,6 +75,7 @@ DebugInfo debugInfo;
 
 int main() {
     HAL_Delay(100);
+
     std::shared_ptr<I2C> sharedI2C = std::make_shared<I2C>(SHARED_I2C_BUS);
     std::shared_ptr<SPI> fpgaKickerSPI = std::make_shared<SPI>(FPGA_KICKER_SPI_BUS, std::nullopt, 16'000'000);
     std::shared_ptr<SPI> dot_star_spi = std::make_shared<SPI>(DOT_STAR_SPI_BUS, std::nullopt, 100'000);
@@ -84,9 +85,7 @@ int main() {
     // this will allow us to force the CS lines into the correct
     // position before doing anything like flashing other
     // devices on the bus
-    //DigitalOut kickerCS(KICKER_CS);
-    //kickerCS = 1;
-
+    
     HAL_Delay(100);
 
     std::shared_ptr<MCP23017> ioExpander = std::make_shared<MCP23017>(sharedI2C, 0x42);
@@ -149,6 +148,11 @@ int main() {
     moduleList.emplace_back(curTime, LEDModule::period,           LEDModule::runtime,           &led);
 
     while (true) {
+        // Must do all timing in systick
+        // Base time we use is in systick, and if you convert from systick
+        // to us and try to compare timepoints, the value will "overflow" at
+        // some random point which messes up the `Current - Start` magic
+        // that automatically deals with delta time using the math behind overflows
         uint32_t loopStartTime = DWT_GetTick();
         uint32_t loopEndTime = DWT_GetTick() + SUPER_LOOP_PERIOD*DWT_SysTick_To_us();
 
@@ -162,8 +166,8 @@ int main() {
             //
             // Subtraction allows for rollover compensation
             // then convertion to signed allows simple comparison
-            if ((int32_t)(currentTime - module.nextRunTime) >= 0 &&
-                (int32_t)(loopEndTime - currentTime) >= module.moduleRunTime) {
+            if (static_cast<int32_t(currentTime - module.nextRunTime) >= 0 &&
+                static_cast<int32_t>(loopEndTime - currentTime) >= module.moduleRunTime) {
                 
                 // todo change to loop start time
                 module.lastRunTime = loopStartTime;
@@ -173,7 +177,7 @@ int main() {
             }
 
             // Check if we missed a module X times in a row
-            if ((int32_t)(currentTime - module.nextRunTime) > MAX_MISS_CNT*module.moduleRunTime) {
+            if (static_cast<int32_t>(currentTime - module.nextRunTime) > MAX_MISS_CNT*module.moduleRunTime) {
                 //printf("WARNING: Missed module #%d run %d times in a row\r\n", i+1, MAX_MISS_CNT);
                 led.missedModuleRun();
             }
