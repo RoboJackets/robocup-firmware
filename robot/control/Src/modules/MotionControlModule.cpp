@@ -15,11 +15,10 @@ MotionControlModule::MotionControlModule(BatteryVoltage *const batteryVoltage,
     : batteryVoltage(batteryVoltage), imuData(imuData),
       motionCommand(motionCommand), motorFeedback(motorFeedback),
       motorCommand(motorCommand),
-      dribblerController(period), // todo check if namespace is needed
+      dribblerController(period),
       robotController(period),
       robotEstimator(period) {
-    
-    // todo init estimator / regulator
+
     prevCommand << 0, 0, 0, 0;
 
     motorCommand->isValid = false;
@@ -33,7 +32,7 @@ MotionControlModule::MotionControlModule(BatteryVoltage *const batteryVoltage,
 void MotionControlModule::entry(void) {
     // No radio comm in a little while
     // return and die
-    if (!motionCommand->isValid /*|| !isRecentUpdate(motionCommand->lastUpdate)*/) {
+    if (!motionCommand->isValid || !isRecentUpdate(motionCommand->lastUpdate)) {
         motorCommand->isValid = false;
         motorCommand->lastUpdate = HAL_GetTick();
     }
@@ -44,7 +43,7 @@ void MotionControlModule::entry(void) {
     measurements << 0, 0, 0, 0, 0;
     currentWheels << 0, 0, 0, 0;
     
-    if (motorFeedback->isValid/** && isRecentUpdate(motorFeedback->lastUpdate)*/) {
+    if (motorFeedback->isValid && isRecentUpdate(motorFeedback->lastUpdate)) {
         for (int i = 0; i < 4; i++) {
             if (!isnan(measurements(i,0))) {
                 measurements(i, 0) = motorFeedback->encoders[i];
@@ -56,7 +55,7 @@ void MotionControlModule::entry(void) {
         }
     }
 
-    if (imuData->isValid/** && isRecentUpdate(imuData->lastUpdate)*/) {
+    if (imuData->isValid && isRecentUpdate(imuData->lastUpdate)) {
         measurements(4, 0) = imuData->omegas[2]; // Z gyro
     }
 
@@ -75,7 +74,12 @@ void MotionControlModule::entry(void) {
 
 
     // Only use the feedback if we have good inputs
-    // todo figure out where the nan's are coming in
+    // NAN's most likely came from the divide by dt in the fpga
+    // which was 0, resulting in bad behavior
+    // Leaving this hear until someone can test, then remove
+    // this
+    // - Joe Aug 2019
+    // TODO: When imu is implemented, check for imu data
     if (motorFeedback->isValid && // imuData->isValid &&
         !isnan(measurements(0,0)) &&
         !isnan(measurements(1,0)) &&

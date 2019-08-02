@@ -74,12 +74,12 @@ private:
     double dt;
 
     // Max wheel acceleration rad per second^2)
-    static constexpr double maxWheelAccel = 160;//60//120
+    static constexpr double maxWheelAccel = 160;
 
     // Max acceleration (meters per second^2)
-    static constexpr double maxForwardAccel = 8;//4;
+    static constexpr double maxForwardAccel = 8;
     // Max acceleration (meters per second^2)
-    static constexpr double maxSideAccel = 8;//2.2;
+    static constexpr double maxSideAccel = 8;
 
     // Max angular acceleration (rad per second^2)
     static constexpr double maxAngularAccel = 40.0;
