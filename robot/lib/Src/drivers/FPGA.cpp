@@ -82,7 +82,7 @@ bool FPGA::configure() {
 
     // show INIT_B error if it never went low
     if (!fpgaReady) {
-        //LOG(SEVERE, "INIT_B pin timed out\t(PRE CONFIGURATION ERROR)");
+        printf("[SEVERE] FPGA: INIT_B pin timed out\r\n");
 
         return false;
     }
@@ -106,15 +106,13 @@ bool FPGA::configure() {
         if (configSuccess) {
             // everything worked are we're good to go!
             _isInit = true;
-            //LOG(DEBUG, "DONE pin state:\t%s", _done ? "HIGH" : "LOW");
-
             return true;
         }
 
-        //LOG(SEVERE, "DONE pin timed out\t(POST CONFIGURATION ERROR)");
+        printf("[SEVERE] FPGA: DONE pin timed out\r\n");
     }
 
-    //LOG(SEVERE, "FPGA bitstream write error");
+    printf("[SEVERE] FPGA: FPGA bitstream write error\r\n");
 
     return false;
 }
@@ -124,8 +122,6 @@ bool FPGA::send_config() {
     
     _spi_bus->frequency(16'000'000);
     _spi_bus->transmit(FPGA_BYTES, FPGA_BYTES_LEN);
-    
-    // SPI dummySPI(RJ_SPI_MOSI, RJ_SPI_MISO, RJ_SPI_SCK);
     
     chip_deselect();
     
@@ -182,10 +178,9 @@ uint8_t FPGA::read_duty_cycles(int16_t* duty_cycles, size_t size) {
 uint8_t FPGA::set_duty_cycles(int16_t* duty_cycles, size_t size) {
     uint8_t status;
 
-    //ASSERT(size == 5);
-    //if (size != 5) {
-        //LOG(WARN, "set_duty_cycles() requires input buffer to be of size 5");
-    //}
+    if (size != 5) {
+        printf("[WARN] FPGA: set_duty_cycles() requires input buffer to be of size 5\r\n");
+    }
 
     // Check for valid duty cycles values
     for (size_t i = 0; i < size; i++)
@@ -212,7 +207,7 @@ uint8_t FPGA::set_duty_get_enc(int16_t* duty_cycles, size_t size_dut,
     uint8_t status;
 
     if (size_dut != 5 || size_enc != 5) {
-        //LOG(WARN, "set_duty_get_enc() requires input buffers to be of size 5");
+        printf("[WARN] FPGA: set_duty_get_enc() requires input buffers to be of size 5\r\n");
     }
 
     // Check for valid duty cycles values
@@ -297,7 +292,6 @@ uint8_t FPGA::watchdog_reset() {
 }
 
 void FPGA::chip_select() {
-    //_spi_bus->frequency(FPGA_SPI_FREQ);
     _nCs = 1;
 }
 

@@ -104,16 +104,14 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
     const uint8_t* progBinary = KICKER_BYTES;
     unsigned int length = KICKER_BYTES_LEN;
 
-    // Program it!
-    printf("Attempting to program kicker.\r\n");
+    printf("[INFO] Kicker: Attempting to program kicker.\r\n");
     bool shouldProgram = true;
     if (onlyIfDifferent &&
         (checkMemory(ATTINY_PAGESIZE, ATTINY_NUM_PAGES, progBinary, length, false) == 0))
         shouldProgram = false;
     
     if (!shouldProgram) {
-        //LOG(INFO, "Kicker up-to-date, no need to flash.");
-        printf("Kicker up-to-date, no need to flash.\r\n");
+        printf("[INFO] Kicker: Kicker up-to-date, no need to flash.\r\n");
 
         // exit programming mode by bringing nReset high
         exitProgramming();
@@ -121,11 +119,9 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
         bool success = program(progBinary, length, ATTINY_PAGESIZE, ATTINY_NUM_PAGES);
 
         if (!success) {
-            //LOG(WARN, "Failed to program kicker.");
-            printf("Failed to program kicker.\r\n");
+            printf("[WARN] Kicker: Failed to program kicker.\r\n");
         } else {
-            //LOG(INFO, "Kicker successfully programmed.");
-            printf("Kicker successfully programmed.\r\n");
+            printf("[INFO] Kicker: Kicker successfully programmed.\r\n");
         }
     }
 
@@ -164,9 +160,9 @@ void KickerBoard::service() {
     command |= static_cast<uint8_t>(static_cast<float>(_kick_strength)/255 * 0xF) & KICK_POWER_MASK;
 
     // Transmit byte over to kicker
-    // Must wait 10 us such that the isr actually triggers
+    // Must wait at least 10 us such that the isr actually triggers
     _nCs->write(0);
-    DWT_Delay(50);//10
+    DWT_Delay(50);
     uint8_t resp = _spi->transmitReceive(command);
     DWT_Delay(50);
     _nCs->write(1);
