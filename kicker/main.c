@@ -45,6 +45,9 @@
 // get different ball reading for X * 10 us before switching
 #define BALL_SENSE_MAX_SAMPLES 5
 
+// Corresponds to the values of the kick_type_is_kick
+#define IS_KICK true
+#define IS_CHIP false
 
 // Used to time kick and chip durations, -1 indicates inactive state
 volatile struct {
@@ -272,13 +275,8 @@ ISR(SPI_STC_vect) {
     command.commanded_charge  = recv_data & CHARGE_ALLOWED;
     command.kick_power        = recv_data & KICK_POWER_MASK;
 
-    // force min power of 50%
-    //if (command.kick_power < 0x03) {
-    //    command.kick_power = 0x03;
-    //}
-
     // If chip, force max power
-    if (!command.kick_type_is_kick) {
+    if (command.kick_type_is_kick == IS_CHIP) {
         command.kick_power = 0xF;
     }
 
@@ -337,7 +335,7 @@ ISR(TIMER0_COMPA_vect) {
          */
 
         // todo
-        if (current_kick_type_is_kick) {
+        if (current_kick_type_is_kick == IS_KICK) {
             HAL_SetPin(KICK_PIN);
         } else {
             HAL_SetPin(CHIP_PIN);
@@ -353,7 +351,7 @@ ISR(TIMER0_COMPA_vect) {
          */
 
         // todo
-        if (current_kick_type_is_kick) {
+        if (current_kick_type_is_kick == IS_KICK) {
             HAL_ClearPin(KICK_PIN);
         } else {
             HAL_ClearPin(CHIP_PIN);
