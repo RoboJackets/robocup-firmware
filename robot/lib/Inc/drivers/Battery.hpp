@@ -26,6 +26,9 @@ private:
     const float BATT_VOLTAGE_READ_RANGE =
         (MAX_SAFE_BATT_VOLTAGE_READ - MIN_SAFE_BATT_VOLTAGE_READ);
 
+    // AnalogIn hasn't been implemented it yet so
+    // we couldn't actually do this the correct way
+    // - Joe Aug 2019
     //AnalogIn battVoltageAIPin;
 
     float lastReadPercentage;
