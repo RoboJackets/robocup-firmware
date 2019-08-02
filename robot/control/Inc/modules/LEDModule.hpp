@@ -78,6 +78,13 @@ private:
     KickerInfo *const kickerInfo;
     RadioError *const radioError;
 
+    // Dot stars were removed so we could use their SPI
+    // bus for the kicker
+    // On startup, the kicker was pulling the spi lines
+    // incorrectly that caused the fpga to not boot correctly
+    // Add back in once opto-isolators are added to the control
+    // boards again
+    // - Joe Aug 2019
     //SPI dot_star_spi;
 
     std::shared_ptr<MCP23017> ioExpander;
