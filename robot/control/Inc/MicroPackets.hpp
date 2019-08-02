@@ -121,6 +121,12 @@ struct KickerInfo {
     bool ballSenseTriggered;
 };
 
+// 18 ints for debug info to pass back to soccer
+// Any -> Radio
+//
+// Use `extern DebugInfo debugInfo;` at the top of any cpp
+// and then set specific values using `debugInfo.val[i] = X`
+// It is up to the user to make sure the indicies don't conflict
 struct DebugInfo {
     int16_t val[18];
 };
