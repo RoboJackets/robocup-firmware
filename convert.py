@@ -1,5 +1,18 @@
 #!/usr/bin/env python3
 
+#
+# Converts the bin/nib file into a C header
+#
+# Both the fpga and kicker bins must be converted into a header
+# so we can dynamically program them on robot startup
+# This is the easy fix until a file system is built
+#
+# Example usage:
+# python3 convert.py kicker/build/bin/kicker.nib robot/lib/Inc/device-bins/kicker_bin.h KICKER_BYTES
+#
+# FPGA should be very similar
+#
+
 import sys
 
 if len(sys.argv) != 4:
