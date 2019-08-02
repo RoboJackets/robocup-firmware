@@ -20,8 +20,6 @@
 #define KICKER_CS p8
 #define KICKER_RST p7
 
-#define BALL_SENSE_LED p10 // todo: really check this
-
 #define HEX_SWITCH_BIT0 MCP23017::ExpPinName::PinA7
 #define HEX_SWITCH_BIT1 MCP23017::ExpPinName::PinA4
 #define HEX_SWITCH_BIT2 MCP23017::ExpPinName::PinA6
