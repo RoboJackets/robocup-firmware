@@ -334,7 +334,6 @@ ISR(TIMER0_COMPA_vect) {
          * wait for kick interval to end
          */
 
-        // todo
         if (current_kick_type_is_kick == IS_KICK) {
             HAL_SetPin(KICK_PIN);
         } else {
@@ -350,7 +349,6 @@ ISR(TIMER0_COMPA_vect) {
          * state
          */
 
-        // todo
         if (current_kick_type_is_kick == IS_KICK) {
             HAL_ClearPin(KICK_PIN);
         } else {
@@ -376,7 +374,7 @@ ISR(TIMER0_COMPA_vect) {
          */
 
         // stop prescaled timer
-        TCCR0B &= ~_BV(CS01); // todo
+        TCCR0B &= ~_BV(CS01);
     }
 }
 
@@ -418,10 +416,8 @@ void init() {
     // MISO as output
     // CS and MOSI as input
     HAL_SetInputPin(KICK_MOSI_PIN);
-    HAL_SetOutputPin(KICK_MISO_PIN); // must be configured manually
+    HAL_SetOutputPin(KICK_MISO_PIN);
     HAL_SetInputPin(N_KICK_CS_PIN);
-    HAL_SetInputPin(KICK_MOSI_PIN);
-    // All other autoconfigured on spi enable
 
     /**
      * LT3751 initialization
