@@ -9,6 +9,10 @@ volatile ISMConstants::State currentState;
 void dataReady_cb() {
     // lmao
     // this should be obvious
+    //
+    // In all seriousness, this is just a state machine where we always
+    // increment to the next state whenever there is an edge trigger
+    // This is basically the `++x % y` that you see
     currentState =  static_cast<ISMConstants::State>(
                         (static_cast<uint8_t>(currentState) + 1) %
                          static_cast<uint8_t>(ISMConstants::State::NumStates));
@@ -134,9 +138,6 @@ unsigned int ISM43340::receive(uint8_t* data, const unsigned int maxNumBytes) {
  * Let it run for a minute or so to see if it breaks eventually
  */
 void ISM43340::writeToSpi(uint8_t* command, int length) {
-    uint32_t startTime = HAL_GetTick();
-
-    //while (dataReady.read() != 1); // && (HAL_GetTick() - startTime) < 1000
     while (currentState != ISMConstants::State::CommandReady);
 
     nCs = ISMConstants::CHIP_SELECT;
@@ -157,18 +158,15 @@ void ISM43340::writeToSpi(uint8_t* command, int length) {
     nCs = ISMConstants::CHIP_DESELECT;
 
     // Wait till data ready goes to 0
-    //while (dataReady.read() != 0);
     while (currentState != ISMConstants::State::CommandAck);
 }
 
 uint32_t ISM43340::readFromSpi() {
     unsigned int bytesRead = 0;
-    uint32_t startTime = HAL_GetTick();
 
     readBuffer.clear();
 
     // Wait till data ready goes to 1
-    //while (dataReady.read() != 1); // && (HAL_GetTick() - startTime) < 1000
     while (currentState != ISMConstants::State::ResponseReady);
 
     nCs = ISMConstants::CHIP_SELECT;
@@ -178,7 +176,7 @@ uint32_t ISM43340::readFromSpi() {
     // 0x25 0x25 is a valid character combination in the packet
     bool foundAnyData = false;
 
-    while (currentState != ISMConstants::State::ResponseDone) { //dataReady.read() == 1) { //  && (HAL_GetTick() - startTime) < 1000
+    while (currentState != ISMConstants::State::ResponseDone) {
         uint8_t data1 = radioSPI->transmitReceive(ISMConstants::READ);
         uint8_t data2 = radioSPI->transmitReceive(ISMConstants::READ);
 
@@ -196,8 +194,6 @@ uint32_t ISM43340::readFromSpi() {
 
             foundAnyData = true;
         }
-
-        //DWT_Delay(1);
     }
 
     nCs = ISMConstants::CHIP_DESELECT;
@@ -290,7 +286,7 @@ int32_t ISM43340::selfTest() {
 void ISM43340::pingRouter() {
     sendCommand(ISMConstants::CMD_SET_HUMAN_READABLE);
 
-    sendCommand(ISMConstants::CMD_SET_PING_TARGET_ADDRESS, "172.16.1.1");
+    sendCommand(ISMConstants::CMD_SET_PING_TARGET_ADDRESS, ISMConstants::ROUTER_IP);
     sendCommand(ISMConstants::CMD_SET_PING_DELAY, "10");
     sendCommand(ISMConstants::CMD_SET_PING_REPEAT_COUNT, "10");
     sendCommand(ISMConstants::CMD_PING_TARGET_ADDRESS);
@@ -395,7 +391,7 @@ void ISM43340::reset() {
     sendCommand(ISMConstants::CMD_SET_TRANSPORT_REMOTE_PORT_NUMBER,
                 ISMConstants::LOCAL_PORT);
 
-    sendCommand(ISMConstants::CMD_SET_READ_TRANSPORT_PACKET_SIZE, "12"); // 12
+    sendCommand(ISMConstants::CMD_SET_READ_TRANSPORT_PACKET_SIZE, "12");
 
     sendCommand(ISMConstants::CMD_SET_READ_TRANSPORT_TIMEOUT, "1");
 
@@ -423,8 +419,6 @@ void ISM43340::reset() {
                 ISMConstants::TYPE_TRANSPORT_CLIENT::ENABLE);
 
     currentSocket = SOCKET_TYPE::SEND;
-
-    // todo set read timeout
 
     printf("Radio initialized\r\n");
 }
