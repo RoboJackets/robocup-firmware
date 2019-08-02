@@ -38,8 +38,6 @@ RadioModule::RadioModule(BatteryVoltage *const batteryVoltage,
 }
 
 void RadioModule::entry(void) {
-    secondRadioCS = 1;
-
     // Just check to see if our robot id is valid
     // That way we don't conflict with other robots on the network
     // that are working
