@@ -20,7 +20,7 @@ public:
     virtual void entry(void);
 
 private:
-    //IMUData *const imuData;
+    IMUData *const imuData;
 
-    //MPU6050 imu;
+    MPU6050 imu;
 };
