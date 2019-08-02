@@ -14,8 +14,8 @@ FPGAModule::FPGAModule(std::shared_ptr<SPI> spi,
 
     fpgaInitialized = fpga.configure();
 
-    // todo figure out why this returns false
-    // but the fpga still works
+    // FPGA initialized return doesn't actually work
+    // We should fix that eventually with the new fpga code
     //if (fpgaInitialized) {
     //    printf("INFO: FPGA configured\r\n");
     //} else {
@@ -60,8 +60,8 @@ void FPGAModule::entry(void) {
 
     // Make sure commands are valid
     // If they are not valid, we automatically send a 0 duty cycle
-    if (motorCommand->isValid /*&&
-        (HAL_GetTick() - motorCommand->lastUpdate) < COMMAND_TIMEOUT*/) {
+    if (motorCommand->isValid &&
+        (HAL_GetTick() - motorCommand->lastUpdate) < COMMAND_TIMEOUT) {
 
         for (int i = 0; i < 4; i++) {
             dutyCycles.at(i) = static_cast<int16_t>(
@@ -120,7 +120,7 @@ void FPGAModule::entry(void) {
         dt = 1;
     }
 
-    // Convert encoders to rad/sec from enc ticks since last readin
+    // Convert encoders to rad/sec from enc ticks since last reading
     for (int i = 0; i < 4; i++) {
         // (rad / s) = (enc) * (rev / enc) * (rad / rev) * (1 / sec)
         motorFeedback->encoders[i] = static_cast<float>(encDeltas[i]) * (1 / static_cast<float>(ENC_TICK_PER_REV)) * (2*M_PI / 1) * (1 / dt);
