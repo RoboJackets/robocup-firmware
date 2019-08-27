@@ -421,13 +421,11 @@ private:
      */
     void sendCommand(const std::string& command, const std::string& arg = "");
 
-    // todo switch to unique ptr
     std::unique_ptr<SPI> radioSPI;
 
     DigitalOut nCs;
     DigitalOut nReset;
     pin_name dataReady;
-    //DigitalIn dataReady;
 
     // Current socket selected on the device
     enum SOCKET_TYPE { SEND = 0, RECEIVE = 1 };
