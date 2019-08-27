@@ -7,7 +7,7 @@
 using namespace std;
 
 KickerBoard::KickerBoard(shared_ptr<SPI> spi, std::shared_ptr<DigitalOut> nCs,
-                         PinName nReset, PinName ball_led)
+                         PinName nReset)
     : AVR910(spi, nCs, nReset), _nCs(nCs), _spi(spi)  {}
 
 bool KickerBoard::verify_param(const char* name, char expected,

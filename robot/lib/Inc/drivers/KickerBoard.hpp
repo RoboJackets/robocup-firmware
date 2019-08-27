@@ -20,10 +20,8 @@ public:
      * @param spi A pointer to the shared spi bus
      * @param nCs mtrain pin for not chip select for the kicker board
      * @param nReset mtrain pin for not reset line on the ISP interface.
-     * @param ball_led mtrain pin for the ball sensed led
      */
-    KickerBoard(std::shared_ptr<SPI> spi, std::shared_ptr<DigitalOut> nCs, PinName nReset,
-                PinName ball_led);
+    KickerBoard(std::shared_ptr<SPI> spi, std::shared_ptr<DigitalOut> nCs, PinName nReset);
 
     /**
      * Reflashes the program on the kicker board MCU with the file
@@ -135,7 +133,6 @@ private:
 
     std::shared_ptr<DigitalOut> _nCs;
     std::shared_ptr<SPI> _spi;
-    // DigitalOut ballSenseLED;
 
     const uint8_t isChargedCutoff = 230;
 

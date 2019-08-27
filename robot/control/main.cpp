@@ -41,7 +41,7 @@ struct MODULE_META_DATA {
     const uint32_t modulePeriod;
 
     // Estimate in sysclock ticks of module runtime 
-    const uint32_t moduleRunTime;
+    const int32_t moduleRunTime;
 
     GenericModule* module;
 
@@ -50,7 +50,7 @@ struct MODULE_META_DATA {
      */
     MODULE_META_DATA(uint64_t lastRunTime,
                      uint32_t modulePeriod,
-                     uint32_t moduleRunTime,
+                     int32_t moduleRunTime,
                      GenericModule* module)
         : lastRunTime(lastRunTime),
           nextRunTime(lastRunTime + modulePeriod*DWT_SysTick_To_us()),
@@ -166,7 +166,7 @@ int main() {
             //
             // Subtraction allows for rollover compensation
             // then convertion to signed allows simple comparison
-            if (static_cast<int32_t(currentTime - module.nextRunTime) >= 0 &&
+            if (static_cast<int32_t>(currentTime - module.nextRunTime) >= 0 &&
                 static_cast<int32_t>(loopEndTime - currentTime) >= module.moduleRunTime) {
                 
                 // todo change to loop start time
@@ -184,7 +184,7 @@ int main() {
         }
 
         int32_t elapsed = DWT_GetTick() - loopStartTime;
-        if (elapsed < SUPER_LOOP_PERIOD*DWT_SysTick_To_us()) {
+        if (elapsed < static_cast<int32_t>(SUPER_LOOP_PERIOD*DWT_SysTick_To_us())) {
             DWT_Delay_Sys(SUPER_LOOP_PERIOD*DWT_SysTick_To_us() - elapsed);
         } else {
             //printf("WARNING: Overran super loop time\r\n");
