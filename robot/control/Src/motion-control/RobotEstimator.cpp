@@ -39,7 +39,7 @@ RobotEstimator::RobotEstimator(uint32_t dt_us) {
     x_hat << 0, 0, 0;
 }
 
-// 1.3 ms
+// TODO: Profile these functions
 void RobotEstimator::predict(Eigen::Matrix<double, numInputs, 1> u) {
     // x_hat = F*x_hat + B*last command
     // P = F*P*F' + Q
@@ -47,7 +47,6 @@ void RobotEstimator::predict(Eigen::Matrix<double, numInputs, 1> u) {
     P = F*P*F.transpose() + Q;
 }
 
-// 7 ms
 void RobotEstimator::update(Eigen::Matrix<double, numOutputs, 1> z) {
     // y = z - H*x_hat
     // S = H*P*H' + R
