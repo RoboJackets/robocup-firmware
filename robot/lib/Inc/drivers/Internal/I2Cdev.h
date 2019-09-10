@@ -8,15 +8,16 @@
 #ifndef I2Cdev_h
 #define I2Cdev_h
 
-#include "mbed.h"
-#include "I2CMasterRtos.hpp"
+#include "I2C.hpp"
+#include <memory>
+
 
 class I2Cdev {
 private:
-    I2CMasterRtos i2c;
+    std::shared_ptr<I2C> i2c;
 
 public:
-    I2Cdev(std::shared_ptr<SharedI2C> sharedI2C) : i2c(sharedI2C) {}
+    I2Cdev(std::shared_ptr<I2C> sharedI2C) : i2c(sharedI2C) {}
 
     int8_t readBit(uint8_t devAddr, uint8_t regAddr, uint8_t bitNum,
                    uint8_t* data, uint16_t timeout = I2Cdev::readTimeout());
@@ -54,5 +55,6 @@ public:
 
     static uint16_t readTimeout(void);
 };
+
 
 #endif

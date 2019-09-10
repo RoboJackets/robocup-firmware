@@ -3,32 +3,38 @@
 #include <avr/wdt.h>
 #include <avr/interrupt.h>
 #include <avr/io.h>
+#include <stddef.h>
+#include <stdlib.h>
 #include <util/delay.h>
 
-#include "drivers/Internal/kicker_commands.h"
+#include "HAL_attiny167.h"
+
+#include "kicker_config.h"
+#include "kicker_commands.h"
 #include "pins.h"
 
 // kicker parameters
-#define MAX_KICK_STRENGTH 255.0f
+#define MAX_KICK_STRENGTH 15.0f //2^4 - 1
 #define MIN_EFFECTIVE_KICK_FET_EN_TIME 0.8f
 #define MAX_EFFECTIVE_KICK_FET_EN_TIME 10.0f
 
 #define KICK_TIME_SLOPE \
     (MAX_EFFECTIVE_KICK_FET_EN_TIME - MIN_EFFECTIVE_KICK_FET_EN_TIME)
 
-#define KICK_COOLDOWN_MS 2000
-#define PRE_KICK_SAFETY_MARGIN_MS 5
-#define POST_KICK_SAFETY_MARGIN_MS 5
-
-#define NO_COMMAND 0
+// How much time to give for the LT to stop charging the caps
+#define STOP_CHARGING_SAFETY_MARGIN_MS 5
+// How much time to give the FET to stop current flow
+#define STOP_FLOW_SAFETY_MARGIN_MS 5
+// Time after the kick to allow the caps to charge back up somewhat
+#define CHARGE_TIME_MS 2000
 
 // number of steps of resolution we want per millisecond
-#define TIMER_PER_MS 20
+#define TIMER_PER_MS 4
 
 // calculate our TIMING_CONSTANT (timer cmp val) from the desired resolution
 #define CLK_FREQ 8000000  // after removing default CLKDIV8 prescale
 #define TIMER_PRESCALE \
-    8  // set by TCCR0B |= _BV(CS01) which also starts the timer
+   8  // set by TCCR0B |= _BV(CS01) which also starts the timer
 #define MS_PER_SECOND 1000
 
 #define MAX_TIMER_FREQ (CLK_FREQ / TIMER_PRESCALE)
@@ -36,65 +42,63 @@
 
 #define TIMING_CONSTANT ((MAX_TIMER_FREQ / DESIRED_TIMER_FREQ) - 1)
 
-// get different ball reading for 20 * 100 us = 2 ms before switching
+// get different ball reading for X * 10 us before switching
 #define BALL_SENSE_MAX_SAMPLES 5
 
+// Corresponds to the values of the kick_type_is_kick
+#define IS_KICK true
+#define IS_CHIP false
+
 // Used to time kick and chip durations, -1 indicates inactive state
-volatile int32_t pre_kick_cooldown_ = -1;
-volatile int32_t timer_cnts_left_ = -1;
-volatile int32_t post_kick_cooldown_ = -1;
-volatile int32_t kick_wait_ = -1;
+volatile struct {
+    volatile int32_t stop_charge_phase; // Allow time for main loop to stop charge
+    volatile int32_t flow_phase;        // Let current flow during this phase
+    volatile int32_t stop_flow_phase;   // Allow time for current to stop flowing
+    volatile int32_t charge_phase;      // Allow time for caps to charge back up
+} time = {-1, -1, -1, -1};
 
-// Used to keep track of current button state
-volatile int kick_db_down_ = 0;
-volatile int chip_db_down_ = 0;
-volatile int charge_db_down_ = 0;
+// Latest command from mtrain
+volatile struct {
+    volatile bool kick_type_is_kick; // chip or kick?
+    volatile bool kick_immediate; // Kick immediately?
+    volatile bool kick_on_breakbeam; // Kick when breakbeam triggers?
+    volatile bool commanded_charge; // Commanded to charge the caps?
+    volatile uint8_t kick_power; // Commanded power to kick at
+} command = {false, false, false, false, 0};
 
-volatile uint8_t byte_cnt = 0;
+// Current kick command
+volatile bool current_kick_type_is_kick = true;
 
-volatile uint8_t cur_command_ = NO_COMMAND;
+// Global vars so we don't have to read pins in interrupts etc
+volatile uint8_t current_voltage = 0;
+volatile bool ball_sensed = false;
 
-// always up-to-date voltage so we don't have to get_voltage() inside interupts
-volatile uint8_t last_voltage_ = 0;
+// Global state variables
+volatile bool in_debug_mode = false;
+volatile bool charge_allowed = true; // Don't charge during kick
 
-volatile bool ball_sensed_ = 0;
-
-// whether or not MBED has requested charging to be on
-volatile bool charge_commanded_ = false;
-
-volatile bool charge_allowed_ = true;
-
-volatile bool kick_on_breakbeam_ = false;
-volatile uint8_t kick_on_breakbeam_strength_ = 0;
-
-unsigned ball_sense_change_count_ = 0;
-
-uint32_t time = 0;
-
-// executes a command coming from SPI
-uint8_t execute_cmd(uint8_t, uint8_t);
+void init();
 
 /*
  * Checks and returns if we're in the middle of a kick
  */
 bool is_kicking() {
-    return pre_kick_cooldown_ >= 0 || timer_cnts_left_ >= 0 ||
-           post_kick_cooldown_ >= 0 || kick_wait_ >= 0;
+    return time.stop_charge_phase >= 0 ||
+           time.flow_phase >= 0 ||
+           time.stop_flow_phase >= 0 ||
+           time.charge_phase >= 0;
 }
 
-/*
+/**
  * start the kick FSM for desired strength. If the FSM is already running,
  * the call will be ignored.
  */
-void kick(uint8_t strength) {
+void kick(uint8_t strength, bool is_kick) {
     // check if the kick FSM is running
     if (is_kicking()) return;
 
     // initialize the countdowns for pre and post kick
-    pre_kick_cooldown_ = (PRE_KICK_SAFETY_MARGIN_MS * TIMER_PER_MS);
-    post_kick_cooldown_ = (POST_KICK_SAFETY_MARGIN_MS * TIMER_PER_MS);
-    // force to int32_t, default word size too small
-    kick_wait_ = ((int32_t)KICK_COOLDOWN_MS) * TIMER_PER_MS;
+    time.stop_charge_phase = (STOP_CHARGING_SAFETY_MARGIN_MS * TIMER_PER_MS);
 
     // compute time the solenoid FET is turned on, in milliseconds, based on
     // min and max effective FET enabled times
@@ -102,100 +106,291 @@ void kick(uint8_t strength) {
     float time_cnt_flt_ms =
         KICK_TIME_SLOPE * strength_ratio + MIN_EFFECTIVE_KICK_FET_EN_TIME;
     float time_cnt_flt = time_cnt_flt_ms * TIMER_PER_MS;
-    timer_cnts_left_ = (int)(time_cnt_flt + 0.5f);  // round
+    time.flow_phase = (int)(time_cnt_flt + 0.5f);  // round
+
+    time.stop_flow_phase   = (STOP_FLOW_SAFETY_MARGIN_MS * TIMER_PER_MS);
+
+    // force to int32_t, default word size too small
+    time.charge_phase = ((int32_t)CHARGE_TIME_MS) * TIMER_PER_MS;
+
+    // Set kick type after we have commited to the kick
+    // such that it doesn't change halfway through the kick
+    current_kick_type_is_kick = is_kick;
 
     // start timer to enable the kick FSM processing interrupt
-    TCCR0B |= _BV(CS01);
+    TCCR0B |= _BV(CS01); // No prescale
 }
 
-void init();
+void handle_debug_mode() {
+    // Used to keep track of current button state
+    static bool kick_db_down = true;
+    static bool chip_db_down = true;
+    static bool charge_db_down = true;
 
-/* Voltage Function */
+    if (in_debug_mode) {
+        // Check if the buttons are pressed
+        bool kick_db_pressed = !(HAL_IsSet(DB_KICK_PIN));
+        bool chip_db_pressed = !(HAL_IsSet(DB_CHIP_PIN));
+        bool charge_db_pressed = !(HAL_IsSet(DB_CHG_PIN));
+
+        // Simple rising edge triggers
+        if (!kick_db_down && kick_db_pressed) 
+            kick(255, IS_KICK);
+
+        if (!chip_db_down && chip_db_pressed)
+            kick(255, IS_CHIP);
+
+        // If we should be charging
+        if (!charge_db_down && charge_db_pressed)
+            command.commanded_charge = !command.commanded_charge;
+
+        kick_db_down = kick_db_pressed;
+        chip_db_down = chip_db_pressed;
+        charge_db_down = charge_db_pressed;
+    }
+}
+
 uint8_t get_voltage() {
     // Start conversation by writing to start bit
     ADCSRA |= _BV(ADSC);
 
     // Wait for ADSC bit to clear
-    while (ADCSRA & _BV(ADSC))
-        ;
+    while (ADCSRA & _BV(ADSC));
 
     // ADHC will range from 0 to 255 corresponding to 0 through VCC
     return ADCH;
 }
 
+void try_read_voltage() {
+    static uint32_t time = 0;
+
+    // Don't run the adc every loop
+    // 1000 * 10 us = 10 ms
+    if (time % 1000 == 0) {
+        current_voltage = get_voltage();
+    }
+    time++;
+}
+
+void update_ball_sense() {
+    static uint32_t ball_sense_change_count = 0;
+
+    // Filter ball value
+    // Want X amount in a row to be the same
+    bool new_reading = HAL_IsSet(BALL_SENSE_RX);
+
+    // If we sensed the ball, but don't think it's triggered
+    // or we didn't sense the ball, and think it's triggered
+    // AKA our estimate is wrong
+    if (ball_sensed ^ new_reading)
+        ball_sense_change_count++;
+    else // else correct reading
+        ball_sense_change_count = 0;
+
+    // We got a wrong reading X times in a row
+    // so we should swap
+    if (ball_sense_change_count > BALL_SENSE_MAX_SAMPLES) {
+        ball_sense_change_count = 0;
+
+        ball_sensed = !ball_sensed;
+    }
+}
+
+void charge_caps() {
+    // if we dropped below acceptable voltage, then this will catch it
+    // note: these aren't true voltages, just ADC output, but it matches
+    // fairly close
+    
+    // Stop charging if we are at the voltage target
+    if (current_voltage > 244 ||
+        !charge_allowed ||
+        !command.commanded_charge) {
+
+        HAL_ClearPin(LT_CHARGE);
+
+    // Charge if we are too low
+    } else if (current_voltage < 239 &&
+               charge_allowed &&
+               command.commanded_charge) {
+
+        HAL_SetPin(LT_CHARGE);
+    }
+}
+
+void fill_spi_return() {
+    uint8_t ret_byte = 0x00;
+
+    if (ball_sensed)
+        ret_byte |= BREAKBEAM_TRIPPED;
+
+    ret_byte |= VOLTAGE_MASK & (current_voltage >> 1);
+
+    SPDR = ret_byte;
+}
+
 void main() {
     init();
 
-    // needs to be int to force voltage_accum calculation to use ints
-    const int kalpha = 32;
-
-    // We handle voltage readings here
     while (true) {
-        // get a voltage reading by weighing in a new reading, same concept as
-        // TCP RTT estimates (exponentially weighted sum)
 
-        // don't run the adc every loop
-        if (time % 1000 == 0) {
-            int voltage_accum =
-                (255 - kalpha) * last_voltage_ + kalpha * get_voltage();
-            last_voltage_ = voltage_accum / 255;
-        }
-        time++;
+        handle_debug_mode();
 
-        // if we dropped below acceptable voltage, then this will catch it
-        // note: these aren't true voltages, just ADC output, but it matches
-        // fairly close
-        if (last_voltage_ > 239 || !charge_allowed_ || !charge_commanded_) {
-            PORTB &= ~(_BV(CHARGE_PIN));
-        } else if (last_voltage_ < 232 && charge_allowed_ &&
-                   charge_commanded_) {
-            PORTB |= _BV(CHARGE_PIN);
-        }
+        try_read_voltage();
 
-        if (PINA & _BV(N_KICK_CS_PIN)) {
-            byte_cnt = 0;
-        }
+        update_ball_sense();
 
-        bool bs = PINB & _BV(BALL_SENSE_RX);
-        if (ball_sensed_) {
-            if (!bs)
-                ball_sense_change_count_++;  // wrong reading, inc counter
-            else
-                ball_sense_change_count_ = 0;  // correct reading, reset counter
-        } else {
-            if (bs)
-                ball_sense_change_count_++;  // wrong reading, inc counter
-            else
-                ball_sense_change_count_ = 0;  // correct reading, reset counter
-        }
+        charge_caps();
 
-        // counter exceeds maximium, so reset
-        if (ball_sense_change_count_ > BALL_SENSE_MAX_SAMPLES) {
-            ball_sense_change_count_ = 0;
+        // Kick on give command
+        if ((command.kick_on_breakbeam && ball_sensed) ||
+            command.kick_immediate) {
 
-            ball_sensed_ = !ball_sensed_;
-        }
-
-        if (ball_sensed_ && kick_on_breakbeam_) {
             // pow
-            kick(kick_on_breakbeam_strength_);
-            kick_on_breakbeam_ = false;
+            kick(command.kick_power, command.kick_type_is_kick);
+            command.kick_immediate = false;
+            command.kick_on_breakbeam = false;
         }
+
+        fill_spi_return();
 
         _delay_us(10);
     }
 }
 
+/*
+ * SPI Interrupt. Triggers when we have a new byte available, it'll be
+ * stored in SPDR. Writing a response also occurs using the SPDR register.
+ * 
+ * Receive the command and set the global variables accordingly
+ */
+ISR(SPI_STC_vect) {
+    // Don't take commands in debug mode
+    if (in_debug_mode)
+        return;
+    
+    uint8_t recv_data = SPDR;
+    
+    // Fill our globals with the commands
+    command.kick_type_is_kick = (recv_data & TYPE_FIELD) == TYPE_KICK;
+    command.commanded_charge  = recv_data & CHARGE_ALLOWED;
+    command.kick_power        = recv_data & KICK_POWER_MASK;
+
+    // If chip, force max power
+    if (command.kick_type_is_kick == IS_CHIP) {
+        command.kick_power = 0xF;
+    }
+
+    // If we get a cancel kick command
+    // Stop the kicks
+    if ((recv_data & CANCEL_KICK) == CANCEL_KICK) {
+        command.kick_immediate = false;
+        command.kick_on_breakbeam = false;
+
+    // Set the correct kick action
+    } else if (recv_data & KICK_IMMEDIATE) {
+        command.kick_immediate    = true;
+        command.kick_on_breakbeam = false;
+    } else if (recv_data & KICK_ON_BREAKBEAM) {
+        command.kick_immediate    = false;
+        command.kick_on_breakbeam = true;
+    }
+}
+
+/**
+ * Timer interrupt for chipping/kicking - called every millisecond by timer
+ *
+ * ISR for TIMER 0
+ *
+ * Pre and post cool downs add time between kicking and charging
+ *
+ * Charging while kicking is destructive to the charging circuitry
+ * If no outstanding coutners are running from the timer, the pre, active, post,
+ *and cooldown
+ * states are all finished. We disable the timer to avoid unnecessary ISR
+ *invocations when
+ * there's nothing to do. The kick function will reinstate the timer.
+ *
+ * TCCR0B:
+ * CS00 bit stays at zero
+ * When CS01 is also zero, the clk is diabled
+ * When CS01 is one, the clk is prescaled by 8
+ * (When CS00 is one, and CS01 is 0, no prescale. We don't use this)
+ */
+ISR(TIMER0_COMPA_vect) {
+    if (time.stop_charge_phase >= 0) {
+        /**
+         * PRE KICKING STATE
+         * stop charging
+         * wait between stopping charging and kicking for safety
+         */
+        // disable charging
+        charge_allowed = false;
+
+        time.stop_charge_phase--;
+    } else if (time.flow_phase >= 0) {
+        /**
+         * KICKING STATE
+         * assert the kick pin, enabling the kick FET
+         * wait for kick interval to end
+         */
+
+        if (current_kick_type_is_kick == IS_KICK) {
+            HAL_SetPin(KICK_PIN);
+        } else {
+            HAL_SetPin(CHIP_PIN);
+        }
+
+        time.flow_phase--;
+    } else if (time.stop_flow_phase >= 0) {
+        /**
+         * POST KICKING STATE
+         * deassert the kick pin, disabling the kick FET
+         * wait between stopping the FET and reenabling charging in the next
+         * state
+         */
+
+        if (current_kick_type_is_kick == IS_KICK) {
+            HAL_ClearPin(KICK_PIN);
+        } else {
+            HAL_ClearPin(CHIP_PIN);
+        }
+
+        time.stop_flow_phase--;
+    } else if (time.charge_phase >= 0) {
+        /**
+         * POST KICK COOLDOWN
+         * enable charging
+         * don't allow kicking during the cooldown
+         */
+
+        // reenable charging
+        charge_allowed = true;
+
+        time.charge_phase--;
+    } else {
+        /**
+         * IDLE/NOT RUNNING
+         * stop timer
+         */
+
+        // stop prescaled timer
+        TCCR0B &= ~_BV(CS01);
+    }
+}
+
 void init() {
+    // Disable pullups globally
+    MCUCR |= _BV(PUD);
+    
     // disable interrupts
     cli();
 
     // disable watchdog
     wdt_reset();
-    MCUSR &= ~(_BV(WDRF));
-    WDTCR |= (_BV(WDCE)) | (_BV(WDE));
-    WDTCR = 0x00;
-
+    MCUSR &= !_BV(WDRF);
+    WDTCR |= (_BV(WDCE) | _BV(WDE));
+    WDTCR = 0x00; // WDTON WDE WDIE have to be disabled
+    
     // change our clock speed from 1 Mhz to 8 Mhz (there's a default CLKDIV8)
     // 1. write the Clock Prescaler Change Enable (CLKPCE) bit to one and all
     //    other bits in CLKPR to zero.
@@ -204,28 +399,64 @@ void init() {
     CLKPR = _BV(CLKPCE);
     CLKPR = 0;  // corresponds to CLKDIV1 prescale, also keeps CLKPCE low
 
-    // configure output pins
-    DDRA |= _BV(KICK_MISO_PIN);
-    DDRB |= _BV(KICK_PIN) | _BV(CHARGE_PIN) | _BV(BALL_SENSE_TX);
+    /**
+     * Input button initialization
+     */
 
-    // enable ball sense LED
-    PORTB |= _BV(BALL_SENSE_TX);
+    HAL_SetInputPin(DB_SWITCH);
+    HAL_SetInputPin(DB_CHG_PIN);
+    HAL_SetInputPin(DB_KICK_PIN);
+    HAL_SetInputPin(DB_CHIP_PIN);
 
-    // configure input pins
-    DDRA &= ~(_BV(N_KICK_CS_PIN) | _BV(V_MONITOR_PIN) | _BV(KICK_MOSI_PIN));
 
-    PORTB &= ~(_BV(BALL_SENSE_RX));
-    DDRB &= ~(_BV(BALL_SENSE_RX));
+    /**
+     * SPI initialization
+     */
 
-    // configure SPI
-    SPCR = _BV(SPE) | _BV(SPIE);
-    SPCR &= ~(_BV(MSTR));  // ensure we are a slave SPI device
+    // MISO as output
+    // CS and MOSI as input
+    HAL_SetInputPin(KICK_MOSI_PIN);
+    HAL_SetOutputPin(KICK_MISO_PIN);
+    HAL_SetInputPin(N_KICK_CS_PIN);
 
-    // enable interrupts for PCINT0-PCINT7
-    PCICR |= _BV(PCIE0);
+    /**
+     * LT3751 initialization
+     */
+    // Default values for charge
+    HAL_ClearPin(LT_CHARGE);
 
-    // enable interrupts on debug buttons
-    PCMSK0 = _BV(INT_DB_KICK) | _BV(INT_DB_CHG);
+    // Charge command output
+    HAL_SetOutputPin(LT_CHARGE);
+
+    HAL_ClearPin(KICK_PIN);
+    HAL_ClearPin(CHIP_PIN);
+
+    HAL_SetOutputPin(KICK_PIN);
+    HAL_SetOutputPin(CHIP_PIN);
+
+    /**
+     * Ball sense initialization
+     */
+    // Default ball sense on startup
+    HAL_ClearPin(BALL_SENSE_TX);
+
+    // tx and led as output
+    // RX as intput
+    HAL_SetInputPin(BALL_SENSE_RX);
+    HAL_SetOutputPin(BALL_SENSE_TX);
+
+    // Enable the LED and TX until first loop
+    // This is because you cannot go from {input, tristate} -> {output, high}
+    // in a single step
+    HAL_SetPin(BALL_SENSE_TX);
+    
+    /**
+     * Enable SPI slave
+     */
+    // Assume default spi mode
+    // Allow interrupts, enable, and force slave SPI device
+    SPCR &= ~_BV(MSTR);
+    SPCR |= _BV(SPE) | _BV(SPIE);
 
     ///////////////////////////////////////////////////////////////////////////
     //  TIMER INITIALIZATION
@@ -248,203 +479,32 @@ void init() {
     //
     //  initialize timer
     TIMSK0 |= _BV(OCIE0A);    // Interrupt on TIMER 0
-    TCCR0A |= _BV(WGM01);     // CTC - Clear Timer on Compare Match
+    TCCR0A |= _BV(WGM01); // CTC
     OCR0A = TIMING_CONSTANT;  // OCR0A is max val of timer before reset
     ///////////////////////////////////////////////////////////////////////////
 
-    // Set low bits corresponding to pin we read from
-    ADMUX |= _BV(ADLAR) | 0x00;  // connect PA0 (V_MONITOR_PIN) to ADC
 
-    // ensure ADC isn't shut off
+    /**
+     * ADC Initialization
+     */
+    // Allow us to just read a single register to get the analog output
+    // instead of having to read 2 registers
+    // We don't care about the full 10 bit width, only the top 8
+    // Setup voltage monitor as input to adc
+    ADMUX |= _BV(ADLAR) | 0x00;//_BV(V_MONITOR_PIN.pin);
+
+    //  Ensure ADC isn't off
     PRR &= ~_BV(PRADC);
-    ADCSRA |= _BV(ADEN);  // enable the ADC - Pg. 133
+
+    // Enable adc
+    ADCSRA |= _BV(ADEN);
+
+    /**
+     * Button logic
+     */
+    // latch debug state
+    in_debug_mode = !HAL_IsSet(DB_SWITCH);
 
     // enable global interrupts
     sei();
-}
-
-/*
- * SPI Interrupt. Triggers when we have a new byte available, it'll be
- * stored in SPDR. Writing a response also occurs using the SPDR register.
- */
-ISR(SPI_STC_vect) {
-    uint8_t recv_data = SPDR;
-
-    SPDR = 0xFF;
-    // increment our received byte count and take appropriate action
-    if (byte_cnt == 0) {
-        cur_command_ = recv_data;
-        SPDR = ACK;
-    } else if (byte_cnt == 1) {
-        // execute the currently set command with
-        // the newly given argument, set the response
-        // buffer to our return value
-        SPDR = execute_cmd(cur_command_, recv_data);
-    } else if (byte_cnt == 2) {
-        // return kicker state
-        SPDR = ((ball_sensed_ ? 1 : 0) << BALL_SENSE_FIELD) |
-               ((charge_commanded_ ? 1 : 0) << CHARGE_FIELD) |
-               ((kick_on_breakbeam_ ? 1 : 0) << KICK_ON_BREAKBEAM_FIELD) |
-               ((is_kicking() ? 1 : 0) << KICKING_FIELD);
-    }
-    int MAX_NUM_BYTES = 4;
-    byte_cnt++;
-    byte_cnt %= MAX_NUM_BYTES;
-}
-
-/*
- * Interrupt if the state of any button has changed
- * Every time a button goes from LOW to HIGH, we will execute a command
- *
- * ISR for PCINT8 - PCINT11
- */
-ISR(PCINT0_vect) {
-    // First we get the current state of each button, active low
-    int dbg_switched = !(PINB & _BV(DB_SWITCH));
-
-    if (!dbg_switched) return;
-    int kick_db_pressed = !(PINA & _BV(DB_KICK_PIN));
-    int charge_db_pressed = !(PINA & _BV(DB_CHG_PIN));
-
-    if (!kick_db_down_ && kick_db_pressed) kick(255);
-
-    // toggle charge
-    if (!charge_db_down_ && charge_db_pressed) {
-        // check if charge is already on, toggle appropriately
-        charge_commanded_ = !charge_commanded_;
-    }
-
-    // Now our last state becomes the current state of the buttons
-    kick_db_down_ = kick_db_pressed;
-    charge_db_down_ = charge_db_pressed;
-}
-
-/*
- * Timer interrupt for chipping/kicking - called every millisecond by timer
- *
- * ISR for TIMER 0
- *
- * Pre and post cool downs add time between kicking and charging
- *
- * Charging while kicking is destructive to the charging circuitry
- * If no outstanding coutners are running from the timer, the pre, active, post,
- *and cooldown
- * states are all finished. We disable the timer to avoid unnecessary ISR
- *invocations when
- * there's nothing to do. The kick function will reinstate the timer.
- *
- * TCCR0B:
- * CS00 bit stays at zero
- * When CS01 is also zero, the clk is diabled
- * When CS01 is one, the clk is prescaled by 8
- * (When CS00 is one, and CS01 is 0, no prescale. We don't use this)
- */
-ISR(TIMER0_COMPA_vect) {
-    if (pre_kick_cooldown_ >= 0) {
-        /* PRE KICKING STATE
-         * stop charging
-         * wait between stopping charging and kicking for safety
-         */
-
-        // disable charging
-        charge_allowed_ = false;
-
-        pre_kick_cooldown_--;
-    } else if (timer_cnts_left_ >= 0) {
-        /* KICKING STATE
-         * assert the kick pin, enabling the kick FET
-         * wait for kick interval to end
-         */
-
-        // set KICK pin
-        PORTB |= _BV(KICK_PIN);
-
-        timer_cnts_left_--;
-    } else if (post_kick_cooldown_ >= 0) {
-        /* POST KICKING STATE
-         * deassert the kick pin, disabling the kick FET
-         * wait between stopping the FET and reenabling charging in the next
-         * state
-         */
-
-        // kick is done
-        PORTB &= ~_BV(KICK_PIN);
-
-        post_kick_cooldown_--;
-    } else if (kick_wait_ >= 0) {
-        /* POST KICK COOLDOWN
-         * enable charging
-         * don't allow kicking during the cooldown
-         */
-
-        // reenable charging
-        charge_allowed_ = true;
-
-        kick_wait_--;
-    } else {
-        /* IDLE/NOT RUNNING
-         * stop timer
-         */
-
-        // stop prescaled timer
-        TCCR0B &= ~_BV(CS01);
-    }
-}
-
-/*
- * Executes a command that can come from SPI or a debug button
- *
- * WARNING: This will be called from an interrupt service routines, keep it
- * short!
- */
-uint8_t execute_cmd(uint8_t cmd, uint8_t arg) {
-    // if we don't change ret_val by setting it to voltage or
-    // something, then we'll just return the command we got as
-    // an acknowledgement.
-    uint8_t ret_val = BLANK;
-
-    switch (cmd) {
-        case KICK_BREAKBEAM_CMD:
-            kick_on_breakbeam_ = true;
-            kick_on_breakbeam_strength_ = arg;
-            break;
-
-        case KICK_BREAKBEAM_CANCEL_CMD:
-            kick_on_breakbeam_ = false;
-            kick_on_breakbeam_strength_ = 0;
-            break;
-
-        case KICK_IMMEDIATE_CMD:
-            kick(arg);
-            break;
-
-        case SET_CHARGE_CMD:
-            // set state based on argument
-            if (arg == ON_ARG) {
-                ret_val = 1;
-                charge_commanded_ = true;
-            } else if (arg == OFF_ARG) {
-                ret_val = 0;
-                charge_commanded_ = false;
-            }
-            break;
-
-        case GET_VOLTAGE_CMD:
-            ret_val = last_voltage_;
-            break;
-
-        case PING_CMD:
-            ret_val = 0xFF;
-            // do nothing, ping is just a way to check if the kicker
-            // is connected by checking the returned command ack from
-            // earlier.
-            break;
-
-        default:
-            // return error value to show arg wasn't recognized
-            ret_val = 0xCC;
-            break;
-    }
-
-    return ret_val;
 }

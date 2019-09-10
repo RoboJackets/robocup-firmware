@@ -4,7 +4,7 @@
 // Changelog:
 // 2013-01-08 - first release
 
-#include "I2Cdev.h"
+#include "drivers/Internal/I2Cdev.h"
 
 /** Read a single bit from an 8-bit device register.
  * @param devAddr I2C slave device address
@@ -133,15 +133,12 @@ int8_t I2Cdev::readWord(uint8_t devAddr, uint8_t regAddr, uint16_t* data,
  */
 int8_t I2Cdev::readBytes(uint8_t devAddr, uint8_t regAddr, uint8_t length,
                          uint8_t* data, uint16_t timeout) {
-    char command[1];
-    command[0] = regAddr;
-    char* redData = (char*)malloc(length);
-    i2c.write(devAddr << 1, command, 1, true);
-    i2c.read(devAddr << 1, redData, length);
+    std::vector<uint8_t> ret = i2c->receive(devAddr << 1, regAddr, length);
+
     for (int i = 0; i < length; i++) {
-        data[i] = redData[i];
+        data[i] = ret[i];
     }
-    free(redData);
+
     return length;
 }
 
@@ -257,25 +254,21 @@ bool I2Cdev::writeByte(uint8_t devAddr, uint8_t regAddr, uint8_t data) {
  * @return Status of operation (true = success)
  */
 bool I2Cdev::writeWord(uint8_t devAddr, uint8_t regAddr, uint16_t data) {
-    i2c.start();
-    i2c.write(devAddr << 1);
-    i2c.write(regAddr);
-    i2c.write((uint8_t)(data >> 8));  // MSByte
-    i2c.write((uint8_t)(data >> 0));  // LSByte
-    i2c.stop();
+    uint8_t buf[2];
+    buf[0] = data >> 8;
+    buf[1] = data >> 0;
+    writeBytes(devAddr, regAddr, 2, buf);
     return true;
-    // return writeWords(devAddr, regAddr, 1, &data);
 }
 
 bool I2Cdev::writeBytes(uint8_t devAddr, uint8_t regAddr, uint8_t length,
                         uint8_t* data) {
-    i2c.start();
-    i2c.write(devAddr << 1);
-    i2c.write(regAddr);
+    std::vector<uint8_t> sendData;
     for (int i = 0; i < length; i++) {
-        i2c.write(data[i]);
+        sendData.push_back(data[i]);
     }
-    i2c.stop();
+
+    i2c->transmit(devAddr << 1, regAddr, sendData);
     return true;
 }
 

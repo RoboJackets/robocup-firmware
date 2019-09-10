@@ -48,8 +48,9 @@ THE SOFTWARE.
 #ifndef _MPU6050_H_
 #define _MPU6050_H_
 
-#include "I2Cdev.h"
-#include "helper_3dmath.h"
+#include "I2C.hpp"
+#include "Internal/I2Cdev.h"
+#include "Internal/helper_3dmath.h"
 
 #define MPU6050_ADDRESS_AD0_LOW \
     0x68  // address pin low (GND), default for InvenSense evaluation board
@@ -416,8 +417,8 @@ private:
     I2Cdev* i2Cdev;
 
 public:
-    MPU6050(std::shared_ptr<SharedI2C> sharedI2C);
-    MPU6050(std::shared_ptr<SharedI2C> sharedI2C, uint8_t address);
+    MPU6050(std::shared_ptr<I2C> sharedI2C);
+    MPU6050(std::shared_ptr<I2C> sharedI2C, uint8_t address);
 
     void initialize();
     bool testConnection();

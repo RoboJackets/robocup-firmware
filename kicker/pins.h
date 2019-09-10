@@ -1,25 +1,47 @@
 #pragma once
 
-#include <avr/io.h>
+#include "HAL_attiny167.h"
 
-/* Inputs */
-#define N_KICK_CS_PIN (PA6)
-#define KICK_MOSI_PIN (PA4)
-#define V_MONITOR_PIN (PA0)
+/*
+VMON        PIN_A0
+n btn chg   PIN_A1
+miso        PIN_A2
+nbtnkck     PIN_A3
+mosi        PIN_A4
+sck         PIN_A5
+n kicker cs PIN_A6
+n btn chp   PIN_A7
+chip        PIN_B0
+kck         PIN_B1
+charge      PIN_B2
+bb rx       PIN_B3
+bb tx       PIN_B4
+mode select PIN_B5
+n reset     pb7
+*/
 
-#define DB_KICK_PIN (PA3)
-#define DB_CHG_PIN (PA1)
-/* Outputs */
-#define CHARGE_PIN (PB2)
-// #define CHIP_PIN (PORT)
-#define KICK_PIN (PB1)
-#define BALL_SENSE_TX (PB4)
-#define BALL_SENSE_RX (PB3)
-#define DB_SWITCH (PB5)
+/* core */
+#define N_KICK_CS_PIN (PIN_A6)
+#define KICK_MOSI_PIN (PIN_A4)
+#define KICK_MISO_PIN (PIN_A2)
+#define KICK_SCK_PIN  (PIN_A5)
 
-/* Tri-State */
-#define KICK_MISO_PIN (PA2)
+/* hv monitoring */
+#define V_MONITOR_PIN (PIN_A0)
 
-/* Interrupts for PCMASK0 or PCMASK1 */
-#define INT_DB_KICK (PCINT3)
-#define INT_DB_CHG (PCINT1)
+/* hv reg */
+#define LT_CHARGE  (PIN_B2)
+
+/* hv out */
+#define KICK_PIN (PIN_B1)
+#define CHIP_PIN (PIN_B0)
+
+/* ball sense */
+#define BALL_SENSE_TX  (PIN_B4)
+#define BALL_SENSE_RX  (PIN_B3)
+
+/* debug */
+#define DB_SWITCH   (PIN_B5)
+#define DB_CHG_PIN  (PIN_A1)
+#define DB_KICK_PIN (PIN_A3)
+#define DB_CHIP_PIN (PIN_A7)

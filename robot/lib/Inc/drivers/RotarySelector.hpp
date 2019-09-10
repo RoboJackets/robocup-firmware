@@ -6,7 +6,7 @@
  * This class facilitates reading the value from a rotary selector.
  *
  * This class is templated so that it generalizes I/O functionality to not only
- * IO expander pins but also standard mBed I/O pins.
+ * IO expander pins but also standard mTrain I/O pins.
  *
  * Example usage:
  * RotarySelector<DigitalIn> selector({p5, p6, p7, p8});

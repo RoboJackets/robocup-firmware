@@ -1,51 +1,65 @@
 #pragma once
 
-/*
- * In order to command the KickerBoard, a command byte must be sent,
- * followed by an argument byte. The command byte will not be executed without
- * the argument, even if that argument is not really needed like in the
- * get_voltage command.
- *
- * If getting a varible, it will be returned on the spi write after the
- * command write and the argument write.
+// Kicker packet definition
+// |---------------------------------------|
+// | (7) | (6) (5) | (4) | (3) (2) (1) (0) |
+// |---------------------------------------| 
+//
+// Bits 0-3
+//  Power of kick
+//      0 - 15
+//      0 is min power
+//      15 is max power
+//
+// Bits 4
+//  Charge Allowed
+//      Whether the kicker can start charging the caps
+//      1 Charge allowed
+//      0 Charge not allowed
+//
+// Bits 5-6
+//  Type of kick activation
+//      0b01 Kick on breakbeam
+//      0b10 Kick immediately
+//      0b11 Cancel all current kick commands
+//
+// Bits 7
+//  Type of kick
+//      1 Chip
+//      0 Kick
+
+// Whether the kick should be a chip or kick
+#define TYPE_FIELD (1 << 7)
+#define TYPE_KICK (0 << 7)
+#define TYPE_CHIP (1 << 7)
+
+/**
+ * Only one type of kick command can be sent at once
+ * If you send one, then the other, it uses the latest
+ * If you send both, it cancels all kicks
  */
 
-/*
- * THIS MAY BE INACCURATE
- * KickerBoard SPI protocol.
- * Each conversation begins with chip selecting the kickerboard.
- *
- * SPI Conversation Initiated.
- * Byte  |  Control Board   |   Kickerboard
- * ----------------------------------------------
- * 0     |    command       |   *
- * 1     |    argument      |   command acknowledgement
- * 2     |    *             |   command response
- * ----------------------------------------------
- */
+// Kick right now
+#define KICK_IMMEDIATE (1 << 6)
 
-#define CHARGE_FIELD 0x00
-#define BALL_SENSE_FIELD 0x01
-#define KICK_ON_BREAKBEAM_FIELD 0x02
-#define KICKING_FIELD 0x03
+// Kick on breakbeam
+#define KICK_ON_BREAKBEAM (1 << 5)
 
-/* Commands */
-#define KICK_IMMEDIATE_CMD 0xAA
-#define KICK_BREAKBEAM_CMD 0xCC
-#define KICK_BREAKBEAM_CANCEL_CMD 0x03
-#define SET_CHARGE_CMD 0x04
-#define GET_VOLTAGE_CMD 0x05
-#define PING_CMD 0x06
+// Cancel any kick commands already sent
+#define CANCEL_KICK (0b11 << 5)
 
-/* Arguments */
-#define BLANK 0x00  // Used for clarity when passing useless arguments
-// Kick/Chip arguments
-#define MAX_TIME_ARG 0xFF  // Used if we want to wait max time
-#define DB_KICK_TIME 8     // Used for button press kick
-#define DB_CHIP_TIME 8     // Used for button press chip
-// Charge command arguments
-#define ON_ARG 0x38   // Used for setting charge high
-#define OFF_ARG 0x1A  // Used for setting charge low
+// Allow the kicker to charge
+#define CHARGE_ALLOWED (1 << 4)
 
-/* Response Codes, charging/not charging */
-#define ACK 0x77;
+// How powerful the kick should be
+#define KICK_POWER_MASK (0x0F)
+
+
+// Whether the breakbeam is tripped (1) or not (0)
+#define BREAKBEAM_TRIPPED (1 << 7)
+
+// Voltage of the kicker
+#define VOLTAGE_MASK   (0x7F)
+
+// How much to multiple the voltage returned
+#define VOLTAGE_SCALE (2)

@@ -11,7 +11,6 @@ conan_basic_setup(TARGETS)
 set( CMAKE_RUNTIME_OUTPUT_DIRECTORY  "${CMAKE_BINARY_DIR}/bin" )
 
 add_definitions(-Wall)
-set(CMAKE_BUILD_TYPE Debug)
 
 # TODO: remove
 add_definitions(-Wno-register)
@@ -25,4 +24,3 @@ add_subdirectory(lib)
 
 add_subdirectory(control)
 add_subdirectory(base)
-add_subdirectory(hw-test)
