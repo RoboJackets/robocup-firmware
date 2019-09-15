@@ -15,7 +15,7 @@ clean:
 
 
 build/conaninfo.txt : conanfile.py
-	conan install . -if build -pr armv7hf
+	conan install . -if build -pr armv7hf --build missing
 
 .PHONY : configure
 configure : build/conaninfo.txt
