@@ -1,8 +1,8 @@
+include(default)
+
 C_MACHINE_OPTIONS="-mthumb -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard"
 
 [settings]
-os_build=Macos
-arch_build=x86_64
 arch=armv7hf
 compiler=gcc
 compiler.version=7.3
