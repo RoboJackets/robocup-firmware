@@ -1,24 +1,22 @@
 
-define cmake_build_target
-	mkdir -p build
-	cd build && cmake -DCMAKE_TOOLCHAIN_FILE=arm_toolchain.cmake --target $1 .. && make $1
-endef
+all : build/conaninfo.txt
+	conan build . -bf build
 
-all:
-	$(call cmake_build_target, all)
+C_FIRMWARE_TESTS = blink blink_interrupt gpio flash usb_serial spi us_delay rtos
+CPP_FIRMWARE_TESTS = blink gpio spi usb_serial i2c i2c_bus_recovery
 
-C_FIRMWARE_TESTS = blink gpio flash usb_serial spi
-CPP_FIRMWARE_TESTS = blink gpio spi
-
-$(C_FIRMWARE_TESTS:%=test-%-c):
-	$(call cmake_build_target, $(@F))
-$(C_FIRMWARE_TESTS:%=test-%-c-prog):
-	$(call cmake_build_target, $(@F))
-
-$(CPP_FIRMWARE_TESTS:%=test-%):
-	$(call cmake_build_target, $(@F))
-$(CPP_FIRMWARE_TESTS:%=test-%-prog):
-	$(call cmake_build_target, $(@F))
+$(C_FIRMWARE_TESTS:%=upload-%-c): configure
+	cd build; make $(@F)
+$(CPP_FIRMWARE_TESTS:%=upload-%): configure
+	cd build; make $(@F)
 
 clean:
 	rm -rf build
+
+
+build/conaninfo.txt : conanfile.py
+	conan install . -if build -pr armv7hf --build missing
+
+.PHONY : configure
+configure : build/conaninfo.txt
+	conan build . -bf build -c

@@ -1,6 +1,10 @@
 #ifndef __PIN_DEFS_H
 #define __PIN_DEFS_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // TODO: find a way to scope this
 #include "stm32f7xx_hal.h"
 
@@ -50,5 +54,9 @@ typedef enum {
     PULL_UP = GPIO_PULLUP,
     PULL_DOWN = GPIO_PULLDOWN
 } pull_type;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

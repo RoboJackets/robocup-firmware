@@ -1,6 +1,10 @@
 #ifndef __DIGITAL_OUT_H
 #define __DIGITAL_OUT_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "pin_defs.h"
 
 typedef enum {
@@ -59,5 +63,9 @@ void digitalout_toggle(pin_name pin);
  * @return 1 (high) or 0 (low)
  */
 int digitalout_read(pin_name p);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

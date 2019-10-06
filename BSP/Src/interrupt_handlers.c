@@ -1,8 +1,11 @@
 #include "bsp.h"
 
+extern void osSystickHandler(void);
+
 void SysTick_Handler(void)
 {
     HAL_IncTick();
+    osSystickHandler();
 }
 
 extern PCD_HandleTypeDef hpcd;

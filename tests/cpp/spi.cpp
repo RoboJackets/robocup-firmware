@@ -6,6 +6,8 @@ int main(void) {
     {
         SPI spi2(SpiBus5, p26, 2'000'000);
 
+        spi2.transmit({1, 2, 3});
+
         for (int i = 0; i <= 100; i++) {
             spi2.transmitReceive(i);
         }

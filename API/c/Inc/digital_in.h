@@ -1,6 +1,10 @@
 #ifndef __DIGITAL_IN_H
 #define __DIGITAL_IN_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "pin_defs.h"
 
 /** Configures GPIO pin for digital in
@@ -30,5 +34,9 @@ void digitalin_deinit(pin_name pin);
  * @return 1 (high) or 0 (low)
  */
 int digitalin_read(pin_name pin);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
