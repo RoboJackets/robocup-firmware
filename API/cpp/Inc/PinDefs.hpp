@@ -7,6 +7,10 @@ typedef struct PinName {
     uint16_t pin;
 } PinName;
 
+typdef struct ADCPinName {
+  ADC_TypeDef* port;
+} ADCPinName;
+
 constexpr PinName p3  = { GPIOA, GPIO_PIN_8  };
 constexpr PinName p4  = { GPIOB, GPIO_PIN_15 };
 constexpr PinName p5  = { GPIOB, GPIO_PIN_14 };
