@@ -23,4 +23,5 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_subdirectory(lib)
 
 add_subdirectory(control)
+add_subdirectory(hw-test)
 add_subdirectory(base)

@@ -19,6 +19,8 @@ public:
 
     virtual void entry(void);
 
+    void motorTestEntry(void);
+
 private:
     RobotID *const robotID;
     

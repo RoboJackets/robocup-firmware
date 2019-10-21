@@ -19,3 +19,9 @@ void RotaryDialModule::entry(void) {
     robotID->isValid = true;
     robotID->lastUpdate = HAL_GetTick();
 }
+
+void RotaryDialModule::motorTestEntry(void) {
+    robotID->robotID = dial.read();
+    robotID->isValid = true;
+    robotID->lastUpdate = HAL_GetTick();
+}

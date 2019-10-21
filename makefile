@@ -14,7 +14,7 @@ configure : robot/build/conaninfo.txt
 	cd robot && conan build . -bf build -c
 
 
-ROBOT_TESTS = test
+ROBOT_TESTS = test motor
 
 robot : robot/build/conaninfo.txt
 	cd robot && conan build . -bf build

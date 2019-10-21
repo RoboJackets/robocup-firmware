@@ -1,5 +1,8 @@
 add_executable(control.elf 
     main.cpp
+)
+
+add_library(firm-modules
     Src/radio/RadioLink.cpp
     Src/modules/BatteryModule.cpp
     Src/modules/FPGAModule.cpp
@@ -14,14 +17,18 @@ add_executable(control.elf
     Src/motion-control/RobotEstimator.cpp
 )
 
-target_include_directories(control.elf PUBLIC
+target_include_directories(firm-modules PUBLIC
 	Inc
 	"${CONAN_MTRAIN_ROOT}/external/middleware/STM32_USB_Device_Library/Core/Inc/"
 	"${CONAN_MTRAIN_ROOT}/external/middleware/STM32_USB_Device_Library/Class/CDC/Inc"
 )
+ 
+target_link_libraries(firm-modules
+    firm-lib
+)
 
 target_link_libraries(control.elf
-    firm-lib
+    firm-modules
     CONAN_PKG::eigen
     rc-fshare
 )

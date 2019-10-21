@@ -5,7 +5,10 @@ function(add_test test_file)
         ${test_file}
     )
 
-    target_link_libraries(${test_name}.elf firm-lib)
+    target_link_libraries(${test_name}.elf 
+        firm-lib
+        firm-modules
+    )
 
     add_custom_target(test-${test_name} ALL
         ${CMAKE_OBJCOPY} -Obinary "${test_name}.elf" "${test_name}.bin"
