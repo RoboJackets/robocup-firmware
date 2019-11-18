@@ -19,6 +19,7 @@
 #include "modules/RadioModule.hpp"
 #include "modules/RotaryDialModule.hpp"
 
+#include "cmsis_os.h"
 
 
 #define SUPER_LOOP_FREQ 200
@@ -72,81 +73,12 @@ KickerInfo kickerInfo;
 
 DebugInfo debugInfo;
 
+static std::vector<MODULE_META_DATA> moduleList;
 
-int main() {
-    HAL_Delay(100);
+// Init led first to show startup progress with LED's
+static std::unique_ptr<LEDModule> led;
 
-    std::shared_ptr<I2C> sharedI2C = std::make_shared<I2C>(SHARED_I2C_BUS);
-    std::shared_ptr<SPI> fpgaKickerSPI = std::make_shared<SPI>(FPGA_KICKER_SPI_BUS, std::nullopt, 16'000'000);
-    std::shared_ptr<SPI> dot_star_spi = std::make_shared<SPI>(DOT_STAR_SPI_BUS, std::nullopt, 100'000);
-
-    // TODO: Fix me such that we init all the devices
-    // then call a config to flash them correctly
-    // this will allow us to force the CS lines into the correct
-    // position before doing anything like flashing other
-    // devices on the bus
-    
-    HAL_Delay(100);
-
-    std::shared_ptr<MCP23017> ioExpander = std::make_shared<MCP23017>(sharedI2C, 0x42);
-    ioExpander->config(0x00FF, 0x00FF, 0x00FF);
-
-    // Init led first to show startup progress with LED's
-    LEDModule led(ioExpander,
-                  &batteryVoltage,
-                  &fpgaStatus,
-                  &kickerInfo,
-                  &radioError);
-
-    FPGAModule fpga(fpgaKickerSPI,
-                    &motorCommand,
-                    &fpgaStatus,
-                    &motorFeedback);
-
-    led.fpgaInitialized();
-
-    RadioModule radio(&batteryVoltage,
-                      &fpgaStatus,
-                      &kickerInfo,
-                      &robotID,
-                      &kickerCommand,
-                      &motionCommand,
-                      &radioError);
-
-    led.radioInitialized();
-
-    KickerModule kicker(dot_star_spi,
-                        &kickerCommand,
-                        &kickerInfo);
-
-    led.kickerInitialized();
-
-    BatteryModule battery(&batteryVoltage);
-    RotaryDialModule dial(ioExpander,
-                          &robotID);
-    MotionControlModule motion(&batteryVoltage,
-                               &imuData,
-                               &motionCommand,
-                               &motorFeedback,
-                               &motorCommand);
-    IMUModule imu(sharedI2C,
-                  &imuData);
-
-    led.fullyInitialized();
-    
-
-    std::vector<MODULE_META_DATA> moduleList;
-    
-    uint64_t curTime = DWT_GetTick();
-    moduleList.emplace_back(curTime, MotionControlModule::period, MotionControlModule::runtime, &motion);
-    moduleList.emplace_back(curTime, IMUModule::period,           IMUModule::runtime,           &imu);
-    moduleList.emplace_back(curTime, FPGAModule::period,          FPGAModule::runtime,          &fpga);
-    moduleList.emplace_back(curTime, RadioModule::period,         RadioModule::runtime,         &radio);
-    moduleList.emplace_back(curTime, KickerModule::period,        KickerModule::runtime,        &kicker);
-    moduleList.emplace_back(curTime, BatteryModule::period,       BatteryModule::runtime,       &battery);
-    moduleList.emplace_back(curTime, RotaryDialModule::period,    RotaryDialModule::runtime,    &dial);
-    moduleList.emplace_back(curTime, LEDModule::period,           LEDModule::runtime,           &led);
-
+static void superLoopTask(const void *) {
     while (true) {
         // Must do all timing in systick
         // Base time we use is in systick, and if you convert from systick
@@ -168,7 +100,7 @@ int main() {
             // then convertion to signed allows simple comparison
             if (static_cast<int32_t>(currentTime - module.nextRunTime) >= 0 &&
                 static_cast<int32_t>(loopEndTime - currentTime) >= module.moduleRunTime) {
-                
+
                 // todo change to loop start time
                 module.lastRunTime = loopStartTime;
                 module.nextRunTime = loopStartTime + module.modulePeriod;
@@ -179,7 +111,7 @@ int main() {
             // Check if we missed a module X times in a row
             if (static_cast<int32_t>(currentTime - module.nextRunTime) > MAX_MISS_CNT*module.moduleRunTime) {
                 //printf("WARNING: Missed module #%d run %d times in a row\r\n", i+1, MAX_MISS_CNT);
-                led.missedModuleRun();
+                led->missedModuleRun();
             }
         }
 
@@ -188,8 +120,87 @@ int main() {
             DWT_Delay_Sys(SUPER_LOOP_PERIOD*DWT_SysTick_To_us() - elapsed);
         } else {
             //printf("WARNING: Overran super loop time\r\n");
-            led.missedSuperLoop();
+            led->missedSuperLoop();
         }
-        
     }
+}
+
+
+int main() {
+    HAL_Delay(100);
+
+    std::shared_ptr<I2C> sharedI2C = std::make_shared<I2C>(SHARED_I2C_BUS);
+    std::shared_ptr<SPI> fpgaKickerSPI = std::make_shared<SPI>(FPGA_KICKER_SPI_BUS, std::nullopt, 16'000'000);
+    std::shared_ptr<SPI> dot_star_spi = std::make_shared<SPI>(DOT_STAR_SPI_BUS, std::nullopt, 100'000);
+
+    // TODO: Fix me such that we init all the devices
+    // then call a config to flash them correctly
+    // this will allow us to force the CS lines into the correct
+    // position before doing anything like flashing other
+    // devices on the bus
+
+    HAL_Delay(100);
+
+    std::shared_ptr<MCP23017> ioExpander = std::make_shared<MCP23017>(sharedI2C, 0x42);
+    ioExpander->config(0x00FF, 0x00FF, 0x00FF);
+
+    led = std::make_unique<LEDModule>(ioExpander,
+                                      &batteryVoltage,
+                                      &fpgaStatus,
+                                      &kickerInfo,
+                                      &radioError);
+
+
+    FPGAModule fpga(fpgaKickerSPI,
+                    &motorCommand,
+                    &fpgaStatus,
+                    &motorFeedback);
+
+    led->fpgaInitialized();
+
+    RadioModule radio(&batteryVoltage,
+                      &fpgaStatus,
+                      &kickerInfo,
+                      &robotID,
+                      &kickerCommand,
+                      &motionCommand,
+                      &radioError);
+
+    led->radioInitialized();
+
+    KickerModule kicker(dot_star_spi,
+                        &kickerCommand,
+                        &kickerInfo);
+
+    led->kickerInitialized();
+
+    BatteryModule battery(&batteryVoltage);
+    RotaryDialModule dial(ioExpander,
+                          &robotID);
+    MotionControlModule motion(&batteryVoltage,
+                               &imuData,
+                               &motionCommand,
+                               &motorFeedback,
+                               &motorCommand);
+    IMUModule imu(sharedI2C,
+                  &imuData);
+
+    led->fullyInitialized();
+
+    uint64_t curTime = DWT_GetTick();
+    moduleList.emplace_back(curTime, MotionControlModule::period, MotionControlModule::runtime, &motion);
+    moduleList.emplace_back(curTime, IMUModule::period,           IMUModule::runtime,           &imu);
+    moduleList.emplace_back(curTime, FPGAModule::period,          FPGAModule::runtime,          &fpga);
+    moduleList.emplace_back(curTime, RadioModule::period,         RadioModule::runtime,         &radio);
+    moduleList.emplace_back(curTime, KickerModule::period,        KickerModule::runtime,        &kicker);
+    moduleList.emplace_back(curTime, BatteryModule::period,       BatteryModule::runtime,       &battery);
+    moduleList.emplace_back(curTime, RotaryDialModule::period,    RotaryDialModule::runtime,    &dial);
+    moduleList.emplace_back(curTime, LEDModule::period,           LEDModule::runtime,           led.get());
+
+    osThreadDef(SuperLoopTask, superLoopTask, osPriorityAboveNormal, 1, 1 << 15);
+    osThreadCreate(osThread(SuperLoopTask), NULL);
+
+    osKernelStart();
+
+    for (;;);
 }
