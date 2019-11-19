@@ -9,17 +9,19 @@ function(add_test test_file)
         # ${CMAKE_SOURCE_DIR}/BSP/Src/stm32f7xx_it.c #TODO: Fix
     )
 
-    target_link_libraries(${test_name}.elf STM32F7xx STM32F7_API_C)
+    target_link_libraries(${test_name}.elf STM32F7xx STM32F7_API_C FreeRTOS)
 
-    add_custom_target(test-${test_name}
+    add_custom_target(test-${test_name} ALL
         arm-none-eabi-objcopy -Obinary "${test_name}.elf" "${test_name}.bin"
+        WORKING_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
         DEPENDS ${test_name}.elf
-        COMMENT "objcopying to make binary executable")
+        COMMENT "objcopying to make binary executable for ${test_name}")
 
-    add_custom_target(test-${test_name}-prog
-        COMMAND ${FLASH_COPY_SCRIPT} ${CMAKE_CURRENT_BINARY_DIR}/${test_name}.bin
+    add_custom_target(upload-${test_name}
+        COMMAND ${FLASH_COPY_SCRIPT} "${test_name}.bin"
+        WORKING_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
         DEPENDS test-${test_name}
-        COMMENT "Copying binary to MCU")
+        COMMENT "Copying binary ${test_name} to MCU")
 endfunction()
 
 file(GLOB files "./*.c")

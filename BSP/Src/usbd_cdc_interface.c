@@ -11,6 +11,13 @@ USBD_CDC_LineCodingTypeDef LineCoding =
 
 extern USBD_HandleTypeDef  USBD_Device;
 
+#define APP_RX_DATA_SIZE 1024
+#define APP_TX_DATA_SIZE 1024
+
+uint8_t user_RX_buf[APP_RX_DATA_SIZE];
+
+uint8_t user_TX_buf[APP_TX_DATA_SIZE];
+
 static int8_t CDC_Itf_Init(void);
 static int8_t CDC_Itf_DeInit(void);
 static int8_t CDC_Itf_Control(uint8_t cmd, uint8_t* pbuf, uint16_t length);
@@ -26,6 +33,9 @@ USBD_CDC_ItfTypeDef USBD_CDC_fops =
 
 static int8_t CDC_Itf_Init(void)
 { 
+  USBD_CDC_SetRxBuffer(&USBD_Device, user_RX_buf);
+  USBD_CDC_SetTxBuffer(&USBD_Device, user_TX_buf, 0);
+
   return (USBD_OK);
 }
 
@@ -96,5 +106,7 @@ static int8_t CDC_Itf_Control (uint8_t cmd, uint8_t* pbuf, uint16_t length)
 
 static int8_t CDC_Itf_Receive(uint8_t* Buf, uint32_t *Len)
 {
+  USBD_CDC_SetRxBuffer(&USBD_Device, user_RX_buf);
+  USBD_CDC_ReceivePacket(&USBD_Device);
   return (USBD_OK);
 }
