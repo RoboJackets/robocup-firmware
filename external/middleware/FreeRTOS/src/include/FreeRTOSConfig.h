@@ -169,5 +169,8 @@ header file. */
               to prevent overwriting SysTick_Handler defined within STM32Cube HAL */
 /* #define xPortSysTickHandler SysTick_Handler */
 
+/* We want to allow static allocation of timers, semaphores, mutexes, etc. */
+#define configSUPPORT_STATIC_ALLOCATION 1
+
 #endif /* FREERTOS_CONFIG_H */
 
