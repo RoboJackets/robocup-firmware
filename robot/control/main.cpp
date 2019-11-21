@@ -19,7 +19,8 @@
 #include "modules/RadioModule.hpp"
 #include "modules/RotaryDialModule.hpp"
 
-#include "cmsis_os.h"
+#include "FreeRTOS.h"
+#include "task.h"
 
 
 #define SUPER_LOOP_FREQ 200
@@ -78,7 +79,7 @@ static std::vector<MODULE_META_DATA> moduleList;
 // Init led first to show startup progress with LED's
 static std::unique_ptr<LEDModule> led;
 
-static void superLoopTask(const void *) {
+static void superLoopTask(void *pvParameters) {
     while (true) {
         // Must do all timing in systick
         // Base time we use is in systick, and if you convert from systick
@@ -197,10 +198,14 @@ int main() {
     moduleList.emplace_back(curTime, RotaryDialModule::period,    RotaryDialModule::runtime,    &dial);
     moduleList.emplace_back(curTime, LEDModule::period,           LEDModule::runtime,           led.get());
 
-    osThreadDef(SuperLoopTask, superLoopTask, osPriorityAboveNormal, 1, 1 << 15);
-    osThreadCreate(osThread(SuperLoopTask), NULL);
+    TaskHandle_t superLoopHandle;
+    xTaskCreate(superLoopTask, "Super Loop", 1 << 15, nullptr, 1, &superLoopHandle);
 
-    osKernelStart();
+    vTaskStartScheduler();
+
+    if (superLoopHandle != nullptr) {
+        vTaskDelete(superLoopHandle);
+    }
 
     for (;;);
 }
