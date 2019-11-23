@@ -2,11 +2,12 @@
 #include "iodefs.h"
 
 LEDModule::LEDModule(std::shared_ptr<MCP23017> ioExpander,
-                     BatteryVoltage *const batteryVoltage,
-                     FPGAStatus *const fpgaStatus,
-                     KickerInfo *const kickerInfo,
-                     RadioError *const radioError)
-    : batteryVoltage(batteryVoltage), fpgaStatus(fpgaStatus),
+                     LockedStruct<BatteryVoltage>& batteryVoltage,
+                     LockedStruct<FPGAStatus>& fpgaStatus,
+                     LockedStruct<KickerInfo>& kickerInfo,
+                     LockedStruct<RadioError>& radioError)
+    : GenericModule(kPeriod, "led", kPriority),
+      batteryVoltage(batteryVoltage), fpgaStatus(fpgaStatus),
       kickerInfo(kickerInfo), radioError(radioError),
       ioExpander(ioExpander), //dot_star_spi(DOT_STAR_SPI_BUS, std::nullopt, 1'000'000)
       leds({LED1, LED2, LED3, LED4}),
@@ -22,24 +23,33 @@ void LEDModule::entry(void) {
     uint16_t errors = 0;
     int motors[5] = {ERR_LED_M1, ERR_LED_M2, ERR_LED_M3, ERR_LED_M4, ERR_LED_DRIB};
 
-    if (!fpgaStatus->isValid || fpgaStatus->FPGAHasError) {
-        for (int i = 0; i < 5; i++) {
-            errors |= (1 << motors[i]);
-        }
+    {
+        auto fpgaLock = fpgaStatus.lock();
+        if (!fpgaLock->isValid || fpgaLock->FPGAHasError) {
+            for (int i = 0; i < 5; i++) {
+                errors |= (1 << motors[i]);
+            }
 
-        setColor(0x0000FF, 0xFFFFFF);
-    } else { 
-        for (int i = 0; i < 5; i++) {
-            errors |= (fpgaStatus->motorHasErrors[i] << motors[i]);
+            setColor(0x0000FF, 0xFFFFFF);
+        } else {
+            for (int i = 0; i < 5; i++) {
+                errors |= (fpgaLock->motorHasErrors[i] << motors[i]);
+            }
         }
     }
 
-    if (!radioError->isValid || radioError->hasError) {
-        errors |= (1 << ERR_LED_RADIO);
+    {
+        auto radioLock = radioError.lock();
+        if (!radioLock->isValid || radioLock->hasError) {
+            errors |= (1 << ERR_LED_RADIO);
+        }
     }
 
-    if (kickerInfo->isValid || kickerInfo->kickerHasError) {
-        errors |= (1 << ERR_LED_KICK);
+    {
+        auto kickerLock = kickerInfo.lock();
+        if (kickerLock->isValid || kickerLock->kickerHasError) {
+            errors |= (1 << ERR_LED_KICK);
+        }
     }
 
     //ioExpander->writeMask(errors, IOExpanderErrorLEDMask);

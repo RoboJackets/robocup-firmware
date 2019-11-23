@@ -2,8 +2,9 @@
 #include "mtrain.hpp"
 #include <cmath>
 
-IMUModule::IMUModule(std::shared_ptr<I2C> sharedI2C, IMUData * imuData)
-    : imu(sharedI2C), imuData(imuData) {
+IMUModule::IMUModule(std::shared_ptr<I2C> sharedI2C, LockedStruct<IMUData>& imuData)
+    : GenericModule(kPeriod, "imu", kPriority),
+      imu(sharedI2C), imuData(imuData) {
     imu.initialize();
 
     imu.setTempFIFOEnabled(false);
@@ -52,12 +53,13 @@ IMUModule::IMUModule(std::shared_ptr<I2C> sharedI2C, IMUData * imuData)
 
     printf("INFO: IMU initialized\r\n");
 
-    imuData->isValid = false;
-    imuData->lastUpdate = 0;
+    auto imuDataLock = imuData.unsafe_value();
+    imuDataLock->isValid = false;
+    imuDataLock->lastUpdate = 0;
 
     for (int i = 0; i < 3; i++) {
-        imuData->accelerations[i] = 0.0f;
-        imuData->omegas[i] = 0.0f;
+        imuDataLock->accelerations[i] = 0.0f;
+        imuDataLock->omegas[i] = 0.0f;
     }
 }
 
@@ -91,11 +93,12 @@ void IMUModule::entry(void) {
     imu.getMotion6(&motion[0], &motion[1], &motion[2],
                    &motion[3], &motion[4], &motion[5]);
 
-    imuData->isValid = true;
-    imuData->lastUpdate = HAL_GetTick();
+    auto imuDataLock = imuData.lock();
+    imuDataLock->isValid = true;
+    imuDataLock->lastUpdate = HAL_GetTick();
 
     for (int i = 0; i < 3; i++) {
-        imuData->accelerations[i] = motion[i] * convertAccel;
-        imuData->omegas[i] = motion[i+3] * convertGyro * degToRad;
+        imuDataLock->accelerations[i] = motion[i] * convertAccel;
+        imuDataLock->omegas[i] = motion[i+3] * convertGyro * degToRad;
     }
 }

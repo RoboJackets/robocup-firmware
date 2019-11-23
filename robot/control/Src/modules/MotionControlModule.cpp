@@ -7,34 +7,42 @@
 
 extern DebugInfo debugInfo;
 
-MotionControlModule::MotionControlModule(BatteryVoltage *const batteryVoltage,
-                                         IMUData *const imuData,
-                                         MotionCommand *const motionCommand,
-                                         MotorFeedback *const motorFeedback,
-                                         MotorCommand *const motorCommand)
-    : batteryVoltage(batteryVoltage), imuData(imuData),
+MotionControlModule::MotionControlModule(LockedStruct<BatteryVoltage>& batteryVoltage,
+                                         LockedStruct<IMUData>& imuData,
+                                         LockedStruct<MotionCommand>& motionCommand,
+                                         LockedStruct<MotorFeedback>& motorFeedback,
+                                         LockedStruct<MotorCommand>& motorCommand)
+    : GenericModule(kPeriod, "motion", kPriority, 4096),
+      batteryVoltage(batteryVoltage), imuData(imuData),
       motionCommand(motionCommand), motorFeedback(motorFeedback),
       motorCommand(motorCommand),
-      dribblerController(period),
-      robotController(period),
-      robotEstimator(period) {
+      dribblerController(kPeriod.count()),
+      robotController(kPeriod.count() * 1000),
+      robotEstimator(kPeriod.count() * 1000) {
 
     prevCommand << 0, 0, 0, 0;
 
-    motorCommand->isValid = false;
-    motorCommand->lastUpdate = 0;
+    auto motorCommandLock = motorCommand.unsafe_value();
+    motorCommandLock->isValid = false;
+    motorCommandLock->lastUpdate = 0;
     for (int i = 0; i < 4; i++) {
-        motorCommand->wheels[i] = 0;
+        motorCommandLock->wheels[i] = 0;
     }
-    motorCommand->dribbler = 0;
+    motorCommandLock->dribbler = 0;
 }
 
 void MotionControlModule::entry(void) {
+    auto motionCommandLock = motionCommand.lock();
+    auto motorCommandLock = motorCommand.lock();
+    auto motorFeedbackLock = motorFeedback.lock();
+    auto imuDataLock = imuData.lock();
+    auto batteryVoltageLock = batteryVoltage.lock();
+
     // No radio comm in a little while
     // return and die
-    if (!motionCommand->isValid || !isRecentUpdate(motionCommand->lastUpdate)) {
-        motorCommand->isValid = false;
-        motorCommand->lastUpdate = HAL_GetTick();
+    if (!motionCommandLock->isValid || !isRecentUpdate(motionCommandLock->lastUpdate)) {
+        motorCommandLock->isValid = false;
+        motorCommandLock->lastUpdate = HAL_GetTick();
     }
 
     // Fill data from shared mem
@@ -43,11 +51,11 @@ void MotionControlModule::entry(void) {
     measurements << 0, 0, 0, 0, 0;
     currentWheels << 0, 0, 0, 0;
     
-    if (motorFeedback->isValid && isRecentUpdate(motorFeedback->lastUpdate)) {
+    if (motorFeedbackLock->isValid && isRecentUpdate(motorFeedbackLock->lastUpdate)) {
         for (int i = 0; i < 4; i++) {
             if (!isnan(measurements(i,0))) {
-                measurements(i, 0) = motorFeedback->encoders[i];
-                currentWheels(i, 0) = motorFeedback->encoders[i];
+                measurements(i, 0) = motorFeedbackLock->encoders[i];
+                currentWheels(i, 0) = motorFeedbackLock->encoders[i];
             } else {
                 measurements(i, 0) = 0;
                 currentWheels(i, 0) = 0;
@@ -55,18 +63,18 @@ void MotionControlModule::entry(void) {
         }
     }
 
-    if (imuData->isValid && isRecentUpdate(imuData->lastUpdate)) {
-        measurements(4, 0) = imuData->omegas[2]; // Z gyro
+    if (imuDataLock->isValid && isRecentUpdate(imuDataLock->lastUpdate)) {
+        measurements(4, 0) = imuDataLock->omegas[2]; // Z gyro
     }
 
     // Update targets
     Eigen::Matrix<double, 3, 1> targetState;
     targetState << 0, 0, 0;
     
-    if (motionCommand->isValid && isRecentUpdate(motionCommand->lastUpdate)) {
-        targetState << motionCommand->bodyXVel,
-                       motionCommand->bodyYVel,
-                       motionCommand->bodyWVel;
+    if (motionCommandLock->isValid && isRecentUpdate(motionCommandLock->lastUpdate)) {
+        targetState << motionCommandLock->bodyXVel,
+                       motionCommandLock->bodyYVel,
+                       motionCommandLock->bodyWVel;
     }
 
     // Run estimators
@@ -80,7 +88,7 @@ void MotionControlModule::entry(void) {
     // this
     // - Joe Aug 2019
     // TODO: When imu is implemented, check for imu data
-    if (motorFeedback->isValid && // imuData->isValid &&
+    if (motorFeedbackLock->isValid && // imuData->isValid &&
         !isnan(measurements(0,0)) &&
         !isnan(measurements(1,0)) &&
         !isnan(measurements(2,0)) &&
@@ -95,7 +103,7 @@ void MotionControlModule::entry(void) {
 
     // Run controllers
     uint8_t dribblerCommand = 0;
-    dribblerController.calculate(motionCommand->dribbler, dribblerCommand);
+    dribblerController.calculate(motionCommandLock->dribbler, dribblerCommand);
 
     Eigen::Matrix<double, 4, 1> targetWheels;
     Eigen::Matrix<double, 4, 1> motorCommands;
@@ -106,27 +114,27 @@ void MotionControlModule::entry(void) {
     prevCommand = motorCommands;
 
 
-    motorCommand->isValid = true;
-    motorCommand->lastUpdate = HAL_GetTick();
+    motorCommandLock->isValid = true;
+    motorCommandLock->lastUpdate = HAL_GetTick();
 
     // Good to run motors
     // todo Check stall and motor errors?
-    if (batteryVoltage->isValid && !batteryVoltage->isCritical) {
+    if (batteryVoltageLock->isValid && !batteryVoltageLock->isCritical) {
 
         // set motors to real targets
         for (int i = 0; i < 4; i++) {
-            motorCommand->wheels[i] = motorCommands(i, 0);
+            motorCommandLock->wheels[i] = motorCommands(i, 0);
         }
-        motorCommand->dribbler = dribblerCommand;
+        motorCommandLock->dribbler = dribblerCommand;
 
     } else {
 
         // rip battery
         // stop
         for (int i = 0; i < 4; i++) {
-            motorCommand->wheels[i] = 0.0f;
+            motorCommandLock->wheels[i] = 0.0f;
         }
-        motorCommand->dribbler = 0;
+        motorCommandLock->dribbler = 0;
     }
 }
 

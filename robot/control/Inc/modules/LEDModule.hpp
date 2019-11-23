@@ -3,6 +3,7 @@
 #include <array>
 #include <memory>
 
+#include "LockedStruct.hpp"
 #include "DigitalOut.hpp"
 #include "I2C.hpp"
 #include "SPI.hpp"
@@ -13,17 +14,15 @@
 class LEDModule : public GenericModule {
 public:
     // How many times per second this module should run
-    static constexpr float freq = 1.0f; // Hz
-    static constexpr uint32_t period = static_cast<uint32_t>(1000000L / freq);
-
-    // How long a single call to this module takes
-    static constexpr uint32_t runtime = 550; // us
+    static constexpr float kFrequency = 10.0f; // Hz
+    static constexpr std::chrono::milliseconds kPeriod{static_cast<int>(1000 / kFrequency)};
+    static constexpr int kPriority = 1;
 
     LEDModule(std::shared_ptr<MCP23017> ioExpander,
-              BatteryVoltage *const batteryVoltage,
-              FPGAStatus *const fpgaStatus,
-              KickerInfo *const kickerInfo,
-              RadioError *const radioError);
+              LockedStruct<BatteryVoltage>& batteryVoltage,
+              LockedStruct<FPGAStatus>& fpgaStatus,
+              LockedStruct<KickerInfo>& kickerInfo,
+              LockedStruct<RadioError>& radioError);
 
     virtual void entry(void);
 
@@ -73,10 +72,10 @@ private:
 
     const static uint16_t IOExpanderErrorLEDMask = 0xFF00;
 
-    BatteryVoltage *const batteryVoltage;
-    FPGAStatus *const fpgaStatus;
-    KickerInfo *const kickerInfo;
-    RadioError *const radioError;
+    LockedStruct<BatteryVoltage>& batteryVoltage;
+    LockedStruct<FPGAStatus>& fpgaStatus;
+    LockedStruct<KickerInfo>& kickerInfo;
+    LockedStruct<RadioError>& radioError;
 
     // Dot stars were removed so we could use their SPI
     // bus for the kicker

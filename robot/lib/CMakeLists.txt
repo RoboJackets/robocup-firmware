@@ -10,7 +10,7 @@ add_library(firm-lib
   Src/drivers/KickerBoard.cpp
   Src/drivers/MCP23017.cpp
   Src/drivers/MPU6050.cpp
-)
+        Inc/LockedStruct.hpp)
 target_link_libraries(firm-lib
     CONAN_PKG::mTrain
     CONAN_PKG::Eigen3

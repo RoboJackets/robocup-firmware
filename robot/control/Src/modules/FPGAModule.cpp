@@ -3,11 +3,14 @@
 
 #include <cmath>
 
+using namespace std::literals;
+
 FPGAModule::FPGAModule(std::shared_ptr<SPI> spi,
-                       MotorCommand *const motorCommand,
-                       FPGAStatus *const fpgaStatus,
-                       MotorFeedback *const motorFeedback) 
-    : motorCommand(motorCommand), motorFeedback(motorFeedback),
+                       LockedStruct<MotorCommand>& motorCommand,
+                       LockedStruct<FPGAStatus>& fpgaStatus,
+                       LockedStruct<MotorFeedback>& motorFeedback)
+    : GenericModule(kPeriod, "fpga", kPriority),
+      motorCommand(motorCommand), motorFeedback(motorFeedback),
       fpgaStatus(fpgaStatus),
       fpga(spi, FPGA_CS, FPGA_INIT, FPGA_PROG, FPGA_DONE),
       fpgaInitialized(false) {
@@ -24,19 +27,25 @@ FPGAModule::FPGAModule(std::shared_ptr<SPI> spi,
 
     printf("INFO: FPGA probably configured\r\n");
 
-    motorFeedback->isValid = false;
-    motorFeedback->lastUpdate = 0;
-    for (int i = 0; i < 4; i++) {
-        motorFeedback->encoders[i] = 0.0f;
-        motorFeedback->currents[i] = 0.0f;
+    {
+        auto motorFeedbackLock = motorFeedback.unsafe_value();
+        motorFeedbackLock->isValid = false;
+        motorFeedbackLock->lastUpdate = 0;
+        for (int i = 0; i < 4; i++) {
+            motorFeedbackLock->encoders[i] = 0.0f;
+            motorFeedbackLock->currents[i] = 0.0f;
+        }
     }
 
-    fpgaStatus->isValid = false;
-    fpgaStatus->lastUpdate = 0;
-    // msb is 1 to indicate no errors
-    fpgaStatus->FPGAHasError = false;
-    for (int i = 0; i < 4; i++) {
-        fpgaStatus->motorHasErrors[i] = false;
+    {
+        auto fpgaStatusLock = fpgaStatus.unsafe_value();
+        fpgaStatusLock->isValid = false;
+        fpgaStatusLock->lastUpdate = 0;
+        // msb is 1 to indicate no errors
+        fpgaStatusLock->FPGAHasError = false;
+        for (int i = 0; i < 4; i++) {
+            fpgaStatusLock->motorHasErrors[i] = false;
+        }
     }
 }
 
@@ -58,34 +67,31 @@ void FPGAModule::entry(void) {
     std::array<int16_t, 5> dutyCycles{0, 0, 0, 0, 0};
     std::array<int16_t, 5> encDeltas{};
 
-    // Make sure commands are valid
-    // If they are not valid, we automatically send a 0 duty cycle
-    if (motorCommand->isValid &&
-        (HAL_GetTick() - motorCommand->lastUpdate) < COMMAND_TIMEOUT) {
+    {
+        auto motorCommandLock = motorCommand.lock();
+        // Make sure commands are valid
+        // If they are not valid, we automatically send a 0 duty cycle
+        if (motorCommandLock->isValid &&
+            (HAL_GetTick() - motorCommandLock->lastUpdate) < COMMAND_TIMEOUT) {
 
-        for (int i = 0; i < 4; i++) {
-            dutyCycles.at(i) = static_cast<int16_t>(
-                motorCommand->wheels[i] * fpga.MAX_DUTY_CYCLE/2);
-            if (dutyCycles.at(i) > fpga.MAX_DUTY_CYCLE) {
-                dutyCycles.at(i) = fpga.MAX_DUTY_CYCLE;
-            } else if (dutyCycles.at(i) < -fpga.MAX_DUTY_CYCLE) {
-                dutyCycles.at(i) = -fpga.MAX_DUTY_CYCLE;
+            for (int i = 0; i < 4; i++) {
+                dutyCycles.at(i) = static_cast<int16_t>(
+                        motorCommandLock->wheels[i] * fpga.MAX_DUTY_CYCLE / 2);
+                if (dutyCycles.at(i) > fpga.MAX_DUTY_CYCLE) {
+                    dutyCycles.at(i) = fpga.MAX_DUTY_CYCLE;
+                } else if (dutyCycles.at(i) < -fpga.MAX_DUTY_CYCLE) {
+                    dutyCycles.at(i) = -fpga.MAX_DUTY_CYCLE;
+                }
             }
-        }
-        dutyCycles.at(4) = motorCommand->dribbler;
+            dutyCycles.at(4) = motorCommandLock->dribbler;
 
+        }
     }
 
     // Communicate with FPGA
     uint8_t status = fpga.set_duty_get_enc(
         dutyCycles.data(), dutyCycles.size(),
         encDeltas.data(), encDeltas.size());
-
-
-    // Do conversion and throw into shared mem
-
-    motorFeedback->isValid = true;
-    motorFeedback->lastUpdate = HAL_GetTick();
 
     /*
      * The time since the last update is derived with the value of
@@ -120,25 +126,35 @@ void FPGAModule::entry(void) {
         dt = 1;
     }
 
-    // Convert encoders to rad/sec from enc ticks since last reading
-    for (int i = 0; i < 4; i++) {
-        // (rad / s) = (enc) * (rev / enc) * (rad / rev) * (1 / sec)
-        motorFeedback->encoders[i] = static_cast<float>(encDeltas[i]) * (1 / static_cast<float>(ENC_TICK_PER_REV)) * (2*M_PI / 1) * (1 / dt);
+    {
+        auto motorFeedbackLock = motorFeedback.lock();
+        // Convert encoders to rad/sec from enc ticks since last reading
+        for (int i = 0; i < 4; i++) {
+            // (rad / s) = (enc) * (rev / enc) * (rad / rev) * (1 / sec)
+            motorFeedbackLock->encoders[i] =
+                    static_cast<float>(encDeltas[i]) * (1 / static_cast<float>(ENC_TICK_PER_REV)) * (2 * M_PI / 1) *
+                    (1 / dt);
+        }
+
+        // Convert from adc lsb to amp
+        for (int i = 0; i < 4; i++) {
+            motorFeedbackLock->currents[i] = 0.0f;
+        }
+
+        motorFeedbackLock->isValid = true;
+        motorFeedbackLock->lastUpdate = HAL_GetTick();
     }
 
-    // Convert from adc lsb to amp
-    for (int i = 0; i < 4; i++) {
-        motorFeedback->currents[i] = 0.0f;
-    }
+    {
+        auto fpgaStatusLock = fpgaStatus.lock();
+        fpgaStatusLock->isValid = true;
+        fpgaStatusLock->lastUpdate = HAL_GetTick();
+        // msb is 1 to indicate no errors
+        fpgaStatusLock->FPGAHasError = (status & (1 << 7)) == 0;
 
-
-    fpgaStatus->isValid = true;
-    fpgaStatus->lastUpdate = HAL_GetTick();
-    // msb is 1 to indicate no errors
-    fpgaStatus->FPGAHasError = (status & (1 << 7)) == 0;
-
-    // 1 is to indicate error on the specific wheel
-    for (int i = 0; i < 4; i++) {
-        fpgaStatus->motorHasErrors[i] = (status & (1 << i)) == 1;
+        // 1 is to indicate error on the specific wheel
+        for (int i = 0; i < 4; i++) {
+            fpgaStatusLock->motorHasErrors[i] = (status & (1 << i)) == 1;
+        }
     }
 }

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <LockedStruct.hpp>
 #include "GenericModule.hpp"
 #include "MicroPackets.hpp" 
 #include "drivers/MCP23017.hpp"
@@ -9,18 +10,16 @@
 class RotaryDialModule : public GenericModule {
 public:
     // How many times per second this module should run
-    static constexpr float freq = 1.0f; // Hz
-    static constexpr uint32_t period = static_cast<uint32_t>(1000000L / freq);
+    static constexpr float kFrequency = 50.0f; // Hz
+    static constexpr std::chrono::milliseconds kPeriod{static_cast<int>(1000 / kFrequency)};
+    static constexpr int kPriority = 3;
 
-    // How long a single call to this module takes
-    static constexpr uint32_t runtime = 10; // us
-
-    RotaryDialModule(std::shared_ptr<MCP23017> ioExpander, RobotID *const robotID);
+    RotaryDialModule(std::shared_ptr<MCP23017> ioExpander, LockedStruct<RobotID>& robotID);
 
     virtual void entry(void);
 
 private:
-    RobotID *const robotID;
+    LockedStruct<RobotID>& robotID;
     
     RotarySelector<IOExpanderDigitalInOut> dial;
 };

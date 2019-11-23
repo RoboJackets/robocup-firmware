@@ -130,3 +130,4 @@ struct KickerInfo {
 struct DebugInfo {
     int16_t val[18];
 };
+

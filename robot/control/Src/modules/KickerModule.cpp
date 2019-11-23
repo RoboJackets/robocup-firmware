@@ -4,18 +4,20 @@
 #include "iodefs.h"
 
 KickerModule::KickerModule(std::shared_ptr<SPI> spi,
-                           KickerCommand *const kickerCommand,
-                           KickerInfo *const kickerInfo)
-    : kickerCommand(kickerCommand), kickerInfo(kickerInfo),
+                           LockedStruct<KickerCommand>& kickerCommand,
+                           LockedStruct<KickerInfo>& kickerInfo)
+    : GenericModule(kPeriod, "kicker", kPriority),
+      kickerCommand(kickerCommand), kickerInfo(kickerInfo),
       prevKickTime(0), nCs(std::make_shared<DigitalOut>(KICKER_CS)), kicker(spi, nCs, KICKER_RST) {
 
     kicker.flash(false, true);
 
-    kickerInfo->isValid = false;
-    kickerInfo->lastUpdate = 0;
-    kickerInfo->kickerHasError = false;
-    kickerInfo->kickerCharged = false;
-    kickerInfo->ballSenseTriggered = false;
+    auto kickerInfoLock = kickerInfo.unsafe_value();
+    kickerInfoLock->isValid = false;
+    kickerInfoLock->lastUpdate = 0;
+    kickerInfoLock->kickerHasError = false;
+    kickerInfoLock->kickerCharged = false;
+    kickerInfoLock->ballSenseTriggered = false;
 
     printf("INFO: Kicker initialized\r\n");
 }
@@ -25,42 +27,47 @@ void KickerModule::entry(void) {
     // Check if valid
     // and within the last few ms
     // and not same as previous command
-    if (kickerCommand->isValid) {
-        kickerCommand->isValid = false;
+    {
+        auto kickerCommandLock = kickerCommand.lock();
+        if (kickerCommandLock->isValid) {
 
-        kicker.kickType(kickerCommand->shootMode == KickerCommand::ShootMode::KICK);
-        
-        kicker.setChargeAllowed(true);
+            kickerCommandLock->isValid = false;
 
-        switch (kickerCommand->triggerMode) {
-            case KickerCommand::TriggerMode::OFF:
-                kicker.setChargeAllowed(true);
-                kicker.cancelBreakbeam();
-                break;
+            kicker.kickType(kickerCommandLock->shootMode == KickerCommand::ShootMode::KICK);
 
-            case KickerCommand::TriggerMode::IMMEDIATE:
-                kicker.setChargeAllowed(true);
-                kicker.kick(kickerCommand->kickStrength);
-                break;
+            kicker.setChargeAllowed(true);
 
-            case KickerCommand::TriggerMode::ON_BREAK_BEAM:
-                kicker.setChargeAllowed(true);
-                kicker.kickOnBreakbeam(kickerCommand->kickStrength);
-                break;
+            switch (kickerCommandLock->triggerMode) {
+                case KickerCommand::TriggerMode::OFF:
+                    kicker.setChargeAllowed(true);
+                    kicker.cancelBreakbeam();
+                    break;
 
-            case KickerCommand::TriggerMode::INVALID:
-                kicker.setChargeAllowed(false);
-                kicker.cancelBreakbeam();
-                break;
+                case KickerCommand::TriggerMode::IMMEDIATE:
+                    kicker.setChargeAllowed(true);
+                    kicker.kick(kickerCommandLock->kickStrength);
+                    break;
+
+                case KickerCommand::TriggerMode::ON_BREAK_BEAM:
+                    kicker.setChargeAllowed(true);
+                    kicker.kickOnBreakbeam(kickerCommandLock->kickStrength);
+                    break;
+
+                case KickerCommand::TriggerMode::INVALID:
+                    kicker.setChargeAllowed(false);
+                    kicker.cancelBreakbeam();
+                    break;
+            }
         }
     }
 
     // Do all the commands
     kicker.service();
 
-    kickerInfo->isValid = true;
-    kickerInfo->lastUpdate = HAL_GetTick();
-    kickerInfo->kickerHasError = kicker.isHealthy();
-    kickerInfo->ballSenseTriggered = kicker.isBallSensed();
-    kickerInfo->kickerCharged = kicker.isCharged();
+    auto kickerInfoLock  = kickerInfo.lock();
+    kickerInfoLock->isValid = true;
+    kickerInfoLock->lastUpdate = HAL_GetTick();
+    kickerInfoLock->kickerHasError = kicker.isHealthy();
+    kickerInfoLock->ballSenseTriggered = kicker.isBallSensed();
+    kickerInfoLock->kickerCharged = kicker.isCharged();
 }

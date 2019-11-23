@@ -1,28 +1,32 @@
 #pragma once
 
 #include <cstdint>
+#include <chrono>
+
+#include "FreeRTOS.h"
+#include "task.h"
 
 // All modules must implement this interface
 // It allows the scheduler to call the module to run it
 class GenericModule {
 public:
-    // Double check these values against the super loop timings
-    // Anything fast will not be executed at that rate
-    // Anything with a longer runtime than the loop will never run
-
-    // How many times per second this module should run
-    static constexpr float freq = 1.0f; // Hz
-    static constexpr uint32_t period = static_cast<uint32_t>(1000000L / freq);
-
-    // How long a single call to this module takes
-    // Take the safe estimate since any time over may
-    // cause the loop to run long
-    // Can be 0us if no long IO is done
-    //
-    // Note: Even if this is less than the super loop time,
-    // it may not run due to the priority of the module
-    static constexpr uint32_t runtime = 10; // us
+    GenericModule(std::chrono::milliseconds period, const char *name, int priority = 1, int stackSize = 1024)
+        : period(period), name(name), priority(priority), stackSize(stackSize) {}
+    virtual void start(void) {}
 
     // Called at most once a frame to execute the module
     virtual void entry(void) = 0;
+
+    // The period of this module in milliseconds
+    std::chrono::milliseconds period;
+
+    // A human-readable name for the process
+    const char *name;
+
+    // The priority of this module (default: low)
+    int priority = 1;
+
+    int stackSize = 1024;
+
+    TaskHandle_t handle;
 };

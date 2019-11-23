@@ -4,23 +4,21 @@
 #include "GenericModule.hpp"
 #include "MicroPackets.hpp" 
 #include "drivers/MPU6050.h"
+#include "LockedStruct.hpp"
 #include <memory>
 
 class IMUModule : public GenericModule {
 public:
     // How many times per second this module should run
-    static constexpr float freq = 200.0f; // Hz
-    static constexpr uint32_t period = static_cast<uint32_t>(1000000L / freq);
+    static constexpr float kFrequency = 200.0f; // Hz
+    static constexpr std::chrono::milliseconds kPeriod{static_cast<int>(1000 / kFrequency)};
+    static constexpr int kPriority = 3;
 
-    // How long a single call to this module takes
-    static constexpr uint32_t runtime = 333; // us
-
-    IMUModule(std::shared_ptr<I2C> sharedI2C, IMUData * imuData);
+    IMUModule(std::shared_ptr<I2C> sharedI2C, LockedStruct<IMUData>& imuData);
 
     virtual void entry(void);
 
 private:
-    IMUData *const imuData;
-
     MPU6050 imu;
+    LockedStruct<IMUData>& imuData;
 };

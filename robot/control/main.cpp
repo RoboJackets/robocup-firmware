@@ -18,6 +18,7 @@
 #include "modules/MotionControlModule.hpp"
 #include "modules/RadioModule.hpp"
 #include "modules/RotaryDialModule.hpp"
+#include "LockedStruct.hpp"
 
 #include "FreeRTOS.h"
 #include "task.h"
@@ -61,71 +62,24 @@ struct MODULE_META_DATA {
           module(module) {}
 };
 
-MotionCommand motionCommand;
-MotorCommand motorCommand;
-MotorFeedback motorFeedback;
-IMUData imuData;
-BatteryVoltage batteryVoltage;
-FPGAStatus fpgaStatus;
-RadioError radioError;
-RobotID robotID;
-KickerCommand kickerCommand;
-KickerInfo kickerInfo;
+static std::vector<GenericModule*> moduleList;
 
-DebugInfo debugInfo;
+void startModule(void *pvModule) {
+    GenericModule *module = static_cast<GenericModule *>(pvModule);
 
-static std::vector<MODULE_META_DATA> moduleList;
-
-// Init led first to show startup progress with LED's
-static std::unique_ptr<LEDModule> led;
-
-static void superLoopTask(void *pvParameters) {
+    TickType_t last_wait_time = xTaskGetTickCount();
+    TickType_t increment = module->period.count();
     while (true) {
-        // Must do all timing in systick
-        // Base time we use is in systick, and if you convert from systick
-        // to us and try to compare timepoints, the value will "overflow" at
-        // some random point which messes up the `Current - Start` magic
-        // that automatically deals with delta time using the math behind overflows
-        uint32_t loopStartTime = DWT_GetTick();
-        uint32_t loopEndTime = DWT_GetTick() + SUPER_LOOP_PERIOD*DWT_SysTick_To_us();
-
-        for (unsigned int i = 0; i < moduleList.size(); i++) {
-            MODULE_META_DATA& module = moduleList.at(i);
-            uint32_t currentTime = DWT_GetTick();
-
-            // Check if we should run the module
-            //      It's time to run it and
-            //      we have enough time in the super loop
-            //
-            // Subtraction allows for rollover compensation
-            // then convertion to signed allows simple comparison
-            if (static_cast<int32_t>(currentTime - module.nextRunTime) >= 0 &&
-                static_cast<int32_t>(loopEndTime - currentTime) >= module.moduleRunTime) {
-
-                // todo change to loop start time
-                module.lastRunTime = loopStartTime;
-                module.nextRunTime = loopStartTime + module.modulePeriod;
-
-                module.module->entry();
-            }
-
-            // Check if we missed a module X times in a row
-            if (static_cast<int32_t>(currentTime - module.nextRunTime) > MAX_MISS_CNT*module.moduleRunTime) {
-                //printf("WARNING: Missed module #%d run %d times in a row\r\n", i+1, MAX_MISS_CNT);
-                led->missedModuleRun();
-            }
-        }
-
-        int32_t elapsed = DWT_GetTick() - loopStartTime;
-        if (elapsed < static_cast<int32_t>(SUPER_LOOP_PERIOD*DWT_SysTick_To_us())) {
-            DWT_Delay_Sys(SUPER_LOOP_PERIOD*DWT_SysTick_To_us() - elapsed);
-        } else {
-            //printf("WARNING: Overran super loop time\r\n");
-            led->missedSuperLoop();
-        }
+        module->entry();
+        vTaskDelayUntil(&last_wait_time, increment);
     }
 }
 
+void createModule(GenericModule *module) {
+    xTaskCreate(startModule, module->name, module->stackSize, module, module->priority, &(module->handle));
+}
+
+LockedStruct<DebugInfo> debugInfo;
 
 int main() {
     HAL_Delay(100);
@@ -133,6 +87,17 @@ int main() {
     std::shared_ptr<I2C> sharedI2C = std::make_shared<I2C>(SHARED_I2C_BUS);
     std::shared_ptr<SPI> fpgaKickerSPI = std::make_shared<SPI>(FPGA_KICKER_SPI_BUS, std::nullopt, 16'000'000);
     std::shared_ptr<SPI> dot_star_spi = std::make_shared<SPI>(DOT_STAR_SPI_BUS, std::nullopt, 100'000);
+
+    LockedStruct<MotionCommand> motionCommand;
+    LockedStruct<MotorCommand> motorCommand;
+    LockedStruct<MotorFeedback> motorFeedback;
+    LockedStruct<IMUData> imuData;
+    LockedStruct<BatteryVoltage> batteryVoltage;
+    LockedStruct<FPGAStatus> fpgaStatus;
+    LockedStruct<RadioError> radioError;
+    LockedStruct<RobotID> robotID;
+    LockedStruct<KickerCommand> kickerCommand;
+    LockedStruct<KickerInfo> kickerInfo;
 
     // TODO: Fix me such that we init all the devices
     // then call a config to flash them correctly
@@ -145,67 +110,53 @@ int main() {
     std::shared_ptr<MCP23017> ioExpander = std::make_shared<MCP23017>(sharedI2C, 0x42);
     ioExpander->config(0x00FF, 0x00FF, 0x00FF);
 
-    led = std::make_unique<LEDModule>(ioExpander,
-                                      &batteryVoltage,
-                                      &fpgaStatus,
-                                      &kickerInfo,
-                                      &radioError);
-
+    LEDModule led(ioExpander,
+                  batteryVoltage,
+                  fpgaStatus,
+                  kickerInfo,
+                  radioError);
+    createModule(&led);
 
     FPGAModule fpga(fpgaKickerSPI,
-                    &motorCommand,
-                    &fpgaStatus,
-                    &motorFeedback);
+                    motorCommand,
+                    fpgaStatus,
+                    motorFeedback);
+    createModule(&fpga);
 
-    led->fpgaInitialized();
-
-    RadioModule radio(&batteryVoltage,
-                      &fpgaStatus,
-                      &kickerInfo,
-                      &robotID,
-                      &kickerCommand,
-                      &motionCommand,
-                      &radioError);
-
-    led->radioInitialized();
+    RadioModule radio(batteryVoltage,
+                      fpgaStatus,
+                      kickerInfo,
+                      robotID,
+                      kickerCommand,
+                      motionCommand,
+                      radioError);
+    createModule(&radio);
 
     KickerModule kicker(dot_star_spi,
-                        &kickerCommand,
-                        &kickerInfo);
+                        kickerCommand,
+                        kickerInfo);
+    createModule(&kicker);
 
-    led->kickerInitialized();
+    BatteryModule battery(batteryVoltage);
+    createModule(&battery);
 
-    BatteryModule battery(&batteryVoltage);
     RotaryDialModule dial(ioExpander,
-                          &robotID);
-    MotionControlModule motion(&batteryVoltage,
-                               &imuData,
-                               &motionCommand,
-                               &motorFeedback,
-                               &motorCommand);
+                          robotID);
+    createModule(&dial);
+
+    MotionControlModule motion(batteryVoltage,
+                               imuData,
+                               motionCommand,
+                               motorFeedback,
+                               motorCommand);
+    createModule(&motion);
+
     IMUModule imu(sharedI2C,
-                  &imuData);
+                  imuData);
+    createModule(&imu);
 
-    led->fullyInitialized();
-
-    uint64_t curTime = DWT_GetTick();
-    moduleList.emplace_back(curTime, MotionControlModule::period, MotionControlModule::runtime, &motion);
-    moduleList.emplace_back(curTime, IMUModule::period,           IMUModule::runtime,           &imu);
-    moduleList.emplace_back(curTime, FPGAModule::period,          FPGAModule::runtime,          &fpga);
-    moduleList.emplace_back(curTime, RadioModule::period,         RadioModule::runtime,         &radio);
-    moduleList.emplace_back(curTime, KickerModule::period,        KickerModule::runtime,        &kicker);
-    moduleList.emplace_back(curTime, BatteryModule::period,       BatteryModule::runtime,       &battery);
-    moduleList.emplace_back(curTime, RotaryDialModule::period,    RotaryDialModule::runtime,    &dial);
-    moduleList.emplace_back(curTime, LEDModule::period,           LEDModule::runtime,           led.get());
-
-    TaskHandle_t superLoopHandle;
-    xTaskCreate(superLoopTask, "Super Loop", 1 << 15, nullptr, 1, &superLoopHandle);
-
+    // Start the scheduler now that we're done creating all of our tasks.
     vTaskStartScheduler();
-
-    if (superLoopHandle != nullptr) {
-        vTaskDelete(superLoopHandle);
-    }
 
     for (;;);
 }

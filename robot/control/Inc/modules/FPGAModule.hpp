@@ -8,27 +8,26 @@
 #include "SPI.hpp"
 
 #include <memory>
+#include <LockedStruct.hpp>
 
 class FPGAModule : public GenericModule {
 public:
     // How many times per second this module should run
-    static constexpr float freq = 100.0f; // Hz
-    static constexpr uint32_t period = static_cast<uint32_t>(1000000L / freq);
-
-    // How long a single call to this module takes
-    static constexpr uint32_t runtime = 418; // us
+    static constexpr float kFrequency = 100.0f; // Hz
+    static constexpr std::chrono::milliseconds kPeriod{static_cast<int>(1000 / kFrequency)};
+    static constexpr int kPriority = 3;
 
     FPGAModule(std::shared_ptr<SPI> spi,
-               MotorCommand *const motorCommand,
-               FPGAStatus *const fpgaStatus,
-               MotorFeedback *const motorFeedback);
+               LockedStruct<MotorCommand>& motorCommand,
+               LockedStruct<FPGAStatus>& fpgaStatus,
+               LockedStruct<MotorFeedback>& motorFeedback);
 
     virtual void entry(void);
 
 private:
-    MotorCommand *const motorCommand;
-    MotorFeedback *const motorFeedback;
-    FPGAStatus *const fpgaStatus;
+    LockedStruct<MotorCommand>& motorCommand;
+    LockedStruct<MotorFeedback>& motorFeedback;
+    LockedStruct<FPGAStatus>& fpgaStatus;
 
     FPGA fpga;
     bool fpgaInitialized;

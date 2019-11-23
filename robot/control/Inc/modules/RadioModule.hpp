@@ -1,5 +1,6 @@
 #pragma once
 
+#include "LockedStruct.hpp"
 #include "GenericModule.hpp"
 #include "MicroPackets.hpp" 
 #include "radio/RadioLink.hpp"
@@ -8,31 +9,29 @@
 class RadioModule : public GenericModule {
 public:
     // How many times per second this module should run
-    static constexpr float freq = 50.0f; // Hz
-    static constexpr uint32_t period = static_cast<uint32_t>(1000000L / freq);
+    static constexpr float kFrequency = 50.0f; // Hz
+    static constexpr std::chrono::milliseconds kPeriod{static_cast<int>(1000 / kFrequency)};
+    static constexpr int kPriority = 3;
 
-    // How long a single call to this module takes
-    static constexpr uint32_t runtime = 4000; // us
-
-    RadioModule(BatteryVoltage *const batteryVoltage,
-                FPGAStatus *const fpgaStatus,
-                KickerInfo *const kickerInfo,
-                RobotID *const robotID,
-                KickerCommand *const kickerCommand,
-                MotionCommand *const motionCommand,
-                RadioError *const radioError);
+    RadioModule(LockedStruct<BatteryVoltage>& batteryVoltage,
+                LockedStruct<FPGAStatus>& fpgaStatus,
+                LockedStruct<KickerInfo>& kickerInfo,
+                LockedStruct<RobotID>& robotID,
+                LockedStruct<KickerCommand>& kickerCommand,
+                LockedStruct<MotionCommand>& motionCommand,
+                LockedStruct<RadioError>& radioError);
 
     virtual void entry(void);
 
 private:
-    BatteryVoltage *const batteryVoltage;
-    FPGAStatus *const fpgaStatus;
-    KickerInfo *const kickerInfo;
-    RobotID *const robotID;
+    LockedStruct<BatteryVoltage>& batteryVoltage;
+    LockedStruct<FPGAStatus>& fpgaStatus;
+    LockedStruct<KickerInfo>& kickerInfo;
+    LockedStruct<RobotID>& robotID;
     
-    KickerCommand *const kickerCommand;
-    MotionCommand *const motionCommand;
-    RadioError *const radioError;
+    LockedStruct<KickerCommand>& kickerCommand;
+    LockedStruct<MotionCommand>& motionCommand;
+    LockedStruct<RadioError>& radioError;
 
     RadioLink link;
     DigitalOut secondRadioCS;

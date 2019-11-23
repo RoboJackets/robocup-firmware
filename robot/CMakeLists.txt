@@ -6,6 +6,7 @@ project(RoboCupFirmware
 
 set(CMAKE_NO_SYSTEM_FROM_IMPORTED True)
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+set(CMAKE_CXX_COMPILER_VERSION "7.3")
 conan_basic_setup(TARGETS)
 
 set( CMAKE_RUNTIME_OUTPUT_DIRECTORY  "${CMAKE_BINARY_DIR}/bin" )
