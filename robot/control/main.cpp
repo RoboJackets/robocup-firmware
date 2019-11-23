@@ -84,9 +84,9 @@ LockedStruct<DebugInfo> debugInfo;
 int main() {
     HAL_Delay(100);
 
-    std::shared_ptr<I2C> sharedI2C = std::make_shared<I2C>(SHARED_I2C_BUS);
-    std::shared_ptr<SPI> fpgaKickerSPI = std::make_shared<SPI>(FPGA_KICKER_SPI_BUS, std::nullopt, 16'000'000);
-    std::shared_ptr<SPI> dot_star_spi = std::make_shared<SPI>(DOT_STAR_SPI_BUS, std::nullopt, 100'000);
+    LockedStruct<I2C> sharedI2C(SHARED_I2C_BUS);
+    std::unique_ptr<SPI> fpgaSPI = std::make_unique<SPI>(FPGA_SPI_BUS, std::nullopt, 16'000'000);
+    LockedStruct<SPI> sharedSPI(DOT_STAR_SPI_BUS, std::nullopt, 100'000);
 
     LockedStruct<MotionCommand> motionCommand;
     LockedStruct<MotorCommand> motorCommand;
@@ -107,8 +107,10 @@ int main() {
 
     HAL_Delay(100);
 
-    std::shared_ptr<MCP23017> ioExpander = std::make_shared<MCP23017>(sharedI2C, 0x42);
-    ioExpander->config(0x00FF, 0x00FF, 0x00FF);
+//    std::shared_ptr<MCP23017> ioExpander = std::make_shared<MCP23017>(sharedI2C, 0x42);
+    LockedStruct<MCP23017> ioExpander(MCP23017{sharedI2C, 0x42});
+
+    ioExpander.unsafe_value()->config(0x00FF, 0x00FF, 0x00FF);
 
     LEDModule led(ioExpander,
                   batteryVoltage,
@@ -117,7 +119,7 @@ int main() {
                   radioError);
     createModule(&led);
 
-    FPGAModule fpga(fpgaKickerSPI,
+    FPGAModule fpga(std::move(fpgaSPI),
                     motorCommand,
                     fpgaStatus,
                     motorFeedback);
@@ -132,7 +134,7 @@ int main() {
                       radioError);
     createModule(&radio);
 
-    KickerModule kicker(dot_star_spi,
+    KickerModule kicker(sharedSPI,
                         kickerCommand,
                         kickerInfo);
     createModule(&kicker);
@@ -151,9 +153,9 @@ int main() {
                                motorCommand);
     createModule(&motion);
 
-    IMUModule imu(sharedI2C,
-                  imuData);
-    createModule(&imu);
+//    IMUModule imu(sharedI2C,
+//                  imuData);
+//    createModule(&imu);
 
     // Start the scheduler now that we're done creating all of our tasks.
     vTaskStartScheduler();

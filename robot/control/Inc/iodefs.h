@@ -12,7 +12,7 @@
 #define RADIO_R1_INT  p18
 #define RADIO_GLB_RST p19
 
-#define FPGA_KICKER_SPI_BUS SpiBus::SpiBus3
+#define FPGA_SPI_BUS SpiBus::SpiBus3
 #define FPGA_PROG  p13
 #define FPGA_INIT  p14
 #define FPGA_DONE  p15

@@ -51,9 +51,9 @@ enum {
  *
  * initialies FPGA::Instance.
  */
-FPGA::FPGA(std::shared_ptr<SPI> spi_bus, PinName nCs, PinName initB,
+FPGA::FPGA(std::unique_ptr<SPI> spi_bus, PinName nCs, PinName initB,
            PinName progB, PinName done)
-    : _spi_bus(spi_bus),
+    : _spi_bus(std::move(spi_bus)),
       _nCs(nCs, PullType::PullNone, PinMode::PushPull, PinSpeed::Low, true),
       _initB(initB),
       _done(done),

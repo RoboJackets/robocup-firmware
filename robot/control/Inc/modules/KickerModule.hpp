@@ -13,7 +13,7 @@ public:
     static constexpr std::chrono::milliseconds kPeriod{static_cast<int>(1000 / kFrequency)};
     static constexpr int kPriority = 2;
 
-    KickerModule(std::shared_ptr<SPI> spi,
+    KickerModule(LockedStruct<SPI>& spi,
                  LockedStruct<KickerCommand>& kickerCommand,
                  LockedStruct<KickerInfo>& kickerInfo);
 

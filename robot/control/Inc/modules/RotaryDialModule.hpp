@@ -14,7 +14,7 @@ public:
     static constexpr std::chrono::milliseconds kPeriod{static_cast<int>(1000 / kFrequency)};
     static constexpr int kPriority = 3;
 
-    RotaryDialModule(std::shared_ptr<MCP23017> ioExpander, LockedStruct<RobotID>& robotID);
+    RotaryDialModule(LockedStruct<MCP23017>& ioExpander, LockedStruct<RobotID>& robotID);
 
     virtual void entry(void);
 

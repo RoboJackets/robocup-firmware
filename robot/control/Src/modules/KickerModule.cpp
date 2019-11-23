@@ -3,7 +3,7 @@
 #include "mtrain.hpp"
 #include "iodefs.h"
 
-KickerModule::KickerModule(std::shared_ptr<SPI> spi,
+KickerModule::KickerModule(LockedStruct<SPI>& spi,
                            LockedStruct<KickerCommand>& kickerCommand,
                            LockedStruct<KickerInfo>& kickerInfo)
     : GenericModule(kPeriod, "kicker", kPriority),

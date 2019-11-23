@@ -18,7 +18,7 @@ public:
     static constexpr std::chrono::milliseconds kPeriod{static_cast<int>(1000 / kFrequency)};
     static constexpr int kPriority = 1;
 
-    LEDModule(std::shared_ptr<MCP23017> ioExpander,
+    LEDModule(LockedStruct<MCP23017>& ioExpander,
               LockedStruct<BatteryVoltage>& batteryVoltage,
               LockedStruct<FPGAStatus>& fpgaStatus,
               LockedStruct<KickerInfo>& kickerInfo,
@@ -86,7 +86,7 @@ private:
     // - Joe Aug 2019
     //SPI dot_star_spi;
 
-    std::shared_ptr<MCP23017> ioExpander;
+    LockedStruct<MCP23017>& ioExpander;
 
     std::array<DigitalOut, 4> leds;
     bool missedSuperLoopToggle;

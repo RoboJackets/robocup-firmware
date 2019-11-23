@@ -1,7 +1,7 @@
 #include "modules/RotaryDialModule.hpp"
 #include "iodefs.h"
 
-RotaryDialModule::RotaryDialModule(std::shared_ptr<MCP23017> ioExpander, LockedStruct<RobotID>& robotID)
+RotaryDialModule::RotaryDialModule(LockedStruct<MCP23017>& ioExpander, LockedStruct<RobotID>& robotID)
     : GenericModule(kPeriod, "dial", kPriority), robotID(robotID), dial({
             IOExpanderDigitalInOut(ioExpander, HEX_SWITCH_BIT0, MCP23017::DIR_INPUT),
             IOExpanderDigitalInOut(ioExpander, HEX_SWITCH_BIT1, MCP23017::DIR_INPUT),

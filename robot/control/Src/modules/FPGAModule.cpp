@@ -5,14 +5,14 @@
 
 using namespace std::literals;
 
-FPGAModule::FPGAModule(std::shared_ptr<SPI> spi,
+FPGAModule::FPGAModule(std::unique_ptr<SPI> spi,
                        LockedStruct<MotorCommand>& motorCommand,
                        LockedStruct<FPGAStatus>& fpgaStatus,
                        LockedStruct<MotorFeedback>& motorFeedback)
     : GenericModule(kPeriod, "fpga", kPriority),
       motorCommand(motorCommand), motorFeedback(motorFeedback),
       fpgaStatus(fpgaStatus),
-      fpga(spi, FPGA_CS, FPGA_INIT, FPGA_PROG, FPGA_DONE),
+      fpga(std::move(spi), FPGA_CS, FPGA_INIT, FPGA_PROG, FPGA_DONE),
       fpgaInitialized(false) {
 
     fpgaInitialized = fpga.configure();

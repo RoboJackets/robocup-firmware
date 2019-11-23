@@ -6,9 +6,9 @@
 
 using namespace std;
 
-KickerBoard::KickerBoard(shared_ptr<SPI> spi, std::shared_ptr<DigitalOut> nCs,
+KickerBoard::KickerBoard(LockedStruct<SPI>& spi, std::shared_ptr<DigitalOut> nCs,
                          PinName nReset)
-    : AVR910(spi, nCs, nReset), _nCs(nCs), _spi(spi)  {}
+    : AVR910(spi, nCs, nReset)  {}
 
 bool KickerBoard::verify_param(const char* name, char expected,
                                int (AVR910::*paramMethod)(), char mask,
@@ -129,8 +129,6 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
 }
 
 void KickerBoard::service() {
-    _spi->frequency(100'000);
-
     uint8_t command = 0x00;
 
     if (_is_kick)
@@ -159,13 +157,16 @@ void KickerBoard::service() {
 
     command |= static_cast<uint8_t>(static_cast<float>(_kick_strength)/255 * 0xF) & KICK_POWER_MASK;
 
+    auto spi_lock = lock_spi();
+    spi_lock->frequency(100'000);
+
     // Transmit byte over to kicker
     // Must wait at least 10 us such that the isr actually triggers
-    _nCs->write(0);
+    nCs_->write(0);
     DWT_Delay(50);
-    uint8_t resp = _spi->transmitReceive(command);
+    uint8_t resp = spi_lock->transmitReceive(command);
     DWT_Delay(50);
-    _nCs->write(1);
+    nCs_->write(1);
 
 
     _current_voltage = (resp & VOLTAGE_MASK) * VOLTAGE_SCALE;

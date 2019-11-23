@@ -1,15 +1,25 @@
 #pragma once
 
-#define configSUPPORT_STATIC_ALLOCATION 1
-
+#include <utility>
 #include "FreeRTOS.h"
 #include "semphr.h"
 
+/**
+ * A locked-struct abstraction. To access the inner value (either read or write)
+ * you must first acquire a Lock, an RAII structure that will release the lock
+ * upon destruction.
+ *
+ * The structure uses a recursive mutex, so it is safe to acquire locks
+ * repeatedly from the same thread.
+ *
+ * @tparam T
+ */
 template<typename T>
 struct LockedStruct {
 public:
-    LockedStruct() {
-        xSemaphoreCreateMutexStatic(&mutex);
+    template<typename... Args>
+    LockedStruct(Args... args) : value(std::forward<Args>(args)...) {
+        xSemaphoreCreateRecursiveMutexStatic(&mutex);
     }
 
     // No copy/move
@@ -22,11 +32,12 @@ public:
 
     struct Lock {
     public:
-        // Cannot copy or move a lock
+        // Cannot copy a lock
         Lock(const Lock&) = delete;
         Lock& operator=(const Lock&) = delete;
-        Lock(Lock&& other) = delete;
-        Lock& operator=(Lock&& other) = delete;
+
+        Lock(Lock&& other) = default;
+        Lock& operator=(Lock&& other) = default;
 
         T& value() {
             return locked->value;
@@ -37,20 +48,31 @@ public:
         }
 
         ~Lock() {
+            locked->mutex_depth--;
             locked->release_mutex();
         }
 
     private:
-        Lock(LockedStruct* locked) : locked(locked) {
+        Lock(LockedStruct* locked, bool *first_lock) : locked(locked) {
             locked->acquire_mutex();
+            if (first_lock) {
+                *first_lock = (locked->mutex_depth == 0);
+            }
+            locked->mutex_depth++;
         }
         LockedStruct* locked = nullptr;
 
         friend struct LockedStruct;
     };
 
-    Lock lock() {
-        return Lock(this);
+    /**
+     * Lock this struct.
+     * @param first_lock [optional] output parameter to determine whether or
+     *      not this is the only current lock on this struct.
+     * @return a lock on this struct.
+     */
+    Lock lock(bool *first_lock = nullptr) {
+        return Lock(this, first_lock);
     }
 
     /**
@@ -70,15 +92,18 @@ public:
 
 private:
     void acquire_mutex() {
-        xSemaphoreTake(&mutex, portMAX_DELAY);
+        xSemaphoreTakeRecursive(&mutex, portMAX_DELAY);
     }
 
     void release_mutex() {
-        xSemaphoreGive(&mutex);
+        xSemaphoreGiveRecursive(&mutex);
     }
 
     friend struct Lock;
 
     T value;
+
+    int mutex_depth = 0;
+
     StaticSemaphore_t mutex;
 };

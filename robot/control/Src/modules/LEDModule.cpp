@@ -1,7 +1,7 @@
 #include "modules/LEDModule.hpp"
 #include "iodefs.h"
 
-LEDModule::LEDModule(std::shared_ptr<MCP23017> ioExpander,
+LEDModule::LEDModule(LockedStruct<MCP23017>& ioExpander,
                      LockedStruct<BatteryVoltage>& batteryVoltage,
                      LockedStruct<FPGAStatus>& fpgaStatus,
                      LockedStruct<KickerInfo>& kickerInfo,
@@ -15,7 +15,7 @@ LEDModule::LEDModule(std::shared_ptr<MCP23017> ioExpander,
 
     setColor(0xFFFFFF, 0xFFFFFF);
 
-    ioExpander->writeMask(static_cast<uint16_t>(~IOExpanderErrorLEDMask), IOExpanderErrorLEDMask);
+    ioExpander.unsafe_value()->writeMask(static_cast<uint16_t>(~IOExpanderErrorLEDMask), IOExpanderErrorLEDMask);
 }
 
 void LEDModule::entry(void) {

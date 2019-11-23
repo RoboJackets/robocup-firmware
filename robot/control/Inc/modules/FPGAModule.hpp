@@ -17,7 +17,7 @@ public:
     static constexpr std::chrono::milliseconds kPeriod{static_cast<int>(1000 / kFrequency)};
     static constexpr int kPriority = 3;
 
-    FPGAModule(std::shared_ptr<SPI> spi,
+    FPGAModule(std::unique_ptr<SPI> spi,
                LockedStruct<MotorCommand>& motorCommand,
                LockedStruct<FPGAStatus>& fpgaStatus,
                LockedStruct<MotorFeedback>& motorFeedback);

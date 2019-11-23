@@ -10,7 +10,7 @@
 class IOExpanderDigitalInOut {
 public:
     /// Other constructors for creating objects for pinouts
-    IOExpanderDigitalInOut(std::shared_ptr<MCP23017> mcp, MCP23017::ExpPinName pin,
+    IOExpanderDigitalInOut(LockedStruct<MCP23017>& mcp, MCP23017::ExpPinName pin,
                            MCP23017::PinMode mode, bool state = false)
         : _pin(pin), _mcp23017(mcp) {
         pinMode(mode);
@@ -18,13 +18,22 @@ public:
             write(state);
     }
 
-    void pinMode(MCP23017::PinMode mode) { _mcp23017->pinMode(_pin, mode); }
+    void pinMode(MCP23017::PinMode mode) {
+        auto lock = _mcp23017.lock();
+        lock->pinMode(_pin, mode);
+    }
 
     /// Pulls pin low if val = 0 and pulls pin high if val >= 1
-    void write(int val) { _mcp23017->writePin(val, _pin); }
+    void write(int val) {
+        auto lock = _mcp23017.lock();
+        lock->writePin(val, _pin);
+    }
 
     /// Returns 0 if pin is low, 1 if pin is high
-    int read() { return _mcp23017->readPin(_pin); }
+    int read() {
+        auto lock = _mcp23017.lock();
+        return lock->readPin(_pin);
+    }
 
     /// Allows the equals operator to write to a pin
     IOExpanderDigitalInOut& operator=(int value) {
@@ -37,5 +46,5 @@ public:
 
 private:
     MCP23017::ExpPinName _pin;
-    std::shared_ptr<MCP23017> _mcp23017;
+    LockedStruct<MCP23017>& _mcp23017;
 };
