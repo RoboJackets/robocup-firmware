@@ -1,0 +1,21 @@
+include(default)
+
+C_MACHINE_OPTIONS="-mthumb -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard"
+
+[settings]
+arch=armv7hf
+compiler=gcc
+compiler.version=7.3
+compiler.libcxx=libstdc++11
+build_type=Release
+
+[options]
+GnuArmNoneToolchainInstaller:version=7.3
+[build_requires]
+GnuArmNoneToolchainInstaller/0.1.0@robojackets/testing
+
+[env]
+LDFLAGS="--specs=nosys.specs --specs=nano.specs"
+CFLAGS="$C_MACHINE_OPTIONS"
+CXXFLAGS="$C_MACHINE_OPTIONS -fno-exceptions -fno-rtti"
+ASMFLAGS="$C_MACHINE_OPTIONS"
