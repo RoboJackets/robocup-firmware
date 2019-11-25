@@ -12,24 +12,27 @@ The official [RoboCup site](http://robocupssl.cpe.ku.ac.th/) has more informatio
 
 
 ## Project Layout
-
-### src/
-
-The src folder contains the firmware code for the different targets that are compiled for the robot/base. See the src [README](src/README.md) for more info.
-
-### lib/
-
-The lib folder contains the libraries used for the compiling targets in the src folder. This contains the source for drivers, modules, and common.
+### robot/
+The robot folder contains the firmware code for the different targets that are compiled for the control board, FPGA, IMU, and radio.
 
 
-### run/
+### robot/control
+Contains the firmware code for the main program run on the mtrain, what order the functions of modules defined by the classes in modules/ should be run and when. These modules include devices such as IMU, FGPA, and radio.
+The module classes themselves are not drivers and serve more as intermediatres of storage and communication of data retrieved from various devices. The drivers that they make use of are defined in robot/lib .
 
-Compiled programs and some configuration files are stored here.
+### robot/build/
+Compiled binaries output from the build system for the mtrain connected to the control board get stored here in the bin/ directory as well as other build results.
+
+### kicker/
+The robot folder contains the firmware code for the different targets that are compiled for the kicker board.
+
+### kicker/build/
+Compiled binaries output from the build system for the ATtiny on the kicker board get stored here in the bin/ directory as well as other build results.
 
 
 ## Setup
 
-Here's a quick guide to getting this RoboCup project setup on your computer.  We recommend and only provide directions for installing on Ubuntu Linux, Arch Linux, and Mac OS X, although it shouldn't be too difficult to port to other operating systems.
+Below is a quick guide to getting this RoboCup project setup on your computer. If you plan on developing both mtrain and robocup firmware We recommend and only provide directions for installing on Ubuntu Linux, Arch Linux, and Mac OS X, although it shouldn't be too difficult to port to other operating systems.
 
 1) Clone the repository
 
@@ -47,15 +50,20 @@ $ cd robocup-firmware
 $ ./util/<SYSTEM>-setup
 ```
 
-3) Build the project for the desired target. The `control` target is the firmware for the MBED. The `fpga` target is for the FPGA to be uploaded to the MBED. The `kicker` target is for the kicker MCU to be uploaded to the MBED. The `base` target is for the base station firmware to be uploaded to the base station MBED.
+3) Build the project for the desired target. The `robot` target is the firmware for the MTrain. The `kicker` target is for the kicker MCU to be uploaded to the MTrain. The `clean` target deletes the build directories for both robot and kicker firmware.
 
 ```
 $ make <TARGET>
 ```
 
-Make targets can be uploaded automatically to the MBED by appending `-prog` to the end of the target name.
+We use Conan as our build system and have a simple `makefile` setup that invokes Conan. Conan in-turn invokes CMake.
 
-We use CMake as our build system and have a simple `makefile` setup that invokes CMake.
+
+## Testing
+
+Firmware tests can be written and placed in `src/hw-test` with the name `test-<TESTNAME>.cpp` then compiled with `make robot-test-<TESTNAME>`
+
+Generic firmware tests can be run with `make test-firmware`. (Still not completely sure what this does)
 
 
 ## Documentation
@@ -67,14 +75,8 @@ http://robojackets.github.io/robocup-firmware/
 Note: The doxygen documentation site above is updated automacally using circle-ci.  See our autoupdate-docs.sh file for more info.
 
 
-## Testing
-
-Firmware tests can be written and placed in `src/hw-test` with the name `test-<TESTNAME>.cpp` then compiled with `make robot-test-<TESTNAME>`
-
-Generic firmware tests can be run with `make test-firmware`. (Still not completely sure what this does)
 
 
 ## License
 
 This project is licensed under the Apache License v2.0.  See the [LICENSE](LICENSE) file for more information.
-

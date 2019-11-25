@@ -1,2 +1,0 @@
-conan-center https://conan.bintray.com True
-robojackets https://api.bintray.com/conan/robojackets/conan True

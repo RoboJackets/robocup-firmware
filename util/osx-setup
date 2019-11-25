@@ -12,9 +12,6 @@ fi
 echo "-- Updating homebrew package list"
 brew update
 
-echo "-- Add tap for px4/px4/gcc-arm-none-eabi"
-brew tap PX4/homebrew-px4
-
 echo "-- Add tap for osx-cross/avr/arv-libc"
 brew tap osx-cross/avr
 
@@ -27,12 +24,11 @@ brew install $BASE/util/clang-format@3.6.rb
 brew link clang-format@3.6 --force
 
 echo "-- Installing python packages"
-pip2 install colorama
-pip2 install jinja2
-pip2 install pyserial
-pip2 install mbed-ls 
 pip3 install stylize
+pip3 install conan
 
+echo "-- Setting up remote for conan packages"
+conan remote add robojackets https://api.bintray.com/conan/robojackets/conan
 
 echo "-- Updating submodules"
 git submodule sync
