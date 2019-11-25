@@ -9,7 +9,7 @@ cmake -DCMAKE_TOOLCHAIN_FILE=../attiny_toolchain.cmake .. && make
 
 
 robot/build/conaninfo.txt : robot/conanfile.py
-	cd robot && conan install . -if build -pr armv7hf --build missing
+	cd robot && conan install . -if build -pr armv7hf --build missing --update
 configure : robot/build/conaninfo.txt
 	cd robot && conan build . -bf build -c
 
