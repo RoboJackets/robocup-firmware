@@ -2,7 +2,7 @@
 It is common practice to surround optional arguments to a command in square braces []. Thus we will try to use the same formatting in our brief documentation. Despite this please use the options prescribed by us in the docs unless you understand what the command will do without that option.
 
 
-## Who this Document is for?
+## Who is this Document for?
 This document is primarily geared towards both new and old members who are working between both mtrain-firmware and robocup-firmware and thus need to know how to manage the package created by building mtrain firmware as well as those who would like a deeper understanding of what conan is doing for us in terms of package management.
 It is not intended as a full guide to Conan as it only walks through the basic steps of updating a package for and changing requires but I will leave links to relevant documentation and give commentary as I go.
 

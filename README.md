@@ -18,15 +18,20 @@ For a high level overview of architecture of robocup-firmware see [here](doc/Fir
 The robot folder contains the firmware code for the different targets that are compiled for the control board, FPGA, IMU, and radio.
 
 ### robot/control
-Contains the firmware code for the main program run on the mtrain, what order the functions of modules defined by the classes in modules/ should be run and when. These modules include devices such as IMU, FGPA, and radio.
-The module classes themselves are not drivers and serve more as intermediatres of storage and communication of data retrieved from various devices. The drivers that they make use of are defined in robot/lib .
+Contains the firmware code for the main program run on the mtrain, what order the functions of modules defined by the classes in modules/ should be run and when.
+
+These modules include devices such as IMU, FGPA, and radio.
+
+The module classes themselves are not drivers and serve more as intermediaries or interfaces between the mtrain and the specific device driver. They usually have have their own storage for the results of the driver, a pointer to the driver instance, and they implement generic_modules entry function. Which is called each cycle of the super loop to run the respective functions of that module.
+
+The drivers that they make use of are defined in robot/lib .
 
 ### robot/build/
 Compiled binaries output from the build system for the mtrain connected to the control board get stored here in the bin/ directory as well as other build results.
 
 ### kicker/
-The robot folder contains the firmware code for the different targets that are compiled for the kicker board.
-Details on the architecture of the kicker firmware code can be found [doc/Kicker.md]
+The kicker folder contains the firmware code for the different targets that are compiled for the kicker board.
+Details on the architecture of the kicker firmware code can be found [here](doc/Kicker.md)
 
 ### kicker/build/
 Compiled binaries output from the build system for the ATtiny on the kicker board get stored here in the bin/ directory as well as other build results.
