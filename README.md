@@ -12,9 +12,10 @@ The official [RoboCup site](http://robocupssl.cpe.ku.ac.th/) has more informatio
 
 
 ## Project Layout
+For a high level overview of architecture of robocup-firmware see [here](doc/Firmware.md)
+
 ### robot/
 The robot folder contains the firmware code for the different targets that are compiled for the control board, FPGA, IMU, and radio.
-
 
 ### robot/control
 Contains the firmware code for the main program run on the mtrain, what order the functions of modules defined by the classes in modules/ should be run and when. These modules include devices such as IMU, FGPA, and radio.
@@ -25,14 +26,20 @@ Compiled binaries output from the build system for the mtrain connected to the c
 
 ### kicker/
 The robot folder contains the firmware code for the different targets that are compiled for the kicker board.
+Details on the architecture of the kicker firmware code can be found [doc/Kicker.md]
 
 ### kicker/build/
 Compiled binaries output from the build system for the ATtiny on the kicker board get stored here in the bin/ directory as well as other build results.
 
+### /fpga
+Contains the Verilog code to be programmed to the FPGA for motor control.
+Details on the architecture of the FPGA firmware code can be found [here](doc/FPGA.md)
+
+
 
 ## Setup
-
-Below is a quick guide to getting this RoboCup project setup to build on your computer. If you are a robocup member planning on developing both mtrain and robocup firmware we recommend following the Firmware  [GettingStarted](Getting Started) page. This project only provide directions for installing on Ubuntu Linux, Arch Linux, and Mac OS X, although it shouldn't be too difficult to port to other operating systems.
+Below is a quick guide to getting this RoboCup project setup to build on your computer. If you are a robocup member planning on developing both mtrain and robocup firmware we recommend following the Firmware [Getting Started](doc/GettingStarted.md) page.
+This project only provides directions for installing on Ubuntu Linux, Arch Linux, and Mac OS X, although it shouldn't be too difficult to port to other operating systems.
 
 1) Clone the repository
 
@@ -48,6 +55,8 @@ There are a few setup scripts in the util directory for installing required pack
 $ cd robocup-firmware
 $ ./util/<SYSTEM>-setup
 ```
+
+This will install conan for you if you have not previously installed it. If you respond no to the setup script see the note under Setting up Conan for RoboJackets Firmware in [Getting Started](doc/GettingStarted.md) before continuing.
 
 3) Build the project for the desired target. The `robot` target is the firmware for the MTrain. The `kicker` target is for the kicker MCU to be uploaded to the MTrain. The `clean` target deletes the build directories for both robot and kicker firmware.
 
