@@ -5,10 +5,14 @@
 git clone https://github.com/robojackets/mtrain-firmware
 git clone https://github.com/robojackets/robocup-firmware
 
-### Installing compilers
-sudo add-apt-repository ppa:team-gcc-arm-embedded/ppa
-sudo apt update
-sudo apt install gcc-arm-embedded
+cd into the robocup-firmware directory
+cd robocup-firmware
+There are a few setup scripts in the util directory for installing required packages, setting up udev rules, etc.  Run `ubuntu-setup`, `arch-setup`, and `osx-setup` depending on your system
+
+```
+$ cd robocup-firmware
+$ ./util/<SYSTEM>-setup
+```
 
 ## Setting up Conan for RoboJackets Firmware
 Install conan

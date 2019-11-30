@@ -32,14 +32,13 @@ Compiled binaries output from the build system for the ATtiny on the kicker boar
 
 ## Setup
 
-Below is a quick guide to getting this RoboCup project setup on your computer. If you plan on developing both mtrain and robocup firmware We recommend and only provide directions for installing on Ubuntu Linux, Arch Linux, and Mac OS X, although it shouldn't be too difficult to port to other operating systems.
+Below is a quick guide to getting this RoboCup project setup to build on your computer. If you are a robocup member planning on developing both mtrain and robocup firmware we recommend following the Firmware  [GettingStarted](Getting Started) page. This project only provide directions for installing on Ubuntu Linux, Arch Linux, and Mac OS X, although it shouldn't be too difficult to port to other operating systems.
 
 1) Clone the repository
 
 ```
 git clone git://github.com/RoboJackets/robocup-firmware
 ```
-
 
 2) Install the necessary software
 
