@@ -3,14 +3,17 @@ For a high level overview of robocup firmware see [here](Firmware.md)
 
 
 ## Command Line Basics
+For a brief introduction to how to use the command line see [here](CommandLineBasics.md)
 
 
+## Git Version Control Basics
 
-## Setting up the robocup-firmware repository
+Two good online learning games for git:
+https://learngitbranching.js.org/?locale=en_US
+https://github.com/git-game/git-game-v2
 
-### Linux (Tested on Ubuntu 18.04 LTS)
+## Setting Up the robocup-firmware Repository
 ### Clone the repositories
-
 ```
 git clone https://github.com/robojackets/mtrain-firmware
 git clone https://github.com/robojackets/robocup-firmware
@@ -22,7 +25,7 @@ cd robocup-firmware
 ./util/<SYSTEM>-setup
 ```
 
-### Setting up Conan for RoboJackets Firmware
+### Setting Up Conan for robocup-firmware
 
 As part of the system setup script conan, the robojackets remote, and the required conan profile should have been setup.
 Thus the steps for setting up conan are not necessary and are kept for reference when setting up on older branches.
@@ -30,7 +33,6 @@ Thus the steps for setting up conan are not necessary and are kept for reference
 NOTE: If you chose to not let the script overwrite your previous conan settings you will need to perform step 2 and 3 manually.
 
 1) Install conan
-
 ```
 pip install conan
 ```
@@ -49,12 +51,20 @@ cd into the robocup-firmware repository
 make robot
 ```
 
-## Getting started with C++ and Object Oriented Programming
+## Getting Started with C++ and Object Oriented Programming
 
-## Flashing code to the mtrain?
+In terms of understanding the usefulness of object oriented programming I recommend the Java concept tutorials although you will be briefly introduced to java code if find its a great conceptual starter.
+
+In terms of a full C++ tutorial I recommend W3 schools C++ tutorials as they are easier to understand for beginners.
+https://www.w3schools.com/cpp/
+
+In terms of an in-depth tutorial of C++ I also recommend a Tour of C++ by Bjarne Stroustrup
+
+## Flashing Code to the mTrain
+For a brief introduction to how to use the command line see [here](FlashingMtrain.md)
 
 ## Working with Conan
 
-For details on building packages with conan see [here](Conan.md)
+For details on building packages with Conan see [here](Conan.md)
 
 ## Debugging

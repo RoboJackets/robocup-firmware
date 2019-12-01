@@ -41,7 +41,6 @@ Contains the Verilog code to be programmed to the FPGA for motor control.
 Details on the architecture of the FPGA firmware code can be found [here](doc/FPGA.md)
 
 
-
 ## Setup
 Below is a quick guide to getting this RoboCup project setup to build on your computer. If you are a robocup member planning on developing both mtrain and robocup firmware we recommend following the Firmware [Getting Started](doc/GettingStarted.md) page.
 This project only provides directions for installing on Ubuntu Linux, Arch Linux, and Mac OS X, although it shouldn't be too difficult to port to other operating systems.
