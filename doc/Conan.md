@@ -26,7 +26,7 @@ For those who are working on both mtrain and robocup firmware you may want to ha
 
 The below is used to create a local version of the conan package:
 ```
-conan create . collin/testing -pr armv7hf
+conan create . yourname/testing -pr armv7hf
 ```
 
 This command follows the format:
@@ -87,8 +87,8 @@ Conan references are generally formatted with the creators name as the user (or 
 
 To push our test package to the robojackets remote we would use the following:
 ```
-conan create . collin/testing -pr armv7hf
-conan upload mTrain/[1.0.0]@collin/testing -r robojackets --all
+conan create . yourname/testing -pr armv7hf
+conan upload mTrain/[1.0.0]@yourname/testing -r robojackets --all
 ```
 
 conan upload official documentation:

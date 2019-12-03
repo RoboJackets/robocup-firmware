@@ -18,13 +18,13 @@ For a high level overview of architecture of robocup-firmware see [here](doc/Fir
 The robot folder contains the firmware code for the different targets that are compiled for the control board, FPGA, IMU, and radio.
 
 ### robot/control
-Contains the firmware code for the main program run on the mtrain, what order the functions of modules defined by the classes in modules/ should be run and when.
+Contains the firmware code for the main program run on the mtrain. This controls the overall function of the robot and the interface with various peripheral devices, such as IMU, FPGA, and the radio
 
-These modules include devices such as IMU, FGPA, and radio.
+Modules are fully independent sections of code that take a well defined input (if applicable), do some action, then produce a well defined output (if applicable). For example, the kicker module takes kicker commands (input), directly interfaces with the kicker and does the communication and unit translation (action), and produces breakbeam and voltage to the rest of the firmware (output).
 
-The module classes themselves are not drivers and serve more as intermediaries or interfaces between the mtrain and the specific device driver. They usually have have their own storage for the results of the driver, a pointer to the driver instance, and they implement generic_modules entry function. Which is called each cycle of the super loop to run the respective functions of that module.
+Modules are a class following the interface found in generic_module. The module specifies how often an action should run. At that specific frequency, the entry function will be called to do the action part of the module. The inputs and outputs are given through shared structures passed in the constructor.
 
-The drivers that they make use of are defined in robot/lib .
+The drivers themselves are defined in robot/lib .
 
 ### robot/build/
 Compiled binaries output from the build system for the mtrain connected to the control board get stored here in the bin/ directory as well as other build results.
@@ -36,7 +36,7 @@ Details on the architecture of the kicker firmware code can be found [here](doc/
 ### kicker/build/
 Compiled binaries output from the build system for the ATtiny on the kicker board get stored here in the bin/ directory as well as other build results.
 
-### /fpga
+### fpga/
 Contains the Verilog code to be programmed to the FPGA for motor control.
 Details on the architecture of the FPGA firmware code can be found [here](doc/FPGA.md)
 
@@ -62,7 +62,9 @@ $ ./util/<SYSTEM>-setup
 
 This will install conan for you if you have not previously installed it. If you respond no to the setup script see the note under Setting up Conan for RoboJackets Firmware in [Getting Started](doc/GettingStarted.md) before continuing.
 
-3) Build the project for the desired target. The `robot` target is the firmware for the MTrain. The `kicker` target is for the kicker MCU to be uploaded to the MTrain. The `clean` target deletes the build directories for both robot and kicker firmware.
+3) Build the project for the desired target. The `robot` target is the firmware for the MTrain.
+The `kicker` target is for the kicker MCU to be uploaded to the MTrain.
+The `clean` target deletes the build directories for both robot and kicker firmware.
 
 ```
 $ make <TARGET>
