@@ -6,14 +6,6 @@ For a high level overview of robocup firmware see [here](Firmware.md)
 For a brief introduction to how to use the command line see [here](CommandLineBasics.md)
 
 
-## Git Version Control Basics
-Two good online learning games for git:
-
-https://learngitbranching.js.org/?locale=en_US
-
-https://github.com/git-game/git-game-v2
-
-
 ## Setting Up the robocup-firmware Repository
 ### Clone the repositories
 ```
@@ -51,6 +43,14 @@ cd into the robocup-firmware repository
 ```
 make robot
 ```
+
+
+## Git Version Control
+Please see [here](doc/Git.md) for a brief tutorial on git as well as links to learning resources
+
+
+## Contributing
+Please see the [contributing page](doc/Contributing.md) for general contributing guidelines.
 
 
 ## Getting Started with C++ and Object Oriented Programming

@@ -88,8 +88,9 @@ http://robojackets.github.io/robocup-firmware/
 
 Note: The doxygen documentation site above is updated automacally using circle-ci.  See our autoupdate-docs.sh file for more info.
 
+## Contributing
 
-
+Please see the [contributing page](doc/Contributing.md) before contributing.
 
 ## License
 
