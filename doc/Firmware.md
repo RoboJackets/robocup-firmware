@@ -14,11 +14,15 @@ Kicks are controlled through toggling the current flow from the capacitors throu
 
 Note: Very special care is taken to make sure that the device is safe. Safe in this case means that it won't accidentally kick at the wrong time AND that it wont discharge and charge at the same time. This is a high voltage, high current device.
 
+[Kicker Details](Kicker.md)
+
 ## FPGA Firmware
 
 In short, the FPGA deals with all things motors. It is given duty cycle, forwards that to each of the motors, and returns what the current wheel speed is. In the future (tm), there is hope to also get the current of each motor as well. The FPGA communicates with mtrain over SPI as well.
 
 Note: Motors are expensive so please be very careful when changing the code. It's very easy to make a mistake and fry one. (Totally hasn't happened before, nope, not at all)
+
+[FPGA Details](FPGA.md)
 
 ## Robot Firmware
 

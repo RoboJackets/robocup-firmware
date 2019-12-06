@@ -31,7 +31,7 @@ Attach the ARM-JTAG-20-10 connector to the 20 pin connector side of the J-Link u
 Attach the smaller 10 pin connector to the 10 pins on the top of the mTrain.
 
 Plug in the mTrain mini usb connector and plug the other end to your computer.
-## TODO attach picture here of JLink header and where it connects on the mtrain
+TODO attach picture here of JLink header and where it connects on the mtrain
 
 The mini usb powers the mTrain if its not receiving power from the board so it should light up after this.
 

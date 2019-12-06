@@ -1,7 +1,4 @@
-## Firmware Overview
-For a high level overview of robocup firmware see [here](Firmware.md)
-
-
+# Basics
 ## Command Line Basics
 For a brief introduction to how to use the command line see [here](CommandLineBasics.md)
 
@@ -61,14 +58,23 @@ https://www.w3schools.com/cpp/
 
 In terms of an in-depth tutorial of C++ I also recommend a Tour of C++ by Bjarne Stroustrup
 
+## Debugging
+For a quick intro to the basic GDB commands see [here](GDB.md)
+
+For a interactive exercise for learning GDB see [here](GDBExercise.md)
+
+
+# Advanced
+
+## Firmware Overview
+[Firmware Overview](Firmware.md)
+[Kicker Details](Kicker.md)
+[FPGA Details](FPGA.md)
+
 
 ## Flashing Code to the mTrain
-For a brief introduction to how to use the command line see [here](FlashingMtrain.md)
+For details on flashing code to the mtrain after compiling see [here](FlashingMtrain.md)
 
 
 ## Working with Conan
 For details on building packages with Conan see [here](Conan.md)
-
-
-## Debugging
-See getting started with GDB [here](GDB.md)
