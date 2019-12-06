@@ -62,9 +62,7 @@ PACKAGES="$(sed 's/#.*//;/^$/d' $BASE/util/ubuntu-packages.txt)"
 apt-get install $ARGS $PACKAGES
 
 # install python3 requirements
-pip3 install stylize>=0.3.0 # code reformatting and checkstyling
-pip3 install conan
-
+pip3 install -r $BASE/util/requirements3.txt
 
 # ask for permission to install conan config
 echo "About to install RJ Conan config profile. Needed to compile but will overwrite pre-existing conan remotes"

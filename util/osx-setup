@@ -27,9 +27,9 @@ echo "-- Installing python packages"
 pip3 install stylize
 pip3 install conan
 
-echo "-- Setting up remote for conan packages"
-conan remote add robojackets https://api.bintray.com/conan/robojackets/conan
-
 echo "-- Updating submodules"
 git submodule sync
 git submodule update --init --recursive
+
+echo "-- Setting up conan config"
+conan config install --type git -sf util/conan-config/ https://github.com/CollinAvidano/mtrain-firmware.git
