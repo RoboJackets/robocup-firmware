@@ -10,6 +10,8 @@ The soccer game is played between two teams of six robots each on a field with o
 
 The official [RoboCup site](http://robocupssl.cpe.ku.ac.th/) has more information on the competition.
 
+## Getting Started
+If you are a new member of RoboCup Electrical or Software and are interested in getting involved with firmware it is highly recommend you start with the [getting started](doc/GettingStarted.md) pages.
 
 ## Project Layout
 For a high level overview of architecture of robocup-firmware see [here](doc/Firmware.md)
@@ -42,7 +44,7 @@ Details on the architecture of the FPGA firmware code can be found [here](doc/FP
 
 
 ## Setup
-Below is a quick guide to getting this RoboCup project setup to build on your computer. If you are a robocup member planning on developing both mtrain and robocup firmware we recommend following the Firmware [Getting Started](doc/GettingStarted.md) page.
+Below is a quick guide to getting this RoboCup project setup to build on your computer. If you are a robocup member planning on developing both mtrain and robocup firmware it is highly recommended that you  follow the Firmware [Getting Started](doc/GettingStarted.md) page.
 This project only provides directions for installing on Ubuntu Linux, Arch Linux, and Mac OS X, although it shouldn't be too difficult to port to other operating systems.
 
 1) Clone the repository

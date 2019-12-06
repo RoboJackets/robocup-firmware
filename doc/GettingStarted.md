@@ -68,7 +68,9 @@ For a interactive exercise for learning GDB see [here](GDBExercise.md)
 
 ## Firmware Overview
 [Firmware Overview](Firmware.md)
+
 [Kicker Details](Kicker.md)
+
 [FPGA Details](FPGA.md)
 
 
