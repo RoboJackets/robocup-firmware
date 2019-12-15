@@ -24,4 +24,4 @@ echo "-- Updating submodules"
 git submodule sync
 git submodule update --init
 
-conan config install --type git -sf util/conan-config/ https://github.com/CollinAvidano/mtrain-firmware.git
+conan config install --type git -sf util/conan-config/ https://github.com/RoboJackets/mtrain-firmware.git

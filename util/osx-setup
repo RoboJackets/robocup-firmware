@@ -32,4 +32,4 @@ git submodule sync
 git submodule update --init --recursive
 
 echo "-- Setting up conan config"
-conan config install --type git -sf util/conan-config/ https://github.com/CollinAvidano/mtrain-firmware.git
+conan config install --type git -sf util/conan-config/ https://github.com/RoboJackets/mtrain-firmware.git
