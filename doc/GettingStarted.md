@@ -1,9 +1,10 @@
 # Basics
-## Command Line Basics
+
+## Command line basics
 For a brief introduction to how to use the command line see [here](CommandLineBasics.md)
 
 
-## Setting Up the robocup-firmware Repository
+## Setting up the robocup-firmware repository
 ### Clone the repositories
 ```
 git clone https://github.com/robojackets/mtrain-firmware
@@ -17,7 +18,7 @@ cd robocup-firmware
 ```
 
 
-### Setting Up Conan for robocup-firmware
+### Setting up Conan for robocup-firmware
 As part of the system setup script conan, the robojackets remote, and the required conan profile should have been setup.
 Thus the steps for setting up conan are not necessary and are kept for reference when setting up on older branches.
 
@@ -42,7 +43,7 @@ make robot
 ```
 
 
-## Git Version Control
+## Git version control
 Please see [here](doc/Git.md) for a brief tutorial on git as well as links to learning resources
 
 
@@ -50,7 +51,7 @@ Please see [here](doc/Git.md) for a brief tutorial on git as well as links to le
 Please see the [contributing page](doc/Contributing.md) for general contributing guidelines.
 
 
-## Getting Started with C++ and Object Oriented Programming
+## Getting started with C++ and object oriented programming
 In terms of understanding the usefulness of object oriented programming I recommend the Java concept tutorials although you will be briefly introduced to java code if find its a great conceptual starter.
 
 In terms of a full C++ tutorial I recommend W3 schools C++ tutorials as they are easier to understand for beginners.
@@ -58,7 +59,7 @@ https://www.w3schools.com/cpp/
 
 In terms of an in-depth tutorial of C++ I also recommend a Tour of C++ by Bjarne Stroustrup
 
-## Debugging
+## GDB
 For a quick intro to the basic GDB commands see [here](GDB.md)
 
 For a interactive exercise for learning GDB see [here](GDBExercise.md)
@@ -74,8 +75,8 @@ For a interactive exercise for learning GDB see [here](GDBExercise.md)
 [FPGA Details](FPGA.md)
 
 
-## Flashing Code to the mTrain
-For details on flashing code to the mtrain after compiling see [here](FlashingMtrain.md)
+## Working with the mTrain
+For details on flashing code to the mTrain after compiling and debugging programs see [here](mTrainFlashingAndDebugging.md)
 
 
 ## Working with Conan
