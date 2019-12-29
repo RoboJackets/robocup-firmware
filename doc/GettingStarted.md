@@ -39,7 +39,7 @@ conan remote add robojackets https://api.bintray.com/conan/robojackets/conan
 ### Building robocup-firmware with Conan
 cd into the robocup-firmware repository
 ```
-make robot
+make
 ```
 
 
