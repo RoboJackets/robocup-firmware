@@ -44,11 +44,11 @@ make
 
 
 ## Git version control
-Please see [here](doc/Git.md) for a brief tutorial on git as well as links to learning resources
+Please see [here](Git.md) for a brief tutorial on git as well as links to learning resources
 
 
 ## Contributing
-Please see the [contributing page](doc/Contributing.md) for general contributing guidelines.
+Please see the [contributing page](Contributing.md) for general contributing guidelines.
 
 
 ## Getting started with C++ and object oriented programming
