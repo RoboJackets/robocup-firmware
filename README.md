@@ -10,33 +10,48 @@ The soccer game is played between two teams of six robots each on a field with o
 
 The official [RoboCup site](http://robocupssl.cpe.ku.ac.th/) has more information on the competition.
 
+## Getting Started
+If you are a new member of RoboCup Electrical or Software and are interested in getting involved with firmware it is highly recommend you start with the [getting started](doc/GettingStarted.md) pages.
 
 ## Project Layout
+For a high level overview of architecture of robocup-firmware see [here](doc/Firmware.md)
 
-### src/
+### robot/
+The robot folder contains the firmware code for the different targets that are compiled for the control board, FPGA, IMU, and radio.
 
-The src folder contains the firmware code for the different targets that are compiled for the robot/base. See the src [README](src/README.md) for more info.
+### robot/control
+Contains the firmware code for the main program run on the mtrain. This controls the overall function of the robot and the interface with various peripheral devices, such as IMU, FPGA, and the radio
 
-### lib/
+Modules are fully independent sections of code that take a well defined input (if applicable), do some action, then produce a well defined output (if applicable). For example, the kicker module takes kicker commands (input), directly interfaces with the kicker and does the communication and unit translation (action), and produces breakbeam and voltage to the rest of the firmware (output).
 
-The lib folder contains the libraries used for the compiling targets in the src folder. This contains the source for drivers, modules, and common.
+Modules are a class following the interface found in generic_module. The module specifies how often an action should run. At that specific frequency, the entry function will be called to do the action part of the module. The inputs and outputs are given through shared structures passed in the constructor.
 
+The drivers themselves are defined in robot/lib .
 
-### run/
+### robot/build/
+Compiled binaries output from the build system for the mtrain connected to the control board get stored here in the bin/ directory as well as other build results.
 
-Compiled programs and some configuration files are stored here.
+### kicker/
+The kicker folder contains the firmware code for the different targets that are compiled for the kicker board.
+Details on the architecture of the kicker firmware code can be found [here](doc/Kicker.md)
+
+### kicker/build/
+Compiled binaries output from the build system for the ATtiny on the kicker board get stored here in the bin/ directory as well as other build results.
+
+### fpga/
+Contains the Verilog code to be programmed to the FPGA for motor control.
+Details on the architecture of the FPGA firmware code can be found [here](doc/FPGA.md)
 
 
 ## Setup
-
-Here's a quick guide to getting this RoboCup project setup on your computer.  We recommend and only provide directions for installing on Ubuntu Linux, Arch Linux, and Mac OS X, although it shouldn't be too difficult to port to other operating systems.
+Below is a quick guide to getting this RoboCup project setup to build on your computer. If you are a robocup member planning on developing both mtrain and robocup firmware it is highly recommended that you  follow the Firmware [Getting Started](doc/GettingStarted.md) page.
+This project only provides directions for installing on Ubuntu Linux, Arch Linux, and Mac OS X, although it shouldn't be too difficult to port to other operating systems.
 
 1) Clone the repository
 
 ```
 git clone git://github.com/RoboJackets/robocup-firmware
 ```
-
 
 2) Install the necessary software
 
@@ -47,15 +62,24 @@ $ cd robocup-firmware
 $ ./util/<SYSTEM>-setup
 ```
 
-3) Build the project for the desired target. The `control` target is the firmware for the MBED. The `fpga` target is for the FPGA to be uploaded to the MBED. The `kicker` target is for the kicker MCU to be uploaded to the MBED. The `base` target is for the base station firmware to be uploaded to the base station MBED.
+This will install conan for you if you have not previously installed it. If you respond no to the setup script see the note under Setting up Conan for RoboJackets Firmware in [Getting Started](doc/GettingStarted.md) before continuing.
+
+3) Build the project for the desired target. The `robot` target is the firmware for the MTrain.
+The `kicker` target is for the kicker MCU to be uploaded to the MTrain.
+The `clean` target deletes the build directories for both robot and kicker firmware.
 
 ```
 $ make <TARGET>
 ```
 
-Make targets can be uploaded automatically to the MBED by appending `-prog` to the end of the target name.
+We use Conan as our build system and have a simple `makefile` setup that invokes Conan. Conan in-turn invokes CMake.
 
-We use CMake as our build system and have a simple `makefile` setup that invokes CMake.
+
+## Testing
+
+Firmware tests can be written and placed in `src/hw-test` with the name `test-<TESTNAME>.cpp` then compiled with `make robot-test-<TESTNAME>`
+
+Generic firmware tests can be run with `make test-firmware`. (Still not completely sure what this does)
 
 
 ## Documentation
@@ -66,15 +90,10 @@ http://robojackets.github.io/robocup-firmware/
 
 Note: The doxygen documentation site above is updated automacally using circle-ci.  See our autoupdate-docs.sh file for more info.
 
+## Contributing
 
-## Testing
-
-Firmware tests can be written and placed in `src/hw-test` with the name `test-<TESTNAME>.cpp` then compiled with `make robot-test-<TESTNAME>`
-
-Generic firmware tests can be run with `make test-firmware`. (Still not completely sure what this does)
-
+Please see the [contributing page](doc/Contributing.md) before contributing.
 
 ## License
 
 This project is licensed under the Apache License v2.0.  See the [LICENSE](LICENSE) file for more information.
-

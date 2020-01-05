@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# TODO Change device id
+DEVICE=STM32F405NI
+IF=JTAG
+SPEED=4000
+
+ JLinkExe -device $DEVICE -if $IF -jtagconf -1,-1 -speed $SPEED -autoconnect 1 -CommanderScript mtrain.jlink
