@@ -1,5 +1,6 @@
-add_executable(control.elf 
+add_executable(control.elf
     main.cpp
+    rtos_hooks.c
     Src/radio/RadioLink.cpp
     Src/modules/BatteryModule.cpp
     Src/modules/FPGAModule.cpp
