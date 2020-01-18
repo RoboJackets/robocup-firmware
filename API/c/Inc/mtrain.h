@@ -7,7 +7,6 @@ extern "C" {
 
 #include "digital_in.h"
 #include "digital_out.h"
-#include "analog_in.h"
 
 #ifdef __cplusplus
 }

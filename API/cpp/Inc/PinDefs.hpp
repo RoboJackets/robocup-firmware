@@ -7,7 +7,7 @@ typedef struct PinName {
     uint16_t pin;
 } PinName;
 
-typdef struct ADCPinName {
+typedef struct ADCPinName {
   ADC_TypeDef* port;
 } ADCPinName;
 
