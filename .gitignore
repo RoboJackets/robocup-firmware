@@ -36,3 +36,7 @@ run/*.bin
 run/*.nib
 run/test-firmware
 clean.patch
+
+GPATH
+GRTAGS
+GTAGS

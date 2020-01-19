@@ -40,7 +40,7 @@ struct MODULE_META_DATA {
     // Time in sysclock ticks between module executions
     const uint32_t modulePeriod;
 
-    // Estimate in sysclock ticks of module runtime 
+    // Estimate in sysclock ticks of module runtime
     const int32_t moduleRunTime;
 
     GenericModule* module;
@@ -85,7 +85,7 @@ int main() {
     // this will allow us to force the CS lines into the correct
     // position before doing anything like flashing other
     // devices on the bus
-    
+
     HAL_Delay(100);
 
     std::shared_ptr<MCP23017> ioExpander = std::make_shared<MCP23017>(sharedI2C, 0x42);
@@ -115,11 +115,11 @@ int main() {
 
     led.radioInitialized();
 
-    KickerModule kicker(dot_star_spi,
-                        &kickerCommand,
-                        &kickerInfo);
+    // KickerModule kicker(dot_star_spi,
+    //                     &kickerCommand,
+    //                     &kickerInfo);
 
-    led.kickerInitialized();
+    // led.kickerInitialized();
 
     BatteryModule battery(&batteryVoltage);
     RotaryDialModule dial(ioExpander,
@@ -129,20 +129,20 @@ int main() {
                                &motionCommand,
                                &motorFeedback,
                                &motorCommand);
-    IMUModule imu(sharedI2C,
-                  &imuData);
+    // IMUModule imu(sharedI2C,
+    //               &imuData);
 
-    led.fullyInitialized();
-    
+    // led.fullyInitialized();
+
 
     std::vector<MODULE_META_DATA> moduleList;
-    
+
     uint64_t curTime = DWT_GetTick();
     moduleList.emplace_back(curTime, MotionControlModule::period, MotionControlModule::runtime, &motion);
-    moduleList.emplace_back(curTime, IMUModule::period,           IMUModule::runtime,           &imu);
+    // moduleList.emplace_back(curTime, IMUModule::period,           IMUModule::runtime,           &imu);
     moduleList.emplace_back(curTime, FPGAModule::period,          FPGAModule::runtime,          &fpga);
     moduleList.emplace_back(curTime, RadioModule::period,         RadioModule::runtime,         &radio);
-    moduleList.emplace_back(curTime, KickerModule::period,        KickerModule::runtime,        &kicker);
+    // moduleList.emplace_back(curTime, KickerModule::period,        KickerModule::runtime,        &kicker);
     moduleList.emplace_back(curTime, BatteryModule::period,       BatteryModule::runtime,       &battery);
     moduleList.emplace_back(curTime, RotaryDialModule::period,    RotaryDialModule::runtime,    &dial);
     moduleList.emplace_back(curTime, LEDModule::period,           LEDModule::runtime,           &led);
@@ -168,7 +168,7 @@ int main() {
             // then convertion to signed allows simple comparison
             if (static_cast<int32_t>(currentTime - module.nextRunTime) >= 0 &&
                 static_cast<int32_t>(loopEndTime - currentTime) >= module.moduleRunTime) {
-                
+
                 // todo change to loop start time
                 module.lastRunTime = loopStartTime;
                 module.nextRunTime = loopStartTime + module.modulePeriod;
@@ -190,6 +190,6 @@ int main() {
             //printf("WARNING: Overran super loop time\r\n");
             led.missedSuperLoop();
         }
-        
+
     }
 }

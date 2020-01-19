@@ -11,10 +11,10 @@ namespace ISMConstants {
     // Hardware/driver config values
     static const unsigned int MAX_ARG_SIZE = 512;
     static const unsigned int RECEIVE_BUFF_SIZE = 1000;
-    
+
     static const uint8_t CHIP_SELECT = 0;
     static const uint8_t CHIP_DESELECT = 1;
-    
+
     static const uint8_t RESET_TURN_OFF = 0;
     static const uint8_t RESET_TURN_ON  = 1;
 
@@ -28,7 +28,7 @@ namespace ISMConstants {
 
     static const std::string ROUTER_IP = "172.16.1.1";
 
-    static const std::string BASE_STATION_IP = "172.16.1.48";//48//27//36
+    static const std::string BASE_STATION_IP = "172.16.1.36";//48//27//36
 
     static const std::string RECEIVE_SOCKET = "0";
     static const std::string LOCAL_PORT = "25566";
@@ -323,7 +323,7 @@ namespace ISMConstants {
         ResponseReady = 2,
         ResponseDone = 3,
 
-        
+
         NumStates = 4 // DONT USE
     };
 };
@@ -335,24 +335,24 @@ public:
 
     /**
      * Blocking call to send X number of bytes from `data` over the radio
-     * 
+     *
      * @param data raw array of data to send over the radio
      * @param numBytes number of bytes in the array to send
-     * 
+     *
      * @return number of bytes sent
-     * 
+     *
      * @note It is assumed that `data` is at least X bytes long
      */
     virtual unsigned int send(const uint8_t* data, const unsigned int numBytes);
 
     /**
      * Blocking call to write up to `maxNumBytes` into `data` from the radio
-     * 
+     *
      * @param data raw array that will be filled with data that was sent over the radio
      * @param maxNumBytes max number of bytes to write into `data` from the radio
-     * 
+     *
      * @return actual number of bytes written to data
-     * 
+     *
      * @note The radio may or may not keep the rest of the message in the buffer
      *  if the entire message is not read. It is undefined behavior based on
      *  the specific device
@@ -385,19 +385,19 @@ private:
 
     /**
      * Write the byte array to the spi bus
-     * 
+     *
      * @param command Non-endien swapped version of the raw data
      * @param length Length of the raw data
-     * 
+     *
      * Note: Must be even number of bytes long since the device is 16 bit
      */
     void writeToSpi(uint8_t* command, int length);
 
     /**
      * Blocking read from the SPI bus
-     * 
+     *
      * @return number of bytes read
-     * 
+     *
      * @note Can read indefinitely if the device gets locked up and never drops data ready
      * The device will continuously print out 0x25 until power cycle
      */
@@ -405,7 +405,7 @@ private:
 
     /**
      * Base send command function
-     * 
+     *
      * @param command String AT command, eg "S3="
      * @param arg Array of chars representing the full arguments to the AT command. Does not need
      * to be even padded
@@ -415,7 +415,7 @@ private:
 
     /**
      * Convenience function since all initialization data are string constants
-     * 
+     *
      * @param command String AT command, eg "S3="
      * @param arg String arg for the AT command eg "0"
      */
