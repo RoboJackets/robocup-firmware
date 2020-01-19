@@ -31,6 +31,5 @@ debug : kicker robot
 clean:
 	rm -rf kicker/build
 	rm -rf robot/build
-
-# conan remove RoboCupFirmware/* --builds
-# conan remove mTrain/* --builds
+	conan remove RoboCupFirmware/* --builds
+	conan remove mTrain/* --builds

@@ -11,7 +11,7 @@ ccache
 doxygen
 
 # C/C++ (and more) code-formatting tool
-clang-format-3.6
+clang-format-3.9
 
 # AVR
 avr-libc
