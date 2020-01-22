@@ -10,7 +10,7 @@ add_library(FreeRTOS STATIC
     src/timers.c
     src/portable/Common/mpu_wrappers.c
     src/portable/GCC/ARM_CM7/r0p1/port.c
-    src/portable/MemMang/heap_4.c
+    src/portable/MemMang/heap_3.c
 )
 
 target_include_directories(FreeRTOS PUBLIC

@@ -5,6 +5,7 @@ function(add_test test_file)
     set(test_name ${test_name}-c)
 
     add_executable(${test_name}.elf EXCLUDE_FROM_ALL
+        ../rtos_hooks.c
         ${test_file}
         # ${CMAKE_SOURCE_DIR}/BSP/Src/stm32f7xx_it.c #TODO: Fix
     )

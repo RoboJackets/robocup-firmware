@@ -179,7 +179,7 @@ uint8_t SPI::transmitReceive(uint8_t data) {
     spiHandle.Instance->CR1 |= SPI_CR1_SPE;
 
     /* Wait for TX queue to empty */
-    while (READ_BIT(spiHandle.Instance->SR, SPI_SR_TXE) == 0) {}
+    while (!LL_SPI_IsActiveFlag_TXE(spiHandle.Instance)) { }
     *(__IO uint8_t *)&spiHandle.Instance->DR = data;
     /* Wait for RX queue to fill */
     while (!LL_SPI_IsActiveFlag_RXNE(spiHandle.Instance)) { }
