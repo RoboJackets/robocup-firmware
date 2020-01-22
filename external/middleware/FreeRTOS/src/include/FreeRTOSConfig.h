@@ -127,7 +127,7 @@ to exclude the API function. */
 #define INCLUDE_vTaskDelete            1
 #define INCLUDE_vTaskCleanUpResources  0
 #define INCLUDE_vTaskSuspend           1
-#define INCLUDE_vTaskDelayUntil        0
+#define INCLUDE_vTaskDelayUntil        1
 #define INCLUDE_vTaskDelay             1
 #define INCLUDE_xTaskGetSchedulerState 1
 
@@ -168,6 +168,9 @@ header file. */
 /* IMPORTANT: This define MUST be commented when used with STM32Cube firmware, 
               to prevent overwriting SysTick_Handler defined within STM32Cube HAL */
 /* #define xPortSysTickHandler SysTick_Handler */
+
+/* We want to allow static allocation of timers, semaphores, mutexes, etc. */
+#define configSUPPORT_STATIC_ALLOCATION 1
 
 #endif /* FREERTOS_CONFIG_H */
 

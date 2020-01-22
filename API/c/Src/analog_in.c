@@ -50,6 +50,6 @@ void read_u16(adc_pin_name pin) {
    ADC_Config(pin);
    //TODO
 
-
+}
 
 //configures the ADC and the channel

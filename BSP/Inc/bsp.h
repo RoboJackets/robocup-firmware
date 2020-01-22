@@ -19,6 +19,7 @@ void SystemClock_Config(void);
 void Error_Handler(void);
 void MPU_Config(void);
 void CPU_CACHE_Enable(void);
+void DWT_Config(void);
 
 #ifdef __cplusplus
 }
