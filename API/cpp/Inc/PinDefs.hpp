@@ -1,6 +1,8 @@
 #pragma once
 
 #include "stm32f7xx_hal.h"
+#include "stm32f769xx.h"
+#include <stdint.h>
 
 typedef struct PinName {
     GPIO_TypeDef* port;
@@ -46,6 +48,9 @@ constexpr PinName LED1 = { GPIOE, GPIO_PIN_4 };
 constexpr PinName LED2 = { GPIOE, GPIO_PIN_3 };
 constexpr PinName LED3 = { GPIOE, GPIO_PIN_6 };
 constexpr PinName LED4 = { GPIOE, GPIO_PIN_5 };
+
+constexpr ADCPinName pf6 = { ADC3 };
+
 
 typedef enum PullType {
     PullNone = GPIO_NOPULL,

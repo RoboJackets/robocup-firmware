@@ -1,4 +1,3 @@
-
 all : build/conaninfo.txt
 	conan build . -bf build
 

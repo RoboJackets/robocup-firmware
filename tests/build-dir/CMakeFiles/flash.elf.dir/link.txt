@@ -1,0 +1,1 @@
+/usr/bin/cc     CMakeFiles/flash.elf.dir/flash.c.o  -o flash.elf -lSTM32F7xx 
