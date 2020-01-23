@@ -1,5 +1,4 @@
-
-add_executable( base.elf 
+add_executable( base.elf
     main.cpp
 )
 target_link_libraries(base.elf firm-lib)

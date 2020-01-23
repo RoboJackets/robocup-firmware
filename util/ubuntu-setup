@@ -77,6 +77,11 @@ case "$response" in
         ;;
 esac
 
+
+echo "-- Updating submodules"
+git submodule sync
+git submodule update --init --recursive
+
 SETUP_USER="$SUDO_USER"
 if [ -z "$SETUP_USER" ]; then
     SETUP_USER="$(whoami)"

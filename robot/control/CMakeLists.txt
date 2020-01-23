@@ -1,4 +1,4 @@
-add_executable(control.elf 
+add_executable(control.elf
     main.cpp
     Src/radio/RadioLink.cpp
     Src/modules/BatteryModule.cpp
@@ -22,7 +22,7 @@ target_include_directories(control.elf PUBLIC
 
 target_link_libraries(control.elf
     firm-lib
-    CONAN_PKG::Eigen3
+    CONAN_PKG::eigen
     rc-fshare
 )
 
