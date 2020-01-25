@@ -34,7 +34,7 @@ int _write(int file, char *data, int len)
     if (file == STDOUT_FILENO) {
         USBD_CDC_SetTxBuffer(&USBD_Device, (uint8_t*)data, len);
         USBD_CDC_TransmitPacket(&USBD_Device);
-        HAL_Delay(1); // TODO: why not blocking?
+        DWT_Delay(1000); // TODO: why not blocking?
     }
     return 0;
 }
