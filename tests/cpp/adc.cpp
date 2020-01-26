@@ -11,7 +11,7 @@ int main(void){
       HAL_Delay(100);
       leds[1].toggle();
     }
-    else if (pin.read() < 8570) {
+    else if (pin.read() < 4096) { // // 12 bit approximation on 5v max 1024 should be about 1.25V threshold
       leds[2].toggle();
       HAL_Delay(100);
       leds[2].toggle();

@@ -15,6 +15,7 @@ AnalogIn::AnalogIn(ADCPinName pin) {
 
 }
 
+
 void AnalogIn::DMA_Init(){
 
    __HAL_RCC_DMA2_CLK_ENABLE();
@@ -29,6 +30,12 @@ void AnalogIn::DMA_Init(){
 
 void AnalogIn::ADC_Init(ADCPinName pin) {
   __HAL_RCC_ADC3_CLK_ENABLE();
+  GPIO_InitTypeDef GPIO_InitStruct = {};
+  GPIO_InitStruct.Pin = p30.pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+  GPIO_InitStruct.Pull  = GPIO_NOPULL;
+  HAL_GPIO_Init(p30.port, &GPIO_InitStruct);
+
   ADC_InitStruct.Instance                   = pin.port;
   ADC_InitStruct.Init.ClockPrescaler        = ADC_CLOCK_SYNC_PCLK_DIV2;
   ADC_InitStruct.Init.Resolution            = ADC_RESOLUTION_12B;
@@ -43,9 +50,9 @@ void AnalogIn::ADC_Init(ADCPinName pin) {
   ADC_InitStruct.Init.DMAContinuousRequests = ENABLE;
   ADC_InitStruct.Init.EOCSelection          = DISABLE;
   //initializes the ADC given the structure that defines it
- if (HAL_ADC_Init(&ADC_InitStruct) != HAL_OK) {
-     //ERROR HANDLING
- }
+  if (HAL_ADC_Init(&ADC_InitStruct) != HAL_OK) {
+      //ERROR HANDLING
+  }
 
   ADC_ChannelConfTypeDef sConfig = {};
   sConfig.Channel       = ADC_CHANNEL_4;
@@ -80,11 +87,6 @@ static DMA_HandleTypeDef  hdma_adc = {};
 
 void HAL_ADC_MspInit(ADC_HandleTypeDef *hadc)
 {
-  GPIO_InitTypeDef GPIO_InitStruct = {};
-  GPIO_InitStruct.Pin = p30.pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-  GPIO_InitStruct.Pull  = GPIO_NOPULL;
-  HAL_GPIO_Init(p30.port, &GPIO_InitStruct);
 
   hdma_adc.Instance = DMA2_Stream0;
   hdma_adc.Init.Channel  = DMA_CHANNEL_0;
