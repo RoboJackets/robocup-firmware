@@ -21,6 +21,7 @@ cd robocup-firmware
 3) Compile robocup-firmware
 make sure you are at the top level of robocup-firmware and run make
 ```
+make robot
 make
 ```
 
