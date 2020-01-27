@@ -10,7 +10,7 @@ For Ubuntu you want to download the file labeled as 'J-Link Software and Documen
 
 Provided that file was stored in your downloads folder you can use the below to install the package:
 ```
-sudo dpkg -i ~/downloads/JLink_Linux_V656a_x86_64.deb
+sudo dpkg -i ~/Downloads/JLink_Linux_V656a_x86_64.deb
 sudo apt install -f
 ```
 
