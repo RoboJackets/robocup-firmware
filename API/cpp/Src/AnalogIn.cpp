@@ -11,8 +11,8 @@ AnalogIn::AnalogIn(ADCPinName pin) {
    ADC_Init(pin);
    __enable_irq();
    HAL_ADC_MspInit(&ADC_InitStruct);
-   HAL_ADC_Start_DMA(&ADC_InitStruct, &readValue, 1);  //third argument is length, idk what that is
-
+   //HAL_ADC_Start_DMA(&ADC_InitStruct, &readValue, 1);  //third argument is length, idk what that is
+   HAL_ADC_Start(&ADC_InitStruct);
 }
 
 
@@ -69,18 +69,17 @@ AnalogIn::~AnalogIn() {
 
 }
 
-
-
+// Get the ADC value, does not use DMA
 uint32_t AnalogIn::read () {
-   return readValue;
+   return HAL_ADC_GetValue(&ADC_InitStruct);
 }
 
 uint16_t AnalogIn::read_u16 () {
-    return (uint16_t)readValue;
+    return (uint16_t) HAL_ADC_GetValue(&ADC_InitStruct);
 }
 
 float AnalogIn::getValue() {
-  return readValue;
+  return HAL_ADC_GetValue(&ADC_InitStruct);
 }
 
 static DMA_HandleTypeDef  hdma_adc = {};
