@@ -5,40 +5,23 @@ For a brief introduction to how to use the command line see [here](CommandLineBa
 
 
 ## Setting up the robocup-firmware repository
-### Clone the repositories
+1) Clone the repositories
 ```
 git clone https://github.com/robojackets/mtrain-firmware
 git clone https://github.com/robojackets/robocup-firmware
 ```
 
+2) Run the setup script
 There are a few setup scripts in the util directory for installing required packages, setting up udev rules, etc.  Run `ubuntu-setup`, `arch-setup`, and `osx-setup` depending on your system.
 ```
 cd robocup-firmware
 ./util/<SYSTEM>-setup
 ```
 
-
-### Setting up Conan for robocup-firmware
-As part of the system setup script conan, the robojackets remote, and the required conan profile should have been setup.
-Thus the steps for setting up conan are not necessary and are kept for reference when setting up on older branches.
-
-NOTE: If you chose to not let the script overwrite your previous conan settings you will need to perform step 2 and 3 manually.
-
-1) Install conan
+3) Compile robocup-firmware
+make sure you are at the top level of robocup-firmware and run make
 ```
-pip install conan
-```
-
-2) Add the robojackets remote
-```
-conan remote add robojackets https://api.bintray.com/conan/robojackets/conan
-```
-
-3) cd into the mtrain-firmware repository and copy the file util/conan-config/profiles/armv7hf to ~/.conan/profiles
-
-### Building robocup-firmware with Conan
-cd into the robocup-firmware repository
-```
+make robot
 make
 ```
 

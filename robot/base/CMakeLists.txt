@@ -1,4 +1,3 @@
-
 add_executable( base.elf
     main.cpp
     rtos_hooks.c

@@ -28,9 +28,12 @@ $(ROBOT_TESTS:%=test-%-upload): configure
 debug : BUILDTYPE = "Debug"
 debug : kicker robot
 
+docs:
+	doxygen doc/Doxyfile
+	cp doc/doxygen.css doc/generated-docs/html/
+
 clean:
 	rm -rf kicker/build
 	rm -rf robot/build
-
-# conan remove RoboCupFirmware/* --builds
-# conan remove mTrain/* --builds
+	conan remove RoboCupFirmware/* --builds
+	conan remove mTrain/* --builds

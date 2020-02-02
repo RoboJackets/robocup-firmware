@@ -43,7 +43,7 @@ struct MODULE_META_DATA {
     // Time in sysclock ticks between module executions
     const uint32_t modulePeriod;
 
-    // Estimate in sysclock ticks of module runtime 
+    // Estimate in sysclock ticks of module runtime
     const int32_t moduleRunTime;
 
     GenericModule *module;
@@ -76,7 +76,6 @@ void startModule(void *pvModule) {
     TickType_t increment = module->period.count();
 
     while (true) {
-//        printf("[INFO] Updating module %s\r\n", module->name);
         module->entry();
         vTaskDelayUntil(&last_wait_time, increment);
     }

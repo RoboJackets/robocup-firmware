@@ -10,7 +10,7 @@
 /gmon.out
 *.swp
 /.settings
-/api_docs
+/doc/generated-docs
 *~
 
 # sublime-text
@@ -36,3 +36,8 @@ run/*.bin
 run/*.nib
 run/test-firmware
 clean.patch
+
+# GTags ignore
+GPATH
+GRTAGS
+GTAGS

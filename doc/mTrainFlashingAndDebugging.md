@@ -10,7 +10,7 @@ For Ubuntu you want to download the file labeled as 'J-Link Software and Documen
 
 Provided that file was stored in your downloads folder you can use the below to install the package:
 ```
-sudo dpkg -i ~/downloads/JLink_Linux_V656a_x86_64.deb
+sudo dpkg -i ~/Downloads/JLink_Linux_V656a_x86_64.deb
 sudo apt install -f
 ```
 
@@ -53,11 +53,13 @@ Run J-LinkExe
 JLinkExe
 ```
 
-At this point you will get the same message as in the setting up jlink software section followed by a wall of information on the processor. If you didnt get a wall of processor information the J-Link did not auto connect and thus you will need to connect via 'connect' and hitting enter to use all the default options.
+At this point you will get the same message as in the setting up jlink software section. Then you need to connect to the processor via the following command
+```
+connect
+```
+continue hitting enter to use all the default options and you should get a wall of processor information and a message that you have connected.
 
-At this point you should get a message that you have connected.
-
-To program the radio use:
+To program the mtrain use:
 ```
 loadbin ./control.bin 0x08000000
 ```
