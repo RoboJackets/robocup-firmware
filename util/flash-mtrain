@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # TODO Change device id
-DEVICE=STM32F405NI
+DEVICE=STM32F769NI
 IF=JTAG
 SPEED=4000
 
