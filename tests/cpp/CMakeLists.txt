@@ -4,6 +4,7 @@ function(add_test test_file)
     get_filename_component(test_name ${test_file} NAME_WE)
 
     add_executable(${test_name}.elf
+        ../rtos_hooks.c
         ${test_file}
         # ${CMAKE_SOURCE_DIR}/BSP/Src/stm32f7xx_it.c #TODO: Fix
     )
