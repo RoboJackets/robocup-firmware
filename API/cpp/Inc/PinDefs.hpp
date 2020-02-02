@@ -4,13 +4,21 @@
 #include "stm32f769xx.h"
 #include <stdint.h>
 
+// This file defines mappings of GPIO Pin Labels to pins of the border of the mtrain chip itself (pins 3 - 36)
+
+// Port is the GPIO Bank Pin is which pins
+// pins formed with GPIO and pin correspond to pin label on the data sheet not their BGA name
+// PA8 is gpio bank A pin 8
 typedef struct PinName {
-    GPIO_TypeDef* port;
-    uint16_t pin;
+  GPIO_TypeDef* port;
+  uint16_t pin;
 } PinName;
 
 typedef struct ADCPinName {
-  ADC_TypeDef* port;
+  ADC_TypeDef* adc;
+  uint32_t channel;
+  GPIO_TypeDef* port;
+  uint16_t pin;
 } ADCPinName;
 
 constexpr PinName p3  = { GPIOA, GPIO_PIN_8  };
@@ -49,7 +57,7 @@ constexpr PinName LED2 = { GPIOE, GPIO_PIN_3 };
 constexpr PinName LED3 = { GPIOE, GPIO_PIN_6 };
 constexpr PinName LED4 = { GPIOE, GPIO_PIN_5 };
 
-constexpr ADCPinName pf6 = { ADC3 };
+constexpr ADCPinName pf6 = { ADC3, ADC_CHANNEL_4, GPIOF, GPIO_PIN_6 };
 
 
 typedef enum PullType {

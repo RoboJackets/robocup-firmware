@@ -1,10 +1,10 @@
 #include <iostream>
 #include "AnalogIn.hpp"
-#include "DigitalOut.hpp"
 #include <math.h>
 using namespace std;
 
 const int REFRESH_PERIOD = 10;
+const float ADC_RATIO = 3.3 / 4096;
 
 AnalogIn::AnalogIn(ADCPinName pin) {
    ADC_Init(pin);
@@ -12,15 +12,17 @@ AnalogIn::AnalogIn(ADCPinName pin) {
    HAL_ADC_Start(&ADC_InitStruct);
 }
 
+
+// TODO this setup means 1 adc can go to 1 pin only and thus only 3 adc pins can be inited need to setup multi sampling indepently
 void AnalogIn::ADC_Init(ADCPinName pin) {
   __HAL_RCC_ADC3_CLK_ENABLE();
   GPIO_InitTypeDef GPIO_InitStruct = {};
-  GPIO_InitStruct.Pin = p30.pin;
+  GPIO_InitStruct.Pin = pin.pin;
   GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
   GPIO_InitStruct.Pull  = GPIO_NOPULL;
-  HAL_GPIO_Init(p30.port, &GPIO_InitStruct);
+  HAL_GPIO_Init(pin.port, &GPIO_InitStruct);
 
-  ADC_InitStruct.Instance                   = pin.port;
+  ADC_InitStruct.Instance                   = pin.adc;
   ADC_InitStruct.Init.ClockPrescaler        = ADC_CLOCK_SYNC_PCLK_DIV2;
   ADC_InitStruct.Init.Resolution            = ADC_RESOLUTION_12B;
   ADC_InitStruct.Init.ScanConvMode          = DISABLE; /* Sequencer disabled (ADC conversion on only 1 channel: channel set on rank 1) */
@@ -39,9 +41,9 @@ void AnalogIn::ADC_Init(ADCPinName pin) {
   }
 
   ADC_ChannelConfTypeDef sConfig = {};
-  sConfig.Channel       = ADC_CHANNEL_4;
+  sConfig.Channel       = pin.channel;
   sConfig.Rank          = 1;
-  sConfig.SamplingTime  =  ADC_SAMPLETIME_480CYCLES;
+  sConfig.SamplingTime  = ADC_SAMPLETIME_480CYCLES;
   sConfig.Offset        = 0;
   //configures the channel for the ADC, given the input structure
   if (HAL_ADC_ConfigChannel(&ADC_InitStruct, &sConfig) != HAL_OK) {
@@ -63,7 +65,7 @@ uint16_t AnalogIn::read_u16 () {
 }
 
 float AnalogIn::getValue() {
-  return HAL_ADC_GetValue(&ADC_InitStruct);
+  return (float)(HAL_ADC_GetValue(&ADC_InitStruct)) * ADC_RATIO;
 }
 
 void HAL_ADC_MspDeInit(ADC_HandleTypeDef *hadc)

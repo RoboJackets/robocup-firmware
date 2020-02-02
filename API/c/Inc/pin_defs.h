@@ -9,12 +9,15 @@ extern "C" {
 #include "stm32f7xx_hal.h"
 
 typedef struct pin_name {
-    GPIO_TypeDef* port;
-    uint16_t pin;
+  GPIO_TypeDef* port;
+  uint16_t pin;
 } pin_name;
 
 typedef struct adc_pin_name {
-  ADC_TypeDef* port;
+  ADC_TypeDef* adc;
+  uint32_t channel;
+  GPIO_TypeDef* port;
+  uint16_t pin;
 } adc_pin_name;
 
 #define PIN3 (pin_name) {GPIOA, GPIO_PIN_8}
@@ -53,7 +56,7 @@ typedef struct adc_pin_name {
 #define LED3 (pin_name) {GPIOE, GPIO_PIN_6}
 #define LED4 (pin_name) {GPIOE, GPIO_PIN_5}
 
-#define ADCPINF6 (adc_pin_name) {ADC3}
+#define ADCPINF6 (adc_pin_name) { ADC3, ADC_CHANNEL_4, GPIOF, GPIO_PIN_6 }
 
 typedef enum {
     PULL_NONE = GPIO_NOPULL,

@@ -9,7 +9,6 @@ class AnalogIn {
       uint32_t readValue;
       uint16_t unsignedReadValue;
       void ADC_Init(ADCPinName pin);
-      void DMA_Init();
 
    public:
       AnalogIn(ADCPinName pin);
