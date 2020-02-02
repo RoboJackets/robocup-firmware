@@ -6,16 +6,19 @@ int main(void){
   DigitalOut outPin = p36;
   AnalogIn pin(pf6); //need analog pins
   outPin.write(1);
+
   while(true) {
+    uint32_t adc_val = pin.read();
+    HAL_Delay(100);
+    printf("%u\r\n", adc_val);
     leds[0].toggle();
-    if (pin.read() == 0) {
+    if (adc_val > 0) {
       leds[1].toggle();
       HAL_Delay(100);
       leds[1].toggle();
     }
-    else if (pin.read() > 1024) { // // 12 bit approximation on 5v max 1024 should be about 1.25V threshold
+    if (adc_val > 1024) { // // 12 bit approximation on 5v max 1024 should be about 1.25V threshold
       leds[2].toggle();
-      printf("%d", pin.read());
       HAL_Delay(100);
       leds[2].toggle();
     }

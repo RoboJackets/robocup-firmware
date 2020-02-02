@@ -7,26 +7,10 @@ using namespace std;
 const int REFRESH_PERIOD = 10;
 
 AnalogIn::AnalogIn(ADCPinName pin) {
-   DMA_Init();
    ADC_Init(pin);
    __enable_irq();
-   HAL_ADC_MspInit(&ADC_InitStruct);
-   //HAL_ADC_Start_DMA(&ADC_InitStruct, &readValue, 1);  //third argument is length, idk what that is
    HAL_ADC_Start(&ADC_InitStruct);
 }
-
-
-void AnalogIn::DMA_Init(){
-
-   __HAL_RCC_DMA2_CLK_ENABLE();
-
-   /*##-3- Configure the NVIC for DMA #########################################*/
-   /* NVIC configuration for DMA transfer complete interrupt */
-   HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, 0, 0);
-   HAL_NVIC_EnableIRQ(DMA2_Stream0_IRQn);
-
-}
-
 
 void AnalogIn::ADC_Init(ADCPinName pin) {
   __HAL_RCC_ADC3_CLK_ENABLE();
@@ -71,41 +55,15 @@ AnalogIn::~AnalogIn() {
 
 // Get the ADC value, does not use DMA
 uint32_t AnalogIn::read () {
-   return HAL_ADC_GetValue(&ADC_InitStruct);
+  return HAL_ADC_GetValue(&ADC_InitStruct);
 }
 
 uint16_t AnalogIn::read_u16 () {
-    return (uint16_t) HAL_ADC_GetValue(&ADC_InitStruct);
+  return (uint16_t) HAL_ADC_GetValue(&ADC_InitStruct);
 }
 
 float AnalogIn::getValue() {
   return HAL_ADC_GetValue(&ADC_InitStruct);
-}
-
-static DMA_HandleTypeDef  hdma_adc = {};
-
-void HAL_ADC_MspInit(ADC_HandleTypeDef *hadc)
-{
-
-  hdma_adc.Instance = DMA2_Stream0;
-  hdma_adc.Init.Channel  = DMA_CHANNEL_0;
-  hdma_adc.Init.Direction = DMA_PERIPH_TO_MEMORY;
-  hdma_adc.Init.PeriphInc = DMA_PINC_DISABLE;
-  hdma_adc.Init.MemInc = DMA_MINC_ENABLE;
-  hdma_adc.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
-  hdma_adc.Init.MemDataAlignment = DMA_MDATAALIGN_WORD;
-  hdma_adc.Init.Mode = DMA_CIRCULAR;
-  hdma_adc.Init.Priority = DMA_PRIORITY_HIGH;
-  hdma_adc.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
-  hdma_adc.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_HALFFULL;
-  hdma_adc.Init.MemBurst = DMA_MBURST_SINGLE;
-  hdma_adc.Init.PeriphBurst = DMA_PBURST_SINGLE;
-
-  if (HAL_DMA_Init(&hdma_adc) != HAL_OK) {
-    //ERROR HANDLING
-  }
-  /* Associate the initialized DMA handle to the ADC handle */
-  __HAL_LINKDMA(hadc, DMA_Handle, hdma_adc);
 }
 
 void HAL_ADC_MspDeInit(ADC_HandleTypeDef *hadc)
@@ -113,10 +71,4 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef *hadc)
   /*##-1- Reset peripherals ##################################################*/
   __HAL_RCC_ADC_FORCE_RESET();
   __HAL_RCC_ADC_RELEASE_RESET();
-}
-
-extern "C" {
-  void DMA2_Stream0_IRQHandler(void) {
-    HAL_DMA_IRQHandler(&hdma_adc);
-  }
 }
