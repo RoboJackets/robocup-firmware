@@ -9,7 +9,7 @@ class RoboCupFirmwareConan(ConanFile):
     generators = "cmake"
     exports_sources = ['CMakeLists.txt', 'control*', 'lib*']
 
-    requires = (('mTrain/[1.0]@kyle/testing'),
+    requires = (('mTrain/[1.2]@robojackets/stable'),
                 ('eigen/[3.3.7]@conan/stable'))
 
 
