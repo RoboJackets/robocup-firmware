@@ -3,6 +3,7 @@
 ADC_HandleTypeDef ADC_InitStruct;
 
 const int REFRESH_PERIOD = 10;
+const int ADC_MAX = 4096;
 const float ADC_RATIO = 3.3 / 4096;
 
 void adc_init(adc_pin_name pin) {
@@ -55,7 +56,10 @@ uint16_t read_u16(adc_pin_name pin) {
   return (uint16_t) HAL_ADC_GetValue(&ADC_InitStruct);
 }
 
-float getValue(adc_pin_name pin) {
-  adc_init(pin);
+float getVoltage() {
   return (float)(HAL_ADC_GetValue(&ADC_InitStruct)) * ADC_RATIO;
+}
+
+float getPercent() {
+  return (float)(HAL_ADC_GetValue(&ADC_InitStruct)) / ADC_MAX;
 }

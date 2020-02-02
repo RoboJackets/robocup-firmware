@@ -4,7 +4,8 @@
 using namespace std;
 
 const int REFRESH_PERIOD = 10;
-const float ADC_RATIO = 3.3 / 4096;
+const int ADC_MAX = 4096;
+const float ADC_RATIO = 3.3 / ADC_MAX;
 
 AnalogIn::AnalogIn(ADCPinName pin) {
    ADC_Init(pin);
@@ -64,8 +65,12 @@ uint16_t AnalogIn::read_u16 () {
   return (uint16_t) HAL_ADC_GetValue(&ADC_InitStruct);
 }
 
-float AnalogIn::getValue() {
+float AnalogIn::getVoltage() {
   return (float)(HAL_ADC_GetValue(&ADC_InitStruct)) * ADC_RATIO;
+}
+
+float AnalogIn::getPercent() {
+  return (float)(HAL_ADC_GetValue(&ADC_InitStruct)) / ADC_MAX;
 }
 
 void HAL_ADC_MspDeInit(ADC_HandleTypeDef *hadc)

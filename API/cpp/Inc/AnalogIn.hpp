@@ -16,5 +16,6 @@ class AnalogIn {
 
       uint32_t read();
       uint16_t read_u16();
-      float getValue();
+      float getVoltage();
+      float getPercent();
 };
