@@ -5,6 +5,17 @@
 IMUModule::IMUModule(std::shared_ptr<I2C> sharedI2C, LockedStruct<IMUData>& imuData)
     : GenericModule(kPeriod, "imu", kPriority),
       imu(sharedI2C), imuData(imuData) {
+    auto imuDataLock = imuData.unsafe_value();
+    imuDataLock->isValid = false;
+    imuDataLock->lastUpdate = 0;
+
+    for (int i = 0; i < 3; i++) {
+        imuDataLock->accelerations[i] = 0.0f;
+        imuDataLock->omegas[i] = 0.0f;
+    }
+}
+
+void IMUModule::start() {
     imu.initialize();
 
     imu.setTempFIFOEnabled(false);
@@ -52,15 +63,7 @@ IMUModule::IMUModule(std::shared_ptr<I2C> sharedI2C, LockedStruct<IMUData>& imuD
 
 
     printf("INFO: IMU initialized\r\n");
-
-    auto imuDataLock = imuData.unsafe_value();
-    imuDataLock->isValid = false;
-    imuDataLock->lastUpdate = 0;
-
-    for (int i = 0; i < 3; i++) {
-        imuDataLock->accelerations[i] = 0.0f;
-        imuDataLock->omegas[i] = 0.0f;
-    }
+    imuData.lock()->initialized = true;
 }
 
 void IMUModule::entry(void) {

@@ -12,7 +12,7 @@ MotionControlModule::MotionControlModule(LockedStruct<BatteryVoltage>& batteryVo
                                          LockedStruct<MotionCommand>& motionCommand,
                                          LockedStruct<MotorFeedback>& motorFeedback,
                                          LockedStruct<MotorCommand>& motorCommand)
-    : GenericModule(kPeriod, "motion", kPriority, 4096),
+    : GenericModule(kPeriod, "motion", kPriority, 1024),
       batteryVoltage(batteryVoltage), imuData(imuData),
       motionCommand(motionCommand), motorFeedback(motorFeedback),
       motorCommand(motorCommand),
@@ -31,7 +31,7 @@ MotionControlModule::MotionControlModule(LockedStruct<BatteryVoltage>& batteryVo
     motorCommandLock->dribbler = 0;
 }
 
-void MotionControlModule::entry(void) {
+void MotionControlModule::entry() {
     auto motionCommandLock = motionCommand.lock();
     auto motorCommandLock = motorCommand.lock();
     auto motorFeedbackLock = motorFeedback.lock();
@@ -50,7 +50,7 @@ void MotionControlModule::entry(void) {
     Eigen::Matrix<double, 4, 1> currentWheels;
     measurements << 0, 0, 0, 0, 0;
     currentWheels << 0, 0, 0, 0;
-    
+
     if (motorFeedbackLock->isValid && isRecentUpdate(motorFeedbackLock->lastUpdate)) {
         for (int i = 0; i < 4; i++) {
             if (!isnan(measurements(i,0))) {
@@ -70,7 +70,7 @@ void MotionControlModule::entry(void) {
     // Update targets
     Eigen::Matrix<double, 3, 1> targetState;
     targetState << 0, 0, 0;
-    
+
     if (motionCommandLock->isValid && isRecentUpdate(motionCommandLock->lastUpdate)) {
         targetState << motionCommandLock->bodyXVel,
                        motionCommandLock->bodyYVel,
@@ -113,7 +113,6 @@ void MotionControlModule::entry(void) {
 
     prevCommand = motorCommands;
 
-
     motorCommandLock->isValid = true;
     motorCommandLock->lastUpdate = HAL_GetTick();
 
@@ -126,7 +125,6 @@ void MotionControlModule::entry(void) {
             motorCommandLock->wheels[i] = motorCommands(i, 0);
         }
         motorCommandLock->dribbler = dribblerCommand;
-
     } else {
 
         // rip battery

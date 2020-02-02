@@ -13,9 +13,9 @@ public:
     static constexpr std::chrono::milliseconds kPeriod{static_cast<int>(1000 / kFrequency)};
     static constexpr int kPriority = 1;
 
-    BatteryModule(LockedStruct<BatteryVoltage>& batteryVoltage);
+    explicit BatteryModule(LockedStruct<BatteryVoltage>& batteryVoltage);
 
-    virtual void entry(void);
+    void entry() override;
 
 private:
     LockedStruct<BatteryVoltage>& batteryVoltage;

@@ -21,7 +21,9 @@ public:
                 LockedStruct<MotionCommand>& motionCommand,
                 LockedStruct<RadioError>& radioError);
 
-    virtual void entry(void);
+    void start() override;
+
+    void entry() override;
 
 private:
     LockedStruct<BatteryVoltage>& batteryVoltage;

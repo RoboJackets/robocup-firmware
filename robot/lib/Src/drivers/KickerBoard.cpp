@@ -84,6 +84,10 @@ bool KickerBoard::flash(const string& proFilename,
 }
 
 bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
+    if (!init()) {
+        return false;
+    }
+
     // Check a few parameters before attempting to flash to ensure that we have
     // the right chip and it's connected correctly.
     auto checks = {

@@ -12,10 +12,18 @@ class GenericModule {
 public:
     GenericModule(std::chrono::milliseconds period, const char *name, int priority = 1, int stackSize = 1024)
         : period(period), name(name), priority(priority), stackSize(stackSize) {}
+
+
+    /**
+     * Called once to initialize the module. All initialization work should be
+     * done here instead of in the constructor.
+     */
     virtual void start(void) {}
 
-    // Called at most once a frame to execute the module
-    virtual void entry(void) = 0;
+    /**
+     * Called by the RTOS at the desired update rate.
+     */
+    virtual void entry() = 0;
 
     // The period of this module in milliseconds
     std::chrono::milliseconds period;
@@ -28,5 +36,5 @@ public:
 
     int stackSize = 1024;
 
-    TaskHandle_t handle;
+    TaskHandle_t handle = nullptr;
 };

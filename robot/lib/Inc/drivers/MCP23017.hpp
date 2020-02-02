@@ -48,6 +48,11 @@ public:
 
     MCP23017(LockedStruct<I2C>& sharedI2C, int i2cAddress);
 
+    /**
+     * Initialize the device.
+     */
+    void init();
+
     /** Reset MCP23017 device to its power-on state
      */
     void reset();

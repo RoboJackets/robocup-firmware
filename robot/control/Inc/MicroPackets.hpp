@@ -48,6 +48,7 @@ struct MotorFeedback {
 // IMU -> MotionControl
 struct IMUData {
     bool isValid = false;
+    bool initialized = false;
     uint32_t lastUpdate;
 
     float accelerations[3]; // X Y Z (m/s2)
@@ -71,6 +72,7 @@ struct BatteryVoltage {
 // FPGA -> Radio
 struct FPGAStatus {
     bool isValid = false;
+    bool initialized = false;
     uint32_t lastUpdate;
 
     bool motorHasErrors[5];
@@ -81,6 +83,7 @@ struct FPGAStatus {
 // Radio -> LED
 struct RadioError {
     bool isValid = false;
+    bool initialized = false;
     uint32_t lastUpdate;
 
     bool hasError;
@@ -114,6 +117,7 @@ struct KickerCommand {
 // Kicker -> Radio
 struct KickerInfo {
     bool isValid = false;
+    bool initialized = false;
     uint32_t lastUpdate;
 
     bool kickerHasError;

@@ -36,6 +36,8 @@ int main(void)
   osThreadDef(blinkTask, blinkTask, osPriorityAboveNormal, 1, 1000);
   osThreadCreate(osThread(blinkTask), NULL);
 
+  printf("Fuck\r\n");
+
   osThreadDef(blinkTaskArg, blinkTaskArg, osPriorityAboveNormal, 2, 1000);
   osThreadCreate(osThread(blinkTaskArg), &led3);
   osThreadCreate(osThread(blinkTaskArg), &led4);

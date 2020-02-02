@@ -4,6 +4,9 @@
 #include "FreeRTOS.h"
 #include "semphr.h"
 
+#include "mtrain.hpp"
+#include "task.h"
+
 /**
  * A locked-struct abstraction. To access the inner value (either read or write)
  * you must first acquire a Lock, an RAII structure that will release the lock
@@ -19,7 +22,7 @@ struct LockedStruct {
 public:
     template<typename... Args>
     LockedStruct(Args... args) : value(std::forward<Args>(args)...) {
-        xSemaphoreCreateRecursiveMutexStatic(&mutex);
+        mutex = xSemaphoreCreateRecursiveMutex();
     }
 
     // No copy/move
@@ -92,11 +95,11 @@ public:
 
 private:
     void acquire_mutex() {
-        xSemaphoreTakeRecursive(&mutex, portMAX_DELAY);
+        xSemaphoreTakeRecursive(mutex, 100);
     }
 
     void release_mutex() {
-        xSemaphoreGiveRecursive(&mutex);
+        xSemaphoreGiveRecursive(mutex);
     }
 
     friend struct Lock;
@@ -105,5 +108,6 @@ private:
 
     int mutex_depth = 0;
 
-    StaticSemaphore_t mutex;
+//    StaticSemaphore_t mutex;
+    SemaphoreHandle_t mutex = nullptr;
 };

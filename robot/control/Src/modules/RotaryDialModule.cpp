@@ -14,6 +14,10 @@ RotaryDialModule::RotaryDialModule(LockedStruct<MCP23017>& ioExpander, LockedStr
     robotLock->robotID = 0;
 }
 
+void RotaryDialModule::start() {
+    dial.init();
+}
+
 void RotaryDialModule::entry(void) {
     auto robotIDLock = robotID.lock();
 

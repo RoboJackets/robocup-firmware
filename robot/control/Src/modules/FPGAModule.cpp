@@ -2,6 +2,7 @@
 #include "iodefs.h"
 
 #include <cmath>
+#include <delay.h>
 
 using namespace std::literals;
 
@@ -9,24 +10,11 @@ FPGAModule::FPGAModule(std::unique_ptr<SPI> spi,
                        LockedStruct<MotorCommand>& motorCommand,
                        LockedStruct<FPGAStatus>& fpgaStatus,
                        LockedStruct<MotorFeedback>& motorFeedback)
-    : GenericModule(kPeriod, "fpga", kPriority),
+    : GenericModule(kPeriod, "fpga", kPriority, 1 << 10),
       motorCommand(motorCommand), motorFeedback(motorFeedback),
       fpgaStatus(fpgaStatus),
       fpga(std::move(spi), FPGA_CS, FPGA_INIT, FPGA_PROG, FPGA_DONE),
       fpgaInitialized(false) {
-
-    fpgaInitialized = fpga.configure();
-
-    // FPGA initialized return doesn't actually work
-    // We should fix that eventually with the new fpga code
-    //if (fpgaInitialized) {
-    //    printf("INFO: FPGA configured\r\n");
-    //} else {
-    //    printf("WARN: FPGA could not be configured\r\n");
-    //}
-
-    printf("INFO: FPGA probably configured\r\n");
-
     {
         auto motorFeedbackLock = motorFeedback.unsafe_value();
         motorFeedbackLock->isValid = false;
@@ -49,19 +37,29 @@ FPGAModule::FPGAModule(std::unique_ptr<SPI> spi,
     }
 }
 
-void FPGAModule::entry(void) {
-    // See todo above about fpgaInitialized returning wrong values
-    // FPGA not initialized
-    // report error and return
-    // have to disable otherwise it never returns true
-    //if (!fpgaInitialized && false) {
-    //    // report error and return
-    //    fpgaStatus->isValid = true;
-    //    fpgaStatus->lastUpdate = HAL_GetTick();
-    //    fpgaStatus->FPGAHasError = true;
-    //
-    //    return;
-    //}
+void FPGAModule::start() {
+    vTaskDelay(3000);
+    auto fpgaStatusLock = fpgaStatus.lock();
+    fpgaInitialized = fpga.configure();
+    printf("INFO: FPGA probably configured\r\n");
+    fpgaStatusLock->initialized = fpgaInitialized;
+}
+
+void FPGAModule::entry() {
+    // We've still got an issue in hardware: the INIT_B pin is never pulled
+    // high after FPGA boot, so we never actually receive a signal. Until we
+    // fix this, just assume it's been initialized properly.
+    /*
+    if (!fpgaInitialized) {
+        // If the FPGA was never initialized, report an error and return.
+        auto fpgaStatusLock = fpgaStatus.lock();
+        fpgaStatusLock->isValid = true;
+        fpgaStatusLock->lastUpdate = HAL_GetTick();
+        fpgaStatusLock->FPGAHasError = true;
+
+        return;
+    }
+    */
 
     // FPGA initialized so we all good
     std::array<int16_t, 5> dutyCycles{0, 0, 0, 0, 0};
@@ -84,7 +82,6 @@ void FPGAModule::entry(void) {
                 }
             }
             dutyCycles.at(4) = motorCommandLock->dribbler;
-
         }
     }
 

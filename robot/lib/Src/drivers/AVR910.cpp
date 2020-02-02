@@ -39,16 +39,19 @@ using namespace std;
 
 AVR910::AVR910(LockedStruct<SPI>& spi, std::shared_ptr<DigitalOut> nCs, PinName nReset)
     : spi_(spi), nCs_(nCs), nReset_(nReset) {
+}
+
+bool AVR910::init() {
     int tryCnt = 0;
     bool enabled = false;
     do {
         // Give nReset a positive pulse for at least two CPU clock cycles
         nReset_ = 1;
-        HAL_Delay(100);
+        vTaskDelay(100);
         nReset_ = 0;
 
         // Wait at least 20 ms
-        HAL_Delay(100);
+        vTaskDelay(100);
 
         // Enable SPI Serial Programming
         // may not be synced so toggle and try again
@@ -57,9 +60,11 @@ AVR910::AVR910(LockedStruct<SPI>& spi, std::shared_ptr<DigitalOut> nCs, PinName 
 
     if (!enabled) {
         printf(
-            "ERROR: AVR910 unable to enable programming mode for chip.  "
-            "Further commands will fail\r\n");
+                "ERROR: AVR910 unable to enable programming mode for chip.  "
+                "Further commands will fail\r\n");
     }
+
+    return enabled;
 }
 
 bool AVR910::program(FILE* binary, int pageSize, int numPages) {
@@ -340,7 +345,7 @@ void AVR910::chipErase() {
     spi_lock->transmit(0x00);
     nCs_->write(1);
 
-    HAL_Delay(15); // 9 ms min
+    vTaskDelay(15); // 9 ms min
 }
 
 /**
@@ -557,9 +562,8 @@ bool AVR910::checkMemory(int pageSize, int numPages, const uint8_t* binary,
     return success;
 }
 
-
 void AVR910::exitProgramming() {
     nReset_ = 0;
-    HAL_Delay(100);
+    vTaskDelay(100);
     nReset_ = 1;
 }

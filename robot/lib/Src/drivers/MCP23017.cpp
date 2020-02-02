@@ -3,6 +3,9 @@
 
 MCP23017::MCP23017(LockedStruct<I2C>& sharedI2C, int i2cAddress)
     : _i2c(sharedI2C), _i2cAddress(i2cAddress) {
+}
+
+void MCP23017::init() {
     reset();
 }
 

@@ -15,14 +15,16 @@ public:
     // How many times per second this module should run
     static constexpr float kFrequency = 100.0f; // Hz
     static constexpr std::chrono::milliseconds kPeriod{static_cast<int>(1000 / kFrequency)};
-    static constexpr int kPriority = 3;
+    static constexpr int kPriority = 2;
 
     FPGAModule(std::unique_ptr<SPI> spi,
                LockedStruct<MotorCommand>& motorCommand,
                LockedStruct<FPGAStatus>& fpgaStatus,
                LockedStruct<MotorFeedback>& motorFeedback);
 
-    virtual void entry(void);
+    void start() override;
+
+    void entry() override;
 
 private:
     LockedStruct<MotorCommand>& motorCommand;

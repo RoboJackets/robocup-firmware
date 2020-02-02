@@ -74,10 +74,16 @@ public:
      * @param nCs Chip select pin on mtrain
      * @param nReset mtrain pin for not reset line on the ISP interface.
      *
-     * Sends an enable programming command, allowing device registers to be
-     * read and commands sent.
      */
     AVR910(LockedStruct<SPI>& spi, std::shared_ptr<DigitalOut> nCs, PinName nReset);
+
+    /**
+     * Sends an enable programming command, allowing device registers to be
+     * read and commands sent.
+     *
+     * @return true if initialization completed successfully
+     */
+    bool init();
 
     /**
      * Program the AVR microcontroller connected to the mbed.

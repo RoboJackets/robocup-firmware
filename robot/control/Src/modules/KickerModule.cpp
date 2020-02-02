@@ -9,20 +9,25 @@ KickerModule::KickerModule(LockedStruct<SPI>& spi,
     : GenericModule(kPeriod, "kicker", kPriority),
       kickerCommand(kickerCommand), kickerInfo(kickerInfo),
       prevKickTime(0), nCs(std::make_shared<DigitalOut>(KICKER_CS)), kicker(spi, nCs, KICKER_RST) {
-
-    kicker.flash(false, true);
-
     auto kickerInfoLock = kickerInfo.unsafe_value();
     kickerInfoLock->isValid = false;
     kickerInfoLock->lastUpdate = 0;
     kickerInfoLock->kickerHasError = false;
     kickerInfoLock->kickerCharged = false;
     kickerInfoLock->ballSenseTriggered = false;
+}
 
+void KickerModule::start() {
+    return;
+    bool initialized = kicker.flash(false, true);
     printf("INFO: Kicker initialized\r\n");
+    {
+        kickerInfo.lock()->initialized = initialized;
+    }
 }
 
 void KickerModule::entry(void) {
+    return;
     kicker.setChargeAllowed(true);
     // Check if valid
     // and within the last few ms
@@ -64,10 +69,12 @@ void KickerModule::entry(void) {
     // Do all the commands
     kicker.service();
 
-    auto kickerInfoLock  = kickerInfo.lock();
-    kickerInfoLock->isValid = true;
-    kickerInfoLock->lastUpdate = HAL_GetTick();
-    kickerInfoLock->kickerHasError = kicker.isHealthy();
-    kickerInfoLock->ballSenseTriggered = kicker.isBallSensed();
-    kickerInfoLock->kickerCharged = kicker.isCharged();
+    {
+        auto kickerInfoLock = kickerInfo.lock();
+        kickerInfoLock->isValid = true;
+        kickerInfoLock->lastUpdate = HAL_GetTick();
+        kickerInfoLock->kickerHasError = kicker.isHealthy();
+        kickerInfoLock->ballSenseTriggered = kicker.isBallSensed();
+        kickerInfoLock->kickerCharged = kicker.isCharged();
+    }
 }

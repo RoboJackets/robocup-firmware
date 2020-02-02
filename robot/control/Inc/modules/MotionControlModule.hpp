@@ -23,7 +23,7 @@ public:
                         LockedStruct<MotorFeedback>& motorFeedback,
                         LockedStruct<MotorCommand>& motorCommand);
 
-    virtual void entry(void);
+    void entry() override;
 
 private:
     /**

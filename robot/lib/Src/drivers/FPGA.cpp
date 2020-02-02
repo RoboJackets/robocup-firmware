@@ -5,6 +5,9 @@
 
 #include "device-bins/fpga_bin.h"
 
+#include "FreeRTOS.h"
+#include "task.h"
+
 template <size_t SIGN_INDEX>
 uint16_t toSignMag(int16_t val) {
     return static_cast<uint16_t>((val < 0) ? ((-val) | 1 << SIGN_INDEX) : val);
@@ -57,7 +60,8 @@ FPGA::FPGA(std::unique_ptr<SPI> spi_bus, PinName nCs, PinName initB,
       _nCs(nCs, PullType::PullNone, PinMode::PushPull, PinSpeed::Low, true),
       _initB(initB),
       _done(done),
-      _progB(progB, PullType::PullNone, PinMode::OpenDrain, PinSpeed::Low, false) {
+      _progB(progB, PullType::PullNone, PinMode::OpenDrain, PinSpeed::Low, false)
+      {
     _spi_bus->frequency(FPGA_SPI_FREQ);
     _progB = 1;
 }
@@ -65,13 +69,13 @@ FPGA::FPGA(std::unique_ptr<SPI> spi_bus, PinName nCs, PinName initB,
 bool FPGA::configure() {
     // toggle PROG_B to clear out anything prior
     _progB = 0;
-    HAL_Delay(1);
+    vTaskDelay(1);
     _progB = 1;
 
     // wait for the FPGA to tell us it's ready for the bitstream
     auto fpgaReady = false;
     for (auto i = 0; i < 100; ++i) {
-        HAL_Delay(10);
+        vTaskDelay(10);
 
         // We're ready to start the configuration process when _initB goes high
         if (_initB) {
@@ -87,7 +91,7 @@ bool FPGA::configure() {
         return false;
     }
 
-
+    printf("[FPGA] Got INIT_B at tick %ld\r\n", xTaskGetTickCount());
 
     // Configure the FPGA with the bitstream file, this returns false if file
     // can't be opened
@@ -96,8 +100,9 @@ bool FPGA::configure() {
         // Wait some extra time in case the _done pin needs time to be asserted
         auto configSuccess = false;
         for (auto i = 0; i < 1000; i++) {
-            HAL_Delay(1);
+            vTaskDelay(100);
             if (_done == true) {
+                printf("Got done on i=%d, but InitB=%d\r\n", i, _initB.read());
                 configSuccess = _initB;
                 break;
             }
@@ -113,6 +118,7 @@ bool FPGA::configure() {
     }
 
     printf("[SEVERE] FPGA: FPGA bitstream write error\r\n");
+    printf("[SEVERE] Failure at tick %ld\r\n", xTaskGetTickCount());
 
     return false;
 }
@@ -292,11 +298,11 @@ uint8_t FPGA::watchdog_reset() {
 }
 
 void FPGA::chip_select() {
-    _nCs = 1;
+    _nCs.write(true);
 }
 
 void FPGA::chip_deselect() {
-    _nCs = 0;
+    _nCs.write(false);
 }
 
 bool FPGA::isReady() { return _isInit; }

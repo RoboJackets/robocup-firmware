@@ -16,7 +16,9 @@ public:
 
     IMUModule(std::shared_ptr<I2C> sharedI2C, LockedStruct<IMUData>& imuData);
 
-    virtual void entry(void);
+    void start() override;
+
+    void entry() override;
 
 private:
     MPU6050 imu;

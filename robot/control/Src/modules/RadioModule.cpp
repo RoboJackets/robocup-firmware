@@ -37,28 +37,36 @@ RadioModule::RadioModule(LockedStruct<BatteryVoltage>& batteryVoltage,
     radioErrorLock->isValid = false;
     radioErrorLock->lastUpdate = 0;
     radioErrorLock->hasError = false;
-
-    printf("INFO: Radio initialized\r\n");
 }
 
-void RadioModule::entry(void) {
+void RadioModule::start() {
+    link.init();
+    printf("INFO: Radio initialized\r\n");
+    radioError.lock()->initialized = true;
+}
+
+void RadioModule::entry() {
     {
         auto batteryVoltageLock = batteryVoltage.lock();
         auto fpgaStatusLock = fpgaStatus.lock();
         auto robotIDLock = robotID.lock();
         auto kickerInfoLock = kickerInfo.lock();
+
         // Just check to see if our robot id is valid
         // That way we don't conflict with other robots on the network
         // that are working
-        if (batteryVoltageLock->isValid && fpgaStatusLock->isValid && robotIDLock->isValid) {
+//        if (batteryVoltageLock->isValid && fpgaStatusLock->isValid && robotIDLock->isValid) {
             link.send(batteryVoltageLock.value(), fpgaStatusLock.value(), kickerInfoLock.value(), robotIDLock.value());
-        }
+
+//        printf("FPGA valid: %d, Battery valid: %d, Kicker valid: %d, Robot ID valid: %d\r\n", fpgaStatusLock->isValid, batteryVoltageLock->isValid, kickerInfoLock->isValid, robotIDLock->isValid);
+//        printf("FPGA Initialized: %x, FPGA Errors: %x\r\n", fpgaStatusLock->initialized, fpgaStatusLock->FPGAHasError);
+//        }
     }
 
     {
-        auto kickerCommandLock = kickerCommand.lock();
         auto motionCommandLock = motionCommand.lock();
         auto radioErrorLock = radioError.lock();
+        auto kickerCommandLock = kickerCommand.lock();
 
         // Try read
         // Clear buffer of old packets such that we can get the lastest packet

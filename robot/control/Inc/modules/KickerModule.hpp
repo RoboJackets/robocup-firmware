@@ -17,7 +17,9 @@ public:
                  LockedStruct<KickerCommand>& kickerCommand,
                  LockedStruct<KickerInfo>& kickerInfo);
 
-    virtual void entry(void);
+    void start() override;
+
+    void entry() override;
 
 private:
     LockedStruct<KickerCommand>& kickerCommand;

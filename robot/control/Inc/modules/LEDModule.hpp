@@ -19,12 +19,15 @@ public:
     static constexpr int kPriority = 1;
 
     LEDModule(LockedStruct<MCP23017>& ioExpander,
+              LockedStruct<SPI>& dotStarSPI,
               LockedStruct<BatteryVoltage>& batteryVoltage,
               LockedStruct<FPGAStatus>& fpgaStatus,
               LockedStruct<KickerInfo>& kickerInfo,
               LockedStruct<RadioError>& radioError);
 
-    virtual void entry(void);
+    void start() override;
+
+    void entry() override;
 
     // Specific LED pattern for fpga initialization
     void fpgaInitialized();
@@ -72,21 +75,15 @@ private:
 
     const static uint16_t IOExpanderErrorLEDMask = 0xFF00;
 
+    LockedStruct<MCP23017>& ioExpander;
+    LockedStruct<SPI>& dotStarSPI;
+
     LockedStruct<BatteryVoltage>& batteryVoltage;
     LockedStruct<FPGAStatus>& fpgaStatus;
     LockedStruct<KickerInfo>& kickerInfo;
     LockedStruct<RadioError>& radioError;
 
-    // Dot stars were removed so we could use their SPI
-    // bus for the kicker
-    // On startup, the kicker was pulling the spi lines
-    // incorrectly that caused the fpga to not boot correctly
-    // Add back in once opto-isolators are added to the control
-    // boards again
-    // - Joe Aug 2019
-    //SPI dot_star_spi;
-
-    LockedStruct<MCP23017>& ioExpander;
+    DigitalOut dotStarNCS;
 
     std::array<DigitalOut, 4> leds;
     bool missedSuperLoopToggle;

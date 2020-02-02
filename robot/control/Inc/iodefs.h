@@ -3,7 +3,7 @@
 
 #define SHARED_I2C_BUS I2CBus::I2CBus1
 
-#define DOT_STAR_SPI_BUS SpiBus::SpiBus2
+#define SHARED_SPI_BUS SpiBus::SpiBus2
 
 #define RADIO_SPI_BUS SpiBus::SpiBus5
 #define RADIO_R0_CS   p17
@@ -19,6 +19,8 @@
 #define FPGA_CS    p31
 #define KICKER_CS  p8
 #define KICKER_RST p7
+
+#define DOT_STAR_CS p11
 
 #define HEX_SWITCH_BIT0 MCP23017::ExpPinName::PinA7
 #define HEX_SWITCH_BIT1 MCP23017::ExpPinName::PinA4
