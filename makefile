@@ -11,6 +11,7 @@ cmake -DCMAKE_TOOLCHAIN_FILE=../attiny_toolchain.cmake .. && make
 robot/build/conaninfo.txt : BUILDTYPE ?= "Release"
 robot/build/conaninfo.txt : robot/conanfile.py
 	cd robot && conan install . -if build -pr armv7hf -s build_type=$(BUILDTYPE) --build missing --build=mTrain
+
 configure : robot/build/conaninfo.txt
 	cd robot && conan build . -bf build -c --build=mTrain
 
@@ -33,8 +34,8 @@ debug : BUILDTYPE = "Debug"
 debug : kicker robot
 
 docs:
-	doxygen doc/Doxyfile
-	cp doc/doxygen.css doc/generated-docs/html/
+	doxygen docs/Doxyfile
+	cp docs/doxygen.css docs/generated-docs/html/
 
 clean:
 	rm -rf kicker/build

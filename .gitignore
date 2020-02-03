@@ -10,7 +10,7 @@
 /gmon.out
 *.swp
 /.settings
-/doc/generated-docs
+/docs/generated-docs
 *~
 
 # sublime-text
