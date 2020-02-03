@@ -1,0 +1,5 @@
+<map id="MCP23017::readRegister" name="MCP23017::readRegister">
+<area shape="rect" id="node2" href="$class_m_c_p23017.html#af329a9def6704f71efa586687155bd26" title="MCP23017::digitalRead" alt="" coords="238,5,398,32"/>
+<area shape="rect" id="node3" href="$class_m_c_p23017.html#abd2401da8537875428522c181ecd9769" title="MCP23017::digitalWordRead" alt="" coords="223,56,413,83"/>
+<area shape="rect" id="node4" href="$class_m_c_p23017.html#a6b9fc988b1bae8bf9cd9b9082f952ee1" title="Read a 0/1 value from an input bit. " alt="" coords="461,56,600,83"/>
+</map>

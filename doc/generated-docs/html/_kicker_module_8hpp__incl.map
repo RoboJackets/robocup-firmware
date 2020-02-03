@@ -1,0 +1,7 @@
+<map id="robot/control/Inc/modules/KickerModule.hpp" name="robot/control/Inc/modules/KickerModule.hpp">
+<area shape="rect" id="node2" href="$_generic_module_8hpp.html" title="GenericModule.hpp" alt="" coords="5,95,140,121"/>
+<area shape="rect" id="node5" href="$_micro_packets_8hpp.html" title="MicroPackets.hpp" alt="" coords="164,95,291,121"/>
+<area shape="rect" id="node6" href="$_kicker_board_8hpp.html" title="drivers/KickerBoard.hpp" alt="" coords="315,95,476,121"/>
+<area shape="rect" id="node7" href="$_a_v_r910_8hpp.html" title="AVR910.hpp" alt="" coords="262,169,358,196"/>
+<area shape="rect" id="node11" href="$kicker__commands_8h.html" title="Internal/kicker_commands.h" alt="" coords="483,169,670,196"/>
+</map>

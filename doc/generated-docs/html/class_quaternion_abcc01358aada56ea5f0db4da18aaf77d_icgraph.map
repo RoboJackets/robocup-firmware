@@ -1,0 +1,8 @@
+<map id="Quaternion::Quaternion" name="Quaternion::Quaternion">
+<area shape="rect" id="node2" href="$class_quaternion.html#a3ff8405ed92a3ca16de656e6c83b4028" title="Quaternion::getProduct" alt="" coords="217,5,373,32"/>
+<area shape="rect" id="node7" href="$class_quaternion.html#a079a5673188a8a7d608e8495de0dd119" title="Quaternion::getConjugate" alt="" coords="209,56,380,83"/>
+<area shape="rect" id="node3" href="$class_vector_int16.html#ac7bf149db0a2b66d7683b87ebeb2dfc5" title="VectorInt16::rotate" alt="" coords="428,5,559,32"/>
+<area shape="rect" id="node5" href="$class_vector_float.html#afef0e6d631fb1eb67b6913e90730aa9e" title="VectorFloat::rotate" alt="" coords="428,56,559,83"/>
+<area shape="rect" id="node4" href="$class_vector_int16.html#a9e1d9f4553b069bf353e807f130a285b" title="VectorInt16::getRotated" alt="" coords="607,5,768,32"/>
+<area shape="rect" id="node6" href="$class_vector_float.html#ab4093d50e98baf0d98b437a2b3ee7c2e" title="VectorFloat::getRotated" alt="" coords="607,56,768,83"/>
+</map>

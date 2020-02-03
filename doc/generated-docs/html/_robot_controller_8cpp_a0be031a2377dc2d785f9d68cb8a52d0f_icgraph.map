@@ -1,0 +1,4 @@
+<map id="boundScaling" name="boundScaling">
+<area shape="rect" id="node2" href="$class_robot_controller.html#a4f66f557ece17aaea14884d7b914a24c" title="Updates the wheels such that they try to follow the target Outputs the correct motor commands to do t..." alt="" coords="153,5,327,47"/>
+<area shape="rect" id="node3" href="$class_motion_control_module.html#a64ff50f42659f6bad0912a5b6f86d73e" title="MotionControlModule\l::entry" alt="" coords="375,5,520,47"/>
+</map>

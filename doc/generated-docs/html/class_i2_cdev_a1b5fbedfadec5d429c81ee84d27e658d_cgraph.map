@@ -1,0 +1,6 @@
+<map id="I2Cdev::writeBitW" name="I2Cdev::writeBitW">
+<area shape="rect" id="node2" href="$class_i2_cdev.html#af8817e7bfb53ad2a62c5d0f62066d2cf" title="Read single word from a 16&#45;bit device register. " alt="" coords="184,5,312,32"/>
+<area shape="rect" id="node4" href="$class_i2_cdev.html#acbe68a802d6a177301736e60bedd1def" title="Write single word to a 16&#45;bit device register. " alt="" coords="183,56,313,83"/>
+<area shape="rect" id="node3" href="$class_i2_cdev.html#a3d652d8428f23fe6a51dcc168d4cac3b" title="I2Cdev::readWords" alt="" coords="361,5,496,32"/>
+<area shape="rect" id="node5" href="$class_i2_cdev.html#aa4e39cac6c0eac5112f9132084bcc93e" title="I2Cdev::writeBytes" alt="" coords="361,56,496,83"/>
+</map>

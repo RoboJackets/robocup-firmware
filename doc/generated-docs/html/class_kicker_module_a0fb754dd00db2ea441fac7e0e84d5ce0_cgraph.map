@@ -1,0 +1,11 @@
+<map id="KickerModule::KickerModule" name="KickerModule::KickerModule">
+<area shape="rect" id="node2" href="$class_kicker_board.html#a28cc7187d0a26480ecab58f733913adb" title="Reflashes the program on the kicker board MCU with the file specified. " alt="" coords="241,181,371,208"/>
+<area shape="rect" id="node3" href="$class_a_v_r910.html#a24a91ddb881d8e0d27c1cb203d0f7349" title="Read the vendor code of the device. " alt="" coords="426,5,602,32"/>
+<area shape="rect" id="node5" href="$class_a_v_r910.html#a07c549c137848a2ecf78e1dcb241816e" title="Read the part family and flash size of the device. " alt="" coords="419,57,609,98"/>
+<area shape="rect" id="node6" href="$class_a_v_r910.html#ad1717b6ab05e7c0aba237a7c147354ae" title="Read the part number. " alt="" coords="427,123,601,149"/>
+<area shape="rect" id="node7" href="$class_kicker_board.html#a34de349bcf21d784909184b41e0d944f" title="Uses the given function to check if it&#39;s return value equals the expected value. " alt="" coords="447,174,581,215"/>
+<area shape="rect" id="node8" href="$class_a_v_r910.html#a6390cd4b442aa6267d934357ebdb42b9" title="Brings the reset line high to exit programming mode. " alt="" coords="657,265,835,292"/>
+<area shape="rect" id="node9" href="$class_a_v_r910.html#a3d5e6c907a6c31e47e05557fc713f0f0" title="Check the binary has been written correctly. " alt="" coords="665,328,827,355"/>
+<area shape="rect" id="node10" href="$class_a_v_r910.html#a355ef9fb0c84d822fb50bff21ff1a7b8" title="Program the AVR microcontroller connected to the mbed. " alt="" coords="451,291,577,317"/>
+<area shape="rect" id="node4" href="$class_a_v_r910.html#a4e99d5a29dc0e48069cebd1f26c83800" title="AVR910::readRegister" alt="" coords="669,64,823,91"/>
+</map>

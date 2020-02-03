@@ -1,0 +1,5 @@
+<map id="BatteryModule::entry" name="BatteryModule::entry">
+<area shape="rect" id="node2" href="$class_battery.html#a85dcc13e31dfb66ce3ce217b78a7df7c" title="Battery::update" alt="" coords="214,5,325,32"/>
+<area shape="rect" id="node3" href="$class_battery.html#adcda499b303251aac697577249df77ff" title="Battery::getRaw" alt="" coords="211,56,328,83"/>
+<area shape="rect" id="node4" href="$class_battery.html#afb3dd22b444cb281d76e187a92ce8ec1" title="Battery::isBattCritical" alt="" coords="196,107,343,133"/>
+</map>

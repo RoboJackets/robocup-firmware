@@ -1,0 +1,8 @@
+<map id="robot/control/Src/modules/IMUModule.cpp" name="robot/control/Src/modules/IMUModule.cpp">
+<area shape="rect" id="node2" href="$_i_m_u_module_8hpp.html" title="modules/IMUModule.hpp" alt="" coords="396,95,563,121"/>
+<area shape="rect" id="node4" href="$_generic_module_8hpp.html" title="GenericModule.hpp" alt="" coords="464,169,599,196"/>
+<area shape="rect" id="node6" href="$_micro_packets_8hpp.html" title="MicroPackets.hpp" alt="" coords="623,169,749,196"/>
+<area shape="rect" id="node7" href="$_m_p_u6050_8h.html" title="drivers/MPU6050.h" alt="" coords="155,169,289,196"/>
+<area shape="rect" id="node8" href="$_i2_cdev_8h.html" title="Internal/I2Cdev.h" alt="" coords="77,244,199,271"/>
+<area shape="rect" id="node10" href="$helper__3dmath_8h.html" title="Internal/helper_3dmath.h" alt="" coords="223,244,389,271"/>
+</map>

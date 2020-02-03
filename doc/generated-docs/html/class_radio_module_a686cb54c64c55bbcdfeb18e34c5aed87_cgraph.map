@@ -1,0 +1,4 @@
+<map id="RadioModule::entry" name="RadioModule::entry">
+<area shape="rect" id="node2" href="$class_radio_link.html#a8189adde363d5fe27b29e045b775ae7f" title="Sends a packet of data to the radio. " alt="" coords="195,5,311,32"/>
+<area shape="rect" id="node3" href="$class_radio_link.html#a12a8932314eab725e90308ae23dfa5aa" title="Receive the latest packet from the radio Only fills data portion of structs. " alt="" coords="188,56,319,83"/>
+</map>

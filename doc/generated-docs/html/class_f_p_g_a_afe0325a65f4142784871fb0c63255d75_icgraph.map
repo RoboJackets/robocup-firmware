@@ -1,0 +1,4 @@
+<map id="FPGA::send_config" name="FPGA::send_config">
+<area shape="rect" id="node2" href="$class_f_p_g_a.html#a77752bb708e4d7f5e691110e3e2480e7" title="Configure FPGA with the &quot;fpga_bin.h&quot; binary Must be called to initialize the fpga. " alt="" coords="189,5,308,32"/>
+<area shape="rect" id="node3" href="$class_f_p_g_a_module.html#a43b8f7f1188aa623478aa5fb38d72e3a" title="FPGAModule::FPGAModule" alt="" coords="356,5,543,32"/>
+</map>

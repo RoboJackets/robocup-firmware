@@ -1,0 +1,8 @@
+<map id="I2Cdev::readWords" name="I2Cdev::readWords">
+<area shape="rect" id="node2" href="$class_i2_cdev.html#a2f70586510cbda5c5267a10b4ca220b9" title="I2Cdev::I2Cdev" alt="" coords="548,87,663,113"/>
+<area shape="rect" id="node3" href="$class_i2_cdev.html#af8817e7bfb53ad2a62c5d0f62066d2cf" title="Read single word from a 16&#45;bit device register. " alt="" coords="188,87,316,113"/>
+<area shape="rect" id="node4" href="$class_i2_cdev.html#aa8744b2a73a96254ef2bd0d87f0f4aeb" title="Read a single bit from a 16&#45;bit device register. " alt="" coords="369,61,495,88"/>
+<area shape="rect" id="node5" href="$class_i2_cdev.html#afbeeb8ece31be866c9d7169ae1d91f6b" title="Read multiple bits from a 16&#45;bit device register. " alt="" coords="365,112,499,139"/>
+<area shape="rect" id="node6" href="$class_i2_cdev.html#a1b5fbedfadec5d429c81ee84d27e658d" title="write a single bit in a 16&#45;bit device register. " alt="" coords="367,163,497,189"/>
+<area shape="rect" id="node7" href="$class_i2_cdev.html#a8f8652a1328224cce867eed665a45c4d" title="Write multiple bits in a 16&#45;bit device register. " alt="" coords="364,213,500,240"/>
+</map>

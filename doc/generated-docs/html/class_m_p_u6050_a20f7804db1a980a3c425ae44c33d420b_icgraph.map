@@ -1,0 +1,5 @@
+<map id="MPU6050::getStandbyZGyroEnabled" name="MPU6050::getStandbyZGyroEnabled">
+<area shape="rect" id="node2" href="$class_m_p_u6050.html#a4c1cd147d038e024bdeaa053c4d77734" title="Set clock source setting. " alt="" coords="244,13,425,39"/>
+<area shape="rect" id="node3" href="$class_i_m_u_module.html#aa5d654a2113ba36f90a57570e1243b89" title="IMUModule::IMUModule" alt="" coords="656,13,820,39"/>
+<area shape="rect" id="node4" href="$class_m_p_u6050.html#abd8fc6c18adf158011118fbccc7e7054" title="Power on and prepare for general usage. " alt="" coords="473,38,608,65"/>
+</map>

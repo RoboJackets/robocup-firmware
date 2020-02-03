@@ -1,0 +1,18 @@
+<map id="I2Cdev::readBits" name="I2Cdev::readBits">
+<area shape="rect" id="node2" href="$class_i2_cdev.html#a2f70586510cbda5c5267a10b4ca220b9" title="I2Cdev::I2Cdev" alt="" coords="227,5,341,32"/>
+<area shape="rect" id="node3" href="$class_m_p_u6050.html#a902a7d486cd6ac21f8c378634dc6f59a" title="Get external FSYNC configuration. " alt="" coords="173,56,395,83"/>
+<area shape="rect" id="node4" href="$class_m_p_u6050.html#a9f2737fe22955fd85b2575ba8da874c6" title="Get digital low&#45;pass filter configuration. " alt="" coords="198,107,370,133"/>
+<area shape="rect" id="node5" href="$class_m_p_u6050.html#acb1fa088d43d76230106a3226f343013" title="Get full&#45;scale gyroscope range. " alt="" coords="190,158,378,199"/>
+<area shape="rect" id="node6" href="$class_m_p_u6050.html#a0fe2dad60c170cee7d614e08f243ffd0" title="Get full&#45;scale accelerometer range. " alt="" coords="187,223,381,265"/>
+<area shape="rect" id="node7" href="$class_m_p_u6050.html#a4c3b84a906fcb5a65870fa557f797f4a" title="Get the high&#45;pass filter configuration. " alt="" coords="197,289,371,316"/>
+<area shape="rect" id="node8" href="$class_m_p_u6050.html#a4cda448ef5c5736bd14188947342d636" title="Get I2C master clock speed. " alt="" coords="175,340,393,367"/>
+<area shape="rect" id="node9" href="$class_m_p_u6050.html#a54c2a48b3cb79106bcaf75accf6cd311" title="Get number of bytes to read for the specified slave (0&#45;3). " alt="" coords="181,391,387,417"/>
+<area shape="rect" id="node10" href="$class_m_p_u6050.html#a9a4585b3c9e61478db198011107a56a9" title="Get Slave 4 master delay value. " alt="" coords="191,442,377,483"/>
+<area shape="rect" id="node11" href="$class_m_p_u6050.html#aae903df2accc687423f9cd0a78f9cd32" title="Get accelerometer power&#45;on delay. " alt="" coords="189,507,379,549"/>
+<area shape="rect" id="node12" href="$class_m_p_u6050.html#af6d6fa9869636989a8b29c4827ad7de8" title="Get Free Fall detection counter decrement configuration. " alt="" coords="181,573,387,614"/>
+<area shape="rect" id="node13" href="$class_m_p_u6050.html#a0ed8de8eb440dbfdec829297527b0da6" title="Get Motion detection counter decrement configuration. " alt="" coords="183,638,385,679"/>
+<area shape="rect" id="node14" href="$class_m_p_u6050.html#a8ed670258a805807b5102cdc5d0996a8" title="Get clock source setting. " alt="" coords="193,704,375,731"/>
+<area shape="rect" id="node15" href="$class_m_p_u6050.html#a4c1cd147d038e024bdeaa053c4d77734" title="Set clock source setting. " alt="" coords="193,755,375,781"/>
+<area shape="rect" id="node16" href="$class_i_m_u_module.html#aa5d654a2113ba36f90a57570e1243b89" title="IMUModule::IMUModule" alt="" coords="625,755,789,781"/>
+<area shape="rect" id="node17" href="$class_m_p_u6050.html#abd8fc6c18adf158011118fbccc7e7054" title="Power on and prepare for general usage. " alt="" coords="443,780,577,807"/>
+</map>

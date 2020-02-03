@@ -1,0 +1,9 @@
+<map id="robot/control/Inc/iodefs.h" name="robot/control/Inc/iodefs.h">
+<area shape="rect" id="node2" href="$control_2main_8cpp.html" title="robot/control/main.cpp" alt="" coords="5,87,156,114"/>
+<area shape="rect" id="node3" href="$_f_p_g_a_module_8cpp.html" title="robot/control/Src/modules\l/FPGAModule.cpp" alt="" coords="181,80,351,121"/>
+<area shape="rect" id="node4" href="$_kicker_module_8cpp.html" title="robot/control/Src/modules\l/KickerModule.cpp" alt="" coords="375,80,546,121"/>
+<area shape="rect" id="node5" href="$_l_e_d_module_8cpp.html" title="robot/control/Src/modules\l/LEDModule.cpp" alt="" coords="570,80,741,121"/>
+<area shape="rect" id="node6" href="$_radio_module_8cpp.html" title="robot/control/Src/modules\l/RadioModule.cpp" alt="" coords="765,80,935,121"/>
+<area shape="rect" id="node7" href="$_rotary_dial_module_8cpp.html" title="robot/control/Src/modules\l/RotaryDialModule.cpp" alt="" coords="959,80,1130,121"/>
+<area shape="rect" id="node8" href="$_radio_link_8cpp.html" title="robot/control/Src/radio\l/RadioLink.cpp" alt="" coords="1155,80,1305,121"/>
+</map>

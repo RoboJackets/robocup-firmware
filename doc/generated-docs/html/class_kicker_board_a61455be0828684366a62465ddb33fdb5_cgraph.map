@@ -1,0 +1,7 @@
+<map id="KickerBoard::flash" name="KickerBoard::flash">
+<area shape="rect" id="node2" href="$class_a_v_r910.html#a24a91ddb881d8e0d27c1cb203d0f7349" title="Read the vendor code of the device. " alt="" coords="190,5,366,32"/>
+<area shape="rect" id="node4" href="$class_a_v_r910.html#a07c549c137848a2ecf78e1dcb241816e" title="Read the part family and flash size of the device. " alt="" coords="183,57,373,98"/>
+<area shape="rect" id="node5" href="$class_a_v_r910.html#ad1717b6ab05e7c0aba237a7c147354ae" title="Read the part number. " alt="" coords="191,123,365,149"/>
+<area shape="rect" id="node6" href="$class_kicker_board.html#a34de349bcf21d784909184b41e0d944f" title="Uses the given function to check if it&#39;s return value equals the expected value. " alt="" coords="211,174,345,215"/>
+<area shape="rect" id="node3" href="$class_a_v_r910.html#a4e99d5a29dc0e48069cebd1f26c83800" title="AVR910::readRegister" alt="" coords="421,64,575,91"/>
+</map>

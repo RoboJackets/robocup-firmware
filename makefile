@@ -33,9 +33,11 @@ $(ROBOT_TESTS:%=test-%-upload): configure
 debug : BUILDTYPE = "Debug"
 debug : kicker robot
 
+# Markdowns and target for doxygen are built in doc and then symlinked to docs for easy access and github pages usage
 docs:
-	doxygen docs/Doxyfile
-	cp docs/doxygen.css docs/generated-docs/html/
+	doxygen doc/Doxyfile
+	cp doc/doxygen.css doc/generated-docs/html/
+	ln -s doc/generated-docs/html/ docs
 
 clean:
 	rm -rf kicker/build

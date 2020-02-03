@@ -1,0 +1,5 @@
+<map id="is_kicking" name="is_kicking">
+<area shape="rect" id="node2" href="$main_8c.html#a0d4f8db41b896b615e70d355cfacf056" title="start the kick FSM for desired strength. " alt="" coords="133,31,180,57"/>
+<area shape="rect" id="node3" href="$main_8c.html#ae702ed1cac6218459a4450e242b21e6f" title="handle_debug_mode" alt="" coords="228,5,369,32"/>
+<area shape="rect" id="node4" href="$main_8c.html#acdef7a1fd863a6d3770c1268cb06add3" title="main" alt="" coords="417,31,468,57"/>
+</map>

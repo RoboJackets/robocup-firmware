@@ -1,0 +1,4 @@
+<map id="apply_wheel_force" name="apply_wheel_force">
+<area shape="rect" id="node2" href="$class_robot_controller.html#acf446453660614222a9288b8b9cf88b5" title="Updates the controller with the latest input and calculates the correct wheel velocities to reach thi..." alt="" coords="184,13,387,39"/>
+<area shape="rect" id="node3" href="$class_motion_control_module.html#a64ff50f42659f6bad0912a5b6f86d73e" title="MotionControlModule\l::entry" alt="" coords="435,5,580,47"/>
+</map>

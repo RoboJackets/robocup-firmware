@@ -1,0 +1,7 @@
+<map id="init" name="init">
+<area shape="rect" id="node2" href="$_h_a_l__attiny167_8c.html#ae0644f080d1fab2bc4376a7720cd0a2e" title="HAL_SetInputPin" alt="" coords="97,5,220,32"/>
+<area shape="rect" id="node3" href="$_h_a_l__attiny167_8c.html#aa889ca0f7fc0bfa49791b8aba3f0d856" title="HAL_SetOutputPin" alt="" coords="92,56,225,83"/>
+<area shape="rect" id="node4" href="$_h_a_l__attiny167_8c.html#a53b3bca1b91e57ba0d4a459ac71d3be5" title="HAL_ClearPin" alt="" coords="106,107,211,133"/>
+<area shape="rect" id="node5" href="$_h_a_l__attiny167_8c.html#a77acad64af22fb372955df7d7e4a2606" title="HAL_SetPin" alt="" coords="111,157,206,184"/>
+<area shape="rect" id="node6" href="$_h_a_l__attiny167_8c.html#a0dd22df2d0fc638d04ea0c31d39d111e" title="HAL_IsSet" alt="" coords="115,208,202,235"/>
+</map>

@@ -1,0 +1,8 @@
+<map id="I2Cdev::writeWord" name="I2Cdev::writeWord">
+<area shape="rect" id="node2" href="$class_i2_cdev.html#a2f70586510cbda5c5267a10b4ca220b9" title="I2Cdev::I2Cdev" alt="" coords="423,26,538,52"/>
+<area shape="rect" id="node3" href="$class_i2_cdev.html#a1b5fbedfadec5d429c81ee84d27e658d" title="write a single bit in a 16&#45;bit device register. " alt="" coords="210,26,339,52"/>
+<area shape="rect" id="node4" href="$class_i2_cdev.html#a8f8652a1328224cce867eed665a45c4d" title="Write multiple bits in a 16&#45;bit device register. " alt="" coords="207,76,343,103"/>
+<area shape="rect" id="node5" href="$class_m_p_u6050.html#a4c1cd147d038e024bdeaa053c4d77734" title="Set clock source setting. " alt="" coords="184,127,365,154"/>
+<area shape="rect" id="node6" href="$class_i_m_u_module.html#aa5d654a2113ba36f90a57570e1243b89" title="IMUModule::IMUModule" alt="" coords="596,127,760,154"/>
+<area shape="rect" id="node7" href="$class_m_p_u6050.html#abd8fc6c18adf158011118fbccc7e7054" title="Power on and prepare for general usage. " alt="" coords="413,152,548,179"/>
+</map>
