@@ -1,13 +1,7 @@
 var NAVTREEINDEX4 =
 {
-"control_2main_8cpp.html#a78263cc0d6c3b07fae2f3c9c6e86c169":[13,0,1,2,2,10],
-"control_2main_8cpp.html#aa1a694fb50e6e817afd913b936963688":[13,0,1,2,2,7],
-"control_2main_8cpp.html#abf403f64724e718bf5c7d363faed7adb":[13,0,1,2,2,6],
 "control_2main_8cpp.html#adfbcd451d989bdd9120ff9f2bfd95d01":[13,0,1,2,2,8],
 "control_2main_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4":[13,0,1,2,2,3],
-"control_2rtos__hooks_8c.html":[13,0,1,2,3],
-"control_2rtos__hooks_8c.html#a1988aa923b19fa6f31c93afa7773f793":[13,0,1,2,3,0],
-"control_2rtos__hooks_8c.html#a1e80ecbd3fc2d04f18d6409ffa893a86":[13,0,1,2,3,1],
 "dir_03faaa9710dfdee801b4b6f66f28d0cc.html":[13,0,1,4,0,0],
 "dir_087824843af999929d24013060a6b935.html":[13,0,1,2,0,1],
 "dir_087b0e998215125283ff0c7e65252361.html":[13,0,1,2,1,0],
@@ -58,8 +52,8 @@ var NAVTREEINDEX4 =
 "functions_enum.html":[12,3,3],
 "functions_eval.html":[12,3,4],
 "functions_f.html":[12,3,0,5],
-"functions_func.html":[12,3,1],
 "functions_func.html":[12,3,1,0],
+"functions_func.html":[12,3,1],
 "functions_func_b.html":[12,3,1,1],
 "functions_func_c.html":[12,3,1,2],
 "functions_func_d.html":[12,3,1,3],
@@ -164,8 +158,8 @@ var NAVTREEINDEX4 =
 "helper__3dmath_8h.html":[13,0,1,4,0,1,0,0],
 "helper__3dmath_8h_source.html":[13,0,1,4,0,1,0,0],
 "hierarchy.html":[12,2],
-"index.html":[],
 "index.html":[0],
+"index.html":[],
 "iodefs_8h.html":[13,0,1,2,0,3],
 "iodefs_8h.html#a0c4b76a17ffc7fa61d17c613001d3189":[13,0,1,2,0,3,27],
 "iodefs_8h.html#a155d24c9cab4217c2c96ee2c5fb099f7":[13,0,1,2,0,3,21],
@@ -249,5 +243,11 @@ var NAVTREEINDEX4 =
 "kicker__commands_8h_source.html":[13,0,1,4,0,1,0,2],
 "kicker__config_8h.html":[13,0,0,3],
 "kicker__config_8h.html#a487d5371cc6a1299308f58d88dde7e96":[13,0,0,3,1],
-"kicker__config_8h.html#ab0d6f4c9dadfffe335f2c3ea15a4b828":[13,0,0,3,0]
+"kicker__config_8h.html#ab0d6f4c9dadfffe335f2c3ea15a4b828":[13,0,0,3,0],
+"kicker__config_8h_source.html":[13,0,0,3],
+"main_8c.html":[13,0,0,4],
+"main_8c.html#a01bbd779f25a828ba61d738cfad6bd8e":[13,0,0,4,30],
+"main_8c.html#a02fd73d861ef2e4aabb38c0c9ff82947":[13,0,0,4,21],
+"main_8c.html#a09929c9eec637ba28ea43892568cb506":[13,0,0,4,40],
+"main_8c.html#a0d4f8db41b896b615e70d355cfacf056":[13,0,0,4,25]
 };

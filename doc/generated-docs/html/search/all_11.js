@@ -81,7 +81,6 @@ var searchData=
   ['rotaryselector_3c_20ioexpanderdigitalinout_20_3e',['RotarySelector&lt; IOExpanderDigitalInOut &gt;',['../class_rotary_selector.html',1,'']]],
   ['rotate',['rotate',['../class_vector_int16.html#ac7bf149db0a2b66d7683b87ebeb2dfc5',1,'VectorInt16::rotate()'],['../class_vector_float.html#afef0e6d631fb1eb67b6913e90730aa9e',1,'VectorFloat::rotate()']]],
   ['rtos_2ecpp',['rtos.cpp',['../rtos_8cpp.html',1,'']]],
-  ['rtos_5fhooks_2ec',['rtos_hooks.c',['../base_2rtos__hooks_8c.html',1,'(Global Namespace)'],['../control_2rtos__hooks_8c.html',1,'(Global Namespace)']]],
   ['rtp',['rtp',['../namespacertp.html',1,'']]],
   ['rtp_2ehpp',['rtp.hpp',['../rtp_8hpp.html',1,'']]],
   ['run',['run',['../class_pid.html#a594752a40e7ee5555e2f5918df67d87e',1,'Pid']]],

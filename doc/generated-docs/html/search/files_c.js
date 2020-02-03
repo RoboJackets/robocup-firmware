@@ -14,6 +14,5 @@ var searchData=
   ['rotarydialmodule_2ehpp',['RotaryDialModule.hpp',['../_rotary_dial_module_8hpp.html',1,'']]],
   ['rotaryselector_2ehpp',['RotarySelector.hpp',['../_rotary_selector_8hpp.html',1,'']]],
   ['rtos_2ecpp',['rtos.cpp',['../rtos_8cpp.html',1,'']]],
-  ['rtos_5fhooks_2ec',['rtos_hooks.c',['../base_2rtos__hooks_8c.html',1,'(Global Namespace)'],['../control_2rtos__hooks_8c.html',1,'(Global Namespace)']]],
   ['rtp_2ehpp',['rtp.hpp',['../rtp_8hpp.html',1,'']]]
 ];

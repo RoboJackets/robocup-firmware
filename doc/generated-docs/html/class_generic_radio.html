@@ -31,7 +31,7 @@
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">GT RoboCup SSL
    </div>
-   <div id="projectbrief">Firmware for soccer playing robots</div>
+   <div id="projectbrief">Soccer software, robot firmware</div>
   </td>
  </tr>
  </tbody>
@@ -88,19 +88,6 @@ $(document).ready(function(){initNavTree('class_generic_radio.html','');});
 <div class="title">GenericRadio Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
-<table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
-Public Member Functions</h2></td></tr>
-<tr class="memitem:ac88e2085c48fd612998440844d5468a5"><td class="memItemLeft" align="right" valign="top">virtual unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_radio.html#ac88e2085c48fd612998440844d5468a5">send</a> (const uint8_t *data, const unsigned int numBytes)=0</td></tr>
-<tr class="memdesc:ac88e2085c48fd612998440844d5468a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Blocking call to send X number of bytes from <code>data</code> over the radio.  <a href="#ac88e2085c48fd612998440844d5468a5">More...</a><br /></td></tr>
-<tr class="separator:ac88e2085c48fd612998440844d5468a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abcfec5e072ab5ec7da0dd78658616d6f"><td class="memItemLeft" align="right" valign="top">virtual unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_radio.html#abcfec5e072ab5ec7da0dd78658616d6f">receive</a> (uint8_t *data, const unsigned int maxNumBytes)=0</td></tr>
-<tr class="memdesc:abcfec5e072ab5ec7da0dd78658616d6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Blocking call to write up to <code>maxNumBytes</code> into <code>data</code> from the radio.  <a href="#abcfec5e072ab5ec7da0dd78658616d6f">More...</a><br /></td></tr>
-<tr class="separator:abcfec5e072ab5ec7da0dd78658616d6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a40c525e1097ea507c9445c370b28a6ea"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_radio.html#a40c525e1097ea507c9445c370b28a6ea">isAvailable</a> ()=0</td></tr>
-<tr class="memdesc:a40c525e1097ea507c9445c370b28a6ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true when there is data to read from the radio.  <a href="#a40c525e1097ea507c9445c370b28a6ea">More...</a><br /></td></tr>
-<tr class="separator:a40c525e1097ea507c9445c370b28a6ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for GenericRadio:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -117,9 +104,20 @@ Public Member Functions</h2></td></tr>
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="class_generic_radio__coll__graph.png" border="0" usemap="#_generic_radio_coll__map" alt="Collaboration graph"/></div>
-<map name="_generic_radio_coll__map" id="_generic_radio_coll__map">
-</map>
 </div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:ac88e2085c48fd612998440844d5468a5"><td class="memItemLeft" align="right" valign="top">virtual unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_radio.html#ac88e2085c48fd612998440844d5468a5">send</a> (const uint8_t *data, const unsigned int numBytes)=0</td></tr>
+<tr class="memdesc:ac88e2085c48fd612998440844d5468a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Blocking call to send X number of bytes from <code>data</code> over the radio.  <a href="#ac88e2085c48fd612998440844d5468a5">More...</a><br /></td></tr>
+<tr class="separator:ac88e2085c48fd612998440844d5468a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abcfec5e072ab5ec7da0dd78658616d6f"><td class="memItemLeft" align="right" valign="top">virtual unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_radio.html#abcfec5e072ab5ec7da0dd78658616d6f">receive</a> (uint8_t *data, const unsigned int maxNumBytes)=0</td></tr>
+<tr class="memdesc:abcfec5e072ab5ec7da0dd78658616d6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Blocking call to write up to <code>maxNumBytes</code> into <code>data</code> from the radio.  <a href="#abcfec5e072ab5ec7da0dd78658616d6f">More...</a><br /></td></tr>
+<tr class="separator:abcfec5e072ab5ec7da0dd78658616d6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40c525e1097ea507c9445c370b28a6ea"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_radio.html#a40c525e1097ea507c9445c370b28a6ea">isAvailable</a> ()=0</td></tr>
+<tr class="memdesc:a40c525e1097ea507c9445c370b28a6ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true when there is data to read from the radio.  <a href="#a40c525e1097ea507c9445c370b28a6ea">More...</a><br /></td></tr>
+<tr class="separator:a40c525e1097ea507c9445c370b28a6ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a40c525e1097ea507c9445c370b28a6ea"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a40c525e1097ea507c9445c370b28a6ea">&#9670;&nbsp;</a></span>isAvailable()</h2>
@@ -257,7 +255,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_generic_radio.html">GenericRadio</a></li>
-    <li class="footer">Generated on Sat Jan 18 2020 19:41:00 for GT RoboCup SSL by
+    <li class="footer">Generated on Mon Feb 3 2020 13:37:32 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

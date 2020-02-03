@@ -31,7 +31,7 @@
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">GT RoboCup SSL
    </div>
-   <div id="projectbrief">Firmware for soccer playing robots</div>
+   <div id="projectbrief">Soccer software, robot firmware</div>
   </td>
  </tr>
  </tbody>
@@ -89,7 +89,7 @@ $(document).ready(function(){initNavTree('md_doc_m_train_flashing_and_debugging.
 <p>The mTrain on boot runs the user program located at the predetermined memory address 0x0800000 We flash code to this address using the J-Link in-order to be executed.</p>
 <h2>Installing J-Link Software</h2>
 <p>The J-Link software can be downloaded at: <a href="https://www.segger.com/downloads/jlink/#J-LinkSoftwareAndDocumentationPack">https://www.segger.com/downloads/jlink/#J-LinkSoftwareAndDocumentationPack</a> For Ubuntu you want to download the file labeled as 'J-Link Software and Documentation pack for Linux, DEB installer, 64-bit'</p>
-<p>Provided that file was stored in your downloads folder you can use the below to install the package: </p><div class="fragment"><div class="line">sudo dpkg -i ~/downloads/JLink_Linux_V656a_x86_64.deb</div><div class="line">sudo apt install -f</div></div><!-- fragment --><p>NOTE The name of the exact file may be slightly different depending on what version you downloaded so copying and pasting the above may not work.</p>
+<p>Provided that file was stored in your downloads folder you can use the below to install the package: </p><div class="fragment"><div class="line">sudo dpkg -i ~/Downloads/JLink_Linux_V656a_x86_64.deb</div><div class="line">sudo apt install -f</div></div><!-- fragment --><p>NOTE The name of the exact file may be slightly different depending on what version you downloaded so copying and pasting the above may not work.</p>
 <p>After installing the J-Link software package please restart your terminal emulator and try to tab complete and open the program JLinkExe. If you are successful you will be greeted by the following:</p>
 <div class="fragment"><div class="line">SEGGER J-Link Commander V6.56 (Compiled Nov 22 2019 17:14:15)</div><div class="line">DLL version V6.56, compiled Nov 22 2019 17:14:02</div></div><!-- fragment --><p>Followed by a can not connect error if the J-Link is not connected. Close JLinkExe with exit.</p>
 <h2>Setup The JLink Unit</h2>
@@ -98,9 +98,8 @@ $(document).ready(function(){initNavTree('md_doc_m_train_flashing_and_debugging.
 <p>Plug in the mTrain mini usb connector and plug the other end to your computer. TODO attach picture here of JLink header and where it connects on the mtrain</p>
 <p>The mini usb powers the mTrain if its not receiving power from the board so it should light up after this.</p>
 <h2>Flashing code to the mTrain</h2>
-<p>If you have not already setup robocup-firmware to build do that now (following the guide in getting started). To build it again run the following: </p><div class="fragment"><div class="line">make all</div></div><!-- fragment --><p>After building navigate to the top level of the robojackets firmware repo. Then navigate to the build location of the robocup binaries: </p><div class="fragment"><div class="line">cd robot/build/bin/</div></div><!-- fragment --><p>Run J-LinkExe </p><div class="fragment"><div class="line">JLinkExe</div></div><!-- fragment --><p>At this point you will get the same message as in the setting up jlink software section followed by a wall of information on the processor. If you didnt get a wall of processor information the J-Link did not auto connect and thus you will need to connect via 'connect' and hitting enter to use all the default options.</p>
-<p>At this point you should get a message that you have connected.</p>
-<p>To program the radio use: </p><div class="fragment"><div class="line">loadbin ./control.bin 0x08000000</div></div><!-- fragment --><p>You should now see a progress bar for erasing flash and subsequently flashing memory. After this completes your are done and can exit J-Link. Restart the mTrain with the push button on top of the module and your code should now be running.</p>
+<p>If you have not already setup robocup-firmware to build do that now (following the guide in getting started). To build it again run the following: </p><div class="fragment"><div class="line">make all</div></div><!-- fragment --><p>After building navigate to the top level of the robojackets firmware repo. Then navigate to the build location of the robocup binaries: </p><div class="fragment"><div class="line">cd robot/build/bin/</div></div><!-- fragment --><p>Run J-LinkExe </p><div class="fragment"><div class="line">JLinkExe</div></div><!-- fragment --><p>At this point you will get the same message as in the setting up jlink software section. Then you need to connect to the processor via the following command </p><div class="fragment"><div class="line">connect</div></div><!-- fragment --><p> continue hitting enter to use all the default options and you should get a wall of processor information and a message that you have connected.</p>
+<p>To program the mtrain use: </p><div class="fragment"><div class="line">loadbin ./control.bin 0x08000000</div></div><!-- fragment --><p>You should now see a progress bar for erasing flash and subsequently flashing memory. After this completes your are done and can exit J-Link. Restart the mTrain with the push button on top of the module and your code should now be running.</p>
 <h1>Debugging mTrain</h1>
 <h2>Whats different than using GDB as usual?</h2>
 <p>Using GDB for debugging with RoboCup Firmware is different than debugging a program on your computer. Normally when start up an instance of GDB, you either start it with a binary name or use file after starting along with a file path to a binary to debug. If a binary is compiled with debug symbols (eg using the -g flag on gcc) the binary will have a symbol table which stores the human readable symbol names for memory locations (variables). Of course in addition to loading the symbol table if it exist gdb also loads the program into your memory and then waits for your to issue run before executing any instructions.</p>
@@ -119,7 +118,7 @@ $(document).ready(function(){initNavTree('md_doc_m_train_flashing_and_debugging.
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sat Jan 18 2020 19:40:59 for GT RoboCup SSL by
+    <li class="footer">Generated on Mon Feb 3 2020 13:37:32 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

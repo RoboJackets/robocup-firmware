@@ -1,11 +1,5 @@
 var NAVTREEINDEX5 =
 {
-"kicker__config_8h_source.html":[13,0,0,3],
-"main_8c.html":[13,0,0,4],
-"main_8c.html#a01bbd779f25a828ba61d738cfad6bd8e":[13,0,0,4,30],
-"main_8c.html#a02fd73d861ef2e4aabb38c0c9ff82947":[13,0,0,4,21],
-"main_8c.html#a09929c9eec637ba28ea43892568cb506":[13,0,0,4,40],
-"main_8c.html#a0d4f8db41b896b615e70d355cfacf056":[13,0,0,4,25],
 "main_8c.html#a174eb2c9383620acac5e156c3581d51d":[13,0,0,4,43],
 "main_8c.html#a2017b011897009154e88099ab7e43a65":[13,0,0,4,19],
 "main_8c.html#a257602aaf496b5bd2d54a23f5d851174":[13,0,0,4,27],
@@ -57,8 +51,8 @@ var NAVTREEINDEX5 =
 "md_doc__git.html":[8],
 "md_doc__kicker.html":[9],
 "md_doc_m_train_flashing_and_debugging.html":[10],
-"namespace_i_s_m_constants.html":[11,0,1],
 "namespace_i_s_m_constants.html":[12,0,1],
+"namespace_i_s_m_constants.html":[11,0,1],
 "namespace_i_s_m_constants_1_1_t_y_p_e___a_u_t_h_o_r_i_z_a_t_i_o_n.html":[11,0,1,0],
 "namespace_i_s_m_constants_1_1_t_y_p_e___g_p_i_o___s_e_t_u_p.html":[11,0,1,1],
 "namespace_i_s_m_constants_1_1_t_y_p_e___i_g_m_p___g_r_o_u_p.html":[11,0,1,2],
@@ -85,8 +79,8 @@ var NAVTREEINDEX5 =
 "namespacemembers_func.html":[11,1,1],
 "namespacemembers_type.html":[11,1,3],
 "namespacemembers_vars.html":[11,1,2],
-"namespacertp.html":[12,0,2],
 "namespacertp.html":[11,0,2],
+"namespacertp.html":[12,0,2],
 "namespacertp_1_1_message_type_namespace.html":[11,0,2,0],
 "namespacertp_1_1_port_type_namespace.html":[11,0,2,1],
 "namespaces.html":[11,0],
@@ -249,5 +243,11 @@ var NAVTREEINDEX5 =
 "struct_motor_command.html#a605fc6ceb438c3c1aa19f4e6da1e3834":[12,0,27,0],
 "struct_motor_command.html#aaccada5331e74061402c0b492c7c885e":[12,0,27,2],
 "struct_motor_command.html#ab361cbe148158676f7f19f3d9bb26aa9":[12,0,27,1],
-"struct_motor_command.html#afd6666629a9936c6ca79d162f5b70657":[12,0,27,3]
+"struct_motor_command.html#afd6666629a9936c6ca79d162f5b70657":[12,0,27,3],
+"struct_motor_feedback.html":[12,0,28],
+"struct_motor_feedback.html#a8514ac244bc482f002e989f57225c211":[12,0,28,2],
+"struct_motor_feedback.html#a8600cf3da11509c8165d6f1eeca2d3d5":[12,0,28,1],
+"struct_motor_feedback.html#aa19dbad1c45449593ac32a68d401d0ef":[12,0,28,0],
+"struct_motor_feedback.html#afa6e6bce214fbaf87b35e444cd3e7796":[12,0,28,3],
+"struct_radio_error.html":[12,0,33]
 };

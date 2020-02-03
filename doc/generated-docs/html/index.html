@@ -31,7 +31,7 @@
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">GT RoboCup SSL
    </div>
-   <div id="projectbrief">Firmware for soccer playing robots</div>
+   <div id="projectbrief">Soccer software, robot firmware</div>
   </td>
  </tr>
  </tbody>
@@ -88,12 +88,7 @@ $(document).ready(function(){initNavTree('index.html','');});
 <div class="textblock"><h2>Command line basics</h2>
 <p>For a brief introduction to how to use the command line see <a class="el" href="_command_line_basics_8md.html">here</a></p>
 <h2>Setting up the robocup-firmware repository</h2>
-<p>### Clone the repositories </p><div class="fragment"><div class="line">git clone https://github.com/robojackets/mtrain-firmware</div><div class="line">git clone https://github.com/robojackets/robocup-firmware</div></div><!-- fragment --><p>There are a few setup scripts in the util directory for installing required packages, setting up udev rules, etc. Run <code>ubuntu-setup</code>, <code>arch-setup</code>, and <code>osx-setup</code> depending on your system. </p><div class="fragment"><div class="line">cd robocup-firmware</div><div class="line">./util/&lt;SYSTEM&gt;-setup</div></div><!-- fragment --><h3>Setting up Conan for robocup-firmware</h3>
-<p>As part of the system setup script conan, the robojackets remote, and the required conan profile should have been setup. Thus the steps for setting up conan are not necessary and are kept for reference when setting up on older branches.</p>
-<p>NOTE: If you chose to not let the script overwrite your previous conan settings you will need to perform step 2 and 3 manually.</p>
-<p>1) Install conan </p><div class="fragment"><div class="line">pip install conan</div></div><!-- fragment --><p>2) Add the robojackets remote </p><div class="fragment"><div class="line">conan remote add robojackets https://api.bintray.com/conan/robojackets/conan</div></div><!-- fragment --><p>3) cd into the mtrain-firmware repository and copy the file util/conan-config/profiles/armv7hf to ~/.conan/profiles</p>
-<h3>Building robocup-firmware with Conan</h3>
-<p>cd into the robocup-firmware repository </p><div class="fragment"><div class="line">make</div></div><!-- fragment --><h2>Git version control</h2>
+<p>1) Clone the repositories </p><div class="fragment"><div class="line">git clone https://github.com/robojackets/mtrain-firmware</div><div class="line">git clone https://github.com/robojackets/robocup-firmware</div></div><!-- fragment --><p>2) Run the setup script There are a few setup scripts in the util directory for installing required packages, setting up udev rules, etc. Run <code>ubuntu-setup</code>, <code>arch-setup</code>, and <code>osx-setup</code> depending on your system. </p><div class="fragment"><div class="line">cd robocup-firmware</div><div class="line">./util/&lt;SYSTEM&gt;-setup</div></div><!-- fragment --><p>3) Compile robocup-firmware make sure you are at the top level of robocup-firmware and run make </p><div class="fragment"><div class="line">make robot</div><div class="line">make</div></div><!-- fragment --><h2>Git version control</h2>
 <p>Please see <a class="el" href="_git_8md.html">here</a> for a brief tutorial on git as well as links to learning resources</p>
 <h2>Contributing</h2>
 <p>Please see the <a class="el" href="_contributing_8md.html">contributing page</a> for general contributing guidelines.</p>
@@ -118,7 +113,7 @@ $(document).ready(function(){initNavTree('index.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sat Jan 18 2020 19:41:00 for GT RoboCup SSL by
+    <li class="footer">Generated on Mon Feb 3 2020 13:37:32 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

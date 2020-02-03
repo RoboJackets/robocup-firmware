@@ -1,4 +1,4 @@
-.PHONY : all kicker configure robot control-upload $(ROBOT_TESTS:%=test-%-upload)
+.PHONY : all kicker configure robot control-upload docs $(ROBOT_TESTS:%=test-%-upload)
 
 all: kicker robot
 
@@ -37,7 +37,7 @@ debug : kicker robot
 docs:
 	doxygen doc/Doxyfile
 	cp doc/doxygen.css doc/generated-docs/html/
-	ln -s doc/generated-docs/html/ docs
+	ln -s doc/generated-docs/html docs
 
 clean:
 	rm -rf kicker/build

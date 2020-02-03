@@ -1,11 +1,5 @@
 var NAVTREEINDEX6 =
 {
-"struct_motor_feedback.html":[12,0,28],
-"struct_motor_feedback.html#a8514ac244bc482f002e989f57225c211":[12,0,28,2],
-"struct_motor_feedback.html#a8600cf3da11509c8165d6f1eeca2d3d5":[12,0,28,1],
-"struct_motor_feedback.html#aa19dbad1c45449593ac32a68d401d0ef":[12,0,28,0],
-"struct_motor_feedback.html#afa6e6bce214fbaf87b35e444cd3e7796":[12,0,28,3],
-"struct_radio_error.html":[12,0,33],
 "struct_radio_error.html#a6ba48d6d836109c4ee966096c2216a2a":[12,0,33,0],
 "struct_radio_error.html#a98804308b9129108cf5700ac30757e7e":[12,0,33,2],
 "struct_radio_error.html#af9b093f5283975e0f351965aee690c55":[12,0,33,1],
