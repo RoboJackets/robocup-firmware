@@ -27,6 +27,5 @@ var searchData=
   ['boundscaling',['boundScaling',['../_robot_controller_8cpp.html#a0be031a2377dc2d785f9d68cb8a52d0f',1,'RobotController.cpp']]],
   ['breakbeam_5ftripped',['BREAKBEAM_TRIPPED',['../kicker__commands_8h.html#ae2ddd027a4f39d6faa24016003c62709',1,'kicker_commands.h']]],
   ['broadcast_5faddress',['BROADCAST_ADDRESS',['../namespacertp.html#a943f65a423f50a6be78c72d0f28c2e39',1,'rtp']]],
-  ['build',['build',['../classconanfile_1_1_robo_cup_firmware_conan.html#a6227acfdd03ca9e400bbae68127793c5',1,'conanfile::RoboCupFirmwareConan']]],
-  ['basics',['Basics',['../index.html',1,'']]]
+  ['build',['build',['../classconanfile_1_1_robo_cup_firmware_conan.html#a6227acfdd03ca9e400bbae68127793c5',1,'conanfile::RoboCupFirmwareConan']]]
 ];

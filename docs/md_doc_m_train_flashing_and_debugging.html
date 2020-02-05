@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>GT RoboCup SSL: Flashing code to the mtrain</title>
+<title>GT RoboCup SSL: mTrain Flashing and Debugging</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -82,10 +82,11 @@ $(document).ready(function(){initNavTree('md_doc_m_train_flashing_and_debugging.
 
 <div class="header">
   <div class="headertitle">
-<div class="title">Flashing code to the mtrain </div>  </div>
+<div class="title">mTrain Flashing and Debugging </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h2>Intro</h2>
+<div class="textblock"><h1>Flashing code to the mTrain</h1>
+<h2>Intro</h2>
 <p>The mTrain on boot runs the user program located at the predetermined memory address 0x0800000 We flash code to this address using the J-Link in-order to be executed.</p>
 <h2>Installing J-Link Software</h2>
 <p>The J-Link software can be downloaded at: <a href="https://www.segger.com/downloads/jlink/#J-LinkSoftwareAndDocumentationPack">https://www.segger.com/downloads/jlink/#J-LinkSoftwareAndDocumentationPack</a> For Ubuntu you want to download the file labeled as 'J-Link Software and Documentation pack for Linux, DEB installer, 64-bit'</p>
@@ -95,10 +96,10 @@ $(document).ready(function(){initNavTree('md_doc_m_train_flashing_and_debugging.
 <h2>Setup The JLink Unit</h2>
 <p>Plug in the JLink unit to a usb port on your computer Attach the ARM-JTAG-20-10 connector to the 20 pin connector side of the J-Link unit.</p>
 <p>Attach the smaller 10 pin connector to the 10 pins on the top of the mTrain.</p>
-<p>Plug in the mTrain mini usb connector and plug the other end to your computer. TODO attach picture here of JLink header and where it connects on the mtrain</p>
+<p>Plug in the mTrain mini usb connector and plug the other end to your computer. TODO attach picture here of JLink header and where it connects on the mTrain</p>
 <p>The mini usb powers the mTrain if its not receiving power from the board so it should light up after this.</p>
 <h2>Flashing code to the mTrain</h2>
-<p>If you have not already setup robocup-firmware to build do that now (following the guide in getting started). To build it again run the following: </p><div class="fragment"><div class="line">make all</div></div><!-- fragment --><p>After building navigate to the top level of the robojackets firmware repo. Then navigate to the build location of the robocup binaries: </p><div class="fragment"><div class="line">cd robot/build/bin/</div></div><!-- fragment --><p>Run J-LinkExe </p><div class="fragment"><div class="line">JLinkExe</div></div><!-- fragment --><p>At this point you will get the same message as in the setting up jlink software section. Then you need to connect to the processor via the following command </p><div class="fragment"><div class="line">connect</div></div><!-- fragment --><p> continue hitting enter to use all the default options and you should get a wall of processor information and a message that you have connected.</p>
+<p>If you have not already setup robocup-firmware to build do that now (following the guide in getting started). To build it again run the following: </p><div class="fragment"><div class="line">make all</div></div><!-- fragment --><p>After building navigate to the top level of the robojackets firmware repo. Then navigate to the build location of the robocup binaries: </p><div class="fragment"><div class="line">cd robot/build/bin/</div></div><!-- fragment --><p>Run J-LinkExe </p><div class="fragment"><div class="line">JLinkExe</div></div><!-- fragment --><p>At this point you will get the same message as in the setting up J-Link software section. Then you need to connect to the processor via the following command </p><div class="fragment"><div class="line">connect</div></div><!-- fragment --><p> continue hitting enter to use all the default options and you should get a wall of processor information and a message that you have connected.</p>
 <p>To program the mtrain use: </p><div class="fragment"><div class="line">loadbin ./control.bin 0x08000000</div></div><!-- fragment --><p>You should now see a progress bar for erasing flash and subsequently flashing memory. After this completes your are done and can exit J-Link. Restart the mTrain with the push button on top of the module and your code should now be running.</p>
 <h1>Debugging mTrain</h1>
 <h2>Whats different than using GDB as usual?</h2>
@@ -118,7 +119,7 @@ $(document).ready(function(){initNavTree('md_doc_m_train_flashing_and_debugging.
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Feb 4 2020 19:37:08 for GT RoboCup SSL by
+    <li class="footer">Generated on Wed Feb 5 2020 12:43:15 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

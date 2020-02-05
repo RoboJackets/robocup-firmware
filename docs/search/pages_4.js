@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['initial_20prerequisites',['Initial Prerequisites',['../md_doc__git.html',1,'']]]
+  ['mtrain_20flashing_20and_20debugging',['mTrain Flashing and Debugging',['../md_doc_m_train_flashing_and_debugging.html',1,'']]]
 ];

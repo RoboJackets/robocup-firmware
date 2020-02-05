@@ -27,8 +27,6 @@ var searchData=
   ['freq',['freq',['../class_battery_module.html#a1f339aa37046fab5c63804d9f1a116d5',1,'BatteryModule::freq()'],['../class_f_p_g_a_module.html#a58667f9950659e4730ca106a375d25c0',1,'FPGAModule::freq()'],['../class_generic_module.html#ac2e54da85101b575db9b0d45710c1e34',1,'GenericModule::freq()'],['../class_i_m_u_module.html#a84c24017a059d774caf06ab8f6c945b5',1,'IMUModule::freq()'],['../class_kicker_module.html#afb0784ec49f60eb1aecfe9544158aca2',1,'KickerModule::freq()'],['../class_l_e_d_module.html#a42a0ea6ac3bd2a53a812e7693b61e7c4',1,'LEDModule::freq()'],['../class_motion_control_module.html#a5f52bbb06520896bd8d74f6c44de9949',1,'MotionControlModule::freq()'],['../class_radio_module.html#a2968371320cc644fddd548913b2a4af6',1,'RadioModule::freq()'],['../class_rotary_dial_module.html#af3050c1ae0da7fbe3a65affcc7ddf7f3',1,'RotaryDialModule::freq()']]],
   ['fromsignmag',['fromSignMag',['../_f_p_g_a_8cpp.html#a9ee1da0740e9a0ad1c257b85feec4cf9',1,'FPGA.cpp']]],
   ['fullyinitialized',['fullyInitialized',['../class_l_e_d_module.html#aa06d62a683353d351978061ae7bf10e2',1,'LEDModule']]],
-  ['for_20new_20members',['For new members',['../md_doc__conan.html',1,'']]],
-  ['firmware',['Firmware',['../md_doc__firmware.html',1,'']]],
-  ['fpga',['FPGA',['../md_doc__f_p_g_a.html',1,'']]],
-  ['flashing_20code_20to_20the_20mtrain',['Flashing code to the mtrain',['../md_doc_m_train_flashing_and_debugging.html',1,'']]]
+  ['firmware_20overview',['Firmware Overview',['../md_doc__firmware.html',1,'']]],
+  ['fpga',['FPGA',['../md_doc__f_p_g_a.html',1,'']]]
 ];

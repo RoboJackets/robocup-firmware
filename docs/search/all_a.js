@@ -46,5 +46,5 @@ var searchData=
   ['krobotradius',['kRobotRadius',['../_robot_controller_8cpp.html#aba4360786096ec30b19774968ef45a25',1,'RobotController.cpp']]],
   ['kticktime',['kTickTime',['../_robot_controller_8cpp.html#a49adfd690773a6ffa93071bb086c9b2d',1,'RobotController.cpp']]],
   ['kvoltagedamping',['kVoltageDamping',['../_robot_controller_8cpp.html#accaf5f136c68813e7d499414ce93dbe7',1,'RobotController.cpp']]],
-  ['kicker',['Kicker',['../md_doc__kicker.html',1,'']]]
+  ['kicker_20firmware',['Kicker Firmware',['../md_doc__kicker.html',1,'']]]
 ];

@@ -1,17 +1,17 @@
 var NAVTREE =
 [
   [ "GT RoboCup SSL", "index.html", [
-    [ "Basics", "index.html", null ],
-    [ "Navigation", "md_doc__command_line_basics.html", null ],
-    [ "For new members", "md_doc__conan.html", null ],
+    [ "Getting Started", "index.html", null ],
+    [ "Command Line Basic", "md_doc__command_line_basics.html", null ],
+    [ "Conan", "md_doc__conan.html", null ],
     [ "Contributing Guide", "md_doc__contributing.html", null ],
-    [ "Firmware", "md_doc__firmware.html", null ],
+    [ "Firmware Overview", "md_doc__firmware.html", null ],
     [ "FPGA", "md_doc__f_p_g_a.html", null ],
     [ "GDB", "md_doc__g_d_b.html", null ],
-    [ "GDBExercise", "md_doc__g_d_b_exercise.html", null ],
-    [ "Initial Prerequisites", "md_doc__git.html", null ],
-    [ "Kicker", "md_doc__kicker.html", null ],
-    [ "Flashing code to the mtrain", "md_doc_m_train_flashing_and_debugging.html", null ],
+    [ "GDB Exercise", "md_doc__g_d_b_exercise.html", null ],
+    [ "Git", "md_doc__git.html", null ],
+    [ "Kicker Firmware", "md_doc__kicker.html", null ],
+    [ "mTrain Flashing and Debugging", "md_doc_m_train_flashing_and_debugging.html", null ],
     [ "Namespaces", null, [
       [ "Namespace List", "namespaces.html", "namespaces" ],
       [ "Namespace Members", "namespacemembers.html", [

@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['for_20new_20members',['For new members',['../md_doc__conan.html',1,'']]],
-  ['firmware',['Firmware',['../md_doc__firmware.html',1,'']]],
-  ['fpga',['FPGA',['../md_doc__f_p_g_a.html',1,'']]],
-  ['flashing_20code_20to_20the_20mtrain',['Flashing code to the mtrain',['../md_doc_m_train_flashing_and_debugging.html',1,'']]]
+  ['getting_20started',['Getting Started',['../index.html',1,'']]],
+  ['gdb',['GDB',['../md_doc__g_d_b.html',1,'']]],
+  ['gdb_20exercise',['GDB Exercise',['../md_doc__g_d_b_exercise.html',1,'']]],
+  ['git',['Git',['../md_doc__git.html',1,'']]]
 ];

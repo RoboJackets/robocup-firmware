@@ -1,4 +1,6 @@
-# Flashing code to the mtrain
+# mTrain Flashing and Debugging
+
+# Flashing code to the mTrain
 ## Intro
 The mTrain on boot runs the user program located at the predetermined memory address 0x0800000
 We flash code to this address using the J-Link in-order to be executed.
@@ -32,7 +34,7 @@ Attach the ARM-JTAG-20-10 connector to the 20 pin connector side of the J-Link u
 Attach the smaller 10 pin connector to the 10 pins on the top of the mTrain.
 
 Plug in the mTrain mini usb connector and plug the other end to your computer.
-TODO attach picture here of JLink header and where it connects on the mtrain
+TODO attach picture here of JLink header and where it connects on the mTrain
 
 The mini usb powers the mTrain if its not receiving power from the board so it should light up after this.
 
@@ -53,7 +55,7 @@ Run J-LinkExe
 JLinkExe
 ```
 
-At this point you will get the same message as in the setting up jlink software section. Then you need to connect to the processor via the following command
+At this point you will get the same message as in the setting up J-Link software section. Then you need to connect to the processor via the following command
 ```
 connect
 ```

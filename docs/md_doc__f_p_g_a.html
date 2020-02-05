@@ -86,7 +86,6 @@ $(document).ready(function(){initNavTree('md_doc__f_p_g_a.html','');});
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p>This document was originally written Fall of 2019 after the mtrain implementation. The latest relevant branch was comp2019. Knowing robocup, this won't be updated to the latest version of firmware, but hopefully it will still describe most everything. - Joe Neiger</p>
-<h1>FPGA</h1>
 <p>This document will lightly touch the FPGA verilog code, motor physics, and the communication protocol. I (Joe) have not personally worked on the FPGA code so this is all from my reading and debugging of the code over the years.</p>
 <h2>FPGA Code</h2>
 <p>On the high level, the FPGA takes in motor speed commands over SPI, communicates specific phases high and low to the motor driver, reads the encoder values, and returns the encoder values and delta time over SPI.</p>
@@ -226,7 +225,7 @@ $(document).ready(function(){initNavTree('md_doc__f_p_g_a.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Feb 4 2020 19:37:08 for GT RoboCup SSL by
+    <li class="footer">Generated on Wed Feb 5 2020 12:43:15 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

@@ -1,6 +1,6 @@
-This document was originally written Fall of 2019 after the mtrain implementation. The latest relevant branch was comp2019. Knowing robocup, this won't be updated to the latest version of firmware, but hopefully it will still describe most everything. - Joe Neiger
-
 # Kicker Firmware
+
+This document was originally written Fall of 2019 after the mtrain implementation. The latest relevant branch was comp2019. Knowing robocup, this won't be updated to the latest version of firmware, but hopefully it will still describe most everything. - Joe Neiger
 
 This document will go through the two modes of operation, standard and debug, and give full details on other specifics of operation, such as communication protocol, voltage reading, SPI operation, kick timings.
 
@@ -32,7 +32,7 @@ See `kicker_commands.h`
 
 In the old'en days, aka Spring of 2019 and before, we used to send multiple SPI transactions to the kicker to fully describe out commands. This was very inefficient due to the lag associated with the attiny processing the transition. It was at least 100 ms delay before another transaction can occur.
 
-This new protocol was built to send the entire packet in a single byte. Each bit represents a different thing. 
+This new protocol was built to send the entire packet in a single byte. Each bit represents a different thing.
 
 ### mtrain -> kicker
 
@@ -60,7 +60,7 @@ AVR on this specific device uses an interrupt to tell the user that a SPI transa
 
 At the same time we receive that byte, the processor automatically sends whatever data used to be in `SPDR` to the other device. It is for this reason we continuously update that with the latest data. The kicker doesn't control the time this SPI transaction occurs so it must always be ready.
 
-Note: When acting on the `SPDR` register, never operate on the register (eg `SPDR & 0x2`), always fully copy the data over. Between two subsequent lines, this value can change due to the interrupt firing again. 
+Note: When acting on the `SPDR` register, never operate on the register (eg `SPDR & 0x2`), always fully copy the data over. Between two subsequent lines, this value can change due to the interrupt firing again.
 
 ## Voltage Reading
 

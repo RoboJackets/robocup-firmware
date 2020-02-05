@@ -1,13 +1,15 @@
+# Conan
+
 ### For new members
 It is common practice to surround optional arguments to a command in square braces []. Thus we will try to use the same formatting in our brief documentation. Despite this please use the options prescribed by us in the docs unless you understand what the command will do without that option.
 
 
-## Who is this Document for?
+## Who is this document for?
 This document is primarily geared towards both new and old members who are working between both mtrain-firmware and robocup-firmware and thus need to know how to manage the package created by building mtrain firmware as well as those who would like a deeper understanding of what conan is doing for us in terms of package management.
 It is not intended as a full guide to Conan as it only walks through the basic steps of updating a package for and changing requires but I will leave links to relevant documentation and give commentary as I go.
 
 
-## Conan
+## What is Conan?
 Conan is a decentralized c++ package manager. This means that much like git it can work it multiple remotes to obtain the dependencies it requires and it can upload built packages to these remotes. The remotes are merely just package storage and do not build the packages themselves.
 The default location for your conan directory will be ~/.conan/ . Here conan stores all user configurations and packages (under the data directory). It is ill advised to modify any of these files by hand but it is sometimes helpful to force rebuild packages by deleting the contents of the data directory.
 

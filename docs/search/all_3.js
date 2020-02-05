@@ -40,5 +40,7 @@ var searchData=
   ['currents',['currents',['../struct_motor_feedback.html#aa19dbad1c45449593ac32a68d401d0ef',1,'MotorFeedback']]],
   ['currentstate',['currentState',['../_i_s_m43340_8cpp.html#a0aa4cf65018a785748e1ac7480da330a',1,'ISM43340.cpp']]],
   ['cxx_5fstd',['CXX_STD',['../robot_2build_2_c_make_files_23_810_82_2_compiler_id_c_x_x_2_c_make_c_x_x_compiler_id_8cpp.html#a34cc889e576a1ae6c84ae9e0a851ba21',1,'CXX_STD():&#160;CMakeCXXCompilerId.cpp'],['../kicker_2build_2_c_make_files_23_810_82_2_compiler_id_c_x_x_2_c_make_c_x_x_compiler_id_8cpp.html#a34cc889e576a1ae6c84ae9e0a851ba21',1,'CXX_STD():&#160;CMakeCXXCompilerId.cpp']]],
+  ['command_20line_20basic',['Command Line Basic',['../md_doc__command_line_basics.html',1,'']]],
+  ['conan',['Conan',['../md_doc__conan.html',1,'']]],
   ['contributing_20guide',['Contributing Guide',['../md_doc__contributing.html',1,'']]]
 ];
