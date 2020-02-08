@@ -31,7 +31,9 @@ module FfSync #(
         parameter SYNC_WIDTH=`DEFAULT_SYNC_WIDTH,
         parameter SYNC_DEPTH=`DEFAULT_SYNC_DEPTH
     )(
-        input [SYNC_WIDTH-1:0] d_in, clk, rst_n,
+        input clk,
+        input rst_n,
+        input [SYNC_WIDTH-1:0] d_in,
         output [SYNC_WIDTH-1:0] d_out
     );
     
