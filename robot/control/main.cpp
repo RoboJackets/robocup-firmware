@@ -98,7 +98,7 @@ int main() {
                   &kickerInfo,
                   &radioError);
 
-    FPGAModule fpga(fpgaKickerSPI,
+    /*FPGAModule fpga(fpgaKickerSPI,
                     &motorCommand,
                     &fpgaStatus,
                     &motorFeedback);
@@ -129,23 +129,27 @@ int main() {
                                &motionCommand,
                                &motorFeedback,
                                &motorCommand);
-    // IMUModule imu(sharedI2C,
-    //               &imuData);
+
+*/
+     IMUModule imu(sharedI2C,
+                   &imuData);
 
     // led.fullyInitialized();
+
+
 
 
     std::vector<MODULE_META_DATA> moduleList;
 
     uint64_t curTime = DWT_GetTick();
-    moduleList.emplace_back(curTime, MotionControlModule::period, MotionControlModule::runtime, &motion);
-    // moduleList.emplace_back(curTime, IMUModule::period,           IMUModule::runtime,           &imu);
-    moduleList.emplace_back(curTime, FPGAModule::period,          FPGAModule::runtime,          &fpga);
-    moduleList.emplace_back(curTime, RadioModule::period,         RadioModule::runtime,         &radio);
+    //moduleList.emplace_back(curTime, MotionControlModule::period, MotionControlModule::runtime, &motion);
+     moduleList.emplace_back(curTime, IMUModule::period,           IMUModule::runtime,           &imu);
+    //moduleList.emplace_back(curTime, FPGAModule::period,          FPGAModule::runtime,          &fpga);
+    //moduleList.emplace_back(curTime, RadioModule::period,         RadioModule::runtime,         &radio);
     // moduleList.emplace_back(curTime, KickerModule::period,        KickerModule::runtime,        &kicker);
-    moduleList.emplace_back(curTime, BatteryModule::period,       BatteryModule::runtime,       &battery);
-    moduleList.emplace_back(curTime, RotaryDialModule::period,    RotaryDialModule::runtime,    &dial);
-    moduleList.emplace_back(curTime, LEDModule::period,           LEDModule::runtime,           &led);
+    //moduleList.emplace_back(curTime, BatteryModule::period,       BatteryModule::runtime,       &battery);
+    //moduleList.emplace_back(curTime, RotaryDialModule::period,    RotaryDialModule::runtime,    &dial);
+    //moduleList.emplace_back(curTime, LEDModule::period,           LEDModule::runtime,           &led);
 
     while (true) {
         // Must do all timing in systick
