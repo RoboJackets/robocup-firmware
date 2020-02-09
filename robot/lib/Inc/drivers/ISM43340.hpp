@@ -36,7 +36,6 @@ namespace ISMConstants {
     static const std::string BASE_STATION_PORT = "25565";
 
 
-
     // RETURN VALUES (Not including error)
     static const std::string OK     = "OK\r\n> ";
     static const std::string PROMPT = "\r\n> ";

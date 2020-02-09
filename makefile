@@ -26,6 +26,7 @@ control-upload: configure
 	./util/flash-mtrain
 # cd robot/build; make control-upload
 
+
 $(ROBOT_TESTS:%=test-%-upload): configure
 	cd robot/build; make $(@F)
 

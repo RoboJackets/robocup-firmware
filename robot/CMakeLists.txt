@@ -24,6 +24,4 @@ add_subdirectory(lib)
 
 add_subdirectory(control)
 
-if(EXISTS hw-test)
-  add_subdirectory(hw-test)
-endif()
+add_subdirectory(hw-test)

@@ -402,19 +402,19 @@ void ISM43340::reset() {
 
 
     // UDP send
-    
+
     sendCommand(ISMConstants::CMD_SET_COMMUNICATION_SOCKET,
                 ISMConstants::SEND_SOCKET);
 
     sendCommand(ISMConstants::CMD_SET_TRANSPORT_PROTOCOL,
                 ISMConstants::TYPE_TRANSPORT_PROTOCOL::UDP_ENABLED);
-    
+
     sendCommand(ISMConstants::CMD_SET_TRANSPORT_REMOTE_HOST_IP_ADDRESS,
                 ISMConstants::BASE_STATION_IP);
-    
+
     sendCommand(ISMConstants::CMD_SET_TRANSPORT_REMOTE_PORT_NUMBER,
                 ISMConstants::BASE_STATION_PORT);
-    
+
     sendCommand(ISMConstants::CMD_START_STOP_TRANSPORT_CLIENT,
                 ISMConstants::TYPE_TRANSPORT_CLIENT::ENABLE);
 

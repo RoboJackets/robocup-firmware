@@ -29,11 +29,10 @@ private:
     FPGAStatus *const fpgaStatus;
     KickerInfo *const kickerInfo;
     RobotID *const robotID;
-    
+
     KickerCommand *const kickerCommand;
     MotionCommand *const motionCommand;
     RadioError *const radioError;
 
     RadioLink link;
-    DigitalOut secondRadioCS;
 };

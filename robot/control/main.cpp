@@ -62,6 +62,7 @@ struct MODULE_META_DATA {
 MotionCommand motionCommand;
 MotorCommand motorCommand;
 MotorFeedback motorFeedback;
+//IMUModule imu;
 IMUData imuData;
 BatteryVoltage batteryVoltage;
 FPGAStatus fpgaStatus;
@@ -77,8 +78,8 @@ int main() {
     HAL_Delay(100);
 
     std::shared_ptr<I2C> sharedI2C = std::make_shared<I2C>(SHARED_I2C_BUS);
-    std::shared_ptr<SPI> fpgaKickerSPI = std::make_shared<SPI>(FPGA_KICKER_SPI_BUS, std::nullopt, 16'000'000);
-    std::shared_ptr<SPI> dot_star_spi = std::make_shared<SPI>(DOT_STAR_SPI_BUS, std::nullopt, 100'000);
+    std::shared_ptr<SPI> fpgaSPI = std::make_shared<SPI>(FPGA_SPI_BUS, std::nullopt, 16'000'000);
+    std::shared_ptr<SPI> sharedSPI = std::make_shared<SPI>(SHARED_SPI_BUS, std::nullopt, 100'000);
 
     // TODO: Fix me such that we init all the devices
     // then call a config to flash them correctly
@@ -105,6 +106,7 @@ int main() {
 
     led.fpgaInitialized();
 
+    
     RadioModule radio(&batteryVoltage,
                       &fpgaStatus,
                       &kickerInfo,
@@ -112,15 +114,19 @@ int main() {
                       &kickerCommand,
                       &motionCommand,
                       &radioError);
+                      
 
     led.radioInitialized();
 
-    // KickerModule kicker(dot_star_spi,
-    //                     &kickerCommand,
-    //                     &kickerInfo);
+   
+    KickerModule kicker(sharedSPI,
+                        &kickerCommand,
+                        &kickerInfo);
+                        */
 
     // led.kickerInitialized();
 
+    /*
     BatteryModule battery(&batteryVoltage);
     RotaryDialModule dial(ioExpander,
                           &robotID);
@@ -129,19 +135,17 @@ int main() {
                                &motionCommand,
                                &motorFeedback,
                                &motorCommand);
-
-*/
-     IMUModule imu(sharedI2C,
+    */
+     IMUModule imu(sharedSPI,
                    &imuData);
 
     // led.fullyInitialized();
 
 
-
-
     std::vector<MODULE_META_DATA> moduleList;
 
     uint64_t curTime = DWT_GetTick();
+
     //moduleList.emplace_back(curTime, MotionControlModule::period, MotionControlModule::runtime, &motion);
      moduleList.emplace_back(curTime, IMUModule::period,           IMUModule::runtime,           &imu);
     //moduleList.emplace_back(curTime, FPGAModule::period,          FPGAModule::runtime,          &fpga);

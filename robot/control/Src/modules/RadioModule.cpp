@@ -11,11 +11,7 @@ RadioModule::RadioModule(BatteryVoltage *const batteryVoltage,
     : batteryVoltage(batteryVoltage), fpgaStatus(fpgaStatus),
       kickerInfo(kickerInfo), robotID(robotID),
       kickerCommand(kickerCommand), motionCommand(motionCommand),
-      radioError(radioError), link(),
-      secondRadioCS(RADIO_R1_CS) {
-
-    secondRadioCS = 1;
-
+      radioError(radioError), link() {
     // todo fill out more kicker stuff
     kickerCommand->isValid = false;
     kickerCommand->lastUpdate = 0;

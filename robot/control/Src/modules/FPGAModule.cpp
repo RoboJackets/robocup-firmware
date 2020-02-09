@@ -3,6 +3,8 @@
 
 #include <cmath>
 
+extern DebugInfo debugInfo;
+
 FPGAModule::FPGAModule(std::shared_ptr<SPI> spi,
                        MotorCommand *const motorCommand,
                        FPGAStatus *const fpgaStatus,
@@ -124,6 +126,7 @@ void FPGAModule::entry(void) {
     for (int i = 0; i < 4; i++) {
         // (rad / s) = (enc) * (rev / enc) * (rad / rev) * (1 / sec)
         motorFeedback->encoders[i] = static_cast<float>(encDeltas[i]) * (1 / static_cast<float>(ENC_TICK_PER_REV)) * (2*M_PI / 1) * (1 / dt);
+        debugInfo.val[i+8] = motorFeedback->encoders[i] * 100;
     }
 
     // Convert from adc lsb to amp
