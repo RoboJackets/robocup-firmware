@@ -1,60 +1,79 @@
 `ifndef _FIFO_MODULE_
 `define _FIFO_MODULE_
 
-module FifoModule( 
-	clk, 
-    dataIn, 
-    RD, 
-    WR, 
-    EN, 
-    dataOut, 
-    rst,
-    EMPTY, 
-    FULL,
-    ALMOST_FULL,
-    ALMOST_EMPTY
+module FifoModule #(
+    MAX_SIZE = 10, 
+    DATA_BIT_WIDTH = 32,
+    ALMOST_FULL_SIZE = 8,
+    ALMOST_EMPTY_SIZE = 2,
+    localparam COUNT_SIZE = $clog2(MAX_SIZE)
+)( 
+	input clk, 
+    input [DATA_BIT_WIDTH - 1:0] dataIn, 
+    input rd, 
+    input wr, 
+    output logic [DATA_BIT_WIDTH-1:0] dataOut, 
+    input rst,
+    output empty, 
+    output full,
+    output almost_full,
+    output almost_empty
 );
 
-parameter MAX_SIZE = 10; 
-parameter DATA_BIT_WIDTH = 32;
-parameter ALMOST_FULL_SIZE = 8;
-parameter ALMOST_EMPTY_SIZE = 2;
+
+reg [COUNT_SIZE - 1:0]      count = 0; 
+reg [DATA_BIT_WIDTH - 1:0]  queue [0:MAX_SIZE - 1]; 
+reg [COUNT_SIZE - 1:0]      front = 0; 
+
+assign empty = (count == 0)? 1'b1:0; 
+assign full = (count == MAX_SIZE)? 1'b1:0; 
+assign almost_empty = (count <= ALMOST_EMPTY_SIZE)? 1'b1:0;
+assign almost_full = (count >= ALMOST_FULL_SIZE)? 1'b1:0;
+
+generate
+    if (MAX_SIZE <= 1)
+    begin: INVALID_SIZE_ERROR
+        $fatal(1, "Fatal elaboration error. Invalid parameter value %b. MAX_SIZE must be > 1.", MAX_SIZE);
+    end
+    
+    if (DATA_BIT_WIDTH <= 0)
+    begin: INVALID_DATA_WIDTH_ERROR
+        $fatal(1, "Fatal elaboration error. Invalid parameter value %b. DATA_BIT_WIDTH must be > 0.", DATA_BIT_WIDTH);
+    end
+    
+    if (ALMOST_FULL_SIZE > MAX_SIZE || ALMOST_FULL_SIZE <= 0)
+    begin: INVALID_ALMOST_FULL_SIZE_ERROR
+        $fatal(1, "Fatal elaboration error. Invalid parameter value %b. ALMOST_FULL_SIZE must be <= FULL and > 0.", ALMOST_FULL_SIZE);
+    end
+
+    if (ALMOST_EMPTY_SIZE < 0)
+    begin: INVALID_ALMOST_EMPTY_SIZE_ERROR
+        $fatal(1, "Fatal elaboration error. Invalid parameter value %b. ALMOST_FULL_SIZE must be >= 0.", ALMOST_EMPTY_SIZE);
+    end
+
+endgenerate
 
 
-
-input                           clk, RD, WR, EN, rst;
-input [DATA_BIT_WIDTH - 1:0]    dataIn;
-
-
-output                          EMPTY, FULL, ALMOST_FULL, ALMOST_EMPTY;
-output reg [DATA_BIT_WIDTH-1:0] dataOut;  
-
-
-reg [$clog2(MAX_SIZE) - 1:0]    count = 0; 
-reg [DATA_BIT_WIDTH - 1:0]      queue [0:MAX_SIZE - 1]; 
-reg [$clog2(MAX_SIZE) - 1:0]    front = 0; 
-
-assign EMPTY = (count == 0)? 1'b1:0; 
-assign FULL = (count == MAX_SIZE)? 1'b1:0; 
-assign ALMOST_EMPTY = (count <= ALMOST_EMPTY_SIZE)? 1'b1:0;
-assign ALMOST_FULL = (count >= ALMOST_FULL_SIZE)? 1'b1:0;
-
-always @ (posedge clk) begin 
-
-    if (EN) begin 
-        if (rst) begin 
-            front = 0;
-            count = 0; 
-        end else if (RD == 1'b1 && count != 0) begin 
-            dataOut  = queue[front]; 
-            front = (front + 1) % MAX_SIZE;
-            count = count - 1; 
-        end else if (WR == 1'b1 && count < MAX_SIZE) begin
-            queue[(front + count) % MAX_SIZE]  = dataIn; 
+always_ff @(posedge clk) begin
+    if (rst) 
+    begin: RESET 
+        front <= 0;
+        count <= 0; 
+    end else begin
+        
+        if (rd == 1'b1 && count != 0)
+        begin: READ 
+            count = count - 1;
+            dataOut = queue[front]; 
+            front = (front + 1) % MAX_SIZE; 
+        end
+        
+        if (wr == 1'b1 && count < MAX_SIZE)
+        begin: WRITE
+            queue[(front + count) % MAX_SIZE] = dataIn; 
             count = count + 1; 
-        end 
+        end
     end 
-
 end 
 
 endmodule

@@ -85,3 +85,8 @@
 !*.elf
 !*.bmm
 !*.xmp
+#########
+#Other files
+#########
+!*.run
+!*.job

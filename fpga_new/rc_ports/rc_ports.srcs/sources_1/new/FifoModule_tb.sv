@@ -1,19 +1,17 @@
 `timescale 1ns/10ps
 
 
-module FifoModule_tb;
+module FifoModule_tb #(
+    localparam MAX_SIZE = 9, 
+    localparam DATA_BIT_WIDTH = 32,
+    localparam ALMOST_FULL_SIZE = 8,
+    localparam ALMOST_EMPTY_SIZE = 2
+);
 
-
-localparam MAX_SIZE = 10; 
-localparam DATA_BIT_WIDTH = 32;
-localparam ALMOST_FULL_SIZE = 8;
-localparam ALMOST_EMPTY_SIZE = 2;
-
-reg                     	clk, RD, WR, EN, rst;
+reg                     	clk, rd, wr, rst;
 reg [DATA_BIT_WIDTH - 1:0]	dataIn;
 
-
-wire                    	EMPTY, FULL, ALMOST_FULL, ALMOST_EMPTY;
+wire                    	empty, full, almost_full, almost_empty;
 wire [DATA_BIT_WIDTH - 1:0] dataOut;  
 
 FifoModule #(
@@ -24,35 +22,31 @@ FifoModule #(
   ) dut (
 	.clk(clk),
 	.dataIn(dataIn),
-	.RD(RD),
-	.WR(WR),
-	.EN(EN),
+	.rd(rd),
+	.wr(wr),
     .dataOut(dataOut), 
     .rst(rst),
-    .EMPTY(EMPTY), 
-    .FULL(FULL),
-    .ALMOST_FULL(ALMOST_FULL),
-    .ALMOST_EMPTY(ALMOST_EMPTY)
+    .empty(empty), 
+    .full(full),
+    .almost_full(almost_full),
+    .almost_empty(almost_empty)
 );
 	
 
 initial begin
 
-	// Pre-reset
+	// Reset
 	clk = 0;
   	dataIn = 0;
-  	RD = 0;
-  	WR = 0;
-  	EN = 0;
+  	rd = 0;
+  	wr = 0;
   	rst = 1'b1;
 
   	#2;
-  	// Reset
-  	EN  = 1'b1;
   	// Load from 1 to 10
   	#1;
   	rst = 0;
-  	WR 	= 1'b1;
+  	wr 	= 1'b1;
   	dataIn = 32'h1;
   	#1;
   	dataIn = 32'h2;
@@ -71,15 +65,15 @@ initial begin
 	#1;
   	dataIn = 32'h9;
   	#1;
-  	dataIn = 32'hA;
+  	dataIn = 32'hA; // Shouldn't add this
   	#1;
   	dataIn = 32'hB; // Shouldn't add this
   	#1;
-  	WR = 0;
-  	RD = 1'b1;
+  	wr = 0;
+  	rd = 1'b1;
   	#10;
-  	RD = 0;
-  	WR 	= 1'b1;
+  	rd = 1'b1; //Read and write at the same time
+  	wr 	= 1'b1;
   	dataIn = 32'h1;
   	#1;
   	dataIn = 32'h2;
@@ -98,12 +92,13 @@ initial begin
 	#1;
   	dataIn = 32'h9;
   	#1;
-  	dataIn = 32'hA;
+  	dataIn = 32'hA; // Shouldn't add this
   	#1;
   	dataIn = 32'hB; // Shouldn't add this
   	#1;
-  	WR = 0;
-  	RD = 1'b1;
+  	wr = 0;
+  	rd = 1'b1;
+  	#13 $finish;
 end
 
 
