@@ -1,9 +1,0 @@
-# Hashes of file build rules.
-27c401fab318b68acc5e28b6283298d3 CMakeFiles/test-adc
-1e39841ed197799b20f53da372c20488 CMakeFiles/test-adc-prog
-487601a38f84b99776fe645275c86f4a CMakeFiles/test-blink
-d96b020d391de14282b7eebb60cb5e64 CMakeFiles/test-blink-prog
-29dbeeb625cccde413b425de10a4a4ef CMakeFiles/test-flash
-f68ed37b65cda4e18c3f53e108458ff5 CMakeFiles/test-flash-prog
-07a02f6d61d31a00bf9c717b70ffa6de CMakeFiles/test-usb_serial
-a72968af2cc7d20a5e9a6ecb7efb3de4 CMakeFiles/test-usb_serial-prog
