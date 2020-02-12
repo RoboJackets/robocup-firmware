@@ -105,6 +105,7 @@ int main() {
 
     led.fpgaInitialized();
 
+    /*
     RadioModule radio(&batteryVoltage,
                       &fpgaStatus,
                       &kickerInfo,
@@ -118,6 +119,10 @@ int main() {
     // KickerModule kicker(dot_star_spi,
     //                     &kickerCommand,
     //                     &kickerInfo);
+=======
+                      */
+
+    led.radioInitialized();
 
     // led.kickerInitialized();
 

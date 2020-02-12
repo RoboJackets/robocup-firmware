@@ -10,9 +10,9 @@ cmake -DCMAKE_TOOLCHAIN_FILE=../attiny_toolchain.cmake .. && make
 # Define BUILDTYPE as Release if not already set for this target and subtargets
 robot/build/conaninfo.txt : BUILDTYPE ?= "Release"
 robot/build/conaninfo.txt : robot/conanfile.py
-	cd robot && conan install . -if build -pr armv7hf -s build_type=$(BUILDTYPE) --build missing --build=mTrain
+	cd robot && conan install . -if build -pr armv7hf -s build_type=$(BUILDTYPE) --build missing
 configure : robot/build/conaninfo.txt
-	cd robot && conan build . -bf build -c --build=mTrain
+	cd robot && conan build . -bf build -c
 
 
 ROBOT_TESTS = test
