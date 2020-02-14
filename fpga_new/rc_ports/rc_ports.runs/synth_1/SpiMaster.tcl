@@ -28,10 +28,7 @@ set_property default_lib xil_defaultlib [current_project]
 set_property target_language Verilog [current_project]
 set_property ip_output_repo c:/Users/arthu/Desktop/robocup-firmware/fpga_new/rc_ports/rc_ports.cache/ip [current_project]
 set_property ip_cache_permissions {read write} [current_project]
-read_verilog -library xil_defaultlib -sv {
-  C:/Users/arthu/Desktop/robocup-firmware/fpga_new/rc_ports/rc_ports.srcs/sources_1/new/FifoModule.sv
-  C:/Users/arthu/Desktop/robocup-firmware/fpga_new/rc_ports/rc_ports.srcs/sources_1/new/FifoModule_tb.sv
-}
+read_verilog -library xil_defaultlib -sv C:/Users/arthu/Desktop/robocup-firmware/fpga_new/rc_ports/rc_ports.srcs/sources_1/new/SpiMaster.sv
 # Mark all dcp files as not used in implementation to prevent them from being
 # stitched into the results of this synthesis run. Any black boxes in the
 # design are intentionally left as such for best results. Dcp files will be
@@ -43,12 +40,12 @@ foreach dcp [get_files -quiet -all -filter file_type=="Design\ Checkpoint"] {
 set_param ips.enableIPCacheLiteLoad 1
 close [open __synthesis_is_running__ w]
 
-synth_design -top FifoModule_tb -part xc7a50tcsg324-3
+synth_design -top SpiMaster -part xc7a50tcsg324-3
 
 
 # disable binary constraint mode for synth run checkpoints
 set_param constraints.enableBinaryConstraints false
-write_checkpoint -force -noxdef FifoModule_tb.dcp
-create_report "synth_1_synth_report_utilization_0" "report_utilization -file FifoModule_tb_utilization_synth.rpt -pb FifoModule_tb_utilization_synth.pb"
+write_checkpoint -force -noxdef SpiMaster.dcp
+create_report "synth_1_synth_report_utilization_0" "report_utilization -file SpiMaster_utilization_synth.rpt -pb SpiMaster_utilization_synth.pb"
 file delete __synthesis_is_running__
 close [open __synthesis_is_complete__ w]

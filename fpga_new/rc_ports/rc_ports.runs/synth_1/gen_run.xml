@@ -1,18 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="synth_1" LaunchPart="xc7a50tcsg324-3" LaunchTime="1581298462">
-  <File Type="PA-TCL" Name="FifoModule_tb.tcl"/>
-  <File Type="RDS-PROPCONSTRS" Name="FifoModule_tb_drc_synth.rpt"/>
-  <File Type="REPORTS-TCL" Name="FifoModule_tb_reports.tcl"/>
-  <File Type="RDS-RDS" Name="FifoModule_tb.vds"/>
-  <File Type="RDS-UTIL" Name="FifoModule_tb_utilization_synth.rpt"/>
-  <File Type="RDS-UTIL-PB" Name="FifoModule_tb_utilization_synth.pb"/>
-  <File Type="RDS-DCP" Name="FifoModule_tb.dcp"/>
-  <File Type="VDS-TIMINGSUMMARY" Name="FifoModule_tb_timing_summary_synth.rpt"/>
-  <File Type="VDS-TIMING-PB" Name="FifoModule_tb_timing_summary_synth.pb"/>
+<GenRun Id="synth_1" LaunchPart="xc7a50tcsg324-3" LaunchTime="1581697967">
+  <File Type="PA-TCL" Name="SpiMaster.tcl"/>
+  <File Type="RDS-PROPCONSTRS" Name="SpiMaster_drc_synth.rpt"/>
+  <File Type="REPORTS-TCL" Name="SpiMaster_reports.tcl"/>
+  <File Type="RDS-RDS" Name="SpiMaster.vds"/>
+  <File Type="RDS-UTIL" Name="SpiMaster_utilization_synth.rpt"/>
+  <File Type="RDS-UTIL-PB" Name="SpiMaster_utilization_synth.pb"/>
+  <File Type="RDS-DCP" Name="SpiMaster.dcp"/>
+  <File Type="VDS-TIMINGSUMMARY" Name="SpiMaster_timing_summary_synth.rpt"/>
+  <File Type="VDS-TIMING-PB" Name="SpiMaster_timing_summary_synth.pb"/>
   <FileSet Name="sources" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1">
     <Filter Type="Srcs"/>
+    <File Path="$PSRCDIR/sources_1/new/SpiMaster.sv">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
     <File Path="$PSRCDIR/sources_1/new/FifoModule.sv">
       <FileInfo>
+        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -20,6 +28,7 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/FifoModule_tb.sv">
       <FileInfo>
+        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -34,14 +43,6 @@
       </FileInfo>
     </File>
     <File Path="$PSRCDIR/sources_1/new/AsyncFifo.sv">
-      <FileInfo>
-        <Attr Name="AutoDisabled" Val="1"/>
-        <Attr Name="UsedIn" Val="synthesis"/>
-        <Attr Name="UsedIn" Val="implementation"/>
-        <Attr Name="UsedIn" Val="simulation"/>
-      </FileInfo>
-    </File>
-    <File Path="$PSRCDIR/sources_1/new/SpiMaster.sv">
       <FileInfo>
         <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -67,7 +68,7 @@
     </File>
     <Config>
       <Option Name="DesignMode" Val="RTL"/>
-      <Option Name="TopModule" Val="FifoModule_tb"/>
+      <Option Name="TopModule" Val="SpiMaster"/>
     </Config>
   </FileSet>
   <FileSet Name="constrs_in" Type="Constrs" RelSrcDir="$PSRCDIR/constrs_1">

@@ -1,3 +1,23 @@
+//////////////////////////////////////////////////////////////////////////////////
+// Company: RoboJackets
+// Engineer: Arthur Siqueira
+// 
+// Create Date: 02/10/2020 12:08:15 AM
+// Design Name: Fifo Module
+// Module Name: FifoModule
+// Project Name: RoboCup
+// Target Devices: Artix 7
+// Tool Versions: 2019.2
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:0.01
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
 `ifndef _FIFO_MODULE_
 `define _FIFO_MODULE_
 
@@ -32,7 +52,7 @@ assign almost_full = (count >= ALMOST_FULL_SIZE)? 1'b1:0;
 
 generate
     if (MAX_SIZE <= 1)
-    begin: INVALID_SIZE_ERROR
+    begin: INVALID_MAX_SIZE_ERROR
         $fatal(1, "Fatal elaboration error. Invalid parameter value %b. MAX_SIZE must be > 1.", MAX_SIZE);
     end
     

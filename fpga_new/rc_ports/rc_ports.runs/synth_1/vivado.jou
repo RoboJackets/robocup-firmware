@@ -2,11 +2,11 @@
 # Vivado v2019.2 (64-bit)
 # SW Build 2708876 on Wed Nov  6 21:40:23 MST 2019
 # IP Build 2700528 on Thu Nov  7 00:09:20 MST 2019
-# Start of session at: Sun Feb  9 20:34:24 2020
-# Process ID: 19208
+# Start of session at: Fri Feb 14 11:32:50 2020
+# Process ID: 4788
 # Current directory: C:/Users/arthu/Desktop/robocup-firmware/fpga_new/rc_ports/rc_ports.runs/synth_1
-# Command line: vivado.exe -log FifoModule_tb.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source FifoModule_tb.tcl
-# Log file: C:/Users/arthu/Desktop/robocup-firmware/fpga_new/rc_ports/rc_ports.runs/synth_1/FifoModule_tb.vds
+# Command line: vivado.exe -log SpiMaster.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source SpiMaster.tcl
+# Log file: C:/Users/arthu/Desktop/robocup-firmware/fpga_new/rc_ports/rc_ports.runs/synth_1/SpiMaster.vds
 # Journal file: C:/Users/arthu/Desktop/robocup-firmware/fpga_new/rc_ports/rc_ports.runs/synth_1\vivado.jou
 #-----------------------------------------------------------
-source FifoModule_tb.tcl -notrace
+source SpiMaster.tcl -notrace
