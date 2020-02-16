@@ -10,10 +10,11 @@ add_library(firm-lib
   Src/drivers/KickerBoard.cpp
   Src/drivers/MCP23017.cpp
   Src/drivers/MPU6050.cpp
+  Src/drivers/ICM20948.cpp
 )
 target_link_libraries(firm-lib
     CONAN_PKG::mTrain
-    CONAN_PKG::Eigen3
+    CONAN_PKG::eigen
     rc-fshare
 )
 
