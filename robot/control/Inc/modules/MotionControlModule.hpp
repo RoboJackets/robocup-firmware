@@ -41,12 +41,12 @@ private:
     RobotController robotController;
     RobotEstimator robotEstimator;
 
-    Eigen::Matrix<double, 4, 1> prevCommand;
+    Eigen::Matrix<float, 4, 1> prevCommand;
 
     /**
      * Max amount of time that can elapse from the latest
      * command from the radio
-     * 
+     *
      * This is a safety feature to prevent the motors from moving
      * if the motion control dies
      */

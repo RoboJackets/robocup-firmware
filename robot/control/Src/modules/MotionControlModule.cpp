@@ -38,16 +38,15 @@ void MotionControlModule::entry() {
     auto imuDataLock = imuData.lock();
     auto batteryVoltageLock = batteryVoltage.lock();
 
-    // No radio comm in a little while
-    // return and die
+    // No radio comm in a little while. Return and die.
     if (!motionCommandLock->isValid || !isRecentUpdate(motionCommandLock->lastUpdate)) {
         motorCommandLock->isValid = false;
         motorCommandLock->lastUpdate = HAL_GetTick();
     }
 
     // Fill data from shared mem
-    Eigen::Matrix<double, 5, 1> measurements;
-    Eigen::Matrix<double, 4, 1> currentWheels;
+    Eigen::Matrix<float, 5, 1> measurements;
+    Eigen::Matrix<float, 4, 1> currentWheels;
     measurements << 0, 0, 0, 0, 0;
     currentWheels << 0, 0, 0, 0;
 
@@ -64,11 +63,11 @@ void MotionControlModule::entry() {
     }
 
     if (imuDataLock->isValid && isRecentUpdate(imuDataLock->lastUpdate)) {
-        measurements(4, 0) = imuDataLock->omegas[2]; // Z gyro
+        measurements(4, 0) = 0.0; // imuDataLock->omegas[2]; // Z gyro
     }
 
     // Update targets
-    Eigen::Matrix<double, 3, 1> targetState;
+    Eigen::Matrix<float, 3, 1> targetState;
     targetState << 0, 0, 0;
 
     if (motionCommandLock->isValid && isRecentUpdate(motionCommandLock->lastUpdate)) {
@@ -93,20 +92,22 @@ void MotionControlModule::entry() {
         !isnan(measurements(1,0)) &&
         !isnan(measurements(2,0)) &&
         !isnan(measurements(3,0)) &&
-        !isnan(measurements(4,0))){
-
+        !isnan(measurements(4,0))) {
         robotEstimator.update(measurements);
+    } else {
+        // Assume we're stopped.
+        robotEstimator.update(Eigen::Matrix<float, 5, 1>::Zero());
     }
 
-    Eigen::Matrix<double, 3, 1> currentState;
+    Eigen::Matrix<float, 3, 1> currentState;
     robotEstimator.getState(currentState);
 
     // Run controllers
     uint8_t dribblerCommand = 0;
     dribblerController.calculate(motionCommandLock->dribbler, dribblerCommand);
 
-    Eigen::Matrix<double, 4, 1> targetWheels;
-    Eigen::Matrix<double, 4, 1> motorCommands;
+    Eigen::Matrix<float, 4, 1> targetWheels;
+    Eigen::Matrix<float, 4, 1> motorCommands;
 
     robotController.calculateBody(currentState, targetState, targetWheels);
     robotController.calculateWheel(currentWheels, targetWheels, motorCommands);
@@ -122,8 +123,10 @@ void MotionControlModule::entry() {
 
         // set motors to real targets
         for (int i = 0; i < 4; i++) {
+            printf("\t%d", (int) (motorCommands(i, 0) * 10000));
             motorCommandLock->wheels[i] = motorCommands(i, 0);
         }
+        printf("\r\n");
         motorCommandLock->dribbler = dribblerCommand;
     } else {
 
