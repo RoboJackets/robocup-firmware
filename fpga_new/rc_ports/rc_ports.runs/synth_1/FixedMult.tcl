@@ -29,10 +29,7 @@ set_property default_lib xil_defaultlib [current_project]
 set_property target_language Verilog [current_project]
 set_property ip_output_repo c:/Users/arthu/Desktop/robocup-firmware/fpga_new/rc_ports/rc_ports.cache/ip [current_project]
 set_property ip_cache_permissions {read write} [current_project]
-read_verilog -library xil_defaultlib -sv {
-  C:/Users/arthu/Desktop/robocup-firmware/fpga_new/rc_ports/rc_ports.srcs/sources_1/new/FixedAdd.sv
-  C:/Users/arthu/Desktop/robocup-firmware/fpga_new/rc_ports/rc_ports.srcs/sources_1/new/FixedSub.sv
-}
+read_verilog -library xil_defaultlib -sv C:/Users/arthu/Desktop/robocup-firmware/fpga_new/rc_ports/rc_ports.srcs/sources_1/new/FixedMult.sv
 # Mark all dcp files as not used in implementation to prevent them from being
 # stitched into the results of this synthesis run. Any black boxes in the
 # design are intentionally left as such for best results. Dcp files will be
@@ -44,12 +41,12 @@ foreach dcp [get_files -quiet -all -filter file_type=="Design\ Checkpoint"] {
 set_param ips.enableIPCacheLiteLoad 1
 close [open __synthesis_is_running__ w]
 
-synth_design -top FixedSub -part xc7a50tcsg324-3
+synth_design -top FixedMult -part xc7a50tcsg324-3
 
 
 # disable binary constraint mode for synth run checkpoints
 set_param constraints.enableBinaryConstraints false
-write_checkpoint -force -noxdef FixedSub.dcp
-create_report "synth_1_synth_report_utilization_0" "report_utilization -file FixedSub_utilization_synth.rpt -pb FixedSub_utilization_synth.pb"
+write_checkpoint -force -noxdef FixedMult.dcp
+create_report "synth_1_synth_report_utilization_0" "report_utilization -file FixedMult_utilization_synth.rpt -pb FixedMult_utilization_synth.pb"
 file delete __synthesis_is_running__
 close [open __synthesis_is_complete__ w]

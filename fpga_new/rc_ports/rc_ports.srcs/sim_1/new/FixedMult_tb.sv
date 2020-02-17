@@ -4,8 +4,8 @@
 // Engineer: Arthur Siqueira
 // 
 // Create Date: 02/16/2020 02:36:20 PM
-// Design Name: Fixed Point Add and Sub testbench
-// Module Name: FixedAddSub_tb
+// Design Name: Fixed Point Multiplier Testbench
+// Module Name: FixedMult_tb
 // Project Name: RoboCup
 // Target Devices: Artix 7
 // Tool Versions: 2019.2
@@ -20,42 +20,32 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module FixedAddSub_tb #(
+module FixedMult_tb #(
     DATA_WIDTH = 32,
-    RADIX = 15
-);
-
+    RADIX =15     
+    );
+    
 reg [DATA_WIDTH-1:0] x;
 reg [DATA_WIDTH-1:0] y;
-wire [DATA_WIDTH-1:0] zSub;
-wire [DATA_WIDTH-1:0] zAdd;
-wire overflowAdd;
-wire overflowSub;
+wire [DATA_WIDTH-1:0] z;
+wire overflow;
 
-FixedAdd #(
+
+FixedMult #(
     .DATA_WIDTH(DATA_WIDTH),
     .RADIX(RADIX)
-) dutAdd (
+) dutMult (
     .x(x),
     .y(y),
-    .z(zAdd),
-    .overflow(overflowAdd)
+    .z(z),
+    .overflow(overflow)
 );
 
-FixedSub #(
-    .DATA_WIDTH(DATA_WIDTH),
-    .RADIX(RADIX)
-) dutSub (
-    .x(x),
-    .y(y),
-    .z(zSub),
-    .overflow(overflowSub)
-);
 
 initial begin
     x = 10;
     y = 5;
-    #1;
+    #1; //Testing overflow:
     x = 32'h0FFFFFFF;
     y = 32'hFFFFFFFF;
     #1;
@@ -64,7 +54,19 @@ initial begin
     #1;
     x = -32'h7FFFFFFF;
     y = 32'h7FFFFFFF;
+    #1;
+    x = 2;
+    y = 32'h7FFFFFFF;
+    #1;
+    x = 2;
+    y = 32'h40000000;
+    #1;
+    x = 2;
+    y = -32'h40000000;
+    #1;
+    x = 2;
+    y = -32'h3ffffffe;
     #1 $finish;
-end
-
+end 
+    
 endmodule

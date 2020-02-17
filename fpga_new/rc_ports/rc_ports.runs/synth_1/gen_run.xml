@@ -1,18 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="synth_1" LaunchPart="xc7a50tcsg324-3" LaunchTime="1581900997">
-  <File Type="PA-TCL" Name="FixedSub.tcl"/>
-  <File Type="RDS-PROPCONSTRS" Name="FixedSub_drc_synth.rpt"/>
-  <File Type="REPORTS-TCL" Name="FixedSub_reports.tcl"/>
-  <File Type="RDS-RDS" Name="FixedSub.vds"/>
-  <File Type="RDS-UTIL" Name="FixedSub_utilization_synth.rpt"/>
-  <File Type="RDS-UTIL-PB" Name="FixedSub_utilization_synth.pb"/>
-  <File Type="RDS-DCP" Name="FixedSub.dcp"/>
-  <File Type="VDS-TIMINGSUMMARY" Name="FixedSub_timing_summary_synth.rpt"/>
-  <File Type="VDS-TIMING-PB" Name="FixedSub_timing_summary_synth.pb"/>
+<GenRun Id="synth_1" LaunchPart="xc7a50tcsg324-3" LaunchTime="1581974976">
+  <File Type="PA-TCL" Name="FixedMult.tcl"/>
+  <File Type="RDS-PROPCONSTRS" Name="FixedMult_drc_synth.rpt"/>
+  <File Type="REPORTS-TCL" Name="FixedMult_reports.tcl"/>
+  <File Type="RDS-RDS" Name="FixedMult.vds"/>
+  <File Type="RDS-UTIL" Name="FixedMult_utilization_synth.rpt"/>
+  <File Type="RDS-UTIL-PB" Name="FixedMult_utilization_synth.pb"/>
+  <File Type="RDS-DCP" Name="FixedMult.dcp"/>
+  <File Type="VDS-TIMINGSUMMARY" Name="FixedMult_timing_summary_synth.rpt"/>
+  <File Type="VDS-TIMING-PB" Name="FixedMult_timing_summary_synth.pb"/>
   <FileSet Name="sources" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1">
     <Filter Type="Srcs"/>
+    <File Path="$PSRCDIR/sources_1/new/FixedMult.sv">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
     <File Path="$PSRCDIR/sources_1/new/FixedAdd.sv">
       <FileInfo>
+        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -20,6 +28,7 @@
     </File>
     <File Path="$PSRCDIR/sources_1/new/FixedSub.sv">
       <FileInfo>
+        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -83,7 +92,7 @@
     </File>
     <Config>
       <Option Name="DesignMode" Val="RTL"/>
-      <Option Name="TopModule" Val="FixedSub"/>
+      <Option Name="TopModule" Val="FixedMult"/>
     </Config>
   </FileSet>
   <FileSet Name="constrs_in" Type="Constrs" RelSrcDir="$PSRCDIR/constrs_1">
