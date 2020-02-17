@@ -36,10 +36,11 @@ namespace Registers {
 
 };
 
-ICM20948::ICM20948(std::shared_ptr<SPI> spi_bus, PinName cs_pin)
-    : spi_bus(spi_bus),
-      chip_select_pin(cs_pin, PullType::PullNone, PinMode::PushPull, PinSpeed::Low, true) {
-    chip_select_pin.write(false);
+ICM20948::ICM20948(std::unique_ptr<SPI> imuSPI, PinName cs_pin) 
+    : imuSPI(std::move(imuSPI)),
+      nCs(cs_pin) {
+    //chip_select_pin.write(false);
+    nCs = 1;
     HAL_Delay(1500);
 }
 
@@ -47,7 +48,7 @@ bool ICM20948::initialize() {
     // chip_select(true);
 
     // SPI pulise to clear pins. 
-    spi_bus->transmit(0);    
+    imuSPI->transmit(0);    
     
     HAL_Delay(100);
 
@@ -104,15 +105,15 @@ bool ICM20948::initialize() {
 
 float ICM20948::gyro_z() {
 
-    uint16_t hi = read_register(0, Registers::GYRO_ZOUT_H),
-             lo = rread_register(0, Registers::GYRO_ZOUT_L);
+    uint16_t hi = read_register(0, Registers::GYRO_Z_OUT_H),
+             lo = read_register(0, Registers::GYRO_Z_OUT_L);
 
 
     // Reinterpret the bits as a signed 16-bit integer
     int16_t total = hi << 8 | lo;
 
     // +-1000dps max, for 16-bit signed integers, comes out to 32.8lsb/deg.
-    const float lsbToDps = 1000f / 32768f;
+    const float lsbToDps = 1000.0f / 32768.f;
     const float degToRad = M_PI / 180.0f;
     return total * (degToRad * lsbToDps);
 }
@@ -125,7 +126,7 @@ uint8_t ICM20948::read_register(uint8_t address) {
 
     uint8_t data_tx[2] = {address | READ_BIT, 0x0};
     uint8_t data_rx[2] = {0x0, 0x0};
-    spi_bus->transmitReceive(data_tx, data_rx, 2);
+    imuSPI->transmitReceive(data_tx, data_rx, 2);
 
     printf("%x%x -> %x%x\r\n", data_tx[0], data_tx[1], data_rx[0], data_rx[1]);
 
@@ -142,7 +143,7 @@ void ICM20948::write_register(uint8_t address, uint8_t value) {
 
     uint8_t data_tx[2] = {address, value};
     uint8_t data_rx[2] = {0x0, 0x0};
-    spi_bus->transmitReceive(data_tx, data_rx, 2);
+    imuSPI->transmitReceive(data_tx, data_rx, 2);
 
     // Restore previous CS state
     chip_select(was_cs_active);
@@ -156,28 +157,36 @@ void ICM20948::chip_select(bool active) {
 }
 */
 
+void ICM20948::chip_select(bool cs_state) {
+    if (cs_state) {
+        nCs.write(0);
+    } else {
+        nCs.write(1);
+    }
+}
+
 void ICM20948::write_register(uint8_t bank, uint8_t address, uint8_t value) {
     chip_select(true);
-    spi_bus->transmit(Registers::REG_BANK_SEL);
-    spi_bus->transmit(bank);
+    imuSPI->transmit(Registers::REG_BANK_SEL);
+    imuSPI->transmit(bank);
     chip_select(false);
 
     chip_select(true);
-    spi_bus->transmit(address);
-    spi_bus->transmit(value);
+    imuSPI->transmit(address);
+    imuSPI->transmit(value);
     chip_select(false);
 }
 
 
 uint8_t ICM20948::read_register(uint8_t bank, uint8_t address) { 
     chip_select(true);
-    spi_bus->transmit(Registers::REG_BANK_SEL);
-    spi_bus->transmit(bank);
+    imuSPI->transmit(Registers::REG_BANK_SEL);
+    imuSPI->transmit(bank);
     chip_select(false);
     
     chip_select(true);
-    spi_bus->transmit(READ_BIT | address);
-    uint8_t data = spi_bus->transmitReceive(0x00);
+    imuSPI->transmit(READ_BIT | address);
+    uint8_t data = imuSPI->transmitReceive(0x00);
     chip_select(false);
 
     return data;    

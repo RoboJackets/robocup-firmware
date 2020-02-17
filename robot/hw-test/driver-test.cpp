@@ -1,4 +1,4 @@
-#include "mtrain.hpp"
+/*#include "mtrain.hpp"
 #include "drivers/ICM20948.hpp"
 
 int main() {
@@ -11,3 +11,4 @@ int main() {
         printf("Data received: %d\r\n", int(imu_data * 1000));
     }    
 }
+*/
