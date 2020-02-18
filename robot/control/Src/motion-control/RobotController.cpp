@@ -74,14 +74,16 @@ void RobotController::calculateBody(Eigen::Matrix<float, numStates, 1> pv,
         sp(0) = std::signbit(sp(0)) * 6.0;
     }
 
+    Eigen::Matrix<float, numWheels, numStates> G = RobotModel::get().BotToWheel.cast<float>();
+
     // TODO(Kyle): Why do we arbitrarily multiply this by 0.02?
     Eigen::Matrix<float, numStates, 1> linear_accel = (sp - pv) / dt * 0.02;
 
     // Calculate inverse dynamics
     Eigen::Matrix<float, numStates, 1> robot_force = Eigen::Matrix<float, 3, 1>(kRobotMassX, kRobotMassY, 30 * kRobotMassH * kRobotRadius).cwiseProduct(linear_accel);
-    Eigen::Matrix<float, numWheels, 1> wheel_force = RobotModel::get().BotToWheel * robot_force;
+    Eigen::Matrix<float, numWheels, 1> wheel_force = G * robot_force;
 
-    apply_wheel_force(wheel_force, RobotModel::get().BotToWheel * pv, outputs);
+    apply_wheel_force(wheel_force, G * pv, outputs);
 
     // Debug variables
     // [0, 3) body acceleration

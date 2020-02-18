@@ -20,7 +20,7 @@ RobotEstimator::RobotEstimator(uint32_t dt_us) {
 
     //H = [bot2Wheel;
     //      0, 0, 1]
-    H.block<4, 3>(0, 0) = RobotModel::get().BotToWheel;
+    H.block<4, 3>(0, 0) = RobotModel::get().BotToWheel.cast<float>();
     H.block<1, 3>(4, 0) << 0, 0, 0;
 
     Q.setIdentity();
