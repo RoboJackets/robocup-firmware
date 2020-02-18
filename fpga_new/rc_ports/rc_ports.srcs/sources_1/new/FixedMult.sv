@@ -41,7 +41,8 @@ endgenerate
 
 
 assign overflow = (result >> (DATA_WIDTH-1) != 0);
-assign result = ((x[DATA_WIDTH-1]==1)?$unsigned(-x):$unsigned(x))*((y[DATA_WIDTH-1]==1)?$unsigned(-y):$unsigned(y));
+assign result = (((x[DATA_WIDTH-1]==1)?$unsigned(-x):$unsigned(x))
+                *((y[DATA_WIDTH-1]==1)?$unsigned(-y):$unsigned(y)))>>>RADIX;
 
 assign z = result[DATA_WIDTH-1:0]; 
         
