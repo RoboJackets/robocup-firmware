@@ -105,7 +105,6 @@ int main() {
 
     led.fpgaInitialized();
 
-    /*
     RadioModule radio(&batteryVoltage,
                       &fpgaStatus,
                       &kickerInfo,
@@ -119,8 +118,6 @@ int main() {
     // KickerModule kicker(dot_star_spi,
     //                     &kickerCommand,
     //                     &kickerInfo);
-=======
-                      */
 
     led.radioInitialized();
 
@@ -146,7 +143,7 @@ int main() {
     moduleList.emplace_back(curTime, MotionControlModule::period, MotionControlModule::runtime, &motion);
     // moduleList.emplace_back(curTime, IMUModule::period,           IMUModule::runtime,           &imu);
     moduleList.emplace_back(curTime, FPGAModule::period,          FPGAModule::runtime,          &fpga);
-    //moduleList.emplace_back(curTime, RadioModule::period,         RadioModule::runtime,         &radio);
+    moduleList.emplace_back(curTime, RadioModule::period,         RadioModule::runtime,         &radio);
     // moduleList.emplace_back(curTime, KickerModule::period,        KickerModule::runtime,        &kicker);
     moduleList.emplace_back(curTime, BatteryModule::period,       BatteryModule::runtime,       &battery);
     moduleList.emplace_back(curTime, RotaryDialModule::period,    RotaryDialModule::runtime,    &dial);
