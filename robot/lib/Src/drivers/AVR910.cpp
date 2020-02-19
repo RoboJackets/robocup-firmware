@@ -34,6 +34,7 @@
  */
 
 #include "drivers/AVR910.hpp"
+#include "delay.h"
 
 using namespace std;
 
@@ -85,8 +86,6 @@ bool AVR910::program(FILE* binary, int pageSize, int numPages) {
     if (numPages > 1) {
         while ((c = getc(binary)) != EOF) {
             // Page is fully loaded, time to write it to flash.
-            // printf("page size: %d\r\n", pageSize);
-            // printf("page offset: %d\r\n", pageOffset);
             if (pageOffset == (pageSize)) {
                 writeFlashMemoryPage(pageNumber, lc_offset, lc_highlow);
                 lc_offset = 0xFF;
@@ -122,7 +121,6 @@ bool AVR910::program(FILE* binary, int pageSize, int numPages) {
                 loadMemoryPage(WRITE_HIGH_BYTE, pageOffset, c);
                 highLow = 0;
                 pageOffset++;
-                // printf("Writing high\r\n");
             }
             // printf("PageNumber: %d\r\n", pageNumber);
         }
@@ -563,7 +561,8 @@ bool AVR910::checkMemory(int pageSize, int numPages, const uint8_t* binary,
 }
 
 void AVR910::exitProgramming() {
-    nReset_ = 0;
-    vTaskDelay(100);
-    nReset_ = 1;
+    nReset_.write(0);
+    // TODO(Kyle): Why wasn't vTaskDelay working here?
+    DWT_Delay(100000);
+    nReset_.write(1);
 }

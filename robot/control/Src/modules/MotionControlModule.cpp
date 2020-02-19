@@ -123,10 +123,8 @@ void MotionControlModule::entry() {
 
         // set motors to real targets
         for (int i = 0; i < 4; i++) {
-            printf("\t%d", (int) (motorCommands(i, 0) * 10000));
             motorCommandLock->wheels[i] = motorCommands(i, 0);
         }
-        printf("\r\n");
         motorCommandLock->dribbler = dribblerCommand;
     } else {
 
