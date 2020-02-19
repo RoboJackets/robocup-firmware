@@ -21,6 +21,8 @@ public:
 
 private:
     LockedStruct<RobotID>& robotID;
-    
+
     RotarySelector<IOExpanderDigitalInOut> dial;
+
+    int last_robot_id = -1;
 };

@@ -11,7 +11,7 @@ RotaryDialModule::RotaryDialModule(LockedStruct<MCP23017>& ioExpander, LockedStr
     auto robotLock = robotID.unsafe_value();
     robotLock->isValid = false;
     robotLock->lastUpdate = 0;
-    robotLock->robotID = 0;
+    robotLock->robotID = -1;
 }
 
 void RotaryDialModule::start() {
@@ -19,10 +19,17 @@ void RotaryDialModule::start() {
 }
 
 void RotaryDialModule::entry(void) {
-    auto robotIDLock = robotID.lock();
+    int new_robot_id = dial.read();
 
-    if (!robotIDLock->isValid)
-        robotIDLock->robotID = dial.read();
-    robotIDLock->isValid = true;
-    robotIDLock->lastUpdate = HAL_GetTick();
+    printf("Rotary dial: %d\r\n", new_robot_id);
+
+    auto robotIDLock = robotID.lock();
+    if (last_robot_id == new_robot_id) {
+        robotIDLock->isValid = true;
+        robotIDLock->lastUpdate = HAL_GetTick();
+        robotIDLock->robotID = new_robot_id;
+    } else {
+        robotIDLock->isValid = false;
+    }
+    last_robot_id = new_robot_id;
 }
