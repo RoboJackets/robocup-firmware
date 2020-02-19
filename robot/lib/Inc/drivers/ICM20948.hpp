@@ -6,7 +6,7 @@
 
 class ICM20948 {
 public:
-    ICM20948(std::unique_ptr<SPI> imuSPI, PinName cs_pin);
+    ICM20948(std::shared_ptr<SPI> imuSPI, PinName cs_pin);
 
     bool initialize();
 
@@ -19,7 +19,7 @@ private:
     
     void chip_select(bool cs_state);
 
-    std::unique_ptr<SPI> imuSPI;
+    std::shared_ptr<SPI> imuSPI;
 
     DigitalOut nCs;
 };

@@ -36,7 +36,7 @@ namespace Registers {
 
 };
 
-ICM20948::ICM20948(std::unique_ptr<SPI> imuSPI, PinName cs_pin) 
+ICM20948::ICM20948(std::shared_ptr<SPI> imuSPI, PinName cs_pin) 
     : imuSPI(std::move(imuSPI)),
       nCs(cs_pin) {
     //chip_select_pin.write(false);
