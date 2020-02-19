@@ -1,0 +1,4 @@
+<map id="sgn" name="sgn">
+<area shape="rect" id="node2" href="$class_dribbler_controller.html#a82486fc0dec2674be10327b39f60a156" title="Updates the controller with the latest input and calculates the correct motor command to reach this t..." alt="" coords="96,5,219,47"/>
+<area shape="rect" id="node3" href="$class_motion_control_module.html#a64ff50f42659f6bad0912a5b6f86d73e" title="MotionControlModule\l::entry" alt="" coords="267,5,412,47"/>
+</map>

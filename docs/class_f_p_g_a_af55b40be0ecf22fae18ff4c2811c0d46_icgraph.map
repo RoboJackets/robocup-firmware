@@ -1,0 +1,6 @@
+<map id="FPGA::chip_deselect" name="FPGA::chip_deselect">
+<area shape="rect" id="node2" href="$class_f_p_g_a.html#a767569caa2aa4d2e9423b6f3a6d2a7a8" title="Reads the hall count for all motors (similar to encoders) " alt="" coords="221,5,347,32"/>
+<area shape="rect" id="node3" href="$class_f_p_g_a.html#a6e2b0841e4e0eca35b463ccc8f70a26e" title="Reads the encoders for all motors. " alt="" coords="221,56,347,83"/>
+<area shape="rect" id="node4" href="$class_f_p_g_a.html#a6f7976dddd569c0b75a94c004ecfe478" title="Reads the duty cycles for all motors. " alt="" coords="200,107,368,133"/>
+<area shape="rect" id="node5" href="$class_f_p_g_a.html#a4daf6e0acbe3eac9db30a5b0aa39cfad" title="Sets the duty cycles for all motors Also reset the watchdog on the fpga. " alt="" coords="203,157,365,184"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="MCP23017::readPin" name="MCP23017::readPin">
+<area shape="rect" id="node2" href="$class_m_c_p23017.html#abd2401da8537875428522c181ecd9769" title="MCP23017::digitalWordRead" alt="" coords="192,5,383,32"/>
+<area shape="rect" id="node3" href="$class_m_c_p23017.html#a369951f5ce7e9ae6a338bcf9cc9f10f6" title="MCP23017::readRegister" alt="" coords="431,5,600,32"/>
+</map>

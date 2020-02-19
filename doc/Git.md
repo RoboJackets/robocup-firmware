@@ -1,3 +1,5 @@
+# Git
+
 ## Initial Prerequisites
 Before starting, you'll need a Unix-like environment. This means you need to be
 running OSX or Ubuntu Linux (other flavors of Debian may work, but we do not

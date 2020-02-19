@@ -1,0 +1,4 @@
+<map id="IMUModule::entry" name="IMUModule::entry">
+<area shape="rect" id="node2" href="$class_m_p_u6050.html#a574d3093dc131e4251a9b37adf208ca7" title="Get raw 6&#45;axis motion sensor readings (accel/gyro). " alt="" coords="180,5,332,32"/>
+<area shape="rect" id="node3" href="$class_i2_cdev.html#ae1eed9468ce4653e080bfd8481d2ac88" title="Read multiple bytes from an 8&#45;bit device register. " alt="" coords="380,5,511,32"/>
+</map>

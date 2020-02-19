@@ -1,0 +1,11 @@
+<map id="robot/control/Inc/modules" name="robot/control/Inc/modules">
+<area shape="rect" id="node1" href="dir_46be606fe712097f815c5f164a99c858.html" title="modules" alt="" coords="111,52,183,100"/>
+<area shape="rect" id="node2" href="dir_087824843af999929d24013060a6b935.html" title="motion&#45;control" alt="" coords="5,148,109,196"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000018_000019.html" title="3" alt="" coords="95,133,103,147"/>
+<area shape="rect" id="node3" href="dir_bce75092e74c8e5afefc19c24a06f395.html" title="lib" alt="" coords="147,244,219,292"/>
+<area shape="rect" id="edge2-headlabel" href="dir_000018_000026.html" title="8" alt="" coords="179,217,187,232"/>
+<area shape="rect" id="node4" href="dir_158341ba859a9e010f791bf02f61fbdf.html" title="radio" alt="" coords="184,148,256,196"/>
+<area shape="rect" id="edge3-headlabel" href="dir_000018_000020.html" title="1" alt="" coords="193,121,201,135"/>
+<area shape="rect" id="edge4-headlabel" href="dir_000020_000026.html" title="2" alt="" coords="203,222,211,237"/>
+<area shape="rect" id="clust1" href="dir_fd52124c4ca61b3c99db413ceca9f983.html" title="Inc" alt="" coords="100,16,193,111"/>
+</map>

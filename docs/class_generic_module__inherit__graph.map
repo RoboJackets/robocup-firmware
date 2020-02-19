@@ -1,0 +1,10 @@
+<map id="GenericModule" name="GenericModule">
+<area shape="rect" id="node2" href="$class_battery_module.html" title="{BatteryModule\n|+ freq\l+ period\l+ runtime\l|+ BatteryModule()\l+ entry()\l}" alt="" coords="5,204,132,325"/>
+<area shape="rect" id="node3" href="$class_f_p_g_a_module.html" title="{FPGAModule\n|+ freq\l+ period\l+ runtime\l|+ FPGAModule()\l+ entry()\l}" alt="" coords="157,204,277,325"/>
+<area shape="rect" id="node4" href="$class_i_m_u_module.html" title="{IMUModule\n|+ freq\l+ period\l+ runtime\l|+ IMUModule()\l+ entry()\l}" alt="" coords="301,204,410,325"/>
+<area shape="rect" id="node5" href="$class_kicker_module.html" title="{KickerModule\n|+ freq\l+ period\l+ runtime\l|+ KickerModule()\l+ entry()\l}" alt="" coords="435,204,556,325"/>
+<area shape="rect" id="node6" href="$class_l_e_d_module.html" title="{LEDModule\n|+ freq\l+ period\l+ runtime\l|+ LEDModule()\l+ entry()\l+ fpgaInitialized()\l+ radioInitialized()\l+ kickerInitialized()\l+ fullyInitialized()\l+ missedSuperLoop()\l+ missedModuleRun()\l}" alt="" coords="580,160,731,369"/>
+<area shape="rect" id="node7" href="$class_motion_control_module.html" title="{MotionControlModule\n|+ freq\l+ period\l+ runtime\l|+ MotionControlModule()\l+ entry()\l}" alt="" coords="755,204,921,325"/>
+<area shape="rect" id="node8" href="$class_radio_module.html" title="{RadioModule\n|+ freq\l+ period\l+ runtime\l|+ RadioModule()\l+ entry()\l}" alt="" coords="945,204,1064,325"/>
+<area shape="rect" id="node9" href="$class_rotary_dial_module.html" title="{RotaryDialModule\n|+ freq\l+ period\l+ runtime\l|+ RotaryDialModule()\l+ entry()\l}" alt="" coords="1089,204,1235,325"/>
+</map>

@@ -1,3 +1,4 @@
+
 # GT RoboJackets RoboCup SSL - Firmware
 [![Build Status](https://circleci.com/gh/RoboJackets/robocup-firmware.svg?&style=shield)](https://circleci.com/gh/RoboJackets/robocup-firmware)
 
@@ -10,11 +11,11 @@ The soccer game is played between two teams of six robots each on a field with o
 
 The official [RoboCup site](http://robocupssl.cpe.ku.ac.th/) has more information on the competition.
 
-## Getting Started
-If you are a new member of RoboCup Electrical or Software and are interested in getting involved with firmware it is highly recommend you start with the [getting started](doc/GettingStarted.md) pages.
+# Getting Started
+If you are a new member of RoboCup Electrical or Software and are interested in getting involved with firmware it is highly recommend you start with the [getting started](docs/GettingStarted.md) pages.
 
 ## Project Layout
-For a high level overview of architecture of robocup-firmware see [here](doc/Firmware.md)
+For a high level overview of architecture of robocup-firmware see [here](docs/Firmware.md)
 
 ### robot/
 The robot folder contains the firmware code for the different targets that are compiled for the control board, FPGA, IMU, and radio.
@@ -33,18 +34,18 @@ Compiled binaries output from the build system for the mtrain connected to the c
 
 ### kicker/
 The kicker folder contains the firmware code for the different targets that are compiled for the kicker board.
-Details on the architecture of the kicker firmware code can be found [here](doc/Kicker.md)
+Details on the architecture of the kicker firmware code can be found [here](docs/Kicker.md)
 
 ### kicker/build/
 Compiled binaries output from the build system for the ATtiny on the kicker board get stored here in the bin/ directory as well as other build results.
 
 ### fpga/
 Contains the Verilog code to be programmed to the FPGA for motor control.
-Details on the architecture of the FPGA firmware code can be found [here](doc/FPGA.md)
+Details on the architecture of the FPGA firmware code can be found [here](docs/FPGA.md)
 
 
 ## Setup
-Below is a quick guide to getting this RoboCup project setup to build on your computer. If you are a robocup member planning on developing both mtrain and robocup firmware it is highly recommended that you  follow the Firmware [Getting Started](doc/GettingStarted.md) page.
+Below is a quick guide to getting this RoboCup project setup to build on your computer. If you are a robocup member planning on developing both mtrain and robocup firmware it is highly recommended that you  follow the Firmware [Getting Started](docs/GettingStarted.md) page.
 This project only provides directions for installing on Ubuntu Linux, Arch Linux, and Mac OS X, although it shouldn't be too difficult to port to other operating systems.
 
 1) Clone the repository
@@ -62,7 +63,7 @@ $ cd robocup-firmware
 $ ./util/<SYSTEM>-setup
 ```
 
-This will install conan for you if you have not previously installed it. If you respond no to the setup script see the note under Setting up Conan for RoboJackets Firmware in [Getting Started](doc/GettingStarted.md) before continuing.
+This will install conan for you if you have not previously installed it. If you respond no to the setup script see the note under Setting up Conan for RoboJackets Firmware in [Getting Started](docs/GettingStarted.md) before continuing.
 
 3) Build the project for the desired target. The `robot` target is the firmware for the MTrain.
 The `kicker` target is for the kicker MCU to be uploaded to the MTrain.
@@ -92,7 +93,7 @@ Note: The doxygen documentation site above is updated automacally using circle-c
 
 ## Contributing
 
-Please see the [contributing page](doc/Contributing.md) before contributing.
+Please see the [contributing page](docs/Contributing.md) before contributing.
 
 ## License
 

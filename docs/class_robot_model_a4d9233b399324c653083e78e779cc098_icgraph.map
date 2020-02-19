@@ -1,0 +1,7 @@
+<map id="RobotModel::operator=" name="RobotModel::operator=">
+<area shape="rect" id="node2" href="$class_robot_model.html#ad3a68a3a8d6036a1706c9d42c32d3585" title="RobotModel::get" alt="" coords="208,56,327,83"/>
+<area shape="rect" id="node3" href="$_robot_controller_8cpp.html#abfc9998f4b0df3fccd727baa5e1ac14d" title="apply_wheel_force" alt="" coords="415,5,546,32"/>
+<area shape="rect" id="node4" href="$class_robot_controller.html#acf446453660614222a9288b8b9cf88b5" title="Updates the controller with the latest input and calculates the correct wheel velocities to reach thi..." alt="" coords="635,31,837,57"/>
+<area shape="rect" id="node6" href="$class_robot_estimator.html#ab7adc8b41475920123f38b2934ce5247" title="RobotEstimator::RobotEstimator" alt="" coords="375,107,587,133"/>
+<area shape="rect" id="node5" href="$class_motion_control_module.html#a64ff50f42659f6bad0912a5b6f86d73e" title="MotionControlModule\l::entry" alt="" coords="885,23,1031,65"/>
+</map>

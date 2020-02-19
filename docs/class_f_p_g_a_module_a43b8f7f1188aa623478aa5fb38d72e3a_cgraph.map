@@ -1,0 +1,5 @@
+<map id="FPGAModule::FPGAModule" name="FPGAModule::FPGAModule">
+<area shape="rect" id="node2" href="$class_f_p_g_a.html#a77752bb708e4d7f5e691110e3e2480e7" title="Configure FPGA with the &quot;fpga_bin.h&quot; binary Must be called to initialize the fpga. " alt="" coords="240,5,359,32"/>
+<area shape="rect" id="node3" href="$class_f_p_g_a.html#afe0325a65f4142784871fb0c63255d75" title="Sends the config over to the FPGA It is assumed that the fpga has already initialized and the spi bus..." alt="" coords="407,5,543,32"/>
+<area shape="rect" id="node4" href="$class_f_p_g_a.html#abfd93a2d6b356b3338b598b8d9c1d5b4" title="Bring chipselect low so we can start a transmission. " alt="" coords="591,5,723,32"/>
+</map>

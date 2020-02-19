@@ -1,0 +1,7 @@
+<map id="robot/control/Inc/modules/MotionControlModule.hpp" name="robot/control/Inc/modules/MotionControlModule.hpp">
+<area shape="rect" id="node2" href="$_generic_module_8hpp.html" title="modules/GenericModule.hpp" alt="" coords="5,95,192,121"/>
+<area shape="rect" id="node4" href="$_micro_packets_8hpp.html" title="MicroPackets.hpp" alt="" coords="217,95,343,121"/>
+<area shape="rect" id="node5" href="$_dribbler_controller_8hpp.html" title="motion&#45;control/DribblerController.hpp" alt="" coords="368,95,603,121"/>
+<area shape="rect" id="node6" href="$_robot_controller_8hpp.html" title="motion&#45;control/RobotController.hpp" alt="" coords="627,95,851,121"/>
+<area shape="rect" id="node8" href="$_robot_estimator_8hpp.html" title="motion&#45;control/RobotEstimator.hpp" alt="" coords="875,95,1099,121"/>
+</map>

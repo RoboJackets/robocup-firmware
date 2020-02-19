@@ -1,0 +1,13 @@
+<map id="MotionControlModule::entry" name="MotionControlModule::entry">
+<area shape="rect" id="node2" href="$class_robot_estimator.html#af0c62c1938b462d08b2bdc840d41bdc0" title="Using the previous state and the next input We can guess where we are this time step. " alt="" coords="220,5,380,32"/>
+<area shape="rect" id="node3" href="$class_robot_estimator.html#ae26554a1a63fee66f30aefac7e366f1b" title="Using the next measurements, we can move our prediction closer to the true target. " alt="" coords="220,56,380,83"/>
+<area shape="rect" id="node4" href="$class_robot_estimator.html#a13ca81478db2261d22a8ff94cafccc10" title="RobotEstimator::getState" alt="" coords="215,107,385,133"/>
+<area shape="rect" id="node5" href="$class_dribbler_controller.html#a82486fc0dec2674be10327b39f60a156" title="Updates the controller with the latest input and calculates the correct motor command to reach this t..." alt="" coords="239,158,361,199"/>
+<area shape="rect" id="node7" href="$class_robot_controller.html#acf446453660614222a9288b8b9cf88b5" title="Updates the controller with the latest input and calculates the correct wheel velocities to reach thi..." alt="" coords="199,224,401,251"/>
+<area shape="rect" id="node11" href="$class_robot_controller.html#a4f66f557ece17aaea14884d7b914a24c" title="Updates the wheels such that they try to follow the target Outputs the correct motor commands to do t..." alt="" coords="213,283,387,325"/>
+<area shape="rect" id="node6" href="$_dribbler_controller_8cpp.html#a1ab31b90bc584c635ec159468ceed9b2" title="Edited sign function to always return &#45;1 or 1. " alt="" coords="493,156,536,183"/>
+<area shape="rect" id="node8" href="$class_robot_model.html#ad3a68a3a8d6036a1706c9d42c32d3585" title="RobotModel::get" alt="" coords="628,232,747,259"/>
+<area shape="rect" id="node10" href="$_robot_controller_8cpp.html#abfc9998f4b0df3fccd727baa5e1ac14d" title="apply_wheel_force" alt="" coords="449,257,580,284"/>
+<area shape="rect" id="node9" href="$class_robot_model.html#a4d9233b399324c653083e78e779cc098" title="RobotModel::operator=" alt="" coords="795,232,949,259"/>
+<area shape="rect" id="node12" href="$_robot_controller_8cpp.html#a0be031a2377dc2d785f9d68cb8a52d0f" title="boundScaling" alt="" coords="465,308,565,335"/>
+</map>

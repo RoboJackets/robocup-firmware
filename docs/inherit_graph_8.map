@@ -1,0 +1,11 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$class_generic_module.html" title="GenericModule" alt="" coords="5,183,115,209"/>
+<area shape="rect" id="node2" href="$class_battery_module.html" title="BatteryModule" alt="" coords="182,5,289,32"/>
+<area shape="rect" id="node3" href="$class_f_p_g_a_module.html" title="FPGAModule" alt="" coords="185,56,285,83"/>
+<area shape="rect" id="node4" href="$class_i_m_u_module.html" title="IMUModule" alt="" coords="191,107,280,133"/>
+<area shape="rect" id="node5" href="$class_kicker_module.html" title="KickerModule" alt="" coords="185,157,286,184"/>
+<area shape="rect" id="node6" href="$class_l_e_d_module.html" title="LEDModule" alt="" coords="190,208,281,235"/>
+<area shape="rect" id="node7" href="$class_motion_control_module.html" title="MotionControlModule" alt="" coords="163,259,308,285"/>
+<area shape="rect" id="node8" href="$class_radio_module.html" title="RadioModule" alt="" coords="186,309,285,336"/>
+<area shape="rect" id="node9" href="$class_rotary_dial_module.html" title="RotaryDialModule" alt="" coords="172,360,299,387"/>
+</map>

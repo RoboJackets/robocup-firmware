@@ -1,0 +1,51 @@
+<map id="I2Cdev::readBytes" name="I2Cdev::readBytes">
+<area shape="rect" id="node2" href="$class_i2_cdev.html#a2f70586510cbda5c5267a10b4ca220b9" title="I2Cdev::I2Cdev" alt="" coords="787,563,902,589"/>
+<area shape="rect" id="node3" href="$class_i2_cdev.html#aef1db446b45660c6631fc780278ac366" title="Read single byte from an 8&#45;bit device register. " alt="" coords="235,841,359,868"/>
+<area shape="rect" id="node16" href="$class_m_p_u6050.html#a4c1cd147d038e024bdeaa053c4d77734" title="Set clock source setting. " alt="" coords="754,740,935,767"/>
+<area shape="rect" id="node37" href="$class_m_p_u6050.html#a574d3093dc131e4251a9b37adf208ca7" title="Get raw 6&#45;axis motion sensor readings (accel/gyro). " alt="" coords="221,1513,373,1540"/>
+<area shape="rect" id="node40" href="$class_m_p_u6050.html#a658dfc7e35b7fdba360a75f137bde33a" title="Get 3&#45;axis accelerometer readings. " alt="" coords="208,1564,387,1591"/>
+<area shape="rect" id="node41" href="$class_m_p_u6050.html#aa68475158c22128e5459c4c5e19439dc" title="Get X&#45;axis accelerometer reading. " alt="" coords="204,1615,391,1641"/>
+<area shape="rect" id="node42" href="$class_m_p_u6050.html#a27240b90d3e03c85b7a619b794bb1756" title="Get Y&#45;axis accelerometer reading. " alt="" coords="204,1665,391,1692"/>
+<area shape="rect" id="node43" href="$class_m_p_u6050.html#acf5f5a20c10d99a1bdedf139f897bfdf" title="Get Z&#45;axis accelerometer reading. " alt="" coords="204,1716,391,1743"/>
+<area shape="rect" id="node44" href="$class_m_p_u6050.html#aedfa4f1e6507f48c0a09545345a87875" title="Get current internal temperature. " alt="" coords="208,1767,387,1793"/>
+<area shape="rect" id="node45" href="$class_m_p_u6050.html#a8ca85b87e7e0230921062fce7889b0d1" title="Get 3&#45;axis gyroscope readings. " alt="" coords="220,1817,375,1844"/>
+<area shape="rect" id="node46" href="$class_m_p_u6050.html#a268f52843a24992ff06a3f12392de584" title="Get X&#45;axis gyroscope reading. " alt="" coords="215,1868,379,1895"/>
+<area shape="rect" id="node47" href="$class_m_p_u6050.html#a97cbe7f10dd27e07bd78d1c25e4286b5" title="Get Y&#45;axis gyroscope reading. " alt="" coords="215,1919,379,1945"/>
+<area shape="rect" id="node48" href="$class_m_p_u6050.html#ae0fee1ba996a2b6f914df6fc34e7da48" title="Get Z&#45;axis gyroscope reading. " alt="" coords="216,1969,379,1996"/>
+<area shape="rect" id="node49" href="$class_m_p_u6050.html#aaee15e48af7ba78660b5754f3bb5f37a" title="Read word (2 bytes) from external sensor data registers. " alt="" coords="184,2020,411,2047"/>
+<area shape="rect" id="node50" href="$class_m_p_u6050.html#afd8983f0911e37015434bebc85185fb2" title="Read double word (4 bytes) from external sensor data registers. " alt="" coords="200,2071,395,2113"/>
+<area shape="rect" id="node4" href="$class_i2_cdev.html#a9f104431c59658432e8b2f02c3e1acd6" title="Read a single bit from an 8&#45;bit device register. " alt="" coords="515,259,629,285"/>
+<area shape="rect" id="node19" href="$class_i2_cdev.html#ab507de3d1a8f9e1528038ed2b2301d31" title="Read multiple bits from an 8&#45;bit device register. " alt="" coords="512,867,632,893"/>
+<area shape="rect" id="node20" href="$class_i2_cdev.html#aa68890af87de5471d32e583ebbd91acb" title="write a single bit in an 8&#45;bit device register. " alt="" coords="514,613,630,640"/>
+<area shape="rect" id="node21" href="$class_i2_cdev.html#a913371251b6a41520c080115650e1b59" title="Write multiple bits in an 8&#45;bit device register. " alt="" coords="511,563,633,589"/>
+<area shape="rect" id="node22" href="$class_m_p_u6050.html#a887a173e079980505763ffd1aa9fec05" title="Get gyroscope output rate divider. " alt="" coords="505,968,639,995"/>
+<area shape="rect" id="node23" href="$class_m_p_u6050.html#ac7f5c0511fe9d0f3525a3757498daed7" title="Get free&#45;fall event acceleration threshold. " alt="" coords="469,1019,675,1061"/>
+<area shape="rect" id="node24" href="$class_m_p_u6050.html#a3cff6b9613ad01aa1a51c287f5c5e329" title="Get free&#45;fall event duration threshold. " alt="" coords="469,1085,675,1126"/>
+<area shape="rect" id="node25" href="$class_m_p_u6050.html#ab7a825b1b8b86cebda308289630795e7" title="Get motion detection event acceleration threshold. " alt="" coords="471,1150,673,1191"/>
+<area shape="rect" id="node26" href="$class_m_p_u6050.html#a8ba035c2ae4a05d7e51b0d29e4924fb0" title="Get motion detection event duration threshold. " alt="" coords="471,1215,673,1257"/>
+<area shape="rect" id="node27" href="$class_m_p_u6050.html#ad941c1e844dc9230675c115734599ea3" title="Get zero motion detection event acceleration threshold. " alt="" coords="459,1281,685,1322"/>
+<area shape="rect" id="node28" href="$class_m_p_u6050.html#a04c0fcdcd0157b6dbf74d4901424801e" title="Get zero motion detection event duration threshold. " alt="" coords="459,1346,685,1387"/>
+<area shape="rect" id="node29" href="$class_m_p_u6050.html#af75b9f7ccac48515c7544238db0e6863" title="Get the I2C address of the specified slave (0&#45;3). " alt="" coords="479,1412,665,1439"/>
+<area shape="rect" id="node30" href="$class_m_p_u6050.html#ae7e9ead9645bcef326eb579c6ab5d5ff" title="Get the active internal register for the specified slave (0&#45;3). " alt="" coords="478,360,666,387"/>
+<area shape="rect" id="node31" href="$class_m_p_u6050.html#a4278dec5fec25be9a6f45b51a3373ad2" title="Get the I2C address of Slave 4. " alt="" coords="475,411,669,437"/>
+<area shape="rect" id="node32" href="$class_m_p_u6050.html#a7bd548cb60ecceb27c72f026ec0a60f8" title="Get the active internal register for the Slave 4. " alt="" coords="475,512,669,539"/>
+<area shape="rect" id="node33" href="$class_m_p_u6050.html#a9bc93f34bc3d85cbe6010b4a3a88c5a7" title="Get last available byte read from Slave 4. " alt="" coords="473,664,671,691"/>
+<area shape="rect" id="node34" href="$class_m_p_u6050.html#a295c9600579557df065aff88bc7a1d83" title="Get full interrupt enabled status. " alt="" coords="488,715,656,741"/>
+<area shape="rect" id="node35" href="$class_m_p_u6050.html#a550a735623cb1de950c72cd6931ee804" title="Get full set of interrupt status bits. " alt="" coords="493,765,651,792"/>
+<area shape="rect" id="node36" href="$class_m_p_u6050.html#a7f786ab4264f40e5a95e8937ec9adcc2" title="Read single byte from external sensor data register. " alt="" coords="461,816,683,843"/>
+<area shape="rect" id="node5" href="$class_m_p_u6050.html#af6e9af8e2222889fd5458e2ae12c55c8" title="Get the auxiliary I2C supply voltage level. " alt="" coords="743,208,946,235"/>
+<area shape="rect" id="node6" href="$class_m_p_u6050.html#a8fc7eab1302281f6e4bc953379f3237b" title="Get self&#45;test enabled setting for accelerometer X axis. " alt="" coords="746,259,943,285"/>
+<area shape="rect" id="node7" href="$class_m_p_u6050.html#a2523e798db3baf9cb9dbf347af16639b" title="Get self&#45;test enabled value for accelerometer Y axis. " alt="" coords="746,309,943,336"/>
+<area shape="rect" id="node8" href="$class_m_p_u6050.html#a57710638eeb6176cf14a8c444bda5300" title="Get self&#45;test enabled value for accelerometer Z axis. " alt="" coords="747,360,943,387"/>
+<area shape="rect" id="node9" href="$class_m_p_u6050.html#a913c2095001e204b5b09f8382a86d2ca" title="Get temperature FIFO enabled value. " alt="" coords="737,411,953,437"/>
+<area shape="rect" id="node10" href="$class_m_p_u6050.html#ada9a553176b57815f23fb7d71bb85c9d" title="Get gyroscope X&#45;axis FIFO enabled value. " alt="" coords="735,461,955,488"/>
+<area shape="rect" id="node11" href="$class_m_p_u6050.html#a86c85d5b5c93df82394435b868e17463" title="Get gyroscope Y&#45;axis FIFO enabled value. " alt="" coords="735,512,955,539"/>
+<area shape="rect" id="node12" href="$class_m_p_u6050.html#adbbbd131c74f37dd545403633eb317ff" title="Get gyroscope Z&#45;axis FIFO enabled value. " alt="" coords="735,5,954,32"/>
+<area shape="rect" id="node13" href="$class_m_p_u6050.html#ace244415128ad7a38293ad6808b7face" title="Get accelerometer FIFO enabled value. " alt="" coords="737,56,953,83"/>
+<area shape="rect" id="node14" href="$class_m_p_u6050.html#a3c2e29508607a655221a2fa4f4219b4d" title="Get Slave 2 FIFO enabled value. " alt="" coords="733,107,956,133"/>
+<area shape="rect" id="node15" href="$class_m_p_u6050.html#afd6a9b55a589c83c9a0fb0b5b2a88234" title="Get Slave 1 FIFO enabled value. " alt="" coords="733,157,956,184"/>
+<area shape="rect" id="node17" href="$class_i_m_u_module.html#aa5d654a2113ba36f90a57570e1243b89" title="IMUModule::IMUModule" alt="" coords="1187,740,1351,767"/>
+<area shape="rect" id="node18" href="$class_m_p_u6050.html#abd8fc6c18adf158011118fbccc7e7054" title="Power on and prepare for general usage. " alt="" coords="1004,765,1139,792"/>
+<area shape="rect" id="node38" href="$class_i_m_u_module.html#a729cd4acb6e0724f9414a1aaebb9a7a1" title="IMUModule::entry" alt="" coords="509,1513,635,1540"/>
+<area shape="rect" id="node39" href="$class_m_p_u6050.html#aabfd2920e748016383e8124a4b32ad31" title="Get raw 9&#45;axis motion sensor readings (accel/gyro/compass). " alt="" coords="496,1564,648,1591"/>
+</map>

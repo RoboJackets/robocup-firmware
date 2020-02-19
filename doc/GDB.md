@@ -1,7 +1,9 @@
-Note: Any place where <variable> is used should be replaced by the user with the appropriate variable.
+# GDB
 
 ## Introduction
 For debugging C and C++ knowing how to use GDB (GNU Debugger) will be invaluable. For that reason we have  assembled this tutorial to get you started with basic features of GDB as well as a few features which we found invaluable to new members.
+
+Note: Any place where <variable> is used should be replaced by the user with the appropriate variable.
 
 ## Installing gdb
 To install gdb use the following

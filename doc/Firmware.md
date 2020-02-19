@@ -1,6 +1,8 @@
+# Firmware Overview
+
 This document was originally written Fall of 2019 after the mtrain implementation. The latest relevant branch was comp2019. Knowing robocup, this won't be updated to the latest version of firmware, but hopefully it will still describe most everything. - Joe Neiger
 
-# Robocup Firmware
+# Repo Layout
 
 The repo is split into three big sections: kicker, fpga, and control. Kicker is the firmware that sits on the kicker board. FPGA is the verilog for the FPGA. Control is the code that runs on the mtrain (not including the HAL).
 

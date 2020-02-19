@@ -1,0 +1,51 @@
+<map id="I2Cdev::writeBytes" name="I2Cdev::writeBytes">
+<area shape="rect" id="node2" href="$class_i2_cdev.html#a2f70586510cbda5c5267a10b4ca220b9" title="I2Cdev::I2Cdev" alt="" coords="699,196,814,223"/>
+<area shape="rect" id="node3" href="$class_i2_cdev.html#aeb297637ef985cd562da465ba61b7042" title="Write single byte to an 8&#45;bit device register. " alt="" coords="190,794,317,820"/>
+<area shape="rect" id="node31" href="$class_m_p_u6050.html#a4c1cd147d038e024bdeaa053c4d77734" title="Set clock source setting. " alt="" coords="666,432,847,459"/>
+<area shape="rect" id="node48" href="$class_i2_cdev.html#acbe68a802d6a177301736e60bedd1def" title="Write single word to a 16&#45;bit device register. " alt="" coords="188,95,319,122"/>
+<area shape="rect" id="node4" href="$class_i2_cdev.html#aa68890af87de5471d32e583ebbd91acb" title="write a single bit in an 8&#45;bit device register. " alt="" coords="422,1148,538,1175"/>
+<area shape="rect" id="node33" href="$class_i2_cdev.html#a913371251b6a41520c080115650e1b59" title="Write multiple bits in an 8&#45;bit device register. " alt="" coords="419,676,541,703"/>
+<area shape="rect" id="node34" href="$class_m_p_u6050.html#a7d03801d6b656e8e12cd3c1dd97824a8" title="Set gyroscope sample rate divider. " alt="" coords="689,1798,824,1824"/>
+<area shape="rect" id="node35" href="$class_m_p_u6050.html#af704e1a4eb01522b146abeba78c32716" title="Get free&#45;fall event acceleration threshold. " alt="" coords="377,298,583,340"/>
+<area shape="rect" id="node36" href="$class_m_p_u6050.html#a41eeb40a654465966d260e3d31c4de4b" title="Get free&#45;fall event duration threshold. " alt="" coords="377,364,583,405"/>
+<area shape="rect" id="node37" href="$class_m_p_u6050.html#aa23c8d66502345c30915e69975fd2cc9" title="Set free&#45;fall event acceleration threshold. " alt="" coords="379,429,581,470"/>
+<area shape="rect" id="node38" href="$class_m_p_u6050.html#a6d81616aaa47539217057891c91ff08f" title="Set motion detection event duration threshold. " alt="" coords="379,494,581,536"/>
+<area shape="rect" id="node39" href="$class_m_p_u6050.html#a347a51fd25de20b9ead4659015ef793b" title="Set zero motion detection event acceleration threshold. " alt="" coords="367,560,593,601"/>
+<area shape="rect" id="node40" href="$class_m_p_u6050.html#a6d25a21e1673682f096399b719c66d2c" title="Set zero motion detection event duration threshold. " alt="" coords="367,728,593,769"/>
+<area shape="rect" id="node41" href="$class_m_p_u6050.html#a3c07eb2c59fff3ddc7186319ee40ba6f" title="Set the I2C address of the specified slave (0&#45;3). " alt="" coords="387,794,573,820"/>
+<area shape="rect" id="node42" href="$class_m_p_u6050.html#a62851e982059a2462d52c210ad764a1c" title="Set the active internal register for the specified slave (0&#45;3). " alt="" coords="386,844,574,871"/>
+<area shape="rect" id="node43" href="$class_m_p_u6050.html#a6985da2cbc37be3fefbe3c16bf8d34a6" title="Set the I2C address of Slave 4. " alt="" coords="383,895,577,922"/>
+<area shape="rect" id="node44" href="$class_m_p_u6050.html#ae54dc358da048e61a1ac68012300fdaa" title="Set the active internal register for Slave 4. " alt="" coords="383,946,577,972"/>
+<area shape="rect" id="node45" href="$class_m_p_u6050.html#a17147a6f477be79f58889e9e6329392f" title="Set new byte to write to Slave 4. " alt="" coords="374,1047,586,1074"/>
+<area shape="rect" id="node46" href="$class_m_p_u6050.html#ac7bcf24249dd5000320a8ec0ffe488c6" title="Set full interrupt enabled status. " alt="" coords="947,1835,1115,1862"/>
+<area shape="rect" id="node47" href="$class_m_p_u6050.html#a34a1def575f6abcd464afe954de8a461" title="Write byte to Data Output container for specified slave. " alt="" coords="377,1098,583,1124"/>
+<area shape="rect" id="node5" href="$class_m_p_u6050.html#a7c666c20e26869bc80646f1b2c3d69bc" title="Set the auxiliary I2C supply voltage level. " alt="" coords="655,870,858,896"/>
+<area shape="rect" id="node6" href="$class_m_p_u6050.html#ac2ab843dc9d241056ed0f891195cdbf9" title="Get self&#45;test enabled setting for accelerometer X axis. " alt="" coords="658,920,855,947"/>
+<area shape="rect" id="node7" href="$class_m_p_u6050.html#ad5847430ab297959e4d0e9b81ba2e3ba" title="Get self&#45;test enabled value for accelerometer Y axis. " alt="" coords="658,971,855,998"/>
+<area shape="rect" id="node8" href="$class_m_p_u6050.html#a8eb8ba039af9a47e0475a3835b87f404" title="Set self&#45;test enabled value for accelerometer Z axis. " alt="" coords="659,1022,855,1048"/>
+<area shape="rect" id="node9" href="$class_m_p_u6050.html#ae528a25b4997ad0e3091a012e4e4419e" title="Set temperature FIFO enabled value. " alt="" coords="923,1072,1139,1099"/>
+<area shape="rect" id="node11" href="$class_m_p_u6050.html#a53a03d1f255a62f01375c870cdc85767" title="Set gyroscope X&#45;axis FIFO enabled value. " alt="" coords="921,1123,1141,1150"/>
+<area shape="rect" id="node12" href="$class_m_p_u6050.html#a16eb12bbf07bc17a9d852941d834175e" title="Set gyroscope Y&#45;axis FIFO enabled value. " alt="" coords="921,1174,1141,1200"/>
+<area shape="rect" id="node13" href="$class_m_p_u6050.html#af5b5bc39b66466ba910f6eef1259444c" title="Set gyroscope Z&#45;axis FIFO enabled value. " alt="" coords="922,1224,1141,1251"/>
+<area shape="rect" id="node14" href="$class_m_p_u6050.html#afccbee85f5cdc95098f6d62d8d417c3f" title="Set accelerometer FIFO enabled value. " alt="" coords="923,1275,1139,1302"/>
+<area shape="rect" id="node15" href="$class_m_p_u6050.html#a38a10ac4f30b96718ec021dc0db8587b" title="Set Slave 2 FIFO enabled value. " alt="" coords="920,1326,1143,1352"/>
+<area shape="rect" id="node16" href="$class_m_p_u6050.html#a5d432fa2fb8b2227f50aa5c7b5befb66" title="Set Slave 1 FIFO enabled value. " alt="" coords="920,1376,1143,1403"/>
+<area shape="rect" id="node17" href="$class_m_p_u6050.html#a97fbf27e1b827f9dfc3c28ff376b54c4" title="Set Slave 0 FIFO enabled value. " alt="" coords="920,1427,1143,1454"/>
+<area shape="rect" id="node18" href="$class_m_p_u6050.html#a039f5724974c5bf3f373ed9be031441c" title="Set multi&#45;master enabled value. " alt="" coords="921,1478,1142,1504"/>
+<area shape="rect" id="node19" href="$class_m_p_u6050.html#a20dc4bdedbe1550580c28a6d090291be" title="Set wait&#45;for&#45;external&#45;sensor&#45;data enabled value. " alt="" coords="931,1529,1131,1570"/>
+<area shape="rect" id="node20" href="$class_m_p_u6050.html#a6ed713870c7f6d085ded91a45515a36c" title="Set Slave 3 FIFO enabled value. " alt="" coords="920,1595,1143,1622"/>
+<area shape="rect" id="node21" href="$class_m_p_u6050.html#a3413efbf2f4e8a27aa8768d9bc34d663" title="Set slave read/write transition enabled value. " alt="" coords="656,1732,857,1773"/>
+<area shape="rect" id="node22" href="$class_m_p_u6050.html#afaffa021d7bb41f3a288827080602eee" title="Set the enabled value for the specified slave (0&#45;3). " alt="" coords="663,483,850,510"/>
+<area shape="rect" id="node23" href="$class_m_p_u6050.html#abeb1f83652066d7543fd3283af794364" title="Set word pair byte&#45;swapping enabled for the specified slave (0&#45;3). " alt="" coords="641,534,872,560"/>
+<area shape="rect" id="node24" href="$class_m_p_u6050.html#a3d9bfcb5394c7a382009cd2dc91ce801" title="Set write mode for the specified slave (0&#45;3). " alt="" coords="655,584,858,611"/>
+<area shape="rect" id="node25" href="$class_m_p_u6050.html#a32602ab86f70b70d3313628fc6c010ae" title="Set word pair grouping order offset for the specified slave (0&#45;3). " alt="" coords="654,636,859,677"/>
+<area shape="rect" id="node26" href="$class_m_p_u6050.html#a04be2a8c3af6ef174f97769b9b5164a9" title="Set the enabled value for Slave 4. " alt="" coords="660,702,853,728"/>
+<area shape="rect" id="node27" href="$class_m_p_u6050.html#a7d7498ebc26f8a1fe8c9dcf40cd5d265" title="Set the enabled value for Slave 4 transaction interrupts. " alt="" coords="659,753,854,794"/>
+<area shape="rect" id="node28" href="$class_m_p_u6050.html#af1402fe7f3e1cc0dedb6714351cbca4e" title="Set write mode for the Slave 4. " alt="" coords="652,819,861,846"/>
+<area shape="rect" id="node29" href="$class_m_p_u6050.html#a003a098a1521c5ef4df50c0a8a2d47ab" title="Set interrupt logic level mode. " alt="" coords="938,1646,1125,1672"/>
+<area shape="rect" id="node30" href="$class_m_p_u6050.html#a9d9d6aeea346e6f6fad8e4a428cf3301" title="Set interrupt drive mode. " alt="" coords="939,1696,1124,1723"/>
+<area shape="rect" id="node10" href="$class_i_m_u_module.html#aa5d654a2113ba36f90a57570e1243b89" title="IMUModule::IMUModule" alt="" coords="1191,1376,1355,1403"/>
+<area shape="rect" id="node32" href="$class_m_p_u6050.html#abd8fc6c18adf158011118fbccc7e7054" title="Power on and prepare for general usage. " alt="" coords="964,752,1099,779"/>
+<area shape="rect" id="node49" href="$class_i2_cdev.html#a1b5fbedfadec5d429c81ee84d27e658d" title="write a single bit in a 16&#45;bit device register. " alt="" coords="415,44,545,71"/>
+<area shape="rect" id="node50" href="$class_i2_cdev.html#a8f8652a1328224cce867eed665a45c4d" title="Write multiple bits in a 16&#45;bit device register. " alt="" coords="412,95,548,122"/>
+</map>

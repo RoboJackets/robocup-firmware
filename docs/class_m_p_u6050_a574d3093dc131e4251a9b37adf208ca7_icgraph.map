@@ -1,0 +1,4 @@
+<map id="MPU6050::getMotion6" name="MPU6050::getMotion6">
+<area shape="rect" id="node2" href="$class_i_m_u_module.html#a729cd4acb6e0724f9414a1aaebb9a7a1" title="IMUModule::entry" alt="" coords="218,5,345,32"/>
+<area shape="rect" id="node3" href="$class_m_p_u6050.html#aabfd2920e748016383e8124a4b32ad31" title="Get raw 9&#45;axis motion sensor readings (accel/gyro/compass). " alt="" coords="205,56,357,83"/>
+</map>

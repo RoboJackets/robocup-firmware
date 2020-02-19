@@ -1,0 +1,3 @@
+<map id="MPU6050::getExternalSensorDWord" name="MPU6050::getExternalSensorDWord">
+<area shape="rect" id="node2" href="$class_i2_cdev.html#ae1eed9468ce4653e080bfd8481d2ac88" title="Read multiple bytes from an 8&#45;bit device register. " alt="" coords="248,13,379,39"/>
+</map>

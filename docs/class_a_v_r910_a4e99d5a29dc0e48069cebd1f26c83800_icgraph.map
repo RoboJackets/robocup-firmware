@@ -1,0 +1,7 @@
+<map id="AVR910::readRegister" name="AVR910::readRegister">
+<area shape="rect" id="node2" href="$class_a_v_r910.html#a24a91ddb881d8e0d27c1cb203d0f7349" title="Read the vendor code of the device. " alt="" coords="214,5,390,32"/>
+<area shape="rect" id="node5" href="$class_a_v_r910.html#a07c549c137848a2ecf78e1dcb241816e" title="Read the part family and flash size of the device. " alt="" coords="207,57,397,98"/>
+<area shape="rect" id="node6" href="$class_a_v_r910.html#ad1717b6ab05e7c0aba237a7c147354ae" title="Read the part number. " alt="" coords="215,123,389,149"/>
+<area shape="rect" id="node3" href="$class_kicker_board.html#a28cc7187d0a26480ecab58f733913adb" title="Reflashes the program on the kicker board MCU with the file specified. " alt="" coords="445,64,575,91"/>
+<area shape="rect" id="node4" href="$class_kicker_module.html#a0fb754dd00db2ea441fac7e0e84d5ce0" title="KickerModule::KickerModule" alt="" coords="623,64,811,91"/>
+</map>

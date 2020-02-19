@@ -1,0 +1,11 @@
+<map id="KickerModule::entry" name="KickerModule::entry">
+<area shape="rect" id="node2" href="$class_kicker_board.html#a5caa81abc585544ba6122f237f9d6a31" title="Sets the charge pin (to high) and allows the caps to charge up to max voltage. " alt="" coords="193,5,399,32"/>
+<area shape="rect" id="node3" href="$class_kicker_board.html#aae6db87403d0bb354f76071ea2182e7a" title="Sets whether the KickerBoard should chip or kick. " alt="" coords="219,56,373,83"/>
+<area shape="rect" id="node4" href="$class_kicker_board.html#ad7fe6bbf240ec17f50d3b9551166ed95" title="Cancels the kick on break beam command so that it doesn&#39;t kick when the break beam triggers..." alt="" coords="193,107,399,133"/>
+<area shape="rect" id="node5" href="$class_kicker_board.html#ad09cd66a72a0d24f1a8176cea71397ff" title="Sends the KickerBoard a command to kick for the allotted time in in milliseconds. ..." alt="" coords="233,157,359,184"/>
+<area shape="rect" id="node6" href="$class_kicker_board.html#a68a34d0ca98d8d67da8167bdea3eb332" title="Sends the KickerBoard a command to kick for the allotted time in in milliseconds once the breakbeam t..." alt="" coords="192,208,400,235"/>
+<area shape="rect" id="node7" href="$class_kicker_board.html#aaa3a613b73e4be7eb4812bb8c11bc6ce" title="Must be called once an interation (~25hz) to communicate and update the kicker. " alt="" coords="225,259,367,285"/>
+<area shape="rect" id="node8" href="$class_kicker_board.html#ad4598424736ecde08789e4d4d5feb83e" title="KickerBoard::isHealthy" alt="" coords="218,309,374,336"/>
+<area shape="rect" id="node9" href="$class_kicker_board.html#a24d20274376b425dcecfde77eefffbb9" title="KickerBoard::isBallSensed" alt="" coords="207,360,385,387"/>
+<area shape="rect" id="node10" href="$class_kicker_board.html#a183b9c1bd871f9124b706b053157dada" title="KickerBoard::isCharged" alt="" coords="216,411,376,437"/>
+</map>

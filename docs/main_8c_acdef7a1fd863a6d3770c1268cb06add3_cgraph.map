@@ -1,0 +1,16 @@
+<map id="main" name="main">
+<area shape="rect" id="node2" href="$main_8c.html#a02fd73d861ef2e4aabb38c0c9ff82947" title="init" alt="" coords="155,107,194,133"/>
+<area shape="rect" id="node8" href="$main_8c.html#ae702ed1cac6218459a4450e242b21e6f" title="handle_debug_mode" alt="" coords="104,259,245,285"/>
+<area shape="rect" id="node9" href="$main_8c.html#a0d4f8db41b896b615e70d355cfacf056" title="start the kick FSM for desired strength. " alt="" coords="337,284,383,311"/>
+<area shape="rect" id="node11" href="$main_8c.html#a257602aaf496b5bd2d54a23f5d851174" title="try_read_voltage" alt="" coords="115,360,234,387"/>
+<area shape="rect" id="node13" href="$main_8c.html#aab9d7a735441932d098ebfe60559ba10" title="update_ball_sense" alt="" coords="109,208,240,235"/>
+<area shape="rect" id="node14" href="$main_8c.html#a8b188dc3ad96f5f0741a7d2de916212b" title="charge_caps" alt="" coords="127,157,223,184"/>
+<area shape="rect" id="node15" href="$main_8c.html#af4a30028f5fcf211d1d914e6d73fb75c" title="fill_spi_return" alt="" coords="125,411,224,437"/>
+<area shape="rect" id="node3" href="$_h_a_l__attiny167_8c.html#ae0644f080d1fab2bc4376a7720cd0a2e" title="HAL_SetInputPin" alt="" coords="299,56,421,83"/>
+<area shape="rect" id="node4" href="$_h_a_l__attiny167_8c.html#aa889ca0f7fc0bfa49791b8aba3f0d856" title="HAL_SetOutputPin" alt="" coords="293,5,427,32"/>
+<area shape="rect" id="node5" href="$_h_a_l__attiny167_8c.html#a53b3bca1b91e57ba0d4a459ac71d3be5" title="HAL_ClearPin" alt="" coords="307,157,413,184"/>
+<area shape="rect" id="node6" href="$_h_a_l__attiny167_8c.html#a77acad64af22fb372955df7d7e4a2606" title="HAL_SetPin" alt="" coords="313,107,407,133"/>
+<area shape="rect" id="node7" href="$_h_a_l__attiny167_8c.html#a0dd22df2d0fc638d04ea0c31d39d111e" title="HAL_IsSet" alt="" coords="317,208,403,235"/>
+<area shape="rect" id="node10" href="$main_8c.html#a2d15b31f87ddbefcdea5546ee4250b26" title="is_kicking" alt="" coords="475,284,555,311"/>
+<area shape="rect" id="node12" href="$main_8c.html#a2017b011897009154e88099ab7e43a65" title="get_voltage" alt="" coords="315,360,405,387"/>
+</map>

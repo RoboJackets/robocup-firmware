@@ -1,0 +1,2 @@
+r
+loadfile ./robot/build/bin/control.bin 0x08000000

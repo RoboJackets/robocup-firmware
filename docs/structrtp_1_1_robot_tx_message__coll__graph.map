@@ -1,0 +1,4 @@
+<map id="rtp::RobotTxMessage" name="rtp::RobotTxMessage">
+<area shape="rect" id="node2" href="$unionrtp_1_1_robot_tx_message_1_1_robot_tx_messages.html" title="{rtp::RobotTxMessage\l::RobotTxMessages\n||}" alt="" coords="38,263,186,355"/>
+<area shape="rect" id="node3" href="$structrtp_1_1_control_message.html" title="{rtp::ControlMessage\n|+ bodyX\l+ bodyY\l+ bodyW\l+ dribbler\l+ kickStrength\l+ shootMode\l+ triggerMode\l+ song\l+ VELOCITY_SCALE_FACTOR\l|}" alt="" coords="5,5,219,200"/>
+</map>

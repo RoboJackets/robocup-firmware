@@ -1,3 +1,5 @@
+# Getting Started
+
 # Basics
 
 ## Command line basics
