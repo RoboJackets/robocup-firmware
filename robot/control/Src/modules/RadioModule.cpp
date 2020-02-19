@@ -55,12 +55,9 @@ void RadioModule::entry() {
         // Just check to see if our robot id is valid
         // That way we don't conflict with other robots on the network
         // that are working
-//        if (batteryVoltageLock->isValid && fpgaStatusLock->isValid && robotIDLock->isValid) {
+        if (batteryVoltageLock->isValid && fpgaStatusLock->isValid && robotIDLock->isValid) {
             link.send(batteryVoltageLock.value(), fpgaStatusLock.value(), kickerInfoLock.value(), robotIDLock.value());
-
-//        printf("FPGA valid: %d, Battery valid: %d, Kicker valid: %d, Robot ID valid: %d\r\n", fpgaStatusLock->isValid, batteryVoltageLock->isValid, kickerInfoLock->isValid, robotIDLock->isValid);
-//        printf("FPGA Initialized: %x, FPGA Errors: %x\r\n", fpgaStatusLock->initialized, fpgaStatusLock->FPGAHasError);
-//        }
+        }
     }
 
     {

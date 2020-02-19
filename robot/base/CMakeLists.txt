@@ -1,6 +1,5 @@
 add_executable( base.elf
     main.cpp
-    rtos_hooks.c
 )
 target_link_libraries(base.elf firm-lib)
 
