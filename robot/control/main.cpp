@@ -119,7 +119,6 @@ int main() {
     //                     &kickerCommand,
     //                     &kickerInfo);
 
-    led.radioInitialized();
 
     // led.kickerInitialized();
 

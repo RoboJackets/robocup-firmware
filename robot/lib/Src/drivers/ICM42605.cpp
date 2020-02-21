@@ -1,4 +1,3 @@
-#include "drivers/ICM42605.hpp"
 #include <cmath>
 
 #define READ_BIT (1 << 7)

@@ -20,20 +20,31 @@ namespace Registers {
     constexpr uint8_t GYRO_Z_OUT_L  = 0x38;
 
     constexpr uint8_t FIFO_MODE     = 0x69;
-    //constexpr uint8_t 
    
     // Bank 2 
     constexpr uint8_t GYRO_CONFIG_1 = 0x01;
-    //constexpr uint8_t 
 
-
-    enum GyroFS {
+    enum GYRO_FS_SEL {
         DPS_2000 = 3,
         DPS_1000 = 2,
         DPS_500 = 1,
         DPS_250 = 0,
     };
 
+    enum PWR_MGMT {
+        DEVICE_RESET = 1,
+        SLEEP = 1,  // 1: enter sleep mode
+        CLKSEL = 1, // 1-5: Auto selects best available clock source
+    };
+
+    enum LP_CONFIG_REG {
+        I2C_MST_CYCLE = 1,
+    };
+
+    enum USER_CTRL_REG {
+        I2C_IF_DIS = 1, // disable I2C, enable SPI
+    }; 
+    
 };
 
 ICM20948::ICM20948(std::shared_ptr<SPI> imuSPI, PinName cs_pin) 
@@ -44,63 +55,63 @@ ICM20948::ICM20948(std::shared_ptr<SPI> imuSPI, PinName cs_pin)
     HAL_Delay(1500);
 }
 
-bool ICM20948::initialize() {
-    // chip_select(true);
-
-    // SPI pulise to clear pins. 
+void ICM20948::initialize() {
+    // SPI pulse to clear pins. 
     imuSPI->transmit(0);    
     
-    HAL_Delay(100);
-
     uint8_t whoami = read_register(0, Registers::WHO_AM_I);
-    bool failed_init = false;
-
-    if (whoami != WHOAMI_VAL) {
+    
+    while (whoami != WHOAMI_VAL) {
         printf("Failed to connect to IMU.");
-        failed_init = true;
+        whoami = read_register(Registers::WHO_AM_I);
     }
-
+    
     // Reset
-    write_register(0, Registers::PWR_MGMT_1, 0xC1);
+    write_register( 
+        Registers::PWR_MGMT_1,
+        Registers::PWR_MGMT::DEVICE_RESET << 7
+        | Registers::PWR_MGMT::SLEEP << 6
+        | Registers::PWR_MGMT::CLKSEL);
 
     HAL_Delay(100);
 
     // Check whoami again
     whoami = read_register(0, Registers::WHO_AM_I);
-
-    if (whoami != WHOAMI_VAL && failed_init) {
+    
+    while (whoami != WHOAMI_VAL) {
         printf("Failed to connect to IMU.");
-        return false;
+        whoami = read_register(Registers::WHO_AM_I);
     }
     
     // Auto select best clock source
-    write_register(0, Registers::PWR_MGMT_1, 0x01);
+    write_register(
+        Registers::PWR_MGMT_1, 
+        Registers::PWR_MGMT::CLKSEL);
     
     // Operate I2C in duty cycled mode and disable GYRO duty cycle mode
-    write_register(0, Registers::LP_CONFIG, 0x40);
+    write_register(
+        Registers::LP_CONFIG, 
+        Registers::LP_CONFIG_REG::I2C_MST_CYCLE << 6);
     
     // Disable I2C
-    write_register(0, Registers::USER_CTRL, 0x10);
+    write_register(
+        Registers::USER_CTRL,
+        Registers::USER_CTRL_REG::I2C_IF_DIS << 4);
 
     // Turn FIFO off
-    write_register(0, Registers::FIFO_MODE, 0x00);
+    write_register(Registers::FIFO_MODE, 0x00);
 
     // Enable gyro
-    write_register(0, Registers::PWR_MGMT_2, 0x00);
+    write_register(Registers::PWR_MGMT_2, 0x00);
     
     // Configure gyro
-    write_register(2, Registers::GYRO_CONFIG_1, 0x04);
+    write_register(
+        2, 
+        Registers::GYRO_CONFIG_1, 
+        Registers::GYRO_FS_SEL::DPS_1000 << 2);
     
-    // Check whoami again
-    whoami = read_register(0, Registers::WHO_AM_I);
-
-    if (whoami != WHOAMI_VAL) {
-        printf("Failed to connect to IMU.");
-        return false;
-    } else {
-        printf("Initialization Complete!");
-        return true;
-    }
+    
+    printf("Initialization Complete!");
 }
 
 float ICM20948::gyro_z() {
@@ -118,52 +129,11 @@ float ICM20948::gyro_z() {
     return total * (degToRad * lsbToDps);
 }
 
-/*
-uint8_t ICM20948::read_register(uint8_t address) {
-    bool was_cs_active = currently_active;
-
-    chip_select(true);
-
-    uint8_t data_tx[2] = {address | READ_BIT, 0x0};
-    uint8_t data_rx[2] = {0x0, 0x0};
-    imuSPI->transmitReceive(data_tx, data_rx, 2);
-
-    printf("%x%x -> %x%x\r\n", data_tx[0], data_tx[1], data_rx[0], data_rx[1]);
-
-    // Restore previous CS state
-    chip_select(was_cs_active);
-
-    return data_rx[1];
-}
-
-void ICM20948::write_register(uint8_t address, uint8_t value) {
-    bool was_cs_active = currently_active;
-
-    chip_select(true);
-
-    uint8_t data_tx[2] = {address, value};
-    uint8_t data_rx[2] = {0x0, 0x0};
-    imuSPI->transmitReceive(data_tx, data_rx, 2);
-
-    // Restore previous CS state
-    chip_select(was_cs_active);
-}
-
-void ICM20948::chip_select(bool active) {
-    if (currently_active != active) {
-        currently_active = active;
-        chip_select_pin.write(active);
-    }
-}
-*/
 
 void ICM20948::chip_select(bool cs_state) {
-    if (cs_state) {
-        nCs.write(0);
-    } else {
-        nCs.write(1);
-    }
+    nCs.write(!cs_state); 
 }
+
 
 void ICM20948::write_register(uint8_t bank, uint8_t address, uint8_t value) {
     chip_select(true);
@@ -177,6 +147,13 @@ void ICM20948::write_register(uint8_t bank, uint8_t address, uint8_t value) {
     chip_select(false);
 }
 
+void ICM20948::write_register(uint8_t address, uint8_t value) {
+    chip_select(true);
+    imuSPI->transmit(address);
+    imuSPI->transmit(value);
+    chip_select(false);
+}
+
 
 uint8_t ICM20948::read_register(uint8_t bank, uint8_t address) { 
     chip_select(true);
@@ -184,6 +161,16 @@ uint8_t ICM20948::read_register(uint8_t bank, uint8_t address) {
     imuSPI->transmit(bank);
     chip_select(false);
     
+    chip_select(true);
+    imuSPI->transmit(READ_BIT | address);
+    uint8_t data = imuSPI->transmitReceive(0x00);
+    chip_select(false);
+
+    return data;    
+}
+
+
+uint8_t ICM20948::read_register(uint8_t address) { 
     chip_select(true);
     imuSPI->transmit(READ_BIT | address);
     uint8_t data = imuSPI->transmitReceive(0x00);
