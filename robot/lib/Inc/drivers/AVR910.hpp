@@ -41,6 +41,7 @@
 #include "mtrain.hpp"
 #include "SPI.hpp"
 #include "DigitalOut.hpp"
+#include "LockedStruct.hpp"
 #include <memory>
 
 // AVR SPI Commands
@@ -73,10 +74,16 @@ public:
      * @param nCs Chip select pin on mtrain
      * @param nReset mtrain pin for not reset line on the ISP interface.
      *
+     */
+    AVR910(LockedStruct<SPI>& spi, std::shared_ptr<DigitalOut> nCs, PinName nReset);
+
+    /**
      * Sends an enable programming command, allowing device registers to be
      * read and commands sent.
+     *
+     * @return true if initialization completed successfully
      */
-    AVR910(std::shared_ptr<SPI> spi, std::shared_ptr<DigitalOut> nCs, PinName nReset);
+    bool init();
 
     /**
      * Program the AVR microcontroller connected to the mbed.
@@ -181,6 +188,21 @@ protected:
      */
     void exitProgramming();
 
+    LockedStruct<SPI>::Lock lock_spi() {
+        // Lock the SPI struct. If it's the first time it's been locked, we also
+        // need to set the frequency.
+        bool set_freq;
+        auto spi_lock = spi_.lock(&set_freq);
+        if (set_freq) {
+            spi_lock->frequency(100'000);
+        }
+        return spi_lock;
+    }
+
+    LockedStruct<SPI>& spi_;
+    std::shared_ptr<DigitalOut> nCs_;
+    DigitalOut nReset_;
+
 private:
     /**
      * Issue an enable programming command to the AVR microcontroller.
@@ -236,8 +258,4 @@ private:
      * @return The byte at the specified memory location.
      */
     char readProgramMemory(int highLow, char pageNumber, char pageOffset);
-
-    std::shared_ptr<SPI> spi_;
-    std::shared_ptr<DigitalOut> nCs_;
-    DigitalOut nReset_;
 };

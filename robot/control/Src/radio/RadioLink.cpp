@@ -10,7 +10,9 @@
 
 extern DebugInfo debugInfo;
 
-RadioLink::RadioLink() {
+RadioLink::RadioLink() {}
+
+void RadioLink::init() {
     std::unique_ptr radioSPI = std::make_unique<SPI>(SpiBus5, std::nullopt, 16'000'000);
     radio = std::make_unique<ISM43340>(std::move(radioSPI),
                                        RADIO_R0_CS,

@@ -3,6 +3,7 @@
 #include <array>
 #include <memory>
 
+#include "LockedStruct.hpp"
 #include "DigitalOut.hpp"
 #include "I2C.hpp"
 #include "SPI.hpp"
@@ -13,19 +14,20 @@
 class LEDModule : public GenericModule {
 public:
     // How many times per second this module should run
-    static constexpr float freq = 1.0f; // Hz
-    static constexpr uint32_t period = static_cast<uint32_t>(1000000L / freq);
+    static constexpr float kFrequency = 10.0f; // Hz
+    static constexpr std::chrono::milliseconds kPeriod{static_cast<int>(1000 / kFrequency)};
+    static constexpr int kPriority = 1;
 
-    // How long a single call to this module takes
-    static constexpr uint32_t runtime = 550; // us
+    LEDModule(LockedStruct<MCP23017>& ioExpander,
+              LockedStruct<SPI>& dotStarSPI,
+              LockedStruct<BatteryVoltage>& batteryVoltage,
+              LockedStruct<FPGAStatus>& fpgaStatus,
+              LockedStruct<KickerInfo>& kickerInfo,
+              LockedStruct<RadioError>& radioError);
 
-    LEDModule(std::shared_ptr<MCP23017> ioExpander,
-              BatteryVoltage *const batteryVoltage,
-              FPGAStatus *const fpgaStatus,
-              KickerInfo *const kickerInfo,
-              RadioError *const radioError);
+    void start() override;
 
-    virtual void entry(void);
+    void entry() override;
 
     // Specific LED pattern for fpga initialization
     void fpgaInitialized();
@@ -73,21 +75,15 @@ private:
 
     const static uint16_t IOExpanderErrorLEDMask = 0xFF00;
 
-    BatteryVoltage *const batteryVoltage;
-    FPGAStatus *const fpgaStatus;
-    KickerInfo *const kickerInfo;
-    RadioError *const radioError;
+    LockedStruct<MCP23017>& ioExpander;
+    LockedStruct<SPI>& dotStarSPI;
 
-    // Dot stars were removed so we could use their SPI
-    // bus for the kicker
-    // On startup, the kicker was pulling the spi lines
-    // incorrectly that caused the fpga to not boot correctly
-    // Add back in once opto-isolators are added to the control
-    // boards again
-    // - Joe Aug 2019
-    //SPI dot_star_spi;
+    LockedStruct<BatteryVoltage>& batteryVoltage;
+    LockedStruct<FPGAStatus>& fpgaStatus;
+    LockedStruct<KickerInfo>& kickerInfo;
+    LockedStruct<RadioError>& radioError;
 
-    std::shared_ptr<MCP23017> ioExpander;
+    DigitalOut dotStarNCS;
 
     std::array<DigitalOut, 4> leds;
     bool missedSuperLoopToggle;

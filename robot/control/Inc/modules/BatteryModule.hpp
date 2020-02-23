@@ -1,5 +1,6 @@
 #pragma once
 
+#include <LockedStruct.hpp>
 #include "GenericModule.hpp"
 #include "MicroPackets.hpp" 
 
@@ -8,18 +9,16 @@
 class BatteryModule : public GenericModule {
 public:
     // How many times per second this module should run
-    static constexpr float freq = 1.0f; // Hz
-    static constexpr uint32_t period = static_cast<uint32_t>(1000000L / freq);
+    static constexpr float kFrequency = 1.0f; // Hz
+    static constexpr std::chrono::milliseconds kPeriod{static_cast<int>(1000 / kFrequency)};
+    static constexpr int kPriority = 1;
 
-    // How long a single call to this module takes
-    static constexpr uint32_t runtime = 0; // us
+    explicit BatteryModule(LockedStruct<BatteryVoltage>& batteryVoltage);
 
-    BatteryModule(BatteryVoltage *const batteryVoltage);
-
-    virtual void entry(void);
+    void entry() override;
 
 private:
-    BatteryVoltage *const batteryVoltage;
+    LockedStruct<BatteryVoltage>& batteryVoltage;
     
     Battery battery;
 };

@@ -1,11 +1,18 @@
+#include "LockedStruct.hpp"
 #include "drivers/MCP23017.hpp"
 
-MCP23017::MCP23017(std::shared_ptr<I2C> sharedI2C, int i2cAddress)
+MCP23017::MCP23017(LockedStruct<I2C>& sharedI2C, int i2cAddress)
     : _i2c(sharedI2C), _i2cAddress(i2cAddress) {
+}
+
+void MCP23017::init() {
     reset();
 }
 
 void MCP23017::reset() {
+    // Lock is a recursive mutex, so it's okay that child also call it.
+    auto lock = _i2c.lock();
+
     // Set all pins to input mode (via IODIR register)
     inputOutputMask(0xFFFF);
 
@@ -20,13 +27,15 @@ void MCP23017::reset() {
 }
 
 void MCP23017::writeRegister(MCP23017::Register regAddress, uint16_t data) {
+    auto i2c_lock = _i2c.lock();
     std::vector<uint8_t> buffer{static_cast<uint8_t>(data & 0xff),
                                 static_cast<uint8_t>(data >> 8)};
-    _i2c->transmit(_i2cAddress, regAddress, buffer);
+    i2c_lock->transmit(_i2cAddress, regAddress, buffer);
 }
 
 uint16_t MCP23017::readRegister(MCP23017::Register regAddress) {
-    std::vector<uint8_t> buffer = _i2c->receive(_i2cAddress, regAddress, 2);
+    auto i2c_lock = _i2c.lock();
+    std::vector<uint8_t> buffer = i2c_lock->receive(_i2cAddress, regAddress, 2);
 
     return (uint16_t)(buffer[0] | (buffer[1] << 8));
 }

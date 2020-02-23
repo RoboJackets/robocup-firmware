@@ -22,7 +22,7 @@ target_include_directories(control.elf PUBLIC
 
 target_link_libraries(control.elf
     firm-lib
-    CONAN_PKG::eigen
+    CONAN_PKG::Eigen3
     rc-fshare
 )
 

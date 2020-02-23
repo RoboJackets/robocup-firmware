@@ -2,6 +2,7 @@
 
 #include <memory>
 #include "I2C.hpp"
+#include "LockedStruct.hpp"
 
 /**
  * Allow access to an I2C-connected MCP23017 16-bit I/O extender chip
@@ -45,7 +46,12 @@ public:
         PinB7 = 15
     } ExpPinName;
 
-    MCP23017(std::shared_ptr<I2C> sharedI2C, int i2cAddress);
+    MCP23017(LockedStruct<I2C>& sharedI2C, int i2cAddress);
+
+    /**
+     * Initialize the device.
+     */
+    void init();
 
     /** Reset MCP23017 device to its power-on state
      */
@@ -112,7 +118,7 @@ public:
     void internalPullupMask(uint16_t mask);
 
 private:
-    std::shared_ptr<I2C> _i2c;
+    LockedStruct<I2C>& _i2c;
     int _i2cAddress;  // physical I2C address
 
     // Cached copies of the register values

@@ -22,6 +22,12 @@ public:
      */
     RotarySelector(std::array<DIGITAL_IN, NUM_PINS> pins) : m_pins(pins) {}
 
+    void init() {
+        for (auto& pin : m_pins) {
+            pin.init();
+        }
+    }
+
     /**
      * Gives the reading (0x0 - 0xF) of the NUM_PINS wires
     */

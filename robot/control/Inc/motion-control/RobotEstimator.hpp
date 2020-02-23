@@ -27,7 +27,7 @@ public:
      * 
      * @param u Last motor command
      */
-    void predict(Eigen::Matrix<double, numInputs, 1> u);
+    void predict(Eigen::Matrix<float, numInputs, 1> u);
 
     /**
      * Using the next measurements, we can move our prediction
@@ -35,29 +35,29 @@ public:
      * 
      * @param z Encoders 1-4 then gyro
      */
-    void update(Eigen::Matrix<double, numOutputs, 1> z);
+    void update(Eigen::Matrix<float, numOutputs, 1> z);
 
     /**
      * @param state Matrix that the current guess will be saved into
      */
-    void getState(Eigen::Matrix<double, numStates, 1>& state);
+    void getState(Eigen::Matrix<float, numStates, 1>& state);
 
 private:
-    static constexpr double processNoise = 0.05;
-    static constexpr double encoderNoise = 0.04;
-    static constexpr double gyroNoise = 0.005;
-    static constexpr double initCovariance = 10.0;
+    static constexpr float processNoise = 0.05;
+    static constexpr float encoderNoise = 0.04;
+    static constexpr float gyroNoise = 0.005;
+    static constexpr float initCovariance = 0.1;
 
-    Eigen::Matrix<double, numStates,  numStates>  F;
-    Eigen::Matrix<double, numStates,  numInputs>  B;
-    Eigen::Matrix<double, numOutputs, numStates>  H;
-    Eigen::Matrix<double, numStates,  numStates>  Q;
-    Eigen::Matrix<double, numOutputs, numOutputs> R;
-    Eigen::Matrix<double, numStates,  numStates>  P;
+    Eigen::Matrix<float, numStates,  numStates>  F;
+    Eigen::Matrix<float, numStates,  numInputs>  B;
+    Eigen::Matrix<float, numOutputs, numStates>  H;
+    Eigen::Matrix<float, numStates,  numStates>  Q;
+    Eigen::Matrix<float, numOutputs, numOutputs> R;
+    Eigen::Matrix<float, numStates,  numStates>  P;
 
     // Identity
-    Eigen::Matrix<double, numStates, numStates> I;
+    Eigen::Matrix<float, numStates, numStates> I;
 
     // Current estimate
-    Eigen::Matrix<double, numStates, 1> x_hat;
+    Eigen::Matrix<float, numStates, 1> x_hat;
 };

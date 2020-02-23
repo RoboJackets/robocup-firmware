@@ -1,5 +1,6 @@
 #pragma once
 
+#include "LockedStruct.hpp"
 #include "GenericModule.hpp"
 #include "DigitalOut.hpp"
 #include "MicroPackets.hpp" 
@@ -8,21 +9,21 @@
 class KickerModule : public GenericModule {
 public:
     // How many times per second this module should run
-    static constexpr float freq = 25.0f; // Hz
-    static constexpr uint32_t period = static_cast<uint32_t>(1000000L / freq);
+    static constexpr float kFrequency = 25.0f; // Hz
+    static constexpr std::chrono::milliseconds kPeriod{static_cast<int>(1000 / kFrequency)};
+    static constexpr int kPriority = 2;
 
-    // How long a single call to this module takes
-    static constexpr uint32_t runtime = 1000; // us
+    KickerModule(LockedStruct<SPI>& spi,
+                 LockedStruct<KickerCommand>& kickerCommand,
+                 LockedStruct<KickerInfo>& kickerInfo);
 
-    KickerModule(std::shared_ptr<SPI> spi,
-                 KickerCommand *const kickerCommand,
-                 KickerInfo *const kickerInfo);
+    void start() override;
 
-    virtual void entry(void);
+    void entry() override;
 
 private:
-    KickerCommand *const kickerCommand;
-    KickerInfo *const kickerInfo;
+    LockedStruct<KickerCommand>& kickerCommand;
+    LockedStruct<KickerInfo>& kickerInfo;
     
     // Time of last command to kick
     // Stops double triggers on the same packet

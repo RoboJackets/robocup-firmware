@@ -12,7 +12,7 @@
 
 class FPGA { 
 public:
-    FPGA(std::shared_ptr<SPI> spi_bus, PinName nCs, PinName initB,
+    FPGA(std::unique_ptr<SPI> spi_bus, PinName nCs, PinName initB,
          PinName progB, PinName done);
 
     /**
@@ -240,7 +240,7 @@ public:
 private:
     bool _isInit = false;
 
-    std::shared_ptr<SPI> _spi_bus;
+    std::unique_ptr<SPI> _spi_bus;
     DigitalOut _nCs;
     DigitalIn _initB;
     DigitalIn _done;

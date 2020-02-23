@@ -1,49 +1,92 @@
 #include "modules/LEDModule.hpp"
 #include "iodefs.h"
 
-LEDModule::LEDModule(std::shared_ptr<MCP23017> ioExpander,
-                     BatteryVoltage *const batteryVoltage,
-                     FPGAStatus *const fpgaStatus,
-                     KickerInfo *const kickerInfo,
-                     RadioError *const radioError)
-    : batteryVoltage(batteryVoltage), fpgaStatus(fpgaStatus),
+LEDModule::LEDModule(LockedStruct<MCP23017>& ioExpander,
+                     LockedStruct<SPI>& sharedSPI,
+                     LockedStruct<BatteryVoltage>& batteryVoltage,
+                     LockedStruct<FPGAStatus>& fpgaStatus,
+                     LockedStruct<KickerInfo>& kickerInfo,
+                     LockedStruct<RadioError>& radioError)
+    : GenericModule(kPeriod, "led", kPriority),
+      batteryVoltage(batteryVoltage), fpgaStatus(fpgaStatus),
       kickerInfo(kickerInfo), radioError(radioError),
-      ioExpander(ioExpander), //dot_star_spi(DOT_STAR_SPI_BUS, std::nullopt, 1'000'000)
+      ioExpander(ioExpander),
+      dotStarSPI(sharedSPI),
+      dotStarNCS(DOT_STAR_CS),
       leds({LED1, LED2, LED3, LED4}),
       missedSuperLoopToggle(false), missedModuleRunToggle(false) {
-
-    setColor(0xFFFFFF, 0xFFFFFF);
-
-    ioExpander->writeMask(static_cast<uint16_t>(~IOExpanderErrorLEDMask), IOExpanderErrorLEDMask);
+    dotStarNCS.write(true);
 }
 
-void LEDModule::entry(void) {
+void LEDModule::start() {
+    auto ioExpanderLock = ioExpander.lock();
+    ioExpanderLock->init();
+    setColor(0xFFFFFF, 0xFFFFFF);
+
+    ioExpanderLock->config(0x00FF, 0x00FF, 0x00FF);
+    ioExpanderLock->writeMask(static_cast<uint16_t>(~IOExpanderErrorLEDMask), IOExpanderErrorLEDMask);
+}
+
+extern std::vector<const char*> failed_modules;
+extern size_t free_space;
+
+void LEDModule::entry() {
+    for (const char* c : failed_modules) {
+        printf("[ERROR] Module failed to initialize: %s (initial heap size: %d)\r\n", c, free_space);
+    }
     // update battery, fpga, and radio status leds
     uint16_t errors = 0;
     int motors[5] = {ERR_LED_M1, ERR_LED_M2, ERR_LED_M3, ERR_LED_M4, ERR_LED_DRIB};
 
-    if (!fpgaStatus->isValid || fpgaStatus->FPGAHasError) {
-        for (int i = 0; i < 5; i++) {
-            errors |= (1 << motors[i]);
+    {
+        auto fpgaLock = fpgaStatus.lock();
+
+        if (fpgaLock->initialized) {
+            fpgaInitialized();
         }
 
-        setColor(0x0000FF, 0xFFFFFF);
-    } else { 
-        for (int i = 0; i < 5; i++) {
-            errors |= (fpgaStatus->motorHasErrors[i] << motors[i]);
+        if (!fpgaLock->isValid || fpgaLock->FPGAHasError) {
+            for (int i = 0; i < 5; i++) {
+                errors |= (1 << motors[i]);
+            }
+
+            setColor(0x0000FF, 0xFFFFFF);
+        } else {
+            for (int i = 0; i < 5; i++) {
+                errors |= (fpgaLock->motorHasErrors[i] << motors[i]);
+            }
         }
     }
 
-    if (!radioError->isValid || radioError->hasError) {
-        errors |= (1 << ERR_LED_RADIO);
+    {
+        auto radioLock = radioError.lock();
+
+        if (radioLock->initialized) {
+            radioInitialized();
+        }
+
+        if (!radioLock->isValid || radioLock->hasError) {
+            errors |= (1 << ERR_LED_RADIO);
+        }
     }
 
-    if (kickerInfo->isValid || kickerInfo->kickerHasError) {
-        errors |= (1 << ERR_LED_KICK);
+    {
+        auto kickerLock = kickerInfo.lock();
+
+        if (kickerLock->initialized) {
+            radioInitialized();
+        }
+
+        if (kickerLock->isValid || kickerLock->kickerHasError) {
+            errors |= (1 << ERR_LED_KICK);
+        }
     }
 
     //ioExpander->writeMask(errors, IOExpanderErrorLEDMask);
-    leds[0].toggle();
+//    leds[0].toggle();
+    static bool state = true;
+    state = !state;
+    leds[0].write(state);
 }
 
 void LEDModule::fpgaInitialized() {
@@ -97,7 +140,6 @@ void LEDModule::missedModuleRun() {
 }
 
 void LEDModule::setColor(uint32_t led0, uint32_t led1) {
-    return;
     // 0 - 31
     uint8_t brightness = 2 | 0xE0;
 
@@ -123,5 +165,7 @@ void LEDModule::setColor(uint32_t led0, uint32_t led1) {
     data.push_back(0xFF);
     data.push_back(0xFF);
 
-    //dot_star_spi.transmit(data);
+    dotStarNCS.write(false);
+    dotStarSPI.lock()->transmit(data);
+    dotStarNCS.write(true);
 }
