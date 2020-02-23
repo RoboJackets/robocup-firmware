@@ -299,30 +299,31 @@ void ISM43340::pingRouter() {
 }
 
 void ISM43340::reset() {
-    for(int i = 0; i < 5; i++)
-    {
-    nReset = ISMConstants::RESET_TURN_OFF;
-    vTaskDelay(ISMConstants::RESET_DELAY);
-    nReset = ISMConstants::RESET_TURN_ON;
-    vTaskDelay(ISMConstants::RESET_DELAY);
+    for(int i = 0; i < 5; i++) {
+        nReset = ISMConstants::RESET_TURN_OFF;
+        vTaskDelay(ISMConstants::RESET_DELAY);
+        nReset = ISMConstants::RESET_TURN_ON;
+        vTaskDelay(ISMConstants::RESET_DELAY);
 
-    radioSPI->frequency(ISMConstants::SPI_FREQ);
+        radioSPI->frequency(ISMConstants::SPI_FREQ);
 
-    int counter = 0;
-    // Wait for device to turn on
-    while (interruptin_read(dataReady) != 1 && counter < 1500) {
-        vTaskDelay(10);
-        counter++;
-    }
+        int counter = 0;
+        // Wait for device to turn on
+        for (int counter = 0; counter < 1500; counter++) {
+            vTaskDelay(10);
+            if (interruptin_read(dataReady)) {
+                break;
+            }
+        }
 
-    isInit = !interruptin_read(dataReady);
+        isInit = !interruptin_read(dataReady);
 
-    if (isInit) {
-        printf("Could not initialize radio\r\n");
-        //return;
-    } else {
-        break;
-    }
+        if (isInit) {
+            printf("Could not initialize radio\r\n");
+            //return;
+        } else {
+            break;
+        }
     }
 
 
