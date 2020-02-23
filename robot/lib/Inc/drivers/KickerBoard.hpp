@@ -5,6 +5,7 @@
 #include "Internal/kicker_commands.h"
 #include "SPI.hpp"
 #include "mtrain.hpp"
+#include "LockedStruct.hpp"
 
 #include <string>
 
@@ -21,7 +22,7 @@ public:
      * @param nCs mtrain pin for not chip select for the kicker board
      * @param nReset mtrain pin for not reset line on the ISP interface.
      */
-    KickerBoard(std::shared_ptr<SPI> spi, std::shared_ptr<DigitalOut> nCs, PinName nReset);
+    KickerBoard(LockedStruct<SPI>& spi, std::shared_ptr<DigitalOut> nCs, PinName nReset);
 
     /**
      * Reflashes the program on the kicker board MCU with the file
@@ -130,9 +131,6 @@ protected:
 
 private:
     bool verbose;
-
-    std::shared_ptr<DigitalOut> _nCs;
-    std::shared_ptr<SPI> _spi;
 
     const uint8_t isChargedCutoff = 230;
 

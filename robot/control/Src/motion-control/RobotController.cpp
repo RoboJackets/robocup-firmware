@@ -6,26 +6,26 @@
 
 extern DebugInfo debugInfo;
 
-constexpr double kJerkLimit = 10.0;
-constexpr double kTickTime = 5e-3;
-constexpr double kRobotMassX = 6.35;
-constexpr double kRobotMassY = 6.35;
-constexpr double kRobotMassH = 6.35 * 0.37;
-constexpr double kRobotRadius = 0.0794;
-constexpr double kCurrentPerTorque = 1.0 / 25.1e-3;
-constexpr double kPhaseResistance = 0.464;
+constexpr float kJerkLimit = 10.0;
+constexpr float kTickTime = 5e-3;
+constexpr float kRobotMassX = 6.35;
+constexpr float kRobotMassY = 6.35;
+constexpr float kRobotMassH = 6.35 * 0.37;
+constexpr float kRobotRadius = 0.0794;
+constexpr float kCurrentPerTorque = 1.0 / 25.1e-3;
+constexpr float kPhaseResistance = 0.464;
 
 // Hacks because the full "correct" voltages end up creating a
 // horrifically oscillatory system.
 // TODO(Kyle): Figure out why these aren't just 1.
-constexpr double kBackEmfDamping = 0.7;
-constexpr double kVoltageDamping = 0.14;
+constexpr float kBackEmfDamping = 0.7;
+constexpr float kVoltageDamping = 0.14;
 
-void apply_wheel_force(const Eigen::Matrix<double, 4, 1> force, const Eigen::Matrix<double, 4, 1> speeds, Eigen::Matrix<double, 4, 1>& outputs) {
+void apply_wheel_force(const Eigen::Matrix<float, 4, 1> force, const Eigen::Matrix<float, 4, 1> speeds, Eigen::Matrix<float, 4, 1>& outputs) {
     for (int i = 0; i < 4; i++) {
-        double torque = force(i) * RobotModel::get().WheelRadius / 3.0;
-        double voltage = torque * kCurrentPerTorque * kPhaseResistance / 24.0;
-        double back_emf = (double) speeds(i) * RobotModel::get().SpeedToDutyCycle / 512.0;
+        float torque = force(i) * RobotModel::get().WheelRadius / 3.0;
+        float voltage = torque * kCurrentPerTorque * kPhaseResistance / 24.0;
+        float back_emf = (float) speeds(i) * RobotModel::get().SpeedToDutyCycle / 512.0;
         outputs(i, 0) = kVoltageDamping * voltage + kBackEmfDamping * back_emf;
     }
 }
@@ -37,7 +37,7 @@ bool boundScaling(T x, T absLimit, T& out) {
     out = x;
     T ratio = x.cwiseQuotient(absLimit);
     T ratioAbs = ratio.cwiseAbs();
-    double ratioMax = ratioAbs.maxCoeff();
+    float ratioMax = ratioAbs.maxCoeff();
     if (ratioMax > 1) {
         out /= ratioMax;
         return true;
@@ -66,48 +66,24 @@ RobotController::RobotController(uint32_t dt_us)
     WheelPrevTarget << 0, 0, 0, 0;
 }
 
-void RobotController::calculateBody(Eigen::Matrix<double, numStates, 1> pv,
-                                    Eigen::Matrix<double, numStates, 1> sp,
-                                    Eigen::Matrix<double, numWheels, 1>& outputs) {
+void RobotController::calculateBody(Eigen::Matrix<float, numStates, 1> pv,
+                                    Eigen::Matrix<float, numStates, 1> sp,
+                                    Eigen::Matrix<float, numWheels, 1>& outputs) {
     // Limit sideways velocity to <= 6m/s
     if (std::abs(sp(0)) > 6.0) {
         sp(0) = std::signbit(sp(0)) * 6.0;
     }
 
+    Eigen::Matrix<float, numWheels, numStates> G = RobotModel::get().BotToWheel.cast<float>();
+
     // TODO(Kyle): Why do we arbitrarily multiply this by 0.02?
-    Eigen::Matrix<double, numStates, 1> linear_accel = (sp - pv) / dt * 0.02;
-
-    static Eigen::Matrix<double, numStates, 1> prev_linear_accel(0, 0, 0);
-
-    Eigen::Matrix<double, numStates, 1> linear_diff = linear_accel - prev_linear_accel;
-
-    // Clamp the acceleration difference (jerk)
-    linear_diff(0, 0) = std::clamp(linear_diff(0, 0),
-                                   -kJerkLimit * kTickTime,
-                                   kJerkLimit * kTickTime);
-    linear_diff(1, 0) = std::clamp(linear_diff(1, 0),
-                                   -kJerkLimit * kTickTime,
-                                   kJerkLimit * kTickTime);
-    linear_diff(2, 0) = std::clamp(linear_diff(2, 0),
-                                   -kJerkLimit * kTickTime * 10,
-                                   kJerkLimit * kTickTime * 10);
-
-    linear_accel = prev_linear_accel + linear_diff;
-
-    // Sideways acceleration is _really_ bad. Limit it.
-    constexpr double kMaxSidewaysAccel = 1.5;
-    if (std::abs(linear_accel(0)) > kMaxSidewaysAccel) {
-        linear_accel(0) = kMaxSidewaysAccel * std::signbit(linear_accel(0));
-    }
-
-    prev_linear_accel = linear_accel;
-    linear_accel(2, 0) = sp(2) - pv(2);
+    Eigen::Matrix<float, numStates, 1> linear_accel = (sp - pv) / dt * 0.02;
 
     // Calculate inverse dynamics
-    Eigen::Matrix<double, numStates, 1> robot_force = Eigen::Matrix<double, 3, 1>(kRobotMassX, kRobotMassY, 30 * kRobotMassH * kRobotRadius).cwiseProduct(linear_accel);
-    Eigen::Matrix<double, numWheels, 1> wheel_force = RobotModel::get().BotToWheel * robot_force;
+    Eigen::Matrix<float, numStates, 1> robot_force = Eigen::Matrix<float, 3, 1>(kRobotMassX, kRobotMassY, 30 * kRobotMassH * kRobotRadius).cwiseProduct(linear_accel);
+    Eigen::Matrix<float, numWheels, 1> wheel_force = G * robot_force;
 
-    apply_wheel_force(wheel_force, RobotModel::get().BotToWheel * pv, outputs);
+    apply_wheel_force(wheel_force, G * pv, outputs);
 
     // Debug variables
     // [0, 3) body acceleration
@@ -129,23 +105,23 @@ void RobotController::calculateBody(Eigen::Matrix<double, numStates, 1> pv,
     debugInfo.val[13] = outputs(3, 0) * 1000;
 }
 
-void RobotController::calculateWheel(Eigen::Matrix<double, numWheels, 1> pv,
-                                     Eigen::Matrix<double, numWheels, 1> sp,
-                                     Eigen::Matrix<double, numWheels, 1>& outputs) {
+void RobotController::calculateWheel(Eigen::Matrix<float, numWheels, 1> pv,
+                                     Eigen::Matrix<float, numWheels, 1> sp,
+                                     Eigen::Matrix<float, numWheels, 1>& outputs) {
     outputs = sp;
     return;
 }
 
-bool RobotController::limitBodyAccel(const Eigen::Matrix<double, numStates, 1> finalTarget,
-                                     Eigen::Matrix<double, numStates, 1>& dampened) {
-    Eigen::Vector3d accel(maxForwardAccel, maxSideAccel, maxAngularAccel);
+bool RobotController::limitBodyAccel(const Eigen::Matrix<float, numStates, 1> finalTarget,
+                                     Eigen::Matrix<float, numStates, 1>& dampened) {
+    Eigen::Vector3f accel(maxForwardAccel, maxSideAccel, maxAngularAccel);
     accel *= dt;
     return boundScaling(finalTarget, accel, dampened);
 }
 
-bool RobotController::limitWheelAccel(const Eigen::Matrix<double, numWheels, 1> finalTarget,
-                                      Eigen::Matrix<double, numWheels, 1>& dampened) {
-    Eigen::Vector4d accel(maxWheelAccel, maxWheelAccel, maxWheelAccel, maxWheelAccel);
+bool RobotController::limitWheelAccel(const Eigen::Matrix<float, numWheels, 1> finalTarget,
+                                      Eigen::Matrix<float, numWheels, 1>& dampened) {
+    Eigen::Vector4f accel(maxWheelAccel, maxWheelAccel, maxWheelAccel, maxWheelAccel);
     accel *= dt;
     return boundScaling(finalTarget, accel, dampened);
 }

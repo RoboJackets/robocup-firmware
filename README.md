@@ -3,13 +3,13 @@
 [![Build Status](https://circleci.com/gh/RoboJackets/robocup-firmware.svg?&style=shield)](https://circleci.com/gh/RoboJackets/robocup-firmware)
 
 The Georgia Tech RoboJackets team competes in the annual RoboCup Small Size League (SSL) competition.  This repository contains all of the firmware that we run on our robots. More information on how our software works can be found on our [documentation page](http://robojackets.github.io/robocup-firmware/), our [wiki](http://wiki.robojackets.org/w/RoboCup_Software) or on our [website](http://www.robojackets.org/).
-Also, check out our [2014 qualification video](https://www.youtube.com/watch?v=H3F9HexPLT0) to see our robots in action!
+Also, check out our [2019 qualification video](https://www.youtube.com/watch?v=-neayQX3K30/) to see our robots in action!
 
 ## The Competition
 
 The soccer game is played between two teams of six robots each on a field with overhead cameras.  The field vision computer processes images from the cameras and sends out (x,y) coordinates of the ball and the robots.  Each team has a laptop that accepts the data from the vision computer and uses it to strategize, then send commands to robots on the field.
 
-The official [RoboCup site](http://robocupssl.cpe.ku.ac.th/) has more information on the competition.
+The official [RoboCup site](https://ssl.robocup.org/) has more information on the competition.
 
 # Getting Started
 If you are a new member of RoboCup Electrical or Software and are interested in getting involved with firmware it is highly recommend you start with the [getting started](docs/GettingStarted.md) pages.
@@ -46,7 +46,7 @@ Details on the architecture of the FPGA firmware code can be found [here](docs/F
 
 ## Setup
 Below is a quick guide to getting this RoboCup project setup to build on your computer. If you are a robocup member planning on developing both mtrain and robocup firmware it is highly recommended that you  follow the Firmware [Getting Started](docs/GettingStarted.md) page.
-This project only provides directions for installing on Ubuntu Linux, Arch Linux, and Mac OS X, although it shouldn't be too difficult to port to other operating systems.
+This project only provides directions for installing on Ubuntu Linux, Arch Linux, and Mac OS X.
 
 1) Clone the repository
 

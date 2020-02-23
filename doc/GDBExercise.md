@@ -1,4 +1,4 @@
-TODO Update tutorial with more comprehensive commands mainly backtrace
+# GDB Exercise
 
 The associated source files for this exercise can be cloned from [here](https://github.com/CollinAvidano/GDB-Tutorial)
 

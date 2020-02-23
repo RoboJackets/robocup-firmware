@@ -1,6 +1,6 @@
-This document was originally written Fall of 2019 after the mtrain implementation. The latest relevant branch was comp2019. Knowing robocup, this won't be updated to the latest version of firmware, but hopefully it will still describe most everything. - Joe Neiger
-
 # FPGA
+
+This document was originally written Fall of 2019 after the mtrain implementation. The latest relevant branch was comp2019. Knowing robocup, this won't be updated to the latest version of firmware, but hopefully it will still describe most everything. - Joe Neiger
 
 This document will lightly touch the FPGA verilog code, motor physics, and the communication protocol. I (Joe) have not personally worked on the FPGA code so this is all from my reading and debugging of the code over the years.
 
@@ -12,7 +12,7 @@ One big thing to keep in mind as you work with the FPGA, from the mtrain side, t
 
 ## Motor Lowdown
 
-RoboCup uses BLDC motors for all their movement needs. BLDC (Brushless DC) basically means that instead of using brushes to swap the positive and negative magnetic poles in the motor, we do it electrically. There are 3 phases evenly distributed around the physical device. You can rotate a magnet through a full circle by turning on the attraction side in front of the magnet, turning on the repellent side behind the magnet, and letting the third one just sit without a field. This will allow for rotations of the magnet itself. These three phases are called A, B, and C. To actually cause the motor to rotate, you need to know where the magnet is located in it's rotation. We use hall effect sensors for this purpose. They are very course grain position sensors who's output is which 60 degree quadrant you are in. This is perfect for interfacing with the 3 phases. A simple state machine can be built that says for each quadrant, a specific combination of phases should be turned on and off. To get the speed correct, you can change the voltage going to the motors. This is done using PWM (Pulse Width Modulation). One can easily imagine this by turning off and on the power very quickly to the motor. 
+RoboCup uses BLDC motors for all their movement needs. BLDC (Brushless DC) basically means that instead of using brushes to swap the positive and negative magnetic poles in the motor, we do it electrically. There are 3 phases evenly distributed around the physical device. You can rotate a magnet through a full circle by turning on the attraction side in front of the magnet, turning on the repellent side behind the magnet, and letting the third one just sit without a field. This will allow for rotations of the magnet itself. These three phases are called A, B, and C. To actually cause the motor to rotate, you need to know where the magnet is located in it's rotation. We use hall effect sensors for this purpose. They are very course grain position sensors who's output is which 60 degree quadrant you are in. This is perfect for interfacing with the 3 phases. A simple state machine can be built that says for each quadrant, a specific combination of phases should be turned on and off. To get the speed correct, you can change the voltage going to the motors. This is done using PWM (Pulse Width Modulation). One can easily imagine this by turning off and on the power very quickly to the motor.
 
 ## Communication Protocol
 

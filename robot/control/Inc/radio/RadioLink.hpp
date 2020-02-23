@@ -17,6 +17,11 @@ public:
     RadioLink();
 
     /**
+     * Initialize the radio.
+     */
+    void init();
+
+    /**
      * Sends a packet of data to the radio
      * 
      * Assumes data in structs are valid

@@ -3,6 +3,9 @@
 #include <cstring>
 #include "interrupt_in.h"
 
+#include "FreeRTOS.h"
+#include "task.h"
+
 volatile ISMConstants::State currentState;
 
 // Callback on every state change on data ready
@@ -258,10 +261,10 @@ void ISM43340::sendCommand(const std::string& command, const std::string& arg) {
 int32_t ISM43340::testPrint() {
     for (unsigned int i = 0; i < readBuffer.size(); i++) {
         printf("%c", (char) readBuffer[i]);
-        HAL_Delay(10);
+        vTaskDelay(10);
     }
     printf("\r\n");
-    HAL_Delay(50);
+    vTaskDelay(50);
     return 0;
 }
 
@@ -299,16 +302,16 @@ void ISM43340::reset() {
     for(int i = 0; i < 5; i++)
     {
     nReset = ISMConstants::RESET_TURN_OFF;
-    HAL_Delay(ISMConstants::RESET_DELAY);
+    vTaskDelay(ISMConstants::RESET_DELAY);
     nReset = ISMConstants::RESET_TURN_ON;
-    HAL_Delay(ISMConstants::RESET_DELAY);
+    vTaskDelay(ISMConstants::RESET_DELAY);
 
     radioSPI->frequency(ISMConstants::SPI_FREQ);
 
     int counter = 0;
     // Wait for device to turn on
     while (interruptin_read(dataReady) != 1 && counter < 1500) {
-        HAL_Delay(10);
+        vTaskDelay(10);
         counter++;
     }
 
