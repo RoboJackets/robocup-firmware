@@ -56,7 +56,7 @@ bool ISM43340::isAvailable() {
     // Check to see if it's the normal prompt
     std::string noData = "\r\n\r\nOK\r\n> ";
     std::string err = "-1";
-    
+
     bool matchNoData = true;
     for (unsigned int i = 0; i < noData.size(); i++) {
         if (i >= readBuffer.size()) {
@@ -117,7 +117,7 @@ unsigned int ISM43340::send(const uint8_t* data, const unsigned int numBytes) {
 unsigned int ISM43340::receive(uint8_t* data, const unsigned int maxNumBytes) {
     // There's an extra 0x0a 0x0d on the front of the packet
     unsigned int amntToCopy = readBuffer.size() - 2;
-    
+
     // limit to their buffer size
     if (amntToCopy > maxNumBytes) {
         amntToCopy = maxNumBytes;
@@ -132,12 +132,12 @@ unsigned int ISM43340::receive(uint8_t* data, const unsigned int maxNumBytes) {
  * Note: All delays in the function below have been tuned
  * to work correctly. The data sheet misses some key ones
  * and the ones given are partially wrong
- * 
+ *
  * Bump the super loop call rate until it just barely works
  * Drop these delays until it just barely works
  * Bump the super loop call rate again until it works
  * repeat
- * 
+ *
  * Let it run for a minute or so to see if it breaks eventually
  */
 void ISM43340::writeToSpi(uint8_t* command, int length) {
@@ -294,30 +294,38 @@ void ISM43340::pingRouter() {
     sendCommand(ISMConstants::CMD_SET_PING_REPEAT_COUNT, "10");
     sendCommand(ISMConstants::CMD_PING_TARGET_ADDRESS);
     testPrint();
-    
+
     sendCommand(ISMConstants::CMD_SET_MACHINE_READABLE);
 }
 
 void ISM43340::reset() {
-    nReset = ISMConstants::RESET_TURN_OFF;
-    vTaskDelay(ISMConstants::RESET_DELAY);
-    nReset = ISMConstants::RESET_TURN_ON;
-    vTaskDelay(ISMConstants::RESET_DELAY);
+    for(int i = 0; i < 5; i++) {
+        nReset = ISMConstants::RESET_TURN_OFF;
+        vTaskDelay(ISMConstants::RESET_DELAY);
+        nReset = ISMConstants::RESET_TURN_ON;
+        vTaskDelay(ISMConstants::RESET_DELAY);
 
-    radioSPI->frequency(ISMConstants::SPI_FREQ);
+        radioSPI->frequency(ISMConstants::SPI_FREQ);
 
-    // Wait for device to turn on
-    while (interruptin_read(dataReady) != 1) {
-        vTaskDelay(10);
+        int counter = 0;
+        // Wait for device to turn on
+        for (int counter = 0; counter < 1500; counter++) {
+            vTaskDelay(10);
+            if (interruptin_read(dataReady)) {
+                break;
+            }
+        }
+
+        isInit = !interruptin_read(dataReady);
+
+        if (isInit) {
+            printf("Could not initialize radio\r\n");
+            //return;
+        } else {
+            break;
+        }
     }
 
-    isInit = !interruptin_read(dataReady);
-
-    if (isInit) {
-        printf("Could not initialize radio\r\n");
-        return;
-    }
-    
 
     nCs = ISMConstants::CHIP_SELECT;
     DWT_Delay(500);
@@ -381,16 +389,16 @@ void ISM43340::reset() {
 
     // Port initialization
     // UDP receive
-    
+
     sendCommand(ISMConstants::CMD_SET_COMMUNICATION_SOCKET,
                 ISMConstants::RECEIVE_SOCKET);
-    
+
     sendCommand(ISMConstants::CMD_SET_TRANSPORT_PROTOCOL,
                 ISMConstants::TYPE_TRANSPORT_PROTOCOL::UDP_ENABLED);
-    
+
     sendCommand(ISMConstants::CMD_SET_TRANSPORT_REMOTE_HOST_IP_ADDRESS,
                 ISMConstants::BASE_STATION_IP);
-    
+
     sendCommand(ISMConstants::CMD_SET_TRANSPORT_REMOTE_PORT_NUMBER,
                 ISMConstants::LOCAL_PORT);
 
@@ -405,19 +413,19 @@ void ISM43340::reset() {
 
 
     // UDP send
-    
+
     sendCommand(ISMConstants::CMD_SET_COMMUNICATION_SOCKET,
                 ISMConstants::SEND_SOCKET);
 
     sendCommand(ISMConstants::CMD_SET_TRANSPORT_PROTOCOL,
                 ISMConstants::TYPE_TRANSPORT_PROTOCOL::UDP_ENABLED);
-    
+
     sendCommand(ISMConstants::CMD_SET_TRANSPORT_REMOTE_HOST_IP_ADDRESS,
                 ISMConstants::BASE_STATION_IP);
-    
+
     sendCommand(ISMConstants::CMD_SET_TRANSPORT_REMOTE_PORT_NUMBER,
                 ISMConstants::BASE_STATION_PORT);
-    
+
     sendCommand(ISMConstants::CMD_START_STOP_TRANSPORT_CLIENT,
                 ISMConstants::TYPE_TRANSPORT_CLIENT::ENABLE);
 
