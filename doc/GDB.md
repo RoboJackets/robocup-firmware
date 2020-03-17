@@ -5,6 +5,9 @@ For debugging C and C++ knowing how to use GDB (GNU Debugger) will be invaluable
 
 Note: Any place where <variable> is used should be replaced by the user with the appropriate variable.
 
+Update: This is an [extended cheat sheet](http://www.yolinux.com/TUTORIALS/GDB-Commands.html) I found useful.
+
+
 ## Installing gdb
 To install gdb use the following
 ```
@@ -21,6 +24,9 @@ If this is successful you should now see the gdb prompt:
 ```
 $ (gdb)
 ```
+## Practicing gdb
+To help you get familiar with gdb this repo includes a full gdb exercise [here](GDBExercise.md)
+
 
 ## GDB Commands Reference
 Below are some other common gdb commands along with their abbreviated versions. All these commands can be directly replaced with their abbreviated versions.
