@@ -16,8 +16,7 @@ your operating system.
 ## Git
 We use Git as our version control system (if you already know git, you can continue on to contributing guidelines [here](Contributing.md)). A Version control system allows many people to code for the same project at the same time.
 
-TODO LINK BROKEN FIND NEW ONE AND UPDATE
-A "cheat-sheet" of Git commands can be found [here](http://www-rohan.sdsu.edu/acm/git.png).
+A "cheat-sheet" of Git commands can be found [here](https://education.github.com/git-cheat-sheet-education.pdf).
 
 To ease new contributors into Git, I'll repeatedly use the analogy of the
 classroom test.
