@@ -17,7 +17,7 @@ public:
     /**
      * Updates the controller with the latest input and calculates
      * the correct wheel velocities to reach this target
-     * 
+     *
      * @param pv Current state (XYW vel in m/s or rad/s)
      * @param sp Current target (XYW vel in m/s or rad/s)
      * @param output Motor targets (rad/s)
@@ -29,58 +29,18 @@ public:
     /**
      * Updates the wheels such that they try to follow the target
      * Outputs the correct motor commands to do this
-     * 
+     *
      * @param pv Current state (W1-4 in rad/s)
      * @param sp Current target (W1-4 in rad/s)
      * @param output Motor duty cycles in % max (-1 to 1)
      */
     void calculateWheel(Eigen::Matrix<float, numWheels, 1> pv,
-                         Eigen::Matrix<float, numWheels, 1> sp,
-                         Eigen::Matrix<float, numWheels, 1>& outputs);
+                        Eigen::Matrix<float, numWheels, 1> sp,
+                        Eigen::Matrix<float, numWheels, 1>& outputs);
 
 private:
-    /**
-     * Limits the difference between the previous target and the new target
-     * such that the acceleration limits below are never broken
-     */
-    bool limitBodyAccel(const Eigen::Matrix<float, numStates, 1> finalTarget,
-                        Eigen::Matrix<float, numStates, 1>& dampened);
-
-    bool limitWheelAccel(const Eigen::Matrix<float, numWheels, 1> finalTarget,
-                        Eigen::Matrix<float, numWheels, 1>& dampened);
-
-
     // Body Vel
     Eigen::Matrix<float, numStates, 1> BodyKp;
-    Eigen::Matrix<float, numStates, 1> BodyKi;
-
-    Eigen::Matrix<float, numStates, 1> BodyErrorSum;
-
-    // Restrict the i term from contributing more than
-    // this amount to the output
-    Eigen::Matrix<float, numStates, 1> BodyILimit;
-    bool BodyUseILimit;
-    bool BodyInputLimited;
-    bool BodyOutputLimited;
-
-    Eigen::Matrix<float, numStates, 1> BodyPrevTarget;
-
-
-    // Wheel Vel
-    Eigen::Matrix<float, numWheels, 1> WheelKp;
-
-    Eigen::Matrix<float, numWheels, 1> WheelPrevTarget;
 
     float dt;
-
-    // Max wheel acceleration rad per second^2)
-    static constexpr float maxWheelAccel = 160;
-
-    // Max acceleration (meters per second^2)
-    static constexpr float maxForwardAccel = 8;
-    // Max acceleration (meters per second^2)
-    static constexpr float maxSideAccel = 8;
-
-    // Max angular acceleration (rad per second^2)
-    static constexpr float maxAngularAccel = 40.0;
 };

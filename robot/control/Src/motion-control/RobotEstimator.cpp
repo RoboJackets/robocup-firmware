@@ -21,19 +21,7 @@ RobotEstimator::RobotEstimator(uint32_t dt_us) {
     //H = [bot2Wheel;
     //      0, 0, 1]
     H.block<4, 3>(0, 0) = RobotModel::get().BotToWheel.cast<float>();
-    H.block<1, 3>(4, 0) << 0, 0, 0;
-
-    Q.setIdentity();
-    Q *= 3.0*processNoise / (dt*dt);
-
-    R.setIdentity();
-    R.block<4, 4>(0, 0) *= encoderNoise;
-    R.block<1, 1>(4, 4) *= gyroNoise;
-
-    P.setIdentity();
-    P *= initCovariance;
-
-    I.setIdentity();
+    H.block<1, 3>(4, 0) << 0, 0, 1;
 
     // Assume no motion
     x_hat << 0, 0, 0;
@@ -42,23 +30,20 @@ RobotEstimator::RobotEstimator(uint32_t dt_us) {
 // TODO: Profile these functions
 void RobotEstimator::predict(Eigen::Matrix<float, numInputs, 1> u) {
     x_hat = F*x_hat + B*u;
-    P = F*P*F.transpose() + Q;
 }
 
 void RobotEstimator::update(Eigen::Matrix<float, numOutputs, 1> z) {
-    // y = z - H*x_hat
-    // S = H*P*H' + R
-    // K = P*H'*S^-1
-    // x_hat += K*y
-    // P = (I - K*H)*P
     Eigen::Matrix<float, numOutputs, 1> y = z - H*x_hat;
     Eigen::Matrix<float, numStates,  numOutputs> K;
-    z(4) = x_hat(2);
-    K << 1.83624980e-01, -2.29806179e-01, -2.29806179e-01, 1.83624980e-01, -2.13457449e-04,
-         3.07632598e-01, 2.76060529e-01, -2.76060529e-01, -3.07632598e-01, -2.99584147e-18,
-         -6.86033585e-02, -6.02908809e-02, -6.02908809e-02, -6.86033585e-02, 2.38627208e-02;
 
-    x_hat += K * 0.01 * y;
+    K <<
+        0.001941, -0.002376, -0.002376, 0.001941, -0.001040,
+        0.001117, 0.001002, -0.001002, -0.001117, 0.000000,
+        -0.004554, -0.004132, -0.004132, -0.004554, 0.152357;
+
+    x_hat += K * y;
+    // printf("%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\r\n", z(0), z(1), z(2), z(3), z(4), x_hat(0), x_hat(1), x_hat(2));
+    printf("%f\t%f\t%f\r\n", x_hat(0), x_hat(1), x_hat(2));
 }
 
 void RobotEstimator::getState(Eigen::Matrix<float, numStates, 1>& state) {

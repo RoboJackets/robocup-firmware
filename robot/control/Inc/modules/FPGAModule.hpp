@@ -13,7 +13,7 @@
 class FPGAModule : public GenericModule {
 public:
     // How many times per second this module should run
-    static constexpr float kFrequency = 100.0f; // Hz
+    static constexpr float kFrequency = 200.0f; // Hz
     static constexpr std::chrono::milliseconds kPeriod{static_cast<int>(1000 / kFrequency)};
     static constexpr int kPriority = 2;
 

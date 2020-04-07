@@ -2,8 +2,8 @@
 
 #include "I2C.hpp"
 #include "GenericModule.hpp"
-#include "MicroPackets.hpp" 
-#include "drivers/MPU6050.h"
+#include "MicroPackets.hpp"
+#include "drivers/ICM20948.hpp"
 #include "LockedStruct.hpp"
 #include <memory>
 
@@ -14,13 +14,13 @@ public:
     static constexpr std::chrono::milliseconds kPeriod{static_cast<int>(1000 / kFrequency)};
     static constexpr int kPriority = 3;
 
-    IMUModule(std::shared_ptr<I2C> sharedI2C, LockedStruct<IMUData>& imuData);
+    IMUModule(LockedStruct<SPI>& sharedSPI, LockedStruct<IMUData>& imuData);
 
     void start() override;
 
     void entry() override;
 
 private:
-    MPU6050 imu;
+    ICM20948 imu;
     LockedStruct<IMUData>& imuData;
 };

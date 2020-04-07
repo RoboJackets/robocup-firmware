@@ -63,7 +63,7 @@ void MotionControlModule::entry() {
     }
 
     if (imuDataLock->isValid && isRecentUpdate(imuDataLock->lastUpdate)) {
-        measurements(4, 0) = 0.0; // imuDataLock->omegas[2]; // Z gyro
+        measurements(4, 0) = imuDataLock->omegas[2]; // Z gyro
     }
 
     // Update targets
@@ -86,7 +86,6 @@ void MotionControlModule::entry() {
     // Leaving this hear until someone can test, then remove
     // this
     // - Joe Aug 2019
-    // TODO: When imu is implemented, check for imu data
     if (motorFeedbackLock->isValid && // imuData->isValid &&
         !isnan(measurements(0,0)) &&
         !isnan(measurements(1,0)) &&

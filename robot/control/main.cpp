@@ -163,6 +163,9 @@ int main() {
                                       motorCommand);
     createModule(&motion);
 
+    static IMUModule imu(sharedSPI, imuData);
+    createModule(&imu);
+
     ////////////////////////////////////////////
 
     printf("Starting scheduler...\r\n");
