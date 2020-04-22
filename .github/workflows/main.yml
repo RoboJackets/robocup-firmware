@@ -1,0 +1,28 @@
+defaults_deps: &install_deps
+  - name: install-dependencies
+    run: cd $GITHUB_WORKSPACE && ./util/ubuntu-setup --yes
+
+checkout: &checkout
+  - name: checkout
+    uses: actions/checkout@v2
+
+
+name: CI
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ master, develop ]
+  pull_request:
+    branches: [ master, develop ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  gen-docs:
+    runs-on: ubuntu-latest
+    steps:
+      <<: *checkout
+      # Ensure latest deps are installed
+      <<: *install_deps
+
+      - run: cd $GITHUB_WORKSPACE && ./util/autoupdate-docs.sh
