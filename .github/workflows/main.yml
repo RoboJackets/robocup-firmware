@@ -1,11 +1,7 @@
 defaults_deps: &install_deps
-  - name: install-dependencies
-    run: |
-      cd $GITHUB_WORKSPACE && ./util/ubuntu-setup --yes
-
+  
 checkout: &checkout
-  - name: checkout
-    uses: actions/checkout@v2
+
 
 
 name: CI
@@ -22,9 +18,13 @@ jobs:
   gen-docs:
     runs-on: ubuntu-latest
     steps:
-      <<: *checkout
-      # Ensure latest deps are installed
-      <<: *install_deps
+      - name: checkout
+        uses: actions/checkout@v2
+      
+      - name: install-dependencies
+        run: |
+          cd $GITHUB_WORKSPACE && ./util/ubuntu-setup --yes
+
       - name: document
-      - run: |
+        run: |
           cd $GITHUB_WORKSPACE && ./util/autoupdate-docs.sh
