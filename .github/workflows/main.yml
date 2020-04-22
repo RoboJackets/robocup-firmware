@@ -25,6 +25,6 @@ jobs:
       <<: *checkout
       # Ensure latest deps are installed
       <<: *install_deps
-
+      - name: document
       - run: |
           cd $GITHUB_WORKSPACE && ./util/autoupdate-docs.sh
