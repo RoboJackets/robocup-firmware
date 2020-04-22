@@ -1,6 +1,7 @@
 defaults_deps: &install_deps
   - name: install-dependencies
-    run: cd $GITHUB_WORKSPACE && ./util/ubuntu-setup --yes
+    run: |
+      cd $GITHUB_WORKSPACE && ./util/ubuntu-setup --yes
 
 checkout: &checkout
   - name: checkout
@@ -25,4 +26,5 @@ jobs:
       # Ensure latest deps are installed
       <<: *install_deps
 
-      - run: cd $GITHUB_WORKSPACE && ./util/autoupdate-docs.sh
+      - run: |
+          cd $GITHUB_WORKSPACE && ./util/autoupdate-docs.sh
