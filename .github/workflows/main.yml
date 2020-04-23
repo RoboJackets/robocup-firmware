@@ -12,9 +12,12 @@ jobs:
   gen-docs:
     runs-on: ubuntu-latest
     steps:
+      - name: setup-env
+        run: |
+          echo "::add-path::~/.local/bin"
       - name: checkout
         uses: actions/checkout@v2
-      
+
       - name: install-dependencies
         run: |
           cd $GITHUB_WORKSPACE && ./util/ubuntu-setup --yes
