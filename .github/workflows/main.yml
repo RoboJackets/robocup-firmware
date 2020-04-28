@@ -14,7 +14,8 @@ jobs:
     steps:
       - name: setup-env
         run: |
-          echo "::add-path::~/.local/bin"
+          echo "::add-path::$HOME/.local/bin"
+
       - name: checkout
         uses: actions/checkout@v2
 
