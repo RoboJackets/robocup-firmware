@@ -14,7 +14,11 @@ jobs:
     steps:
       - name: setup-env
         run: |
-          echo "::add-path::$HOME/.local/bin"
+          echo "::add-path::$HOME/.local/bin" &&
+          echo "::add-path::$GITHUB_WORKSPACE/.local/bin" &&
+          echo "::add-path::home/runner/.local/bin" &&
+          echo $PATH &&
+          ls home/runner/.local/bin
 
       - name: checkout
         uses: actions/checkout@v2
