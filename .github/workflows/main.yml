@@ -29,12 +29,14 @@ jobs:
       - name: copy
         run: |
           rm -rf docs/ &&
+          mkdir -p docs/ &&
+          git clone -b gh-pages git://github.com/robojackets/robocup-firmware docs/ &&
           docker cp $DOCKER_NAME:/home/developer/robocup-firmware/docs .
       - name: push
         run: |
           cd docs/ &&
-          git config --local user.email "admin@robojackets.org" &&
-          git config --local user.name "docbot" &&
+          git config --local user.email "action@github.com" &&
+          git config --local user.name "GitHub Action" &&
           git add --all -f &&
           git commit -m 'auto-updated documentation' &&
           git push https://$GH_TOKEN@github.com/robojackets/robocup-firmware gh-pages
