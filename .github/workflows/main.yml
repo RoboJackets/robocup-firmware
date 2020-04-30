@@ -25,7 +25,7 @@ jobs:
           docker build -t $DOCKER_NAME:latest ./
       - name: document
         run: |
-          docker run --name $DOCKER_NAME "make docs"
+          docker run --name $DOCKER_NAME $DOCKER_NAME make docs
       - name: copy
         run: |
           rm -rf docs/ &&
