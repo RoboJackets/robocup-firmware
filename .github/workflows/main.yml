@@ -7,26 +7,32 @@ on:
   pull_request:
     branches: [ master, develop ]
 
+# NOTE Much of what I do with run commands directly has other github action specific ways I just didnt care and did it with commands
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   gen-docs:
     runs-on: ubuntu-latest
+    env:
+      DOCKER_NAME: docsbuild
     steps:
       - name: setup-env
         run: |
-          echo "::add-path::$HOME/.local/bin" &&
-          echo "::add-path::$GITHUB_WORKSPACE/.local/bin" &&
-          echo "::add-path::home/runner/.local/bin" &&
-          echo $PATH &&
-          ls home/runner/.local/bin
-
+          cd $GITHUB_WORKSPACE
       - name: checkout
         uses: actions/checkout@v2
-
-      - name: install-dependencies
+      - name: docker-build
         run: |
-          cd $GITHUB_WORKSPACE && ./util/ubuntu-setup --yes
-
+          docker build -t $DOCKER_NAME:latest ./
       - name: document
         run: |
-          cd $GITHUB_WORKSPACE && ./util/autoupdate-docs.sh
+          docker run --name $DOCKER_NAME "make docs"
+      - name: copy
+        run: |
+          rm -rf docs/ &&
+          docker cp $DOCKER_NAME:/home/developer/robocup-firmware/docs .
+      - name: push
+        run: |
+          cd docs/ &&
+          git add --all -f &&
+          git commit -m 'auto-updated documentation' &&
+          git push https://$GH_TOKEN@github.com/robojackets/robocup-firmware gh-pages
