@@ -33,6 +33,8 @@ jobs:
       - name: push
         run: |
           cd docs/ &&
+          git config --local user.email "admin@robojackets.org" &&
+          git config --local user.name "docbot" &&
           git add --all -f &&
           git commit -m 'auto-updated documentation' &&
           git push https://$GH_TOKEN@github.com/robojackets/robocup-firmware gh-pages
