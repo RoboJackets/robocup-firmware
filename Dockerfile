@@ -14,6 +14,7 @@ ENV LANG en_US.UTF-8
 # TODO Double check these later for which are really necessary
 RUN apt-get update --fix-missing && apt-get -y install udev git nano vim software-properties-common sudo apt-utils wget curl htop iputils-ping less bsdmainutils debconf-utils w3m scons screen && apt-get clean
 
+# I still dont know why this was the route we took for this
 # set up user <this is for running soccer later on>
 # Replace 1000 with your user / group id
 RUN export uid=1000 gid=1000 && \
@@ -27,7 +28,9 @@ RUN export uid=1000 gid=1000 && \
 USER developer
 ENV HOME /home/developer
 
-COPY . ~/robocup-firmware
-WORKDIR ~/robocup-firmware
+COPY . $HOME/robocup-firmware
+WORKDIR $HOME/robocup-firmware
 
 RUN sudo ./util/ubuntu-setup --yes
+
+RUN sudo chown -R developer:developer $HOME/robocup-firmware
