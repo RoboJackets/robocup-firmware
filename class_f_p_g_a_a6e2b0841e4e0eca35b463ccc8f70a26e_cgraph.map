@@ -1,0 +1,4 @@
+<map id="FPGA::read_encs" name="FPGA::read_encs">
+<area shape="rect" id="node2" href="$class_f_p_g_a.html#abfd93a2d6b356b3338b598b8d9c1d5b4" title="Bring chipselect low so we can start a transmission. " alt="" coords="187,5,319,32"/>
+<area shape="rect" id="node3" href="$class_f_p_g_a.html#af55b40be0ecf22fae18ff4c2811c0d46" title="Bring chipselect high so we can end a transmission. " alt="" coords="180,56,327,83"/>
+</map>

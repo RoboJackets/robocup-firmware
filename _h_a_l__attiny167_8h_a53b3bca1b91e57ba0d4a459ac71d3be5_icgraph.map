@@ -1,0 +1,7 @@
+<map id="HAL_ClearPin" name="HAL_ClearPin">
+<area shape="rect" id="node2" href="$_h_a_l__attiny167_8h.html#ac8c3dd9505e897b4209b4f6c7bf24bc6" title="Most LED&#39;s are inverted so this deals with that in a nice way. " alt="" coords="159,5,260,32"/>
+<area shape="rect" id="node3" href="$main_8c.html#a8b188dc3ad96f5f0741a7d2de916212b" title="charge_caps" alt="" coords="161,56,257,83"/>
+<area shape="rect" id="node5" href="$main_8c.html#aec43762dc86e029b395d4e5819192c2d" title="Timer interrupt for chipping/kicking &#45; called every millisecond by timer. " alt="" coords="187,107,232,133"/>
+<area shape="rect" id="node6" href="$main_8c.html#a02fd73d861ef2e4aabb38c0c9ff82947" title="init" alt="" coords="190,157,229,184"/>
+<area shape="rect" id="node4" href="$main_8c.html#acdef7a1fd863a6d3770c1268cb06add3" title="main" alt="" coords="308,107,359,133"/>
+</map>

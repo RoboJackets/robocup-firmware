@@ -1,0 +1,4 @@
+<map id="MCP23017::digitalRead" name="MCP23017::digitalRead">
+<area shape="rect" id="node2" href="$class_m_c_p23017.html#a369951f5ce7e9ae6a338bcf9cc9f10f6" title="MCP23017::readRegister" alt="" coords="213,5,383,32"/>
+<area shape="rect" id="node3" href="$struct_locked_struct.html#aa207b98a1cd6c569a96e7d1d5565478f" title="Lock this struct. " alt="" coords="431,5,561,32"/>
+</map>

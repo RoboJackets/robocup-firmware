@@ -1,0 +1,4 @@
+<map id="MPU6050::getSlaveRegister" name="MPU6050::getSlaveRegister">
+<area shape="rect" id="node2" href="$class_i2_cdev.html#aef1db446b45660c6631fc780278ac366" title="Read single byte from an 8&#45;bit device register. " alt="" coords="241,5,365,32"/>
+<area shape="rect" id="node3" href="$class_i2_cdev.html#ae1eed9468ce4653e080bfd8481d2ac88" title="Read multiple bytes from an 8&#45;bit device register. " alt="" coords="413,5,544,32"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="apply_wheel_force" name="apply_wheel_force">
+<area shape="rect" id="node2" href="$class_robot_controller.html#a8518f8a0522c7359e708cc1efff96dfd" title="Updates the controller with the latest input and calculates the correct wheel velocities to reach thi..." alt="" coords="184,13,387,39"/>
+<area shape="rect" id="node3" href="$class_motion_control_module.html#ae9ce65e3c14d0effbac1c1a3b93fb5b1" title="Called by the RTOS at the desired update rate. " alt="" coords="435,5,580,47"/>
+</map>

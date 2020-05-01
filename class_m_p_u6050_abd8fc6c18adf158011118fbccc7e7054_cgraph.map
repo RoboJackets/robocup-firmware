@@ -1,0 +1,51 @@
+<map id="MPU6050::initialize" name="MPU6050::initialize">
+<area shape="rect" id="node2" href="$class_m_p_u6050.html#a4c1cd147d038e024bdeaa053c4d77734" title="Set clock source setting. " alt="" coords="194,1266,375,1293"/>
+<area shape="rect" id="node48" href="$class_m_p_u6050.html#a72afc0b6f221c9336f635b5637c62dae" title="Set full&#45;scale gyroscope range. " alt="" coords="191,5,379,47"/>
+<area shape="rect" id="node49" href="$class_m_p_u6050.html#a64eb78e8e359c541beaf8664db3421d1" title="Set full&#45;scale accelerometer range. " alt="" coords="188,71,381,112"/>
+<area shape="rect" id="node50" href="$class_m_p_u6050.html#a15ec5f8e7daf235f507c1d8b96af051a" title="Set sleep mode status. " alt="" coords="191,137,378,163"/>
+<area shape="rect" id="node3" href="$class_i2_cdev.html#a913371251b6a41520c080115650e1b59" title="Write multiple bits in an 8&#45;bit device register. " alt="" coords="469,45,591,71"/>
+<area shape="rect" id="node4" href="$class_i2_cdev.html#aef1db446b45660c6631fc780278ac366" title="Read single byte from an 8&#45;bit device register. " alt="" coords="680,374,804,401"/>
+<area shape="rect" id="node5" href="$class_i2_cdev.html#ae1eed9468ce4653e080bfd8481d2ac88" title="Read multiple bytes from an 8&#45;bit device register. " alt="" coords="853,475,984,502"/>
+<area shape="rect" id="node6" href="$class_i2_cdev.html#aeb297637ef985cd562da465ba61b7042" title="Write single byte to an 8&#45;bit device register. " alt="" coords="679,95,805,122"/>
+<area shape="rect" id="node7" href="$class_m_p_u6050.html#a249a905ae4572a462414f2d94236258a" title="MPU6050::getWakeFrequency" alt="" coords="429,602,631,629"/>
+<area shape="rect" id="node8" href="$class_i2_cdev.html#ab507de3d1a8f9e1528038ed2b2301d31" title="Read multiple bits from an 8&#45;bit device register. " alt="" coords="470,349,590,375"/>
+<area shape="rect" id="node9" href="$class_m_p_u6050.html#a62495e89f4787e6b18f0f795cef2b7cd" title="MPU6050::setWakeFrequency" alt="" coords="429,653,631,679"/>
+<area shape="rect" id="node10" href="$class_m_p_u6050.html#a99261a04739fdb7a9a1c5b67ce3e710e" title="MPU6050::getStandbyXAccel\lEnabled" alt="" coords="432,704,628,745"/>
+<area shape="rect" id="node11" href="$class_i2_cdev.html#a9f104431c59658432e8b2f02c3e1acd6" title="Read a single bit from an 8&#45;bit device register. " alt="" coords="473,399,587,426"/>
+<area shape="rect" id="node12" href="$class_m_p_u6050.html#af4df87fd2e87f41d06706cfd5bbc2a2c" title="MPU6050::setStandbyXAccel\lEnabled" alt="" coords="432,769,628,811"/>
+<area shape="rect" id="node13" href="$class_i2_cdev.html#aa68890af87de5471d32e583ebbd91acb" title="write a single bit in an 8&#45;bit device register. " alt="" coords="472,95,588,122"/>
+<area shape="rect" id="node14" href="$class_m_p_u6050.html#a104f2ec438d745f8fdeec202bae09b48" title="MPU6050::getStandbyYAccel\lEnabled" alt="" coords="432,835,628,876"/>
+<area shape="rect" id="node15" href="$class_m_p_u6050.html#a7ce7d3299479eb66518acf0697132835" title="MPU6050::setStandbyYAccel\lEnabled" alt="" coords="432,900,628,941"/>
+<area shape="rect" id="node16" href="$class_m_p_u6050.html#adae85612e047c4c7f0c3b7110fc92956" title="MPU6050::getStandbyZAccel\lEnabled" alt="" coords="433,965,627,1007"/>
+<area shape="rect" id="node17" href="$class_m_p_u6050.html#ac5fd917549d2ed0f12b8a17167271199" title="MPU6050::setStandbyZAccel\lEnabled" alt="" coords="433,1031,627,1072"/>
+<area shape="rect" id="node18" href="$class_m_p_u6050.html#acb5fde4167aa54fbbe84706d577a48a6" title="MPU6050::getStandbyXGyro\lEnabled" alt="" coords="435,1096,625,1137"/>
+<area shape="rect" id="node19" href="$class_m_p_u6050.html#ac1c6d8f623a9ca00a4ddc50f6615b977" title="MPU6050::setStandbyXGyro\lEnabled" alt="" coords="435,1161,625,1203"/>
+<area shape="rect" id="node20" href="$class_m_p_u6050.html#aaad2985f8d22aec123f1e1dabcdd427a" title="MPU6050::getStandbyYGyro\lEnabled" alt="" coords="435,1227,625,1268"/>
+<area shape="rect" id="node21" href="$class_m_p_u6050.html#ab0973d64b7132188539b07991f7ea1f0" title="MPU6050::setStandbyYGyro\lEnabled" alt="" coords="435,1292,625,1333"/>
+<area shape="rect" id="node22" href="$class_m_p_u6050.html#a20f7804db1a980a3c425ae44c33d420b" title="MPU6050::getStandbyZGyro\lEnabled" alt="" coords="435,1357,625,1399"/>
+<area shape="rect" id="node23" href="$class_m_p_u6050.html#ada7c8a873fe157703dcdc08e25b48e32" title="MPU6050::setStandbyZGyro\lEnabled" alt="" coords="435,1423,625,1464"/>
+<area shape="rect" id="node24" href="$class_m_p_u6050.html#ad96c7a75a39327ebaae01386bcbc58dd" title="MPU6050::getFIFOCount" alt="" coords="445,1489,615,1515"/>
+<area shape="rect" id="node25" href="$class_m_p_u6050.html#a7733011d30d5b64564f6b5422d8639ae" title="MPU6050::getFIFOByte" alt="" coords="449,1539,611,1566"/>
+<area shape="rect" id="node26" href="$class_m_p_u6050.html#aba36dcb767b5cd8965053987aaa08a6a" title="MPU6050::getFIFOBytes" alt="" coords="445,1590,615,1617"/>
+<area shape="rect" id="node27" href="$class_m_p_u6050.html#a66da5bc38aa82404117d1ef5306c951a" title="MPU6050::setFIFOByte" alt="" coords="449,1641,611,1667"/>
+<area shape="rect" id="node28" href="$class_m_p_u6050.html#a35ae3c8894b3258e642043886801e031" title="MPU6050::getDeviceID" alt="" coords="449,1691,611,1718"/>
+<area shape="rect" id="node29" href="$class_m_p_u6050.html#aaefb4b3d93cf4b78d56cd63b10ea0e97" title="MPU6050::setDeviceID" alt="" coords="449,1742,611,1769"/>
+<area shape="rect" id="node30" href="$class_m_p_u6050.html#a6eb099e3dc96eb4d113cf81804256e8c" title="MPU6050::getOTPBankValid" alt="" coords="434,1793,626,1819"/>
+<area shape="rect" id="node31" href="$class_m_p_u6050.html#a074024a7818b2998b3f1c99064bea3a0" title="MPU6050::setOTPBankValid" alt="" coords="434,1843,626,1870"/>
+<area shape="rect" id="node32" href="$class_m_p_u6050.html#afb6b0de954cc89e161e5ac389102af0c" title="MPU6050::getXGyroOffsetTC" alt="" coords="431,1894,629,1921"/>
+<area shape="rect" id="node33" href="$class_m_p_u6050.html#a571bb0b54080a1def63fb4166b7f7f59" title="MPU6050::setXGyroOffsetTC" alt="" coords="431,1945,629,1971"/>
+<area shape="rect" id="node34" href="$class_m_p_u6050.html#aeec244d6f9d33f45260ff459fabb9622" title="MPU6050::getYGyroOffsetTC" alt="" coords="431,1995,629,2022"/>
+<area shape="rect" id="node35" href="$class_m_p_u6050.html#a5a671929be9a7d6ff5e433aa0eaa0c90" title="MPU6050::setYGyroOffsetTC" alt="" coords="431,2046,629,2073"/>
+<area shape="rect" id="node36" href="$class_m_p_u6050.html#afb9254a04feb7909cb808e94fa4fc44c" title="MPU6050::getZGyroOffsetTC" alt="" coords="432,2097,628,2123"/>
+<area shape="rect" id="node37" href="$class_m_p_u6050.html#a1d9fc7f1058c4ab9a8a586e3fc30d12d" title="MPU6050::setZGyroOffsetTC" alt="" coords="432,2147,628,2174"/>
+<area shape="rect" id="node38" href="$class_m_p_u6050.html#a9c9332a5050be54fa47f321be01d524b" title="MPU6050::getXFineGain" alt="" coords="447,2198,613,2225"/>
+<area shape="rect" id="node39" href="$class_m_p_u6050.html#a73d4473d134cf5f7c516ff38faa2b4a8" title="MPU6050::setXFineGain" alt="" coords="447,2249,613,2275"/>
+<area shape="rect" id="node40" href="$class_m_p_u6050.html#ad471fd5499dd2fbf730c066a8893420d" title="MPU6050::getYFineGain" alt="" coords="447,2299,613,2326"/>
+<area shape="rect" id="node41" href="$class_m_p_u6050.html#a7f97e86dcfa1d491d8f809112c6fb40b" title="MPU6050::setYFineGain" alt="" coords="447,2350,613,2377"/>
+<area shape="rect" id="node42" href="$class_m_p_u6050.html#a13c980e62e6e7774299fea1c827b6e7a" title="MPU6050::getZFineGain" alt="" coords="447,2401,613,2427"/>
+<area shape="rect" id="node43" href="$class_m_p_u6050.html#a98107dec68994cfc8c8cb1d0d78d2b6b" title="MPU6050::setZFineGain" alt="" coords="447,2451,613,2478"/>
+<area shape="rect" id="node44" href="$class_m_p_u6050.html#afdfe715ced419d117c2c47007d631f9e" title="MPU6050::getXAccelOffset" alt="" coords="438,146,622,173"/>
+<area shape="rect" id="node45" href="$class_m_p_u6050.html#a447144e025f55b1dc96d7c209c5defd6" title="MPU6050::setXAccelOffset" alt="" coords="438,197,622,223"/>
+<area shape="rect" id="node46" href="$class_i2_cdev.html#acbe68a802d6a177301736e60bedd1def" title="Write single word to a 16&#45;bit device register. " alt="" coords="465,298,595,325"/>
+<area shape="rect" id="node47" href="$class_m_p_u6050.html#a7753d3c3f5d9e341f1ed0712079a0d12" title="MPU6050::getYAccelOffset" alt="" coords="438,501,622,527"/>
+</map>

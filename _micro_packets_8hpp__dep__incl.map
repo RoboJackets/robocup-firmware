@@ -1,0 +1,23 @@
+<map id="robot/control/Inc/MicroPackets.hpp" name="robot/control/Inc/MicroPackets.hpp">
+<area shape="rect" id="node2" href="$_battery_module_8hpp.html" title="robot/control/Inc/modules\l/BatteryModule.hpp" alt="" coords="57,80,226,121"/>
+<area shape="rect" id="node3" href="$control_2main_8cpp.html" title="robot/control/main.cpp" alt="" coords="925,266,1075,293"/>
+<area shape="rect" id="node5" href="$_f_p_g_a_module_8hpp.html" title="robot/control/Inc/modules\l/FPGAModule.hpp" alt="" coords="425,80,594,121"/>
+<area shape="rect" id="node7" href="$_i_m_u_module_8hpp.html" title="robot/control/Inc/modules\l/IMUModule.hpp" alt="" coords="670,80,839,121"/>
+<area shape="rect" id="node9" href="$_kicker_module_8hpp.html" title="robot/control/Inc/modules\l/KickerModule.hpp" alt="" coords="897,80,1066,121"/>
+<area shape="rect" id="node11" href="$_l_e_d_module_8hpp.html" title="robot/control/Inc/modules\l/LEDModule.hpp" alt="" coords="1090,80,1259,121"/>
+<area shape="rect" id="node13" href="$_motion_control_module_8hpp.html" title="robot/control/Inc/modules\l/MotionControlModule.hpp" alt="" coords="1283,80,1458,121"/>
+<area shape="rect" id="node14" href="$_motion_control_module_8cpp.html" title="robot/control/Src/modules\l/MotionControlModule.cpp" alt="" coords="1334,169,1509,211"/>
+<area shape="rect" id="node15" href="$_radio_module_8hpp.html" title="robot/control/Inc/modules\l/RadioModule.hpp" alt="" coords="1779,169,1949,211"/>
+<area shape="rect" id="node17" href="$_rotary_dial_module_8hpp.html" title="robot/control/Inc/modules\l/RotaryDialModule.hpp" alt="" coords="1534,80,1703,121"/>
+<area shape="rect" id="node19" href="$_radio_link_8hpp.html" title="robot/control/Inc/radio\l/RadioLink.hpp" alt="" coords="1779,80,1927,121"/>
+<area shape="rect" id="node20" href="$_radio_link_8cpp.html" title="robot/control/Src/radio\l/RadioLink.cpp" alt="" coords="1973,169,2123,211"/>
+<area shape="rect" id="node21" href="$_robot_controller_8cpp.html" title="robot/control/Src/motion\l&#45;control/RobotController.cpp" alt="" coords="2003,80,2189,121"/>
+<area shape="rect" id="node22" href="$_robot_estimator_8cpp.html" title="robot/control/Src/motion\l&#45;control/RobotEstimator.cpp" alt="" coords="2213,80,2398,121"/>
+<area shape="rect" id="node4" href="$_battery_module_8cpp.html" title="robot/control/Src/modules\l/BatteryModule.cpp" alt="" coords="5,169,176,211"/>
+<area shape="rect" id="node6" href="$_f_p_g_a_module_8cpp.html" title="robot/control/Src/modules\l/FPGAModule.cpp" alt="" coords="301,169,472,211"/>
+<area shape="rect" id="node8" href="$_i_m_u_module_8cpp.html" title="robot/control/Src/modules\l/IMUModule.cpp" alt="" coords="547,169,717,211"/>
+<area shape="rect" id="node10" href="$_kicker_module_8cpp.html" title="robot/control/Src/modules\l/KickerModule.cpp" alt="" coords="792,169,963,211"/>
+<area shape="rect" id="node12" href="$_l_e_d_module_8cpp.html" title="robot/control/Src/modules\l/LEDModule.cpp" alt="" coords="1037,169,1208,211"/>
+<area shape="rect" id="node16" href="$_radio_module_8cpp.html" title="robot/control/Src/modules\l/RadioModule.cpp" alt="" coords="1779,259,1949,300"/>
+<area shape="rect" id="node18" href="$_rotary_dial_module_8cpp.html" title="robot/control/Src/modules\l/RotaryDialModule.cpp" alt="" coords="1533,169,1704,211"/>
+</map>

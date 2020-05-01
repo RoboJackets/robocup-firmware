@@ -1,0 +1,5 @@
+<map id="MCP23017::digitalWordWrite" name="MCP23017::digitalWordWrite">
+<area shape="rect" id="node2" href="$class_m_c_p23017.html#abf2d0d52597391e51a5ec6c25a6b05a1" title="Write a 0/1 value to an output bit. " alt="" coords="253,5,395,32"/>
+<area shape="rect" id="node3" href="$class_m_c_p23017.html#a03a2643a1e2fbf8c2aa998d48f360498" title="Write a masked 16&#45;bit value to the device. " alt="" coords="247,56,401,83"/>
+<area shape="rect" id="node4" href="$class_m_c_p23017.html#ab143d9fd9c65bd4361cda701833f400a" title="MCP23017::digitalWrite" alt="" coords="244,107,404,133"/>
+</map>

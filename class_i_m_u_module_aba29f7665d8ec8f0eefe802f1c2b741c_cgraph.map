@@ -1,0 +1,51 @@
+<map id="IMUModule::start" name="IMUModule::start">
+<area shape="rect" id="node2" href="$class_m_p_u6050.html#abd8fc6c18adf158011118fbccc7e7054" title="Power on and prepare for general usage. " alt="" coords="220,296,355,323"/>
+<area shape="rect" id="node3" href="$class_m_p_u6050.html#a4c1cd147d038e024bdeaa053c4d77734" title="Set clock source setting. " alt="" coords="470,336,651,363"/>
+<area shape="rect" id="node20" href="$class_m_p_u6050.html#a72afc0b6f221c9336f635b5637c62dae" title="Set full&#45;scale gyroscope range. " alt="" coords="467,245,655,286"/>
+<area shape="rect" id="node21" href="$class_m_p_u6050.html#a64eb78e8e359c541beaf8664db3421d1" title="Set full&#45;scale accelerometer range. " alt="" coords="464,179,657,221"/>
+<area shape="rect" id="node23" href="$class_m_p_u6050.html#ae528a25b4997ad0e3091a012e4e4419e" title="Set temperature FIFO enabled value. " alt="" coords="453,1163,669,1189"/>
+<area shape="rect" id="node24" href="$class_m_p_u6050.html#a53a03d1f255a62f01375c870cdc85767" title="Set gyroscope X&#45;axis FIFO enabled value. " alt="" coords="451,1213,671,1240"/>
+<area shape="rect" id="node25" href="$class_m_p_u6050.html#a16eb12bbf07bc17a9d852941d834175e" title="Set gyroscope Y&#45;axis FIFO enabled value. " alt="" coords="451,1265,671,1292"/>
+<area shape="rect" id="node26" href="$class_m_p_u6050.html#af5b5bc39b66466ba910f6eef1259444c" title="Set gyroscope Z&#45;axis FIFO enabled value. " alt="" coords="451,1317,670,1344"/>
+<area shape="rect" id="node27" href="$class_m_p_u6050.html#afccbee85f5cdc95098f6d62d8d417c3f" title="Set accelerometer FIFO enabled value. " alt="" coords="453,1372,669,1399"/>
+<area shape="rect" id="node28" href="$class_m_p_u6050.html#a38a10ac4f30b96718ec021dc0db8587b" title="Set Slave 2 FIFO enabled value. " alt="" coords="449,1423,672,1449"/>
+<area shape="rect" id="node29" href="$class_m_p_u6050.html#a5d432fa2fb8b2227f50aa5c7b5befb66" title="Set Slave 1 FIFO enabled value. " alt="" coords="449,1473,672,1500"/>
+<area shape="rect" id="node30" href="$class_m_p_u6050.html#a97fbf27e1b827f9dfc3c28ff376b54c4" title="Set Slave 0 FIFO enabled value. " alt="" coords="449,1524,672,1551"/>
+<area shape="rect" id="node31" href="$class_m_p_u6050.html#a7d03801d6b656e8e12cd3c1dd97824a8" title="Set gyroscope sample rate divider. " alt="" coords="756,1313,891,1340"/>
+<area shape="rect" id="node32" href="$class_m_p_u6050.html#a77b36f41c531a11b5a835fc75a9aefe6" title="Set external FSYNC configuration. " alt="" coords="177,132,398,159"/>
+<area shape="rect" id="node33" href="$class_m_p_u6050.html#a7a782ade8af2f88dfef7171487f59a3b" title="Set digital low&#45;pass filter configuration. " alt="" coords="201,72,373,99"/>
+<area shape="rect" id="node34" href="$class_m_p_u6050.html#ac7bcf24249dd5000320a8ec0ffe488c6" title="Set full interrupt enabled status. " alt="" coords="203,15,371,41"/>
+<area shape="rect" id="node35" href="$class_m_p_u6050.html#a78e58ab27986db6999af775ed4d43091" title="Set FIFO enabled status. " alt="" coords="469,1575,652,1601"/>
+<area shape="rect" id="node36" href="$class_m_p_u6050.html#af238656844a3727fa96a8d434b55473e" title="Set I2C Master interrupt enabled status. " alt="" coords="469,438,652,479"/>
+<area shape="rect" id="node37" href="$class_m_p_u6050.html#a559c2d091d36a4e0489bc639916ddbb6" title="Reset temperature sensor signal path. " alt="" coords="452,504,669,531"/>
+<area shape="rect" id="node38" href="$class_m_p_u6050.html#a99ee74708c12f32e48ef5ec69ac9f4a9" title="Reset accelerometer signal path. " alt="" coords="447,555,675,581"/>
+<area shape="rect" id="node39" href="$class_m_p_u6050.html#af1599c0d70f07fd3e28683d571842c22" title="Reset gyroscope signal path. " alt="" coords="457,605,664,632"/>
+<area shape="rect" id="node40" href="$class_m_p_u6050.html#a20dc4bdedbe1550580c28a6d090291be" title="Set wait&#45;for&#45;external&#45;sensor&#45;data enabled value. " alt="" coords="187,601,387,642"/>
+<area shape="rect" id="node41" href="$class_m_p_u6050.html#a6ed713870c7f6d085ded91a45515a36c" title="Set Slave 3 FIFO enabled value. " alt="" coords="176,667,399,693"/>
+<area shape="rect" id="node42" href="$class_m_p_u6050.html#a039f5724974c5bf3f373ed9be031441c" title="Set multi&#45;master enabled value. " alt="" coords="177,717,398,744"/>
+<area shape="rect" id="node43" href="$class_m_p_u6050.html#a340eade71cf6286f6904c2021330944e" title="Set wake cycle enabled status. " alt="" coords="177,768,398,795"/>
+<area shape="rect" id="node44" href="$class_m_p_u6050.html#a96aa409e02cdb7d3671890c70b44f167" title="Set FSYNC pin interrupt enabled setting. " alt="" coords="191,819,383,861"/>
+<area shape="rect" id="node45" href="$class_m_p_u6050.html#a003a098a1521c5ef4df50c0a8a2d47ab" title="Set interrupt logic level mode. " alt="" coords="194,885,381,912"/>
+<area shape="rect" id="node46" href="$class_m_p_u6050.html#a9d9d6aeea346e6f6fad8e4a428cf3301" title="Set interrupt drive mode. " alt="" coords="195,936,380,963"/>
+<area shape="rect" id="node47" href="$class_m_p_u6050.html#abf9ccf9eb6c7156e6660abb76734920a" title="Set interrupt latch mode. " alt="" coords="194,987,381,1013"/>
+<area shape="rect" id="node48" href="$class_m_p_u6050.html#a67a11be7fc7ab6b1186469b94ea33dda" title="Set Data Ready interrupt enabled status. " alt="" coords="194,1038,381,1079"/>
+<area shape="rect" id="node49" href="$class_m_p_u6050.html#a2fa64c7030242aac18bd6727e8ca4a54" title="Set interrupt latch clear mode. " alt="" coords="194,1103,381,1145"/>
+<area shape="rect" id="node50" href="$struct_locked_struct.html#aa207b98a1cd6c569a96e7d1d5565478f" title="Lock this struct. " alt="" coords="222,1676,353,1703"/>
+<area shape="rect" id="node22" href="$class_m_p_u6050.html#a15ec5f8e7daf235f507c1d8b96af051a" title="Set sleep mode status. " alt="" coords="467,387,654,413"/>
+<area shape="rect" id="node4" href="$class_i2_cdev.html#a913371251b6a41520c080115650e1b59" title="Write multiple bits in an 8&#45;bit device register. " alt="" coords="762,65,885,92"/>
+<area shape="rect" id="node5" href="$class_i2_cdev.html#aeb297637ef985cd562da465ba61b7042" title="Write single byte to an 8&#45;bit device register. " alt="" coords="972,116,1099,143"/>
+<area shape="rect" id="node6" href="$class_m_p_u6050.html#a249a905ae4572a462414f2d94236258a" title="MPU6050::getWakeFrequency" alt="" coords="723,299,924,325"/>
+<area shape="rect" id="node7" href="$class_i2_cdev.html#ab507de3d1a8f9e1528038ed2b2301d31" title="Read multiple bits from an 8&#45;bit device register. " alt="" coords="763,349,883,376"/>
+<area shape="rect" id="node8" href="$class_m_p_u6050.html#a62495e89f4787e6b18f0f795cef2b7cd" title="MPU6050::setWakeFrequency" alt="" coords="723,400,924,427"/>
+<area shape="rect" id="node9" href="$class_m_p_u6050.html#a99261a04739fdb7a9a1c5b67ce3e710e" title="MPU6050::getStandbyXAccel\lEnabled" alt="" coords="725,451,921,493"/>
+<area shape="rect" id="node10" href="$class_i2_cdev.html#a9f104431c59658432e8b2f02c3e1acd6" title="Read a single bit from an 8&#45;bit device register. " alt="" coords="767,517,880,544"/>
+<area shape="rect" id="node11" href="$class_m_p_u6050.html#af4df87fd2e87f41d06706cfd5bbc2a2c" title="MPU6050::setStandbyXAccel\lEnabled" alt="" coords="725,569,921,610"/>
+<area shape="rect" id="node12" href="$class_i2_cdev.html#aa68890af87de5471d32e583ebbd91acb" title="write a single bit in an 8&#45;bit device register. " alt="" coords="765,961,881,988"/>
+<area shape="rect" id="node13" href="$class_m_p_u6050.html#a104f2ec438d745f8fdeec202bae09b48" title="MPU6050::getStandbyYAccel\lEnabled" alt="" coords="725,634,921,675"/>
+<area shape="rect" id="node14" href="$class_m_p_u6050.html#a7ce7d3299479eb66518acf0697132835" title="MPU6050::setStandbyYAccel\lEnabled" alt="" coords="725,699,921,741"/>
+<area shape="rect" id="node15" href="$class_m_p_u6050.html#adae85612e047c4c7f0c3b7110fc92956" title="MPU6050::getStandbyZAccel\lEnabled" alt="" coords="726,765,921,806"/>
+<area shape="rect" id="node16" href="$class_m_p_u6050.html#ac5fd917549d2ed0f12b8a17167271199" title="MPU6050::setStandbyZAccel\lEnabled" alt="" coords="726,830,921,871"/>
+<area shape="rect" id="node17" href="$class_m_p_u6050.html#acb5fde4167aa54fbbe84706d577a48a6" title="MPU6050::getStandbyXGyro\lEnabled" alt="" coords="728,895,919,937"/>
+<area shape="rect" id="node18" href="$class_m_p_u6050.html#ac1c6d8f623a9ca00a4ddc50f6615b977" title="MPU6050::setStandbyXGyro\lEnabled" alt="" coords="728,167,919,209"/>
+<area shape="rect" id="node19" href="$class_m_p_u6050.html#aaad2985f8d22aec123f1e1dabcdd427a" title="MPU6050::getStandbyYGyro\lEnabled" alt="" coords="728,233,919,274"/>
+</map>

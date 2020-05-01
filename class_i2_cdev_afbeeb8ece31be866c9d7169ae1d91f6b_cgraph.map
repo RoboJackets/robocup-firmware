@@ -1,0 +1,4 @@
+<map id="I2Cdev::readBitsW" name="I2Cdev::readBitsW">
+<area shape="rect" id="node2" href="$class_i2_cdev.html#af8817e7bfb53ad2a62c5d0f62066d2cf" title="Read single word from a 16&#45;bit device register. " alt="" coords="187,5,315,32"/>
+<area shape="rect" id="node3" href="$class_i2_cdev.html#a3d652d8428f23fe6a51dcc168d4cac3b" title="I2Cdev::readWords" alt="" coords="363,5,497,32"/>
+</map>

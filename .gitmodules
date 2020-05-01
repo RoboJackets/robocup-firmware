@@ -1,0 +1,6 @@
+[submodule "external/DoCIF"]
+	path = util/DoCIF
+	url = https://github.com/jgkamat/DoCIF.git
+[submodule "lib/robocup-fshare"]
+	path = robot/lib/robocup-fshare
+	url = https://github.com/robojackets/robocup-fshare

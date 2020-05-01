@@ -1,0 +1,8 @@
+<map id="robot/control/Inc/modules/RotaryDialModule.hpp" name="robot/control/Inc/modules/RotaryDialModule.hpp">
+<area shape="rect" id="node2" href="$_locked_struct_8hpp.html" title="LockedStruct.hpp" alt="" coords="59,259,183,285"/>
+<area shape="rect" id="node8" href="$_generic_module_8hpp.html" title="GenericModule.hpp" alt="" coords="397,102,531,129"/>
+<area shape="rect" id="node11" href="$_micro_packets_8hpp.html" title="MicroPackets.hpp" alt="" coords="555,102,682,129"/>
+<area shape="rect" id="node12" href="$_m_c_p23017_8hpp.html" title="drivers/MCP23017.hpp" alt="" coords="151,184,305,211"/>
+<area shape="rect" id="node15" href="$_rotary_selector_8hpp.html" title="drivers/RotarySelector.hpp" alt="" coords="706,102,883,129"/>
+<area shape="rect" id="node17" href="$_i_o_expander_digital_in_out_8hpp.html" title="drivers/IOExpanderDigital\lInOut.hpp" alt="" coords="201,95,372,136"/>
+</map>
