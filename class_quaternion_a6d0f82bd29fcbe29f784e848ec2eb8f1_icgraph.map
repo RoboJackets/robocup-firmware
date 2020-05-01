@@ -1,0 +1,8 @@
+<map id="Quaternion::getMagnitude" name="Quaternion::getMagnitude">
+<area shape="rect" id="node2" href="$class_quaternion.html#a48e6bafb249c895ed25f29dc9170e11e" title="Quaternion::normalize" alt="" coords="226,5,375,32"/>
+<area shape="rect" id="node4" href="$class_vector_int16.html#aefdadb30fbc20b564bbbf0b1a885e349" title="VectorInt16::normalize" alt="" coords="224,56,377,83"/>
+<area shape="rect" id="node6" href="$class_vector_float.html#a112eaf8758a6f51b96ed1ccb71700495" title="VectorFloat::normalize" alt="" coords="224,107,377,133"/>
+<area shape="rect" id="node3" href="$class_quaternion.html#a61f5f7cb9b248aa259292c3c1960a1f0" title="Quaternion::getNormalized" alt="" coords="427,5,605,32"/>
+<area shape="rect" id="node5" href="$class_vector_int16.html#a1f2c17ac660f1e90a095f9e7914200c5" title="VectorInt16::getNormalized" alt="" coords="425,56,607,83"/>
+<area shape="rect" id="node7" href="$class_vector_float.html#aacb5e7ca59563c47dd066d8b1264ec4b" title="VectorFloat::getNormalized" alt="" coords="425,107,607,133"/>
+</map>

@@ -1,0 +1,10 @@
+<map id="GenericModule" name="GenericModule">
+<area shape="rect" id="node2" href="$class_battery_module.html" title="{BatteryModule\n|+ kFrequency\l+ kPeriod\l+ kPriority\l|+ BatteryModule()\l+ entry()\l}" alt="" coords="5,270,132,391"/>
+<area shape="rect" id="node3" href="$class_f_p_g_a_module.html" title="{FPGAModule\n|+ kFrequency\l+ kPeriod\l+ kPriority\l|+ FPGAModule()\l+ start()\l+ entry()\l}" alt="" coords="157,263,277,399"/>
+<area shape="rect" id="node4" href="$class_i_m_u_module.html" title="{IMUModule\n|+ kFrequency\l+ kPeriod\l+ kPriority\l|+ IMUModule()\l+ start()\l+ entry()\l}" alt="" coords="301,263,410,399"/>
+<area shape="rect" id="node5" href="$class_kicker_module.html" title="{KickerModule\n|+ kFrequency\l+ kPeriod\l+ kPriority\l|+ KickerModule()\l+ start()\l+ entry()\l}" alt="" coords="435,263,556,399"/>
+<area shape="rect" id="node6" href="$class_l_e_d_module.html" title="{LEDModule\n|+ kFrequency\l+ kPeriod\l+ kPriority\l|+ LEDModule()\l+ start()\l+ entry()\l+ fpgaInitialized()\l+ radioInitialized()\l+ kickerInitialized()\l+ fullyInitialized()\l+ missedSuperLoop()\l+ missedModuleRun()\l}" alt="" coords="580,219,731,443"/>
+<area shape="rect" id="node7" href="$class_motion_control_module.html" title="{MotionControlModule\n|+ kFrequency\l+ kPeriod\l+ kPriority\l|+ MotionControlModule()\l+ entry()\l}" alt="" coords="755,270,921,391"/>
+<area shape="rect" id="node8" href="$class_radio_module.html" title="{RadioModule\n|+ kFrequency\l+ kPeriod\l+ kPriority\l|+ RadioModule()\l+ start()\l+ entry()\l}" alt="" coords="945,263,1064,399"/>
+<area shape="rect" id="node9" href="$class_rotary_dial_module.html" title="{RotaryDialModule\n|+ kFrequency\l+ kPeriod\l+ kPriority\l|+ RotaryDialModule()\l+ start()\l+ entry()\l}" alt="" coords="1089,263,1235,399"/>
+</map>

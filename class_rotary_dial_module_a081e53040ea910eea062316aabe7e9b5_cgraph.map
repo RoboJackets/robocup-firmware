@@ -1,0 +1,4 @@
+<map id="RotaryDialModule::entry" name="RotaryDialModule::entry">
+<area shape="rect" id="node2" href="$class_rotary_selector.html#a493cc623892fe610d951f8c192720246" title="Gives the reading (0x0 &#45; 0xF) of the NUM_PINS wires. " alt="" coords="216,5,359,32"/>
+<area shape="rect" id="node3" href="$struct_locked_struct.html#aa207b98a1cd6c569a96e7d1d5565478f" title="Lock this struct. " alt="" coords="222,56,353,83"/>
+</map>

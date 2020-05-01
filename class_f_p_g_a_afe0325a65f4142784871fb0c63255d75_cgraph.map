@@ -1,0 +1,3 @@
+<map id="FPGA::send_config" name="FPGA::send_config">
+<area shape="rect" id="node2" href="$class_f_p_g_a.html#abfd93a2d6b356b3338b598b8d9c1d5b4" title="Bring chipselect low so we can start a transmission. " alt="" coords="189,5,321,32"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="MPU6050::setSlave4OutputByte" name="MPU6050::setSlave4OutputByte">
+<area shape="rect" id="node2" href="$class_i2_cdev.html#aeb297637ef985cd562da465ba61b7042" title="Write single byte to an 8&#45;bit device register. " alt="" coords="265,5,392,32"/>
+<area shape="rect" id="node3" href="$class_i2_cdev.html#aa4e39cac6c0eac5112f9132084bcc93e" title="I2Cdev::writeBytes" alt="" coords="440,5,575,32"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="handle_debug_mode" name="handle_debug_mode">
+<area shape="rect" id="node2" href="$_h_a_l__attiny167_8c.html#a0dd22df2d0fc638d04ea0c31d39d111e" title="HAL_IsSet" alt="" coords="195,5,281,32"/>
+<area shape="rect" id="node3" href="$main_8c.html#a0d4f8db41b896b615e70d355cfacf056" title="start the kick FSM for desired strength. " alt="" coords="215,56,261,83"/>
+<area shape="rect" id="node4" href="$main_8c.html#a2d15b31f87ddbefcdea5546ee4250b26" title="is_kicking" alt="" coords="329,56,409,83"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="startModule" name="startModule">
+<area shape="rect" id="node2" href="$class_generic_module.html#a649d4cab743da118a4274969dbe6c3b0" title="Called once to initialize the module. " alt="" coords="144,5,287,32"/>
+<area shape="rect" id="node3" href="$class_generic_module.html#a3789bbdeff222e7320e262a622b52237" title="Called by the RTOS at the desired update rate. " alt="" coords="335,31,481,57"/>
+</map>
