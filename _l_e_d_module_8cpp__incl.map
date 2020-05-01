@@ -1,8 +1,0 @@
-<map id="robot/control/Src/modules/LEDModule.cpp" name="robot/control/Src/modules/LEDModule.cpp">
-<area shape="rect" id="node2" href="$_l_e_d_module_8hpp.html" title="modules/LEDModule.hpp" alt="" coords="363,95,531,121"/>
-<area shape="rect" id="node19" href="$iodefs_8h.html" title="iodefs.h" alt="" coords="260,95,328,121"/>
-<area shape="rect" id="node5" href="$_locked_struct_8hpp.html" title="LockedStruct.hpp" alt="" coords="85,244,209,271"/>
-<area shape="rect" id="node14" href="$_generic_module_8hpp.html" title="GenericModule.hpp" alt="" coords="433,169,568,196"/>
-<area shape="rect" id="node17" href="$_micro_packets_8hpp.html" title="MicroPackets.hpp" alt="" coords="891,169,1017,196"/>
-<area shape="rect" id="node18" href="$_m_c_p23017_8hpp.html" title="drivers/MCP23017.hpp" alt="" coords="153,169,307,196"/>
-</map>

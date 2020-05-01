@@ -1,5 +1,0 @@
-<map id="LEDModule::entry" name="LEDModule::entry">
-<area shape="rect" id="node2" href="$struct_locked_struct.html#aa207b98a1cd6c569a96e7d1d5565478f" title="Lock this struct. " alt="" coords="205,5,336,32"/>
-<area shape="rect" id="node3" href="$class_l_e_d_module.html#ac5cf1e0e2c9e02c30b9cd9dd156b6bd3" title="LEDModule::fpgaInitialized" alt="" coords="181,56,360,83"/>
-<area shape="rect" id="node4" href="$class_l_e_d_module.html#a00403b436a96603d807aec0ca88899e1" title="LEDModule::radioInitialized" alt="" coords="180,107,361,133"/>
-</map>

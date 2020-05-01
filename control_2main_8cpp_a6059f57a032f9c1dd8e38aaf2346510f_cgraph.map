@@ -1,5 +1,0 @@
-<map id="createModule" name="createModule">
-<area shape="rect" id="node2" href="$control_2main_8cpp.html#ae4d58a312a23ef26cf0cbef0f7d760c4" title="startModule" alt="" coords="153,31,244,57"/>
-<area shape="rect" id="node3" href="$class_generic_module.html#a649d4cab743da118a4274969dbe6c3b0" title="Called once to initialize the module. " alt="" coords="292,5,435,32"/>
-<area shape="rect" id="node4" href="$class_generic_module.html#a3789bbdeff222e7320e262a622b52237" title="Called by the RTOS at the desired update rate. " alt="" coords="483,31,629,57"/>
-</map>

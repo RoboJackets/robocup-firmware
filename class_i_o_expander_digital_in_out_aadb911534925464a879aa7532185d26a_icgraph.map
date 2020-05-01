@@ -1,4 +1,0 @@
-<map id="IOExpanderDigitalInOut::read" name="IOExpanderDigitalInOut::read">
-<area shape="rect" id="node2" href="$class_i_o_expander_digital_in_out.html#a2b7fd6147f7abc8eea43afbcbb80e1b6" title="IOExpanderDigitalInOut\l::init" alt="" coords="213,5,373,47"/>
-<area shape="rect" id="node3" href="$class_i_o_expander_digital_in_out.html#afb472b73e9a9bd7512a87c309fbdc893" title="Allows the pin to return its value like a simple integer variable. " alt="" coords="213,71,373,112"/>
-</map>

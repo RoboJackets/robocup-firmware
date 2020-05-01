@@ -1,4 +1,0 @@
-<map id="MPU6050::getMotion6" name="MPU6050::getMotion6">
-<area shape="rect" id="node2" href="$class_i_m_u_module.html#a784f495174be8c60b2d1e5a99bf508c9" title="Called by the RTOS at the desired update rate. " alt="" coords="218,5,345,32"/>
-<area shape="rect" id="node3" href="$class_m_p_u6050.html#aabfd2920e748016383e8124a4b32ad31" title="Get raw 9&#45;axis motion sensor readings (accel/gyro/compass). " alt="" coords="205,56,357,83"/>
-</map>

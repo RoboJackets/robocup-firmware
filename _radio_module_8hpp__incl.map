@@ -1,7 +1,0 @@
-<map id="robot/control/Inc/modules/RadioModule.hpp" name="robot/control/Inc/modules/RadioModule.hpp">
-<area shape="rect" id="node2" href="$_locked_struct_8hpp.html" title="LockedStruct.hpp" alt="" coords="176,95,300,121"/>
-<area shape="rect" id="node8" href="$_generic_module_8hpp.html" title="GenericModule.hpp" alt="" coords="349,95,484,121"/>
-<area shape="rect" id="node11" href="$_micro_packets_8hpp.html" title="MicroPackets.hpp" alt="" coords="1059,169,1185,196"/>
-<area shape="rect" id="node12" href="$_radio_link_8hpp.html" title="radio/RadioLink.hpp" alt="" coords="729,95,867,121"/>
-<area shape="rect" id="node15" href="$_generic_radio_8hpp.html" title="drivers/GenericRadio.hpp" alt="" coords="629,169,799,196"/>
-</map>

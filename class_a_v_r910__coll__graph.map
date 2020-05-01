@@ -1,4 +1,0 @@
-<map id="AVR910" name="AVR910">
-<area shape="rect" id="node2" href="$struct_locked_struct.html" title="{LockedStruct\&lt; SPI \&gt;\n||+ LockedStruct()\l+ LockedStruct()\l+ LockedStruct()\l+ operator=()\l+ operator=()\l+ ~LockedStruct()\l+ lock()\l+ unsafe_value()\l}" alt="" coords="38,248,183,428"/>
-<area shape="rect" id="node3" href="$struct_locked_struct.html" title="A locked&#45;struct abstraction. " alt="" coords="45,5,176,185"/>
-</map>
