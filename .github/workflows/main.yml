@@ -3,7 +3,7 @@ name: CI
 # events but only for the master branch
 on:
   push:
-    branches: [ master, develop ]
+    branches: [ master, develop, collin/build-test ]
   pull_request:
     branches: [ master, develop ]
 
@@ -40,3 +40,21 @@ jobs:
           git add --all -f &&
           git commit -m 'auto-updated documentation' &&
           git push https://$GITHUB_ACTOR:${{ secrets.GITHUB_TOKEN }}@github.com/robojackets/robocup-firmware gh-pages
+
+
+  test-firmware:
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_NAME: testbuild
+    steps:
+      - name: setup-env
+        run: |
+          cd $GITHUB_WORKSPACE
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: docker-build
+        run: |
+          docker build -t $DOCKER_NAME:latest ./
+      - name: document
+        run: |
+          docker run --name $DOCKER_NAME $DOCKER_NAME make robot
