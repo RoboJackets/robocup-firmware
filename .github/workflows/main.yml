@@ -39,4 +39,4 @@ jobs:
           git config --local user.name "GitHub Action" &&
           git add --all -f &&
           git commit -m 'auto-updated documentation' &&
-          git push https://$GH_TOKEN@github.com/robojackets/robocup-firmware gh-pages
+          git push https://$GITHUB_TOKEN@github.com/robojackets/robocup-firmware gh-pages
