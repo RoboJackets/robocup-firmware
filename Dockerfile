@@ -6,8 +6,8 @@ MAINTAINER Collin Avidano collin.avidano@gmail.com
 ENV DEBIAN_FRONTEND noninteractive
 
 # setup apt tools and other goodies we want
-# TODO Double check these later for which are really necessary
-RUN apt-get update --fix-missing && apt-get -y install udev git nano vim software-properties-common sudo apt-utils wget curl htop iputils-ping less bsdmainutils scons screen && apt-get clean
+# left nano and htop because someone is going to ask why they cant use nano if this gets used as a development image
+RUN apt-get update --fix-missing && apt-get -y install udev git vim nano software-properties-common sudo apt-utils wget curl htop iputils-ping less bsdmainutils screen && apt-get clean
 
 # set up user
 # Replace 1000 with your user / group id
