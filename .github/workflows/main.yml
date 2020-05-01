@@ -3,7 +3,7 @@ name: CI
 # events but only for the master branch
 on:
   push:
-    branches: [ master, develop, collin/build-test ]
+    branches: [ master, develop ]
   pull_request:
     branches: [ master, develop ]
 
@@ -55,6 +55,6 @@ jobs:
       - name: docker-build
         run: |
           docker build -t $DOCKER_NAME:latest ./
-      - name: document
+      - name: test-build
         run: |
           docker run --name $DOCKER_NAME $DOCKER_NAME make robot
