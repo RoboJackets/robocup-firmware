@@ -39,8 +39,8 @@ clean:
 	conan remove RoboCupFirmware/* --builds
 	conan remove mTrain/* --builds
 
-# Markdowns and target for doxygen are built in doc and then symlinked to docs for easy access and github pages usage
 docs:
 	doxygen doc/Doxyfile
 	cp doc/doxygen.css docs/
+	cp doc/*.md docs/
 	@echo "\n=> Open up 'docs/index.html' in a browser to view a local copy of the documentation"
