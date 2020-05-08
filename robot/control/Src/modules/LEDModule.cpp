@@ -1,5 +1,6 @@
 #include "modules/LEDModule.hpp"
 #include "iodefs.h"
+#include <cmath>
 
 LEDModule::LEDModule(LockedStruct<MCP23017>& ioExpander,
                      LockedStruct<SPI>& sharedSPI,
@@ -23,8 +24,10 @@ void LEDModule::start() {
     ioExpanderLock->init();
     setColor(0xFFFFFF, 0xFFFFFF);
 
+    /*
     ioExpanderLock->config(0x00FF, 0x00FF, 0x00FF);
     ioExpanderLock->writeMask(static_cast<uint16_t>(~IOExpanderErrorLEDMask), IOExpanderErrorLEDMask);
+    */
 }
 
 extern std::vector<const char*> failed_modules;
@@ -143,29 +146,30 @@ void LEDModule::setColor(uint32_t led0, uint32_t led1) {
     // 0 - 31
     uint8_t brightness = 2 | 0xE0;
 
-    std::vector<uint8_t> data;
-
-    data.push_back(0x00);
-    data.push_back(0x00);
-    data.push_back(0x00);
-    data.push_back(0x00);
-
-    data.push_back(brightness);
-    data.push_back((led0 >> 16) & 0xFF);
-    data.push_back((led0 >> 8) & 0xFF);
-    data.push_back((led0 >> 0) & 0xFF);
-    
-    data.push_back(brightness);
-    data.push_back((led1 >> 16) & 0xFF);
-    data.push_back((led1 >> 8) & 0xFF);
-    data.push_back((led1 >> 0) & 0xFF);
-    
-    data.push_back(0xFF);
-    data.push_back(0xFF);
-    data.push_back(0xFF);
-    data.push_back(0xFF);
+    t += 0.1;
 
     dotStarNCS.write(false);
-    dotStarSPI.lock()->transmit(data);
+
+    auto lock = dotStarSPI.lock();
+    lock->transmit(0x00);
+    lock->transmit(0x00);
+    lock->transmit(0x00);
+    lock->transmit(0x00);
+
+    lock->transmit(brightness);
+    lock->transmit((uint8_t) (127 + std::sin(t) * 127));
+    lock->transmit((uint8_t) (127 + std::sin(t + 2 * M_PI / 3) * 127));
+    lock->transmit((uint8_t) (127 + std::sin(t - 2 * M_PI / 3) * 127));
+
+    lock->transmit(brightness);
+    lock->transmit((uint8_t) (127 + std::sin(t + 2 * M_PI / 3) * 127));
+    lock->transmit((uint8_t) (127 + std::sin(t - 2 * M_PI / 3) * 127));
+    lock->transmit((uint8_t) (127 + std::sin(t) * 127));
+
+    lock->transmit(brightness);
+    lock->transmit((uint8_t) (127 + std::sin(t - 2 * M_PI / 3) * 127));
+    lock->transmit((uint8_t) (127 + std::sin(t) * 127));
+    lock->transmit((uint8_t) (127 + std::sin(t + 2 * M_PI / 3) * 127));
+
     dotStarNCS.write(true);
 }

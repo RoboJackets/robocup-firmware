@@ -8,9 +8,9 @@ RobotEstimator::RobotEstimator(uint32_t dt_us) {
     const float dt = dt_us/1000000.0;
 
     // Assume constant velocity
-    F << 1,  0,  0,
-         0,  1,  0,
-         0,  0,  1;
+    F << 0.998,  0,  0,
+         0,  0.995,  0,
+         -0.001,  0,  0.998;
 
     // Assume no input for the moment
     // May need to change based on filter lag
@@ -27,9 +27,16 @@ RobotEstimator::RobotEstimator(uint32_t dt_us) {
     x_hat << 0, 0, 0;
 }
 
-// TODO: Profile these functions
 void RobotEstimator::predict(Eigen::Matrix<float, numInputs, 1> u) {
-    x_hat = F*x_hat + B*u;
+    x_hat.topRows<3>() = F * x_hat.topRows<3>() + B*u;
+
+    float angle = x_hat(5);
+    Eigen::Matrix<float, 3, 3> R;
+    R <<
+        std::cos(angle), -std::sin(angle), 0,
+        std::sin(angle), std::cos(angle), 0,
+        0, 0, 1;
+    x_hat.bottomRows<3>() += 0.005 * R * x_hat.topRows<3>();
 }
 
 void RobotEstimator::update(Eigen::Matrix<float, numOutputs, 1> z) {
@@ -41,9 +48,23 @@ void RobotEstimator::update(Eigen::Matrix<float, numOutputs, 1> z) {
         0.001117, 0.001002, -0.001002, -0.001117, 0.000000,
         -0.004554, -0.004132, -0.004132, -0.004554, 0.152357;
 
-    x_hat += K * y;
-    // printf("%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\r\n", z(0), z(1), z(2), z(3), z(4), x_hat(0), x_hat(1), x_hat(2));
-    printf("%f\t%f\t%f\r\n", x_hat(0), x_hat(1), x_hat(2));
+    x_hat.topRows<3>() += K * y;
+}
+
+void RobotEstimator::updateVision(Eigen::Matrix<float, numStates, 1> z) {
+    // Approximate the x_hat from when the frame was actually taken using a
+    // fixed latency.
+    double latency = 0.07;
+    Eigen::Matrix<float, numStates, 1> old_x_hat =
+        x_hat.bottomRows<3>() - x_hat.topRows<3>() * latency;
+
+    // TODO(Kyle): Pick non-fudged Kalman gains here.
+    Eigen::Matrix<float, numOutputs, 1> y = z - old_x_hat;
+    Eigen::Matrix<float, numStates * 2,  numStates> K;
+    K.leftRows<3>() = Eigen::Matrix<float, 3, 3>::Identity() * 0.15;
+    K.rightRows<3>() = Eigen::Matrix<float, 3, 3>::Identity() * 0.08;
+
+    x_hat.topRows += K * y;
 }
 
 void RobotEstimator::getState(Eigen::Matrix<float, numStates, 1>& state) {
