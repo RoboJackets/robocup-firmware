@@ -90,7 +90,7 @@ $(document).ready(function(){initNavTree('md__conan.html','');});
 <h2>Who is this document for?</h2>
 <p>This document is primarily geared towards both new and old members who are working between both mtrain-firmware and robocup-firmware and thus need to know how to manage the package created by building mtrain firmware as well as those who would like a deeper understanding of what conan is doing for us in terms of package management. It is not intended as a full guide to Conan as it only walks through the basic steps of updating a package for and changing requires but I will leave links to relevant documentation and give commentary as I go.</p>
 <h2>What is Conan?</h2>
-<p>Conan is a decentralized c++ package manager. This means that much like git there is no completely central authority. Conan can search multiple registered remotes (just servers running the Conan protocol) to obtain the dependencies it requires. These dependencies are either distributed pre built binary for whatever library we may be looking for or, if no binary exists, Conan recipies which instruct your machine on how to compile the binary for your platform. Afterwards you can the upload the binaries for these package to these remotes. The remotes are merely just package storage and do not build the packages themselves. The default location for your conan directory will be ~/.conan/ . Here conan stores all user configurations and packages (under the data directory). It is ill advised to modify any of these files by hand but it is sometimes helpful to force rebuild packages by deleting the contents of the data directory.</p>
+<p>Conan is a decentralized c++ package manager. This means that much like git there is no completely central authority. Conan can search multiple registered remotes (just servers running the Conan protocol) to obtain the dependencies it requires. These dependencies are either distributed pre built binary for whatever library we may be looking for or, if no binary exists, Conan recipies which instruct your machine on how to compile the binary for your platform. Afterwards you can upload the binaries for these package to these remotes. The remotes are merely just package storage and do not build the packages themselves. The default location for your conan directory will be ~/.conan/ . Here conan stores all user configurations and packages (under the data directory). It is ill advised to modify any of these files by hand but it is sometimes helpful to force rebuild packages by deleting the contents of the data directory.</p>
 <p>To learn more about Conan see the introduction page on the official docs: <a href="https://docs.conan.io/en/latest/introduction.html">https://docs.conan.io/en/latest/introduction.html</a></p>
 <h2>Dependency Management</h2>
 <p>TODO talk more about how conan deals with dependencies eg requires statement</p>
@@ -119,7 +119,7 @@ $(document).ready(function(){initNavTree('md__conan.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sun May 17 2020 01:28:19 for GT RoboCup SSL by
+    <li class="footer">Generated on Sun May 17 2020 05:27:52 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>
