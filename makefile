@@ -40,7 +40,5 @@ clean:
 	conan remove mTrain/* --builds
 
 docs:
-	doxygen doc/Doxyfile
-	cp doc/doxygen.css docs/
-	cp doc/*.md docs/
+	cd doc && doxygen Doxyfile
 	@echo "\n=> Open up 'docs/index.html' in a browser to view a local copy of the documentation"
