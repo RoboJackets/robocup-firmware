@@ -1,0 +1,8 @@
+digraph "RotarySelector&lt; DIGITAL_IN, NUM_PINS &gt;"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node0 [label="{RotarySelector\< DIGITAL\l_IN, NUM_PINS \>\n||+ RotarySelector()\l+ init()\l+ read()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node0 -> Node1 [dir="back",color="orange",fontsize="10",style="solid",label=" \< IOExpanderDigitalInOut \>" ,fontname="Helvetica"];
+  Node1 [label="{RotarySelector\< IOExpander\lDigitalInOut \>\n||+ RotarySelector()\l+ init()\l+ read()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_rotary_selector.html"];
+}

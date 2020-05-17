@@ -1,0 +1,19 @@
+digraph "Quaternion::getMagnitude"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node18 [label="Quaternion::getMagnitude",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node18 -> Node19 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node19 [label="Quaternion::normalize",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_quaternion.html#a48e6bafb249c895ed25f29dc9170e11e"];
+  Node19 -> Node20 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node20 [label="Quaternion::getNormalized",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_quaternion.html#a61f5f7cb9b248aa259292c3c1960a1f0"];
+  Node18 -> Node21 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node21 [label="VectorInt16::normalize",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_vector_int16.html#aefdadb30fbc20b564bbbf0b1a885e349"];
+  Node21 -> Node22 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node22 [label="VectorInt16::getNormalized",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_vector_int16.html#a1f2c17ac660f1e90a095f9e7914200c5"];
+  Node18 -> Node23 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node23 [label="VectorFloat::normalize",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_vector_float.html#a112eaf8758a6f51b96ed1ccb71700495"];
+  Node23 -> Node24 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node24 [label="VectorFloat::getNormalized",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_vector_float.html#aacb5e7ca59563c47dd066d8b1264ec4b"];
+}

@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['fpga',['FPGA',['../class_f_p_g_a.html',1,'']]],
-  ['fpgamodule',['FPGAModule',['../class_f_p_g_a_module.html',1,'']]],
-  ['fpgastatus',['FPGAStatus',['../struct_f_p_g_a_status.html',1,'']]]
+  ['debuginfo',['DebugInfo',['../struct_debug_info.html',1,'']]],
+  ['dribblercontroller',['DribblerController',['../class_dribbler_controller.html',1,'']]]
 ];

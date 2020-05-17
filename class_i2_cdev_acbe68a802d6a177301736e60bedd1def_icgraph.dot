@@ -1,0 +1,22 @@
+digraph "I2Cdev::writeWord"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node761 [label="I2Cdev::writeWord",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node761 -> Node762 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node762 [label="I2Cdev::I2Cdev",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i2_cdev.html#a2f70586510cbda5c5267a10b4ca220b9"];
+  Node761 -> Node763 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node763 [label="I2Cdev::writeBitW",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i2_cdev.html#a1b5fbedfadec5d429c81ee84d27e658d",tooltip="write a single bit in a 16-bit device register. "];
+  Node763 -> Node762 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node761 -> Node764 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node764 [label="I2Cdev::writeBitsW",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i2_cdev.html#a8f8652a1328224cce867eed665a45c4d",tooltip="Write multiple bits in a 16-bit device register. "];
+  Node764 -> Node762 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node761 -> Node765 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node765 [label="MPU6050::setClockSource",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_p_u6050.html#a4c1cd147d038e024bdeaa053c4d77734",tooltip="Set clock source setting. "];
+  Node765 -> Node766 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node766 [label="IMUModule::start",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_m_u_module.html#aba29f7665d8ec8f0eefe802f1c2b741c",tooltip="Called once to initialize the module. "];
+  Node765 -> Node767 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node767 [label="MPU6050::initialize",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_p_u6050.html#abd8fc6c18adf158011118fbccc7e7054",tooltip="Power on and prepare for general usage. "];
+  Node767 -> Node766 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+}

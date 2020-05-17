@@ -1,0 +1,6 @@
+digraph "MPU6050"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{MPU6050\n||+ MPU6050()\l+ MPU6050()\l+ initialize()\l+ testConnection()\l+ getAuxVDDIOLevel()\l+ setAuxVDDIOLevel()\l+ getRate()\l+ setRate()\l+ getExternalFrameSync()\l+ setExternalFrameSync()\land 251 more...\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+}

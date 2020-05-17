@@ -1,7 +1,9 @@
 var searchData=
 [
-  ['ledmodule',['LEDModule',['../class_l_e_d_module.html#af27f3d929f279451bee79633b2869f33',1,'LEDModule']]],
-  ['lock',['lock',['../struct_locked_struct.html#aa207b98a1cd6c569a96e7d1d5565478f',1,'LockedStruct::lock()'],['../struct_locked_struct_1_1_lock.html#a114a6b364423baf17d26a66b488e41c4',1,'LockedStruct::Lock::Lock(const Lock &amp;)=delete'],['../struct_locked_struct_1_1_lock.html#a9f5314631f93fc270fd3e32a02f97602',1,'LockedStruct::Lock::Lock(Lock &amp;&amp;other)=default']]],
-  ['lock_5fspi',['lock_spi',['../class_a_v_r910.html#a4b33111389ef72e6e05e2951505e1821',1,'AVR910']]],
-  ['lockedstruct',['LockedStruct',['../struct_locked_struct.html#a584c151a418a9788f05979df37142d14',1,'LockedStruct::LockedStruct(Args... args)'],['../struct_locked_struct.html#a1c62caa32f1abab6d307d061100af73f',1,'LockedStruct::LockedStruct(const LockedStruct &amp;)=delete'],['../struct_locked_struct.html#a39d371fa9a7d5dccd09d8ad7c4e7a70f',1,'LockedStruct::LockedStruct(LockedStruct &amp;&amp;)=delete']]]
+  ['kick',['kick',['../class_kicker_board.html#ad09cd66a72a0d24f1a8176cea71397ff',1,'KickerBoard::kick()'],['../main_8c.html#a0d4f8db41b896b615e70d355cfacf056',1,'kick():&#160;main.c']]],
+  ['kickerboard',['KickerBoard',['../class_kicker_board.html#a3dd5dc981a48f17ec42e79d9e065dc7e',1,'KickerBoard']]],
+  ['kickerinitialized',['kickerInitialized',['../class_l_e_d_module.html#a257cc53a6966c74659f8b5e1697960a7',1,'LEDModule']]],
+  ['kickermodule',['KickerModule',['../class_kicker_module.html#ac5af2febe3aea6f37919d5eedcfb57ed',1,'KickerModule']]],
+  ['kickonbreakbeam',['kickOnBreakbeam',['../class_kicker_board.html#a68a34d0ca98d8d67da8167bdea3eb332',1,'KickerBoard']]],
+  ['kicktype',['kickType',['../class_kicker_board.html#aae6db87403d0bb354f76071ea2182e7a',1,'KickerBoard']]]
 ];

@@ -1,0 +1,21 @@
+digraph "LockedStruct::unsafe_value"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node61 [label="LockedStruct::unsafe\l_value",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node61 -> Node62 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node62 [label="BatteryModule::BatteryModule",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_battery_module.html#adabb837c0e450c2695c09aebe35127e6"];
+  Node61 -> Node63 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node63 [label="FPGAModule::FPGAModule",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_f_p_g_a_module.html#ab2fa4b8a501aa9eb2434d03711dcecf5"];
+  Node61 -> Node64 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node64 [label="IMUModule::IMUModule",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_m_u_module.html#a1f691ac4f40252d106767cbbb98b1075"];
+  Node61 -> Node65 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node65 [label="KickerModule::KickerModule",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_kicker_module.html#ac5af2febe3aea6f37919d5eedcfb57ed"];
+  Node61 -> Node66 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node66 [label="MotionControlModule\l::MotionControlModule",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_motion_control_module.html#a1c1a6b82b985533d633a3ced7cd5feee"];
+  Node61 -> Node67 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node67 [label="RadioModule::RadioModule",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_radio_module.html#a62c854a2b04d5d559202b58af5163f02"];
+  Node61 -> Node68 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node68 [label="RotaryDialModule::Rotary\lDialModule",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_rotary_dial_module.html#a9a503cc48777facea79a695862d26960"];
+}

@@ -1,12 +1,10 @@
 var searchData=
 [
-  ['v_5fmonitor_5fpin',['V_MONITOR_PIN',['../pins_8h.html#a8b1690108cf4b73ec3ce10666db8c2f1',1,'pins.h']]],
-  ['val',['val',['../struct_debug_info.html#a8454e0adfa96e0b49763e96820e9f398',1,'DebugInfo']]],
-  ['value',['value',['../struct_locked_struct_1_1_lock.html#a3b0bf9828f0ed57cc73b83bfdb0f609d',1,'LockedStruct::Lock']]],
-  ['vectorfloat',['VectorFloat',['../class_vector_float.html',1,'VectorFloat'],['../class_vector_float.html#a8b54ec5c117ca7101cff478b3cfaa0cc',1,'VectorFloat::VectorFloat()'],['../class_vector_float.html#a3b12ed03e28bded4316275882433e5aa',1,'VectorFloat::VectorFloat(float nx, float ny, float nz)']]],
-  ['vectorint16',['VectorInt16',['../class_vector_int16.html',1,'VectorInt16'],['../class_vector_int16.html#a314bffb747999af26026f734c43d61a2',1,'VectorInt16::VectorInt16()'],['../class_vector_int16.html#acce45f37b3f90df1d5aff6edbf12f02b',1,'VectorInt16::VectorInt16(int16_t nx, int16_t ny, int16_t nz)']]],
-  ['verify_5fparam',['verify_param',['../class_kicker_board.html#a34de349bcf21d784909184b41e0d944f',1,'KickerBoard']]],
-  ['version',['version',['../classconanfile_1_1_robo_cup_firmware_conan.html#a603d2c7ecb35070b2c8dfd3cb5ddb9b9',1,'conanfile::RoboCupFirmwareConan']]],
-  ['voltage_5fmask',['VOLTAGE_MASK',['../kicker__commands_8h.html#acc191a807d7ba1820b8dfbc81fc756ef',1,'kicker_commands.h']]],
-  ['voltage_5fscale',['VOLTAGE_SCALE',['../_kicker_board_8hpp.html#a8140333fc0cddd7a5b762b6a2cd044ba',1,'kicker_commands.h']]]
+  ['uid',['uid',['../structrtp_1_1_robot_tx_message.html#a0921d3b02c0f027ee55c35103678fb76',1,'rtp::RobotTxMessage::uid()'],['../structrtp_1_1_robot_status_message.html#a7161ddbe791e57e597099b1f794d091e',1,'rtp::RobotStatusMessage::uid()'],['../rtp_8hpp.html#a18ac6eb6ff39c52b65d6516c98a3c424',1,'uid():&#160;rtp.hpp']]],
+  ['unsafe_5fvalue',['unsafe_value',['../struct_locked_struct.html#a915c1d48aeaf29c4af2897122ad4b486',1,'LockedStruct']]],
+  ['update',['update',['../class_robot_estimator.html#a4c351248722cd20f02a05023fe8b986f',1,'RobotEstimator::update()'],['../class_battery.html#a85dcc13e31dfb66ce3ce217b78a7df7c',1,'Battery::update()']]],
+  ['update_5fball_5fsense',['update_ball_sense',['../main_8c.html#aab9d7a735441932d098ebfe60559ba10',1,'main.c']]],
+  ['upgrade',['UPGRADE',['../namespacertp_1_1_message_type_namespace.html#adc037e9081cafd7131456daea23cc59da050ec2a83c1259050a6d8b6cec82f8b5',1,'rtp::MessageTypeNamespace']]],
+  ['url',['url',['../classconanfile_1_1_robo_cup_firmware_conan.html#a8cf521b4c1ad2a13d10785232fae3377',1,'conanfile::RoboCupFirmwareConan']]],
+  ['usb_2dinterface_2ehpp',['usb-interface.hpp',['../usb-interface_8hpp.html',1,'']]]
 ];

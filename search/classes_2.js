@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['debuginfo',['DebugInfo',['../struct_debug_info.html',1,'']]],
-  ['dribblercontroller',['DribblerController',['../class_dribbler_controller.html',1,'']]]
+  ['controlmessage',['ControlMessage',['../structrtp_1_1_control_message.html',1,'rtp']]]
 ];

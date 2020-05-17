@@ -1,0 +1,23 @@
+digraph "/home/developer/robocup-firmware/robot/lib/Inc/drivers/GenericRadio.hpp"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node2 [label="/home/developer/robocup\l-firmware/robot/lib/Inc\l/drivers/GenericRadio.hpp",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node2 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="/home/developer/robocup\l-firmware/robot/control\l/Inc/radio/RadioLink.hpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_radio_link_8hpp.html"];
+  Node3 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="/home/developer/robocup\l-firmware/robot/control\l/Inc/modules/RadioModule.hpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_radio_module_8hpp.html"];
+  Node4 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="/home/developer/robocup\l-firmware/robot/control\l/main.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$control_2main_8cpp.html"];
+  Node4 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="/home/developer/robocup\l-firmware/robot/control\l/Src/modules/RadioModule.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_radio_module_8cpp.html"];
+  Node3 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="/home/developer/robocup\l-firmware/robot/control\l/Src/radio/RadioLink.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_radio_link_8cpp.html"];
+  Node2 -> Node8 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node8 [label="/home/developer/robocup\l-firmware/robot/lib/Inc\l/drivers/ISM43340.hpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_i_s_m43340_8hpp.html"];
+  Node8 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node8 -> Node9 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node9 [label="/home/developer/robocup\l-firmware/robot/hw-test\l/radio-test.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$radio-test_8cpp.html"];
+  Node8 -> Node10 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node10 [label="/home/developer/robocup\l-firmware/robot/lib/Src\l/drivers/ISM43340.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_i_s_m43340_8cpp.html"];
+}

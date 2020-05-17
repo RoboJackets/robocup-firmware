@@ -1,0 +1,40 @@
+digraph "I2Cdev::readBits"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node95 [label="I2Cdev::readBits",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node95 -> Node96 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node96 [label="I2Cdev::I2Cdev",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i2_cdev.html#a2f70586510cbda5c5267a10b4ca220b9"];
+  Node95 -> Node97 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node97 [label="MPU6050::getExternalFrameSync",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_p_u6050.html#a902a7d486cd6ac21f8c378634dc6f59a",tooltip="Get external FSYNC configuration. "];
+  Node95 -> Node98 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node98 [label="MPU6050::getDLPFMode",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_p_u6050.html#a9f2737fe22955fd85b2575ba8da874c6",tooltip="Get digital low-pass filter configuration. "];
+  Node95 -> Node99 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node99 [label="MPU6050::getFullScaleGyro\lRange",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_p_u6050.html#acb1fa088d43d76230106a3226f343013",tooltip="Get full-scale gyroscope range. "];
+  Node95 -> Node100 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node100 [label="MPU6050::getFullScaleAccel\lRange",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_p_u6050.html#a0fe2dad60c170cee7d614e08f243ffd0",tooltip="Get full-scale accelerometer range. "];
+  Node95 -> Node101 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node101 [label="MPU6050::getDHPFMode",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_p_u6050.html#a4c3b84a906fcb5a65870fa557f797f4a",tooltip="Get the high-pass filter configuration. "];
+  Node95 -> Node102 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node102 [label="MPU6050::getMasterClockSpeed",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_p_u6050.html#a4cda448ef5c5736bd14188947342d636",tooltip="Get I2C master clock speed. "];
+  Node95 -> Node103 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node103 [label="MPU6050::getSlaveDataLength",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_p_u6050.html#a54c2a48b3cb79106bcaf75accf6cd311",tooltip="Get number of bytes to read for the specified slave (0-3). "];
+  Node95 -> Node104 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node104 [label="MPU6050::getSlave4Master\lDelay",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_p_u6050.html#a9a4585b3c9e61478db198011107a56a9",tooltip="Get Slave 4 master delay value. "];
+  Node95 -> Node105 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node105 [label="MPU6050::getAccelerometer\lPowerOnDelay",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_p_u6050.html#aae903df2accc687423f9cd0a78f9cd32",tooltip="Get accelerometer power-on delay. "];
+  Node95 -> Node106 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node106 [label="MPU6050::getFreefallDetection\lCounterDecrement",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_p_u6050.html#af6d6fa9869636989a8b29c4827ad7de8",tooltip="Get Free Fall detection counter decrement configuration. "];
+  Node95 -> Node107 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node107 [label="MPU6050::getMotionDetection\lCounterDecrement",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_p_u6050.html#a0ed8de8eb440dbfdec829297527b0da6",tooltip="Get Motion detection counter decrement configuration. "];
+  Node95 -> Node108 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node108 [label="MPU6050::getClockSource",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_p_u6050.html#a8ed670258a805807b5102cdc5d0996a8",tooltip="Get clock source setting. "];
+  Node95 -> Node109 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node109 [label="MPU6050::setClockSource",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_p_u6050.html#a4c1cd147d038e024bdeaa053c4d77734",tooltip="Set clock source setting. "];
+  Node109 -> Node110 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node110 [label="IMUModule::start",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_m_u_module.html#aba29f7665d8ec8f0eefe802f1c2b741c",tooltip="Called once to initialize the module. "];
+  Node109 -> Node111 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node111 [label="MPU6050::initialize",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_p_u6050.html#abd8fc6c18adf158011118fbccc7e7054",tooltip="Power on and prepare for general usage. "];
+  Node111 -> Node110 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+}

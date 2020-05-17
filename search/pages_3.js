@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['kicker_20firmware',['Kicker Firmware',['../md_doc__kicker.html',1,'']]]
+  ['kicker_20firmware',['Kicker Firmware',['../md__kicker.html',1,'']]]
 ];

@@ -1,14 +1,7 @@
 var searchData=
 [
-  ['calculate',['calculate',['../class_dribbler_controller.html#a82486fc0dec2674be10327b39f60a156',1,'DribblerController']]],
-  ['calculatebody',['calculateBody',['../class_robot_controller.html#a8518f8a0522c7359e708cc1efff96dfd',1,'RobotController']]],
-  ['calculatewheel',['calculateWheel',['../class_robot_controller.html#a0707cb5415d1d8abc6179199d7595b8a',1,'RobotController']]],
-  ['cancelbreakbeam',['cancelBreakbeam',['../class_kicker_board.html#ad7fe6bbf240ec17f50d3b9551166ed95',1,'KickerBoard']]],
-  ['charge_5fcaps',['charge_caps',['../main_8c.html#a8b188dc3ad96f5f0741a7d2de916212b',1,'main.c']]],
-  ['checkmemory',['checkMemory',['../class_a_v_r910.html#a3d5e6c907a6c31e47e05557fc713f0f0',1,'AVR910::checkMemory(int numPages, int pageSize, FILE *binary, bool verbose=false)'],['../class_a_v_r910.html#a9b2a40ea811be1dd68f0423c35c0df8b',1,'AVR910::checkMemory(int numPages, int pageSize, const uint8_t *binary, unsigned int length, bool verbose=false)']]],
-  ['chip_5fdeselect',['chip_deselect',['../class_f_p_g_a.html#af55b40be0ecf22fae18ff4c2811c0d46',1,'FPGA']]],
-  ['chip_5fselect',['chip_select',['../class_f_p_g_a.html#abfd93a2d6b356b3338b598b8d9c1d5b4',1,'FPGA']]],
-  ['config',['config',['../class_m_c_p23017.html#a0012ecd9ece2bbe2f1ac473abf76fe29',1,'MCP23017']]],
-  ['configure',['configure',['../class_f_p_g_a.html#a77752bb708e4d7f5e691110e3e2480e7',1,'FPGA']]],
-  ['createmodule',['createModule',['../control_2main_8cpp.html#a6059f57a032f9c1dd8e38aaf2346510f',1,'main.cpp']]]
+  ['battery',['Battery',['../class_battery.html#a36a6234c583e3b3506f4a77e3eb49989',1,'Battery']]],
+  ['batterymodule',['BatteryModule',['../class_battery_module.html#adabb837c0e450c2695c09aebe35127e6',1,'BatteryModule']]],
+  ['boundscaling',['boundScaling',['../_robot_controller_8cpp.html#a0be031a2377dc2d785f9d68cb8a52d0f',1,'RobotController.cpp']]],
+  ['build',['build',['../classconanfile_1_1_robo_cup_firmware_conan.html#a6227acfdd03ca9e400bbae68127793c5',1,'conanfile::RoboCupFirmwareConan']]]
 ];

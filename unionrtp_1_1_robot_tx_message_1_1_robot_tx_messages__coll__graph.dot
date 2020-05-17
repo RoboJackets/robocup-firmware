@@ -1,0 +1,8 @@
+digraph "rtp::RobotTxMessage::RobotTxMessages"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{rtp::RobotTxMessage\l::RobotTxMessages\n||}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node2 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +controlMessage" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node2 [label="{rtp::ControlMessage\n|+ bodyX\l+ bodyY\l+ bodyW\l+ dribbler\l+ kickStrength\l+ shootMode\l+ triggerMode\l+ song\l+ VELOCITY_SCALE_FACTOR\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structrtp_1_1_control_message.html"];
+}

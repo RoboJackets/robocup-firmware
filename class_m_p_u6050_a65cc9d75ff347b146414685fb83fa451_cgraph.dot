@@ -1,0 +1,13 @@
+digraph "MPU6050::getSlave1Nack"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node390 [label="MPU6050::getSlave1Nack",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node390 -> Node391 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node391 [label="I2Cdev::readBit",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i2_cdev.html#a9f104431c59658432e8b2f02c3e1acd6",tooltip="Read a single bit from an 8-bit device register. "];
+  Node391 -> Node392 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node392 [label="I2Cdev::readByte",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i2_cdev.html#aef1db446b45660c6631fc780278ac366",tooltip="Read single byte from an 8-bit device register. "];
+  Node392 -> Node393 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node393 [label="I2Cdev::readBytes",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i2_cdev.html#ae1eed9468ce4653e080bfd8481d2ac88",tooltip="Read multiple bytes from an 8-bit device register. "];
+}

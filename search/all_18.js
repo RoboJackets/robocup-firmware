@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['z',['z',['../class_quaternion.html#a625cb732d8ff3083e7852b86b736ab29',1,'Quaternion::z()'],['../class_vector_int16.html#af1b5c4c297bdd32751ab4519480b919f',1,'VectorInt16::z()'],['../class_vector_float.html#a54b8e4234e3b48e106d090570755f107',1,'VectorFloat::z()']]]
+  ['y',['y',['../class_quaternion.html#a3bd3f270462944423611f44e19d2511b',1,'Quaternion::y()'],['../class_vector_int16.html#a5d340e1f1bcbc064e5084ca609a6a6a3',1,'VectorInt16::y()'],['../class_vector_float.html#a4affe2a9de97600b3d8df98586679e14',1,'VectorFloat::y()']]]
 ];

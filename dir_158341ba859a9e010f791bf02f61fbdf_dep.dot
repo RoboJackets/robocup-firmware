@@ -1,0 +1,11 @@
+digraph "/home/developer/robocup-firmware/robot/control/Inc/radio" {
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  subgraph clusterdir_fd52124c4ca61b3c99db413ceca9f983 {
+    graph [ bgcolor="#ddddee", pencolor="black", label="Inc" fontname="Helvetica", fontsize="10", URL="dir_fd52124c4ca61b3c99db413ceca9f983.html"]
+  dir_158341ba859a9e010f791bf02f61fbdf [shape=box, label="radio", style="filled", fillcolor="#eeeeff", pencolor="black", URL="dir_158341ba859a9e010f791bf02f61fbdf.html"];
+  }
+  dir_bce75092e74c8e5afefc19c24a06f395 [shape=box label="lib" fillcolor="white" style="filled" color="red" URL="dir_bce75092e74c8e5afefc19c24a06f395.html"];
+  dir_158341ba859a9e010f791bf02f61fbdf->dir_bce75092e74c8e5afefc19c24a06f395 [headlabel="2", labeldistance=1.5 headhref="dir_000007_000013.html"];
+}

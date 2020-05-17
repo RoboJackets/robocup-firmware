@@ -1,0 +1,11 @@
+digraph "FPGA::read_halls"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node38 [label="FPGA::read_halls",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node38 -> Node39 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node39 [label="FPGA::chip_select",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_f_p_g_a.html#abfd93a2d6b356b3338b598b8d9c1d5b4",tooltip="Bring chipselect low so we can start a transmission. "];
+  Node38 -> Node40 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node40 [label="FPGA::chip_deselect",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_f_p_g_a.html#af55b40be0ecf22fae18ff4c2811c0d46",tooltip="Bring chipselect high so we can end a transmission. "];
+}

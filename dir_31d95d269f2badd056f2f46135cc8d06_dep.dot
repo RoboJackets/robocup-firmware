@@ -1,0 +1,8 @@
+digraph "/home/developer/robocup-firmware/kicker" {
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  dir_31d95d269f2badd056f2f46135cc8d06 [shape=box, label="kicker", style="filled", fillcolor="#eeeeff", pencolor="black", URL="dir_31d95d269f2badd056f2f46135cc8d06.html"];
+  dir_ecf8ca46b2885291d59feefec80b5002 [shape=box label="robot" fillcolor="white" style="filled" color="red" URL="dir_ecf8ca46b2885291d59feefec80b5002.html"];
+  dir_31d95d269f2badd056f2f46135cc8d06->dir_ecf8ca46b2885291d59feefec80b5002 [headlabel="1", labeldistance=1.5 headhref="dir_000000_000001.html"];
+}

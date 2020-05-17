@@ -1,0 +1,11 @@
+digraph "MPU6050::getMotion6"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node320 [label="MPU6050::getMotion6",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node320 -> Node321 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node321 [label="IMUModule::entry",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_m_u_module.html#a784f495174be8c60b2d1e5a99bf508c9",tooltip="Called by the RTOS at the desired update rate. "];
+  Node320 -> Node322 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node322 [label="MPU6050::getMotion9",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_p_u6050.html#aabfd2920e748016383e8124a4b32ad31",tooltip="Get raw 9-axis motion sensor readings (accel/gyro/compass). "];
+}

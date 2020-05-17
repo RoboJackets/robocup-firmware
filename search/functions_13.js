@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['unsafe_5fvalue',['unsafe_value',['../struct_locked_struct.html#a915c1d48aeaf29c4af2897122ad4b486',1,'LockedStruct']]],
-  ['update',['update',['../class_robot_estimator.html#a4c351248722cd20f02a05023fe8b986f',1,'RobotEstimator::update()'],['../class_battery.html#a85dcc13e31dfb66ce3ce217b78a7df7c',1,'Battery::update()']]],
-  ['update_5fball_5fsense',['update_ball_sense',['../main_8c.html#aab9d7a735441932d098ebfe60559ba10',1,'main.c']]]
+  ['testconnection',['testConnection',['../class_m_p_u6050.html#a95ffab7b44fce3834236e0813687d11a',1,'MPU6050']]],
+  ['testprint',['testPrint',['../class_i_s_m43340.html#a9d4a7334f5c290f607e1c056b7e24e9e',1,'ISM43340']]],
+  ['tosignmag',['toSignMag',['../_f_p_g_a_8cpp.html#a3bb982aaed78810669f2b066bd5a8d60',1,'FPGA.cpp']]],
+  ['try_5fread_5fvoltage',['try_read_voltage',['../main_8c.html#a257602aaf496b5bd2d54a23f5d851174',1,'main.c']]]
 ];

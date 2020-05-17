@@ -1,0 +1,21 @@
+digraph "I2Cdev::readWord"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node473 [label="I2Cdev::readWord",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node473 -> Node474 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node474 [label="I2Cdev::I2Cdev",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i2_cdev.html#a2f70586510cbda5c5267a10b4ca220b9"];
+  Node473 -> Node475 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node475 [label="I2Cdev::readBitW",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i2_cdev.html#aa8744b2a73a96254ef2bd0d87f0f4aeb",tooltip="Read a single bit from a 16-bit device register. "];
+  Node475 -> Node474 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node473 -> Node476 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node476 [label="I2Cdev::readBitsW",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i2_cdev.html#afbeeb8ece31be866c9d7169ae1d91f6b",tooltip="Read multiple bits from a 16-bit device register. "];
+  Node476 -> Node474 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node473 -> Node477 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node477 [label="I2Cdev::writeBitW",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i2_cdev.html#a1b5fbedfadec5d429c81ee84d27e658d",tooltip="write a single bit in a 16-bit device register. "];
+  Node477 -> Node474 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node473 -> Node478 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node478 [label="I2Cdev::writeBitsW",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i2_cdev.html#a8f8652a1328224cce867eed665a45c4d",tooltip="Write multiple bits in a 16-bit device register. "];
+  Node478 -> Node474 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+}

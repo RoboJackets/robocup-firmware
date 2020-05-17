@@ -1,0 +1,13 @@
+digraph "RadioModule::entry"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node3 [label="RadioModule::entry",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node3 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="LockedStruct::lock",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_locked_struct.html#aa207b98a1cd6c569a96e7d1d5565478f",tooltip="Lock this struct. "];
+  Node3 -> Node5 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="RadioLink::send",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_radio_link.html#a8189adde363d5fe27b29e045b775ae7f",tooltip="Sends a packet of data to the radio. "];
+  Node3 -> Node6 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="RadioLink::receive",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_radio_link.html#a12a8932314eab725e90308ae23dfa5aa",tooltip="Receive the latest packet from the radio Only fills data portion of structs. "];
+}

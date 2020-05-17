@@ -1,0 +1,12 @@
+digraph "/home/developer/robocup-firmware/robot/lib/robocup-fshare/include/rc-fshare/robot_model.hpp"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node4 [label="/home/developer/robocup\l-firmware/robot/lib/robocup\l-fshare/include/rc-fshare\l/robot_model.hpp",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node4 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="/home/developer/robocup\l-firmware/robot/control\l/Src/modules/MotionControlModule.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_motion_control_module_8cpp.html"];
+  Node4 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="/home/developer/robocup\l-firmware/robot/control\l/Src/motion-control/RobotController.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_robot_controller_8cpp.html"];
+  Node4 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="/home/developer/robocup\l-firmware/robot/control\l/Src/motion-control/RobotEstimator.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_robot_estimator_8cpp.html"];
+}

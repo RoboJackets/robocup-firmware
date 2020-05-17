@@ -18,6 +18,5 @@ var searchData=
   ['pin_5fb5',['PIN_B5',['../_h_a_l__attiny167_8h.html#a67cedc64b02ba7f3079a9a3a49ff76b0',1,'HAL_attiny167.h']]],
   ['pin_5fb6',['PIN_B6',['../_h_a_l__attiny167_8h.html#a540df78f72d4ac2230b7cdec504d9e01',1,'HAL_attiny167.h']]],
   ['pin_5fb7',['PIN_B7',['../_h_a_l__attiny167_8h.html#a74ca744adb6685e91c90e60043b9cd27',1,'HAL_attiny167.h']]],
-  ['platform_5fid',['PLATFORM_ID',['../_c_make_c_compiler_id_8c.html#adbc5372f40838899018fadbc89bd588b',1,'PLATFORM_ID():&#160;CMakeCCompilerId.c'],['../_c_make_c_x_x_compiler_id_8cpp.html#adbc5372f40838899018fadbc89bd588b',1,'PLATFORM_ID():&#160;CMakeCXXCompilerId.cpp']]],
   ['pushbutton',['PUSHBUTTON',['../iodefs_8h.html#adf8e68aa3f7ed1388355e53619b2b736',1,'iodefs.h']]]
 ];

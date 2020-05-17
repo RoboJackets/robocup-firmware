@@ -1,0 +1,13 @@
+digraph "LEDModule::entry"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node2 [label="LEDModule::entry",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node2 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="LockedStruct::lock",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_locked_struct.html#aa207b98a1cd6c569a96e7d1d5565478f",tooltip="Lock this struct. "];
+  Node2 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="LEDModule::fpgaInitialized",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_l_e_d_module.html#ac5cf1e0e2c9e02c30b9cd9dd156b6bd3"];
+  Node2 -> Node5 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="LEDModule::radioInitialized",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_l_e_d_module.html#a00403b436a96603d807aec0ca88899e1"];
+}

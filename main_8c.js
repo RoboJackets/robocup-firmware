@@ -32,7 +32,7 @@ var main_8c =
     [ "ball_sensed", "main_8c.html#a6bf28c414fd1db9d06b79cddbc629cac", null ],
     [ "charge_allowed", "main_8c.html#a01bbd779f25a828ba61d738cfad6bd8e", null ],
     [ "charge_phase", "main_8c.html#a6953728e5e26a7e10bde53509a07f3ba", null ],
-    [ "command", "main_8c.html#af6541cca829b7cc61d9a106d45710277", null ],
+    [ "command", "main_8c.html#a7fdb81046632402c406e430f4dd78114", null ],
     [ "commanded_charge", "main_8c.html#af9d46fcea74d65f3a2ca295bd574e0a0", null ],
     [ "current_kick_type_is_kick", "main_8c.html#a5723c4215dfdf49227fb50e2b1a9d887", null ],
     [ "current_voltage", "main_8c.html#ad4888c7386cf2db5337c03e337d25549", null ],
@@ -44,5 +44,5 @@ var main_8c =
     [ "kick_type_is_kick", "main_8c.html#a8fbfe0433d85b32cca416e87ff924b20", null ],
     [ "stop_charge_phase", "main_8c.html#a2e1e42fff0fd538c333a001d4e070e90", null ],
     [ "stop_flow_phase", "main_8c.html#a174eb2c9383620acac5e156c3581d51d", null ],
-    [ "time", "main_8c.html#ad05db71b58af3f164a217223540733ed", null ]
+    [ "time", "main_8c.html#a343cf4964867abd5554c451848c7eaba", null ]
 ];

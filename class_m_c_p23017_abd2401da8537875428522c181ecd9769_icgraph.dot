@@ -1,0 +1,9 @@
+digraph "MCP23017::digitalWordRead"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node16 [label="MCP23017::digitalWordRead",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node16 -> Node17 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node17 [label="MCP23017::readPin",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_c_p23017.html#a6b9fc988b1bae8bf9cd9b9082f952ee1",tooltip="Read a 0/1 value from an input bit. "];
+}

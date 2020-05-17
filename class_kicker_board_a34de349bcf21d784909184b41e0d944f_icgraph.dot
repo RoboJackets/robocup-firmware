@@ -1,0 +1,11 @@
+digraph "KickerBoard::verify_param"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node57 [label="KickerBoard::verify\l_param",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node57 -> Node58 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node58 [label="KickerBoard::flash",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_kicker_board.html#a28cc7187d0a26480ecab58f733913adb",tooltip="Reflashes the program on the kicker board MCU with the file specified. "];
+  Node58 -> Node59 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node59 [label="KickerModule::start",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_kicker_module.html#a5901fc136f50ca6de9b7110c03f01a10",tooltip="Called once to initialize the module. "];
+}

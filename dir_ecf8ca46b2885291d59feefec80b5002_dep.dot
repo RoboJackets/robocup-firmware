@@ -1,0 +1,15 @@
+digraph "/home/developer/robocup-firmware/robot" {
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  subgraph clusterdir_ecf8ca46b2885291d59feefec80b5002 {
+    graph [ bgcolor="#eeeeff", pencolor="black", label="" URL="dir_ecf8ca46b2885291d59feefec80b5002.html"];
+    dir_ecf8ca46b2885291d59feefec80b5002 [shape=plaintext label="robot"];
+    dir_f442fa39ec1e1b74397ba101a2b5f5fb [shape=box label="base" color="black" fillcolor="white" style="filled" URL="dir_f442fa39ec1e1b74397ba101a2b5f5fb.html"];
+    dir_7529ff68e4b4e38733d6d92fd59bd4e6 [shape=box label="control" color="red" fillcolor="white" style="filled" URL="dir_7529ff68e4b4e38733d6d92fd59bd4e6.html"];
+    dir_49f87ed19c3d3d3ead7cbd6862345fe8 [shape=box label="hw-test" color="black" fillcolor="white" style="filled" URL="dir_49f87ed19c3d3d3ead7cbd6862345fe8.html"];
+    dir_bce75092e74c8e5afefc19c24a06f395 [shape=box label="lib" color="red" fillcolor="white" style="filled" URL="dir_bce75092e74c8e5afefc19c24a06f395.html"];
+  }
+  dir_7529ff68e4b4e38733d6d92fd59bd4e6->dir_bce75092e74c8e5afefc19c24a06f395 [headlabel="24", labeldistance=1.5 headhref="dir_000003_000013.html"];
+  dir_49f87ed19c3d3d3ead7cbd6862345fe8->dir_bce75092e74c8e5afefc19c24a06f395 [headlabel="1", labeldistance=1.5 headhref="dir_000012_000013.html"];
+}

@@ -1,0 +1,11 @@
+digraph "FPGA::send_config"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node44 [label="FPGA::send_config",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node44 -> Node45 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node45 [label="FPGA::configure",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_f_p_g_a.html#a77752bb708e4d7f5e691110e3e2480e7",tooltip="Configure FPGA with the \"fpga_bin.h\" binary Must be called to initialize the fpga. "];
+  Node45 -> Node46 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node46 [label="FPGAModule::start",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_f_p_g_a_module.html#a953b43ed6293a15726706de59570f000",tooltip="Called once to initialize the module. "];
+}

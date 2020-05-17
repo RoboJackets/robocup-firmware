@@ -1,10 +1,9 @@
 var searchData=
 [
-  ['off',['OFF',['../struct_kicker_command.html#a73b1776f87841b7952e4993a76496479a1b13930c8dbdf472b9be4041d86ed5db',1,'KickerCommand']]],
-  ['olat',['OLAT',['../class_m_c_p23017.html#a3f402d0f5722dfbbfca400a36bc5d66ea6dc8984ebc275cf9081c7be0730a657f',1,'MCP23017']]],
-  ['omegas',['omegas',['../struct_i_m_u_data.html#a44034c4fb1bdf5850d3dee7bc174ce29',1,'IMUData']]],
-  ['on_5fbreak_5fbeam',['ON_BREAK_BEAM',['../struct_kicker_command.html#a73b1776f87841b7952e4993a76496479a2b863890a9cbe122fc56a536ce535e53',1,'KickerCommand']]],
-  ['operator_20int',['operator int',['../class_i_o_expander_digital_in_out.html#afb472b73e9a9bd7512a87c309fbdc893',1,'IOExpanderDigitalInOut']]],
-  ['operator_2d_3e',['operator-&gt;',['../struct_locked_struct_1_1_lock.html#a0a7c5e9642b28dacf9db2d9c5908aef6',1,'LockedStruct::Lock']]],
-  ['operator_3d',['operator=',['../class_i_o_expander_digital_in_out.html#adff6364f15113e8bd1b153c2a9d62888',1,'IOExpanderDigitalInOut::operator=()'],['../struct_locked_struct.html#afa60e7c0d6b348e9298b7ee2fc930b61',1,'LockedStruct::operator=(const LockedStruct &amp;)=delete'],['../struct_locked_struct.html#a855bb3347f89261e316198a5a49c5cf0',1,'LockedStruct::operator=(LockedStruct &amp;&amp;)=delete'],['../struct_locked_struct_1_1_lock.html#a33ac53c7ea908834a7fe65f4449995ef',1,'LockedStruct::Lock::operator=(const Lock &amp;)=delete'],['../struct_locked_struct_1_1_lock.html#a34b9dc98d2c52ce988662a99ae9d4af1',1,'LockedStruct::Lock::operator=(Lock &amp;&amp;other)=default']]]
+  ['n_5fkick_5fcs_5fpin',['N_KICK_CS_PIN',['../pins_8h.html#aee789c8e7fcb430bdfff01bb9647a01c',1,'pins.h']]],
+  ['name',['name',['../classconanfile_1_1_robo_cup_firmware_conan.html#a602b0c3bf4a3953aaf2d0db0be2b2335',1,'conanfile.RoboCupFirmwareConan.name()'],['../class_generic_module.html#a72f5ba62ae68e8d0e73b120562a5387b',1,'GenericModule::name()']]],
+  ['ncs_5f',['nCs_',['../class_a_v_r910.html#a0eaf808c6d330e4194a0d628c0fbbc79',1,'AVR910']]],
+  ['normalize',['normalize',['../class_quaternion.html#a48e6bafb249c895ed25f29dc9170e11e',1,'Quaternion::normalize()'],['../class_vector_int16.html#aefdadb30fbc20b564bbbf0b1a885e349',1,'VectorInt16::normalize()'],['../class_vector_float.html#a112eaf8758a6f51b96ed1ccb71700495',1,'VectorFloat::normalize()']]],
+  ['nreset_5f',['nReset_',['../class_a_v_r910.html#af4dae100cf1071e0f757675457a0d3bd',1,'AVR910']]],
+  ['numstates',['NumStates',['../namespace_i_s_m_constants.html#a06c4fed0663243a49abe264d4bc6cc11a10828c01c4e4247b22af2f7e36ef1fa4',1,'ISMConstants']]]
 ];

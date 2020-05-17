@@ -1,0 +1,9 @@
+digraph "DribblerController::calculate"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node2 [label="DribblerController\l::calculate",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node2 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="sgn",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_dribbler_controller_8cpp.html#a1ab31b90bc584c635ec159468ceed9b2",tooltip="Edited sign function to always return -1 or 1. "];
+}

@@ -1,0 +1,14 @@
+digraph "/home/developer/robocup-firmware/robot/lib/Inc" {
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  subgraph clusterdir_bce75092e74c8e5afefc19c24a06f395 {
+    graph [ bgcolor="#ddddee", pencolor="black", label="lib" fontname="Helvetica", fontsize="10", URL="dir_bce75092e74c8e5afefc19c24a06f395.html"]
+  subgraph clusterdir_a894177cf49d69402f578056eb4872c3 {
+    graph [ bgcolor="#eeeeff", pencolor="black", label="" URL="dir_a894177cf49d69402f578056eb4872c3.html"];
+    dir_a894177cf49d69402f578056eb4872c3 [shape=plaintext label="Inc"];
+    dir_03faaa9710dfdee801b4b6f66f28d0cc [shape=box label="device-bins" color="black" fillcolor="white" style="filled" URL="dir_03faaa9710dfdee801b4b6f66f28d0cc.html"];
+    dir_b487b4f01ab169c54a82094cabdb3ac4 [shape=box label="drivers" color="red" fillcolor="white" style="filled" URL="dir_b487b4f01ab169c54a82094cabdb3ac4.html"];
+  }
+  }
+}

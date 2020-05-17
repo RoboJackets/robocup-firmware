@@ -1,0 +1,11 @@
+digraph "Quaternion::getNormalized"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node25 [label="Quaternion::getNormalized",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node25 -> Node26 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node26 [label="Quaternion::normalize",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_quaternion.html#a48e6bafb249c895ed25f29dc9170e11e"];
+  Node26 -> Node27 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node27 [label="Quaternion::getMagnitude",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_quaternion.html#a6d0f82bd29fcbe29f784e848ec2eb8f1"];
+}

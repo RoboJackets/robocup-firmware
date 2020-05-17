@@ -1,0 +1,15 @@
+digraph "FPGA::chip_deselect"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node3 [label="FPGA::chip_deselect",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node3 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="FPGA::read_halls",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_f_p_g_a.html#a767569caa2aa4d2e9423b6f3a6d2a7a8",tooltip="Reads the hall count for all motors (similar to encoders) "];
+  Node3 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="FPGA::read_encs",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_f_p_g_a.html#a6e2b0841e4e0eca35b463ccc8f70a26e",tooltip="Reads the encoders for all motors. "];
+  Node3 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="FPGA::read_duty_cycles",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_f_p_g_a.html#a6f7976dddd569c0b75a94c004ecfe478",tooltip="Reads the duty cycles for all motors. "];
+  Node3 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="FPGA::set_duty_cycles",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_f_p_g_a.html#a4daf6e0acbe3eac9db30a5b0aa39cfad",tooltip="Sets the duty cycles for all motors Also reset the watchdog on the fpga. "];
+}

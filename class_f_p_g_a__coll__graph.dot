@@ -1,0 +1,6 @@
+digraph "FPGA"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{FPGA\n|+ FPGA_SPI_FREQ\l+ MAX_DUTY_CYCLE\l|+ FPGA()\l+ configure()\l+ isReady()\l+ set_duty_get_enc()\l+ set_duty_cycles()\l+ read_duty_cycles()\l+ read_encs()\l+ read_halls()\l+ motors_en()\l+ watchdog_reset()\l+ git_hash()\l+ gate_drivers()\l+ send_config()\l+ chip_select()\l+ chip_deselect()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+}

@@ -1,0 +1,9 @@
+digraph "MPU6050::testConnection"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1544 [label="MPU6050::testConnection",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node1544 -> Node1545 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1545 [label="MPU6050::getDeviceID",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_p_u6050.html#a35ae3c8894b3258e642043886801e031"];
+}

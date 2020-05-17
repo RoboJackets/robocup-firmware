@@ -1,0 +1,35 @@
+digraph "KickerModule::start"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node16 [label="KickerModule::start",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node16 -> Node17 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node17 [label="KickerBoard::flash",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_kicker_board.html#a28cc7187d0a26480ecab58f733913adb",tooltip="Reflashes the program on the kicker board MCU with the file specified. "];
+  Node17 -> Node18 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node18 [label="AVR910::readVendorCode",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_a_v_r910.html#a24a91ddb881d8e0d27c1cb203d0f7349",tooltip="Read the vendor code of the device. "];
+  Node18 -> Node19 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node19 [label="AVR910::readRegister",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_a_v_r910.html#a4e99d5a29dc0e48069cebd1f26c83800"];
+  Node19 -> Node20 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node20 [label="AVR910::lock_spi",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_a_v_r910.html#a4b33111389ef72e6e05e2951505e1821"];
+  Node20 -> Node21 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node21 [label="LockedStruct::lock",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_locked_struct.html#aa207b98a1cd6c569a96e7d1d5565478f",tooltip="Lock this struct. "];
+  Node17 -> Node22 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node22 [label="AVR910::readPartFamilyAnd\lFlashSize",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_a_v_r910.html#a07c549c137848a2ecf78e1dcb241816e",tooltip="Read the part family and flash size of the device. "];
+  Node22 -> Node19 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node17 -> Node23 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node23 [label="AVR910::readPartNumber",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_a_v_r910.html#ad1717b6ab05e7c0aba237a7c147354ae",tooltip="Read the part number. "];
+  Node23 -> Node19 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node23 -> Node20 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node17 -> Node24 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node24 [label="KickerBoard::verify\l_param",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_kicker_board.html#a34de349bcf21d784909184b41e0d944f",tooltip="Uses the given function to check if it&#39;s return value equals the expected value. "];
+  Node17 -> Node25 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node25 [label="AVR910::exitProgramming",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_a_v_r910.html#a6390cd4b442aa6267d934357ebdb42b9",tooltip="Brings the reset line high to exit programming mode. "];
+  Node17 -> Node26 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node26 [label="AVR910::checkMemory",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_a_v_r910.html#a3d5e6c907a6c31e47e05557fc713f0f0",tooltip="Check the binary has been written correctly. "];
+  Node17 -> Node27 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node27 [label="AVR910::program",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_a_v_r910.html#a355ef9fb0c84d822fb50bff21ff1a7b8",tooltip="Program the AVR microcontroller connected to the mbed. "];
+  Node27 -> Node26 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node27 -> Node25 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node16 -> Node21 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+}
