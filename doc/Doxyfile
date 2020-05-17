@@ -51,14 +51,14 @@ PROJECT_BRIEF          = "Soccer software, robot firmware"
 # and the maximum width should not exceed 200 pixels. Doxygen will copy the logo
 # to the output directory.
 
-PROJECT_LOGO           = doc/images/rj_logo.png
+PROJECT_LOGO           = images/rj_logo.png
 
 # The OUTPUT_DIRECTORY tag is used to specify the (relative or absolute) path
 # into which the generated documentation will be written. If a relative path is
 # entered, it will be relative to the location where doxygen was started. If
 # left blank the current directory will be used.
 
-OUTPUT_DIRECTORY       = docs/
+OUTPUT_DIRECTORY       = ../generated-docs/
 
 # If the CREATE_SUBDIRS tag is set to YES, then doxygen will create 4096 sub-
 # directories (in 2 levels) under the output directory of each output format and
@@ -670,7 +670,7 @@ FILE_VERSION_FILTER    =
 # DoxygenLayout.xml, doxygen will parse it automatically even if the LAYOUT_FILE
 # tag is left empty.
 
-LAYOUT_FILE            = doc/DoxygenLayout.xml
+LAYOUT_FILE            = DoxygenLayout.xml
 
 # The CITE_BIB_FILES tag can be used to specify one or more bib files containing
 # the reference definitions. This must be a list of .bib files. The .bib
@@ -752,11 +752,11 @@ WARN_LOGFILE           =
 # spaces.
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = robot \
-                         kicker \
-                         fpga \
-                         common \
-                         doc \
+INPUT                  = ../robot \
+                         ../kicker \
+                         ../fpga \
+                         ../common \
+                         ../doc
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
@@ -876,7 +876,7 @@ EXAMPLE_RECURSIVE      = NO
 # that contain images that are to be included in the documentation (see the
 # \image command).
 
-IMAGE_PATH             = doc/images
+IMAGE_PATH             = images
 
 # The INPUT_FILTER tag can be used to specify a program that doxygen should
 # invoke to filter for each input file. Doxygen will invoke the filter program
@@ -924,7 +924,7 @@ FILTER_SOURCE_PATTERNS =
 # (index.html). This can be useful if you have a project on for instance GitHub
 # and want to reuse the introduction page also for the doxygen output.
 
-USE_MDFILE_AS_MAINPAGE = doc/GettingStarted.md
+USE_MDFILE_AS_MAINPAGE = GettingStarted.md
 
 #---------------------------------------------------------------------------
 # Configuration options related to source browsing
@@ -1123,13 +1123,7 @@ HTML_EXTRA_STYLESHEET  =
 # files will be copied as-is; there are no commands or markers available.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_EXTRA_FILES       = doc/firmware-sounds/0-startup.m4a \
-                         doc/firmware-sounds/1-failure.m4a \
-                         doc/firmware-sounds/2-overvoltage.m4a \
-                         doc/firmware-sounds/3-undervoltage.m4a \
-                         doc/firmware-sounds/4-fuse-blown.m4a \
-                         doc/firmware-sounds/5-victory.m4a \
-                         doc/firmware-sounds/6-still-alive.ogg
+HTML_EXTRA_FILES       = 
 
 # The HTML_COLORSTYLE_HUE tag controls the color of the HTML output. Doxygen
 # will adjust the colors in the stylesheet and background images according to

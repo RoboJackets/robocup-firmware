@@ -4,12 +4,10 @@ set -e
 
 # This script is run by the CI setup to autoupdate our documentation
 
-git config --global user.name "$GIT_USERNAME"
-git config --global user.email $GIT_EMAIL
-mkdir -p api_docs
-git clone -b gh-pages git://github.com/robojackets/robocup-firmware api_docs/html
-make apidocs
-cd api_docs/html
+mkdir -p docs
+git clone -b gh-pages git://github.com/robojackets/robocup-firmware docs/
+make docs
+cd docs/
 git add --all
-git commit -m 'auto-updated api docs'
+git commit -m 'auto-updated documentation'
 git push https://$GH_TOKEN@github.com/robojackets/robocup-firmware gh-pages

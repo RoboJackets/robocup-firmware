@@ -10,8 +10,8 @@
 /gmon.out
 *.swp
 /.settings
-#/doc/generated-docs
-#/docs
+# ignore the generated docs note the CI system force adds these
+/generated-docs
 *~
 
 # sublime-text
