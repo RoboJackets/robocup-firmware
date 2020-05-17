@@ -3,7 +3,7 @@ name: CI
 # events but only for the master branch
 on:
   push:
-    branches: [ master, collin/ci-and-doxygen]
+    branches: [ master, collin/ci-and-doxygen ]
 
 # NOTE Much of what I do with run commands directly has other github action specific ways I just didnt care and did it with commands
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
