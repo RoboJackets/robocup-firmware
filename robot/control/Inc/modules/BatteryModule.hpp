@@ -26,7 +26,7 @@ public:
 
     /**
      * Constructor for BatteryModule
-     * Object storing information from `battery`
+     * @param Object storing information from `battery`
      */
     explicit BatteryModule(LockedStruct<BatteryVoltage>& batteryVoltage);
 
