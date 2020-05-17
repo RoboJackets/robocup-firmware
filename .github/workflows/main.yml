@@ -3,7 +3,7 @@ name: CI
 # events but only for the master branch
 on:
   push:
-    branches: [ master, develop ]
+    branches: [ master, develop, collin/build-test ]
 
 # NOTE Much of what I do with run commands directly has other github action specific ways I just didnt care and did it with commands
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -43,10 +43,10 @@ jobs:
           docker run --name $DOCKER_NAME $DOCKER_NAME make docs
       - name: copy
         run: |
-          rm -rf docs/ &&
-          mkdir -p docs/ &&
-          git clone -b gh-pages git://github.com/robojackets/robocup-firmware docs/ &&
-          docker cp $DOCKER_NAME:/home/developer/robocup-firmware/docs .
+          rm -rf generated-docs/ &&
+          mkdir -p generated-docs/ &&
+          git clone -b gh-pages git://github.com/robojackets/robocup-firmware generated-docs/ &&
+          docker cp $DOCKER_NAME:/home/developer/robocup-firmware/generated-docs .
       - name: push
         run: |
           cd docs/ &&
