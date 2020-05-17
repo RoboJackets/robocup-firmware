@@ -49,7 +49,7 @@ jobs:
           docker cp $DOCKER_NAME:/home/developer/robocup-firmware/generated-docs .
       - name: push
         run: |
-          cd docs/ &&
+          cd generated-docs/ &&
           git config --local user.email "action@github.com" &&
           git config --local user.name "GitHub Action" &&
           git add --all -f &&
