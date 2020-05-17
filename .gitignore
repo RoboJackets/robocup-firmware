@@ -11,7 +11,7 @@
 *.swp
 /.settings
 # ignore the generated docs note the CI system force adds these
-/docs
+/generated-docs
 *~
 
 # sublime-text

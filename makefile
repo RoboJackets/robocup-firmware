@@ -41,4 +41,4 @@ clean:
 
 docs:
 	cd doc && doxygen Doxyfile
-	@echo "\n=> Open up 'docs/index.html' in a browser to view a local copy of the documentation"
+	@echo "\n=> Open up 'generated-docs/index.html' in a browser to view a local copy of the documentation"
