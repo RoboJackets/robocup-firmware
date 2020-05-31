@@ -4,3 +4,5 @@ build
 GPATH
 GRTAGS
 GTAGS
+
+util/.mypy_cache/

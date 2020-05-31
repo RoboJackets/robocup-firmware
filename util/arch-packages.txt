@@ -1,0 +1,14 @@
+
+# python 3
+python
+python-pip
+
+# Build system
+cmake
+ccache
+
+# Documentation
+doxygen
+
+# verilog synthesis and simulation tool
+iverilog
