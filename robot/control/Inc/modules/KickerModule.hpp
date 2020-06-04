@@ -9,12 +9,12 @@
 class KickerModule : public GenericModule {
 public:
     /**
-     * Number of times per second (frequency) that FPGAModule should run (Hz)
+     * Number of times per second (frequency) that KickerModule should run (Hz)
      */
     static constexpr float kFrequency = 25.0f;
 
     /**
-     * Number of seconds elapsed (period) between FPGAModule runs (milliseconds)
+     * Number of seconds elapsed (period) between KickerModule runs (milliseconds)
      */
     static constexpr std::chrono::milliseconds kPeriod{static_cast<int>(1000 / kFrequency)};
 
