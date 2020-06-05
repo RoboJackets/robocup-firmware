@@ -132,17 +132,53 @@ protected:
 private:
     bool verbose;
 
+    /**
+     * Voltage threshold for kicker board to be considered charged (voltage mapped to 0-255)
+     */
     const uint8_t isChargedCutoff = 230;
 
+    /**
+     * Stores whether the breakbeam has been tripped
+     */
     bool _ball_sensed = false;
+
+    /**
+     * Stores whether Kicker is responding back with voltage values
+     */
     bool _is_healthy = true;
 
+    /**
+     * Current voltage stored in Kicker, mapped onto 8 bits (0-255)
+     */
     uint8_t _current_voltage = 0;
 
+    /**
+     * Stores whether current maneuver is a kick (true) or a chip (false)
+     */
     bool _is_kick        = false;
+
+    /**
+     * Stores whether kick is to be performed immediately
+     */
     bool _kick_immediate = false;
+
+    /**
+     * Stores whether to kick when breakbeam is triggered
+     */
     bool _kick_breakbeam = false;
+
+    /**
+     * Stores whether to cancel kick on breakbeam
+     */
     bool _cancel_kick    = true;
+
+    /**
+     * Stores whether the kicker board can safely charge the capacitors
+     */
     bool _charge_allowed = false;
+
+    /**
+     * 4-bit encoding of the kick's strength (0: min strength - 15: max strength)
+     */
     uint8_t _kick_strength = 0;
 };
