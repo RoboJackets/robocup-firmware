@@ -9,13 +9,16 @@ $(C_FIRMWARE_TESTS:%=upload-%-c): configure
 $(CPP_FIRMWARE_TESTS:%=upload-%): configure
 	cd build; make $(@F)
 
-clean:
-	rm -rf build
-
-
 build/conaninfo.txt : conanfile.py
 	conan install . -if build -pr armv7hf --build missing
 
 .PHONY : configure
 configure : build/conaninfo.txt
 	conan build . -bf build -c
+
+clean:
+	rm -rf build
+
+docs:
+	cd doc && doxygen Doxyfile
+	@echo "\n=> Open up 'generated-docs/index.html' in a browser to view a local copy of the documentation"

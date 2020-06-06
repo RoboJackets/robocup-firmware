@@ -1,0 +1,23 @@
+# This is the list of all required packages
+# place each package on its own line
+# these get installed using 'apt-get install ______' whenever the ubuntu-setup
+#   script is run
+
+# Build system
+cmake
+ccache
+
+# program to generate api documentation from comments in code files
+doxygen
+
+# C/C++ (and more) code-formatting tool
+clang-format-3.9
+
+# AVR
+avr-libc
+avrdude
+
+python3-pip
+python3-setuptools
+
+iverilog

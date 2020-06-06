@@ -6,13 +6,9 @@ The purpose of this project is to create a small, more capable microcontroller b
 For some help getting started see the [Resources Page](https://github.com/RoboJackets/mtrain/wiki/Resources) of the wiki
 
 
-## Basic Setup
+## Setup
+It is recommended that you follow the instructions here https://github.com/RoboJackets/robocup-firmware/blob/master/doc/GettingStarted.md#setting-up-the-robocup-firmware-repository as the repo contains an automated setup script. If you wish to only use the mTrain-firmware repo you can delete robocup-firmware following the first successful build
 
-1) Install neccesary tools:
-    * Install `conan` through pip (Python 3)
-2) Setup conan:
-    * `conan remote add robojackets https://api.bintray.com/conan/robojackets/conan`
-3) Install [J-Link Software and Documentation Pack](https://www.segger.com/downloads/jlink/#J-LinkSoftwareAndDocumentationPack) (for programming and debugging)
 
 ## Building and Programming
 
