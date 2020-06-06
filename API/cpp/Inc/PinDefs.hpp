@@ -57,7 +57,7 @@ constexpr PinName LED2 = { GPIOE, GPIO_PIN_3 };
 constexpr PinName LED3 = { GPIOE, GPIO_PIN_6 };
 constexpr PinName LED4 = { GPIOE, GPIO_PIN_5 };
 
-constexpr ADCPinName pf6 = { ADC3, ADC_CHANNEL_4, GPIOF, GPIO_PIN_6 };
+constexpr ADCPinName pf6 = { ADC3, ADC_CHANNEL_4, GPIOF, GPIO_PIN_6 }; // pin 30
 
 
 typedef enum PullType {

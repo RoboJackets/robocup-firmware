@@ -1,11 +1,10 @@
 #include "mtrain.hpp"
 #include <iostream>
 using namespace std;
-int main(void){
+
+int main(void) {
   DigitalOut leds[] = {(LED1), (LED2), (LED3), (LED4)};
-  DigitalOut outPin = p36;
   AnalogIn pin(pf6); //need analog pins
-  outPin.write(1);
 
   while(true) {
     uint32_t adc_val = pin.read();

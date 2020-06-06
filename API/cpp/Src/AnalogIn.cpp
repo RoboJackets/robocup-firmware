@@ -9,10 +9,8 @@ const float ADC_RATIO = 3.3 / ADC_MAX;
 
 AnalogIn::AnalogIn(ADCPinName pin) {
    ADC_Init(pin);
-   __enable_irq();
    HAL_ADC_Start(&ADC_InitStruct);
 }
-
 
 // TODO this setup means 1 adc can go to 1 pin only and thus only 3 adc pins can be inited need to setup multi sampling indepently
 void AnalogIn::ADC_Init(ADCPinName pin) {
@@ -38,7 +36,7 @@ void AnalogIn::ADC_Init(ADCPinName pin) {
   ADC_InitStruct.Init.EOCSelection          = DISABLE;
   //initializes the ADC given the structure that defines it
   if (HAL_ADC_Init(&ADC_InitStruct) != HAL_OK) {
-      //ERROR HANDLING
+    // TODO ERROR HANDLING
   }
 
   ADC_ChannelConfTypeDef sConfig = {};
@@ -48,7 +46,7 @@ void AnalogIn::ADC_Init(ADCPinName pin) {
   sConfig.Offset        = 0;
   //configures the channel for the ADC, given the input structure
   if (HAL_ADC_ConfigChannel(&ADC_InitStruct, &sConfig) != HAL_OK) {
-     //ERROR HANDLING
+    // TODO ERROR HANDLING
   }
 }
 
