@@ -27,12 +27,12 @@ Hall sensor abc - Phases UYW
 011-/01
 */
 
-long[] phase1 = {5, 0, 2.5}; //the first is high low float across each of the motors three phases
-long[] phase5 = {5, 2.5, 0}; //the fifth is high float low
-long[] phase4 = {2.5, 5, 0}; //the fourth is float high low
-long[] phase6 = {0, 5, 2.5}; //the sixth is low high float
-long[] phase2 = {0, 2.5, 5}; //the second is low float high
-long[] phase3 = {2.5, 0, 5}; //the third is float low high
+long[] phase1 = {HIGH, LOW, FLT}; //the first is high low float across each of the motors three phases
+long[] phase5 = {HIGH, FLT, LOW}; //the fifth is high float low
+long[] phase4 = {FLT, HIGH, LOW}; //the fourth is float high low
+long[] phase6 = {LOW, HIGH, FLT}; //the sixth is low high float
+long[] phase2 = {LOW, FLT, HIGH}; //the second is low float high
+long[] phase3 = {FLT, LOW, HIGH}; //the third is float low high
 
 
 
