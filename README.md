@@ -5,8 +5,9 @@ The purpose of this project is to create a small, more capable microcontroller b
 
 ## Setup
 
-It is recommended that you follow the instructions [here](https://github.com/RoboJackets/robocup-firmware/blob/master/doc/GettingStarted.md#setting-up-the-robocup-firmware-repository) for setting up the repo. This was written for robocup-firmwares setup script but the usage process is identical to the one here in the mtrain-firmware repo under the util directory.
+It is recommended that you follow the instructions in the guide below to set up the repo. This was written for robocup-firmware's setup script but the process is identical to the setup script here in the mtrain-firmware repo under the util directory.
 
+[Setup](https://github.com/RoboJackets/robocup-firmware/blob/master/doc/GettingStarted.md#setting-up-the-robocup-firmware-repository)
 
 ## Getting Started
 
