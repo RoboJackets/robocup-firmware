@@ -15,7 +15,7 @@ It is recommended that you follow the instructions in the guide below to set up 
 
 For resources for beginners to embbedded development see the [Getting Started](https://robojackets.github.io/robocup-firmware/) Page for robocup-firmware.
 
-For resources pertaining to the hardware of the mTrain including datasheets and schematics see the [Resources Page]doc/ExternalResources.md).
+For resources pertaining to the hardware of the mTrain including datasheets and schematics see the [Resources Page](doc/ExternalResources.md).
 
 
 ## Building and Programming
