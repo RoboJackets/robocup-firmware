@@ -1,13 +1,19 @@
 # mTrain
 
+![Build Status](https://github.com/RoboJackets/mtrain-firmware/workflows/CI/badge.svg)
+
 The purpose of this project is to create a small, more capable microcontroller board. The hardware design files for this board can be found at [mtrain-pcb](https://github.com/RoboJackets/mtrain-pcb).
 
 
-For some help getting started see the [Resources Page](https://github.com/RoboJackets/mtrain/wiki/Resources) of the wiki
-
-
 ## Setup
-It is recommended that you follow the instructions here https://github.com/RoboJackets/robocup-firmware/blob/master/doc/GettingStarted.md#setting-up-the-robocup-firmware-repository as the repo contains an automated setup script. If you wish to only use the mTrain-firmware repo you can delete robocup-firmware following the first successful build
+
+It is recommended that you follow the instructions in the guide below to set up the repo. This was written for robocup-firmware's setup script but the process is identical to the setup script here in the mtrain-firmware repo under the util directory.
+
+[Setup](https://github.com/RoboJackets/robocup-firmware/blob/master/doc/GettingStarted.md#setting-up-the-robocup-firmware-repository)
+
+## Getting Started
+
+For resources for beginners to embbedded development see the [Resources Page](https://github.com/RoboJackets/mtrain/wiki/Resources).
 
 
 ## Building and Programming
@@ -17,24 +23,8 @@ It is recommended that you follow the instructions here https://github.com/RoboJ
     * For CPP tests: `make upload-{test name}` to rebuild and program a CPP test (eg. `make upload-blink`)
     * For C tests: `make upload-{test name}-c` to rebuild and program a C test (eg. `make upload-blink-c`)
 
+
 ## For Package Contributors
-mTrain is also available as a conan package. This section is for those who need would like to build and upload the finished conan package to services like bintray.
+mTrain is also available as a conan package. Attached below is a guide intended for those who need would like to build and upload the a finished conan package for mtrain-firmware to services like bintray so that it will be usable in robocup-firmware.
 
-creating a local conan package:
-conan create . collin/testing -pr armv7hf
-
-Uploading Conan Package:
-conan create . robojackets/stable -pr armv7hf
-conan upload mTrain/[1.0.0]@robojackets/stable -r robojackets --all
-
-Where:
-package_name/[version]@<user/channel>
--r robojackets  -  indicates what remote to push to
---all  -  indicates that conan should push binaries as well as the sources to the remote
-
-
-TODO: Add another readme detailing contents of the conan file or more how conan works exactly?
-
-TODO: better setup for conan profile
-
-TODO: add the rest of the readme
+[link](https://github.com/RoboJackets/robocup-firmware/blob/master/doc/Conan.md)
