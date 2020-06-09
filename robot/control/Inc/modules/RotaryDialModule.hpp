@@ -9,14 +9,38 @@
 
 class RotaryDialModule : public GenericModule {
 public:
-    // How many times per second this module should run
-    static constexpr float kFrequency = 1.0f; // Hz
-    static constexpr std::chrono::milliseconds kPeriod{static_cast<int>(1000 / kFrequency)};
-    static constexpr int kPriority = 3;
+    /**
+     * Number of times per second (frequency) that RotaryDialModule should run (Hz)
+     */
+    static constexpr float kFrequency = 1.0f
 
+    /**
+     * Number of seconds elapsed (period) between RotaryDialModule runs (milliseconds)
+     */
+    static constexpr std::chrono::milliseconds kPeriod{static_cast<int>(1000 / kFrequency)};
+
+    /**
+     * Priority used by RTOS
+     */
+    static constexpr int kPriority = 3;
+    
+    /**
+     * Constructor for RotaryDialModule
+     * @param ioExpander
+     * @param robotID Packet of data containing ID selected for Robot on rotary dial
+     */
     RotaryDialModule(LockedStruct<MCP23017>& ioExpander, LockedStruct<RobotID>& robotID);
 
+    /**
+     * Code which initializes module
+     */
     void start() override;
+
+    /**
+     * Code to run when called by RTOS
+     *
+     * Updates RobotID based on rotary dial
+     */
     void entry() override;
 
 private:
