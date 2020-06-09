@@ -13,11 +13,33 @@
 
 class LEDModule : public GenericModule {
 public:
-    // How many times per second this module should run
-    static constexpr float kFrequency = 10.0f; // Hz
+    /**
+     * Number of times per second (frequency) that LEDModule should run (Hz)
+     */
+    static constexpr float kFrequency = 10.0f;
+
+    /**
+     * Number of seconds elapsed (period) between LEDModule runs (milliseconds)
+     */
     static constexpr std::chrono::milliseconds kPeriod{static_cast<int>(1000 / kFrequency)};
+
+    /**
+     * Priority used by RTOS
+     *
+     * Uses the default priority of 1.
+     */
     static constexpr int kPriority = 1;
 
+    /**
+     * Constructor for LEDModule
+     *
+     * @param ioExpander Interfaces with MCP23017
+     * @param dotStarSPI SPI bus for dotStar LEDS
+     * @param batteryVoltage Packet of data containing data on battery voltage and critical status
+     * @param fpgaStatus Packet of data containing whether motors or FPGA have errors
+     * @param kickerInfo Packet of data containing kicker status
+     * @param radioError Packet of data containing whether radio has an error
+     */
     LEDModule(LockedStruct<MCP23017>& ioExpander,
               LockedStruct<SPI>& dotStarSPI,
               LockedStruct<BatteryVoltage>& batteryVoltage,
@@ -25,36 +47,50 @@ public:
               LockedStruct<KickerInfo>& kickerInfo,
               LockedStruct<RadioError>& radioError);
 
+    /**
+     * Code which initializes module
+     */
     void start() override;
 
+    /**
+     * Code to run when called by RTOS
+     *
+     * Checks for Radio, FPGA, and Kicker errors, and activates dotStar LEDs accordingly
+     */
     void entry() override;
 
-    // Specific LED pattern for fpga initialization
+    /**
+     * Set specific LED pattern for fpga initialization
+     */
     void fpgaInitialized();
 
-    // Specific LED pattern for radio initialization
+    /**
+     * Set specific LED pattern for radio initialization
+     */
     void radioInitialized();
 
-    // Specific LED pattern for kicker initialization
+    /**
+     * Set specific LED pattern for kicker initialization
+     */
     void kickerInitialized();
 
-    // Specific LED pattern for fully initialized system
+    /**
+     * Set specific LED pattern for full system initialization
+     */
     void fullyInitialized();
 
-    // Specific toggling pattern for missing the X ms
-    // super loop timings
-    //
-    // All LED's on mtrain are blinking together
-    //
-    // AKA, some module is too slow
+    /**
+     * Set specific toggling pattern for missing the X ms super loop timings
+     *
+     * All LEDs on the mTrain are blinking together, indicating that some module is running too slowly.
+     */
     void missedSuperLoop();
 
-    // Specific toggling pattern for missing a module run
-    // X times in a row
-    //
-    // LED 1&3 toggle opposite of LED 2&4
-    //
-    // AKA, due to priority and timing, some module never runs
+    /**
+     * Specific toggling pattern for missing a module run X times in a row
+     *
+     * LEDs 1 and 3 toggle opposite of LEDs 2 and 4, indicating that due to priority and timing, some module never runs
+     */
     void missedModuleRun();
 
 private:
