@@ -23,10 +23,10 @@ public:
      * Priority used by RTOS
      */
     static constexpr int kPriority = 3;
-    
+
     /**
      * Constructor for RotaryDialModule
-     * @param ioExpander
+     * @param ioExpander Interfaces with the MCP23017
      * @param robotID Packet of data containing ID selected for Robot on rotary dial
      */
     RotaryDialModule(LockedStruct<MCP23017>& ioExpander, LockedStruct<RobotID>& robotID);
