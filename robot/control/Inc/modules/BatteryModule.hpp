@@ -31,7 +31,7 @@ public:
     /**
      * Constructor for BatteryModule
      *
-     * @param batteryVoltage Object storing information from `battery`
+     * @param batteryVoltage Packet of data containing data on battery voltage and critical status
      */
     explicit BatteryModule(LockedStruct<BatteryVoltage>& batteryVoltage);
 
@@ -43,15 +43,7 @@ public:
     void entry() override;
 
 private:
-    /**
-     * Stores information from `battery`
-     *
-     * Set by constructor
-     */
     LockedStruct<BatteryVoltage>& batteryVoltage;
 
-    /**
-     * Interfaces with physical battery to get updates for `batteryVoltage`
-     */
     Battery battery;
 };

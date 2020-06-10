@@ -30,7 +30,7 @@ public:
     /**
      * Constructor for IMUModule
      * @param sharedI2C Pointer to I2C object which reads/writes on I2C bus
-     * @param imuData Packet of IMU data sent between IMUModule and MotionControlModule
+     * @param imuData Packet of data containing linear acceleration and angular velocity along/about X,Y, and Z axes
      */
     IMUModule(std::shared_ptr<I2C> sharedI2C, LockedStruct<IMUData>& imuData);
 
