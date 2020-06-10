@@ -6,6 +6,9 @@
 #include "MicroPackets.hpp" 
 #include "drivers/KickerBoard.hpp"
 
+/**
+ * Module interfacing with Kicker and handling Kicker status
+ */
 class KickerModule : public GenericModule {
 public:
     /**

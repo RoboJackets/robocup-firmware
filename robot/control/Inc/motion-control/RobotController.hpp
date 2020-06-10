@@ -3,6 +3,9 @@
 #include <cstdint>
 #include <Eigen/Dense>
 
+/**
+ * Controller for wheel velocities
+ */
 class RobotController {
 private:
     /**
@@ -62,7 +65,7 @@ private:
 
     bool limitWheelAccel(const Eigen::Matrix<float, numWheels, 1> finalTarget,
                         Eigen::Matrix<float, numWheels, 1>& dampened);
-    
+
     /**
      * Vector of proportional constants for body velocity PID control
      *

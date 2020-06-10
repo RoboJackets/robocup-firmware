@@ -7,6 +7,9 @@
 #include "drivers/RotarySelector.hpp"
 #include "drivers/IOExpanderDigitalInOut.hpp"
 
+/**
+ * Module interfacing with Rotary Dial to handle Robot IDs
+ */
 class RotaryDialModule : public GenericModule {
 public:
     /**

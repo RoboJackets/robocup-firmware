@@ -7,6 +7,9 @@
 #include "LockedStruct.hpp"
 #include <memory>
 
+/**
+ * Module interfacing with IMU and handling IMU status
+ */
 class IMUModule : public GenericModule {
 public:
     /**

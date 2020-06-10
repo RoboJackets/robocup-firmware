@@ -11,6 +11,9 @@
 #include "MicroPackets.hpp"
 #include "drivers/MCP23017.hpp"
 
+/**
+ * Module interfacing with debugging LEDS based on the statuses of other electronics
+ */
 class LEDModule : public GenericModule {
 public:
     /**

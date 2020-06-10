@@ -10,6 +10,9 @@
 #include <memory>
 #include <LockedStruct.hpp>
 
+/**
+ * Module interfacing with FPGA and handling FPGA status
+ */
 class FPGAModule : public GenericModule {
 public:
     /**

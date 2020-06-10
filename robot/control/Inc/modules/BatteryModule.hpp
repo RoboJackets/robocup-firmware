@@ -6,6 +6,9 @@
 
 #include "drivers/Battery.hpp"
 
+/**
+ * Module interfacing with battery and handling battery status
+ */
 class BatteryModule : public GenericModule {
 public:
     /**

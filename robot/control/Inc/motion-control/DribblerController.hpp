@@ -2,10 +2,15 @@
 
 #include "cstdint"
 
+/**
+ * Controller for Dribbler velocity
+ */
 class DribblerController {
 public:
     /**
-     * @param dt Period of control loop in ms
+     * Constructor
+     *
+     * @param dt Period of control, loop in ms
      */
     DribblerController(uint32_t dt);
 
@@ -20,13 +25,21 @@ public:
 private:
     // Current speed
     uint16_t pv; // lsb
-    uint32_t dt; // ms
+
+    /**
+     * Period of control loop, in ms
+     *
+     * Set by constructor
+     */
+    uint32_t dt;
 
     static constexpr uint8_t MAX_SPEED = 128u; // lsb
     static constexpr uint8_t MIN_SPEED = 0u; // lsb
 
-    // Time for dribbler to ramp up from min to max speed
-    static constexpr float MAX_SPEED_RAMP_TIME = .5f; // s
+    /**
+     * Time for dribbler to ramp up from min to max speed, in seconds
+     */
+    static constexpr float MAX_SPEED_RAMP_TIME = .5f;
 
     // Max change in command per second
     // Caution: Make sure any changes to this doesn't result

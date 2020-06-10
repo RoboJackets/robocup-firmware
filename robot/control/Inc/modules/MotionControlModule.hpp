@@ -10,6 +10,9 @@
 #include <Eigen/Dense>
 #include "LockedStruct.hpp"
 
+/**
+ * Module handling robot state estimation and motion control for motors
+ */
 class MotionControlModule : public GenericModule {
 public:
     /**

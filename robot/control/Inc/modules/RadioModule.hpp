@@ -6,6 +6,9 @@
 #include "radio/RadioLink.hpp"
 #include "DigitalOut.hpp"
 
+/**
+ * Module interfacing with Radio and handling Radio status
+ */
 class RadioModule : public GenericModule {
 public:
     /**
@@ -68,6 +71,5 @@ private:
      * Object which sends and receives radio packets
      */
     RadioLink link;
-    
     DigitalOut secondRadioCS;
 };
