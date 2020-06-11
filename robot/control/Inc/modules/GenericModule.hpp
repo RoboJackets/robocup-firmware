@@ -6,7 +6,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
-/** \class GenericModule
+/** @class GenericModule
  *  Interface for all modules, so that they can be ran by the scheduler
  */
 class GenericModule {

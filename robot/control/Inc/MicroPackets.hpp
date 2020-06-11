@@ -23,7 +23,7 @@ struct MotionCommand {
     float bodyYVel;       /**< y-component of robot's linear velocity (m/s) */
     float bodyWVel;       /**< Angular velocity of robot about z axis (rad/s) */
 
-    uint8_t dribbler;     /**< 7-bit encoding of dribble rotation (0: no spin - 128: max spin)
+    uint8_t dribbler;     /**< 7-bit encoding of dribbler rotation (0: no spin - 128: max spin)
                           @note **This is limited from 0-128** */
 };
 
@@ -174,4 +174,3 @@ struct KickerInfo {
 struct DebugInfo {
     int16_t val[18]; /**< Array of integers of debug info for soccer */
 };
-

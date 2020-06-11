@@ -1,7 +1,7 @@
 #pragma once
 
 #include "cstdint"
-/** \class Battery
+/** @class Battery
  * Interfaces with analog pin to get voltage-related data
  *
  * @note As of May 2020, this class does not currently work, as it does not read analog pin
