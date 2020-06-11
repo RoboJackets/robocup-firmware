@@ -36,12 +36,12 @@ public:
     /**
      * Constructor for LEDModule
      *
-     * @param ioExpander Interfaces with MCP23017
+     * @param ioExpander shared_ptr with mutex locks for MCP23017 driver
      * @param dotStarSPI SPI bus for dotStar LEDS
-     * @param batteryVoltage Packet of data containing data on battery voltage and critical status
-     * @param fpgaStatus Packet of data containing whether motors or FPGA have errors
-     * @param kickerInfo Packet of data containing kicker status
-     * @param radioError Packet of data containing whether radio has an error
+     * @param batteryVoltage Shared memory location containing data on battery voltage and critical status
+     * @param fpgaStatus Shared memory location containing whether motors or FPGA have errors
+     * @param kickerInfo Shared memory location containing kicker status
+     * @param radioError Shared memory location containing whether radio has an error
      */
     LEDModule(LockedStruct<MCP23017>& ioExpander,
               LockedStruct<SPI>& dotStarSPI,
@@ -56,29 +56,29 @@ public:
     void start() override;
 
     /**
-     * Code to run when called by RTOS
+     * Code to run when called by RTOS once per system tick (`kperiod`)
      *
      * Checks for Radio, FPGA, and Kicker errors, and activates dotStar LEDs accordingly
      */
     void entry() override;
 
     /**
-     * Set specific LED pattern for fpga initialization
+     * Turns on LED1 to signal fpga initialization
      */
     void fpgaInitialized();
 
     /**
-     * Set specific LED pattern for radio initialization
+     * Turns on LED2 to signal radio initialization
      */
     void radioInitialized();
 
     /**
-     * Set specific LED pattern for kicker initialization
+     * Turns on LED3 to signal kicker initialization
      */
     void kickerInitialized();
 
     /**
-     * Set specific LED pattern for full system initialization
+     * Turns on LED4 to signal full system initialization
      */
     void fullyInitialized();
 

@@ -12,12 +12,12 @@
 class RadioModule : public GenericModule {
 public:
     /**
-     * Number of times per second (frequency) that KickerModule should run (Hz)
+     * Number of times per second (frequency) that RadioModule should run (Hz)
      */
     static constexpr float kFrequency = 50.0f;
 
     /**
-     * Number of seconds elapsed (period) between KickerModule runs (milliseconds)
+     * Number of seconds elapsed (period) between RadioModule runs (milliseconds)
      */
     static constexpr std::chrono::milliseconds kPeriod{static_cast<int>(1000 / kFrequency)};
 
@@ -28,13 +28,13 @@ public:
 
     /**
      * Constructor for RadioModule
-     * @param batteryVoltage Packet of data containing data on battery voltage and critical status
-     * @param fpgaStatus Packet of data containing whether motors or FPGA have errors
-     * @param kickerInfo Packet of data containing kicker status
-     * @param robotID Packet of data containing ID selected for Robot on rotary dial
-     * @param kickerCommand Packet of data containing kicker shoot mode, trigger mode, and kick strength
-     * @param motionCommand Packet of data containing dribbler rotation, x and y linear velocity, z angular velocity
-     * @param radioError Packet of data containing whether radio has an error
+     * @param batteryVoltage Shared memory location containing data on battery voltage and critical status
+     * @param fpgaStatus Shared memory location containing whether motors or FPGA have errors
+     * @param kickerInfo Shared memory location containing kicker status
+     * @param robotID Shared memory location containing ID selected for Robot on rotary dial
+     * @param kickerCommand Shared memory location containing kicker shoot mode, trigger mode, and kick strength
+     * @param motionCommand Shared memory location containing dribbler rotation, x and y linear velocity, z angular velocity
+     * @param radioError Shared memory location containing whether radio has an error
      */
     RadioModule(LockedStruct<BatteryVoltage>& batteryVoltage,
                 LockedStruct<FPGAStatus>& fpgaStatus,
@@ -50,7 +50,7 @@ public:
     void start() override;
 
     /**
-     * Code to run when called by RTOS
+     * Code to run when called by RTOS once per system tick (`kperiod`)
      *
      * Sends `batteryVoltage`, `fpgaStatus`, `kickerInfo`, `robotID` packets to radio
      * Receives `kickerCommand`, `motionCommand` packets from radio
@@ -68,7 +68,7 @@ private:
     LockedStruct<RadioError>& radioError;
 
     /**
-     * Object which sends and receives radio packets
+     * General radio driver interface acting as a middle man to send and receive radio packets
      */
     RadioLink link;
     DigitalOut secondRadioCS;

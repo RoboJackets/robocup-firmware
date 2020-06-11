@@ -18,8 +18,6 @@ private:
 
     /**
      * Number of wheels controlled
-     *
-     * Control signal: % max voltage
      */
     const static int numWheels = 4;
 
@@ -110,7 +108,7 @@ private:
     float dt;
 
     /**
-     * Max wheel acceleration (m/s^2)
+     * Max wheel acceleration (rad/s^2)
      */
     static constexpr float maxWheelAccel = 160;
 

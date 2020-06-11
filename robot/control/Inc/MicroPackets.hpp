@@ -141,7 +141,7 @@ struct KickerCommand {
     ShootMode shootMode;     /**< 1-bit encoding of whether the kicker should perform a ground kicker or a chip */
     TriggerMode triggerMode; /**< 2-bit encoding of when kicker should kick (none, immediately, on breakbeam, cancel) */
 
-    uint8_t kickStrength;    /**< 4-bit encoding of the kick's strength (0: min strength - 15: max strength) */
+    uint8_t kickStrength;    /**< 8-bit encoding of the kick's strength (0-255) */
 };
 
 /** @struct KickerInfo

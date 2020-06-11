@@ -143,12 +143,12 @@ private:
     bool _ball_sensed = false;
 
     /**
-     * Stores whether Kicker is responding back with voltage values
+     * Stores whether Kicker is responding back with non-zero voltage values
      */
     bool _is_healthy = true;
 
     /**
-     * Current voltage stored in Kicker, mapped onto 8 bits (0-255)
+     * Current voltage stored in Kicker (volts)
      */
     uint8_t _current_voltage = 0;
 
@@ -178,7 +178,7 @@ private:
     bool _charge_allowed = false;
 
     /**
-     * 4-bit encoding of the kick's strength (0: min strength - 15: max strength)
+     * 8-bit encoding of the kick's strength (0-255)
      */
     uint8_t _kick_strength = 0;
 };

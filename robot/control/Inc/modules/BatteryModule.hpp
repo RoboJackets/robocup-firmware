@@ -31,12 +31,12 @@ public:
     /**
      * Constructor for BatteryModule
      *
-     * @param batteryVoltage Packet of data containing data on battery voltage and critical status
+     * @param batteryVoltage Shared memory location containing data on battery voltage and critical status
      */
     explicit BatteryModule(LockedStruct<BatteryVoltage>& batteryVoltage);
 
     /**
-     * Code to run when called by RTOS
+     * Code to run when called by RTOS once per system tick (`kperiod`)
      *
      * Updates `batteryVoltage` with new information from `battery`
      */

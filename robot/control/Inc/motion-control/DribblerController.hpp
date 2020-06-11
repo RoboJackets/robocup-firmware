@@ -18,8 +18,8 @@ public:
      * Updates the controller with the latest input and calculates
      * the correct motor command to reach this target
      * 
-     * @param setpoint Target to reach (duty cycles)
-     * @param command Next command to send to the motors (duty cycles)
+     * @param setpoint Target to reach (LSB: 0-255)
+     * @param command Next command to send to the motors (LSB: 0-255)
      */
     void calculate(uint8_t setpoint, uint8_t& command);
 private:

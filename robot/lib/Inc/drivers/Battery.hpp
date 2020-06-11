@@ -1,10 +1,11 @@
 #pragma once
 
 #include "cstdint"
+
 /** @class Battery
  * Interfaces with analog pin to get voltage-related data
  *
- * @note As of May 2020, this class does not currently work, as it does not read analog pin
+ * @note As of May 2020, this class does not currently work, as we have no analog_in driver to read pin
  */
 class Battery {
 public:
@@ -16,7 +17,7 @@ public:
 
     uint8_t getRaw();          /**< Returns battery voltage as a raw 8-bit integer */
 
-    bool isBattCritical();     /**< Stores whether battery is critical (at or below 0%) */
+    bool isBattCritical();     /**< Returns whether battery is critical (at or below 0%) */
 
 private:
     /**

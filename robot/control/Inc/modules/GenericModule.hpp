@@ -21,7 +21,7 @@ public:
     virtual void start(void) {}
 
     /**
-     * Code executed by the module when called by RTOS at the desired update rate.
+     * Code to run when called by RTOS once per system tick (`kperiod`)
      */
     virtual void entry() = 0;
 

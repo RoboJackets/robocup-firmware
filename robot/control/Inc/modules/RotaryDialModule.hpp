@@ -29,8 +29,8 @@ public:
 
     /**
      * Constructor for RotaryDialModule
-     * @param ioExpander Interfaces with the MCP23017
-     * @param robotID Packet of data containing ID selected for Robot on rotary dial
+     * @param ioExpander shared_ptr with mutex locks for MCP23017 driver
+     * @param robotID Shared memory location containing ID selected for Robot on rotary dial
      */
     RotaryDialModule(LockedStruct<MCP23017>& ioExpander, LockedStruct<RobotID>& robotID);
 
@@ -40,7 +40,7 @@ public:
     void start() override;
 
     /**
-     * Code to run when called by RTOS
+     * Code to run when called by RTOS once per system tick (`kperiod`)
      *
      * Updates RobotID based on rotary dial
      */

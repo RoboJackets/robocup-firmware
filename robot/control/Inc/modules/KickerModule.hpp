@@ -29,8 +29,8 @@ public:
     /**
      * Constructor for KickerModule
      * @param spi Pointer to SPI object which handles communication on SPI bus
-     * @param kickerCommand Packet of data containing kicker shoot mode, trigger mode, and kick strength
-     * @param kickerInfo Packet of data containing kicker status
+     * @param kickerCommand Shared memory location containing kicker shoot mode, trigger mode, and kick strength
+     * @param kickerInfo Shared memory location containing kicker status
      */
     KickerModule(LockedStruct<SPI>& spi,
                  LockedStruct<KickerCommand>& kickerCommand,
@@ -42,7 +42,7 @@ public:
     void start() override;
 
     /**
-     * Code to run when called by RTOS
+     * Code to run when called by RTOS once per system tick (`kperiod`)
      *
      * Sets kicker strength, shoot mode and trigger mode from `kickerCommand`. Updates kicker status in `kickerInfo`
      */

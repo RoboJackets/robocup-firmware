@@ -33,9 +33,9 @@ public:
     /**
     * Constructor for FPGAModule
     * @param spi Pointer to SPI object which handles communication on SPI bus
-    * @param motorCommand Packet of data containing wheel motor duty cycles and dribbler rotation speed
-    * @param fpgaStatus Packet of data containing whether motors or FPGA have errors
-    * @param motorFeedback Packet of data containing encoder counts and currents to each wheel motor
+    * @param motorCommand Shared memory location containing wheel motor duty cycles and dribbler rotation speed
+    * @param fpgaStatus Shared memory location containing whether motors or FPGA have errors
+    * @param motorFeedback Shared memory location containing encoder counts and currents to each wheel motor
     */
     FPGAModule(std::unique_ptr<SPI> spi,
                LockedStruct<MotorCommand>& motorCommand,
@@ -48,7 +48,7 @@ public:
     void start() override;
 
     /**
-     * Code to run when called by RTOS
+     * Code to run when called by RTOS once per system tick (`kperiod`)
      *
      * Updates motor voltages and feedback (currents/encoder counts)
      */
