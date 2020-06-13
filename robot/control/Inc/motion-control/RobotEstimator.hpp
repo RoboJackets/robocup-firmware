@@ -69,7 +69,7 @@ public:
 
 private:
 
-    static constexpr float processNoise = 0.05;  /**< Random noise caused by external influences on the robot */
+    static constexpr float processNoise = 0.05;  /**< State noise from unmodeled influences (model errors/omissions) */
     static constexpr float encoderNoise = 0.04;  /**< Measurement noise in the encoder */
     static constexpr float gyroNoise = 0.005;    /**< Measurement noise in the gyro */
     static constexpr float initCovariance = 0.1; /**< The initial covariance value in each entry of `P` */
@@ -99,7 +99,7 @@ private:
      * Covariance Matrix for Process Noise
      *
      * A matrix whose entries are the estimated covariances between any two state variables.
-     * Entries represent uncertainty in our state vector (`x_hat`) due to environmental influences.
+     * Entries represent uncertainty in our state vector (`x_hat`) due to unmodeled influences.
      */
     Eigen::Matrix<float, numStates,  numStates>  Q;
 
