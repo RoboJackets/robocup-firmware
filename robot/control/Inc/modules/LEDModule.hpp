@@ -59,40 +59,49 @@ public:
      * Code to run when called by RTOS once per system tick (`kperiod`)
      *
      * Checks for Radio, FPGA, and Kicker errors, and activates dotStar LEDs accordingly
+     * mTrain LED 1 toggled as watchdog/running signal
      */
     void entry() override;
 
     /**
-     * Turns on LED1 to signal fpga initialization
+     * Toggles LEDs to signal fpga initialization
+     * - mTrain LED1 turned on
+     * - dotstars set to [yellow, white]
      */
     void fpgaInitialized();
 
     /**
-     * Turns on LED2 to signal radio initialization
+     * Toggles LEDs to signal radio initialization
+     * - mTrain LED2 turned on
+     * - dotstars set to [pink, white]
      */
     void radioInitialized();
 
     /**
-     * Turns on LED3 to signal kicker initialization
+     * Toggles LEDs to signal fpga initialization
+     * - mTrain LED3 turned on
+     * - dotstars set to [blue, white]
      */
     void kickerInitialized();
 
     /**
-     * Turns on LED4 to signal full system initialization
+     * Toggles LEDs to signal full system initialization
+     * - mTrain LED4 turned on
+     * - dotstars set to [green, green]
      */
     void fullyInitialized();
 
     /**
      * Set specific toggling pattern for missing the X ms super loop timings
      *
-     * All LEDs on the mTrain are blinking together, indicating that some module is running too slowly.
+     * mTrain LEDs 2,3, and 4 are blinking together, indicating that some module is running too slowly.
      */
     void missedSuperLoop();
 
     /**
      * Specific toggling pattern for missing a module run X times in a row
      *
-     * LEDs 1 and 3 toggle opposite of LEDs 2 and 4, indicating that due to priority and timing, some module never runs
+     * mTrain LED 3 toggles opposite of LEDs 2 and 4, indicating that due to priority and timing, some module never runs
      */
     void missedModuleRun();
 
@@ -124,6 +133,9 @@ private:
 
     DigitalOut dotStarNCS;
 
+    /**
+     * Array of mTrain LEDs as `DigitalOut`s
+     */
     std::array<DigitalOut, 4> leds;
     bool missedSuperLoopToggle;
     bool missedModuleRunToggle;
