@@ -3,16 +3,41 @@
 #include <cstdint>
 #include <Eigen/Dense>
 
-// todo improve documentation on these
+/** @class RobotEstimator
+ *  This class implements a Kalman Filter in order to estimate a robot's current state.
+ *  The estimated state is then used in motion control to assign wheel velocities accordingly
+ *
+ *  Explanations:
+ *  - https://www.bzarg.com/p/how-a-kalman-filter-works-in-pictures/
+ *  - https://en.wikipedia.org/wiki/Kalman_filter
+ *  - https://www.mathworks.com/videos/series/understanding-kalman-filters.html
+ */
 class RobotEstimator {
 private:
-    // X Y W bot velocities (m/s)
+    /**
+     * Number of tracked states (number of states in state vector, x_hat)
+     *
+     * 3 Total:
+     * - X and Y: linear velocities of robot body (m/s)
+     * - W: angular velocity of robot body around z axis (rad/s)
+     */
     static constexpr int numStates = 3;
 
-    // Motor duty cycles (% max)
+    /**
+     * Number of applied inputs (number of control inputs in control vector, u)
+     *
+     * 4 total:
+     * - Motor duty cycle for each motor (% max), controls average applied voltage
+     */
     static constexpr int numInputs = 4;
 
-    // Motor encoders (rad/s), gyro angular vel (rad/s)
+    /**
+     * Number of tracked measurable outputs (number of outputs in output vector, y)
+     *
+     * 5 total:
+     * - 4 wheel motor encoders (rad/s)
+     * - Gyro angular velocity (rad/s)
+     */
     static constexpr int numOutputs = 5;
 
 public:
@@ -43,21 +68,68 @@ public:
     void getState(Eigen::Matrix<float, numStates, 1>& state);
 
 private:
-    static constexpr float processNoise = 0.05;
-    static constexpr float encoderNoise = 0.04;
-    static constexpr float gyroNoise = 0.005;
-    static constexpr float initCovariance = 0.1;
 
+    static constexpr float processNoise = 0.05;  /**< State noise from unmodeled influences (model errors/omissions) */
+    static constexpr float encoderNoise = 0.04;  /**< Measurement noise in the encoder */
+    static constexpr float gyroNoise = 0.005;    /**< Measurement noise in the gyro */
+    static constexpr float initCovariance = 0.1; /**< The initial covariance value in each entry of `P` */
+
+    /**
+     * State Transition Matrix/Prediction Matrix
+     *
+     * Predict our next state based on our current state using dynamics
+     */
     Eigen::Matrix<float, numStates,  numStates>  F;
+
+    /**
+     * Control Input Matrix
+     *
+     * Corrects our next state prediction by mapping control input (known influences, `u`) to our next state
+     */
     Eigen::Matrix<float, numStates,  numInputs>  B;
+
+    /**
+     * Observation Matrix
+     *
+     * Predicts the measurements from our sensors (`z`) from our current state (`x_hat`).
+     */
     Eigen::Matrix<float, numOutputs, numStates>  H;
+
+    /**
+     * Covariance Matrix for Process Noise
+     *
+     * A matrix whose entries are the estimated covariances between any two state variables.
+     * Entries represent uncertainty in our state vector (`x_hat`) due to unmodeled influences.
+     */
     Eigen::Matrix<float, numStates,  numStates>  Q;
+
+    /**
+     * Covariance Matrix for Observation Noise
+     *
+     * A matrix whose entries are the estimated covariances between any two state variables.
+     * Entries represent uncertainty in our measurements (`z`) due to random noise
+     */
     Eigen::Matrix<float, numOutputs, numOutputs> R;
+
+    /**
+     * Covariance Estimate Matrix
+     *
+     * A matrix whose entries are the estimated covariances between any two state variables.
+     * Entries represent our overall uncertainty in our state vector (`x_hat`).
+     */
     Eigen::Matrix<float, numStates,  numStates>  P;
 
-    // Identity
+    /**
+     * Identity Matrix
+     *
+     * A square matrix with only 1s on the diagonals
+     */
     Eigen::Matrix<float, numStates, numStates> I;
 
-    // Current estimate
+    /**
+     * Current State Vector Estimate
+     *
+     * What the robot estimator believes our current state to be
+     */
     Eigen::Matrix<float, numStates, 1> x_hat;
 };

@@ -3,15 +3,30 @@
 #include <cstdint>
 #include <Eigen/Dense>
 
+/**
+ * Controller for wheel velocities
+ */
 class RobotController {
 private:
-    // X Y W bot velocities (m/s)
+    /**
+     * Number of tracked states (number of states in state vector)
+     *
+     * X and Y: linear velocities of robot body (m/s)
+     * W: angular velocity of robot body around z axis (rad/s)
+     */
     const static int numStates = 3;
 
-    // Wheel 1-4 duty cycle % max
+    /**
+     * Number of wheels controlled
+     */
     const static int numWheels = 4;
 
 public:
+    /**
+     * Constructor
+     *
+     * @param dt_us Expected period of the controller (microseconds)
+     */
     RobotController(uint32_t dt_us);
 
     /**
@@ -49,38 +64,66 @@ private:
     bool limitWheelAccel(const Eigen::Matrix<float, numWheels, 1> finalTarget,
                         Eigen::Matrix<float, numWheels, 1>& dampened);
 
-
-    // Body Vel
+    /**
+     * Vector of proportional constants for body velocity PID control
+     *
+     * Weighting of current error terms
+     */
     Eigen::Matrix<float, numStates, 1> BodyKp;
+
+    /**
+     * Vector of integral constants for body velocity PID control
+     *
+     * Weighting of total error terms (integral)
+     */
     Eigen::Matrix<float, numStates, 1> BodyKi;
 
     Eigen::Matrix<float, numStates, 1> BodyErrorSum;
 
-    // Restrict the i term from contributing more than
-    // this amount to the output
+    /**
+      * Vector of limits for integral constants of body velocity PID control
+      *
+      * Thresholds to prevent integral term from blowing up (e.g. if robot is stuck)
+      */
     Eigen::Matrix<float, numStates, 1> BodyILimit;
+
     bool BodyUseILimit;
     bool BodyInputLimited;
     bool BodyOutputLimited;
 
     Eigen::Matrix<float, numStates, 1> BodyPrevTarget;
 
-
-    // Wheel Vel
+    /**
+     * Vector of proportional constants for wheel velocity PID control
+     *
+     * Weighting of current error terms
+     */
     Eigen::Matrix<float, numWheels, 1> WheelKp;
 
     Eigen::Matrix<float, numWheels, 1> WheelPrevTarget;
 
+    /**
+     * Interval of control calculations (seconds)
+     */
     float dt;
 
-    // Max wheel acceleration rad per second^2)
+    /**
+     * Max wheel acceleration (rad/s^2)
+     */
     static constexpr float maxWheelAccel = 160;
 
-    // Max acceleration (meters per second^2)
+    /**
+     * Max foward acceleration (m/s^2)
+     */
     static constexpr float maxForwardAccel = 8;
-    // Max acceleration (meters per second^2)
+
+    /**
+     * Max side acceleration (m/s^2)
+     */
     static constexpr float maxSideAccel = 8;
 
-    // Max angular acceleration (rad per second^2)
+    /**
+     * Max angular acceleration (rad/s^2)
+     */
     static constexpr float maxAngularAccel = 40.0;
 };
