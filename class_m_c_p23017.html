@@ -84,6 +84,7 @@ $(document).ready(function(){initNavTree('class_m_c_p23017.html','');});
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_m_c_p23017-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">MCP23017 Class Reference</div>  </div>
@@ -191,6 +192,21 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a67248b8a39c498bfd3b5f32496d1f78c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a167b866cd44e3389b1cc8315d547db95"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_c_p23017.html#a167b866cd44e3389b1cc8315d547db95">internalPullupMask</a> (uint16_t mask)</td></tr>
 <tr class="separator:a167b866cd44e3389b1cc8315d547db95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a7adc429e934d3ea8bed40037f641e2e3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; I2C &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_c_p23017.html#a7adc429e934d3ea8bed40037f641e2e3">_i2c</a></td></tr>
+<tr class="separator:a7adc429e934d3ea8bed40037f641e2e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc7ed90e71404fc40dcf4f2dd02f398d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_c_p23017.html#afc7ed90e71404fc40dcf4f2dd02f398d">_i2cAddress</a></td></tr>
+<tr class="separator:afc7ed90e71404fc40dcf4f2dd02f398d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f4218f70da673b1185899473e800265"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_c_p23017.html#a6f4218f70da673b1185899473e800265">_cachedGPIO</a></td></tr>
+<tr class="separator:a6f4218f70da673b1185899473e800265"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acadbad1213dd7f50820de4ca6488e80e"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_c_p23017.html#acadbad1213dd7f50820de4ca6488e80e">_cachedIODIR</a></td></tr>
+<tr class="separator:acadbad1213dd7f50820de4ca6488e80e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16c2ae7c3a52af0b7b00adc6081abdf8"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_c_p23017.html#a16c2ae7c3a52af0b7b00adc6081abdf8">_cachedGPPU</a></td></tr>
+<tr class="separator:a16c2ae7c3a52af0b7b00adc6081abdf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af80298d5eeba9907ec8ec9c341a1a6b7"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_c_p23017.html#af80298d5eeba9907ec8ec9c341a1a6b7">_cachedIPOL</a></td></tr>
+<tr class="separator:af80298d5eeba9907ec8ec9c341a1a6b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Allow access to an I2C-connected MCP23017 16-bit I/O extender chip. </p>
@@ -910,6 +926,139 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a6f4218f70da673b1185899473e800265"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f4218f70da673b1185899473e800265">&#9670;&nbsp;</a></span>_cachedGPIO</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t MCP23017::_cachedGPIO</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a16c2ae7c3a52af0b7b00adc6081abdf8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a16c2ae7c3a52af0b7b00adc6081abdf8">&#9670;&nbsp;</a></span>_cachedGPPU</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t MCP23017::_cachedGPPU</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acadbad1213dd7f50820de4ca6488e80e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acadbad1213dd7f50820de4ca6488e80e">&#9670;&nbsp;</a></span>_cachedIODIR</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t MCP23017::_cachedIODIR</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af80298d5eeba9907ec8ec9c341a1a6b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af80298d5eeba9907ec8ec9c341a1a6b7">&#9670;&nbsp;</a></span>_cachedIPOL</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t MCP23017::_cachedIPOL</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7adc429e934d3ea8bed40037f641e2e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7adc429e934d3ea8bed40037f641e2e3">&#9670;&nbsp;</a></span>_i2c</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt;I2C&gt;&amp; MCP23017::_i2c</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afc7ed90e71404fc40dcf4f2dd02f398d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc7ed90e71404fc40dcf4f2dd02f398d">&#9670;&nbsp;</a></span>_i2cAddress</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int MCP23017::_i2cAddress</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/developer/robocup-firmware/robot/lib/Inc/drivers/<a class="el" href="_m_c_p23017_8hpp_source.html">MCP23017.hpp</a></li>
 <li>/home/developer/robocup-firmware/robot/lib/Src/drivers/<a class="el" href="_m_c_p23017_8cpp.html">MCP23017.cpp</a></li>
@@ -920,7 +1069,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_m_c_p23017.html">MCP23017</a></li>
-    <li class="footer">Generated on Mon Jun 8 2020 00:49:57 for GT RoboCup SSL by
+    <li class="footer">Generated on Sun Jun 14 2020 13:26:01 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

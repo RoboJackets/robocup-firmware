@@ -9,7 +9,7 @@ digraph "FPGA::chip_select"
   Node10 -> Node11 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node11 [label="FPGA::configure",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_f_p_g_a.html#a77752bb708e4d7f5e691110e3e2480e7",tooltip="Configure FPGA with the \"fpga_bin.h\" binary Must be called to initialize the fpga. "];
   Node11 -> Node12 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node12 [label="FPGAModule::start",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_f_p_g_a_module.html#a953b43ed6293a15726706de59570f000",tooltip="Called once to initialize the module. "];
+  Node12 [label="FPGAModule::start",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_f_p_g_a_module.html#a953b43ed6293a15726706de59570f000",tooltip="Code which initializes module. "];
   Node9 -> Node13 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node13 [label="FPGA::read_halls",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_f_p_g_a.html#a767569caa2aa4d2e9423b6f3a6d2a7a8",tooltip="Reads the hall count for all motors (similar to encoders) "];
   Node9 -> Node14 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];

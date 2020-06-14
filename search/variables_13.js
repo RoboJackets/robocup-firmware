@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['uid',['uid',['../structrtp_1_1_robot_tx_message.html#a0921d3b02c0f027ee55c35103678fb76',1,'rtp::RobotTxMessage::uid()'],['../structrtp_1_1_robot_status_message.html#a7161ddbe791e57e597099b1f794d091e',1,'rtp::RobotStatusMessage::uid()'],['../rtp_8hpp.html#a18ac6eb6ff39c52b65d6516c98a3c424',1,'uid():&#160;rtp.hpp']]],
-  ['url',['url',['../classconanfile_1_1_robo_cup_firmware_conan.html#a8cf521b4c1ad2a13d10785232fae3377',1,'conanfile::RoboCupFirmwareConan']]]
+  ['time',['time',['../main_8c.html#a343cf4964867abd5554c451848c7eaba',1,'main.c']]],
+  ['triggermode',['triggerMode',['../struct_kicker_command.html#aa758e60a0f431d43f1f87087a0363649',1,'KickerCommand::triggerMode()'],['../structrtp_1_1_control_message.html#aa0dcf4aad5dbe5d5ef40913089bac11a',1,'rtp::ControlMessage::triggerMode()'],['../rtp_8hpp.html#a6d0a5067ad62504a7fd6321a81cfaa4e',1,'triggerMode():&#160;rtp.hpp']]],
+  ['type',['type',['../structrtp_1_1_header.html#a0c407ba1a049c3b2514d30da502df325',1,'rtp::Header::type()'],['../rtp_8hpp.html#a8a2053c7fb1adf60da2f26c06059539e',1,'type():&#160;rtp.hpp']]]
 ];

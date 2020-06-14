@@ -83,6 +83,7 @@ $(document).ready(function(){initNavTree('class_radio_link.html','');});
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_radio_link-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">RadioLink Class Reference</div>  </div>
@@ -114,6 +115,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a12a8932314eab725e90308ae23dfa5aa"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_radio_link.html#a12a8932314eab725e90308ae23dfa5aa">receive</a> (<a class="el" href="struct_kicker_command.html">KickerCommand</a> &amp;kickerCommand, <a class="el" href="struct_motion_command.html">MotionCommand</a> &amp;motionCommand)</td></tr>
 <tr class="memdesc:a12a8932314eab725e90308ae23dfa5aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Receive the latest packet from the radio Only fills data portion of structs.  <a href="#a12a8932314eab725e90308ae23dfa5aa">More...</a><br /></td></tr>
 <tr class="separator:a12a8932314eab725e90308ae23dfa5aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a0b56fb304190359cdb084ac44c2354d8"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="class_generic_radio.html">GenericRadio</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_radio_link.html#a0b56fb304190359cdb084ac44c2354d8">radio</a></td></tr>
+<tr class="separator:a0b56fb304190359cdb084ac44c2354d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Sends and receives data to/from the radio Converts the simplified structures to the rtp packet to send to the radio driver Reverse happens on receive, raw data -&gt; rtp packet -&gt; simplified structures. </p>
@@ -256,6 +262,29 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a0b56fb304190359cdb084ac44c2354d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b56fb304190359cdb084ac44c2354d8">&#9670;&nbsp;</a></span>radio</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unique_ptr&lt;<a class="el" href="class_generic_radio.html">GenericRadio</a>&gt; RadioLink::radio</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/developer/robocup-firmware/robot/control/Inc/radio/<a class="el" href="_radio_link_8hpp_source.html">RadioLink.hpp</a></li>
 <li>/home/developer/robocup-firmware/robot/control/Src/radio/<a class="el" href="_radio_link_8cpp.html">RadioLink.cpp</a></li>
@@ -266,7 +295,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_radio_link.html">RadioLink</a></li>
-    <li class="footer">Generated on Mon Jun 8 2020 00:49:57 for GT RoboCup SSL by
+    <li class="footer">Generated on Sun Jun 14 2020 13:26:01 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

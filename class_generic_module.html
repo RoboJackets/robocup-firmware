@@ -89,6 +89,9 @@ $(document).ready(function(){initNavTree('class_generic_module.html','');});
 <div class="title">GenericModule Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Interface for all modules, so that they can be ran by the scheduler.  
+ <a href="class_generic_module.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for GenericModule:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -116,23 +119,28 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a649d4cab743da118a4274969dbe6c3b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called once to initialize the module.  <a href="#a649d4cab743da118a4274969dbe6c3b0">More...</a><br /></td></tr>
 <tr class="separator:a649d4cab743da118a4274969dbe6c3b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3789bbdeff222e7320e262a622b52237"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_module.html#a3789bbdeff222e7320e262a622b52237">entry</a> ()=0</td></tr>
-<tr class="memdesc:a3789bbdeff222e7320e262a622b52237"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by the RTOS at the desired update rate.  <a href="#a3789bbdeff222e7320e262a622b52237">More...</a><br /></td></tr>
+<tr class="memdesc:a3789bbdeff222e7320e262a622b52237"><td class="mdescLeft">&#160;</td><td class="mdescRight">Code to run when called by RTOS once per system tick (<code>kperiod</code>)  <a href="#a3789bbdeff222e7320e262a622b52237">More...</a><br /></td></tr>
 <tr class="separator:a3789bbdeff222e7320e262a622b52237"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:aa633beb1513b09b54b82ccd9348d1d17"><td class="memItemLeft" align="right" valign="top">std::chrono::milliseconds&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_module.html#aa633beb1513b09b54b82ccd9348d1d17">period</a></td></tr>
+<tr class="memdesc:aa633beb1513b09b54b82ccd9348d1d17"><td class="mdescLeft">&#160;</td><td class="mdescRight">The module period (milliseconds)  <a href="#aa633beb1513b09b54b82ccd9348d1d17">More...</a><br /></td></tr>
 <tr class="separator:aa633beb1513b09b54b82ccd9348d1d17"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a72f5ba62ae68e8d0e73b120562a5387b"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_module.html#a72f5ba62ae68e8d0e73b120562a5387b">name</a></td></tr>
+<tr class="memdesc:a72f5ba62ae68e8d0e73b120562a5387b"><td class="mdescLeft">&#160;</td><td class="mdescRight">A human-readable name for the process.  <a href="#a72f5ba62ae68e8d0e73b120562a5387b">More...</a><br /></td></tr>
 <tr class="separator:a72f5ba62ae68e8d0e73b120562a5387b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a37f43c666f3457c63651c3c4834dc543"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_module.html#a37f43c666f3457c63651c3c4834dc543">priority</a> = 1</td></tr>
+<tr class="memdesc:a37f43c666f3457c63651c3c4834dc543"><td class="mdescLeft">&#160;</td><td class="mdescRight">The priority of the module (default: low)  <a href="#a37f43c666f3457c63651c3c4834dc543">More...</a><br /></td></tr>
 <tr class="separator:a37f43c666f3457c63651c3c4834dc543"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a442ff78f9167bb26b2327aebab4e6210"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_module.html#a442ff78f9167bb26b2327aebab4e6210">stackSize</a> = 1024</td></tr>
 <tr class="separator:a442ff78f9167bb26b2327aebab4e6210"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa40dec1e9e7037584fc29efe09c4e181"><td class="memItemLeft" align="right" valign="top">TaskHandle_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_module.html#aa40dec1e9e7037584fc29efe09c4e181">handle</a> = nullptr</td></tr>
 <tr class="separator:aa40dec1e9e7037584fc29efe09c4e181"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Interface for all modules, so that they can be ran by the scheduler. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ad460da2a697ba4eab4167ba5e6075325"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad460da2a697ba4eab4167ba5e6075325">&#9670;&nbsp;</a></span>GenericModule()</h2>
 
@@ -205,9 +213,9 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Called by the RTOS at the desired update rate. </p>
+<p>Code to run when called by RTOS once per system tick (<code>kperiod</code>) </p>
 
-<p>Implemented in <a class="el" href="class_l_e_d_module.html#a8413c6960dc269a7771da47c1ad5bc6d">LEDModule</a>, <a class="el" href="class_f_p_g_a_module.html#a56a74cfbd0183b1c17f21579427b4155">FPGAModule</a>, <a class="el" href="class_motion_control_module.html#ae9ce65e3c14d0effbac1c1a3b93fb5b1">MotionControlModule</a>, <a class="el" href="class_radio_module.html#ae95ea2b3961a71fcf854c59148c8b74d">RadioModule</a>, <a class="el" href="class_kicker_module.html#a6fcd2828adf2f4c00d113f4b316e22eb">KickerModule</a>, <a class="el" href="class_i_m_u_module.html#a784f495174be8c60b2d1e5a99bf508c9">IMUModule</a>, <a class="el" href="class_rotary_dial_module.html#a081e53040ea910eea062316aabe7e9b5">RotaryDialModule</a>, and <a class="el" href="class_battery_module.html#aaa99ed7940bf9991a513b919cb57a51b">BatteryModule</a>.</p>
+<p>Implemented in <a class="el" href="class_l_e_d_module.html#a8413c6960dc269a7771da47c1ad5bc6d">LEDModule</a>, <a class="el" href="class_radio_module.html#ae95ea2b3961a71fcf854c59148c8b74d">RadioModule</a>, <a class="el" href="class_f_p_g_a_module.html#a56a74cfbd0183b1c17f21579427b4155">FPGAModule</a>, <a class="el" href="class_motion_control_module.html#ae9ce65e3c14d0effbac1c1a3b93fb5b1">MotionControlModule</a>, <a class="el" href="class_kicker_module.html#a6fcd2828adf2f4c00d113f4b316e22eb">KickerModule</a>, <a class="el" href="class_i_m_u_module.html#a784f495174be8c60b2d1e5a99bf508c9">IMUModule</a>, <a class="el" href="class_rotary_dial_module.html#a081e53040ea910eea062316aabe7e9b5">RotaryDialModule</a>, and <a class="el" href="class_battery_module.html#aaa99ed7940bf9991a513b919cb57a51b">BatteryModule</a>.</p>
 <div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-2-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
 <div id="dynsection-2-summary" class="dynsummary" style="display:block;">
@@ -247,7 +255,7 @@ Public Attributes</h2></td></tr>
 <p>Called once to initialize the module. </p>
 <p>All initialization work should be done here instead of in the constructor. </p>
 
-<p>Reimplemented in <a class="el" href="class_l_e_d_module.html#aac9491cb79f42b71e117838766930357">LEDModule</a>, <a class="el" href="class_f_p_g_a_module.html#a953b43ed6293a15726706de59570f000">FPGAModule</a>, <a class="el" href="class_radio_module.html#a3627426419c1b7b0bd6cd04baeab2a0c">RadioModule</a>, <a class="el" href="class_kicker_module.html#a5901fc136f50ca6de9b7110c03f01a10">KickerModule</a>, <a class="el" href="class_i_m_u_module.html#aba29f7665d8ec8f0eefe802f1c2b741c">IMUModule</a>, and <a class="el" href="class_rotary_dial_module.html#ad7420a57bee4532485710cd40a860969">RotaryDialModule</a>.</p>
+<p>Reimplemented in <a class="el" href="class_l_e_d_module.html#aac9491cb79f42b71e117838766930357">LEDModule</a>, <a class="el" href="class_radio_module.html#a3627426419c1b7b0bd6cd04baeab2a0c">RadioModule</a>, <a class="el" href="class_f_p_g_a_module.html#a953b43ed6293a15726706de59570f000">FPGAModule</a>, <a class="el" href="class_kicker_module.html#a5901fc136f50ca6de9b7110c03f01a10">KickerModule</a>, <a class="el" href="class_i_m_u_module.html#aba29f7665d8ec8f0eefe802f1c2b741c">IMUModule</a>, and <a class="el" href="class_rotary_dial_module.html#ad7420a57bee4532485710cd40a860969">RotaryDialModule</a>.</p>
 <div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-3-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-3-summary" class="dynsummary" style="display:block;">
@@ -296,6 +304,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>A human-readable name for the process. </p>
+
 </div>
 </div>
 <a id="aa633beb1513b09b54b82ccd9348d1d17"></a>
@@ -310,6 +320,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>The module period (milliseconds) </p>
+
 </div>
 </div>
 <a id="a37f43c666f3457c63651c3c4834dc543"></a>
@@ -323,6 +335,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>The priority of the module (default: low) </p>
 
 </div>
 </div>
@@ -349,7 +363,7 @@ Public Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_generic_module.html">GenericModule</a></li>
-    <li class="footer">Generated on Mon Jun 8 2020 00:49:57 for GT RoboCup SSL by
+    <li class="footer">Generated on Sun Jun 14 2020 13:26:01 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

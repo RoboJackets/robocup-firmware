@@ -1,6 +1,12 @@
 var searchData=
 [
-  ['time',['time',['../main_8c.html#a343cf4964867abd5554c451848c7eaba',1,'main.c']]],
-  ['triggermode',['triggerMode',['../struct_kicker_command.html#aa758e60a0f431d43f1f87087a0363649',1,'KickerCommand::triggerMode()'],['../structrtp_1_1_control_message.html#aa0dcf4aad5dbe5d5ef40913089bac11a',1,'rtp::ControlMessage::triggerMode()'],['../rtp_8hpp.html#a6d0a5067ad62504a7fd6321a81cfaa4e',1,'triggerMode():&#160;rtp.hpp']]],
-  ['type',['type',['../structrtp_1_1_header.html#a0c407ba1a049c3b2514d30da502df325',1,'rtp::Header::type()'],['../rtp_8hpp.html#a8a2053c7fb1adf60da2f26c06059539e',1,'type():&#160;rtp.hpp']]]
+  ['secondradiocs',['secondRadioCS',['../class_radio_module.html#aa5b55e7c94a99de26a22f4f0ad9549b4',1,'RadioModule']]],
+  ['settings',['settings',['../classconanfile_1_1_robo_cup_firmware_conan.html#a551362f540c4be7bb03cab923257efa1',1,'conanfile::RoboCupFirmwareConan']]],
+  ['shootmode',['shootMode',['../struct_kicker_command.html#a93b5cc139a5baecb67b6f604b50875ed',1,'KickerCommand::shootMode()'],['../structrtp_1_1_control_message.html#ab04e8cf341e3cb2879a82206ad82bc29',1,'rtp::ControlMessage::shootMode()'],['../rtp_8hpp.html#a9cbade81a70376c688a0839971bb05d5',1,'shootMode():&#160;rtp.hpp']]],
+  ['song',['song',['../structrtp_1_1_control_message.html#a38ae3dd1443d2d071fd756b86c396784',1,'rtp::ControlMessage::song()'],['../rtp_8hpp.html#a90cfcabda5917921d2a44f7083d1c60b',1,'song():&#160;rtp.hpp']]],
+  ['speedtodutycycle',['SpeedToDutyCycle',['../class_robot_model.html#a5b9710dbcce0ff4fbdbf832a9dd4fe6c',1,'RobotModel']]],
+  ['spi_5f',['spi_',['../class_a_v_r910.html#a92bf8d4664bd341a45db873f652f6639',1,'AVR910']]],
+  ['stacksize',['stackSize',['../class_generic_module.html#a442ff78f9167bb26b2327aebab4e6210',1,'GenericModule']]],
+  ['stop_5fcharge_5fphase',['stop_charge_phase',['../main_8c.html#a2e1e42fff0fd538c333a001d4e070e90',1,'main.c']]],
+  ['stop_5fflow_5fphase',['stop_flow_phase',['../main_8c.html#a174eb2c9383620acac5e156c3581d51d',1,'main.c']]]
 ];

@@ -3,12 +3,11 @@ digraph "AVR910::readPartNumber"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node49 [label="AVR910::readPartNumber",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
-  Node49 -> Node50 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node50 [label="AVR910::readRegister",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_a_v_r910.html#a4e99d5a29dc0e48069cebd1f26c83800"];
-  Node50 -> Node51 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node51 [label="AVR910::lock_spi",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_a_v_r910.html#a4b33111389ef72e6e05e2951505e1821"];
-  Node51 -> Node52 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node52 [label="LockedStruct::lock",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_locked_struct.html#aa207b98a1cd6c569a96e7d1d5565478f",tooltip="Lock this struct. "];
-  Node49 -> Node51 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node110 [label="AVR910::readPartNumber",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node110 -> Node111 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node111 [label="AVR910::readRegister",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_a_v_r910.html#a4e99d5a29dc0e48069cebd1f26c83800"];
+  Node111 -> Node112 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node112 [label="AVR910::lock_spi",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_a_v_r910.html#a4b33111389ef72e6e05e2951505e1821"];
+  Node112 -> Node113 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node113 [label="LockedStruct::lock",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_locked_struct.html#aa207b98a1cd6c569a96e7d1d5565478f",tooltip="Lock this struct. "];
 }

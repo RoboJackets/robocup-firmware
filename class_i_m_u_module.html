@@ -84,11 +84,15 @@ $(document).ready(function(){initNavTree('class_i_m_u_module.html','');});
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_i_m_u_module-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">IMUModule Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Module interfacing with IMU and handling IMU status.  
+ <a href="class_i_m_u_module.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for IMUModule:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -110,13 +114,14 @@ $(document).ready(function(){initNavTree('class_i_m_u_module.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a1f691ac4f40252d106767cbbb98b1075"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_m_u_module.html#a1f691ac4f40252d106767cbbb98b1075">IMUModule</a> (std::shared_ptr&lt; I2C &gt; sharedI2C, <a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_i_m_u_data.html">IMUData</a> &gt; &amp;imuData)</td></tr>
+<tr class="memitem:a1f691ac4f40252d106767cbbb98b1075"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_m_u_module.html#a1f691ac4f40252d106767cbbb98b1075">IMUModule</a> (std::shared_ptr&lt; I2C &gt; sharedI2C, <a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_i_m_u_data.html">IMUData</a> &gt; &amp;<a class="el" href="class_i_m_u_module.html#a5170390891f04c6be5af4a4c8ce339e9">imuData</a>)</td></tr>
+<tr class="memdesc:a1f691ac4f40252d106767cbbb98b1075"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for IMUModule.  <a href="#a1f691ac4f40252d106767cbbb98b1075">More...</a><br /></td></tr>
 <tr class="separator:a1f691ac4f40252d106767cbbb98b1075"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba29f7665d8ec8f0eefe802f1c2b741c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_m_u_module.html#aba29f7665d8ec8f0eefe802f1c2b741c">start</a> () override</td></tr>
-<tr class="memdesc:aba29f7665d8ec8f0eefe802f1c2b741c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called once to initialize the module.  <a href="#aba29f7665d8ec8f0eefe802f1c2b741c">More...</a><br /></td></tr>
+<tr class="memdesc:aba29f7665d8ec8f0eefe802f1c2b741c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Code which initializes module.  <a href="#aba29f7665d8ec8f0eefe802f1c2b741c">More...</a><br /></td></tr>
 <tr class="separator:aba29f7665d8ec8f0eefe802f1c2b741c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a784f495174be8c60b2d1e5a99bf508c9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_m_u_module.html#a784f495174be8c60b2d1e5a99bf508c9">entry</a> () override</td></tr>
-<tr class="memdesc:a784f495174be8c60b2d1e5a99bf508c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by the RTOS at the desired update rate.  <a href="#a784f495174be8c60b2d1e5a99bf508c9">More...</a><br /></td></tr>
+<tr class="memdesc:a784f495174be8c60b2d1e5a99bf508c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Code to run when called by RTOS once per system tick (<code>kperiod</code>)  <a href="#a784f495174be8c60b2d1e5a99bf508c9">More...</a><br /></td></tr>
 <tr class="separator:a784f495174be8c60b2d1e5a99bf508c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_class_generic_module"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_generic_module')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_generic_module.html">GenericModule</a></td></tr>
 <tr class="memitem:ad460da2a697ba4eab4167ba5e6075325 inherit pub_methods_class_generic_module"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_module.html#ad460da2a697ba4eab4167ba5e6075325">GenericModule</a> (std::chrono::milliseconds <a class="el" href="class_generic_module.html#aa633beb1513b09b54b82ccd9348d1d17">period</a>, const char *<a class="el" href="class_generic_module.html#a72f5ba62ae68e8d0e73b120562a5387b">name</a>, int <a class="el" href="class_generic_module.html#a37f43c666f3457c63651c3c4834dc543">priority</a>=1, int <a class="el" href="class_generic_module.html#a442ff78f9167bb26b2327aebab4e6210">stackSize</a>=1024)</td></tr>
@@ -125,27 +130,42 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
 <tr class="memitem:a0bcf95158bee2458fa68f0383934590d"><td class="memItemLeft" align="right" valign="top">static constexpr float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_m_u_module.html#a0bcf95158bee2458fa68f0383934590d">kFrequency</a> = 200.0f</td></tr>
+<tr class="memdesc:a0bcf95158bee2458fa68f0383934590d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of times per second (frequency) that IMUModule should run (Hz)  <a href="#a0bcf95158bee2458fa68f0383934590d">More...</a><br /></td></tr>
 <tr class="separator:a0bcf95158bee2458fa68f0383934590d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a05395f89fae677dca2fc1a1b490bc258"><td class="memItemLeft" align="right" valign="top">static constexpr std::chrono::milliseconds&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_m_u_module.html#a05395f89fae677dca2fc1a1b490bc258">kPeriod</a> {static_cast&lt;int&gt;(1000 / <a class="el" href="class_i_m_u_module.html#a0bcf95158bee2458fa68f0383934590d">kFrequency</a>)}</td></tr>
+<tr class="memdesc:a05395f89fae677dca2fc1a1b490bc258"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of seconds elapsed (period) between IMUModule runs (milliseconds)  <a href="#a05395f89fae677dca2fc1a1b490bc258">More...</a><br /></td></tr>
 <tr class="separator:a05395f89fae677dca2fc1a1b490bc258"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0e03a193a9d6438d4aae2211dd69e796"><td class="memItemLeft" align="right" valign="top">static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_m_u_module.html#a0e03a193a9d6438d4aae2211dd69e796">kPriority</a> = 3</td></tr>
+<tr class="memdesc:a0e03a193a9d6438d4aae2211dd69e796"><td class="mdescLeft">&#160;</td><td class="mdescRight">Priority used by RTOS.  <a href="#a0e03a193a9d6438d4aae2211dd69e796">More...</a><br /></td></tr>
 <tr class="separator:a0e03a193a9d6438d4aae2211dd69e796"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a33b2cf520ed3dbc3c6ac80d71104d6d8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_m_p_u6050.html">MPU6050</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_m_u_module.html#a33b2cf520ed3dbc3c6ac80d71104d6d8">imu</a></td></tr>
+<tr class="separator:a33b2cf520ed3dbc3c6ac80d71104d6d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5170390891f04c6be5af4a4c8ce339e9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_i_m_u_data.html">IMUData</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_m_u_module.html#a5170390891f04c6be5af4a4c8ce339e9">imuData</a></td></tr>
+<tr class="separator:a5170390891f04c6be5af4a4c8ce339e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pub_attribs_class_generic_module"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_class_generic_module')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="class_generic_module.html">GenericModule</a></td></tr>
 <tr class="memitem:aa633beb1513b09b54b82ccd9348d1d17 inherit pub_attribs_class_generic_module"><td class="memItemLeft" align="right" valign="top">std::chrono::milliseconds&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_module.html#aa633beb1513b09b54b82ccd9348d1d17">period</a></td></tr>
+<tr class="memdesc:aa633beb1513b09b54b82ccd9348d1d17 inherit pub_attribs_class_generic_module"><td class="mdescLeft">&#160;</td><td class="mdescRight">The module period (milliseconds)  <a href="class_generic_module.html#aa633beb1513b09b54b82ccd9348d1d17">More...</a><br /></td></tr>
 <tr class="separator:aa633beb1513b09b54b82ccd9348d1d17 inherit pub_attribs_class_generic_module"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a72f5ba62ae68e8d0e73b120562a5387b inherit pub_attribs_class_generic_module"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_module.html#a72f5ba62ae68e8d0e73b120562a5387b">name</a></td></tr>
+<tr class="memdesc:a72f5ba62ae68e8d0e73b120562a5387b inherit pub_attribs_class_generic_module"><td class="mdescLeft">&#160;</td><td class="mdescRight">A human-readable name for the process.  <a href="class_generic_module.html#a72f5ba62ae68e8d0e73b120562a5387b">More...</a><br /></td></tr>
 <tr class="separator:a72f5ba62ae68e8d0e73b120562a5387b inherit pub_attribs_class_generic_module"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a37f43c666f3457c63651c3c4834dc543 inherit pub_attribs_class_generic_module"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_module.html#a37f43c666f3457c63651c3c4834dc543">priority</a> = 1</td></tr>
+<tr class="memdesc:a37f43c666f3457c63651c3c4834dc543 inherit pub_attribs_class_generic_module"><td class="mdescLeft">&#160;</td><td class="mdescRight">The priority of the module (default: low)  <a href="class_generic_module.html#a37f43c666f3457c63651c3c4834dc543">More...</a><br /></td></tr>
 <tr class="separator:a37f43c666f3457c63651c3c4834dc543 inherit pub_attribs_class_generic_module"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a442ff78f9167bb26b2327aebab4e6210 inherit pub_attribs_class_generic_module"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_module.html#a442ff78f9167bb26b2327aebab4e6210">stackSize</a> = 1024</td></tr>
 <tr class="separator:a442ff78f9167bb26b2327aebab4e6210 inherit pub_attribs_class_generic_module"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa40dec1e9e7037584fc29efe09c4e181 inherit pub_attribs_class_generic_module"><td class="memItemLeft" align="right" valign="top">TaskHandle_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_module.html#aa40dec1e9e7037584fc29efe09c4e181">handle</a> = nullptr</td></tr>
 <tr class="separator:aa40dec1e9e7037584fc29efe09c4e181 inherit pub_attribs_class_generic_module"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Module interfacing with IMU and handling IMU status. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a1f691ac4f40252d106767cbbb98b1075"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1f691ac4f40252d106767cbbb98b1075">&#9670;&nbsp;</a></span>IMUModule()</h2>
 
@@ -171,6 +191,15 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Constructor for IMUModule. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sharedI2C</td><td>Pointer to I2C object which reads/writes on I2C bus </td></tr>
+    <tr><td class="paramname">imuData</td><td>Shared memory location containing linear acceleration and angular velocity along/about X,Y, and Z axes </td></tr>
+  </table>
+  </dd>
+</dl>
 <div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-2-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-2-summary" class="dynsummary" style="display:block;">
@@ -196,6 +225,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">void IMUModule::entry </td>
           <td>(</td>
+          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -207,7 +237,8 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Called by the RTOS at the desired update rate. </p>
+<p>Code to run when called by RTOS once per system tick (<code>kperiod</code>) </p>
+<dl class="section note"><dt>Note</dt><dd>As of May 2020, IMUModule is not integrated on the robots due to issues. The code immediately returns. </dd></dl>
 
 <p>Implements <a class="el" href="class_generic_module.html#a3789bbdeff222e7320e262a622b52237">GenericModule</a>.</p>
 <div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -246,8 +277,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Called once to initialize the module. </p>
-<p>All initialization work should be done here instead of in the constructor. </p>
+<p>Code which initializes module. </p>
 
 <p>Reimplemented from <a class="el" href="class_generic_module.html#a649d4cab743da118a4274969dbe6c3b0">GenericModule</a>.</p>
 <div id="dynsection-4" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -263,6 +293,50 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a33b2cf520ed3dbc3c6ac80d71104d6d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a33b2cf520ed3dbc3c6ac80d71104d6d8">&#9670;&nbsp;</a></span>imu</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_m_p_u6050.html">MPU6050</a> IMUModule::imu</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5170390891f04c6be5af4a4c8ce339e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5170390891f04c6be5af4a4c8ce339e9">&#9670;&nbsp;</a></span>imuData</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt;<a class="el" href="struct_i_m_u_data.html">IMUData</a>&gt;&amp; IMUModule::imuData</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a0bcf95158bee2458fa68f0383934590d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0bcf95158bee2458fa68f0383934590d">&#9670;&nbsp;</a></span>kFrequency</h2>
 
@@ -282,6 +356,8 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Number of times per second (frequency) that IMUModule should run (Hz) </p>
 
 </div>
 </div>
@@ -305,6 +381,8 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Number of seconds elapsed (period) between IMUModule runs (milliseconds) </p>
+
 </div>
 </div>
 <a id="a0e03a193a9d6438d4aae2211dd69e796"></a>
@@ -327,6 +405,8 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Priority used by RTOS. </p>
+
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
@@ -339,7 +419,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_i_m_u_module.html">IMUModule</a></li>
-    <li class="footer">Generated on Mon Jun 8 2020 00:49:57 for GT RoboCup SSL by
+    <li class="footer">Generated on Sun Jun 14 2020 13:26:01 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

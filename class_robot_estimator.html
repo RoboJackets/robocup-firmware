@@ -83,11 +83,16 @@ $(document).ready(function(){initNavTree('class_robot_estimator.html','');});
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="class_robot_estimator-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">RobotEstimator Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>This class implements a Kalman Filter in order to estimate a robot's current state.  
+ <a href="class_robot_estimator.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for RobotEstimator:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -102,16 +107,75 @@ $(document).ready(function(){initNavTree('class_robot_estimator.html','');});
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ab7adc8b41475920123f38b2934ce5247"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_estimator.html#ab7adc8b41475920123f38b2934ce5247">RobotEstimator</a> (uint32_t dt_us)</td></tr>
 <tr class="separator:ab7adc8b41475920123f38b2934ce5247"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3c6b5cd0be4868c7e97e6d17442dc418"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_estimator.html#a3c6b5cd0be4868c7e97e6d17442dc418">predict</a> (Eigen::Matrix&lt; float, numInputs, 1 &gt; u)</td></tr>
+<tr class="memitem:a3c6b5cd0be4868c7e97e6d17442dc418"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_estimator.html#a3c6b5cd0be4868c7e97e6d17442dc418">predict</a> (Eigen::Matrix&lt; float, <a class="el" href="class_robot_estimator.html#afde2bc2786e2944bdec8b1c3dc406842">numInputs</a>, 1 &gt; u)</td></tr>
 <tr class="memdesc:a3c6b5cd0be4868c7e97e6d17442dc418"><td class="mdescLeft">&#160;</td><td class="mdescRight">Using the previous state and the next input We can guess where we are this time step.  <a href="#a3c6b5cd0be4868c7e97e6d17442dc418">More...</a><br /></td></tr>
 <tr class="separator:a3c6b5cd0be4868c7e97e6d17442dc418"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4c351248722cd20f02a05023fe8b986f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_estimator.html#a4c351248722cd20f02a05023fe8b986f">update</a> (Eigen::Matrix&lt; float, numOutputs, 1 &gt; z)</td></tr>
+<tr class="memitem:a4c351248722cd20f02a05023fe8b986f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_estimator.html#a4c351248722cd20f02a05023fe8b986f">update</a> (Eigen::Matrix&lt; float, <a class="el" href="class_robot_estimator.html#aa870daab4545632d9af3f6c7fb4af3ed">numOutputs</a>, 1 &gt; z)</td></tr>
 <tr class="memdesc:a4c351248722cd20f02a05023fe8b986f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Using the next measurements, we can move our prediction closer to the true target.  <a href="#a4c351248722cd20f02a05023fe8b986f">More...</a><br /></td></tr>
 <tr class="separator:a4c351248722cd20f02a05023fe8b986f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2b6d81d066db57da453ae497f5df57c0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_estimator.html#a2b6d81d066db57da453ae497f5df57c0">getState</a> (Eigen::Matrix&lt; float, numStates, 1 &gt; &amp;state)</td></tr>
+<tr class="memitem:a2b6d81d066db57da453ae497f5df57c0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_estimator.html#a2b6d81d066db57da453ae497f5df57c0">getState</a> (Eigen::Matrix&lt; float, <a class="el" href="class_robot_estimator.html#aac86dd93ec242286d0934164d24c5890">numStates</a>, 1 &gt; &amp;state)</td></tr>
 <tr class="separator:a2b6d81d066db57da453ae497f5df57c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a19b077b3a4382b64b752f61fe745b6c5"><td class="memItemLeft" align="right" valign="top">Eigen::Matrix&lt; float, <a class="el" href="class_robot_estimator.html#aac86dd93ec242286d0934164d24c5890">numStates</a>, <a class="el" href="class_robot_estimator.html#aac86dd93ec242286d0934164d24c5890">numStates</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_estimator.html#a19b077b3a4382b64b752f61fe745b6c5">F</a></td></tr>
+<tr class="memdesc:a19b077b3a4382b64b752f61fe745b6c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">State Transition Matrix/Prediction Matrix.  <a href="#a19b077b3a4382b64b752f61fe745b6c5">More...</a><br /></td></tr>
+<tr class="separator:a19b077b3a4382b64b752f61fe745b6c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb38bfc71c82f01fbd4aa301679be912"><td class="memItemLeft" align="right" valign="top">Eigen::Matrix&lt; float, <a class="el" href="class_robot_estimator.html#aac86dd93ec242286d0934164d24c5890">numStates</a>, <a class="el" href="class_robot_estimator.html#afde2bc2786e2944bdec8b1c3dc406842">numInputs</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_estimator.html#abb38bfc71c82f01fbd4aa301679be912">B</a></td></tr>
+<tr class="memdesc:abb38bfc71c82f01fbd4aa301679be912"><td class="mdescLeft">&#160;</td><td class="mdescRight">Control Input Matrix.  <a href="#abb38bfc71c82f01fbd4aa301679be912">More...</a><br /></td></tr>
+<tr class="separator:abb38bfc71c82f01fbd4aa301679be912"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af81d489467461b814d9872755a2e8ad1"><td class="memItemLeft" align="right" valign="top">Eigen::Matrix&lt; float, <a class="el" href="class_robot_estimator.html#aa870daab4545632d9af3f6c7fb4af3ed">numOutputs</a>, <a class="el" href="class_robot_estimator.html#aac86dd93ec242286d0934164d24c5890">numStates</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_estimator.html#af81d489467461b814d9872755a2e8ad1">H</a></td></tr>
+<tr class="memdesc:af81d489467461b814d9872755a2e8ad1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Observation Matrix.  <a href="#af81d489467461b814d9872755a2e8ad1">More...</a><br /></td></tr>
+<tr class="separator:af81d489467461b814d9872755a2e8ad1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a98f3295da570a740b9dc4045174592b9"><td class="memItemLeft" align="right" valign="top">Eigen::Matrix&lt; float, <a class="el" href="class_robot_estimator.html#aac86dd93ec242286d0934164d24c5890">numStates</a>, <a class="el" href="class_robot_estimator.html#aac86dd93ec242286d0934164d24c5890">numStates</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_estimator.html#a98f3295da570a740b9dc4045174592b9">Q</a></td></tr>
+<tr class="memdesc:a98f3295da570a740b9dc4045174592b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Covariance Matrix for Process Noise.  <a href="#a98f3295da570a740b9dc4045174592b9">More...</a><br /></td></tr>
+<tr class="separator:a98f3295da570a740b9dc4045174592b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c87842e68dc39ab7acdce575ef3fa2c"><td class="memItemLeft" align="right" valign="top">Eigen::Matrix&lt; float, <a class="el" href="class_robot_estimator.html#aa870daab4545632d9af3f6c7fb4af3ed">numOutputs</a>, <a class="el" href="class_robot_estimator.html#aa870daab4545632d9af3f6c7fb4af3ed">numOutputs</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_estimator.html#a4c87842e68dc39ab7acdce575ef3fa2c">R</a></td></tr>
+<tr class="memdesc:a4c87842e68dc39ab7acdce575ef3fa2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Covariance Matrix for Observation Noise.  <a href="#a4c87842e68dc39ab7acdce575ef3fa2c">More...</a><br /></td></tr>
+<tr class="separator:a4c87842e68dc39ab7acdce575ef3fa2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1555a9f6c32fb88e2e5c5eacc4c9e84d"><td class="memItemLeft" align="right" valign="top">Eigen::Matrix&lt; float, <a class="el" href="class_robot_estimator.html#aac86dd93ec242286d0934164d24c5890">numStates</a>, <a class="el" href="class_robot_estimator.html#aac86dd93ec242286d0934164d24c5890">numStates</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_estimator.html#a1555a9f6c32fb88e2e5c5eacc4c9e84d">P</a></td></tr>
+<tr class="memdesc:a1555a9f6c32fb88e2e5c5eacc4c9e84d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Covariance Estimate Matrix.  <a href="#a1555a9f6c32fb88e2e5c5eacc4c9e84d">More...</a><br /></td></tr>
+<tr class="separator:a1555a9f6c32fb88e2e5c5eacc4c9e84d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8f394c01a63f9f7c026818b3e8bc43c"><td class="memItemLeft" align="right" valign="top">Eigen::Matrix&lt; float, <a class="el" href="class_robot_estimator.html#aac86dd93ec242286d0934164d24c5890">numStates</a>, <a class="el" href="class_robot_estimator.html#aac86dd93ec242286d0934164d24c5890">numStates</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_estimator.html#ad8f394c01a63f9f7c026818b3e8bc43c">I</a></td></tr>
+<tr class="memdesc:ad8f394c01a63f9f7c026818b3e8bc43c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identity Matrix.  <a href="#ad8f394c01a63f9f7c026818b3e8bc43c">More...</a><br /></td></tr>
+<tr class="separator:ad8f394c01a63f9f7c026818b3e8bc43c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a581ef2c2d4b55f87d0825f07e6836a35"><td class="memItemLeft" align="right" valign="top">Eigen::Matrix&lt; float, <a class="el" href="class_robot_estimator.html#aac86dd93ec242286d0934164d24c5890">numStates</a>, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_estimator.html#a581ef2c2d4b55f87d0825f07e6836a35">x_hat</a></td></tr>
+<tr class="memdesc:a581ef2c2d4b55f87d0825f07e6836a35"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current State Vector Estimate.  <a href="#a581ef2c2d4b55f87d0825f07e6836a35">More...</a><br /></td></tr>
+<tr class="separator:a581ef2c2d4b55f87d0825f07e6836a35"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:aac86dd93ec242286d0934164d24c5890"><td class="memItemLeft" align="right" valign="top">static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_estimator.html#aac86dd93ec242286d0934164d24c5890">numStates</a> = 3</td></tr>
+<tr class="memdesc:aac86dd93ec242286d0934164d24c5890"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of tracked states (number of states in state vector, x_hat)  <a href="#aac86dd93ec242286d0934164d24c5890">More...</a><br /></td></tr>
+<tr class="separator:aac86dd93ec242286d0934164d24c5890"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afde2bc2786e2944bdec8b1c3dc406842"><td class="memItemLeft" align="right" valign="top">static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_estimator.html#afde2bc2786e2944bdec8b1c3dc406842">numInputs</a> = 4</td></tr>
+<tr class="memdesc:afde2bc2786e2944bdec8b1c3dc406842"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of applied inputs (number of control inputs in control vector, u)  <a href="#afde2bc2786e2944bdec8b1c3dc406842">More...</a><br /></td></tr>
+<tr class="separator:afde2bc2786e2944bdec8b1c3dc406842"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa870daab4545632d9af3f6c7fb4af3ed"><td class="memItemLeft" align="right" valign="top">static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_estimator.html#aa870daab4545632d9af3f6c7fb4af3ed">numOutputs</a> = 5</td></tr>
+<tr class="memdesc:aa870daab4545632d9af3f6c7fb4af3ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of tracked measurable outputs (number of outputs in output vector, y)  <a href="#aa870daab4545632d9af3f6c7fb4af3ed">More...</a><br /></td></tr>
+<tr class="separator:aa870daab4545632d9af3f6c7fb4af3ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeaac1317d46b4269b68a4136a07ac99b"><td class="memItemLeft" align="right" valign="top">static constexpr float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_estimator.html#aeaac1317d46b4269b68a4136a07ac99b">processNoise</a> = 0.05</td></tr>
+<tr class="memdesc:aeaac1317d46b4269b68a4136a07ac99b"><td class="mdescLeft">&#160;</td><td class="mdescRight">State noise from unmodeled influences (model errors/omissions)  <a href="#aeaac1317d46b4269b68a4136a07ac99b">More...</a><br /></td></tr>
+<tr class="separator:aeaac1317d46b4269b68a4136a07ac99b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89405047bb2e0e19414bd5f3dd8d089e"><td class="memItemLeft" align="right" valign="top">static constexpr float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_estimator.html#a89405047bb2e0e19414bd5f3dd8d089e">encoderNoise</a> = 0.04</td></tr>
+<tr class="memdesc:a89405047bb2e0e19414bd5f3dd8d089e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Measurement noise in the encoder.  <a href="#a89405047bb2e0e19414bd5f3dd8d089e">More...</a><br /></td></tr>
+<tr class="separator:a89405047bb2e0e19414bd5f3dd8d089e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b9433f38d9f93882274a0c2b7329231"><td class="memItemLeft" align="right" valign="top">static constexpr float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_estimator.html#a8b9433f38d9f93882274a0c2b7329231">gyroNoise</a> = 0.005</td></tr>
+<tr class="memdesc:a8b9433f38d9f93882274a0c2b7329231"><td class="mdescLeft">&#160;</td><td class="mdescRight">Measurement noise in the gyro.  <a href="#a8b9433f38d9f93882274a0c2b7329231">More...</a><br /></td></tr>
+<tr class="separator:a8b9433f38d9f93882274a0c2b7329231"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22808bcbf394d638a94d2739f2538ba1"><td class="memItemLeft" align="right" valign="top">static constexpr float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_estimator.html#a22808bcbf394d638a94d2739f2538ba1">initCovariance</a> = 0.1</td></tr>
+<tr class="memdesc:a22808bcbf394d638a94d2739f2538ba1"><td class="mdescLeft">&#160;</td><td class="mdescRight">The initial covariance value in each entry of <code>P</code>  <a href="#a22808bcbf394d638a94d2739f2538ba1">More...</a><br /></td></tr>
+<tr class="separator:a22808bcbf394d638a94d2739f2538ba1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This class implements a Kalman Filter in order to estimate a robot's current state. </p>
+<p>The estimated state is then used in motion control to assign wheel velocities accordingly</p>
+<p>Explanations:</p><ul>
+<li><a href="https://www.bzarg.com/p/how-a-kalman-filter-works-in-pictures/">https://www.bzarg.com/p/how-a-kalman-filter-works-in-pictures/</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Kalman_filter">https://en.wikipedia.org/wiki/Kalman_filter</a></li>
+<li><a href="https://www.mathworks.com/videos/series/understanding-kalman-filters.html">https://www.mathworks.com/videos/series/understanding-kalman-filters.html</a> </li>
+</ul>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ab7adc8b41475920123f38b2934ce5247"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab7adc8b41475920123f38b2934ce5247">&#9670;&nbsp;</a></span>RobotEstimator()</h2>
 
@@ -155,7 +219,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void RobotEstimator::getState </td>
           <td>(</td>
-          <td class="paramtype">Eigen::Matrix&lt; float, numStates, 1 &gt; &amp;&#160;</td>
+          <td class="paramtype">Eigen::Matrix&lt; float, <a class="el" href="class_robot_estimator.html#aac86dd93ec242286d0934164d24c5890">numStates</a>, 1 &gt; &amp;&#160;</td>
           <td class="paramname"><em>state</em></td><td>)</td>
           <td></td>
         </tr>
@@ -188,7 +252,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void RobotEstimator::predict </td>
           <td>(</td>
-          <td class="paramtype">Eigen::Matrix&lt; float, numInputs, 1 &gt;&#160;</td>
+          <td class="paramtype">Eigen::Matrix&lt; float, <a class="el" href="class_robot_estimator.html#afde2bc2786e2944bdec8b1c3dc406842">numInputs</a>, 1 &gt;&#160;</td>
           <td class="paramname"><em>u</em></td><td>)</td>
           <td></td>
         </tr>
@@ -223,7 +287,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void RobotEstimator::update </td>
           <td>(</td>
-          <td class="paramtype">Eigen::Matrix&lt; float, numOutputs, 1 &gt;&#160;</td>
+          <td class="paramtype">Eigen::Matrix&lt; float, <a class="el" href="class_robot_estimator.html#aa870daab4545632d9af3f6c7fb4af3ed">numOutputs</a>, 1 &gt;&#160;</td>
           <td class="paramname"><em>z</em></td><td>)</td>
           <td></td>
         </tr>
@@ -249,6 +313,386 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="abb38bfc71c82f01fbd4aa301679be912"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb38bfc71c82f01fbd4aa301679be912">&#9670;&nbsp;</a></span>B</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Eigen::Matrix&lt;float, <a class="el" href="class_robot_estimator.html#aac86dd93ec242286d0934164d24c5890">numStates</a>, <a class="el" href="class_robot_estimator.html#afde2bc2786e2944bdec8b1c3dc406842">numInputs</a>&gt; RobotEstimator::B</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Control Input Matrix. </p>
+<p>Corrects our next state prediction by mapping control input (known influences, <code>u</code>) to our next state </p>
+
+</div>
+</div>
+<a id="a89405047bb2e0e19414bd5f3dd8d089e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89405047bb2e0e19414bd5f3dd8d089e">&#9670;&nbsp;</a></span>encoderNoise</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr float RobotEstimator::encoderNoise = 0.04</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Measurement noise in the encoder. </p>
+
+</div>
+</div>
+<a id="a19b077b3a4382b64b752f61fe745b6c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a19b077b3a4382b64b752f61fe745b6c5">&#9670;&nbsp;</a></span>F</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Eigen::Matrix&lt;float, <a class="el" href="class_robot_estimator.html#aac86dd93ec242286d0934164d24c5890">numStates</a>, <a class="el" href="class_robot_estimator.html#aac86dd93ec242286d0934164d24c5890">numStates</a>&gt; RobotEstimator::F</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>State Transition Matrix/Prediction Matrix. </p>
+<p>Predict our next state based on our current state using dynamics </p>
+
+</div>
+</div>
+<a id="a8b9433f38d9f93882274a0c2b7329231"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b9433f38d9f93882274a0c2b7329231">&#9670;&nbsp;</a></span>gyroNoise</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr float RobotEstimator::gyroNoise = 0.005</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Measurement noise in the gyro. </p>
+
+</div>
+</div>
+<a id="af81d489467461b814d9872755a2e8ad1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af81d489467461b814d9872755a2e8ad1">&#9670;&nbsp;</a></span>H</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Eigen::Matrix&lt;float, <a class="el" href="class_robot_estimator.html#aa870daab4545632d9af3f6c7fb4af3ed">numOutputs</a>, <a class="el" href="class_robot_estimator.html#aac86dd93ec242286d0934164d24c5890">numStates</a>&gt; RobotEstimator::H</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Observation Matrix. </p>
+<p>Predicts the measurements from our sensors (<code>z</code>) from our current state (<code>x_hat</code>). </p>
+
+</div>
+</div>
+<a id="ad8f394c01a63f9f7c026818b3e8bc43c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8f394c01a63f9f7c026818b3e8bc43c">&#9670;&nbsp;</a></span>I</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Eigen::Matrix&lt;float, <a class="el" href="class_robot_estimator.html#aac86dd93ec242286d0934164d24c5890">numStates</a>, <a class="el" href="class_robot_estimator.html#aac86dd93ec242286d0934164d24c5890">numStates</a>&gt; RobotEstimator::I</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Identity Matrix. </p>
+<p>A square matrix with only 1s on the diagonals </p>
+
+</div>
+</div>
+<a id="a22808bcbf394d638a94d2739f2538ba1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22808bcbf394d638a94d2739f2538ba1">&#9670;&nbsp;</a></span>initCovariance</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr float RobotEstimator::initCovariance = 0.1</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The initial covariance value in each entry of <code>P</code> </p>
+
+</div>
+</div>
+<a id="afde2bc2786e2944bdec8b1c3dc406842"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afde2bc2786e2944bdec8b1c3dc406842">&#9670;&nbsp;</a></span>numInputs</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr int RobotEstimator::numInputs = 4</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Number of applied inputs (number of control inputs in control vector, u) </p>
+<p>4 total:</p><ul>
+<li>Motor duty cycle for each motor (% max), controls average applied voltage </li>
+</ul>
+
+</div>
+</div>
+<a id="aa870daab4545632d9af3f6c7fb4af3ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa870daab4545632d9af3f6c7fb4af3ed">&#9670;&nbsp;</a></span>numOutputs</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr int RobotEstimator::numOutputs = 5</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Number of tracked measurable outputs (number of outputs in output vector, y) </p>
+<p>5 total:</p><ul>
+<li>4 wheel motor encoders (rad/s)</li>
+<li>Gyro angular velocity (rad/s) </li>
+</ul>
+
+</div>
+</div>
+<a id="aac86dd93ec242286d0934164d24c5890"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac86dd93ec242286d0934164d24c5890">&#9670;&nbsp;</a></span>numStates</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr int RobotEstimator::numStates = 3</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Number of tracked states (number of states in state vector, x_hat) </p>
+<p>3 Total:</p><ul>
+<li>X and Y: linear velocities of robot body (m/s)</li>
+<li>W: angular velocity of robot body around z axis (rad/s) </li>
+</ul>
+
+</div>
+</div>
+<a id="a1555a9f6c32fb88e2e5c5eacc4c9e84d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1555a9f6c32fb88e2e5c5eacc4c9e84d">&#9670;&nbsp;</a></span>P</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Eigen::Matrix&lt;float, <a class="el" href="class_robot_estimator.html#aac86dd93ec242286d0934164d24c5890">numStates</a>, <a class="el" href="class_robot_estimator.html#aac86dd93ec242286d0934164d24c5890">numStates</a>&gt; RobotEstimator::P</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Covariance Estimate Matrix. </p>
+<p>A matrix whose entries are the estimated covariances between any two state variables. Entries represent our overall uncertainty in our state vector (<code>x_hat</code>). </p>
+
+</div>
+</div>
+<a id="aeaac1317d46b4269b68a4136a07ac99b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeaac1317d46b4269b68a4136a07ac99b">&#9670;&nbsp;</a></span>processNoise</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr float RobotEstimator::processNoise = 0.05</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>State noise from unmodeled influences (model errors/omissions) </p>
+
+</div>
+</div>
+<a id="a98f3295da570a740b9dc4045174592b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a98f3295da570a740b9dc4045174592b9">&#9670;&nbsp;</a></span>Q</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Eigen::Matrix&lt;float, <a class="el" href="class_robot_estimator.html#aac86dd93ec242286d0934164d24c5890">numStates</a>, <a class="el" href="class_robot_estimator.html#aac86dd93ec242286d0934164d24c5890">numStates</a>&gt; RobotEstimator::Q</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Covariance Matrix for Process Noise. </p>
+<p>A matrix whose entries are the estimated covariances between any two state variables. Entries represent uncertainty in our state vector (<code>x_hat</code>) due to unmodeled influences. </p>
+
+</div>
+</div>
+<a id="a4c87842e68dc39ab7acdce575ef3fa2c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c87842e68dc39ab7acdce575ef3fa2c">&#9670;&nbsp;</a></span>R</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Eigen::Matrix&lt;float, <a class="el" href="class_robot_estimator.html#aa870daab4545632d9af3f6c7fb4af3ed">numOutputs</a>, <a class="el" href="class_robot_estimator.html#aa870daab4545632d9af3f6c7fb4af3ed">numOutputs</a>&gt; RobotEstimator::R</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Covariance Matrix for Observation Noise. </p>
+<p>A matrix whose entries are the estimated covariances between any two state variables. Entries represent uncertainty in our measurements (<code>z</code>) due to random noise </p>
+
+</div>
+</div>
+<a id="a581ef2c2d4b55f87d0825f07e6836a35"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a581ef2c2d4b55f87d0825f07e6836a35">&#9670;&nbsp;</a></span>x_hat</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Eigen::Matrix&lt;float, <a class="el" href="class_robot_estimator.html#aac86dd93ec242286d0934164d24c5890">numStates</a>, 1&gt; RobotEstimator::x_hat</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Current State Vector Estimate. </p>
+<p>What the robot estimator believes our current state to be </p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/developer/robocup-firmware/robot/control/Inc/motion-control/<a class="el" href="_robot_estimator_8hpp_source.html">RobotEstimator.hpp</a></li>
 <li>/home/developer/robocup-firmware/robot/control/Src/motion-control/<a class="el" href="_robot_estimator_8cpp.html">RobotEstimator.cpp</a></li>
@@ -259,7 +703,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_robot_estimator.html">RobotEstimator</a></li>
-    <li class="footer">Generated on Mon Jun 8 2020 00:49:57 for GT RoboCup SSL by
+    <li class="footer">Generated on Sun Jun 14 2020 13:26:01 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

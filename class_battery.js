@@ -4,5 +4,10 @@ var class_battery =
     [ "getBattPercentage", "class_battery.html#a2c35b1f11881ca7da347a32c6e28e457", null ],
     [ "getRaw", "class_battery.html#adcda499b303251aac697577249df77ff", null ],
     [ "isBattCritical", "class_battery.html#afb3dd22b444cb281d76e187a92ce8ec1", null ],
-    [ "update", "class_battery.html#a85dcc13e31dfb66ce3ce217b78a7df7c", null ]
+    [ "update", "class_battery.html#a85dcc13e31dfb66ce3ce217b78a7df7c", null ],
+    [ "BATT_VOLTAGE_READ_RANGE", "class_battery.html#a2be3d152ac705fbe9bf74ec2eb7582ae", null ],
+    [ "lastReadPercentage", "class_battery.html#a03d322ef9b9b38ddc3a7ac9a18e6361e", null ],
+    [ "MAX_SAFE_BATT_VOLTAGE_READ", "class_battery.html#a4fae09007fc55acb3a23130f89ea0d55", null ],
+    [ "MIN_SAFE_BATT_VOLTAGE_READ", "class_battery.html#ac5948a5d7a45475b298568dcdb371b1d", null ],
+    [ "rawVoltage", "class_battery.html#a987fe263bc4c7b5d5d093fae612ee5db", null ]
 ];

@@ -3,7 +3,7 @@ digraph "LockedStruct::Lock::~Lock"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node6 [label="LockedStruct::Lock\l::~Lock",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
-  Node6 -> Node7 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node7 [label="LockedStruct::Lock\l::Lock",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_locked_struct_1_1_lock.html#a114a6b364423baf17d26a66b488e41c4"];
+  Node5 [label="LockedStruct::Lock\l::~Lock",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node5 -> Node6 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="LockedStruct::release\l_mutex",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_locked_struct.html#ac3be20adb21eef5da630903817926e12"];
 }

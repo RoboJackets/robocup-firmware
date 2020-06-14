@@ -88,6 +88,9 @@ $(document).ready(function(){initNavTree('struct_debug_info.html','');});
 <div class="title">DebugInfo Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>18 integers for debug info for any of the modules to pass back to soccer  
+ <a href="struct_debug_info.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for DebugInfo:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -101,9 +104,16 @@ $(document).ready(function(){initNavTree('struct_debug_info.html','');});
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a8454e0adfa96e0b49763e96820e9f398"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_debug_info.html#a8454e0adfa96e0b49763e96820e9f398">val</a> [18]</td></tr>
+<tr class="memdesc:a8454e0adfa96e0b49763e96820e9f398"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of integers of debug info for soccer.  <a href="#a8454e0adfa96e0b49763e96820e9f398">More...</a><br /></td></tr>
 <tr class="separator:a8454e0adfa96e0b49763e96820e9f398"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Data Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>18 integers for debug info for any of the modules to pass back to soccer </p>
+<dl class="section note"><dt>Note</dt><dd>Use <code>extern DebugInfo debugInfo;</code> at the top of any cpp and then set specific values using <code>debugInfo.val[i] = X</code></dd>
+<dd>
+<b>It is up to the user to make sure the indices don't conflict</b></dd></dl>
+<p>Passed from any module to <a class="el" href="class_radio_module.html">RadioModule</a> </p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="a8454e0adfa96e0b49763e96820e9f398"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8454e0adfa96e0b49763e96820e9f398">&#9670;&nbsp;</a></span>val</h2>
 
@@ -116,6 +126,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Array of integers of debug info for soccer. </p>
+
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
@@ -127,7 +139,7 @@ Public Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="struct_debug_info.html">DebugInfo</a></li>
-    <li class="footer">Generated on Mon Jun 8 2020 00:49:57 for GT RoboCup SSL by
+    <li class="footer">Generated on Sun Jun 14 2020 13:26:01 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

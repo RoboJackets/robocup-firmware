@@ -2,5 +2,5 @@ digraph "RobotEstimator"
 {
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
-  Node1 [label="{RobotEstimator\n||+ RobotEstimator()\l+ predict()\l+ update()\l+ getState()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node1 [label="{RobotEstimator\n|- F\l- B\l- H\l- Q\l- R\l- P\l- I\l- x_hat\l- numStates\l- numInputs\l- numOutputs\l- processNoise\l- encoderNoise\l- gyroNoise\l- initCovariance\l|+ RobotEstimator()\l+ predict()\l+ update()\l+ getState()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
 }

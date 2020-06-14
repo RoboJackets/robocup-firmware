@@ -84,11 +84,17 @@ $(document).ready(function(){initNavTree('class_motion_control_module.html','');
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="class_motion_control_module-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">MotionControlModule Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Module handling robot state estimation and motion control for motors.  
+ <a href="class_motion_control_module.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for MotionControlModule:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -110,10 +116,11 @@ $(document).ready(function(){initNavTree('class_motion_control_module.html','');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a1c1a6b82b985533d633a3ced7cd5feee"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_motion_control_module.html#a1c1a6b82b985533d633a3ced7cd5feee">MotionControlModule</a> (<a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_battery_voltage.html">BatteryVoltage</a> &gt; &amp;batteryVoltage, <a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_i_m_u_data.html">IMUData</a> &gt; &amp;imuData, <a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_motion_command.html">MotionCommand</a> &gt; &amp;motionCommand, <a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_motor_feedback.html">MotorFeedback</a> &gt; &amp;motorFeedback, <a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_motor_command.html">MotorCommand</a> &gt; &amp;motorCommand)</td></tr>
+<tr class="memitem:a1c1a6b82b985533d633a3ced7cd5feee"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_motion_control_module.html#a1c1a6b82b985533d633a3ced7cd5feee">MotionControlModule</a> (<a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_battery_voltage.html">BatteryVoltage</a> &gt; &amp;<a class="el" href="class_motion_control_module.html#ac487782699fe387b8585a9a056213e86">batteryVoltage</a>, <a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_i_m_u_data.html">IMUData</a> &gt; &amp;<a class="el" href="class_motion_control_module.html#a1afd02f786d51923eb78af587b4fab9b">imuData</a>, <a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_motion_command.html">MotionCommand</a> &gt; &amp;<a class="el" href="class_motion_control_module.html#ad17884ead7ab226c0d0101302c28938a">motionCommand</a>, <a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_motor_feedback.html">MotorFeedback</a> &gt; &amp;<a class="el" href="class_motion_control_module.html#ae259b221aba4cfad7b3d4e617c25b3bb">motorFeedback</a>, <a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_motor_command.html">MotorCommand</a> &gt; &amp;<a class="el" href="class_motion_control_module.html#a1e856e0e3c5ffdadfa99ca814a202101">motorCommand</a>)</td></tr>
+<tr class="memdesc:a1c1a6b82b985533d633a3ced7cd5feee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for MotionControlModule.  <a href="#a1c1a6b82b985533d633a3ced7cd5feee">More...</a><br /></td></tr>
 <tr class="separator:a1c1a6b82b985533d633a3ced7cd5feee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae9ce65e3c14d0effbac1c1a3b93fb5b1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_motion_control_module.html#ae9ce65e3c14d0effbac1c1a3b93fb5b1">entry</a> () override</td></tr>
-<tr class="memdesc:ae9ce65e3c14d0effbac1c1a3b93fb5b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by the RTOS at the desired update rate.  <a href="#ae9ce65e3c14d0effbac1c1a3b93fb5b1">More...</a><br /></td></tr>
+<tr class="memdesc:ae9ce65e3c14d0effbac1c1a3b93fb5b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Code to run when called by RTOS once per system tick (<code>kperiod</code>)  <a href="#ae9ce65e3c14d0effbac1c1a3b93fb5b1">More...</a><br /></td></tr>
 <tr class="separator:ae9ce65e3c14d0effbac1c1a3b93fb5b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_class_generic_module"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_generic_module')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_generic_module.html">GenericModule</a></td></tr>
 <tr class="memitem:ad460da2a697ba4eab4167ba5e6075325 inherit pub_methods_class_generic_module"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_module.html#ad460da2a697ba4eab4167ba5e6075325">GenericModule</a> (std::chrono::milliseconds <a class="el" href="class_generic_module.html#aa633beb1513b09b54b82ccd9348d1d17">period</a>, const char *<a class="el" href="class_generic_module.html#a72f5ba62ae68e8d0e73b120562a5387b">name</a>, int <a class="el" href="class_generic_module.html#a37f43c666f3457c63651c3c4834dc543">priority</a>=1, int <a class="el" href="class_generic_module.html#a442ff78f9167bb26b2327aebab4e6210">stackSize</a>=1024)</td></tr>
@@ -125,27 +132,68 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
 <tr class="memitem:af94779079164664908c873210bcd90a2"><td class="memItemLeft" align="right" valign="top">static constexpr float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_motion_control_module.html#af94779079164664908c873210bcd90a2">kFrequency</a> = 200.0f</td></tr>
+<tr class="memdesc:af94779079164664908c873210bcd90a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of times per second (frequency) that MotionControlModule should run (Hz)  <a href="#af94779079164664908c873210bcd90a2">More...</a><br /></td></tr>
 <tr class="separator:af94779079164664908c873210bcd90a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8a1840bfdc94b4416259b97657ca0330"><td class="memItemLeft" align="right" valign="top">static constexpr std::chrono::milliseconds&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_motion_control_module.html#a8a1840bfdc94b4416259b97657ca0330">kPeriod</a> {static_cast&lt;int&gt;(1000 / <a class="el" href="class_motion_control_module.html#af94779079164664908c873210bcd90a2">kFrequency</a>)}</td></tr>
+<tr class="memdesc:a8a1840bfdc94b4416259b97657ca0330"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of seconds elapsed (period) between MotionControlModule runs (milliseconds)  <a href="#a8a1840bfdc94b4416259b97657ca0330">More...</a><br /></td></tr>
 <tr class="separator:a8a1840bfdc94b4416259b97657ca0330"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7de04406f96b1101ef4bc04ace6e7b6d"><td class="memItemLeft" align="right" valign="top">static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_motion_control_module.html#a7de04406f96b1101ef4bc04ace6e7b6d">kPriority</a> = 3</td></tr>
+<tr class="memdesc:a7de04406f96b1101ef4bc04ace6e7b6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Priority used by RTOS.  <a href="#a7de04406f96b1101ef4bc04ace6e7b6d">More...</a><br /></td></tr>
 <tr class="separator:a7de04406f96b1101ef4bc04ace6e7b6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:aa465c7f948ee9c5522b14b8def68f241"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_motion_control_module.html#aa465c7f948ee9c5522b14b8def68f241">isRecentUpdate</a> (uint32_t lastUpdateTime)</td></tr>
+<tr class="memdesc:aa465c7f948ee9c5522b14b8def68f241"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks the update time versus the current time and timout given below.  <a href="#aa465c7f948ee9c5522b14b8def68f241">More...</a><br /></td></tr>
+<tr class="separator:aa465c7f948ee9c5522b14b8def68f241"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:ac487782699fe387b8585a9a056213e86"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_battery_voltage.html">BatteryVoltage</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_motion_control_module.html#ac487782699fe387b8585a9a056213e86">batteryVoltage</a></td></tr>
+<tr class="separator:ac487782699fe387b8585a9a056213e86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1afd02f786d51923eb78af587b4fab9b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_i_m_u_data.html">IMUData</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_motion_control_module.html#a1afd02f786d51923eb78af587b4fab9b">imuData</a></td></tr>
+<tr class="separator:a1afd02f786d51923eb78af587b4fab9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad17884ead7ab226c0d0101302c28938a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_motion_command.html">MotionCommand</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_motion_control_module.html#ad17884ead7ab226c0d0101302c28938a">motionCommand</a></td></tr>
+<tr class="separator:ad17884ead7ab226c0d0101302c28938a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae259b221aba4cfad7b3d4e617c25b3bb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_motor_feedback.html">MotorFeedback</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_motion_control_module.html#ae259b221aba4cfad7b3d4e617c25b3bb">motorFeedback</a></td></tr>
+<tr class="separator:ae259b221aba4cfad7b3d4e617c25b3bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e856e0e3c5ffdadfa99ca814a202101"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_motor_command.html">MotorCommand</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_motion_control_module.html#a1e856e0e3c5ffdadfa99ca814a202101">motorCommand</a></td></tr>
+<tr class="separator:a1e856e0e3c5ffdadfa99ca814a202101"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aafae109345b58942b79559efd60d584b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_dribbler_controller.html">DribblerController</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_motion_control_module.html#aafae109345b58942b79559efd60d584b">dribblerController</a></td></tr>
+<tr class="separator:aafae109345b58942b79559efd60d584b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0beef0155ae4274389cefdb8e52974ef"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_robot_controller.html">RobotController</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_motion_control_module.html#a0beef0155ae4274389cefdb8e52974ef">robotController</a></td></tr>
+<tr class="separator:a0beef0155ae4274389cefdb8e52974ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b39572dfdd7b39e471c8ad355671ece"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_robot_estimator.html">RobotEstimator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_motion_control_module.html#a4b39572dfdd7b39e471c8ad355671ece">robotEstimator</a></td></tr>
+<tr class="separator:a4b39572dfdd7b39e471c8ad355671ece"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55876a0062d293316e0ae7d2968484b0"><td class="memItemLeft" align="right" valign="top">Eigen::Matrix&lt; float, 4, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_motion_control_module.html#a55876a0062d293316e0ae7d2968484b0">prevCommand</a></td></tr>
+<tr class="separator:a55876a0062d293316e0ae7d2968484b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:a33f5513bedd558b6590815f874c5685b"><td class="memItemLeft" align="right" valign="top">static constexpr uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_motion_control_module.html#a33f5513bedd558b6590815f874c5685b">COMMAND_TIMEOUT</a> = 250</td></tr>
+<tr class="memdesc:a33f5513bedd558b6590815f874c5685b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Max amount of time that can elapse from the latest command from the radio (milliseconds)  <a href="#a33f5513bedd558b6590815f874c5685b">More...</a><br /></td></tr>
+<tr class="separator:a33f5513bedd558b6590815f874c5685b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pub_attribs_class_generic_module"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_class_generic_module')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="class_generic_module.html">GenericModule</a></td></tr>
 <tr class="memitem:aa633beb1513b09b54b82ccd9348d1d17 inherit pub_attribs_class_generic_module"><td class="memItemLeft" align="right" valign="top">std::chrono::milliseconds&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_module.html#aa633beb1513b09b54b82ccd9348d1d17">period</a></td></tr>
+<tr class="memdesc:aa633beb1513b09b54b82ccd9348d1d17 inherit pub_attribs_class_generic_module"><td class="mdescLeft">&#160;</td><td class="mdescRight">The module period (milliseconds)  <a href="class_generic_module.html#aa633beb1513b09b54b82ccd9348d1d17">More...</a><br /></td></tr>
 <tr class="separator:aa633beb1513b09b54b82ccd9348d1d17 inherit pub_attribs_class_generic_module"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a72f5ba62ae68e8d0e73b120562a5387b inherit pub_attribs_class_generic_module"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_module.html#a72f5ba62ae68e8d0e73b120562a5387b">name</a></td></tr>
+<tr class="memdesc:a72f5ba62ae68e8d0e73b120562a5387b inherit pub_attribs_class_generic_module"><td class="mdescLeft">&#160;</td><td class="mdescRight">A human-readable name for the process.  <a href="class_generic_module.html#a72f5ba62ae68e8d0e73b120562a5387b">More...</a><br /></td></tr>
 <tr class="separator:a72f5ba62ae68e8d0e73b120562a5387b inherit pub_attribs_class_generic_module"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a37f43c666f3457c63651c3c4834dc543 inherit pub_attribs_class_generic_module"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_module.html#a37f43c666f3457c63651c3c4834dc543">priority</a> = 1</td></tr>
+<tr class="memdesc:a37f43c666f3457c63651c3c4834dc543 inherit pub_attribs_class_generic_module"><td class="mdescLeft">&#160;</td><td class="mdescRight">The priority of the module (default: low)  <a href="class_generic_module.html#a37f43c666f3457c63651c3c4834dc543">More...</a><br /></td></tr>
 <tr class="separator:a37f43c666f3457c63651c3c4834dc543 inherit pub_attribs_class_generic_module"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a442ff78f9167bb26b2327aebab4e6210 inherit pub_attribs_class_generic_module"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_module.html#a442ff78f9167bb26b2327aebab4e6210">stackSize</a> = 1024</td></tr>
 <tr class="separator:a442ff78f9167bb26b2327aebab4e6210 inherit pub_attribs_class_generic_module"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa40dec1e9e7037584fc29efe09c4e181 inherit pub_attribs_class_generic_module"><td class="memItemLeft" align="right" valign="top">TaskHandle_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_module.html#aa40dec1e9e7037584fc29efe09c4e181">handle</a> = nullptr</td></tr>
 <tr class="separator:aa40dec1e9e7037584fc29efe09c4e181 inherit pub_attribs_class_generic_module"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Module handling robot state estimation and motion control for motors. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a1c1a6b82b985533d633a3ced7cd5feee"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1c1a6b82b985533d633a3ced7cd5feee">&#9670;&nbsp;</a></span>MotionControlModule()</h2>
 
@@ -189,6 +237,18 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Constructor for MotionControlModule. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">batteryVoltage</td><td>Shared memory location containing data on battery voltage and critical status </td></tr>
+    <tr><td class="paramname">imuData</td><td>Shared memory location containing linear acceleration and angular velocity along/about X,Y, and Z axes </td></tr>
+    <tr><td class="paramname">motionCommand</td><td>Shared memory location containing dribbler rotation, x and y linear velocity, z angular velocity </td></tr>
+    <tr><td class="paramname">motorFeedback</td><td>Shared memory location containing encoder counts and currents to each wheel motor </td></tr>
+    <tr><td class="paramname">motorCommand</td><td>Shared memory location containing wheel motor duty cycles and dribbler rotation speed </td></tr>
+  </table>
+  </dd>
+</dl>
 <div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-2-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-2-summary" class="dynsummary" style="display:block;">
@@ -214,6 +274,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">void MotionControlModule::entry </td>
           <td>(</td>
+          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -225,7 +286,8 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Called by the RTOS at the desired update rate. </p>
+<p>Code to run when called by RTOS once per system tick (<code>kperiod</code>) </p>
+<p>Uses IMU Data, motion data, motor data, and battery voltage data to update robot state estimation and motor controllers. </p>
 
 <p>Implements <a class="el" href="class_generic_module.html#a3789bbdeff222e7320e262a622b52237">GenericModule</a>.</p>
 <div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -240,7 +302,135 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="aa465c7f948ee9c5522b14b8def68f241"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa465c7f948ee9c5522b14b8def68f241">&#9670;&nbsp;</a></span>isRecentUpdate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MotionControlModule::isRecentUpdate </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>lastUpdateTime</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Checks the update time versus the current time and timout given below. </p>
+<div id="dynsection-4" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-4-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-4-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-4-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_motion_control_module_aa465c7f948ee9c5522b14b8def68f241_icgraph.png" border="0" usemap="#class_motion_control_module_aa465c7f948ee9c5522b14b8def68f241_icgraph" alt=""/></div>
+<map name="class_motion_control_module_aa465c7f948ee9c5522b14b8def68f241_icgraph" id="class_motion_control_module_aa465c7f948ee9c5522b14b8def68f241_icgraph">
+</map>
+</div>
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="ac487782699fe387b8585a9a056213e86"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac487782699fe387b8585a9a056213e86">&#9670;&nbsp;</a></span>batteryVoltage</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt;<a class="el" href="struct_battery_voltage.html">BatteryVoltage</a>&gt;&amp; MotionControlModule::batteryVoltage</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a33f5513bedd558b6590815f874c5685b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a33f5513bedd558b6590815f874c5685b">&#9670;&nbsp;</a></span>COMMAND_TIMEOUT</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr uint32_t MotionControlModule::COMMAND_TIMEOUT = 250</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Max amount of time that can elapse from the latest command from the radio (milliseconds) </p>
+<p>This is a safety feature to prevent the motors from moving if the motion control dies </p>
+
+</div>
+</div>
+<a id="aafae109345b58942b79559efd60d584b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aafae109345b58942b79559efd60d584b">&#9670;&nbsp;</a></span>dribblerController</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_dribbler_controller.html">DribblerController</a> MotionControlModule::dribblerController</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1afd02f786d51923eb78af587b4fab9b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1afd02f786d51923eb78af587b4fab9b">&#9670;&nbsp;</a></span>imuData</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt;<a class="el" href="struct_i_m_u_data.html">IMUData</a>&gt;&amp; MotionControlModule::imuData</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="af94779079164664908c873210bcd90a2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af94779079164664908c873210bcd90a2">&#9670;&nbsp;</a></span>kFrequency</h2>
 
@@ -260,6 +450,8 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Number of times per second (frequency) that MotionControlModule should run (Hz) </p>
 
 </div>
 </div>
@@ -283,6 +475,8 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Number of seconds elapsed (period) between MotionControlModule runs (milliseconds) </p>
+
 </div>
 </div>
 <a id="a7de04406f96b1101ef4bc04ace6e7b6d"></a>
@@ -305,6 +499,140 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Priority used by RTOS. </p>
+
+</div>
+</div>
+<a id="ad17884ead7ab226c0d0101302c28938a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad17884ead7ab226c0d0101302c28938a">&#9670;&nbsp;</a></span>motionCommand</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt;<a class="el" href="struct_motion_command.html">MotionCommand</a>&gt;&amp; MotionControlModule::motionCommand</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1e856e0e3c5ffdadfa99ca814a202101"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e856e0e3c5ffdadfa99ca814a202101">&#9670;&nbsp;</a></span>motorCommand</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt;<a class="el" href="struct_motor_command.html">MotorCommand</a>&gt;&amp; MotionControlModule::motorCommand</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae259b221aba4cfad7b3d4e617c25b3bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae259b221aba4cfad7b3d4e617c25b3bb">&#9670;&nbsp;</a></span>motorFeedback</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt;<a class="el" href="struct_motor_feedback.html">MotorFeedback</a>&gt;&amp; MotionControlModule::motorFeedback</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a55876a0062d293316e0ae7d2968484b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a55876a0062d293316e0ae7d2968484b0">&#9670;&nbsp;</a></span>prevCommand</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Eigen::Matrix&lt;float, 4, 1&gt; MotionControlModule::prevCommand</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0beef0155ae4274389cefdb8e52974ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0beef0155ae4274389cefdb8e52974ef">&#9670;&nbsp;</a></span>robotController</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_robot_controller.html">RobotController</a> MotionControlModule::robotController</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4b39572dfdd7b39e471c8ad355671ece"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b39572dfdd7b39e471c8ad355671ece">&#9670;&nbsp;</a></span>robotEstimator</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_robot_estimator.html">RobotEstimator</a> MotionControlModule::robotEstimator</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
@@ -317,7 +645,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_motion_control_module.html">MotionControlModule</a></li>
-    <li class="footer">Generated on Mon Jun 8 2020 00:49:57 for GT RoboCup SSL by
+    <li class="footer">Generated on Sun Jun 14 2020 13:26:01 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

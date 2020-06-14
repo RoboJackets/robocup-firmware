@@ -260,5 +260,8 @@ var class_m_p_u6050 =
     [ "writeMemoryBlock", "class_m_p_u6050.html#aae135772b45e1c7968b55f4f01b3757f", null ],
     [ "writeMemoryByte", "class_m_p_u6050.html#a20de45af9109402f0cfe785f8fdbf439", null ],
     [ "writeProgDMPConfigurationSet", "class_m_p_u6050.html#a160a3d018a81eb85a33874a43f44b3ea", null ],
-    [ "writeProgMemoryBlock", "class_m_p_u6050.html#a201dc0aa819f451584c575c5a7590e10", null ]
+    [ "writeProgMemoryBlock", "class_m_p_u6050.html#a201dc0aa819f451584c575c5a7590e10", null ],
+    [ "buffer", "class_m_p_u6050.html#ad2000cad671bb7b293e26f2d463d4cea", null ],
+    [ "devAddr", "class_m_p_u6050.html#ad248bbf6e9da395ab67f7049b50ae474", null ],
+    [ "i2Cdev", "class_m_p_u6050.html#a21a3dafd707d161dcd0b7e429b8c3447", null ]
 ];

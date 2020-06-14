@@ -88,6 +88,9 @@ $(document).ready(function(){initNavTree('struct_f_p_g_a_status.html','');});
 <div class="title">FPGAStatus Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Contains data on whether FPGA and motors are working or not.  
+ <a href="struct_f_p_g_a_status.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for FPGAStatus:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -101,17 +104,28 @@ $(document).ready(function(){initNavTree('struct_f_p_g_a_status.html','');});
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a7698dc8aedb4a3d1ca400ac82b0c4606"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_f_p_g_a_status.html#a7698dc8aedb4a3d1ca400ac82b0c4606">isValid</a> = false</td></tr>
+<tr class="memdesc:a7698dc8aedb4a3d1ca400ac82b0c4606"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores whether given data is valid.  <a href="#a7698dc8aedb4a3d1ca400ac82b0c4606">More...</a><br /></td></tr>
 <tr class="separator:a7698dc8aedb4a3d1ca400ac82b0c4606"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a40d1d640912376ed1c79dbd3d22c045a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_f_p_g_a_status.html#a40d1d640912376ed1c79dbd3d22c045a">initialized</a> = false</td></tr>
+<tr class="memdesc:a40d1d640912376ed1c79dbd3d22c045a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores whether FPGA has been initialized.  <a href="#a40d1d640912376ed1c79dbd3d22c045a">More...</a><br /></td></tr>
 <tr class="separator:a40d1d640912376ed1c79dbd3d22c045a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aff5aa87588ba794aaa1a374163bfd530"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_f_p_g_a_status.html#aff5aa87588ba794aaa1a374163bfd530">lastUpdate</a></td></tr>
+<tr class="memdesc:aff5aa87588ba794aaa1a374163bfd530"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time at which FPGAStatus was last updated (milliseconds)  <a href="#aff5aa87588ba794aaa1a374163bfd530">More...</a><br /></td></tr>
 <tr class="separator:aff5aa87588ba794aaa1a374163bfd530"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac06d8506b730488846e6c0705770807c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_f_p_g_a_status.html#ac06d8506b730488846e6c0705770807c">motorHasErrors</a> [5]</td></tr>
+<tr class="memdesc:ac06d8506b730488846e6c0705770807c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores whether each of the motors has an error.  <a href="#ac06d8506b730488846e6c0705770807c">More...</a><br /></td></tr>
 <tr class="separator:ac06d8506b730488846e6c0705770807c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae70b30dc79ee4a5d544e7e118960c71d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_f_p_g_a_status.html#ae70b30dc79ee4a5d544e7e118960c71d">FPGAHasError</a></td></tr>
+<tr class="memdesc:ae70b30dc79ee4a5d544e7e118960c71d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores whether FPGA has an error.  <a href="#ae70b30dc79ee4a5d544e7e118960c71d">More...</a><br /></td></tr>
 <tr class="separator:ae70b30dc79ee4a5d544e7e118960c71d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Data Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Contains data on whether FPGA and motors are working or not. </p>
+<p>Passed from <a class="el" href="class_f_p_g_a_module.html">FPGAModule</a> to</p><ul>
+<li><a class="el" href="class_l_e_d_module.html">LEDModule</a></li>
+<li><a class="el" href="class_radio_module.html">RadioModule</a> </li>
+</ul>
+</div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="ae70b30dc79ee4a5d544e7e118960c71d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae70b30dc79ee4a5d544e7e118960c71d">&#9670;&nbsp;</a></span>FPGAHasError</h2>
 
@@ -123,6 +137,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Stores whether FPGA has an error. </p>
 
 </div>
 </div>
@@ -138,6 +154,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Stores whether FPGA has been initialized. </p>
+
 </div>
 </div>
 <a id="a7698dc8aedb4a3d1ca400ac82b0c4606"></a>
@@ -151,6 +169,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Stores whether given data is valid. </p>
 
 </div>
 </div>
@@ -166,6 +186,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Time at which FPGAStatus was last updated (milliseconds) </p>
+
 </div>
 </div>
 <a id="ac06d8506b730488846e6c0705770807c"></a>
@@ -180,6 +202,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Stores whether each of the motors has an error. </p>
+
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
@@ -191,7 +215,7 @@ Public Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="struct_f_p_g_a_status.html">FPGAStatus</a></li>
-    <li class="footer">Generated on Mon Jun 8 2020 00:49:57 for GT RoboCup SSL by
+    <li class="footer">Generated on Sun Jun 14 2020 13:26:01 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

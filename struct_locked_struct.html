@@ -84,6 +84,8 @@ $(document).ready(function(){initNavTree('struct_locked_struct.html','');});
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="struct_locked_struct-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -138,6 +140,22 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a915c1d48aeaf29c4af2897122ad4b486"><td class="memItemLeft" align="right" valign="top">T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_locked_struct.html#a915c1d48aeaf29c4af2897122ad4b486">unsafe_value</a> ()</td></tr>
 <tr class="memdesc:a915c1d48aeaf29c4af2897122ad4b486"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bypass the locking system to directly get a pointer to the underlying data.  <a href="#a915c1d48aeaf29c4af2897122ad4b486">More...</a><br /></td></tr>
 <tr class="separator:a915c1d48aeaf29c4af2897122ad4b486"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:aa8f0f689d346bc01c87c4e40d8ca6af4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_locked_struct.html#aa8f0f689d346bc01c87c4e40d8ca6af4">acquire_mutex</a> ()</td></tr>
+<tr class="separator:aa8f0f689d346bc01c87c4e40d8ca6af4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3be20adb21eef5da630903817926e12"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_locked_struct.html#ac3be20adb21eef5da630903817926e12">release_mutex</a> ()</td></tr>
+<tr class="separator:ac3be20adb21eef5da630903817926e12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a199e5c0cffe282660cda05146cba4f4d"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_locked_struct.html#a199e5c0cffe282660cda05146cba4f4d">value</a></td></tr>
+<tr class="separator:a199e5c0cffe282660cda05146cba4f4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add8ebde9c1a8cc5559b8bf4fe7c6e7b9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_locked_struct.html#add8ebde9c1a8cc5559b8bf4fe7c6e7b9">mutex_depth</a> = 0</td></tr>
+<tr class="separator:add8ebde9c1a8cc5559b8bf4fe7c6e7b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8240f3ab701676640d62122ac471c2f3"><td class="memItemLeft" align="right" valign="top">SemaphoreHandle_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_locked_struct.html#a8240f3ab701676640d62122ac471c2f3">mutex</a> = nullptr</td></tr>
+<tr class="separator:a8240f3ab701676640d62122ac471c2f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -281,6 +299,42 @@ template&lt;typename T&gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="aa8f0f689d346bc01c87c4e40d8ca6af4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa8f0f689d346bc01c87c4e40d8ca6af4">&#9670;&nbsp;</a></span>acquire_mutex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; T &gt;::acquire_mutex </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-3-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-3-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-3-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="struct_locked_struct_aa8f0f689d346bc01c87c4e40d8ca6af4_icgraph.png" border="0" usemap="#struct_locked_struct_aa8f0f689d346bc01c87c4e40d8ca6af4_icgraph" alt=""/></div>
+<map name="struct_locked_struct_aa8f0f689d346bc01c87c4e40d8ca6af4_icgraph" id="struct_locked_struct_aa8f0f689d346bc01c87c4e40d8ca6af4_icgraph">
+</map>
+</div>
+
+</div>
+</div>
 <a id="aa207b98a1cd6c569a96e7d1d5565478f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa207b98a1cd6c569a96e7d1d5565478f">&#9670;&nbsp;</a></span>lock()</h2>
 
@@ -315,11 +369,11 @@ template&lt;typename T&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a lock on this struct. </dd></dl>
-<div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-3-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-3-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-4" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-4-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-4-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-3-content" class="dyncontent" style="display:none;">
+<div id="dynsection-4-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="struct_locked_struct_aa207b98a1cd6c569a96e7d1d5565478f_icgraph.png" border="0" usemap="#struct_locked_struct_aa207b98a1cd6c569a96e7d1d5565478f_icgraph" alt=""/></div>
 <map name="struct_locked_struct_aa207b98a1cd6c569a96e7d1d5565478f_icgraph" id="struct_locked_struct_aa207b98a1cd6c569a96e7d1d5565478f_icgraph">
 </map>
@@ -352,11 +406,11 @@ template&lt;typename T&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<div id="dynsection-4" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-4-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-4-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-5" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-5-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-5-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-4-content" class="dyncontent" style="display:none;">
+<div id="dynsection-5-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="struct_locked_struct_afa60e7c0d6b348e9298b7ee2fc930b61_icgraph.png" border="0" usemap="#struct_locked_struct_afa60e7c0d6b348e9298b7ee2fc930b61_icgraph" alt=""/></div>
 <map name="struct_locked_struct_afa60e7c0d6b348e9298b7ee2fc930b61_icgraph" id="struct_locked_struct_afa60e7c0d6b348e9298b7ee2fc930b61_icgraph">
 </map>
@@ -392,6 +446,42 @@ template&lt;typename T&gt; </div>
 
 </div>
 </div>
+<a id="ac3be20adb21eef5da630903817926e12"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3be20adb21eef5da630903817926e12">&#9670;&nbsp;</a></span>release_mutex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; T &gt;::release_mutex </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div id="dynsection-6" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-6-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-6-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-6-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="struct_locked_struct_ac3be20adb21eef5da630903817926e12_icgraph.png" border="0" usemap="#struct_locked_struct_ac3be20adb21eef5da630903817926e12_icgraph" alt=""/></div>
+<map name="struct_locked_struct_ac3be20adb21eef5da630903817926e12_icgraph" id="struct_locked_struct_ac3be20adb21eef5da630903817926e12_icgraph">
+</map>
+</div>
+
+</div>
+</div>
 <a id="a915c1d48aeaf29c4af2897122ad4b486"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a915c1d48aeaf29c4af2897122ad4b486">&#9670;&nbsp;</a></span>unsafe_value()</h2>
 
@@ -421,11 +511,11 @@ template&lt;typename T&gt; </div>
 <p>This is obviously unsafe while the scheduler is running, so it should only be used during startup, before the scheduler has been started (i.e. initializing the struct with useful data).</p>
 <p>You should <em>never</em> save the result of this function for longer than the function's scope.</p>
 <dl class="section return"><dt>Returns</dt><dd>A pointer to the underlying struct </dd></dl>
-<div id="dynsection-5" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-5-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-5-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-7" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-7-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-7-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-5-content" class="dyncontent" style="display:none;">
+<div id="dynsection-7-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="struct_locked_struct_a915c1d48aeaf29c4af2897122ad4b486_icgraph.png" border="0" usemap="#struct_locked_struct_a915c1d48aeaf29c4af2897122ad4b486_icgraph" alt=""/></div>
 <map name="struct_locked_struct_a915c1d48aeaf29c4af2897122ad4b486_icgraph" id="struct_locked_struct_a915c1d48aeaf29c4af2897122ad4b486_icgraph">
 </map>
@@ -458,6 +548,79 @@ template&lt;typename T&gt; </div>
 
 </div>
 </div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a8240f3ab701676640d62122ac471c2f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8240f3ab701676640d62122ac471c2f3">&#9670;&nbsp;</a></span>mutex</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">SemaphoreHandle_t <a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; T &gt;::mutex = nullptr</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="add8ebde9c1a8cc5559b8bf4fe7c6e7b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add8ebde9c1a8cc5559b8bf4fe7c6e7b9">&#9670;&nbsp;</a></span>mutex_depth</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; T &gt;::mutex_depth = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a199e5c0cffe282660cda05146cba4f4d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a199e5c0cffe282660cda05146cba4f4d">&#9670;&nbsp;</a></span>value</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">T <a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; T &gt;::value</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>/home/developer/robocup-firmware/robot/lib/Inc/<a class="el" href="_locked_struct_8hpp_source.html">LockedStruct.hpp</a></li>
 </ul>
@@ -467,7 +630,7 @@ template&lt;typename T&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="struct_locked_struct.html">LockedStruct</a></li>
-    <li class="footer">Generated on Mon Jun 8 2020 00:49:57 for GT RoboCup SSL by
+    <li class="footer">Generated on Sun Jun 14 2020 13:26:01 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

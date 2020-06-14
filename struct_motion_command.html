@@ -88,6 +88,9 @@ $(document).ready(function(){initNavTree('struct_motion_command.html','');});
 <div class="title">MotionCommand Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Contains robot body velocities and dribbler commands.  
+ <a href="struct_motion_command.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for MotionCommand:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -101,19 +104,28 @@ $(document).ready(function(){initNavTree('struct_motion_command.html','');});
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:ad32767a3f2b7e690b11c385d5abfc860"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_motion_command.html#ad32767a3f2b7e690b11c385d5abfc860">isValid</a> = false</td></tr>
+<tr class="memdesc:ad32767a3f2b7e690b11c385d5abfc860"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores whether given data is valid.  <a href="#ad32767a3f2b7e690b11c385d5abfc860">More...</a><br /></td></tr>
 <tr class="separator:ad32767a3f2b7e690b11c385d5abfc860"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a235f12ca92802bf0fda5a7cb5f7e6483"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_motion_command.html#a235f12ca92802bf0fda5a7cb5f7e6483">lastUpdate</a></td></tr>
+<tr class="memdesc:a235f12ca92802bf0fda5a7cb5f7e6483"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time that MotionCommand was sent (milliseconds)  <a href="#a235f12ca92802bf0fda5a7cb5f7e6483">More...</a><br /></td></tr>
 <tr class="separator:a235f12ca92802bf0fda5a7cb5f7e6483"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a18f72b9a8370d0730ef6c4398cc98cc1"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_motion_command.html#a18f72b9a8370d0730ef6c4398cc98cc1">bodyXVel</a></td></tr>
+<tr class="memdesc:a18f72b9a8370d0730ef6c4398cc98cc1"><td class="mdescLeft">&#160;</td><td class="mdescRight">x-component of robot's linear velocity (m/s)  <a href="#a18f72b9a8370d0730ef6c4398cc98cc1">More...</a><br /></td></tr>
 <tr class="separator:a18f72b9a8370d0730ef6c4398cc98cc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5599db7982fc509c81dafc2b5b3a43aa"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_motion_command.html#a5599db7982fc509c81dafc2b5b3a43aa">bodyYVel</a></td></tr>
+<tr class="memdesc:a5599db7982fc509c81dafc2b5b3a43aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">y-component of robot's linear velocity (m/s)  <a href="#a5599db7982fc509c81dafc2b5b3a43aa">More...</a><br /></td></tr>
 <tr class="separator:a5599db7982fc509c81dafc2b5b3a43aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a82ec9ba3d74e182f69953f91cf954a47"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_motion_command.html#a82ec9ba3d74e182f69953f91cf954a47">bodyWVel</a></td></tr>
+<tr class="memdesc:a82ec9ba3d74e182f69953f91cf954a47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Angular velocity of robot about z axis (rad/s)  <a href="#a82ec9ba3d74e182f69953f91cf954a47">More...</a><br /></td></tr>
 <tr class="separator:a82ec9ba3d74e182f69953f91cf954a47"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab54add81cd15f7915f2bb59d000aa9b"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_motion_command.html#aab54add81cd15f7915f2bb59d000aa9b">dribbler</a></td></tr>
+<tr class="memdesc:aab54add81cd15f7915f2bb59d000aa9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">7-bit encoding of dribbler rotation (0: no spin - 128: max spin)  <a href="#aab54add81cd15f7915f2bb59d000aa9b">More...</a><br /></td></tr>
 <tr class="separator:aab54add81cd15f7915f2bb59d000aa9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Data Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Contains robot body velocities and dribbler commands. </p>
+<p>Passed from <a class="el" href="class_radio_module.html">RadioModule</a> to <a class="el" href="class_motion_control_module.html">MotionControlModule</a> </p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="a82ec9ba3d74e182f69953f91cf954a47"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a82ec9ba3d74e182f69953f91cf954a47">&#9670;&nbsp;</a></span>bodyWVel</h2>
 
@@ -125,6 +137,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Angular velocity of robot about z axis (rad/s) </p>
 
 </div>
 </div>
@@ -140,6 +154,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>x-component of robot's linear velocity (m/s) </p>
+
 </div>
 </div>
 <a id="a5599db7982fc509c81dafc2b5b3a43aa"></a>
@@ -153,6 +169,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>y-component of robot's linear velocity (m/s) </p>
 
 </div>
 </div>
@@ -168,6 +186,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>7-bit encoding of dribbler rotation (0: no spin - 128: max spin) </p>
+<dl class="section note"><dt>Note</dt><dd><b>This is limited from 0-128</b> </dd></dl>
+
 </div>
 </div>
 <a id="ad32767a3f2b7e690b11c385d5abfc860"></a>
@@ -181,6 +202,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Stores whether given data is valid. </p>
 
 </div>
 </div>
@@ -196,6 +219,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Time that MotionCommand was sent (milliseconds) </p>
+
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
@@ -207,7 +232,7 @@ Public Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="struct_motion_command.html">MotionCommand</a></li>
-    <li class="footer">Generated on Mon Jun 8 2020 00:49:57 for GT RoboCup SSL by
+    <li class="footer">Generated on Sun Jun 14 2020 13:26:01 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

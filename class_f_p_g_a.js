@@ -14,5 +14,11 @@ var class_f_p_g_a =
     [ "send_config", "class_f_p_g_a.html#afe0325a65f4142784871fb0c63255d75", null ],
     [ "set_duty_cycles", "class_f_p_g_a.html#a4daf6e0acbe3eac9db30a5b0aa39cfad", null ],
     [ "set_duty_get_enc", "class_f_p_g_a.html#af0c136e99ee9117b264291ea7390a7ed", null ],
-    [ "watchdog_reset", "class_f_p_g_a.html#aaf55a1decbb2783031f56c99a885f54d", null ]
+    [ "watchdog_reset", "class_f_p_g_a.html#aaf55a1decbb2783031f56c99a885f54d", null ],
+    [ "_done", "class_f_p_g_a.html#adaa56acf2f987cfa0fcaecb972104722", null ],
+    [ "_initB", "class_f_p_g_a.html#a85e15e4e26c41e864cc40fd37bfac9dc", null ],
+    [ "_isInit", "class_f_p_g_a.html#a1b2ea20b366ec5219ff3d53887f95798", null ],
+    [ "_nCs", "class_f_p_g_a.html#a0179962077bd43ef5164c73626a973f6", null ],
+    [ "_progB", "class_f_p_g_a.html#a1bce7bf9551172a98873ac80468973b6", null ],
+    [ "_spi_bus", "class_f_p_g_a.html#a838a88572cc75bc319561927c2ae99c2", null ]
 ];

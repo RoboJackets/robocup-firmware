@@ -3,7 +3,7 @@ digraph "KickerBoard::kickType"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node46 [label="KickerBoard::kickType",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
-  Node46 -> Node47 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node47 [label="KickerModule::entry",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_kicker_module.html#a6fcd2828adf2f4c00d113f4b316e22eb",tooltip="Called by the RTOS at the desired update rate. "];
+  Node53 [label="KickerBoard::kickType",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node53 -> Node54 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node54 [label="KickerModule::entry",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_kicker_module.html#a6fcd2828adf2f4c00d113f4b316e22eb",tooltip="Code to run when called by RTOS once per system tick (kperiod) "];
 }

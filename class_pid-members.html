@@ -88,22 +88,29 @@ $(document).ready(function(){initNavTree('class_pid.html','');});
 
 <p>This is the complete list of members for <a class="el" href="class_pid.html">Pid</a>, including all inherited members.</p>
 <table class="directory">
-  <tr class="even"><td class="entry"><a class="el" href="class_pid.html#a63308bb7bc14653d961b1f79f1824aaf">clearWindup</a>()</td><td class="entry"><a class="el" href="class_pid.html">Pid</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="class_pid.html#a0b2d864820b6a11ee2685dbb6ac6622b">derivAlpha</a></td><td class="entry"><a class="el" href="class_pid.html">Pid</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_pid.html#a7f72115e163cb28354927c91ba5a5c3d">kd</a></td><td class="entry"><a class="el" href="class_pid.html">Pid</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="class_pid.html#a1568c4e65b32d723598b14700fafd304">ki</a></td><td class="entry"><a class="el" href="class_pid.html">Pid</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_pid.html#a48fd7caf5fbc94de6a5406e76191d249">kp</a></td><td class="entry"><a class="el" href="class_pid.html">Pid</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="class_pid.html#acfd171f7623d22f9d12034ed50eb38a9">Pid</a>(float p=0, float i=0, float d=0, unsigned int windup=0, float dAlpha=0)</td><td class="entry"><a class="el" href="class_pid.html">Pid</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_pid.html#a594752a40e7ee5555e2f5918df67d87e">run</a>(float err)</td><td class="entry"><a class="el" href="class_pid.html">Pid</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="class_pid.html#ad429ef91b9999f5e664c90b41a9b3e9c">set_saturated</a>(bool is_saturated)</td><td class="entry"><a class="el" href="class_pid.html">Pid</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_pid.html#a1106664b17ce8a73c361de7b74e005eb">setWindup</a>(unsigned int w)</td><td class="entry"><a class="el" href="class_pid.html">Pid</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="class_pid.html#aa5f15a38ac5cbe06cf21fc86dd1a18dd">windup</a>() const</td><td class="entry"><a class="el" href="class_pid.html">Pid</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_pid.html#a44dc731a1b9afb8a59d862dbe4e25848">_errSum</a></td><td class="entry"><a class="el" href="class_pid.html">Pid</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_pid.html#a6a95c247badb14bd60ed228c8a1f960a">_lastDeriv</a></td><td class="entry"><a class="el" href="class_pid.html">Pid</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_pid.html#a917e27fd1b90dd1d851913f2a825f0f6">_lastError</a></td><td class="entry"><a class="el" href="class_pid.html">Pid</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_pid.html#a1105ee8378ebd5307b5d892e5330789f">_oldErr</a></td><td class="entry"><a class="el" href="class_pid.html">Pid</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_pid.html#ac8a8150cbe6098745e75064a017bf20f">_saturated</a></td><td class="entry"><a class="el" href="class_pid.html">Pid</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_pid.html#ad4463543f8aca7c10c1fb75f89e9855b">_windup</a></td><td class="entry"><a class="el" href="class_pid.html">Pid</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_pid.html#ae736dcd86a5dac4d2baff98de149c995">_windupLoc</a></td><td class="entry"><a class="el" href="class_pid.html">Pid</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_pid.html#a63308bb7bc14653d961b1f79f1824aaf">clearWindup</a>()</td><td class="entry"><a class="el" href="class_pid.html">Pid</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_pid.html#a0b2d864820b6a11ee2685dbb6ac6622b">derivAlpha</a></td><td class="entry"><a class="el" href="class_pid.html">Pid</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_pid.html#a7f72115e163cb28354927c91ba5a5c3d">kd</a></td><td class="entry"><a class="el" href="class_pid.html">Pid</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_pid.html#a1568c4e65b32d723598b14700fafd304">ki</a></td><td class="entry"><a class="el" href="class_pid.html">Pid</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_pid.html#a48fd7caf5fbc94de6a5406e76191d249">kp</a></td><td class="entry"><a class="el" href="class_pid.html">Pid</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_pid.html#acfd171f7623d22f9d12034ed50eb38a9">Pid</a>(float p=0, float i=0, float d=0, unsigned int windup=0, float dAlpha=0)</td><td class="entry"><a class="el" href="class_pid.html">Pid</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="class_pid.html#a594752a40e7ee5555e2f5918df67d87e">run</a>(float err)</td><td class="entry"><a class="el" href="class_pid.html">Pid</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_pid.html#ad429ef91b9999f5e664c90b41a9b3e9c">set_saturated</a>(bool is_saturated)</td><td class="entry"><a class="el" href="class_pid.html">Pid</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="class_pid.html#a1106664b17ce8a73c361de7b74e005eb">setWindup</a>(unsigned int w)</td><td class="entry"><a class="el" href="class_pid.html">Pid</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_pid.html#aa5f15a38ac5cbe06cf21fc86dd1a18dd">windup</a>() const</td><td class="entry"><a class="el" href="class_pid.html">Pid</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
 </table></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Mon Jun 8 2020 00:49:57 for GT RoboCup SSL by
+    <li class="footer">Generated on Sun Jun 14 2020 13:26:01 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

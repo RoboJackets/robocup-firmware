@@ -2,7 +2,20 @@ digraph "ISM43340"
 {
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
-  Node2 [label="{ISM43340\n|+ cmd\l+ arg\l|+ ISM43340()\l+ send()\l+ receive()\l+ isAvailable()\l+ selfTest()\l+ pingRouter()\l+ isConnected()\l+ testPrint()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node2 [label="{ISM43340\n|+ cmd\l+ arg\l- nCs\l- nReset\l- currentSocket\l- builtCommand\l- cmdStart\l- isInit\l|+ ISM43340()\l+ send()\l+ receive()\l+ isAvailable()\l+ selfTest()\l+ pingRouter()\l+ isConnected()\l+ testPrint()\l- reset()\l- writeToSpi()\l- readFromSpi()\l- sendCommand()\l- sendCommand()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
   Node3 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
   Node3 [label="{GenericRadio\n||+ send()\l+ receive()\l+ isAvailable()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_generic_radio.html"];
+  Node4 -> Node2 [color="grey25",fontsize="10",style="solid",label=" -dataReady" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node4 [label="{pin_name\n|+ dd_reg\l+ port_reg\l+ pin_reg\l+ pin\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structpin__name.html"];
+  Node5 -> Node2 [color="grey25",fontsize="10",style="solid",label=" -readBuffer" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node5 [label="{std::vector\< uint8_t \>\n|+ elements\l|}",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node6 -> Node5 [dir="back",color="orange",fontsize="10",style="solid",label=" \< uint8_t \>" ,fontname="Helvetica"];
+  Node6 [label="{std::vector\< T \>\n||}",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip="STL class. "];
+  Node7 -> Node6 [color="grey25",fontsize="10",style="solid",label=" +elements" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node7 [label="{T\n||}",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node8 -> Node2 [color="grey25",fontsize="10",style="solid",label=" -radioSPI" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node8 [label="{std::unique_ptr\< SPI \>\n|+ ptr\l|+ operator-\>()\l}",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node9 -> Node8 [dir="back",color="orange",fontsize="10",style="solid",label=" \< SPI \>" ,fontname="Helvetica"];
+  Node9 [label="{std::unique_ptr\< T \>\n||+ operator-\>()\l}",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip="STL class. "];
+  Node7 -> Node9 [color="grey25",fontsize="10",style="solid",label=" +ptr" ,arrowhead="odiamond",fontname="Helvetica"];
 }

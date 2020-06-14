@@ -83,11 +83,15 @@ $(document).ready(function(){initNavTree('class_battery.html','');});
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_battery-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">Battery Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Interfaces with analog pin to get voltage-related data.  
+ <a href="class_battery.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for Battery:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -103,15 +107,40 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a36a6234c583e3b3506f4a77e3eb49989"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_battery.html#a36a6234c583e3b3506f4a77e3eb49989">Battery</a> ()</td></tr>
 <tr class="separator:a36a6234c583e3b3506f4a77e3eb49989"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a85dcc13e31dfb66ce3ce217b78a7df7c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_battery.html#a85dcc13e31dfb66ce3ce217b78a7df7c">update</a> ()</td></tr>
+<tr class="memdesc:a85dcc13e31dfb66ce3ce217b78a7df7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates reading from analog pin.  <a href="#a85dcc13e31dfb66ce3ce217b78a7df7c">More...</a><br /></td></tr>
 <tr class="separator:a85dcc13e31dfb66ce3ce217b78a7df7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c35b1f11881ca7da347a32c6e28e457"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_battery.html#a2c35b1f11881ca7da347a32c6e28e457">getBattPercentage</a> ()</td></tr>
+<tr class="memdesc:a2c35b1f11881ca7da347a32c6e28e457"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the last battery percentage read.  <a href="#a2c35b1f11881ca7da347a32c6e28e457">More...</a><br /></td></tr>
 <tr class="separator:a2c35b1f11881ca7da347a32c6e28e457"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adcda499b303251aac697577249df77ff"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_battery.html#adcda499b303251aac697577249df77ff">getRaw</a> ()</td></tr>
+<tr class="memdesc:adcda499b303251aac697577249df77ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns battery voltage as a raw 8-bit integer.  <a href="#adcda499b303251aac697577249df77ff">More...</a><br /></td></tr>
 <tr class="separator:adcda499b303251aac697577249df77ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afb3dd22b444cb281d76e187a92ce8ec1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_battery.html#afb3dd22b444cb281d76e187a92ce8ec1">isBattCritical</a> ()</td></tr>
+<tr class="memdesc:afb3dd22b444cb281d76e187a92ce8ec1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether battery is critical (at or below 0%)  <a href="#afb3dd22b444cb281d76e187a92ce8ec1">More...</a><br /></td></tr>
 <tr class="separator:afb3dd22b444cb281d76e187a92ce8ec1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a4fae09007fc55acb3a23130f89ea0d55"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_battery.html#a4fae09007fc55acb3a23130f89ea0d55">MAX_SAFE_BATT_VOLTAGE_READ</a> = 2.756</td></tr>
+<tr class="memdesc:a4fae09007fc55acb3a23130f89ea0d55"><td class="mdescLeft">&#160;</td><td class="mdescRight">The maximum voltage the battery can safely hold.  <a href="#a4fae09007fc55acb3a23130f89ea0d55">More...</a><br /></td></tr>
+<tr class="separator:a4fae09007fc55acb3a23130f89ea0d55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5948a5d7a45475b298568dcdb371b1d"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_battery.html#ac5948a5d7a45475b298568dcdb371b1d">MIN_SAFE_BATT_VOLTAGE_READ</a> = 1.923</td></tr>
+<tr class="memdesc:ac5948a5d7a45475b298568dcdb371b1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The minimum voltage the battery can safely hold.  <a href="#ac5948a5d7a45475b298568dcdb371b1d">More...</a><br /></td></tr>
+<tr class="separator:ac5948a5d7a45475b298568dcdb371b1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2be3d152ac705fbe9bf74ec2eb7582ae"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_battery.html#a2be3d152ac705fbe9bf74ec2eb7582ae">BATT_VOLTAGE_READ_RANGE</a></td></tr>
+<tr class="memdesc:a2be3d152ac705fbe9bf74ec2eb7582ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">The difference between the maximum and minimum safe voltages the battery can safely hold.  <a href="#a2be3d152ac705fbe9bf74ec2eb7582ae">More...</a><br /></td></tr>
+<tr class="separator:a2be3d152ac705fbe9bf74ec2eb7582ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03d322ef9b9b38ddc3a7ac9a18e6361e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_battery.html#a03d322ef9b9b38ddc3a7ac9a18e6361e">lastReadPercentage</a></td></tr>
+<tr class="memdesc:a03d322ef9b9b38ddc3a7ac9a18e6361e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Battery percentage on last read.  <a href="#a03d322ef9b9b38ddc3a7ac9a18e6361e">More...</a><br /></td></tr>
+<tr class="separator:a03d322ef9b9b38ddc3a7ac9a18e6361e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a987fe263bc4c7b5d5d093fae612ee5db"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_battery.html#a987fe263bc4c7b5d5d093fae612ee5db">rawVoltage</a></td></tr>
+<tr class="memdesc:a987fe263bc4c7b5d5d093fae612ee5db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Raw battery voltage (0-255)  <a href="#a987fe263bc4c7b5d5d093fae612ee5db">More...</a><br /></td></tr>
+<tr class="separator:a987fe263bc4c7b5d5d093fae612ee5db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Interfaces with analog pin to get voltage-related data. </p>
+<dl class="section note"><dt>Note</dt><dd>As of May 2020, this class does not currently work, as we have no analog_in driver to read pin </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a36a6234c583e3b3506f4a77e3eb49989"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a36a6234c583e3b3506f4a77e3eb49989">&#9670;&nbsp;</a></span>Battery()</h2>
 
@@ -145,6 +174,8 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Returns the last battery percentage read. </p>
+
 </div>
 </div>
 <a id="adcda499b303251aac697577249df77ff"></a>
@@ -161,6 +192,8 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Returns battery voltage as a raw 8-bit integer. </p>
 <div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
@@ -187,6 +220,8 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Returns whether battery is critical (at or below 0%) </p>
 <div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-2-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
 <div id="dynsection-2-summary" class="dynsummary" style="display:block;">
@@ -213,6 +248,8 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Updates reading from analog pin. </p>
 <div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-3-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
 <div id="dynsection-3-summary" class="dynsummary" style="display:block;">
@@ -222,6 +259,136 @@ Public Member Functions</h2></td></tr>
 <map name="class_battery_a85dcc13e31dfb66ce3ce217b78a7df7c_icgraph" id="class_battery_a85dcc13e31dfb66ce3ce217b78a7df7c_icgraph">
 </map>
 </div>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a2be3d152ac705fbe9bf74ec2eb7582ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2be3d152ac705fbe9bf74ec2eb7582ae">&#9670;&nbsp;</a></span>BATT_VOLTAGE_READ_RANGE</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const float Battery::BATT_VOLTAGE_READ_RANGE</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">=</div><div class="line">        (<a class="code" href="class_battery.html#a4fae09007fc55acb3a23130f89ea0d55">MAX_SAFE_BATT_VOLTAGE_READ</a> - <a class="code" href="class_battery.html#ac5948a5d7a45475b298568dcdb371b1d">MIN_SAFE_BATT_VOLTAGE_READ</a>)</div></div><!-- fragment -->
+<p>The difference between the maximum and minimum safe voltages the battery can safely hold. </p>
+
+</div>
+</div>
+<a id="a03d322ef9b9b38ddc3a7ac9a18e6361e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a03d322ef9b9b38ddc3a7ac9a18e6361e">&#9670;&nbsp;</a></span>lastReadPercentage</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Battery::lastReadPercentage</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Battery percentage on last read. </p>
+
+</div>
+</div>
+<a id="a4fae09007fc55acb3a23130f89ea0d55"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4fae09007fc55acb3a23130f89ea0d55">&#9670;&nbsp;</a></span>MAX_SAFE_BATT_VOLTAGE_READ</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const float Battery::MAX_SAFE_BATT_VOLTAGE_READ = 2.756</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The maximum voltage the battery can safely hold. </p>
+<p>Calculations:</p><ul>
+<li>5-cell lipo * 4.3 v per cell = 21.5 battery volts</li>
+<li>68k and 10k ohm voltage divider, analog in read voltage 2.756</li>
+</ul>
+<dl class="section note"><dt>Note</dt><dd>Voltages above this threshold indicate that the battery is overvolted! </dd></dl>
+
+</div>
+</div>
+<a id="ac5948a5d7a45475b298568dcdb371b1d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac5948a5d7a45475b298568dcdb371b1d">&#9670;&nbsp;</a></span>MIN_SAFE_BATT_VOLTAGE_READ</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const float Battery::MIN_SAFE_BATT_VOLTAGE_READ = 1.923</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The minimum voltage the battery can safely hold. </p>
+<p>Calculations:</p><ul>
+<li>5-cell lipo * 4.3 v per cell = 21.5 battery volts</li>
+<li>68k and 10k ohm voltage divider, analog in read voltage 1.923 </li>
+</ul>
+
+</div>
+</div>
+<a id="a987fe263bc4c7b5d5d093fae612ee5db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a987fe263bc4c7b5d5d093fae612ee5db">&#9670;&nbsp;</a></span>rawVoltage</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t Battery::rawVoltage</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Raw battery voltage (0-255) </p>
 
 </div>
 </div>
@@ -235,7 +402,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_battery.html">Battery</a></li>
-    <li class="footer">Generated on Mon Jun 8 2020 00:49:57 for GT RoboCup SSL by
+    <li class="footer">Generated on Sun Jun 14 2020 13:26:01 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

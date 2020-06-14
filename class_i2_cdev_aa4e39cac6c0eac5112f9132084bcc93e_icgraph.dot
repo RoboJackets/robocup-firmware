@@ -23,7 +23,7 @@ digraph "I2Cdev::writeBytes"
   Node674 -> Node679 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node679 [label="MPU6050::setTempFIFOEnabled",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_p_u6050.html#ae528a25b4997ad0e3091a012e4e4419e",tooltip="Set temperature FIFO enabled value. "];
   Node679 -> Node680 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node680 [label="IMUModule::start",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_m_u_module.html#aba29f7665d8ec8f0eefe802f1c2b741c",tooltip="Called once to initialize the module. "];
+  Node680 [label="IMUModule::start",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_m_u_module.html#aba29f7665d8ec8f0eefe802f1c2b741c",tooltip="Code which initializes module. "];
   Node674 -> Node681 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node681 [label="MPU6050::setXGyroFIFOEnabled",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_p_u6050.html#a53a03d1f255a62f01375c870cdc85767",tooltip="Set gyroscope X-axis FIFO enabled value. "];
   Node681 -> Node680 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];

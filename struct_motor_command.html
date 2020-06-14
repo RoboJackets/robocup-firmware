@@ -88,6 +88,9 @@ $(document).ready(function(){initNavTree('struct_motor_command.html','');});
 <div class="title">MotorCommand Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Contains duty cycle commands for individual motors.  
+ <a href="struct_motor_command.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for MotorCommand:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -101,15 +104,22 @@ $(document).ready(function(){initNavTree('struct_motor_command.html','');});
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:ab361cbe148158676f7f19f3d9bb26aa9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_motor_command.html#ab361cbe148158676f7f19f3d9bb26aa9">isValid</a> = false</td></tr>
+<tr class="memdesc:ab361cbe148158676f7f19f3d9bb26aa9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores whether given data is valid.  <a href="#ab361cbe148158676f7f19f3d9bb26aa9">More...</a><br /></td></tr>
 <tr class="separator:ab361cbe148158676f7f19f3d9bb26aa9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaccada5331e74061402c0b492c7c885e"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_motor_command.html#aaccada5331e74061402c0b492c7c885e">lastUpdate</a></td></tr>
+<tr class="memdesc:aaccada5331e74061402c0b492c7c885e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time at which MotorCommand was last updated (milliseconds)  <a href="#aaccada5331e74061402c0b492c7c885e">More...</a><br /></td></tr>
 <tr class="separator:aaccada5331e74061402c0b492c7c885e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd6666629a9936c6ca79d162f5b70657"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_motor_command.html#afd6666629a9936c6ca79d162f5b70657">wheels</a> [4]</td></tr>
+<tr class="memdesc:afd6666629a9936c6ca79d162f5b70657"><td class="mdescLeft">&#160;</td><td class="mdescRight">% max duty cycle for each wheel motor (-1 to 1)  <a href="#afd6666629a9936c6ca79d162f5b70657">More...</a><br /></td></tr>
 <tr class="separator:afd6666629a9936c6ca79d162f5b70657"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a605fc6ceb438c3c1aa19f4e6da1e3834"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_motor_command.html#a605fc6ceb438c3c1aa19f4e6da1e3834">dribbler</a></td></tr>
+<tr class="memdesc:a605fc6ceb438c3c1aa19f4e6da1e3834"><td class="mdescLeft">&#160;</td><td class="mdescRight">7-bit encoding of dribble rotation (0: no spin - 128: max spin)  <a href="#a605fc6ceb438c3c1aa19f4e6da1e3834">More...</a><br /></td></tr>
 <tr class="separator:a605fc6ceb438c3c1aa19f4e6da1e3834"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Data Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Contains duty cycle commands for individual motors. </p>
+<p>Passed from <a class="el" href="class_motion_control_module.html">MotionControlModule</a> to <a class="el" href="class_f_p_g_a_module.html">FPGAModule</a> </p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="a605fc6ceb438c3c1aa19f4e6da1e3834"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a605fc6ceb438c3c1aa19f4e6da1e3834">&#9670;&nbsp;</a></span>dribbler</h2>
 
@@ -121,6 +131,9 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>7-bit encoding of dribble rotation (0: no spin - 128: max spin) </p>
+<dl class="section note"><dt>Note</dt><dd><b>This is limited from 0-128</b> </dd></dl>
 
 </div>
 </div>
@@ -136,6 +149,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Stores whether given data is valid. </p>
+
 </div>
 </div>
 <a id="aaccada5331e74061402c0b492c7c885e"></a>
@@ -149,6 +164,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Time at which MotorCommand was last updated (milliseconds) </p>
 
 </div>
 </div>
@@ -164,6 +181,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>% max duty cycle for each wheel motor (-1 to 1) </p>
+
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
@@ -175,7 +194,7 @@ Public Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="struct_motor_command.html">MotorCommand</a></li>
-    <li class="footer">Generated on Mon Jun 8 2020 00:49:57 for GT RoboCup SSL by
+    <li class="footer">Generated on Sun Jun 14 2020 13:26:01 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

@@ -1,0 +1,25 @@
+digraph "LEDModule::setColor"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node36 [label="LEDModule::setColor",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node36 -> Node37 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node37 [label="LEDModule::start",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_l_e_d_module.html#aac9491cb79f42b71e117838766930357",tooltip="Code which initializes module. "];
+  Node36 -> Node38 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node38 [label="LEDModule::entry",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_l_e_d_module.html#a8413c6960dc269a7771da47c1ad5bc6d",tooltip="Code to run when called by RTOS once per system tick (kperiod) "];
+  Node36 -> Node39 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node39 [label="LEDModule::fpgaInitialized",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_l_e_d_module.html#ac5cf1e0e2c9e02c30b9cd9dd156b6bd3",tooltip="Toggles LEDs to signal fpga initialization. "];
+  Node39 -> Node38 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node36 -> Node40 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node40 [label="LEDModule::radioInitialized",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_l_e_d_module.html#a00403b436a96603d807aec0ca88899e1",tooltip="Toggles LEDs to signal radio initialization. "];
+  Node40 -> Node38 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node36 -> Node41 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node41 [label="LEDModule::kickerInitialized",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_l_e_d_module.html#a257cc53a6966c74659f8b5e1697960a7",tooltip="Toggles LEDs to signal fpga initialization. "];
+  Node36 -> Node42 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node42 [label="LEDModule::fullyInitialized",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_l_e_d_module.html#aa06d62a683353d351978061ae7bf10e2",tooltip="Toggles LEDs to signal full system initialization. "];
+  Node36 -> Node43 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node43 [label="LEDModule::missedSuperLoop",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_l_e_d_module.html#a0bf3449aeac41a6eb7f2d64bb00a7578",tooltip="Set specific toggling pattern for missing the X ms super loop timings. "];
+  Node36 -> Node44 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node44 [label="LEDModule::missedModuleRun",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_l_e_d_module.html#a2ac4599c211434223bfad44e36d6d72e",tooltip="Specific toggling pattern for missing a module run X times in a row. "];
+}

@@ -51,5 +51,11 @@ var class_m_c_p23017 =
     [ "reset", "class_m_c_p23017.html#a8e108f5da7099d11e6916e0badc133c0", null ],
     [ "writeMask", "class_m_c_p23017.html#a03a2643a1e2fbf8c2aa998d48f360498", null ],
     [ "writePin", "class_m_c_p23017.html#abf2d0d52597391e51a5ec6c25a6b05a1", null ],
-    [ "writeRegister", "class_m_c_p23017.html#ab7e0f3b57f9eee9988689643f59b67d3", null ]
+    [ "writeRegister", "class_m_c_p23017.html#ab7e0f3b57f9eee9988689643f59b67d3", null ],
+    [ "_cachedGPIO", "class_m_c_p23017.html#a6f4218f70da673b1185899473e800265", null ],
+    [ "_cachedGPPU", "class_m_c_p23017.html#a16c2ae7c3a52af0b7b00adc6081abdf8", null ],
+    [ "_cachedIODIR", "class_m_c_p23017.html#acadbad1213dd7f50820de4ca6488e80e", null ],
+    [ "_cachedIPOL", "class_m_c_p23017.html#af80298d5eeba9907ec8ec9c341a1a6b7", null ],
+    [ "_i2c", "class_m_c_p23017.html#a7adc429e934d3ea8bed40037f641e2e3", null ],
+    [ "_i2cAddress", "class_m_c_p23017.html#afc7ed90e71404fc40dcf4f2dd02f398d", null ]
 ];

@@ -5,5 +5,5 @@ digraph "MPU6050::setTempFIFOEnabled"
   rankdir="LR";
   Node1415 [label="MPU6050::setTempFIFOEnabled",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
   Node1415 -> Node1416 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node1416 [label="IMUModule::start",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_m_u_module.html#aba29f7665d8ec8f0eefe802f1c2b741c",tooltip="Called once to initialize the module. "];
+  Node1416 [label="IMUModule::start",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_m_u_module.html#aba29f7665d8ec8f0eefe802f1c2b741c",tooltip="Code which initializes module. "];
 }

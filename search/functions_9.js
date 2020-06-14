@@ -17,5 +17,6 @@ var searchData=
   ['ishealthy',['isHealthy',['../class_kicker_board.html#ad4598424736ecde08789e4d4d5feb83e',1,'KickerBoard']]],
   ['ism43340',['ISM43340',['../class_i_s_m43340.html#a2c19b9ec46df497471e44eb5c791844a',1,'ISM43340']]],
   ['isr',['ISR',['../main_8c.html#af9cad97352f5ba9bbd800446131125a6',1,'ISR(SPI_STC_vect):&#160;main.c'],['../main_8c.html#aec43762dc86e029b395d4e5819192c2d',1,'ISR(TIMER0_COMPA_vect):&#160;main.c']]],
-  ['isready',['isReady',['../class_f_p_g_a.html#a3a19d0de422731d1686bf8b6d3b0a800',1,'FPGA']]]
+  ['isready',['isReady',['../class_f_p_g_a.html#a3a19d0de422731d1686bf8b6d3b0a800',1,'FPGA']]],
+  ['isrecentupdate',['isRecentUpdate',['../class_motion_control_module.html#aa465c7f948ee9c5522b14b8def68f241',1,'MotionControlModule']]]
 ];

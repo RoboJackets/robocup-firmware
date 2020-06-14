@@ -16,5 +16,6 @@ var class_i2_cdev =
     [ "writeByte", "class_i2_cdev.html#aeb297637ef985cd562da465ba61b7042", null ],
     [ "writeBytes", "class_i2_cdev.html#aa4e39cac6c0eac5112f9132084bcc93e", null ],
     [ "writeWord", "class_i2_cdev.html#acbe68a802d6a177301736e60bedd1def", null ],
-    [ "writeWords", "class_i2_cdev.html#aae37c0526e4b4730a5b2ffd752fd8b21", null ]
+    [ "writeWords", "class_i2_cdev.html#aae37c0526e4b4730a5b2ffd752fd8b21", null ],
+    [ "i2c", "class_i2_cdev.html#abd4c30506507158f7d881336fd830115", null ]
 ];

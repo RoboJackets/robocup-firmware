@@ -2,7 +2,32 @@ digraph "FPGAModule"
 {
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
-  Node2 [label="{FPGAModule\n|+ kFrequency\l+ kPeriod\l+ kPriority\l|+ FPGAModule()\l+ start()\l+ entry()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node2 [label="{FPGAModule\n|+ kFrequency\l+ kPeriod\l+ kPriority\l- fpgaInitialized\l- COMMAND_TIMEOUT\l- GEAR_RATIO\l- ENC_TICK_PER_REV\l|+ FPGAModule()\l+ start()\l+ entry()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
   Node3 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
-  Node3 [label="{GenericModule\n|+ period\l+ name\l+ priority\l+ stackSize\l+ handle\l|+ GenericModule()\l+ start()\l+ entry()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_generic_module.html"];
+  Node3 [label="{GenericModule\n|+ period\l+ name\l+ priority\l+ stackSize\l+ handle\l|+ GenericModule()\l+ start()\l+ entry()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_generic_module.html",tooltip="Interface for all modules, so that they can be ran by the scheduler. "];
+  Node4 -> Node2 [color="grey25",fontsize="10",style="solid",label=" -fpga" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node4 [label="{FPGA\n|+ FPGA_SPI_FREQ\l+ MAX_DUTY_CYCLE\l- _isInit\l- _nCs\l- _initB\l- _done\l- _progB\l|+ FPGA()\l+ configure()\l+ isReady()\l+ set_duty_get_enc()\l+ set_duty_cycles()\l+ read_duty_cycles()\l+ read_encs()\l+ read_halls()\l+ motors_en()\l+ watchdog_reset()\l+ git_hash()\l+ gate_drivers()\l+ send_config()\l+ chip_select()\l+ chip_deselect()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_f_p_g_a.html"];
+  Node5 -> Node4 [color="grey25",fontsize="10",style="solid",label=" -_spi_bus" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node5 [label="{std::unique_ptr\< SPI \>\n|+ ptr\l|+ operator-\>()\l}",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node6 -> Node5 [dir="back",color="orange",fontsize="10",style="solid",label=" \< SPI \>" ,fontname="Helvetica"];
+  Node6 [label="{std::unique_ptr\< T \>\n||+ operator-\>()\l}",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip="STL class. "];
+  Node7 -> Node6 [color="grey25",fontsize="10",style="solid",label=" +ptr" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node7 [label="{T\n||}",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node8 -> Node2 [color="grey25",fontsize="10",style="solid",label=" -motorCommand" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node8 [label="{LockedStruct\< MotorCommand \>\n|- mutex_depth\l- mutex\l|+ LockedStruct()\l+ LockedStruct()\l+ LockedStruct()\l+ operator=()\l+ operator=()\l+ ~LockedStruct()\l+ lock()\l+ unsafe_value()\l- acquire_mutex()\l- release_mutex()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_locked_struct.html"];
+  Node9 -> Node8 [color="grey25",fontsize="10",style="solid",label=" -value" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node9 [label="{MotorCommand\n|+ isValid\l+ lastUpdate\l+ wheels\l+ dribbler\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_motor_command.html",tooltip="Contains duty cycle commands for individual motors. "];
+  Node10 -> Node8 [dir="back",color="orange",fontsize="10",style="solid",label=" \< MotorCommand \>" ,fontname="Helvetica"];
+  Node10 [label="{LockedStruct\< T \>\n|- mutex_depth\l- mutex\l|+ LockedStruct()\l+ LockedStruct()\l+ operator=()\l+ LockedStruct()\l+ operator=()\l+ ~LockedStruct()\l+ lock()\l+ unsafe_value()\l- acquire_mutex()\l- release_mutex()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_locked_struct.html",tooltip="A locked-struct abstraction. "];
+  Node7 -> Node10 [color="grey25",fontsize="10",style="solid",label=" -value" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node11 -> Node2 [color="grey25",fontsize="10",style="solid",label=" -fpgaStatus" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node11 [label="{LockedStruct\< FPGAStatus \>\n|- mutex_depth\l- mutex\l|+ LockedStruct()\l+ LockedStruct()\l+ LockedStruct()\l+ operator=()\l+ operator=()\l+ ~LockedStruct()\l+ lock()\l+ unsafe_value()\l- acquire_mutex()\l- release_mutex()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_locked_struct.html"];
+  Node12 -> Node11 [color="grey25",fontsize="10",style="solid",label=" -value" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node12 [label="{FPGAStatus\n|+ isValid\l+ initialized\l+ lastUpdate\l+ motorHasErrors\l+ FPGAHasError\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_f_p_g_a_status.html",tooltip="Contains data on whether FPGA and motors are working or not. "];
+  Node10 -> Node11 [dir="back",color="orange",fontsize="10",style="solid",label=" \< FPGAStatus \>" ,fontname="Helvetica"];
+  Node13 -> Node2 [color="grey25",fontsize="10",style="solid",label=" -motorFeedback" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node13 [label="{LockedStruct\< MotorFeedback \>\n|- mutex_depth\l- mutex\l|+ LockedStruct()\l+ LockedStruct()\l+ LockedStruct()\l+ operator=()\l+ operator=()\l+ ~LockedStruct()\l+ lock()\l+ unsafe_value()\l- acquire_mutex()\l- release_mutex()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_locked_struct.html"];
+  Node14 -> Node13 [color="grey25",fontsize="10",style="solid",label=" -value" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node14 [label="{MotorFeedback\n|+ isValid\l+ lastUpdate\l+ encoders\l+ currents\l|}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_motor_feedback.html",tooltip="Contains current and encoder data for each motor. "];
+  Node10 -> Node13 [dir="back",color="orange",fontsize="10",style="solid",label=" \< MotorFeedback \>" ,fontname="Helvetica"];
 }

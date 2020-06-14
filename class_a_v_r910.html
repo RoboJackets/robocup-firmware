@@ -85,6 +85,7 @@ $(document).ready(function(){initNavTree('class_a_v_r910.html','');});
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="class_a_v_r910-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">AVR910 Class Reference</div>  </div>
@@ -162,6 +163,30 @@ Protected Attributes</h2></td></tr>
 <tr class="separator:a0eaf808c6d330e4194a0d628c0fbbc79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af4dae100cf1071e0f757675457a0d3bd"><td class="memItemLeft" align="right" valign="top">DigitalOut&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_v_r910.html#af4dae100cf1071e0f757675457a0d3bd">nReset_</a></td></tr>
 <tr class="separator:af4dae100cf1071e0f757675457a0d3bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a32ada57871310471f4dcce84141f7f28"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_v_r910.html#a32ada57871310471f4dcce84141f7f28">enableProgramming</a> ()</td></tr>
+<tr class="memdesc:a32ada57871310471f4dcce84141f7f28"><td class="mdescLeft">&#160;</td><td class="mdescRight">Issue an enable programming command to the AVR microcontroller.  <a href="#a32ada57871310471f4dcce84141f7f28">More...</a><br /></td></tr>
+<tr class="separator:a32ada57871310471f4dcce84141f7f28"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0fb0a591e044d917d00d3f1e6635072"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_v_r910.html#ac0fb0a591e044d917d00d3f1e6635072">poll</a> (int high_low, char page_number, char page_offset)</td></tr>
+<tr class="memdesc:ac0fb0a591e044d917d00d3f1e6635072"><td class="mdescLeft">&#160;</td><td class="mdescRight">Poll the device until it has finished its current operation.  <a href="#ac0fb0a591e044d917d00d3f1e6635072">More...</a><br /></td></tr>
+<tr class="separator:ac0fb0a591e044d917d00d3f1e6635072"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a97502aa5764608dcd9c9b3f22629026c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_v_r910.html#a97502aa5764608dcd9c9b3f22629026c">chipErase</a> ()</td></tr>
+<tr class="memdesc:a97502aa5764608dcd9c9b3f22629026c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Issue a chip erase command to the AVR microcontroller.  <a href="#a97502aa5764608dcd9c9b3f22629026c">More...</a><br /></td></tr>
+<tr class="separator:a97502aa5764608dcd9c9b3f22629026c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e5ff38fc05efa757b90a9d1e3a8e53d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_v_r910.html#a1e5ff38fc05efa757b90a9d1e3a8e53d">loadMemoryPage</a> (int highLow, char <a class="el" href="rtp_8hpp.html#af3f726014b044194def151079f1f2d89">address</a>, char data)</td></tr>
+<tr class="memdesc:a1e5ff38fc05efa757b90a9d1e3a8e53d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load a byte into the memory page buffer.  <a href="#a1e5ff38fc05efa757b90a9d1e3a8e53d">More...</a><br /></td></tr>
+<tr class="separator:a1e5ff38fc05efa757b90a9d1e3a8e53d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d3b3f3268bcd7af9dcac28d65aa4f07"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_v_r910.html#a4d3b3f3268bcd7af9dcac28d65aa4f07">writeFlashMemoryByte</a> (int highLow, int <a class="el" href="rtp_8hpp.html#af3f726014b044194def151079f1f2d89">address</a>, char data)</td></tr>
+<tr class="memdesc:a4d3b3f3268bcd7af9dcac28d65aa4f07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write a byte into the flash memory.  <a href="#a4d3b3f3268bcd7af9dcac28d65aa4f07">More...</a><br /></td></tr>
+<tr class="separator:a4d3b3f3268bcd7af9dcac28d65aa4f07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf1394523f7ceb15279bcec480d79e04"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_v_r910.html#adf1394523f7ceb15279bcec480d79e04">writeFlashMemoryPage</a> (char pageNumber, char lc_offset, int lc_highLow)</td></tr>
+<tr class="memdesc:adf1394523f7ceb15279bcec480d79e04"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write the memory page buffer to flash memory.  <a href="#adf1394523f7ceb15279bcec480d79e04">More...</a><br /></td></tr>
+<tr class="separator:adf1394523f7ceb15279bcec480d79e04"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ba4ac1ede5e82813de6dbf3d1691b6f"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_v_r910.html#a3ba4ac1ede5e82813de6dbf3d1691b6f">readProgramMemory</a> (int highLow, char pageNumber, char pageOffset)</td></tr>
+<tr class="memdesc:a3ba4ac1ede5e82813de6dbf3d1691b6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read a byte from program memory.  <a href="#a3ba4ac1ede5e82813de6dbf3d1691b6f">More...</a><br /></td></tr>
+<tr class="separator:a3ba4ac1ede5e82813de6dbf3d1691b6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>AVR910 ISP. </p>
@@ -269,10 +294,19 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>boolean indicating success </dd></dl>
 <div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-2-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+  <img id="dynsection-2-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-2-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-2-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_a_v_r910_a3d5e6c907a6c31e47e05557fc713f0f0_cgraph.png" border="0" usemap="#class_a_v_r910_a3d5e6c907a6c31e47e05557fc713f0f0_cgraph" alt=""/></div>
+<map name="class_a_v_r910_a3d5e6c907a6c31e47e05557fc713f0f0_cgraph" id="class_a_v_r910_a3d5e6c907a6c31e47e05557fc713f0f0_cgraph">
+</map>
+</div>
+<div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-3-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-3-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-3-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="class_a_v_r910_a3d5e6c907a6c31e47e05557fc713f0f0_icgraph.png" border="0" usemap="#class_a_v_r910_a3d5e6c907a6c31e47e05557fc713f0f0_icgraph" alt=""/></div>
 <map name="class_a_v_r910_a3d5e6c907a6c31e47e05557fc713f0f0_icgraph" id="class_a_v_r910_a3d5e6c907a6c31e47e05557fc713f0f0_icgraph">
 </map>
@@ -343,6 +377,111 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>boolean indicating success </dd></dl>
+<div id="dynsection-4" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-4-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-4-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-4-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_a_v_r910_a9b2a40ea811be1dd68f0423c35c0df8b_cgraph.png" border="0" usemap="#class_a_v_r910_a9b2a40ea811be1dd68f0423c35c0df8b_cgraph" alt=""/></div>
+<map name="class_a_v_r910_a9b2a40ea811be1dd68f0423c35c0df8b_cgraph" id="class_a_v_r910_a9b2a40ea811be1dd68f0423c35c0df8b_cgraph">
+</map>
+</div>
+
+</div>
+</div>
+<a id="a97502aa5764608dcd9c9b3f22629026c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a97502aa5764608dcd9c9b3f22629026c">&#9670;&nbsp;</a></span>chipErase()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void AVR910::chipErase </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Issue a chip erase command to the AVR microcontroller. </p>
+<div id="dynsection-5" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-5-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-5-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-5-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_a_v_r910_a97502aa5764608dcd9c9b3f22629026c_cgraph.png" border="0" usemap="#class_a_v_r910_a97502aa5764608dcd9c9b3f22629026c_cgraph" alt=""/></div>
+<map name="class_a_v_r910_a97502aa5764608dcd9c9b3f22629026c_cgraph" id="class_a_v_r910_a97502aa5764608dcd9c9b3f22629026c_cgraph">
+</map>
+</div>
+<div id="dynsection-6" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-6-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-6-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-6-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_a_v_r910_a97502aa5764608dcd9c9b3f22629026c_icgraph.png" border="0" usemap="#class_a_v_r910_a97502aa5764608dcd9c9b3f22629026c_icgraph" alt=""/></div>
+<map name="class_a_v_r910_a97502aa5764608dcd9c9b3f22629026c_icgraph" id="class_a_v_r910_a97502aa5764608dcd9c9b3f22629026c_icgraph">
+</map>
+</div>
+
+</div>
+</div>
+<a id="a32ada57871310471f4dcce84141f7f28"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32ada57871310471f4dcce84141f7f28">&#9670;&nbsp;</a></span>enableProgramming()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool AVR910::enableProgramming </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Issue an enable programming command to the AVR microcontroller. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">boolean</td><td>indicating success </td></tr>
+  </table>
+  </dd>
+</dl>
+<div id="dynsection-7" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-7-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-7-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-7-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_a_v_r910_a32ada57871310471f4dcce84141f7f28_cgraph.png" border="0" usemap="#class_a_v_r910_a32ada57871310471f4dcce84141f7f28_cgraph" alt=""/></div>
+<map name="class_a_v_r910_a32ada57871310471f4dcce84141f7f28_cgraph" id="class_a_v_r910_a32ada57871310471f4dcce84141f7f28_cgraph">
+</map>
+</div>
+<div id="dynsection-8" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-8-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-8-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-8-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_a_v_r910_a32ada57871310471f4dcce84141f7f28_icgraph.png" border="0" usemap="#class_a_v_r910_a32ada57871310471f4dcce84141f7f28_icgraph" alt=""/></div>
+<map name="class_a_v_r910_a32ada57871310471f4dcce84141f7f28_icgraph" id="class_a_v_r910_a32ada57871310471f4dcce84141f7f28_icgraph">
+</map>
+</div>
 
 </div>
 </div>
@@ -371,11 +510,11 @@ Protected Attributes</h2></td></tr>
 
 <p>Brings the reset line high to exit programming mode. </p>
 <p>The program() method does this automatically, but this can be called instead of program() to return the AVR to its normal state. </p>
-<div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-3-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-3-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-9" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-9-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-9-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-3-content" class="dyncontent" style="display:none;">
+<div id="dynsection-9-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="class_a_v_r910_a6390cd4b442aa6267d934357ebdb42b9_icgraph.png" border="0" usemap="#class_a_v_r910_a6390cd4b442aa6267d934357ebdb42b9_icgraph" alt=""/></div>
 <map name="class_a_v_r910_a6390cd4b442aa6267d934357ebdb42b9_icgraph" id="class_a_v_r910_a6390cd4b442aa6267d934357ebdb42b9_icgraph">
 </map>
@@ -400,13 +539,96 @@ Protected Attributes</h2></td></tr>
 
 <p>Sends an enable programming command, allowing device registers to be read and commands sent. </p>
 <dl class="section return"><dt>Returns</dt><dd>true if initialization completed successfully </dd></dl>
-<div id="dynsection-4" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-4-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-4-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-10" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-10-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-10-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-4-content" class="dyncontent" style="display:none;">
+<div id="dynsection-10-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_a_v_r910_a8af9bfcbc0a4fdea5a9909b6125faaa0_cgraph.png" border="0" usemap="#class_a_v_r910_a8af9bfcbc0a4fdea5a9909b6125faaa0_cgraph" alt=""/></div>
+<map name="class_a_v_r910_a8af9bfcbc0a4fdea5a9909b6125faaa0_cgraph" id="class_a_v_r910_a8af9bfcbc0a4fdea5a9909b6125faaa0_cgraph">
+</map>
+</div>
+<div id="dynsection-11" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-11-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-11-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-11-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="class_a_v_r910_a8af9bfcbc0a4fdea5a9909b6125faaa0_icgraph.png" border="0" usemap="#class_a_v_r910_a8af9bfcbc0a4fdea5a9909b6125faaa0_icgraph" alt=""/></div>
 <map name="class_a_v_r910_a8af9bfcbc0a4fdea5a9909b6125faaa0_icgraph" id="class_a_v_r910_a8af9bfcbc0a4fdea5a9909b6125faaa0_icgraph">
+</map>
+</div>
+
+</div>
+</div>
+<a id="a1e5ff38fc05efa757b90a9d1e3a8e53d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e5ff38fc05efa757b90a9d1e3a8e53d">&#9670;&nbsp;</a></span>loadMemoryPage()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void AVR910::loadMemoryPage </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>highLow</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>address</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>data</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Load a byte into the memory page buffer. </p>
+<p>Load program memory page.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">highLow</td><td>Indicate whether the byte being loaded is a high or low byte. </td></tr>
+    <tr><td class="paramname">data</td><td>The data byte to load.</td></tr>
+    <tr><td class="paramname">highLog</td><td>first byte of the command, whether low or high byte 0100 0000 for low byte 0100 1000 for high byte </td></tr>
+    <tr><td class="paramname">address</td><td>6 lsbs of the word address AKA location in the current page </td></tr>
+    <tr><td class="paramname">data</td><td>byte of data to be stored</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>load low before high </dd></dl>
+<div id="dynsection-12" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-12-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-12-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-12-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_a_v_r910_a1e5ff38fc05efa757b90a9d1e3a8e53d_cgraph.png" border="0" usemap="#class_a_v_r910_a1e5ff38fc05efa757b90a9d1e3a8e53d_cgraph" alt=""/></div>
+<map name="class_a_v_r910_a1e5ff38fc05efa757b90a9d1e3a8e53d_cgraph" id="class_a_v_r910_a1e5ff38fc05efa757b90a9d1e3a8e53d_cgraph">
+</map>
+</div>
+<div id="dynsection-13" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-13-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-13-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-13-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_a_v_r910_a1e5ff38fc05efa757b90a9d1e3a8e53d_icgraph.png" border="0" usemap="#class_a_v_r910_a1e5ff38fc05efa757b90a9d1e3a8e53d_icgraph" alt=""/></div>
+<map name="class_a_v_r910_a1e5ff38fc05efa757b90a9d1e3a8e53d_icgraph" id="class_a_v_r910_a1e5ff38fc05efa757b90a9d1e3a8e53d_icgraph">
 </map>
 </div>
 
@@ -434,22 +656,84 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<div id="dynsection-5" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-5-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-5-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-14" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-14-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-14-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-5-content" class="dyncontent" style="display:none;">
+<div id="dynsection-14-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="class_a_v_r910_a4b33111389ef72e6e05e2951505e1821_cgraph.png" border="0" usemap="#class_a_v_r910_a4b33111389ef72e6e05e2951505e1821_cgraph" alt=""/></div>
 <map name="class_a_v_r910_a4b33111389ef72e6e05e2951505e1821_cgraph" id="class_a_v_r910_a4b33111389ef72e6e05e2951505e1821_cgraph">
 </map>
 </div>
-<div id="dynsection-6" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-6-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-6-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-15" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-15-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-15-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-6-content" class="dyncontent" style="display:none;">
+<div id="dynsection-15-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="class_a_v_r910_a4b33111389ef72e6e05e2951505e1821_icgraph.png" border="0" usemap="#class_a_v_r910_a4b33111389ef72e6e05e2951505e1821_icgraph" alt=""/></div>
 <map name="class_a_v_r910_a4b33111389ef72e6e05e2951505e1821_icgraph" id="class_a_v_r910_a4b33111389ef72e6e05e2951505e1821_icgraph">
+</map>
+</div>
+
+</div>
+</div>
+<a id="ac0fb0a591e044d917d00d3f1e6635072"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0fb0a591e044d917d00d3f1e6635072">&#9670;&nbsp;</a></span>poll()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void AVR910::poll </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>high_low</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>page_number</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>page_offset</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Poll the device until it has finished its current operation. </p>
+<div id="dynsection-16" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-16-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-16-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-16-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_a_v_r910_ac0fb0a591e044d917d00d3f1e6635072_cgraph.png" border="0" usemap="#class_a_v_r910_ac0fb0a591e044d917d00d3f1e6635072_cgraph" alt=""/></div>
+<map name="class_a_v_r910_ac0fb0a591e044d917d00d3f1e6635072_cgraph" id="class_a_v_r910_ac0fb0a591e044d917d00d3f1e6635072_cgraph">
+</map>
+</div>
+<div id="dynsection-17" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-17-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-17-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-17-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_a_v_r910_ac0fb0a591e044d917d00d3f1e6635072_icgraph.png" border="0" usemap="#class_a_v_r910_ac0fb0a591e044d917d00d3f1e6635072_icgraph" alt=""/></div>
+<map name="class_a_v_r910_ac0fb0a591e044d917d00d3f1e6635072_icgraph" id="class_a_v_r910_ac0fb0a591e044d917d00d3f1e6635072_icgraph">
 </map>
 </div>
 
@@ -498,20 +782,20 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>boolean value indicating success </dd></dl>
-<div id="dynsection-7" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-7-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-7-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-18" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-18-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-18-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-7-content" class="dyncontent" style="display:none;">
+<div id="dynsection-18-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="class_a_v_r910_a355ef9fb0c84d822fb50bff21ff1a7b8_cgraph.png" border="0" usemap="#class_a_v_r910_a355ef9fb0c84d822fb50bff21ff1a7b8_cgraph" alt=""/></div>
 <map name="class_a_v_r910_a355ef9fb0c84d822fb50bff21ff1a7b8_cgraph" id="class_a_v_r910_a355ef9fb0c84d822fb50bff21ff1a7b8_cgraph">
 </map>
 </div>
-<div id="dynsection-8" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-8-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-8-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-19" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-19-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-19-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-8-content" class="dyncontent" style="display:none;">
+<div id="dynsection-19-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="class_a_v_r910_a355ef9fb0c84d822fb50bff21ff1a7b8_icgraph.png" border="0" usemap="#class_a_v_r910_a355ef9fb0c84d822fb50bff21ff1a7b8_icgraph" alt=""/></div>
 <map name="class_a_v_r910_a355ef9fb0c84d822fb50bff21ff1a7b8_icgraph" id="class_a_v_r910_a355ef9fb0c84d822fb50bff21ff1a7b8_icgraph">
 </map>
@@ -569,11 +853,11 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>boolean value indicating success </dd></dl>
-<div id="dynsection-9" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-9-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-9-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-20" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-20-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-20-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-9-content" class="dyncontent" style="display:none;">
+<div id="dynsection-20-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="class_a_v_r910_a122ca70af276f5b5d5ca71ae1ffe06a9_cgraph.png" border="0" usemap="#class_a_v_r910_a122ca70af276f5b5d5ca71ae1ffe06a9_cgraph" alt=""/></div>
 <map name="class_a_v_r910_a122ca70af276f5b5d5ca71ae1ffe06a9_cgraph" id="class_a_v_r910_a122ca70af276f5b5d5ca71ae1ffe06a9_cgraph">
 </map>
@@ -598,20 +882,20 @@ Protected Attributes</h2></td></tr>
 
 <p>Read the part family and flash size of the device. </p>
 <dl class="section return"><dt>Returns</dt><dd>Code indicating the family of AVR microcontrollers the device comes from and how much flash memory it contains. 0xFF -&gt; Device code erased or target missing. 0x01 -&gt; Device is locked. </dd></dl>
-<div id="dynsection-10" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-10-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-10-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-21" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-21-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-21-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-10-content" class="dyncontent" style="display:none;">
+<div id="dynsection-21-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="class_a_v_r910_a07c549c137848a2ecf78e1dcb241816e_cgraph.png" border="0" usemap="#class_a_v_r910_a07c549c137848a2ecf78e1dcb241816e_cgraph" alt=""/></div>
 <map name="class_a_v_r910_a07c549c137848a2ecf78e1dcb241816e_cgraph" id="class_a_v_r910_a07c549c137848a2ecf78e1dcb241816e_cgraph">
 </map>
 </div>
-<div id="dynsection-11" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-11-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-11-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-22" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-22-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-22-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-11-content" class="dyncontent" style="display:none;">
+<div id="dynsection-22-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="class_a_v_r910_a07c549c137848a2ecf78e1dcb241816e_icgraph.png" border="0" usemap="#class_a_v_r910_a07c549c137848a2ecf78e1dcb241816e_icgraph" alt=""/></div>
 <map name="class_a_v_r910_a07c549c137848a2ecf78e1dcb241816e_icgraph" id="class_a_v_r910_a07c549c137848a2ecf78e1dcb241816e_icgraph">
 </map>
@@ -636,22 +920,103 @@ Protected Attributes</h2></td></tr>
 
 <p>Read the part number. </p>
 <dl class="section return"><dt>Returns</dt><dd>Code identifying the part number. 0xFF -&gt; Device code erased or target missing. 0x02 -&gt; Device is locked. </dd></dl>
-<div id="dynsection-12" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-12-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-12-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-23" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-23-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-23-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-12-content" class="dyncontent" style="display:none;">
+<div id="dynsection-23-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="class_a_v_r910_ad1717b6ab05e7c0aba237a7c147354ae_cgraph.png" border="0" usemap="#class_a_v_r910_ad1717b6ab05e7c0aba237a7c147354ae_cgraph" alt=""/></div>
 <map name="class_a_v_r910_ad1717b6ab05e7c0aba237a7c147354ae_cgraph" id="class_a_v_r910_ad1717b6ab05e7c0aba237a7c147354ae_cgraph">
 </map>
 </div>
-<div id="dynsection-13" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-13-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-13-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-24" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-24-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-24-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-13-content" class="dyncontent" style="display:none;">
+<div id="dynsection-24-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="class_a_v_r910_ad1717b6ab05e7c0aba237a7c147354ae_icgraph.png" border="0" usemap="#class_a_v_r910_ad1717b6ab05e7c0aba237a7c147354ae_icgraph" alt=""/></div>
 <map name="class_a_v_r910_ad1717b6ab05e7c0aba237a7c147354ae_icgraph" id="class_a_v_r910_ad1717b6ab05e7c0aba237a7c147354ae_icgraph">
+</map>
+</div>
+
+</div>
+</div>
+<a id="a3ba4ac1ede5e82813de6dbf3d1691b6f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ba4ac1ede5e82813de6dbf3d1691b6f">&#9670;&nbsp;</a></span>readProgramMemory()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">char AVR910::readProgramMemory </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>highLow</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>pageNumber</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>pageOffset</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Read a byte from program memory. </p>
+<p>Read program memory.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">highLow</td><td>Indicate whether the byte being read is a low or high byte. </td></tr>
+    <tr><td class="paramname">pageNumber</td><td>The page number to read from. </td></tr>
+    <tr><td class="paramname">pageOffset</td><td>Address of byte in the page.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The byte at the specified memory location.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">highLow</td><td>First byte of command 0100 0000 for low byte 0100 0100 for high byte </td></tr>
+    <tr><td class="paramname">pageNumber</td><td>Page number from [0 - N] </td></tr>
+    <tr><td class="paramname">pageOffset</td><td>location in words in page to read</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>value read </dd></dl>
+<div id="dynsection-25" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-25-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-25-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-25-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_a_v_r910_a3ba4ac1ede5e82813de6dbf3d1691b6f_cgraph.png" border="0" usemap="#class_a_v_r910_a3ba4ac1ede5e82813de6dbf3d1691b6f_cgraph" alt=""/></div>
+<map name="class_a_v_r910_a3ba4ac1ede5e82813de6dbf3d1691b6f_cgraph" id="class_a_v_r910_a3ba4ac1ede5e82813de6dbf3d1691b6f_cgraph">
+</map>
+</div>
+<div id="dynsection-26" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-26-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-26-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-26-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_a_v_r910_a3ba4ac1ede5e82813de6dbf3d1691b6f_icgraph.png" border="0" usemap="#class_a_v_r910_a3ba4ac1ede5e82813de6dbf3d1691b6f_icgraph" alt=""/></div>
+<map name="class_a_v_r910_a3ba4ac1ede5e82813de6dbf3d1691b6f_icgraph" id="class_a_v_r910_a3ba4ac1ede5e82813de6dbf3d1691b6f_icgraph">
 </map>
 </div>
 
@@ -680,20 +1045,20 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<div id="dynsection-14" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-14-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-14-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-27" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-27-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-27-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-14-content" class="dyncontent" style="display:none;">
+<div id="dynsection-27-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="class_a_v_r910_a4e99d5a29dc0e48069cebd1f26c83800_cgraph.png" border="0" usemap="#class_a_v_r910_a4e99d5a29dc0e48069cebd1f26c83800_cgraph" alt=""/></div>
 <map name="class_a_v_r910_a4e99d5a29dc0e48069cebd1f26c83800_cgraph" id="class_a_v_r910_a4e99d5a29dc0e48069cebd1f26c83800_cgraph">
 </map>
 </div>
-<div id="dynsection-15" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-15-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-15-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-28" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-28-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-28-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-15-content" class="dyncontent" style="display:none;">
+<div id="dynsection-28-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="class_a_v_r910_a4e99d5a29dc0e48069cebd1f26c83800_icgraph.png" border="0" usemap="#class_a_v_r910_a4e99d5a29dc0e48069cebd1f26c83800_icgraph" alt=""/></div>
 <map name="class_a_v_r910_a4e99d5a29dc0e48069cebd1f26c83800_icgraph" id="class_a_v_r910_a4e99d5a29dc0e48069cebd1f26c83800_icgraph">
 </map>
@@ -718,22 +1083,162 @@ Protected Attributes</h2></td></tr>
 
 <p>Read the vendor code of the device. </p>
 <dl class="section return"><dt>Returns</dt><dd>The vendor code - should be 0x1E for Atmel. 0x00 -&gt; Device is locked. </dd></dl>
-<div id="dynsection-16" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-16-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-16-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-29" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-29-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-29-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-16-content" class="dyncontent" style="display:none;">
+<div id="dynsection-29-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="class_a_v_r910_a24a91ddb881d8e0d27c1cb203d0f7349_cgraph.png" border="0" usemap="#class_a_v_r910_a24a91ddb881d8e0d27c1cb203d0f7349_cgraph" alt=""/></div>
 <map name="class_a_v_r910_a24a91ddb881d8e0d27c1cb203d0f7349_cgraph" id="class_a_v_r910_a24a91ddb881d8e0d27c1cb203d0f7349_cgraph">
 </map>
 </div>
-<div id="dynsection-17" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-17-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-17-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-30" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-30-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-30-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-17-content" class="dyncontent" style="display:none;">
+<div id="dynsection-30-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="class_a_v_r910_a24a91ddb881d8e0d27c1cb203d0f7349_icgraph.png" border="0" usemap="#class_a_v_r910_a24a91ddb881d8e0d27c1cb203d0f7349_icgraph" alt=""/></div>
 <map name="class_a_v_r910_a24a91ddb881d8e0d27c1cb203d0f7349_icgraph" id="class_a_v_r910_a24a91ddb881d8e0d27c1cb203d0f7349_icgraph">
+</map>
+</div>
+
+</div>
+</div>
+<a id="a4d3b3f3268bcd7af9dcac28d65aa4f07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d3b3f3268bcd7af9dcac28d65aa4f07">&#9670;&nbsp;</a></span>writeFlashMemoryByte()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void AVR910::writeFlashMemoryByte </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>highLow</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>address</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>data</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Write a byte into the flash memory. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">highLow</td><td>Indicate whether the byte being loaded is a high or low byte. </td></tr>
+    <tr><td class="paramname">address</td><td>The address to load the byte at. </td></tr>
+    <tr><td class="paramname">data</td><td>The data byte to load. </td></tr>
+  </table>
+  </dd>
+</dl>
+<div id="dynsection-31" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-31-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-31-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-31-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_a_v_r910_a4d3b3f3268bcd7af9dcac28d65aa4f07_cgraph.png" border="0" usemap="#class_a_v_r910_a4d3b3f3268bcd7af9dcac28d65aa4f07_cgraph" alt=""/></div>
+<map name="class_a_v_r910_a4d3b3f3268bcd7af9dcac28d65aa4f07_cgraph" id="class_a_v_r910_a4d3b3f3268bcd7af9dcac28d65aa4f07_cgraph">
+</map>
+</div>
+<div id="dynsection-32" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-32-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-32-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-32-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_a_v_r910_a4d3b3f3268bcd7af9dcac28d65aa4f07_icgraph.png" border="0" usemap="#class_a_v_r910_a4d3b3f3268bcd7af9dcac28d65aa4f07_icgraph" alt=""/></div>
+<map name="class_a_v_r910_a4d3b3f3268bcd7af9dcac28d65aa4f07_icgraph" id="class_a_v_r910_a4d3b3f3268bcd7af9dcac28d65aa4f07_icgraph">
+</map>
+</div>
+
+</div>
+</div>
+<a id="adf1394523f7ceb15279bcec480d79e04"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf1394523f7ceb15279bcec480d79e04">&#9670;&nbsp;</a></span>writeFlashMemoryPage()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void AVR910::writeFlashMemoryPage </td>
+          <td>(</td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>pageNumber</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>pageOffset</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>highlow</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Write the memory page buffer to flash memory. </p>
+<p>Write program memory page.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pageNumber</td><td>The page number to write to in flash memory.</td></tr>
+    <tr><td class="paramname">pageNumber</td><td>page number to write </td></tr>
+  </table>
+  </dd>
+</dl>
+<div id="dynsection-33" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-33-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-33-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-33-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_a_v_r910_adf1394523f7ceb15279bcec480d79e04_cgraph.png" border="0" usemap="#class_a_v_r910_adf1394523f7ceb15279bcec480d79e04_cgraph" alt=""/></div>
+<map name="class_a_v_r910_adf1394523f7ceb15279bcec480d79e04_cgraph" id="class_a_v_r910_adf1394523f7ceb15279bcec480d79e04_cgraph">
+</map>
+</div>
+<div id="dynsection-34" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-34-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-34-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-34-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_a_v_r910_adf1394523f7ceb15279bcec480d79e04_icgraph.png" border="0" usemap="#class_a_v_r910_adf1394523f7ceb15279bcec480d79e04_icgraph" alt=""/></div>
+<map name="class_a_v_r910_adf1394523f7ceb15279bcec480d79e04_icgraph" id="class_a_v_r910_adf1394523f7ceb15279bcec480d79e04_icgraph">
 </map>
 </div>
 
@@ -761,11 +1266,11 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<div id="dynsection-18" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-18-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-18-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-35" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-35-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-35-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-18-content" class="dyncontent" style="display:none;">
+<div id="dynsection-35-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="class_a_v_r910_a39178fcc7d45cd3f0835525f5270f7fd_cgraph.png" border="0" usemap="#class_a_v_r910_a39178fcc7d45cd3f0835525f5270f7fd_cgraph" alt=""/></div>
 <map name="class_a_v_r910_a39178fcc7d45cd3f0835525f5270f7fd_cgraph" id="class_a_v_r910_a39178fcc7d45cd3f0835525f5270f7fd_cgraph">
 </map>
@@ -850,7 +1355,7 @@ Protected Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_a_v_r910.html">AVR910</a></li>
-    <li class="footer">Generated on Mon Jun 8 2020 00:49:57 for GT RoboCup SSL by
+    <li class="footer">Generated on Sun Jun 14 2020 13:26:01 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

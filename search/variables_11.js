@@ -1,11 +1,15 @@
 var searchData=
 [
-  ['settings',['settings',['../classconanfile_1_1_robo_cup_firmware_conan.html#a551362f540c4be7bb03cab923257efa1',1,'conanfile::RoboCupFirmwareConan']]],
-  ['shootmode',['shootMode',['../struct_kicker_command.html#a93b5cc139a5baecb67b6f604b50875ed',1,'KickerCommand::shootMode()'],['../structrtp_1_1_control_message.html#ab04e8cf341e3cb2879a82206ad82bc29',1,'rtp::ControlMessage::shootMode()'],['../rtp_8hpp.html#a9cbade81a70376c688a0839971bb05d5',1,'shootMode():&#160;rtp.hpp']]],
-  ['song',['song',['../structrtp_1_1_control_message.html#a38ae3dd1443d2d071fd756b86c396784',1,'rtp::ControlMessage::song()'],['../rtp_8hpp.html#a90cfcabda5917921d2a44f7083d1c60b',1,'song():&#160;rtp.hpp']]],
-  ['speedtodutycycle',['SpeedToDutyCycle',['../class_robot_model.html#a5b9710dbcce0ff4fbdbf832a9dd4fe6c',1,'RobotModel']]],
-  ['spi_5f',['spi_',['../class_a_v_r910.html#a92bf8d4664bd341a45db873f652f6639',1,'AVR910']]],
-  ['stacksize',['stackSize',['../class_generic_module.html#a442ff78f9167bb26b2327aebab4e6210',1,'GenericModule']]],
-  ['stop_5fcharge_5fphase',['stop_charge_phase',['../main_8c.html#a2e1e42fff0fd538c333a001d4e070e90',1,'main.c']]],
-  ['stop_5fflow_5fphase',['stop_flow_phase',['../main_8c.html#a174eb2c9383620acac5e156c3581d51d',1,'main.c']]]
+  ['r',['R',['../class_robot_estimator.html#a4c87842e68dc39ab7acdce575ef3fa2c',1,'RobotEstimator']]],
+  ['radio',['radio',['../class_radio_link.html#a0b56fb304190359cdb084ac44c2354d8',1,'RadioLink']]],
+  ['radioerror',['radioError',['../class_l_e_d_module.html#af44faa95c9edbfb07bac5aef12799d41',1,'LEDModule::radioError()'],['../class_radio_module.html#a554605c1e35547ca60445323ee660f59',1,'RadioModule::radioError()']]],
+  ['radiospi',['radioSPI',['../class_i_s_m43340.html#add1ad3929231213eea8f337ed4c8316a',1,'ISM43340']]],
+  ['rawvoltage',['rawVoltage',['../struct_battery_voltage.html#aba125a0242a15226daea2c9b76641576',1,'BatteryVoltage::rawVoltage()'],['../class_battery.html#a987fe263bc4c7b5d5d093fae612ee5db',1,'Battery::rawVoltage()']]],
+  ['readbuffer',['readBuffer',['../class_i_s_m43340.html#ae61436a76cd0f5054c61d0f66d390809',1,'ISM43340']]],
+  ['requires',['requires',['../classconanfile_1_1_robo_cup_firmware_conan.html#a1b5d31fab3e12bfd5d41173f25eb312b',1,'conanfile::RoboCupFirmwareConan']]],
+  ['robot_5faddress',['ROBOT_ADDRESS',['../namespacertp.html#ab69c67ceceac3e0bcf89ccf40a60204a',1,'rtp']]],
+  ['robotcontroller',['robotController',['../class_motion_control_module.html#a0beef0155ae4274389cefdb8e52974ef',1,'MotionControlModule']]],
+  ['robotestimator',['robotEstimator',['../class_motion_control_module.html#a4b39572dfdd7b39e471c8ad355671ece',1,'MotionControlModule']]],
+  ['robotid',['robotID',['../struct_robot_i_d.html#a369f294aa4f214177c3f33c8faf42c71',1,'RobotID::robotID()'],['../class_radio_module.html#a3f7bcd9a3673914e0e8ddc95f0929484',1,'RadioModule::robotID()'],['../class_rotary_dial_module.html#a2008e412f931d180ad051a32979366b6',1,'RotaryDialModule::robotID()']]],
+  ['robotmodelcontrol',['RobotModelControl',['../robot__model_8hpp.html#a322dae78ddd902cba5de82da34418ac2',1,'robot_model.hpp']]]
 ];

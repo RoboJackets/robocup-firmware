@@ -88,6 +88,9 @@ $(document).ready(function(){initNavTree('struct_motor_feedback.html','');});
 <div class="title">MotorFeedback Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Contains current and encoder data for each motor.  
+ <a href="struct_motor_feedback.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for MotorFeedback:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -101,15 +104,22 @@ $(document).ready(function(){initNavTree('struct_motor_feedback.html','');});
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a8514ac244bc482f002e989f57225c211"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_motor_feedback.html#a8514ac244bc482f002e989f57225c211">isValid</a> = false</td></tr>
+<tr class="memdesc:a8514ac244bc482f002e989f57225c211"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores whether given data is valid.  <a href="#a8514ac244bc482f002e989f57225c211">More...</a><br /></td></tr>
 <tr class="separator:a8514ac244bc482f002e989f57225c211"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa6e6bce214fbaf87b35e444cd3e7796"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_motor_feedback.html#afa6e6bce214fbaf87b35e444cd3e7796">lastUpdate</a></td></tr>
+<tr class="memdesc:afa6e6bce214fbaf87b35e444cd3e7796"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time at which MotorFeedback was last updated (milliseconds)  <a href="#afa6e6bce214fbaf87b35e444cd3e7796">More...</a><br /></td></tr>
 <tr class="separator:afa6e6bce214fbaf87b35e444cd3e7796"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8600cf3da11509c8165d6f1eeca2d3d5"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_motor_feedback.html#a8600cf3da11509c8165d6f1eeca2d3d5">encoders</a> [4]</td></tr>
+<tr class="memdesc:a8600cf3da11509c8165d6f1eeca2d3d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encoder readings from each wheel motor (rad/s)  <a href="#a8600cf3da11509c8165d6f1eeca2d3d5">More...</a><br /></td></tr>
 <tr class="separator:a8600cf3da11509c8165d6f1eeca2d3d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa19dbad1c45449593ac32a68d401d0ef"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_motor_feedback.html#aa19dbad1c45449593ac32a68d401d0ef">currents</a> [4]</td></tr>
+<tr class="memdesc:aa19dbad1c45449593ac32a68d401d0ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current readings from each wheel motor (amps)  <a href="#aa19dbad1c45449593ac32a68d401d0ef">More...</a><br /></td></tr>
 <tr class="separator:aa19dbad1c45449593ac32a68d401d0ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Data Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Contains current and encoder data for each motor. </p>
+<p>Passed from <a class="el" href="class_f_p_g_a_module.html">FPGAModule</a> to <a class="el" href="class_motion_control_module.html">MotionControlModule</a> </p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="aa19dbad1c45449593ac32a68d401d0ef"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa19dbad1c45449593ac32a68d401d0ef">&#9670;&nbsp;</a></span>currents</h2>
 
@@ -121,6 +131,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Current readings from each wheel motor (amps) </p>
 
 </div>
 </div>
@@ -136,6 +148,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Encoder readings from each wheel motor (rad/s) </p>
+
 </div>
 </div>
 <a id="a8514ac244bc482f002e989f57225c211"></a>
@@ -149,6 +163,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Stores whether given data is valid. </p>
 
 </div>
 </div>
@@ -164,6 +180,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Time at which MotorFeedback was last updated (milliseconds) </p>
+
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
@@ -175,7 +193,7 @@ Public Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="struct_motor_feedback.html">MotorFeedback</a></li>
-    <li class="footer">Generated on Mon Jun 8 2020 00:49:57 for GT RoboCup SSL by
+    <li class="footer">Generated on Sun Jun 14 2020 13:26:01 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

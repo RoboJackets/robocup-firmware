@@ -5,5 +5,5 @@ digraph "GenericModule::start"
   rankdir="LR";
   Node7 [label="GenericModule::start",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
   Node7 -> Node8 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node8 [label="GenericModule::entry",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_generic_module.html#a3789bbdeff222e7320e262a622b52237",tooltip="Called by the RTOS at the desired update rate. "];
+  Node8 [label="GenericModule::entry",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_generic_module.html#a3789bbdeff222e7320e262a622b52237",tooltip="Code to run when called by RTOS once per system tick (kperiod) "];
 }

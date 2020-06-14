@@ -84,6 +84,7 @@ $(document).ready(function(){initNavTree('class_pid.html','');});
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_pid-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">Pid Class Reference</div>  </div>
@@ -125,6 +126,24 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a7f72115e163cb28354927c91ba5a5c3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0b2d864820b6a11ee2685dbb6ac6622b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pid.html#a0b2d864820b6a11ee2685dbb6ac6622b">derivAlpha</a></td></tr>
 <tr class="separator:a0b2d864820b6a11ee2685dbb6ac6622b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:ad4463543f8aca7c10c1fb75f89e9855b"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pid.html#ad4463543f8aca7c10c1fb75f89e9855b">_windup</a></td></tr>
+<tr class="memdesc:ad4463543f8aca7c10c1fb75f89e9855b"><td class="mdescLeft">&#160;</td><td class="mdescRight">amount to sum up  <a href="#ad4463543f8aca7c10c1fb75f89e9855b">More...</a><br /></td></tr>
+<tr class="separator:ad4463543f8aca7c10c1fb75f89e9855b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae736dcd86a5dac4d2baff98de149c995"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pid.html#ae736dcd86a5dac4d2baff98de149c995">_windupLoc</a></td></tr>
+<tr class="separator:ae736dcd86a5dac4d2baff98de149c995"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44dc731a1b9afb8a59d862dbe4e25848"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pid.html#a44dc731a1b9afb8a59d862dbe4e25848">_errSum</a></td></tr>
+<tr class="separator:a44dc731a1b9afb8a59d862dbe4e25848"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a917e27fd1b90dd1d851913f2a825f0f6"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pid.html#a917e27fd1b90dd1d851913f2a825f0f6">_lastError</a></td></tr>
+<tr class="separator:a917e27fd1b90dd1d851913f2a825f0f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a95c247badb14bd60ed228c8a1f960a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pid.html#a6a95c247badb14bd60ed228c8a1f960a">_lastDeriv</a></td></tr>
+<tr class="separator:a6a95c247badb14bd60ed228c8a1f960a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8a8150cbe6098745e75064a017bf20f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pid.html#ac8a8150cbe6098745e75064a017bf20f">_saturated</a></td></tr>
+<tr class="separator:ac8a8150cbe6098745e75064a017bf20f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1105ee8378ebd5307b5d892e5330789f"><td class="memItemLeft" align="right" valign="top">std::vector&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pid.html#a1105ee8378ebd5307b5d892e5330789f">_oldErr</a></td></tr>
+<tr class="separator:a1105ee8378ebd5307b5d892e5330789f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="acfd171f7623d22f9d12034ed50eb38a9"></a>
@@ -317,6 +336,162 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a44dc731a1b9afb8a59d862dbe4e25848"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44dc731a1b9afb8a59d862dbe4e25848">&#9670;&nbsp;</a></span>_errSum</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Pid::_errSum</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6a95c247badb14bd60ed228c8a1f960a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a95c247badb14bd60ed228c8a1f960a">&#9670;&nbsp;</a></span>_lastDeriv</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Pid::_lastDeriv</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a917e27fd1b90dd1d851913f2a825f0f6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a917e27fd1b90dd1d851913f2a825f0f6">&#9670;&nbsp;</a></span>_lastError</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Pid::_lastError</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1105ee8378ebd5307b5d892e5330789f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1105ee8378ebd5307b5d892e5330789f">&#9670;&nbsp;</a></span>_oldErr</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;float&gt; Pid::_oldErr</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac8a8150cbe6098745e75064a017bf20f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8a8150cbe6098745e75064a017bf20f">&#9670;&nbsp;</a></span>_saturated</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Pid::_saturated</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad4463543f8aca7c10c1fb75f89e9855b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad4463543f8aca7c10c1fb75f89e9855b">&#9670;&nbsp;</a></span>_windup</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned int Pid::_windup</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>amount to sum up </p>
+
+</div>
+</div>
+<a id="ae736dcd86a5dac4d2baff98de149c995"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae736dcd86a5dac4d2baff98de149c995">&#9670;&nbsp;</a></span>_windupLoc</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned int Pid::_windupLoc</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a0b2d864820b6a11ee2685dbb6ac6622b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0b2d864820b6a11ee2685dbb6ac6622b">&#9670;&nbsp;</a></span>derivAlpha</h2>
 
@@ -383,7 +558,7 @@ Public Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_pid.html">Pid</a></li>
-    <li class="footer">Generated on Mon Jun 8 2020 00:49:57 for GT RoboCup SSL by
+    <li class="footer">Generated on Sun Jun 14 2020 13:26:01 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

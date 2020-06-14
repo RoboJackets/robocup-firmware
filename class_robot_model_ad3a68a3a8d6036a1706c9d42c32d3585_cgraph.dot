@@ -3,7 +3,13 @@ digraph "RobotModel::get"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node2 [label="RobotModel::get",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
-  Node2 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node3 [label="RobotModel::operator=",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_robot_model.html#a4d9233b399324c653083e78e779cc098"];
+  Node19 [label="RobotModel::get",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node19 -> Node20 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node20 [label="RobotModel::RobotModel",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_robot_model.html#a65c03c3c26d969afaae0efff52653a9d"];
+  Node20 -> Node21 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node21 [label="RobotModel::DegreesToRadians",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_robot_model.html#ad71d5a753cdc8697fe2e59978643e66f"];
+  Node20 -> Node22 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node22 [label="RobotModel::recalculateBot\lToWheel",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_robot_model.html#a371f2a73a77c19c7771bfdef12b7b5a9",tooltip="This should be called when any of the other parameters are changed. "];
+  Node19 -> Node23 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node23 [label="RobotModel::operator=",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_robot_model.html#a4d9233b399324c653083e78e779cc098"];
 }

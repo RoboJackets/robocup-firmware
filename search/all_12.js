@@ -1,8 +1,10 @@
 var searchData=
 [
+  ['secondradiocs',['secondRadioCS',['../class_radio_module.html#aa5b55e7c94a99de26a22f4f0ad9549b4',1,'RadioModule']]],
   ['selftest',['selfTest',['../class_i_s_m43340.html#a95d33af4f23014987be2bc28df3aba2d',1,'ISM43340']]],
-  ['send',['send',['../class_radio_link.html#a8189adde363d5fe27b29e045b775ae7f',1,'RadioLink::send()'],['../class_generic_radio.html#ac88e2085c48fd612998440844d5468a5',1,'GenericRadio::send()'],['../class_i_s_m43340.html#a3a64b0ef7c8286b330311afcf70bbd45',1,'ISM43340::send()']]],
+  ['send',['send',['../class_radio_link.html#a8189adde363d5fe27b29e045b775ae7f',1,'RadioLink::send()'],['../class_generic_radio.html#ac88e2085c48fd612998440844d5468a5',1,'GenericRadio::send()'],['../class_i_s_m43340.html#a3a64b0ef7c8286b330311afcf70bbd45',1,'ISM43340::send(const uint8_t *data, const unsigned int numBytes)'],['../class_i_s_m43340.html#afb7c0572679cf355f54cf3baac0cf005a4f12fb21793dae0238ddd6fb610f9800',1,'ISM43340::SEND()']]],
   ['send_5fconfig',['send_config',['../class_f_p_g_a.html#afe0325a65f4142784871fb0c63255d75',1,'FPGA']]],
+  ['sendcommand',['sendCommand',['../class_i_s_m43340.html#a55f5fa5d826f8056d5f7d43f43a55691',1,'ISM43340::sendCommand(const std::string &amp;command, const uint8_t *arg, const unsigned int argSize)'],['../class_i_s_m43340.html#aa0175106811681726972de1a475fcd4b',1,'ISM43340::sendCommand(const std::string &amp;command, const std::string &amp;arg=&quot;&quot;)']]],
   ['serializetovector',['serializeToVector',['../namespacertp.html#a9d71039fcc36747d650cb8cc105a7f21',1,'rtp']]],
   ['service',['service',['../class_kicker_board.html#aaa3a613b73e4be7eb4812bb8c11bc6ce',1,'KickerBoard']]],
   ['set_5fduty_5fcycles',['set_duty_cycles',['../class_f_p_g_a.html#a4daf6e0acbe3eac9db30a5b0aa39cfad',1,'FPGA']]],
@@ -17,6 +19,7 @@ var searchData=
   ['setchargeallowed',['setChargeAllowed',['../class_kicker_board.html#a5caa81abc585544ba6122f237f9d6a31',1,'KickerBoard']]],
   ['setclockoutputenabled',['setClockOutputEnabled',['../class_m_p_u6050.html#a71ec4642b6f6c937bbf6a24fea4179e5',1,'MPU6050']]],
   ['setclocksource',['setClockSource',['../class_m_p_u6050.html#a4c1cd147d038e024bdeaa053c4d77734',1,'MPU6050']]],
+  ['setcolor',['setColor',['../class_l_e_d_module.html#ab12cbc129d32a221d4ae69b9a72ba7fd',1,'LEDModule']]],
   ['setdeviceid',['setDeviceID',['../class_m_p_u6050.html#aaefb4b3d93cf4b78d56cd63b10ea0e97',1,'MPU6050']]],
   ['setdhpfmode',['setDHPFMode',['../class_m_p_u6050.html#a44cc43aaad1e52c1ba3142d4490af611',1,'MPU6050']]],
   ['setdlpfmode',['setDLPFMode',['../class_m_p_u6050.html#a7a782ade8af2f88dfef7171487f59a3b',1,'MPU6050']]],
@@ -116,6 +119,7 @@ var searchData=
   ['shootmode',['ShootMode',['../struct_kicker_command.html#a7334a1861569334fa12adeb9fe1c3bdc',1,'KickerCommand::ShootMode()'],['../struct_kicker_command.html#a93b5cc139a5baecb67b6f604b50875ed',1,'KickerCommand::shootMode()'],['../structrtp_1_1_control_message.html#ab04e8cf341e3cb2879a82206ad82bc29',1,'rtp::ControlMessage::shootMode()'],['../rtp_8hpp.html#a9cbade81a70376c688a0839971bb05d5',1,'shootMode():&#160;rtp.hpp']]],
   ['sink',['SINK',['../namespacertp_1_1_port_type_namespace.html#aa4aec9e3af6e48136ec9a1e072d22288a771337ccebdc1a25157f5317beabe0bb',1,'rtp::PortTypeNamespace']]],
   ['size',['size',['../classrtp_1_1_packet.html#a998b11eff8d702b4ebc086ff13a4d8c5',1,'rtp::Packet']]],
+  ['socket_5ftype',['SOCKET_TYPE',['../class_i_s_m43340.html#afb7c0572679cf355f54cf3baac0cf005',1,'ISM43340']]],
   ['song',['song',['../structrtp_1_1_control_message.html#a38ae3dd1443d2d071fd756b86c396784',1,'rtp::ControlMessage::song()'],['../rtp_8hpp.html#a90cfcabda5917921d2a44f7083d1c60b',1,'song():&#160;rtp.hpp']]],
   ['speedtodutycycle',['SpeedToDutyCycle',['../class_robot_model.html#a5b9710dbcce0ff4fbdbf832a9dd4fe6c',1,'RobotModel']]],
   ['spi_5f',['spi_',['../class_a_v_r910.html#a92bf8d4664bd341a45db873f652f6639',1,'AVR910']]],

@@ -2,7 +2,7 @@ digraph "ISM43340"
 {
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
-  Node0 [label="{ISM43340\n|+ cmd\l+ arg\l|+ ISM43340()\l+ send()\l+ receive()\l+ isAvailable()\l+ selfTest()\l+ pingRouter()\l+ isConnected()\l+ testPrint()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node0 [label="{ISM43340\n|+ cmd\l+ arg\l- radioSPI\l- nCs\l- nReset\l- dataReady\l- currentSocket\l- readBuffer\l- builtCommand\l- cmdStart\l- isInit\l|+ ISM43340()\l+ send()\l+ receive()\l+ isAvailable()\l+ selfTest()\l+ pingRouter()\l+ isConnected()\l+ testPrint()\l- reset()\l- writeToSpi()\l- readFromSpi()\l- sendCommand()\l- sendCommand()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
   Node1 -> Node0 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
   Node1 [label="{GenericRadio\n||+ send()\l+ receive()\l+ isAvailable()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_generic_radio.html"];
 }

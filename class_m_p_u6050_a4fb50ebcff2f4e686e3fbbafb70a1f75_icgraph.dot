@@ -7,7 +7,7 @@ digraph "MPU6050::readMemoryByte"
   Node773 -> Node774 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node774 [label="MPU6050::setClockSource",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_p_u6050.html#a4c1cd147d038e024bdeaa053c4d77734",tooltip="Set clock source setting. "];
   Node774 -> Node775 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node775 [label="IMUModule::start",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_m_u_module.html#aba29f7665d8ec8f0eefe802f1c2b741c",tooltip="Called once to initialize the module. "];
+  Node775 [label="IMUModule::start",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_m_u_module.html#aba29f7665d8ec8f0eefe802f1c2b741c",tooltip="Code which initializes module. "];
   Node774 -> Node776 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node776 [label="MPU6050::initialize",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_p_u6050.html#abd8fc6c18adf158011118fbccc7e7054",tooltip="Power on and prepare for general usage. "];
   Node776 -> Node775 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];

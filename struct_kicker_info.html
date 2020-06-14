@@ -88,6 +88,9 @@ $(document).ready(function(){initNavTree('struct_kicker_info.html','');});
 <div class="title">KickerInfo Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Contains status on kicker and breakbeam.  
+ <a href="struct_kicker_info.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for KickerInfo:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -101,19 +104,28 @@ $(document).ready(function(){initNavTree('struct_kicker_info.html','');});
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:ace4defdb6fd7a8dbcb4eb309cd738ff6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kicker_info.html#ace4defdb6fd7a8dbcb4eb309cd738ff6">isValid</a> = false</td></tr>
+<tr class="memdesc:ace4defdb6fd7a8dbcb4eb309cd738ff6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores whether given data is valid.  <a href="#ace4defdb6fd7a8dbcb4eb309cd738ff6">More...</a><br /></td></tr>
 <tr class="separator:ace4defdb6fd7a8dbcb4eb309cd738ff6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1d06c8a2f56286931645df8fc53327b2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kicker_info.html#a1d06c8a2f56286931645df8fc53327b2">initialized</a> = false</td></tr>
+<tr class="memdesc:a1d06c8a2f56286931645df8fc53327b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores whether Kicker has been initialized.  <a href="#a1d06c8a2f56286931645df8fc53327b2">More...</a><br /></td></tr>
 <tr class="separator:a1d06c8a2f56286931645df8fc53327b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9786a9526aaf76752b0f23defdd87229"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kicker_info.html#a9786a9526aaf76752b0f23defdd87229">lastUpdate</a></td></tr>
+<tr class="memdesc:a9786a9526aaf76752b0f23defdd87229"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time at which MotionCommand was last updated (milliseconds)  <a href="#a9786a9526aaf76752b0f23defdd87229">More...</a><br /></td></tr>
 <tr class="separator:a9786a9526aaf76752b0f23defdd87229"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade60b8d173ec78e2b3474a6e0d3e19ac"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kicker_info.html#ade60b8d173ec78e2b3474a6e0d3e19ac">kickerHasError</a></td></tr>
+<tr class="memdesc:ade60b8d173ec78e2b3474a6e0d3e19ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores whether Kicker has an error.  <a href="#ade60b8d173ec78e2b3474a6e0d3e19ac">More...</a><br /></td></tr>
 <tr class="separator:ade60b8d173ec78e2b3474a6e0d3e19ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab48f1fe2d25a504e3da61a3921f37b97"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kicker_info.html#ab48f1fe2d25a504e3da61a3921f37b97">kickerCharged</a></td></tr>
+<tr class="memdesc:ab48f1fe2d25a504e3da61a3921f37b97"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores whether Kicker is charged above appropriate threshold to kick.  <a href="#ab48f1fe2d25a504e3da61a3921f37b97">More...</a><br /></td></tr>
 <tr class="separator:ab48f1fe2d25a504e3da61a3921f37b97"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a557d750e8d5d1101b2fdb4d4a5528229"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_kicker_info.html#a557d750e8d5d1101b2fdb4d4a5528229">ballSenseTriggered</a></td></tr>
+<tr class="memdesc:a557d750e8d5d1101b2fdb4d4a5528229"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores whether Breakbeam is tripped.  <a href="#a557d750e8d5d1101b2fdb4d4a5528229">More...</a><br /></td></tr>
 <tr class="separator:a557d750e8d5d1101b2fdb4d4a5528229"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Data Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Contains status on kicker and breakbeam. </p>
+<p>Passed from <a class="el" href="class_kicker_module.html">KickerModule</a> to <a class="el" href="class_radio_module.html">RadioModule</a> </p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="a557d750e8d5d1101b2fdb4d4a5528229"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a557d750e8d5d1101b2fdb4d4a5528229">&#9670;&nbsp;</a></span>ballSenseTriggered</h2>
 
@@ -125,6 +137,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Stores whether Breakbeam is tripped. </p>
 
 </div>
 </div>
@@ -140,6 +154,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Stores whether Kicker has been initialized. </p>
+
 </div>
 </div>
 <a id="ace4defdb6fd7a8dbcb4eb309cd738ff6"></a>
@@ -153,6 +169,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Stores whether given data is valid. </p>
 
 </div>
 </div>
@@ -168,6 +186,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Stores whether Kicker is charged above appropriate threshold to kick. </p>
+
 </div>
 </div>
 <a id="ade60b8d173ec78e2b3474a6e0d3e19ac"></a>
@@ -181,6 +201,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Stores whether Kicker has an error. </p>
 
 </div>
 </div>
@@ -196,6 +218,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Time at which MotionCommand was last updated (milliseconds) </p>
+
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
@@ -207,7 +231,7 @@ Public Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="struct_kicker_info.html">KickerInfo</a></li>
-    <li class="footer">Generated on Mon Jun 8 2020 00:49:57 for GT RoboCup SSL by
+    <li class="footer">Generated on Sun Jun 14 2020 13:26:01 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

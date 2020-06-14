@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['dataready',['dataReady',['../class_i_s_m43340.html#a3d14d8c9efb73d99539978ef87c920af',1,'ISM43340']]],
   ['dataready_5fcb',['dataReady_cb',['../_i_s_m43340_8cpp.html#a9ee77ecdf1402df975a6aca30b8e8ed6',1,'ISM43340.cpp']]],
   ['db_5fchg_5fpin',['DB_CHG_PIN',['../pins_8h.html#ab0b41ecdfaec48410e01f7d41b24fb86',1,'pins.h']]],
   ['db_5fchip_5fpin',['DB_CHIP_PIN',['../pins_8h.html#a28fd024e4d460049e2fd41be4919bee1',1,'pins.h']]],
@@ -8,10 +9,13 @@ var searchData=
   ['dd_5freg',['dd_reg',['../structpin__name.html#a2c7e2c0b02f16759581dddbbb6a246d6',1,'pin_name']]],
   ['debuginfo',['DebugInfo',['../struct_debug_info.html',1,'DebugInfo'],['../control_2main_8cpp.html#a0f1c919a110996e49af5843c288a899b',1,'debugInfo():&#160;main.cpp'],['../_motion_control_module_8cpp.html#a02690f65e1f610e4a30b71680beb6ea3',1,'debugInfo():&#160;main.cpp'],['../_robot_controller_8cpp.html#a02690f65e1f610e4a30b71680beb6ea3',1,'debugInfo():&#160;main.cpp'],['../_robot_estimator_8cpp.html#a02690f65e1f610e4a30b71680beb6ea3',1,'debugInfo():&#160;main.cpp'],['../_radio_link_8cpp.html#a02690f65e1f610e4a30b71680beb6ea3',1,'debugInfo():&#160;main.cpp']]],
   ['defval',['DEFVAL',['../class_m_c_p23017.html#a3f402d0f5722dfbbfca400a36bc5d66ea72a32a4ac4878bbb847998ccc5417f83',1,'MCP23017']]],
+  ['degreestoradians',['DegreesToRadians',['../class_robot_model.html#ad71d5a753cdc8697fe2e59978643e66f',1,'RobotModel']]],
   ['derivalpha',['derivAlpha',['../class_pid.html#a0b2d864820b6a11ee2685dbb6ac6622b',1,'Pid']]],
   ['description',['description',['../classconanfile_1_1_robo_cup_firmware_conan.html#aa419af7c8fa2e7e9984afd95aced993a',1,'conanfile::RoboCupFirmwareConan']]],
   ['desired_5ftimer_5ffreq',['DESIRED_TIMER_FREQ',['../main_8c.html#a3899d06c609fae76112f59f92cb2fa63',1,'main.c']]],
+  ['devaddr',['devAddr',['../class_m_p_u6050.html#ad248bbf6e9da395ab67f7049b50ae474',1,'MPU6050']]],
   ['device_5flocked',['DEVICE_LOCKED',['../_a_v_r910_8hpp.html#aaefef489ea7ebe4a77277bfaa83178ce',1,'AVR910.hpp']]],
+  ['dial',['dial',['../class_rotary_dial_module.html#aed93e5a3446aa999fd573a942dc1d3c2',1,'RotaryDialModule']]],
   ['digitalread',['digitalRead',['../class_m_c_p23017.html#af329a9def6704f71efa586687155bd26',1,'MCP23017']]],
   ['digitalwordread',['digitalWordRead',['../class_m_c_p23017.html#abd2401da8537875428522c181ecd9769',1,'MCP23017']]],
   ['digitalwordwrite',['digitalWordWrite',['../class_m_c_p23017.html#a1422a52e107cc99ec72f9069979e1807',1,'MCP23017']]],
@@ -22,8 +26,11 @@ var searchData=
   ['dir_5finput',['DIR_INPUT',['../class_m_c_p23017.html#a722f23d7767a135c669222da836339bea2edc7b553859d242d65404f71a6da0d3',1,'MCP23017']]],
   ['dir_5foutput',['DIR_OUTPUT',['../class_m_c_p23017.html#a722f23d7767a135c669222da836339bea80b0a688232a4f3b0712285be56d1f2e',1,'MCP23017']]],
   ['dot_5fstar_5fcs',['DOT_STAR_CS',['../iodefs_8h.html#a8a283cb9fa013689d5a76622ae1278a7',1,'iodefs.h']]],
+  ['dotstarncs',['dotStarNCS',['../class_l_e_d_module.html#abc0364864fb54a0143a36adb214242e1',1,'LEDModule']]],
+  ['dotstarspi',['dotStarSPI',['../class_l_e_d_module.html#a5975d2df0087e540993addba4e2450bc',1,'LEDModule']]],
   ['dribbler',['dribbler',['../struct_motion_command.html#aab54add81cd15f7915f2bb59d000aa9b',1,'MotionCommand::dribbler()'],['../struct_motor_command.html#a605fc6ceb438c3c1aa19f4e6da1e3834',1,'MotorCommand::dribbler()'],['../structrtp_1_1_control_message.html#a1d1380ca4164b234b982bd28814e568c',1,'rtp::ControlMessage::dribbler()'],['../rtp_8hpp.html#a93506a5ab96874915e73c996e141bc72',1,'dribbler():&#160;rtp.hpp']]],
-  ['dribblercontroller',['DribblerController',['../class_dribbler_controller.html',1,'DribblerController'],['../class_dribbler_controller.html#a778b90c2faed182dcd9df9c9d7fcfe7d',1,'DribblerController::DribblerController()']]],
+  ['dribblercontroller',['DribblerController',['../class_dribbler_controller.html',1,'DribblerController'],['../class_dribbler_controller.html#a778b90c2faed182dcd9df9c9d7fcfe7d',1,'DribblerController::DribblerController()'],['../class_motion_control_module.html#aafae109345b58942b79559efd60d584b',1,'MotionControlModule::dribblerController()']]],
   ['dribblercontroller_2ecpp',['DribblerController.cpp',['../_dribbler_controller_8cpp.html',1,'']]],
-  ['dribblercontroller_2ehpp',['DribblerController.hpp',['../_dribbler_controller_8hpp.html',1,'']]]
+  ['dribblercontroller_2ehpp',['DribblerController.hpp',['../_dribbler_controller_8hpp.html',1,'']]],
+  ['dt',['dt',['../class_dribbler_controller.html#af8063f872c621e980b21f901b35c0ab5',1,'DribblerController::dt()'],['../class_robot_controller.html#ac7d22001bbe5cfab5687f2f4df2e4885',1,'RobotController::dt()']]]
 ];

@@ -37,7 +37,7 @@ digraph "I2Cdev::readBytes"
   Node292 -> Node358 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node358 [label="MPU6050::setClockSource",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_p_u6050.html#a4c1cd147d038e024bdeaa053c4d77734",tooltip="Set clock source setting. "];
   Node358 -> Node359 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node359 [label="IMUModule::start",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_m_u_module.html#aba29f7665d8ec8f0eefe802f1c2b741c",tooltip="Called once to initialize the module. "];
+  Node359 [label="IMUModule::start",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_m_u_module.html#aba29f7665d8ec8f0eefe802f1c2b741c",tooltip="Code which initializes module. "];
   Node358 -> Node360 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node360 [label="MPU6050::initialize",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_p_u6050.html#abd8fc6c18adf158011118fbccc7e7054",tooltip="Power on and prepare for general usage. "];
   Node360 -> Node359 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
@@ -87,7 +87,7 @@ digraph "I2Cdev::readBytes"
   Node289 -> Node454 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node454 [label="MPU6050::getMotion6",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_p_u6050.html#a574d3093dc131e4251a9b37adf208ca7",tooltip="Get raw 6-axis motion sensor readings (accel/gyro). "];
   Node454 -> Node455 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node455 [label="IMUModule::entry",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_m_u_module.html#a784f495174be8c60b2d1e5a99bf508c9",tooltip="Called by the RTOS at the desired update rate. "];
+  Node455 [label="IMUModule::entry",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_m_u_module.html#a784f495174be8c60b2d1e5a99bf508c9",tooltip="Code to run when called by RTOS once per system tick (kperiod) "];
   Node454 -> Node456 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node456 [label="MPU6050::getMotion9",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_p_u6050.html#aabfd2920e748016383e8124a4b32ad31",tooltip="Get raw 9-axis motion sensor readings (accel/gyro/compass). "];
   Node289 -> Node457 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];

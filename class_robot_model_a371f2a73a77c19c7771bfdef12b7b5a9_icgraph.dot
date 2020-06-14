@@ -1,0 +1,20 @@
+digraph "RobotModel::recalculateBotToWheel"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node37 [label="RobotModel::recalculateBot\lToWheel",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node37 -> Node38 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node38 [label="RobotModel::RobotModel",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_robot_model.html#a65c03c3c26d969afaae0efff52653a9d"];
+  Node38 -> Node39 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node39 [label="RobotModel::get",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_robot_model.html#ad3a68a3a8d6036a1706c9d42c32d3585"];
+  Node39 -> Node40 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node40 [label="apply_wheel_force",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_robot_controller_8cpp.html#a71e48812e11f8c3991f75c5958a75d61"];
+  Node40 -> Node41 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node41 [label="RobotController::calculateBody",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_robot_controller.html#a8518f8a0522c7359e708cc1efff96dfd",tooltip="Updates the controller with the latest input and calculates the correct wheel velocities to reach thi..."];
+  Node41 -> Node42 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node42 [label="MotionControlModule\l::entry",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_motion_control_module.html#ae9ce65e3c14d0effbac1c1a3b93fb5b1",tooltip="Code to run when called by RTOS once per system tick (kperiod) "];
+  Node39 -> Node41 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node39 -> Node43 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node43 [label="RobotEstimator::RobotEstimator",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_robot_estimator.html#ab7adc8b41475920123f38b2934ce5247"];
+}

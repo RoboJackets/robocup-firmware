@@ -84,6 +84,7 @@ $(document).ready(function(){initNavTree('class_f_p_g_a.html','');});
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_f_p_g_a-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">FPGA Class Reference</div>  </div>
@@ -152,6 +153,21 @@ Static Public Attributes</h2></td></tr>
 <tr class="separator:a0335b1e6dc2fd18799bc18c7869a9e97"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1af8cb7f992ab5a18d7a48296493199c"><td class="memItemLeft" align="right" valign="top">static const int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_p_g_a.html#a1af8cb7f992ab5a18d7a48296493199c">MAX_DUTY_CYCLE</a> = 511</td></tr>
 <tr class="separator:a1af8cb7f992ab5a18d7a48296493199c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a1b2ea20b366ec5219ff3d53887f95798"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_p_g_a.html#a1b2ea20b366ec5219ff3d53887f95798">_isInit</a> = false</td></tr>
+<tr class="separator:a1b2ea20b366ec5219ff3d53887f95798"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a838a88572cc75bc319561927c2ae99c2"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; SPI &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_p_g_a.html#a838a88572cc75bc319561927c2ae99c2">_spi_bus</a></td></tr>
+<tr class="separator:a838a88572cc75bc319561927c2ae99c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0179962077bd43ef5164c73626a973f6"><td class="memItemLeft" align="right" valign="top">DigitalOut&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_p_g_a.html#a0179962077bd43ef5164c73626a973f6">_nCs</a></td></tr>
+<tr class="separator:a0179962077bd43ef5164c73626a973f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85e15e4e26c41e864cc40fd37bfac9dc"><td class="memItemLeft" align="right" valign="top">DigitalIn&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_p_g_a.html#a85e15e4e26c41e864cc40fd37bfac9dc">_initB</a></td></tr>
+<tr class="separator:a85e15e4e26c41e864cc40fd37bfac9dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adaa56acf2f987cfa0fcaecb972104722"><td class="memItemLeft" align="right" valign="top">DigitalIn&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_p_g_a.html#adaa56acf2f987cfa0fcaecb972104722">_done</a></td></tr>
+<tr class="separator:adaa56acf2f987cfa0fcaecb972104722"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1bce7bf9551172a98873ac80468973b6"><td class="memItemLeft" align="right" valign="top">DigitalOut&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_f_p_g_a.html#a1bce7bf9551172a98873ac80468973b6">_progB</a></td></tr>
+<tr class="separator:a1bce7bf9551172a98873ac80468973b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a929707a4ffecf1a2f9aa0d18e11dc3e0"></a>
@@ -719,6 +735,138 @@ Static Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="adaa56acf2f987cfa0fcaecb972104722"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adaa56acf2f987cfa0fcaecb972104722">&#9670;&nbsp;</a></span>_done</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">DigitalIn FPGA::_done</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a85e15e4e26c41e864cc40fd37bfac9dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a85e15e4e26c41e864cc40fd37bfac9dc">&#9670;&nbsp;</a></span>_initB</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">DigitalIn FPGA::_initB</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1b2ea20b366ec5219ff3d53887f95798"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b2ea20b366ec5219ff3d53887f95798">&#9670;&nbsp;</a></span>_isInit</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool FPGA::_isInit = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0179962077bd43ef5164c73626a973f6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0179962077bd43ef5164c73626a973f6">&#9670;&nbsp;</a></span>_nCs</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">DigitalOut FPGA::_nCs</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1bce7bf9551172a98873ac80468973b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1bce7bf9551172a98873ac80468973b6">&#9670;&nbsp;</a></span>_progB</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">DigitalOut FPGA::_progB</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a838a88572cc75bc319561927c2ae99c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a838a88572cc75bc319561927c2ae99c2">&#9670;&nbsp;</a></span>_spi_bus</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unique_ptr&lt;SPI&gt; FPGA::_spi_bus</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a0335b1e6dc2fd18799bc18c7869a9e97"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0335b1e6dc2fd18799bc18c7869a9e97">&#9670;&nbsp;</a></span>FPGA_SPI_FREQ</h2>
 
@@ -773,7 +921,7 @@ Static Public Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_f_p_g_a.html">FPGA</a></li>
-    <li class="footer">Generated on Mon Jun 8 2020 00:49:57 for GT RoboCup SSL by
+    <li class="footer">Generated on Sun Jun 14 2020 13:26:01 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

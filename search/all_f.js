@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['p',['P',['../class_robot_estimator.html#a1555a9f6c32fb88e2e5c5eacc4c9e84d',1,'RobotEstimator']]],
   ['pack',['pack',['../classrtp_1_1_packet.html#ae7ade83f1d9d9c46178e639be7900282',1,'rtp::Packet']]],
   ['package',['package',['../classconanfile_1_1_robo_cup_firmware_conan.html#aa9ef66c14f49f52ea1665baa6f82f53f',1,'conanfile::RoboCupFirmwareConan']]],
   ['packet',['Packet',['../classrtp_1_1_packet.html',1,'rtp::Packet'],['../classrtp_1_1_packet.html#add36db7d672d9115e000eca1c92c3dde',1,'rtp::Packet::Packet()'],['../classrtp_1_1_packet.html#a19fd8c5a0fecec46ca343b3e390bd10e',1,'rtp::Packet::Packet(const std::vector&lt; T &gt; &amp;v, PortType p=PortType::LEGACY)'],['../classrtp_1_1_packet.html#a9e0807cd9ada101cb1d2acfb77d650df',1,'rtp::Packet::Packet(const std::array&lt; T, N &gt; &amp;v, PortType p=PortType::LEGACY)'],['../classrtp_1_1_packet.html#a35abfcf4222759b5d63061ff3618cd0f',1,'rtp::Packet::Packet(const std::initializer_list&lt; T &gt; &amp;payloadBytes, PortType p=PortType::PING)'],['../classrtp_1_1_packet.html#a274dc74c3c6f2dc6226d56f70e08dd64',1,'rtp::Packet::Packet(const std::string &amp;s, PortType p=PortType::SINK)']]],
@@ -49,13 +50,18 @@ var searchData=
   ['pingrouter',['pingRouter',['../class_i_s_m43340.html#abb2e9dbc0e7058d62a44d12eaeacd211',1,'ISM43340']]],
   ['pinmode',['PinMode',['../class_m_c_p23017.html#a722f23d7767a135c669222da836339be',1,'MCP23017::PinMode()'],['../class_i_o_expander_digital_in_out.html#ac36968692d1b2c6584aa53af6b75f03f',1,'IOExpanderDigitalInOut::pinMode()'],['../class_m_c_p23017.html#ab23fbf252bc8823771aa0109b5f09955',1,'MCP23017::pinMode()']]],
   ['pins_2eh',['pins.h',['../pins_8h.html',1,'']]],
+  ['poll',['poll',['../class_a_v_r910.html#ac0fb0a591e044d917d00d3f1e6635072',1,'AVR910']]],
   ['port',['port',['../structrtp_1_1_header.html#a6c9d2c1c24ed04d14a0a5a9ea5cf9dbb',1,'rtp::Header::port()'],['../rtp_8hpp.html#a0c8626701e995d0cb72a0bb94fc79f70',1,'port():&#160;rtp.hpp']]],
   ['port_5freg',['port_reg',['../structpin__name.html#ac46007fe242e65e502b37857ddf5faa5',1,'pin_name']]],
   ['porttype',['PortType',['../namespacertp.html#ab331cb54d0a87ff7ff6cf14f6ddd4aea',1,'rtp']]],
   ['porttypeenum',['PortTypeEnum',['../namespacertp_1_1_port_type_namespace.html#aa4aec9e3af6e48136ec9a1e072d22288',1,'rtp::PortTypeNamespace']]],
   ['predict',['predict',['../class_robot_estimator.html#a3c6b5cd0be4868c7e97e6d17442dc418',1,'RobotEstimator']]],
+  ['prevcommand',['prevCommand',['../class_motion_control_module.html#a55876a0062d293316e0ae7d2968484b0',1,'MotionControlModule']]],
+  ['prevkicktime',['prevKickTime',['../class_kicker_module.html#ae9540f765de190a67f3f07a07b32dff0',1,'KickerModule']]],
   ['priority',['priority',['../class_generic_module.html#a37f43c666f3457c63651c3c4834dc543',1,'GenericModule']]],
+  ['processnoise',['processNoise',['../class_robot_estimator.html#aeaac1317d46b4269b68a4136a07ac99b',1,'RobotEstimator']]],
   ['prog_5fuchar',['prog_uchar',['../_m_p_u6050_8cpp.html#af345cb3ceab4e846233b87e95b442c28',1,'MPU6050.cpp']]],
   ['program',['program',['../class_a_v_r910.html#a355ef9fb0c84d822fb50bff21ff1a7b8',1,'AVR910::program(FILE *binary, int pageSize, int numPages=1)'],['../class_a_v_r910.html#a122ca70af276f5b5d5ca71ae1ffe06a9',1,'AVR910::program(const uint8_t *binary, unsigned int length, int pageSize, int numPages=1)']]],
-  ['pushbutton',['PUSHBUTTON',['../iodefs_8h.html#adf8e68aa3f7ed1388355e53619b2b736',1,'iodefs.h']]]
+  ['pushbutton',['PUSHBUTTON',['../iodefs_8h.html#adf8e68aa3f7ed1388355e53619b2b736',1,'iodefs.h']]],
+  ['pv',['pv',['../class_dribbler_controller.html#a8d68333e7f7dd21ac1056f77c9956d28',1,'DribblerController']]]
 ];

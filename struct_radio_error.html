@@ -88,6 +88,9 @@ $(document).ready(function(){initNavTree('struct_radio_error.html','');});
 <div class="title">RadioError Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Contains data on whether Radio is working properly on not.  
+ <a href="struct_radio_error.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for RadioError:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -101,15 +104,22 @@ $(document).ready(function(){initNavTree('struct_radio_error.html','');});
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:af9b093f5283975e0f351965aee690c55"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_radio_error.html#af9b093f5283975e0f351965aee690c55">isValid</a> = false</td></tr>
+<tr class="memdesc:af9b093f5283975e0f351965aee690c55"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores whether given data is valid.  <a href="#af9b093f5283975e0f351965aee690c55">More...</a><br /></td></tr>
 <tr class="separator:af9b093f5283975e0f351965aee690c55"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a46dfa001283bc348551b30971248b662"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_radio_error.html#a46dfa001283bc348551b30971248b662">initialized</a> = false</td></tr>
+<tr class="memdesc:a46dfa001283bc348551b30971248b662"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores whether Radio has been initialized.  <a href="#a46dfa001283bc348551b30971248b662">More...</a><br /></td></tr>
 <tr class="separator:a46dfa001283bc348551b30971248b662"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a98804308b9129108cf5700ac30757e7e"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_radio_error.html#a98804308b9129108cf5700ac30757e7e">lastUpdate</a></td></tr>
+<tr class="memdesc:a98804308b9129108cf5700ac30757e7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time at which RadioError was last updated (milliseconds)  <a href="#a98804308b9129108cf5700ac30757e7e">More...</a><br /></td></tr>
 <tr class="separator:a98804308b9129108cf5700ac30757e7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ba48d6d836109c4ee966096c2216a2a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_radio_error.html#a6ba48d6d836109c4ee966096c2216a2a">hasError</a></td></tr>
+<tr class="memdesc:a6ba48d6d836109c4ee966096c2216a2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores whether Radio has an error.  <a href="#a6ba48d6d836109c4ee966096c2216a2a">More...</a><br /></td></tr>
 <tr class="separator:a6ba48d6d836109c4ee966096c2216a2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Data Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Contains data on whether Radio is working properly on not. </p>
+<p>Passed from <a class="el" href="class_radio_module.html">RadioModule</a> to <a class="el" href="class_l_e_d_module.html">LEDModule</a> </p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="a6ba48d6d836109c4ee966096c2216a2a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6ba48d6d836109c4ee966096c2216a2a">&#9670;&nbsp;</a></span>hasError</h2>
 
@@ -121,6 +131,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Stores whether Radio has an error. </p>
 
 </div>
 </div>
@@ -136,6 +148,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Stores whether Radio has been initialized. </p>
+
 </div>
 </div>
 <a id="af9b093f5283975e0f351965aee690c55"></a>
@@ -149,6 +163,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Stores whether given data is valid. </p>
 
 </div>
 </div>
@@ -164,6 +180,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Time at which RadioError was last updated (milliseconds) </p>
+
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
@@ -175,7 +193,7 @@ Public Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="struct_radio_error.html">RadioError</a></li>
-    <li class="footer">Generated on Mon Jun 8 2020 00:49:57 for GT RoboCup SSL by
+    <li class="footer">Generated on Sun Jun 14 2020 13:26:01 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

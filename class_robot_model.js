@@ -1,5 +1,6 @@
 var class_robot_model =
 [
+    [ "RobotModel", "class_robot_model.html#a65c03c3c26d969afaae0efff52653a9d", null ],
     [ "RobotModel", "class_robot_model.html#a53c9f7fd319943128d2c6a1d5617f50e", null ],
     [ "operator=", "class_robot_model.html#a4d9233b399324c653083e78e779cc098", null ],
     [ "recalculateBotToWheel", "class_robot_model.html#a371f2a73a77c19c7771bfdef12b7b5a9", null ],

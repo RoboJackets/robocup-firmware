@@ -83,6 +83,9 @@ $(document).ready(function(){initNavTree('class_i_s_m43340.html','');});
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-types">Private Types</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_i_s_m43340-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">ISM43340 Class Reference</div>  </div>
@@ -109,7 +112,7 @@ $(document).ready(function(){initNavTree('class_i_s_m43340.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a2c19b9ec46df497471e44eb5c791844a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_s_m43340.html#a2c19b9ec46df497471e44eb5c791844a">ISM43340</a> (std::unique_ptr&lt; SPI &gt; radioSPI, PinName nCsPin, PinName nResetPin, PinName dataReadyPin)</td></tr>
+<tr class="memitem:a2c19b9ec46df497471e44eb5c791844a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_s_m43340.html#a2c19b9ec46df497471e44eb5c791844a">ISM43340</a> (std::unique_ptr&lt; SPI &gt; <a class="el" href="class_i_s_m43340.html#add1ad3929231213eea8f337ed4c8316a">radioSPI</a>, PinName nCsPin, PinName nResetPin, PinName dataReadyPin)</td></tr>
 <tr class="separator:a2c19b9ec46df497471e44eb5c791844a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3a64b0ef7c8286b330311afcf70bbd45"><td class="memItemLeft" align="right" valign="top">virtual unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_s_m43340.html#a3a64b0ef7c8286b330311afcf70bbd45">send</a> (const uint8_t *data, const unsigned int numBytes)</td></tr>
 <tr class="memdesc:a3a64b0ef7c8286b330311afcf70bbd45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Blocking call to send X number of bytes from <code>data</code> over the radio.  <a href="#a3a64b0ef7c8286b330311afcf70bbd45">More...</a><br /></td></tr>
@@ -128,7 +131,85 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af8a5973f0a9b438b58a8799daed460c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9d4a7334f5c290f607e1c056b7e24e9e"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_s_m43340.html#a9d4a7334f5c290f607e1c056b7e24e9e">testPrint</a> ()</td></tr>
 <tr class="separator:a9d4a7334f5c290f607e1c056b7e24e9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-types"></a>
+Private Types</h2></td></tr>
+<tr class="memitem:afb7c0572679cf355f54cf3baac0cf005"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_s_m43340.html#afb7c0572679cf355f54cf3baac0cf005">SOCKET_TYPE</a> { <a class="el" href="class_i_s_m43340.html#afb7c0572679cf355f54cf3baac0cf005a4f12fb21793dae0238ddd6fb610f9800">SEND</a> = 0, 
+<a class="el" href="class_i_s_m43340.html#afb7c0572679cf355f54cf3baac0cf005a62cce61e3391168e4fcc47bd066ede33">RECEIVE</a> = 1
+ }</td></tr>
+<tr class="separator:afb7c0572679cf355f54cf3baac0cf005"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a1a802e672db823dbe5471866e6692309"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_s_m43340.html#a1a802e672db823dbe5471866e6692309">reset</a> ()</td></tr>
+<tr class="memdesc:a1a802e672db823dbe5471866e6692309"><td class="mdescLeft">&#160;</td><td class="mdescRight">Power cycles the device, connects to the network, and sets up the two sockets for UDP communication.  <a href="#a1a802e672db823dbe5471866e6692309">More...</a><br /></td></tr>
+<tr class="separator:a1a802e672db823dbe5471866e6692309"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f39b288c0a4ecde7c0bbf5bf73302ad"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_s_m43340.html#a6f39b288c0a4ecde7c0bbf5bf73302ad">writeToSpi</a> (uint8_t *<a class="el" href="main_8c.html#a7fdb81046632402c406e430f4dd78114">command</a>, int length)</td></tr>
+<tr class="memdesc:a6f39b288c0a4ecde7c0bbf5bf73302ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write the byte array to the spi bus.  <a href="#a6f39b288c0a4ecde7c0bbf5bf73302ad">More...</a><br /></td></tr>
+<tr class="separator:a6f39b288c0a4ecde7c0bbf5bf73302ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3999e5b5745b81fbc6e10992bf0cd5c"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_s_m43340.html#ae3999e5b5745b81fbc6e10992bf0cd5c">readFromSpi</a> ()</td></tr>
+<tr class="memdesc:ae3999e5b5745b81fbc6e10992bf0cd5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Blocking read from the SPI bus.  <a href="#ae3999e5b5745b81fbc6e10992bf0cd5c">More...</a><br /></td></tr>
+<tr class="separator:ae3999e5b5745b81fbc6e10992bf0cd5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55f5fa5d826f8056d5f7d43f43a55691"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_s_m43340.html#a55f5fa5d826f8056d5f7d43f43a55691">sendCommand</a> (const std::string &amp;<a class="el" href="main_8c.html#a7fdb81046632402c406e430f4dd78114">command</a>, const uint8_t *<a class="el" href="class_i_s_m43340.html#ae75b2c81550acf223284c91f72ac03f2">arg</a>, const unsigned int argSize)</td></tr>
+<tr class="memdesc:a55f5fa5d826f8056d5f7d43f43a55691"><td class="mdescLeft">&#160;</td><td class="mdescRight">Base send command function.  <a href="#a55f5fa5d826f8056d5f7d43f43a55691">More...</a><br /></td></tr>
+<tr class="separator:a55f5fa5d826f8056d5f7d43f43a55691"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0175106811681726972de1a475fcd4b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_s_m43340.html#aa0175106811681726972de1a475fcd4b">sendCommand</a> (const std::string &amp;<a class="el" href="main_8c.html#a7fdb81046632402c406e430f4dd78114">command</a>, const std::string &amp;<a class="el" href="class_i_s_m43340.html#ae75b2c81550acf223284c91f72ac03f2">arg</a>=&quot;&quot;)</td></tr>
+<tr class="memdesc:aa0175106811681726972de1a475fcd4b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convenience function since all initialization data are string constants.  <a href="#aa0175106811681726972de1a475fcd4b">More...</a><br /></td></tr>
+<tr class="separator:aa0175106811681726972de1a475fcd4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:add1ad3929231213eea8f337ed4c8316a"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; SPI &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_s_m43340.html#add1ad3929231213eea8f337ed4c8316a">radioSPI</a></td></tr>
+<tr class="separator:add1ad3929231213eea8f337ed4c8316a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeae9cacd62172cb94ff741b0c8162ee5"><td class="memItemLeft" align="right" valign="top">DigitalOut&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_s_m43340.html#aeae9cacd62172cb94ff741b0c8162ee5">nCs</a></td></tr>
+<tr class="separator:aeae9cacd62172cb94ff741b0c8162ee5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea10d2c05cdadd43a90e68fb31b548e9"><td class="memItemLeft" align="right" valign="top">DigitalOut&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_s_m43340.html#aea10d2c05cdadd43a90e68fb31b548e9">nReset</a></td></tr>
+<tr class="separator:aea10d2c05cdadd43a90e68fb31b548e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d14d8c9efb73d99539978ef87c920af"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structpin__name.html">pin_name</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_s_m43340.html#a3d14d8c9efb73d99539978ef87c920af">dataReady</a></td></tr>
+<tr class="separator:a3d14d8c9efb73d99539978ef87c920af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66dbe602665fd62773374dea0d3ed938"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_i_s_m43340.html#afb7c0572679cf355f54cf3baac0cf005">SOCKET_TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_s_m43340.html#a66dbe602665fd62773374dea0d3ed938">currentSocket</a></td></tr>
+<tr class="separator:a66dbe602665fd62773374dea0d3ed938"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae61436a76cd0f5054c61d0f66d390809"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint8_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_s_m43340.html#ae61436a76cd0f5054c61d0f66d390809">readBuffer</a></td></tr>
+<tr class="separator:ae61436a76cd0f5054c61d0f66d390809"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95d5dc4449cfa59c8870c555bda12fb8"><td class="memItemLeft" >struct {</td></tr>
+<tr class="memitem:a97952e86c6f7fe7af17fe016d565c5a8"><td class="memItemLeft" >&#160;&#160;&#160;uint8_t&#160;&#160;&#160;<a class="el" href="class_i_s_m43340.html#af7333a2f3d84f3f7d0bd55f41ca19f27">cmd</a> [ISMConstants::MAX_CMD_SIZE]</td></tr>
+<tr class="separator:a97952e86c6f7fe7af17fe016d565c5a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7870043b24ba6ae0f7b2945826f0f35"><td class="memItemLeft" >&#160;&#160;&#160;uint8_t&#160;&#160;&#160;<a class="el" href="class_i_s_m43340.html#ae75b2c81550acf223284c91f72ac03f2">arg</a> [ISMConstants::MAX_ARG_SIZE]</td></tr>
+<tr class="separator:ab7870043b24ba6ae0f7b2945826f0f35"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95d5dc4449cfa59c8870c555bda12fb8"><td class="memItemLeft" valign="top">}&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_s_m43340.html#a95d5dc4449cfa59c8870c555bda12fb8">builtCommand</a></td></tr>
+<tr class="separator:a95d5dc4449cfa59c8870c555bda12fb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6bf1dd1731e57ead6ae1d1e47ab806d3"><td class="memItemLeft" align="right" valign="top">uint8_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_s_m43340.html#a6bf1dd1731e57ead6ae1d1e47ab806d3">cmdStart</a></td></tr>
+<tr class="separator:a6bf1dd1731e57ead6ae1d1e47ab806d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a17fcef576fc278908ab3406183309df4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_s_m43340.html#a17fcef576fc278908ab3406183309df4">isInit</a> = false</td></tr>
+<tr class="separator:a17fcef576fc278908ab3406183309df4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="afb7c0572679cf355f54cf3baac0cf005"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb7c0572679cf355f54cf3baac0cf005">&#9670;&nbsp;</a></span>SOCKET_TYPE</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_i_s_m43340.html#afb7c0572679cf355f54cf3baac0cf005">ISM43340::SOCKET_TYPE</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="afb7c0572679cf355f54cf3baac0cf005a4f12fb21793dae0238ddd6fb610f9800"></a>SEND&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="afb7c0572679cf355f54cf3baac0cf005a62cce61e3391168e4fcc47bd066ede33"></a>RECEIVE&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a2c19b9ec46df497471e44eb5c791844a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2c19b9ec46df497471e44eb5c791844a">&#9670;&nbsp;</a></span>ISM43340()</h2>
@@ -207,6 +288,15 @@ Public Member Functions</h2></td></tr>
 <p>Caution: This reads the data from the device into the driver If you do not follow with a receive, that data will be lost </p>
 
 <p>Implements <a class="el" href="class_generic_radio.html#a40c525e1097ea507c9445c370b28a6ea">GenericRadio</a>.</p>
+<div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-3-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-3-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-3-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_i_s_m43340_ab0678ac375792c9c9499ae9b42e5b6a3_cgraph.png" border="0" usemap="#class_i_s_m43340_ab0678ac375792c9c9499ae9b42e5b6a3_cgraph" alt=""/></div>
+<map name="class_i_s_m43340_ab0678ac375792c9c9499ae9b42e5b6a3_cgraph" id="class_i_s_m43340_ab0678ac375792c9c9499ae9b42e5b6a3_cgraph">
+</map>
+</div>
 
 </div>
 </div>
@@ -249,13 +339,51 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-3-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-3-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-4" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-4-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-4-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-3-content" class="dyncontent" style="display:none;">
+<div id="dynsection-4-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="class_i_s_m43340_abb2e9dbc0e7058d62a44d12eaeacd211_cgraph.png" border="0" usemap="#class_i_s_m43340_abb2e9dbc0e7058d62a44d12eaeacd211_cgraph" alt=""/></div>
 <map name="class_i_s_m43340_abb2e9dbc0e7058d62a44d12eaeacd211_cgraph" id="class_i_s_m43340_abb2e9dbc0e7058d62a44d12eaeacd211_cgraph">
+</map>
+</div>
+
+</div>
+</div>
+<a id="ae3999e5b5745b81fbc6e10992bf0cd5c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3999e5b5745b81fbc6e10992bf0cd5c">&#9670;&nbsp;</a></span>readFromSpi()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t ISM43340::readFromSpi </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Blocking read from the SPI bus. </p>
+<dl class="section return"><dt>Returns</dt><dd>number of bytes read</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Can read indefinitely if the device gets locked up and never drops data ready The device will continuously print out 0x25 until power cycle </dd></dl>
+<div id="dynsection-5" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-5-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-5-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-5-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_i_s_m43340_ae3999e5b5745b81fbc6e10992bf0cd5c_icgraph.png" border="0" usemap="#class_i_s_m43340_ae3999e5b5745b81fbc6e10992bf0cd5c_icgraph" alt=""/></div>
+<map name="class_i_s_m43340_ae3999e5b5745b81fbc6e10992bf0cd5c_icgraph" id="class_i_s_m43340_ae3999e5b5745b81fbc6e10992bf0cd5c_icgraph">
 </map>
 </div>
 
@@ -310,6 +438,51 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a1a802e672db823dbe5471866e6692309"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a802e672db823dbe5471866e6692309">&#9670;&nbsp;</a></span>reset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ISM43340::reset </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Power cycles the device, connects to the network, and sets up the two sockets for UDP communication. </p>
+<div id="dynsection-6" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-6-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-6-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-6-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_i_s_m43340_a1a802e672db823dbe5471866e6692309_cgraph.png" border="0" usemap="#class_i_s_m43340_a1a802e672db823dbe5471866e6692309_cgraph" alt=""/></div>
+<map name="class_i_s_m43340_a1a802e672db823dbe5471866e6692309_cgraph" id="class_i_s_m43340_a1a802e672db823dbe5471866e6692309_cgraph">
+</map>
+</div>
+<div id="dynsection-7" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-7-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-7-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-7-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_i_s_m43340_a1a802e672db823dbe5471866e6692309_icgraph.png" border="0" usemap="#class_i_s_m43340_a1a802e672db823dbe5471866e6692309_icgraph" alt=""/></div>
+<map name="class_i_s_m43340_a1a802e672db823dbe5471866e6692309_icgraph" id="class_i_s_m43340_a1a802e672db823dbe5471866e6692309_icgraph">
+</map>
+</div>
+
+</div>
+</div>
 <a id="a95d33af4f23014987be2bc28df3aba2d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a95d33af4f23014987be2bc28df3aba2d">&#9670;&nbsp;</a></span>selfTest()</h2>
 
@@ -324,6 +497,15 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<div id="dynsection-8" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-8-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-8-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-8-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_i_s_m43340_a95d33af4f23014987be2bc28df3aba2d_cgraph.png" border="0" usemap="#class_i_s_m43340_a95d33af4f23014987be2bc28df3aba2d_cgraph" alt=""/></div>
+<map name="class_i_s_m43340_a95d33af4f23014987be2bc28df3aba2d_cgraph" id="class_i_s_m43340_a95d33af4f23014987be2bc28df3aba2d_cgraph">
+</map>
+</div>
 
 </div>
 </div>
@@ -373,6 +555,139 @@ Public Member Functions</h2></td></tr>
 <dl class="section note"><dt>Note</dt><dd>It is assumed that <code>data</code> is at least X bytes long </dd></dl>
 
 <p>Implements <a class="el" href="class_generic_radio.html#ac88e2085c48fd612998440844d5468a5">GenericRadio</a>.</p>
+<div id="dynsection-9" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-9-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-9-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-9-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_i_s_m43340_a3a64b0ef7c8286b330311afcf70bbd45_cgraph.png" border="0" usemap="#class_i_s_m43340_a3a64b0ef7c8286b330311afcf70bbd45_cgraph" alt=""/></div>
+<map name="class_i_s_m43340_a3a64b0ef7c8286b330311afcf70bbd45_cgraph" id="class_i_s_m43340_a3a64b0ef7c8286b330311afcf70bbd45_cgraph">
+</map>
+</div>
+
+</div>
+</div>
+<a id="a55f5fa5d826f8056d5f7d43f43a55691"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a55f5fa5d826f8056d5f7d43f43a55691">&#9670;&nbsp;</a></span>sendCommand() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ISM43340::sendCommand </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>command</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const uint8_t *&#160;</td>
+          <td class="paramname"><em>arg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const unsigned int&#160;</td>
+          <td class="paramname"><em>argSize</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Base send command function. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">command</td><td>String AT command, eg "S3=" </td></tr>
+    <tr><td class="paramname">arg</td><td>Array of chars representing the full arguments to the AT command. Does not need to be even padded </td></tr>
+    <tr><td class="paramname">argSize</td><td>Size in chars of arg. Can be zero representing a 0 char argument </td></tr>
+  </table>
+  </dd>
+</dl>
+<div id="dynsection-10" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-10-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-10-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-10-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_i_s_m43340_a55f5fa5d826f8056d5f7d43f43a55691_cgraph.png" border="0" usemap="#class_i_s_m43340_a55f5fa5d826f8056d5f7d43f43a55691_cgraph" alt=""/></div>
+<map name="class_i_s_m43340_a55f5fa5d826f8056d5f7d43f43a55691_cgraph" id="class_i_s_m43340_a55f5fa5d826f8056d5f7d43f43a55691_cgraph">
+</map>
+</div>
+<div id="dynsection-11" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-11-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-11-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-11-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_i_s_m43340_a55f5fa5d826f8056d5f7d43f43a55691_icgraph.png" border="0" usemap="#class_i_s_m43340_a55f5fa5d826f8056d5f7d43f43a55691_icgraph" alt=""/></div>
+<map name="class_i_s_m43340_a55f5fa5d826f8056d5f7d43f43a55691_icgraph" id="class_i_s_m43340_a55f5fa5d826f8056d5f7d43f43a55691_icgraph">
+</map>
+</div>
+
+</div>
+</div>
+<a id="aa0175106811681726972de1a475fcd4b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa0175106811681726972de1a475fcd4b">&#9670;&nbsp;</a></span>sendCommand() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ISM43340::sendCommand </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>command</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>arg</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Convenience function since all initialization data are string constants. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">command</td><td>String AT command, eg "S3=" </td></tr>
+    <tr><td class="paramname">arg</td><td>String arg for the AT command eg "0" </td></tr>
+  </table>
+  </dd>
+</dl>
+<div id="dynsection-12" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-12-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-12-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-12-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_i_s_m43340_aa0175106811681726972de1a475fcd4b_cgraph.png" border="0" usemap="#class_i_s_m43340_aa0175106811681726972de1a475fcd4b_cgraph" alt=""/></div>
+<map name="class_i_s_m43340_aa0175106811681726972de1a475fcd4b_cgraph" id="class_i_s_m43340_aa0175106811681726972de1a475fcd4b_cgraph">
+</map>
+</div>
 
 </div>
 </div>
@@ -390,13 +705,72 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<div id="dynsection-4" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-4-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-4-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-13" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-13-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-13-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-4-content" class="dyncontent" style="display:none;">
+<div id="dynsection-13-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="class_i_s_m43340_a9d4a7334f5c290f607e1c056b7e24e9e_icgraph.png" border="0" usemap="#class_i_s_m43340_a9d4a7334f5c290f607e1c056b7e24e9e_icgraph" alt=""/></div>
 <map name="class_i_s_m43340_a9d4a7334f5c290f607e1c056b7e24e9e_icgraph" id="class_i_s_m43340_a9d4a7334f5c290f607e1c056b7e24e9e_icgraph">
+</map>
+</div>
+
+</div>
+</div>
+<a id="a6f39b288c0a4ecde7c0bbf5bf73302ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f39b288c0a4ecde7c0bbf5bf73302ad">&#9670;&nbsp;</a></span>writeToSpi()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ISM43340::writeToSpi </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>command</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>length</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Write the byte array to the spi bus. </p>
+<p>Note: All delays in the function below have been tuned to work correctly.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">command</td><td>Non-endien swapped version of the raw data </td></tr>
+    <tr><td class="paramname">length</td><td>Length of the raw data</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Note: Must be even number of bytes long since the device is 16 bit</p>
+<p>The data sheet misses some key ones and the ones given are partially wrong</p>
+<p>Bump the super loop call rate until it just barely works Drop these delays until it just barely works Bump the super loop call rate again until it works repeat</p>
+<p>Let it run for a minute or so to see if it breaks eventually </p>
+<div id="dynsection-14" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-14-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-14-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-14-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_i_s_m43340_a6f39b288c0a4ecde7c0bbf5bf73302ad_icgraph.png" border="0" usemap="#class_i_s_m43340_a6f39b288c0a4ecde7c0bbf5bf73302ad_icgraph" alt=""/></div>
+<map name="class_i_s_m43340_a6f39b288c0a4ecde7c0bbf5bf73302ad_icgraph" id="class_i_s_m43340_a6f39b288c0a4ecde7c0bbf5bf73302ad_icgraph">
 </map>
 </div>
 
@@ -417,6 +791,20 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a95d5dc4449cfa59c8870c555bda12fb8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95d5dc4449cfa59c8870c555bda12fb8">&#9670;&nbsp;</a></span>builtCommand</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct { ... }   ISM43340::builtCommand</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="af7333a2f3d84f3f7d0bd55f41ca19f27"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af7333a2f3d84f3f7d0bd55f41ca19f27">&#9670;&nbsp;</a></span>cmd</h2>
 
@@ -431,6 +819,182 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a6bf1dd1731e57ead6ae1d1e47ab806d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6bf1dd1731e57ead6ae1d1e47ab806d3">&#9670;&nbsp;</a></span>cmdStart</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t* ISM43340::cmdStart</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a66dbe602665fd62773374dea0d3ed938"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a66dbe602665fd62773374dea0d3ed938">&#9670;&nbsp;</a></span>currentSocket</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_i_s_m43340.html#afb7c0572679cf355f54cf3baac0cf005">SOCKET_TYPE</a> ISM43340::currentSocket</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3d14d8c9efb73d99539978ef87c920af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3d14d8c9efb73d99539978ef87c920af">&#9670;&nbsp;</a></span>dataReady</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structpin__name.html">pin_name</a> ISM43340::dataReady</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a17fcef576fc278908ab3406183309df4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a17fcef576fc278908ab3406183309df4">&#9670;&nbsp;</a></span>isInit</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ISM43340::isInit = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aeae9cacd62172cb94ff741b0c8162ee5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeae9cacd62172cb94ff741b0c8162ee5">&#9670;&nbsp;</a></span>nCs</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">DigitalOut ISM43340::nCs</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aea10d2c05cdadd43a90e68fb31b548e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea10d2c05cdadd43a90e68fb31b548e9">&#9670;&nbsp;</a></span>nReset</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">DigitalOut ISM43340::nReset</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="add1ad3929231213eea8f337ed4c8316a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add1ad3929231213eea8f337ed4c8316a">&#9670;&nbsp;</a></span>radioSPI</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unique_ptr&lt;SPI&gt; ISM43340::radioSPI</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae61436a76cd0f5054c61d0f66d390809"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae61436a76cd0f5054c61d0f66d390809">&#9670;&nbsp;</a></span>readBuffer</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;uint8_t&gt; ISM43340::readBuffer</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/developer/robocup-firmware/robot/lib/Inc/drivers/<a class="el" href="_i_s_m43340_8hpp_source.html">ISM43340.hpp</a></li>
 <li>/home/developer/robocup-firmware/robot/lib/Src/drivers/<a class="el" href="_i_s_m43340_8cpp.html">ISM43340.cpp</a></li>
@@ -441,7 +1005,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_i_s_m43340.html">ISM43340</a></li>
-    <li class="footer">Generated on Mon Jun 8 2020 00:49:57 for GT RoboCup SSL by
+    <li class="footer">Generated on Sun Jun 14 2020 13:26:01 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

@@ -83,11 +83,16 @@ $(document).ready(function(){initNavTree('class_dribbler_controller.html','');})
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="class_dribbler_controller-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">DribblerController Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Controller for Dribbler velocity.  
+ <a href="class_dribbler_controller.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for DribblerController:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -100,13 +105,36 @@ $(document).ready(function(){initNavTree('class_dribbler_controller.html','');})
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a778b90c2faed182dcd9df9c9d7fcfe7d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_dribbler_controller.html#a778b90c2faed182dcd9df9c9d7fcfe7d">DribblerController</a> (uint32_t dt)</td></tr>
+<tr class="memitem:a778b90c2faed182dcd9df9c9d7fcfe7d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_dribbler_controller.html#a778b90c2faed182dcd9df9c9d7fcfe7d">DribblerController</a> (uint32_t <a class="el" href="class_dribbler_controller.html#af8063f872c621e980b21f901b35c0ab5">dt</a>)</td></tr>
+<tr class="memdesc:a778b90c2faed182dcd9df9c9d7fcfe7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#a778b90c2faed182dcd9df9c9d7fcfe7d">More...</a><br /></td></tr>
 <tr class="separator:a778b90c2faed182dcd9df9c9d7fcfe7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a82486fc0dec2674be10327b39f60a156"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_dribbler_controller.html#a82486fc0dec2674be10327b39f60a156">calculate</a> (uint8_t setpoint, uint8_t &amp;<a class="el" href="main_8c.html#a7fdb81046632402c406e430f4dd78114">command</a>)</td></tr>
 <tr class="memdesc:a82486fc0dec2674be10327b39f60a156"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the controller with the latest input and calculates the correct motor command to reach this target.  <a href="#a82486fc0dec2674be10327b39f60a156">More...</a><br /></td></tr>
 <tr class="separator:a82486fc0dec2674be10327b39f60a156"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a8d68333e7f7dd21ac1056f77c9956d28"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_dribbler_controller.html#a8d68333e7f7dd21ac1056f77c9956d28">pv</a></td></tr>
+<tr class="separator:a8d68333e7f7dd21ac1056f77c9956d28"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8063f872c621e980b21f901b35c0ab5"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_dribbler_controller.html#af8063f872c621e980b21f901b35c0ab5">dt</a></td></tr>
+<tr class="memdesc:af8063f872c621e980b21f901b35c0ab5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Period of control loop, in ms.  <a href="#af8063f872c621e980b21f901b35c0ab5">More...</a><br /></td></tr>
+<tr class="separator:af8063f872c621e980b21f901b35c0ab5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:a4ae85baca52b2ee1f88507560d709d87"><td class="memItemLeft" align="right" valign="top">static constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_dribbler_controller.html#a4ae85baca52b2ee1f88507560d709d87">MAX_SPEED</a> = 128u</td></tr>
+<tr class="separator:a4ae85baca52b2ee1f88507560d709d87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15e9ea6243b09a6c809e6f137aa08f57"><td class="memItemLeft" align="right" valign="top">static constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_dribbler_controller.html#a15e9ea6243b09a6c809e6f137aa08f57">MIN_SPEED</a> = 0u</td></tr>
+<tr class="separator:a15e9ea6243b09a6c809e6f137aa08f57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a712f64602539c71f08fe45476e01114e"><td class="memItemLeft" align="right" valign="top">static constexpr float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_dribbler_controller.html#a712f64602539c71f08fe45476e01114e">MAX_SPEED_RAMP_TIME</a> = .5f</td></tr>
+<tr class="memdesc:a712f64602539c71f08fe45476e01114e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time for dribbler to ramp up from min to max speed, in seconds.  <a href="#a712f64602539c71f08fe45476e01114e">More...</a><br /></td></tr>
+<tr class="separator:a712f64602539c71f08fe45476e01114e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2863dc19fb3c83b65e593a01c9dd1730"><td class="memItemLeft" align="right" valign="top">static constexpr uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_dribbler_controller.html#a2863dc19fb3c83b65e593a01c9dd1730">MAX_DELTAV_PER_S</a></td></tr>
+<tr class="separator:a2863dc19fb3c83b65e593a01c9dd1730"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Controller for Dribbler velocity. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a778b90c2faed182dcd9df9c9d7fcfe7d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a778b90c2faed182dcd9df9c9d7fcfe7d">&#9670;&nbsp;</a></span>DribblerController()</h2>
 
@@ -122,9 +150,11 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Constructor. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">dt</td><td>Period of control loop in ms </td></tr>
+    <tr><td class="paramname">dt</td><td>Period of control, loop in ms </td></tr>
   </table>
   </dd>
 </dl>
@@ -161,8 +191,8 @@ Public Member Functions</h2></td></tr>
 <p>Updates the controller with the latest input and calculates the correct motor command to reach this target. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">setpoint</td><td>Target to reach (duty cycles) </td></tr>
-    <tr><td class="paramname">command</td><td>Next command to send to the motors (duty cycles) </td></tr>
+    <tr><td class="paramname">setpoint</td><td>Target to reach (LSB: 0-128) </td></tr>
+    <tr><td class="paramname">command</td><td>Next command to send to the motors (LSB: 0-128) </td></tr>
   </table>
   </dd>
 </dl>
@@ -187,6 +217,144 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="af8063f872c621e980b21f901b35c0ab5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af8063f872c621e980b21f901b35c0ab5">&#9670;&nbsp;</a></span>dt</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t DribblerController::dt</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Period of control loop, in ms. </p>
+<p>Set by constructor </p>
+
+</div>
+</div>
+<a id="a2863dc19fb3c83b65e593a01c9dd1730"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2863dc19fb3c83b65e593a01c9dd1730">&#9670;&nbsp;</a></span>MAX_DELTAV_PER_S</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr uint16_t DribblerController::MAX_DELTAV_PER_S</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">=</div><div class="line">        (<a class="code" href="class_dribbler_controller.html#a4ae85baca52b2ee1f88507560d709d87">MAX_SPEED</a> - <a class="code" href="class_dribbler_controller.html#a15e9ea6243b09a6c809e6f137aa08f57">MIN_SPEED</a>) * static_cast&lt;uint8_t&gt;(1 / <a class="code" href="class_dribbler_controller.html#a712f64602539c71f08fe45476e01114e">MAX_SPEED_RAMP_TIME</a>)</div></div><!-- fragment -->
+</div>
+</div>
+<a id="a4ae85baca52b2ee1f88507560d709d87"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ae85baca52b2ee1f88507560d709d87">&#9670;&nbsp;</a></span>MAX_SPEED</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr uint8_t DribblerController::MAX_SPEED = 128u</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a712f64602539c71f08fe45476e01114e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a712f64602539c71f08fe45476e01114e">&#9670;&nbsp;</a></span>MAX_SPEED_RAMP_TIME</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr float DribblerController::MAX_SPEED_RAMP_TIME = .5f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Time for dribbler to ramp up from min to max speed, in seconds. </p>
+
+</div>
+</div>
+<a id="a15e9ea6243b09a6c809e6f137aa08f57"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a15e9ea6243b09a6c809e6f137aa08f57">&#9670;&nbsp;</a></span>MIN_SPEED</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr uint8_t DribblerController::MIN_SPEED = 0u</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8d68333e7f7dd21ac1056f77c9956d28"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d68333e7f7dd21ac1056f77c9956d28">&#9670;&nbsp;</a></span>pv</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t DribblerController::pv</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/developer/robocup-firmware/robot/control/Inc/motion-control/<a class="el" href="_dribbler_controller_8hpp_source.html">DribblerController.hpp</a></li>
 <li>/home/developer/robocup-firmware/robot/control/Src/motion-control/<a class="el" href="_dribbler_controller_8cpp.html">DribblerController.cpp</a></li>
@@ -197,7 +365,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_dribbler_controller.html">DribblerController</a></li>
-    <li class="footer">Generated on Mon Jun 8 2020 00:49:57 for GT RoboCup SSL by
+    <li class="footer">Generated on Sun Jun 14 2020 13:26:01 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

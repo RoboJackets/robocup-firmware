@@ -3,9 +3,9 @@ digraph "boundScaling"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node7 [label="boundScaling",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
-  Node7 -> Node8 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node8 [label="RobotController::calculate\lWheel",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_robot_controller.html#a0707cb5415d1d8abc6179199d7595b8a",tooltip="Updates the wheels such that they try to follow the target Outputs the correct motor commands to do t..."];
-  Node8 -> Node9 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node9 [label="MotionControlModule\l::entry",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_motion_control_module.html#ae9ce65e3c14d0effbac1c1a3b93fb5b1",tooltip="Called by the RTOS at the desired update rate. "];
+  Node10 [label="boundScaling",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node10 -> Node11 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node11 [label="RobotController::limitBody\lAccel",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_robot_controller.html#a3d6033a398ba89afad79af746eceeab5",tooltip="Limits the difference between the previous target and the new target such that the acceleration limit..."];
+  Node10 -> Node12 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node12 [label="RobotController::limitWheel\lAccel",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_robot_controller.html#aa4d23a9a654037bd5a63a5d331988299"];
 }

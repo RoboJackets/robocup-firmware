@@ -2,5 +2,5 @@ digraph "I2Cdev"
 {
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
-  Node1 [label="{I2Cdev\n||+ I2Cdev()\l+ readBit()\l+ readBitW()\l+ readBits()\l+ readBitsW()\l+ readByte()\l+ readWord()\l+ readBytes()\l+ readWords()\l+ writeBit()\land 7 more...\l+ readTimeout()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node1 [label="{I2Cdev\n|- i2c\l|+ I2Cdev()\l+ readBit()\l+ readBitW()\l+ readBits()\l+ readBitsW()\l+ readByte()\l+ readWord()\l+ readBytes()\l+ readWords()\l+ writeBit()\land 7 more...\l+ readTimeout()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
 }

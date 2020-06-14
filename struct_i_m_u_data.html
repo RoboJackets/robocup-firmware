@@ -88,6 +88,9 @@ $(document).ready(function(){initNavTree('struct_i_m_u_data.html','');});
 <div class="title">IMUData Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Contains linear acceleration and angular velocity readings from IMU.  
+ <a href="struct_i_m_u_data.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for IMUData:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -101,17 +104,25 @@ $(document).ready(function(){initNavTree('struct_i_m_u_data.html','');});
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:ae88f1f4af6551f0351eb0a5b23e6d287"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_i_m_u_data.html#ae88f1f4af6551f0351eb0a5b23e6d287">isValid</a> = false</td></tr>
+<tr class="memdesc:ae88f1f4af6551f0351eb0a5b23e6d287"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores whether given data is valid.  <a href="#ae88f1f4af6551f0351eb0a5b23e6d287">More...</a><br /></td></tr>
 <tr class="separator:ae88f1f4af6551f0351eb0a5b23e6d287"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5837cd70011a6539209e33ccc24cf504"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_i_m_u_data.html#a5837cd70011a6539209e33ccc24cf504">initialized</a> = false</td></tr>
+<tr class="memdesc:a5837cd70011a6539209e33ccc24cf504"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores whether IMU has been initialized.  <a href="#a5837cd70011a6539209e33ccc24cf504">More...</a><br /></td></tr>
 <tr class="separator:a5837cd70011a6539209e33ccc24cf504"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad4b7a36db0d3d314ee40a25c464fa755"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_i_m_u_data.html#ad4b7a36db0d3d314ee40a25c464fa755">lastUpdate</a></td></tr>
+<tr class="memdesc:ad4b7a36db0d3d314ee40a25c464fa755"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time at which IMUData was last updated (milliseconds)  <a href="#ad4b7a36db0d3d314ee40a25c464fa755">More...</a><br /></td></tr>
 <tr class="separator:ad4b7a36db0d3d314ee40a25c464fa755"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a306ead01d8bf5ecc45e3cc564d58ad9c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_i_m_u_data.html#a306ead01d8bf5ecc45e3cc564d58ad9c">accelerations</a> [3]</td></tr>
+<tr class="memdesc:a306ead01d8bf5ecc45e3cc564d58ad9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Linear acceleration on axes <a href="m/s^2">X,Y,Z</a>  <a href="#a306ead01d8bf5ecc45e3cc564d58ad9c">More...</a><br /></td></tr>
 <tr class="separator:a306ead01d8bf5ecc45e3cc564d58ad9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a44034c4fb1bdf5850d3dee7bc174ce29"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_i_m_u_data.html#a44034c4fb1bdf5850d3dee7bc174ce29">omegas</a> [3]</td></tr>
+<tr class="memdesc:a44034c4fb1bdf5850d3dee7bc174ce29"><td class="mdescLeft">&#160;</td><td class="mdescRight">Angular velocities on axes <a href="rad/s">X,Y,Z</a>  <a href="#a44034c4fb1bdf5850d3dee7bc174ce29">More...</a><br /></td></tr>
 <tr class="separator:a44034c4fb1bdf5850d3dee7bc174ce29"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Data Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Contains linear acceleration and angular velocity readings from IMU. </p>
+<p>Passed from <a class="el" href="class_i_m_u_module.html">IMUModule</a> to <a class="el" href="class_motion_control_module.html">MotionControlModule</a> </p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="a306ead01d8bf5ecc45e3cc564d58ad9c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a306ead01d8bf5ecc45e3cc564d58ad9c">&#9670;&nbsp;</a></span>accelerations</h2>
 
@@ -123,6 +134,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Linear acceleration on axes <a href="m/s^2">X,Y,Z</a> </p>
 
 </div>
 </div>
@@ -138,6 +151,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Stores whether IMU has been initialized. </p>
+
 </div>
 </div>
 <a id="ae88f1f4af6551f0351eb0a5b23e6d287"></a>
@@ -151,6 +166,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Stores whether given data is valid. </p>
 
 </div>
 </div>
@@ -166,6 +183,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Time at which IMUData was last updated (milliseconds) </p>
+
 </div>
 </div>
 <a id="a44034c4fb1bdf5850d3dee7bc174ce29"></a>
@@ -180,6 +199,8 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Angular velocities on axes <a href="rad/s">X,Y,Z</a> </p>
+
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
@@ -191,7 +212,7 @@ Public Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="struct_i_m_u_data.html">IMUData</a></li>
-    <li class="footer">Generated on Mon Jun 8 2020 00:49:57 for GT RoboCup SSL by
+    <li class="footer">Generated on Sun Jun 14 2020 13:26:01 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

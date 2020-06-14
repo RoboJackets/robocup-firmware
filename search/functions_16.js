@@ -10,6 +10,8 @@ var searchData=
   ['writebyte',['writeByte',['../class_i2_cdev.html#aeb297637ef985cd562da465ba61b7042',1,'I2Cdev']]],
   ['writebytes',['writeBytes',['../class_i2_cdev.html#aa4e39cac6c0eac5112f9132084bcc93e',1,'I2Cdev']]],
   ['writedmpconfigurationset',['writeDMPConfigurationSet',['../class_m_p_u6050.html#abe4f64f68164116b2ec94fe1d987929a',1,'MPU6050']]],
+  ['writeflashmemorybyte',['writeFlashMemoryByte',['../class_a_v_r910.html#a4d3b3f3268bcd7af9dcac28d65aa4f07',1,'AVR910']]],
+  ['writeflashmemorypage',['writeFlashMemoryPage',['../class_a_v_r910.html#adf1394523f7ceb15279bcec480d79e04',1,'AVR910']]],
   ['writefusebitslow',['writeFuseBitsLow',['../class_a_v_r910.html#a39178fcc7d45cd3f0835525f5270f7fd',1,'AVR910']]],
   ['writemask',['writeMask',['../class_m_c_p23017.html#a03a2643a1e2fbf8c2aa998d48f360498',1,'MCP23017']]],
   ['writememoryblock',['writeMemoryBlock',['../class_m_p_u6050.html#aae135772b45e1c7968b55f4f01b3757f',1,'MPU6050']]],
@@ -18,6 +20,7 @@ var searchData=
   ['writeprogdmpconfigurationset',['writeProgDMPConfigurationSet',['../class_m_p_u6050.html#a160a3d018a81eb85a33874a43f44b3ea',1,'MPU6050']]],
   ['writeprogmemoryblock',['writeProgMemoryBlock',['../class_m_p_u6050.html#a201dc0aa819f451584c575c5a7590e10',1,'MPU6050']]],
   ['writeregister',['writeRegister',['../class_m_c_p23017.html#ab7e0f3b57f9eee9988689643f59b67d3',1,'MCP23017']]],
+  ['writetospi',['writeToSpi',['../class_i_s_m43340.html#a6f39b288c0a4ecde7c0bbf5bf73302ad',1,'ISM43340']]],
   ['writeword',['writeWord',['../class_i2_cdev.html#acbe68a802d6a177301736e60bedd1def',1,'I2Cdev']]],
   ['writewords',['writeWords',['../class_i2_cdev.html#aae37c0526e4b4730a5b2ffd752fd8b21',1,'I2Cdev']]]
 ];

@@ -84,11 +84,15 @@ $(document).ready(function(){initNavTree('class_kicker_module.html','');});
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_kicker_module-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">KickerModule Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Module interfacing with Kicker and handling Kicker status.  
+ <a href="class_kicker_module.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for KickerModule:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -110,13 +114,14 @@ $(document).ready(function(){initNavTree('class_kicker_module.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ac5af2febe3aea6f37919d5eedcfb57ed"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kicker_module.html#ac5af2febe3aea6f37919d5eedcfb57ed">KickerModule</a> (<a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; SPI &gt; &amp;spi, <a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_kicker_command.html">KickerCommand</a> &gt; &amp;kickerCommand, <a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_kicker_info.html">KickerInfo</a> &gt; &amp;kickerInfo)</td></tr>
+<tr class="memitem:ac5af2febe3aea6f37919d5eedcfb57ed"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kicker_module.html#ac5af2febe3aea6f37919d5eedcfb57ed">KickerModule</a> (<a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; SPI &gt; &amp;spi, <a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_kicker_command.html">KickerCommand</a> &gt; &amp;<a class="el" href="class_kicker_module.html#a005da8b1dd3cb7c310affea68be6ca12">kickerCommand</a>, <a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_kicker_info.html">KickerInfo</a> &gt; &amp;<a class="el" href="class_kicker_module.html#abc7c80402d4a3851b1ca78fc771850bb">kickerInfo</a>)</td></tr>
+<tr class="memdesc:ac5af2febe3aea6f37919d5eedcfb57ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for KickerModule.  <a href="#ac5af2febe3aea6f37919d5eedcfb57ed">More...</a><br /></td></tr>
 <tr class="separator:ac5af2febe3aea6f37919d5eedcfb57ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5901fc136f50ca6de9b7110c03f01a10"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kicker_module.html#a5901fc136f50ca6de9b7110c03f01a10">start</a> () override</td></tr>
-<tr class="memdesc:a5901fc136f50ca6de9b7110c03f01a10"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called once to initialize the module.  <a href="#a5901fc136f50ca6de9b7110c03f01a10">More...</a><br /></td></tr>
+<tr class="memdesc:a5901fc136f50ca6de9b7110c03f01a10"><td class="mdescLeft">&#160;</td><td class="mdescRight">Code which initializes module.  <a href="#a5901fc136f50ca6de9b7110c03f01a10">More...</a><br /></td></tr>
 <tr class="separator:a5901fc136f50ca6de9b7110c03f01a10"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6fcd2828adf2f4c00d113f4b316e22eb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kicker_module.html#a6fcd2828adf2f4c00d113f4b316e22eb">entry</a> () override</td></tr>
-<tr class="memdesc:a6fcd2828adf2f4c00d113f4b316e22eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by the RTOS at the desired update rate.  <a href="#a6fcd2828adf2f4c00d113f4b316e22eb">More...</a><br /></td></tr>
+<tr class="memdesc:a6fcd2828adf2f4c00d113f4b316e22eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Code to run when called by RTOS once per system tick (<code>kperiod</code>)  <a href="#a6fcd2828adf2f4c00d113f4b316e22eb">More...</a><br /></td></tr>
 <tr class="separator:a6fcd2828adf2f4c00d113f4b316e22eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_class_generic_module"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_generic_module')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_generic_module.html">GenericModule</a></td></tr>
 <tr class="memitem:ad460da2a697ba4eab4167ba5e6075325 inherit pub_methods_class_generic_module"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_module.html#ad460da2a697ba4eab4167ba5e6075325">GenericModule</a> (std::chrono::milliseconds <a class="el" href="class_generic_module.html#aa633beb1513b09b54b82ccd9348d1d17">period</a>, const char *<a class="el" href="class_generic_module.html#a72f5ba62ae68e8d0e73b120562a5387b">name</a>, int <a class="el" href="class_generic_module.html#a37f43c666f3457c63651c3c4834dc543">priority</a>=1, int <a class="el" href="class_generic_module.html#a442ff78f9167bb26b2327aebab4e6210">stackSize</a>=1024)</td></tr>
@@ -125,27 +130,50 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
 <tr class="memitem:a862c834c2193f55306fe5387357b13ae"><td class="memItemLeft" align="right" valign="top">static constexpr float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kicker_module.html#a862c834c2193f55306fe5387357b13ae">kFrequency</a> = 25.0f</td></tr>
+<tr class="memdesc:a862c834c2193f55306fe5387357b13ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of times per second (frequency) that KickerModule should run (Hz)  <a href="#a862c834c2193f55306fe5387357b13ae">More...</a><br /></td></tr>
 <tr class="separator:a862c834c2193f55306fe5387357b13ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4507515c036d730119a58a8c5fb73782"><td class="memItemLeft" align="right" valign="top">static constexpr std::chrono::milliseconds&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kicker_module.html#a4507515c036d730119a58a8c5fb73782">kPeriod</a> {static_cast&lt;int&gt;(1000 / <a class="el" href="class_kicker_module.html#a862c834c2193f55306fe5387357b13ae">kFrequency</a>)}</td></tr>
+<tr class="memdesc:a4507515c036d730119a58a8c5fb73782"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of seconds elapsed (period) between KickerModule runs (milliseconds)  <a href="#a4507515c036d730119a58a8c5fb73782">More...</a><br /></td></tr>
 <tr class="separator:a4507515c036d730119a58a8c5fb73782"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad7948068a3b9271f8ca8c759891c1553"><td class="memItemLeft" align="right" valign="top">static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kicker_module.html#ad7948068a3b9271f8ca8c759891c1553">kPriority</a> = 2</td></tr>
+<tr class="memdesc:ad7948068a3b9271f8ca8c759891c1553"><td class="mdescLeft">&#160;</td><td class="mdescRight">Priority used by RTOS.  <a href="#ad7948068a3b9271f8ca8c759891c1553">More...</a><br /></td></tr>
 <tr class="separator:ad7948068a3b9271f8ca8c759891c1553"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a005da8b1dd3cb7c310affea68be6ca12"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_kicker_command.html">KickerCommand</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kicker_module.html#a005da8b1dd3cb7c310affea68be6ca12">kickerCommand</a></td></tr>
+<tr class="separator:a005da8b1dd3cb7c310affea68be6ca12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc7c80402d4a3851b1ca78fc771850bb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_kicker_info.html">KickerInfo</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kicker_module.html#abc7c80402d4a3851b1ca78fc771850bb">kickerInfo</a></td></tr>
+<tr class="separator:abc7c80402d4a3851b1ca78fc771850bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9540f765de190a67f3f07a07b32dff0"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kicker_module.html#ae9540f765de190a67f3f07a07b32dff0">prevKickTime</a></td></tr>
+<tr class="memdesc:ae9540f765de190a67f3f07a07b32dff0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time at which last command to kick was sent (milliseconds)  <a href="#ae9540f765de190a67f3f07a07b32dff0">More...</a><br /></td></tr>
+<tr class="separator:ae9540f765de190a67f3f07a07b32dff0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10c23b8850cff087d4c61cfd5c04ccc1"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; DigitalOut &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kicker_module.html#a10c23b8850cff087d4c61cfd5c04ccc1">nCs</a></td></tr>
+<tr class="memdesc:a10c23b8850cff087d4c61cfd5c04ccc1"><td class="mdescLeft">&#160;</td><td class="mdescRight">PinName for the negated chip select line.  <a href="#a10c23b8850cff087d4c61cfd5c04ccc1">More...</a><br /></td></tr>
+<tr class="separator:a10c23b8850cff087d4c61cfd5c04ccc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe5a295e05f2520fa751f47217c3bce1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_kicker_board.html">KickerBoard</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kicker_module.html#abe5a295e05f2520fa751f47217c3bce1">kicker</a></td></tr>
+<tr class="separator:abe5a295e05f2520fa751f47217c3bce1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pub_attribs_class_generic_module"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_class_generic_module')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="class_generic_module.html">GenericModule</a></td></tr>
 <tr class="memitem:aa633beb1513b09b54b82ccd9348d1d17 inherit pub_attribs_class_generic_module"><td class="memItemLeft" align="right" valign="top">std::chrono::milliseconds&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_module.html#aa633beb1513b09b54b82ccd9348d1d17">period</a></td></tr>
+<tr class="memdesc:aa633beb1513b09b54b82ccd9348d1d17 inherit pub_attribs_class_generic_module"><td class="mdescLeft">&#160;</td><td class="mdescRight">The module period (milliseconds)  <a href="class_generic_module.html#aa633beb1513b09b54b82ccd9348d1d17">More...</a><br /></td></tr>
 <tr class="separator:aa633beb1513b09b54b82ccd9348d1d17 inherit pub_attribs_class_generic_module"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a72f5ba62ae68e8d0e73b120562a5387b inherit pub_attribs_class_generic_module"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_module.html#a72f5ba62ae68e8d0e73b120562a5387b">name</a></td></tr>
+<tr class="memdesc:a72f5ba62ae68e8d0e73b120562a5387b inherit pub_attribs_class_generic_module"><td class="mdescLeft">&#160;</td><td class="mdescRight">A human-readable name for the process.  <a href="class_generic_module.html#a72f5ba62ae68e8d0e73b120562a5387b">More...</a><br /></td></tr>
 <tr class="separator:a72f5ba62ae68e8d0e73b120562a5387b inherit pub_attribs_class_generic_module"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a37f43c666f3457c63651c3c4834dc543 inherit pub_attribs_class_generic_module"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_module.html#a37f43c666f3457c63651c3c4834dc543">priority</a> = 1</td></tr>
+<tr class="memdesc:a37f43c666f3457c63651c3c4834dc543 inherit pub_attribs_class_generic_module"><td class="mdescLeft">&#160;</td><td class="mdescRight">The priority of the module (default: low)  <a href="class_generic_module.html#a37f43c666f3457c63651c3c4834dc543">More...</a><br /></td></tr>
 <tr class="separator:a37f43c666f3457c63651c3c4834dc543 inherit pub_attribs_class_generic_module"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a442ff78f9167bb26b2327aebab4e6210 inherit pub_attribs_class_generic_module"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_module.html#a442ff78f9167bb26b2327aebab4e6210">stackSize</a> = 1024</td></tr>
 <tr class="separator:a442ff78f9167bb26b2327aebab4e6210 inherit pub_attribs_class_generic_module"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa40dec1e9e7037584fc29efe09c4e181 inherit pub_attribs_class_generic_module"><td class="memItemLeft" align="right" valign="top">TaskHandle_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_module.html#aa40dec1e9e7037584fc29efe09c4e181">handle</a> = nullptr</td></tr>
 <tr class="separator:aa40dec1e9e7037584fc29efe09c4e181 inherit pub_attribs_class_generic_module"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Module interfacing with Kicker and handling Kicker status. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ac5af2febe3aea6f37919d5eedcfb57ed"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac5af2febe3aea6f37919d5eedcfb57ed">&#9670;&nbsp;</a></span>KickerModule()</h2>
 
@@ -177,6 +205,16 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Constructor for KickerModule. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">spi</td><td>Pointer to SPI object which handles communication on SPI bus </td></tr>
+    <tr><td class="paramname">kickerCommand</td><td>Shared memory location containing kicker shoot mode, trigger mode, and kick strength </td></tr>
+    <tr><td class="paramname">kickerInfo</td><td>Shared memory location containing kicker status </td></tr>
+  </table>
+  </dd>
+</dl>
 <div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-2-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-2-summary" class="dynsummary" style="display:block;">
@@ -202,6 +240,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">void KickerModule::entry </td>
           <td>(</td>
+          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -213,7 +252,8 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Called by the RTOS at the desired update rate. </p>
+<p>Code to run when called by RTOS once per system tick (<code>kperiod</code>) </p>
+<p>Sets kicker strength, shoot mode and trigger mode from <code>kickerCommand</code>. Updates kicker status in <code>kickerInfo</code> </p>
 
 <p>Implements <a class="el" href="class_generic_module.html#a3789bbdeff222e7320e262a622b52237">GenericModule</a>.</p>
 <div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -252,8 +292,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Called once to initialize the module. </p>
-<p>All initialization work should be done here instead of in the constructor. </p>
+<p>Code which initializes module. </p>
 
 <p>Reimplemented from <a class="el" href="class_generic_module.html#a649d4cab743da118a4274969dbe6c3b0">GenericModule</a>.</p>
 <div id="dynsection-4" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -289,6 +328,74 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Number of times per second (frequency) that KickerModule should run (Hz) </p>
+
+</div>
+</div>
+<a id="abe5a295e05f2520fa751f47217c3bce1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe5a295e05f2520fa751f47217c3bce1">&#9670;&nbsp;</a></span>kicker</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_kicker_board.html">KickerBoard</a> KickerModule::kicker</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a005da8b1dd3cb7c310affea68be6ca12"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a005da8b1dd3cb7c310affea68be6ca12">&#9670;&nbsp;</a></span>kickerCommand</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt;<a class="el" href="struct_kicker_command.html">KickerCommand</a>&gt;&amp; KickerModule::kickerCommand</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abc7c80402d4a3851b1ca78fc771850bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc7c80402d4a3851b1ca78fc771850bb">&#9670;&nbsp;</a></span>kickerInfo</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt;<a class="el" href="struct_kicker_info.html">KickerInfo</a>&gt;&amp; KickerModule::kickerInfo</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
 </div>
 </div>
 <a id="a4507515c036d730119a58a8c5fb73782"></a>
@@ -310,6 +417,8 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Number of seconds elapsed (period) between KickerModule runs (milliseconds) </p>
 
 </div>
 </div>
@@ -333,6 +442,57 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Priority used by RTOS. </p>
+
+</div>
+</div>
+<a id="a10c23b8850cff087d4c61cfd5c04ccc1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a10c23b8850cff087d4c61cfd5c04ccc1">&#9670;&nbsp;</a></span>nCs</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt;DigitalOut&gt; KickerModule::nCs</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>PinName for the negated chip select line. </p>
+
+</div>
+</div>
+<a id="ae9540f765de190a67f3f07a07b32dff0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae9540f765de190a67f3f07a07b32dff0">&#9670;&nbsp;</a></span>prevKickTime</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t KickerModule::prevKickTime</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Time at which last command to kick was sent (milliseconds) </p>
+<p>Prevents double triggers on the same packet </p>
+
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
@@ -345,7 +505,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_kicker_module.html">KickerModule</a></li>
-    <li class="footer">Generated on Mon Jun 8 2020 00:49:57 for GT RoboCup SSL by
+    <li class="footer">Generated on Sun Jun 14 2020 13:26:01 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

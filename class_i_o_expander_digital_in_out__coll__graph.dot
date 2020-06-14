@@ -2,5 +2,16 @@ digraph "IOExpanderDigitalInOut"
 {
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
-  Node1 [label="{IOExpanderDigitalInOut\n||+ IOExpanderDigitalInOut()\l+ init()\l+ pinMode()\l+ write()\l+ read()\l+ operator=()\l+ operator int()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node1 [label="{IOExpanderDigitalInOut\n|- _pin\l- _mode\l- _state\l|+ IOExpanderDigitalInOut()\l+ init()\l+ pinMode()\l+ write()\l+ read()\l+ operator=()\l+ operator int()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node2 -> Node1 [color="grey25",fontsize="10",style="solid",label=" -_mcp23017" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node2 [label="{LockedStruct\< MCP23017 \>\n|- mutex_depth\l- mutex\l|+ LockedStruct()\l+ LockedStruct()\l+ LockedStruct()\l+ operator=()\l+ operator=()\l+ ~LockedStruct()\l+ lock()\l+ unsafe_value()\l- acquire_mutex()\l- release_mutex()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_locked_struct.html"];
+  Node3 -> Node2 [color="grey25",fontsize="10",style="solid",label=" -value" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node3 [label="{MCP23017\n|- _i2cAddress\l- _cachedGPIO\l- _cachedIODIR\l- _cachedGPPU\l- _cachedIPOL\l|+ MCP23017()\l+ init()\l+ reset()\l+ writePin()\l+ writeMask()\l+ readPin()\l+ config()\l+ writeRegister()\l+ readRegister()\l+ pinMode()\land 7 more...\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_c_p23017.html",tooltip="Allow access to an I2C-connected MCP23017 16-bit I/O extender chip. "];
+  Node4 -> Node3 [color="grey25",fontsize="10",style="solid",label=" -_i2c" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node4 [label="{LockedStruct\< I2C \>\n|- value\l- mutex_depth\l- mutex\l|+ LockedStruct()\l+ LockedStruct()\l+ LockedStruct()\l+ operator=()\l+ operator=()\l+ ~LockedStruct()\l+ lock()\l+ unsafe_value()\l- acquire_mutex()\l- release_mutex()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_locked_struct.html"];
+  Node5 -> Node4 [dir="back",color="orange",fontsize="10",style="solid",label=" \< I2C \>" ,fontname="Helvetica"];
+  Node5 [label="{LockedStruct\< T \>\n|- mutex_depth\l- mutex\l|+ LockedStruct()\l+ LockedStruct()\l+ operator=()\l+ LockedStruct()\l+ operator=()\l+ ~LockedStruct()\l+ lock()\l+ unsafe_value()\l- acquire_mutex()\l- release_mutex()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_locked_struct.html",tooltip="A locked-struct abstraction. "];
+  Node6 -> Node5 [color="grey25",fontsize="10",style="solid",label=" -value" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node6 [label="{T\n||}",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node5 -> Node2 [dir="back",color="orange",fontsize="10",style="solid",label=" \< MCP23017 \>" ,fontname="Helvetica"];
 }

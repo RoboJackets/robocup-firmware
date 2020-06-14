@@ -30,7 +30,7 @@ var NAVTREE =
       [ "Class Members", "functions.html", [
         [ "All", "functions.html", "functions_dup" ],
         [ "Functions", "functions_func.html", "functions_func" ],
-        [ "Variables", "functions_vars.html", null ],
+        [ "Variables", "functions_vars.html", "functions_vars" ],
         [ "Enumerations", "functions_enum.html", null ],
         [ "Enumerator", "functions_eval.html", null ],
         [ "Related Functions", "functions_rela.html", null ]
@@ -55,11 +55,11 @@ var NAVTREEINDEX =
 [
 "_a_v_r910_8cpp.html",
 "_m_p_u6050_8h.html#a68a2727ce368bc1b2f768a518cf8c844",
-"class_f_p_g_a.html#a6e2b0841e4e0eca35b463ccc8f70a26e",
-"class_m_p_u6050.html#a5f14bde83fe00b27dec6776fc44e89c2",
-"classrtp_1_1_packet.html#a19fd8c5a0fecec46ca343b3e390bd10e",
-"main_8c.html#ab9fccf82137ab14c5bab5f66e5510de8",
-"test_8cpp.html"
+"class_battery.html#adcda499b303251aac697577249df77ff",
+"class_m_p_u6050.html#a13c980e62e6e7774299fea1c827b6e7a",
+"class_motion_control_module.html#a1afd02f786d51923eb78af587b4fab9b",
+"functions_vars_h.html",
+"rtos_8cpp.html#a840291bc02cba5474a4cb46a9b9566fe"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

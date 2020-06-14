@@ -5,5 +5,5 @@ digraph "RotarySelector::init"
   rankdir="LR";
   Node3 [label="RotarySelector::init",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
   Node3 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node4 [label="RotaryDialModule::start",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_rotary_dial_module.html#ad7420a57bee4532485710cd40a860969",tooltip="Called once to initialize the module. "];
+  Node4 [label="RotaryDialModule::start",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_rotary_dial_module.html#ad7420a57bee4532485710cd40a860969",tooltip="Code which initializes module. "];
 }

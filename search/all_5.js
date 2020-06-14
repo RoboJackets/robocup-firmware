@@ -1,7 +1,10 @@
 var searchData=
 [
   ['eigen_5fhas_5fcxx11_5fmath',['EIGEN_HAS_CXX11_MATH',['../robot__model_8hpp.html#a444b05344dc1ff709bf59837b1c17ff5',1,'robot_model.hpp']]],
+  ['enableprogramming',['enableProgramming',['../class_a_v_r910.html#a32ada57871310471f4dcce84141f7f28',1,'AVR910']]],
+  ['enc_5ftick_5fper_5frev',['ENC_TICK_PER_REV',['../class_f_p_g_a_module.html#a56d55ef904bd771b537313b64446d279',1,'FPGAModule']]],
   ['encdeltas',['encDeltas',['../structrtp_1_1_robot_status_message.html#aced0d7264b74857c8b75e23f956c32b0',1,'rtp::RobotStatusMessage::encDeltas()'],['../rtp_8hpp.html#a7923ef66cad5f4f50b9a49393969bfed',1,'encDeltas():&#160;rtp.hpp']]],
+  ['encodernoise',['encoderNoise',['../class_robot_estimator.html#a89405047bb2e0e19414bd5f3dd8d089e',1,'RobotEstimator']]],
   ['encoders',['encoders',['../struct_motor_feedback.html#a8600cf3da11509c8165d6f1eeca2d3d5',1,'MotorFeedback']]],
   ['entry',['entry',['../class_battery_module.html#aaa99ed7940bf9991a513b919cb57a51b',1,'BatteryModule::entry()'],['../class_f_p_g_a_module.html#a56a74cfbd0183b1c17f21579427b4155',1,'FPGAModule::entry()'],['../class_generic_module.html#a3789bbdeff222e7320e262a622b52237',1,'GenericModule::entry()'],['../class_i_m_u_module.html#a784f495174be8c60b2d1e5a99bf508c9',1,'IMUModule::entry()'],['../class_kicker_module.html#a6fcd2828adf2f4c00d113f4b316e22eb',1,'KickerModule::entry()'],['../class_l_e_d_module.html#a8413c6960dc269a7771da47c1ad5bc6d',1,'LEDModule::entry()'],['../class_motion_control_module.html#ae9ce65e3c14d0effbac1c1a3b93fb5b1',1,'MotionControlModule::entry()'],['../class_radio_module.html#ae95ea2b3961a71fcf854c59148c8b74d',1,'RadioModule::entry()'],['../class_rotary_dial_module.html#a081e53040ea910eea062316aabe7e9b5',1,'RotaryDialModule::entry()']]],
   ['err_5fled_5fdrib',['ERR_LED_DRIB',['../iodefs_8h.html#a7e521a79e49c93336c3192d54f63320c',1,'iodefs.h']]],

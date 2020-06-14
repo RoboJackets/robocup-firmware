@@ -6,4 +6,13 @@ digraph "ISM43340::ISM43340"
   Node0 [label="ISM43340::ISM43340",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
   Node0 -> Node1 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node1 [label="dataReady_cb",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_i_s_m43340_8cpp.html#a9ee77ecdf1402df975a6aca30b8e8ed6"];
+  Node0 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="ISM43340::reset",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_s_m43340.html#a1a802e672db823dbe5471866e6692309",tooltip="Power cycles the device, connects to the network, and sets up the two sockets for UDP communication..."];
+  Node2 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="ISM43340::readFromSpi",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_s_m43340.html#ae3999e5b5745b81fbc6e10992bf0cd5c",tooltip="Blocking read from the SPI bus. "];
+  Node2 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="ISM43340::sendCommand",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_s_m43340.html#a55f5fa5d826f8056d5f7d43f43a55691",tooltip="Base send command function. "];
+  Node4 -> Node5 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="ISM43340::writeToSpi",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_s_m43340.html#a6f39b288c0a4ecde7c0bbf5bf73302ad",tooltip="Write the byte array to the spi bus. "];
+  Node4 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
 }

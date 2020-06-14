@@ -84,11 +84,17 @@ $(document).ready(function(){initNavTree('class_l_e_d_module.html','');});
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="class_l_e_d_module-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">LEDModule Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Module interfacing with debugging LEDS based on the statuses of other electronics.  
+ <a href="class_l_e_d_module.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for LEDModule:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -110,25 +116,32 @@ $(document).ready(function(){initNavTree('class_l_e_d_module.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:af27f3d929f279451bee79633b2869f33"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_e_d_module.html#af27f3d929f279451bee79633b2869f33">LEDModule</a> (<a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="class_m_c_p23017.html">MCP23017</a> &gt; &amp;ioExpander, <a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; SPI &gt; &amp;dotStarSPI, <a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_battery_voltage.html">BatteryVoltage</a> &gt; &amp;batteryVoltage, <a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_f_p_g_a_status.html">FPGAStatus</a> &gt; &amp;fpgaStatus, <a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_kicker_info.html">KickerInfo</a> &gt; &amp;kickerInfo, <a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_radio_error.html">RadioError</a> &gt; &amp;radioError)</td></tr>
+<tr class="memitem:af27f3d929f279451bee79633b2869f33"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_e_d_module.html#af27f3d929f279451bee79633b2869f33">LEDModule</a> (<a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="class_m_c_p23017.html">MCP23017</a> &gt; &amp;<a class="el" href="class_l_e_d_module.html#aa24185bd179c1500ea351b894ccf2af4">ioExpander</a>, <a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; SPI &gt; &amp;<a class="el" href="class_l_e_d_module.html#a5975d2df0087e540993addba4e2450bc">dotStarSPI</a>, <a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_battery_voltage.html">BatteryVoltage</a> &gt; &amp;<a class="el" href="class_l_e_d_module.html#a06101193532784e98a8a5b1734f4b699">batteryVoltage</a>, <a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_f_p_g_a_status.html">FPGAStatus</a> &gt; &amp;<a class="el" href="class_l_e_d_module.html#a21aac1cf776038028ad8072f79f4ced3">fpgaStatus</a>, <a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_kicker_info.html">KickerInfo</a> &gt; &amp;<a class="el" href="class_l_e_d_module.html#ad384b4ed7cdcc14be39b101bba4a2e61">kickerInfo</a>, <a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_radio_error.html">RadioError</a> &gt; &amp;<a class="el" href="class_l_e_d_module.html#af44faa95c9edbfb07bac5aef12799d41">radioError</a>)</td></tr>
+<tr class="memdesc:af27f3d929f279451bee79633b2869f33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for LEDModule.  <a href="#af27f3d929f279451bee79633b2869f33">More...</a><br /></td></tr>
 <tr class="separator:af27f3d929f279451bee79633b2869f33"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac9491cb79f42b71e117838766930357"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_e_d_module.html#aac9491cb79f42b71e117838766930357">start</a> () override</td></tr>
-<tr class="memdesc:aac9491cb79f42b71e117838766930357"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called once to initialize the module.  <a href="#aac9491cb79f42b71e117838766930357">More...</a><br /></td></tr>
+<tr class="memdesc:aac9491cb79f42b71e117838766930357"><td class="mdescLeft">&#160;</td><td class="mdescRight">Code which initializes module.  <a href="#aac9491cb79f42b71e117838766930357">More...</a><br /></td></tr>
 <tr class="separator:aac9491cb79f42b71e117838766930357"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8413c6960dc269a7771da47c1ad5bc6d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_e_d_module.html#a8413c6960dc269a7771da47c1ad5bc6d">entry</a> () override</td></tr>
-<tr class="memdesc:a8413c6960dc269a7771da47c1ad5bc6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by the RTOS at the desired update rate.  <a href="#a8413c6960dc269a7771da47c1ad5bc6d">More...</a><br /></td></tr>
+<tr class="memdesc:a8413c6960dc269a7771da47c1ad5bc6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Code to run when called by RTOS once per system tick (<code>kperiod</code>)  <a href="#a8413c6960dc269a7771da47c1ad5bc6d">More...</a><br /></td></tr>
 <tr class="separator:a8413c6960dc269a7771da47c1ad5bc6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5cf1e0e2c9e02c30b9cd9dd156b6bd3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_e_d_module.html#ac5cf1e0e2c9e02c30b9cd9dd156b6bd3">fpgaInitialized</a> ()</td></tr>
+<tr class="memdesc:ac5cf1e0e2c9e02c30b9cd9dd156b6bd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Toggles LEDs to signal fpga initialization.  <a href="#ac5cf1e0e2c9e02c30b9cd9dd156b6bd3">More...</a><br /></td></tr>
 <tr class="separator:ac5cf1e0e2c9e02c30b9cd9dd156b6bd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a00403b436a96603d807aec0ca88899e1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_e_d_module.html#a00403b436a96603d807aec0ca88899e1">radioInitialized</a> ()</td></tr>
+<tr class="memdesc:a00403b436a96603d807aec0ca88899e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Toggles LEDs to signal radio initialization.  <a href="#a00403b436a96603d807aec0ca88899e1">More...</a><br /></td></tr>
 <tr class="separator:a00403b436a96603d807aec0ca88899e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a257cc53a6966c74659f8b5e1697960a7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_e_d_module.html#a257cc53a6966c74659f8b5e1697960a7">kickerInitialized</a> ()</td></tr>
+<tr class="memdesc:a257cc53a6966c74659f8b5e1697960a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Toggles LEDs to signal fpga initialization.  <a href="#a257cc53a6966c74659f8b5e1697960a7">More...</a><br /></td></tr>
 <tr class="separator:a257cc53a6966c74659f8b5e1697960a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa06d62a683353d351978061ae7bf10e2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_e_d_module.html#aa06d62a683353d351978061ae7bf10e2">fullyInitialized</a> ()</td></tr>
+<tr class="memdesc:aa06d62a683353d351978061ae7bf10e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Toggles LEDs to signal full system initialization.  <a href="#aa06d62a683353d351978061ae7bf10e2">More...</a><br /></td></tr>
 <tr class="separator:aa06d62a683353d351978061ae7bf10e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0bf3449aeac41a6eb7f2d64bb00a7578"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_e_d_module.html#a0bf3449aeac41a6eb7f2d64bb00a7578">missedSuperLoop</a> ()</td></tr>
+<tr class="memdesc:a0bf3449aeac41a6eb7f2d64bb00a7578"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set specific toggling pattern for missing the X ms super loop timings.  <a href="#a0bf3449aeac41a6eb7f2d64bb00a7578">More...</a><br /></td></tr>
 <tr class="separator:a0bf3449aeac41a6eb7f2d64bb00a7578"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2ac4599c211434223bfad44e36d6d72e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_e_d_module.html#a2ac4599c211434223bfad44e36d6d72e">missedModuleRun</a> ()</td></tr>
+<tr class="memdesc:a2ac4599c211434223bfad44e36d6d72e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specific toggling pattern for missing a module run X times in a row.  <a href="#a2ac4599c211434223bfad44e36d6d72e">More...</a><br /></td></tr>
 <tr class="separator:a2ac4599c211434223bfad44e36d6d72e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_class_generic_module"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_generic_module')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_generic_module.html">GenericModule</a></td></tr>
 <tr class="memitem:ad460da2a697ba4eab4167ba5e6075325 inherit pub_methods_class_generic_module"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_module.html#ad460da2a697ba4eab4167ba5e6075325">GenericModule</a> (std::chrono::milliseconds <a class="el" href="class_generic_module.html#aa633beb1513b09b54b82ccd9348d1d17">period</a>, const char *<a class="el" href="class_generic_module.html#a72f5ba62ae68e8d0e73b120562a5387b">name</a>, int <a class="el" href="class_generic_module.html#a37f43c666f3457c63651c3c4834dc543">priority</a>=1, int <a class="el" href="class_generic_module.html#a442ff78f9167bb26b2327aebab4e6210">stackSize</a>=1024)</td></tr>
@@ -137,27 +150,70 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
 <tr class="memitem:a9836ceae740accac5998de307939cbfd"><td class="memItemLeft" align="right" valign="top">static constexpr float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_e_d_module.html#a9836ceae740accac5998de307939cbfd">kFrequency</a> = 10.0f</td></tr>
+<tr class="memdesc:a9836ceae740accac5998de307939cbfd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of times per second (frequency) that LEDModule should run (Hz)  <a href="#a9836ceae740accac5998de307939cbfd">More...</a><br /></td></tr>
 <tr class="separator:a9836ceae740accac5998de307939cbfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a212e62ac5a2f5a1bd4e7cf37d0d2d083"><td class="memItemLeft" align="right" valign="top">static constexpr std::chrono::milliseconds&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_e_d_module.html#a212e62ac5a2f5a1bd4e7cf37d0d2d083">kPeriod</a> {static_cast&lt;int&gt;(1000 / <a class="el" href="class_l_e_d_module.html#a9836ceae740accac5998de307939cbfd">kFrequency</a>)}</td></tr>
+<tr class="memdesc:a212e62ac5a2f5a1bd4e7cf37d0d2d083"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of seconds elapsed (period) between LEDModule runs (milliseconds)  <a href="#a212e62ac5a2f5a1bd4e7cf37d0d2d083">More...</a><br /></td></tr>
 <tr class="separator:a212e62ac5a2f5a1bd4e7cf37d0d2d083"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0fccc26a21a0a67fc0ec409574967bbd"><td class="memItemLeft" align="right" valign="top">static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_e_d_module.html#a0fccc26a21a0a67fc0ec409574967bbd">kPriority</a> = 1</td></tr>
+<tr class="memdesc:a0fccc26a21a0a67fc0ec409574967bbd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Priority used by RTOS.  <a href="#a0fccc26a21a0a67fc0ec409574967bbd">More...</a><br /></td></tr>
 <tr class="separator:a0fccc26a21a0a67fc0ec409574967bbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:ab12cbc129d32a221d4ae69b9a72ba7fd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_e_d_module.html#ab12cbc129d32a221d4ae69b9a72ba7fd">setColor</a> (uint32_t led0, uint32_t led1)</td></tr>
+<tr class="memdesc:ab12cbc129d32a221d4ae69b9a72ba7fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the color of the two dot stars.  <a href="#ab12cbc129d32a221d4ae69b9a72ba7fd">More...</a><br /></td></tr>
+<tr class="separator:ab12cbc129d32a221d4ae69b9a72ba7fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:aa24185bd179c1500ea351b894ccf2af4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="class_m_c_p23017.html">MCP23017</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_e_d_module.html#aa24185bd179c1500ea351b894ccf2af4">ioExpander</a></td></tr>
+<tr class="separator:aa24185bd179c1500ea351b894ccf2af4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5975d2df0087e540993addba4e2450bc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; SPI &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_e_d_module.html#a5975d2df0087e540993addba4e2450bc">dotStarSPI</a></td></tr>
+<tr class="separator:a5975d2df0087e540993addba4e2450bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06101193532784e98a8a5b1734f4b699"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_battery_voltage.html">BatteryVoltage</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_e_d_module.html#a06101193532784e98a8a5b1734f4b699">batteryVoltage</a></td></tr>
+<tr class="separator:a06101193532784e98a8a5b1734f4b699"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21aac1cf776038028ad8072f79f4ced3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_f_p_g_a_status.html">FPGAStatus</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_e_d_module.html#a21aac1cf776038028ad8072f79f4ced3">fpgaStatus</a></td></tr>
+<tr class="separator:a21aac1cf776038028ad8072f79f4ced3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad384b4ed7cdcc14be39b101bba4a2e61"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_kicker_info.html">KickerInfo</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_e_d_module.html#ad384b4ed7cdcc14be39b101bba4a2e61">kickerInfo</a></td></tr>
+<tr class="separator:ad384b4ed7cdcc14be39b101bba4a2e61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af44faa95c9edbfb07bac5aef12799d41"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_radio_error.html">RadioError</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_e_d_module.html#af44faa95c9edbfb07bac5aef12799d41">radioError</a></td></tr>
+<tr class="separator:af44faa95c9edbfb07bac5aef12799d41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc0364864fb54a0143a36adb214242e1"><td class="memItemLeft" align="right" valign="top">DigitalOut&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_e_d_module.html#abc0364864fb54a0143a36adb214242e1">dotStarNCS</a></td></tr>
+<tr class="separator:abc0364864fb54a0143a36adb214242e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b96921450cc310a6bdf2f6ea2ecee49"><td class="memItemLeft" align="right" valign="top">std::array&lt; DigitalOut, 4 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_e_d_module.html#a0b96921450cc310a6bdf2f6ea2ecee49">leds</a></td></tr>
+<tr class="memdesc:a0b96921450cc310a6bdf2f6ea2ecee49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of mTrain LEDs as <code>DigitalOut</code>s.  <a href="#a0b96921450cc310a6bdf2f6ea2ecee49">More...</a><br /></td></tr>
+<tr class="separator:a0b96921450cc310a6bdf2f6ea2ecee49"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa31075b6ce0dd661b1c321296a6c79a0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_e_d_module.html#aa31075b6ce0dd661b1c321296a6c79a0">missedSuperLoopToggle</a></td></tr>
+<tr class="separator:aa31075b6ce0dd661b1c321296a6c79a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5d6420401fbd78f3fdce4b8a540775d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_e_d_module.html#ad5d6420401fbd78f3fdce4b8a540775d">missedModuleRunToggle</a></td></tr>
+<tr class="separator:ad5d6420401fbd78f3fdce4b8a540775d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:a27dccb90d6c1ce59d2333e06ab923c50"><td class="memItemLeft" align="right" valign="top">static const uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_e_d_module.html#a27dccb90d6c1ce59d2333e06ab923c50">IOExpanderErrorLEDMask</a> = 0xFF00</td></tr>
+<tr class="separator:a27dccb90d6c1ce59d2333e06ab923c50"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pub_attribs_class_generic_module"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_class_generic_module')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="class_generic_module.html">GenericModule</a></td></tr>
 <tr class="memitem:aa633beb1513b09b54b82ccd9348d1d17 inherit pub_attribs_class_generic_module"><td class="memItemLeft" align="right" valign="top">std::chrono::milliseconds&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_module.html#aa633beb1513b09b54b82ccd9348d1d17">period</a></td></tr>
+<tr class="memdesc:aa633beb1513b09b54b82ccd9348d1d17 inherit pub_attribs_class_generic_module"><td class="mdescLeft">&#160;</td><td class="mdescRight">The module period (milliseconds)  <a href="class_generic_module.html#aa633beb1513b09b54b82ccd9348d1d17">More...</a><br /></td></tr>
 <tr class="separator:aa633beb1513b09b54b82ccd9348d1d17 inherit pub_attribs_class_generic_module"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a72f5ba62ae68e8d0e73b120562a5387b inherit pub_attribs_class_generic_module"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_module.html#a72f5ba62ae68e8d0e73b120562a5387b">name</a></td></tr>
+<tr class="memdesc:a72f5ba62ae68e8d0e73b120562a5387b inherit pub_attribs_class_generic_module"><td class="mdescLeft">&#160;</td><td class="mdescRight">A human-readable name for the process.  <a href="class_generic_module.html#a72f5ba62ae68e8d0e73b120562a5387b">More...</a><br /></td></tr>
 <tr class="separator:a72f5ba62ae68e8d0e73b120562a5387b inherit pub_attribs_class_generic_module"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a37f43c666f3457c63651c3c4834dc543 inherit pub_attribs_class_generic_module"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_module.html#a37f43c666f3457c63651c3c4834dc543">priority</a> = 1</td></tr>
+<tr class="memdesc:a37f43c666f3457c63651c3c4834dc543 inherit pub_attribs_class_generic_module"><td class="mdescLeft">&#160;</td><td class="mdescRight">The priority of the module (default: low)  <a href="class_generic_module.html#a37f43c666f3457c63651c3c4834dc543">More...</a><br /></td></tr>
 <tr class="separator:a37f43c666f3457c63651c3c4834dc543 inherit pub_attribs_class_generic_module"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a442ff78f9167bb26b2327aebab4e6210 inherit pub_attribs_class_generic_module"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_module.html#a442ff78f9167bb26b2327aebab4e6210">stackSize</a> = 1024</td></tr>
 <tr class="separator:a442ff78f9167bb26b2327aebab4e6210 inherit pub_attribs_class_generic_module"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa40dec1e9e7037584fc29efe09c4e181 inherit pub_attribs_class_generic_module"><td class="memItemLeft" align="right" valign="top">TaskHandle_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_module.html#aa40dec1e9e7037584fc29efe09c4e181">handle</a> = nullptr</td></tr>
 <tr class="separator:aa40dec1e9e7037584fc29efe09c4e181 inherit pub_attribs_class_generic_module"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Module interfacing with debugging LEDS based on the statuses of other electronics. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="af27f3d929f279451bee79633b2869f33"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af27f3d929f279451bee79633b2869f33">&#9670;&nbsp;</a></span>LEDModule()</h2>
 
@@ -208,6 +264,19 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Constructor for LEDModule. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ioExpander</td><td>shared_ptr with mutex locks for MCP23017 driver </td></tr>
+    <tr><td class="paramname">dotStarSPI</td><td>SPI bus for dotStar LEDS </td></tr>
+    <tr><td class="paramname">batteryVoltage</td><td>Shared memory location containing data on battery voltage and critical status </td></tr>
+    <tr><td class="paramname">fpgaStatus</td><td>Shared memory location containing whether motors or FPGA have errors </td></tr>
+    <tr><td class="paramname">kickerInfo</td><td>Shared memory location containing kicker status </td></tr>
+    <tr><td class="paramname">radioError</td><td>Shared memory location containing whether radio has an error </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
@@ -223,6 +292,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">void LEDModule::entry </td>
           <td>(</td>
+          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -234,7 +304,8 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Called by the RTOS at the desired update rate. </p>
+<p>Code to run when called by RTOS once per system tick (<code>kperiod</code>) </p>
+<p>Checks for Radio, FPGA, and Kicker errors, and activates dotStar LEDs accordingly mTrain LED 1 toggled as watchdog/running signal </p>
 
 <p>Implements <a class="el" href="class_generic_module.html#a3789bbdeff222e7320e262a622b52237">GenericModule</a>.</p>
 <div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -263,11 +334,26 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Toggles LEDs to signal fpga initialization. </p>
+<ul>
+<li>mTrain LED1 turned on</li>
+<li>dotstars set to [yellow, white] </li>
+</ul>
 <div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-3-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+  <img id="dynsection-3-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-3-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-3-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_l_e_d_module_ac5cf1e0e2c9e02c30b9cd9dd156b6bd3_cgraph.png" border="0" usemap="#class_l_e_d_module_ac5cf1e0e2c9e02c30b9cd9dd156b6bd3_cgraph" alt=""/></div>
+<map name="class_l_e_d_module_ac5cf1e0e2c9e02c30b9cd9dd156b6bd3_cgraph" id="class_l_e_d_module_ac5cf1e0e2c9e02c30b9cd9dd156b6bd3_cgraph">
+</map>
+</div>
+<div id="dynsection-4" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-4-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-4-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-4-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="class_l_e_d_module_ac5cf1e0e2c9e02c30b9cd9dd156b6bd3_icgraph.png" border="0" usemap="#class_l_e_d_module_ac5cf1e0e2c9e02c30b9cd9dd156b6bd3_icgraph" alt=""/></div>
 <map name="class_l_e_d_module_ac5cf1e0e2c9e02c30b9cd9dd156b6bd3_icgraph" id="class_l_e_d_module_ac5cf1e0e2c9e02c30b9cd9dd156b6bd3_icgraph">
 </map>
@@ -290,6 +376,21 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Toggles LEDs to signal full system initialization. </p>
+<ul>
+<li>mTrain LED4 turned on</li>
+<li>dotstars set to [green, green] </li>
+</ul>
+<div id="dynsection-5" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-5-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-5-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-5-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_l_e_d_module_aa06d62a683353d351978061ae7bf10e2_cgraph.png" border="0" usemap="#class_l_e_d_module_aa06d62a683353d351978061ae7bf10e2_cgraph" alt=""/></div>
+<map name="class_l_e_d_module_aa06d62a683353d351978061ae7bf10e2_cgraph" id="class_l_e_d_module_aa06d62a683353d351978061ae7bf10e2_cgraph">
+</map>
+</div>
+
 </div>
 </div>
 <a id="a257cc53a6966c74659f8b5e1697960a7"></a>
@@ -307,6 +408,21 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Toggles LEDs to signal fpga initialization. </p>
+<ul>
+<li>mTrain LED3 turned on</li>
+<li>dotstars set to [blue, white] </li>
+</ul>
+<div id="dynsection-6" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-6-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-6-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-6-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_l_e_d_module_a257cc53a6966c74659f8b5e1697960a7_cgraph.png" border="0" usemap="#class_l_e_d_module_a257cc53a6966c74659f8b5e1697960a7_cgraph" alt=""/></div>
+<map name="class_l_e_d_module_a257cc53a6966c74659f8b5e1697960a7_cgraph" id="class_l_e_d_module_a257cc53a6966c74659f8b5e1697960a7_cgraph">
+</map>
+</div>
+
 </div>
 </div>
 <a id="a2ac4599c211434223bfad44e36d6d72e"></a>
@@ -323,11 +439,14 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<div id="dynsection-4" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-4-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-4-summary" class="dynsummary" style="display:block;">
+
+<p>Specific toggling pattern for missing a module run X times in a row. </p>
+<p>mTrain LED 3 toggles opposite of LEDs 2 and 4, indicating that due to priority and timing, some module never runs </p>
+<div id="dynsection-7" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-7-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-7-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-4-content" class="dyncontent" style="display:none;">
+<div id="dynsection-7-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="class_l_e_d_module_a2ac4599c211434223bfad44e36d6d72e_cgraph.png" border="0" usemap="#class_l_e_d_module_a2ac4599c211434223bfad44e36d6d72e_cgraph" alt=""/></div>
 <map name="class_l_e_d_module_a2ac4599c211434223bfad44e36d6d72e_cgraph" id="class_l_e_d_module_a2ac4599c211434223bfad44e36d6d72e_cgraph">
 </map>
@@ -350,6 +469,18 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Set specific toggling pattern for missing the X ms super loop timings. </p>
+<p>mTrain LEDs 2,3, and 4 are blinking together, indicating that some module is running too slowly. </p>
+<div id="dynsection-8" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-8-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-8-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-8-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_l_e_d_module_a0bf3449aeac41a6eb7f2d64bb00a7578_cgraph.png" border="0" usemap="#class_l_e_d_module_a0bf3449aeac41a6eb7f2d64bb00a7578_cgraph" alt=""/></div>
+<map name="class_l_e_d_module_a0bf3449aeac41a6eb7f2d64bb00a7578_cgraph" id="class_l_e_d_module_a0bf3449aeac41a6eb7f2d64bb00a7578_cgraph">
+</map>
+</div>
+
 </div>
 </div>
 <a id="a00403b436a96603d807aec0ca88899e1"></a>
@@ -366,13 +497,91 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<div id="dynsection-5" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-5-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-5-summary" class="dynsummary" style="display:block;">
+
+<p>Toggles LEDs to signal radio initialization. </p>
+<ul>
+<li>mTrain LED2 turned on</li>
+<li>dotstars set to [pink, white] </li>
+</ul>
+<div id="dynsection-9" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-9-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-9-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-5-content" class="dyncontent" style="display:none;">
+<div id="dynsection-9-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_l_e_d_module_a00403b436a96603d807aec0ca88899e1_cgraph.png" border="0" usemap="#class_l_e_d_module_a00403b436a96603d807aec0ca88899e1_cgraph" alt=""/></div>
+<map name="class_l_e_d_module_a00403b436a96603d807aec0ca88899e1_cgraph" id="class_l_e_d_module_a00403b436a96603d807aec0ca88899e1_cgraph">
+</map>
+</div>
+<div id="dynsection-10" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-10-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-10-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-10-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="class_l_e_d_module_a00403b436a96603d807aec0ca88899e1_icgraph.png" border="0" usemap="#class_l_e_d_module_a00403b436a96603d807aec0ca88899e1_icgraph" alt=""/></div>
 <map name="class_l_e_d_module_a00403b436a96603d807aec0ca88899e1_icgraph" id="class_l_e_d_module_a00403b436a96603d807aec0ca88899e1_icgraph">
+</map>
+</div>
+
+</div>
+</div>
+<a id="ab12cbc129d32a221d4ae69b9a72ba7fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab12cbc129d32a221d4ae69b9a72ba7fd">&#9670;&nbsp;</a></span>setColor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LEDModule::setColor </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>led0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>led1</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the color of the two dot stars. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">led0</td><td>0..7 red 8..15 green 16..23 blue 24..31 don't care</td></tr>
+    <tr><td class="paramname">led1</td><td>0..7 red 8..15 green 16..23 blue 24..31 don't care </td></tr>
+  </table>
+  </dd>
+</dl>
+<div id="dynsection-11" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-11-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-11-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-11-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_l_e_d_module_ab12cbc129d32a221d4ae69b9a72ba7fd_cgraph.png" border="0" usemap="#class_l_e_d_module_ab12cbc129d32a221d4ae69b9a72ba7fd_cgraph" alt=""/></div>
+<map name="class_l_e_d_module_ab12cbc129d32a221d4ae69b9a72ba7fd_cgraph" id="class_l_e_d_module_ab12cbc129d32a221d4ae69b9a72ba7fd_cgraph">
+</map>
+</div>
+<div id="dynsection-12" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-12-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-12-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-12-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_l_e_d_module_ab12cbc129d32a221d4ae69b9a72ba7fd_icgraph.png" border="0" usemap="#class_l_e_d_module_ab12cbc129d32a221d4ae69b9a72ba7fd_icgraph" alt=""/></div>
+<map name="class_l_e_d_module_ab12cbc129d32a221d4ae69b9a72ba7fd_icgraph" id="class_l_e_d_module_ab12cbc129d32a221d4ae69b9a72ba7fd_icgraph">
 </map>
 </div>
 
@@ -402,15 +611,14 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Called once to initialize the module. </p>
-<p>All initialization work should be done here instead of in the constructor. </p>
+<p>Code which initializes module. </p>
 
 <p>Reimplemented from <a class="el" href="class_generic_module.html#a649d4cab743da118a4274969dbe6c3b0">GenericModule</a>.</p>
-<div id="dynsection-6" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-6-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-6-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-13" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-13-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-13-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-6-content" class="dyncontent" style="display:none;">
+<div id="dynsection-13-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="class_l_e_d_module_aac9491cb79f42b71e117838766930357_cgraph.png" border="0" usemap="#class_l_e_d_module_aac9491cb79f42b71e117838766930357_cgraph" alt=""/></div>
 <map name="class_l_e_d_module_aac9491cb79f42b71e117838766930357_cgraph" id="class_l_e_d_module_aac9491cb79f42b71e117838766930357_cgraph">
 </map>
@@ -419,6 +627,138 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a06101193532784e98a8a5b1734f4b699"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a06101193532784e98a8a5b1734f4b699">&#9670;&nbsp;</a></span>batteryVoltage</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt;<a class="el" href="struct_battery_voltage.html">BatteryVoltage</a>&gt;&amp; LEDModule::batteryVoltage</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abc0364864fb54a0143a36adb214242e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc0364864fb54a0143a36adb214242e1">&#9670;&nbsp;</a></span>dotStarNCS</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">DigitalOut LEDModule::dotStarNCS</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5975d2df0087e540993addba4e2450bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5975d2df0087e540993addba4e2450bc">&#9670;&nbsp;</a></span>dotStarSPI</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt;SPI&gt;&amp; LEDModule::dotStarSPI</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a21aac1cf776038028ad8072f79f4ced3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a21aac1cf776038028ad8072f79f4ced3">&#9670;&nbsp;</a></span>fpgaStatus</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt;<a class="el" href="struct_f_p_g_a_status.html">FPGAStatus</a>&gt;&amp; LEDModule::fpgaStatus</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa24185bd179c1500ea351b894ccf2af4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa24185bd179c1500ea351b894ccf2af4">&#9670;&nbsp;</a></span>ioExpander</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt;<a class="el" href="class_m_c_p23017.html">MCP23017</a>&gt;&amp; LEDModule::ioExpander</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a27dccb90d6c1ce59d2333e06ab923c50"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27dccb90d6c1ce59d2333e06ab923c50">&#9670;&nbsp;</a></span>IOExpanderErrorLEDMask</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const uint16_t LEDModule::IOExpanderErrorLEDMask = 0xFF00</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a9836ceae740accac5998de307939cbfd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9836ceae740accac5998de307939cbfd">&#9670;&nbsp;</a></span>kFrequency</h2>
 
@@ -435,6 +775,30 @@ Additional Inherited Members</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Number of times per second (frequency) that LEDModule should run (Hz) </p>
+
+</div>
+</div>
+<a id="ad384b4ed7cdcc14be39b101bba4a2e61"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad384b4ed7cdcc14be39b101bba4a2e61">&#9670;&nbsp;</a></span>kickerInfo</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt;<a class="el" href="struct_kicker_info.html">KickerInfo</a>&gt;&amp; LEDModule::kickerInfo</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -461,6 +825,8 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Number of seconds elapsed (period) between LEDModule runs (milliseconds) </p>
+
 </div>
 </div>
 <a id="a0fccc26a21a0a67fc0ec409574967bbd"></a>
@@ -483,6 +849,99 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Priority used by RTOS. </p>
+<p>Uses the default priority of 1. </p>
+
+</div>
+</div>
+<a id="a0b96921450cc310a6bdf2f6ea2ecee49"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b96921450cc310a6bdf2f6ea2ecee49">&#9670;&nbsp;</a></span>leds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::array&lt;DigitalOut, 4&gt; LEDModule::leds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Array of mTrain LEDs as <code>DigitalOut</code>s. </p>
+
+</div>
+</div>
+<a id="ad5d6420401fbd78f3fdce4b8a540775d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad5d6420401fbd78f3fdce4b8a540775d">&#9670;&nbsp;</a></span>missedModuleRunToggle</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool LEDModule::missedModuleRunToggle</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa31075b6ce0dd661b1c321296a6c79a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa31075b6ce0dd661b1c321296a6c79a0">&#9670;&nbsp;</a></span>missedSuperLoopToggle</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool LEDModule::missedSuperLoopToggle</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af44faa95c9edbfb07bac5aef12799d41"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af44faa95c9edbfb07bac5aef12799d41">&#9670;&nbsp;</a></span>radioError</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt;<a class="el" href="struct_radio_error.html">RadioError</a>&gt;&amp; LEDModule::radioError</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
@@ -495,7 +954,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_l_e_d_module.html">LEDModule</a></li>
-    <li class="footer">Generated on Mon Jun 8 2020 00:49:57 for GT RoboCup SSL by
+    <li class="footer">Generated on Sun Jun 14 2020 13:26:01 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

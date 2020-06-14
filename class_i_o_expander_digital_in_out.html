@@ -83,6 +83,7 @@ $(document).ready(function(){initNavTree('class_i_o_expander_digital_in_out.html
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_i_o_expander_digital_in_out-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">IOExpanderDigitalInOut Class Reference</div>  </div>
@@ -122,6 +123,17 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:afb472b73e9a9bd7512a87c309fbdc893"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_o_expander_digital_in_out.html#afb472b73e9a9bd7512a87c309fbdc893">operator int</a> ()</td></tr>
 <tr class="memdesc:afb472b73e9a9bd7512a87c309fbdc893"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows the pin to return its value like a simple integer variable.  <a href="#afb472b73e9a9bd7512a87c309fbdc893">More...</a><br /></td></tr>
 <tr class="separator:afb472b73e9a9bd7512a87c309fbdc893"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:afcfe2c78af401bf3d4d36a58a817e1e1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_m_c_p23017.html#a212b5a8e279b09067dd96eee9a1deb67">MCP23017::ExpPinName</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_o_expander_digital_in_out.html#afcfe2c78af401bf3d4d36a58a817e1e1">_pin</a></td></tr>
+<tr class="separator:afcfe2c78af401bf3d4d36a58a817e1e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabca7e184a9eda6414c9c309acfb56df"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_m_c_p23017.html#a722f23d7767a135c669222da836339be">MCP23017::PinMode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_o_expander_digital_in_out.html#aabca7e184a9eda6414c9c309acfb56df">_mode</a></td></tr>
+<tr class="separator:aabca7e184a9eda6414c9c309acfb56df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af835706476f3b8cd7f29522fc90f3b7a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_o_expander_digital_in_out.html#af835706476f3b8cd7f29522fc90f3b7a">_state</a></td></tr>
+<tr class="separator:af835706476f3b8cd7f29522fc90f3b7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ce7e6bd353871b5479e2496a6cbf53c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="class_m_c_p23017.html">MCP23017</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_o_expander_digital_in_out.html#a2ce7e6bd353871b5479e2496a6cbf53c">_mcp23017</a></td></tr>
+<tr class="separator:a2ce7e6bd353871b5479e2496a6cbf53c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A DigitalInOut class meant to replicate basic functionality of the mBed DigitalOut and DigitalIn on the io-expander. </p>
@@ -419,6 +431,95 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a2ce7e6bd353871b5479e2496a6cbf53c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ce7e6bd353871b5479e2496a6cbf53c">&#9670;&nbsp;</a></span>_mcp23017</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt;<a class="el" href="class_m_c_p23017.html">MCP23017</a>&gt;&amp; IOExpanderDigitalInOut::_mcp23017</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aabca7e184a9eda6414c9c309acfb56df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aabca7e184a9eda6414c9c309acfb56df">&#9670;&nbsp;</a></span>_mode</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_m_c_p23017.html#a722f23d7767a135c669222da836339be">MCP23017::PinMode</a> IOExpanderDigitalInOut::_mode</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afcfe2c78af401bf3d4d36a58a817e1e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afcfe2c78af401bf3d4d36a58a817e1e1">&#9670;&nbsp;</a></span>_pin</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_m_c_p23017.html#a212b5a8e279b09067dd96eee9a1deb67">MCP23017::ExpPinName</a> IOExpanderDigitalInOut::_pin</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af835706476f3b8cd7f29522fc90f3b7a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af835706476f3b8cd7f29522fc90f3b7a">&#9670;&nbsp;</a></span>_state</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool IOExpanderDigitalInOut::_state</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>/home/developer/robocup-firmware/robot/lib/Inc/drivers/<a class="el" href="_i_o_expander_digital_in_out_8hpp_source.html">IOExpanderDigitalInOut.hpp</a></li>
 </ul>
@@ -428,7 +529,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_i_o_expander_digital_in_out.html">IOExpanderDigitalInOut</a></li>
-    <li class="footer">Generated on Mon Jun 8 2020 00:49:57 for GT RoboCup SSL by
+    <li class="footer">Generated on Sun Jun 14 2020 13:26:01 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

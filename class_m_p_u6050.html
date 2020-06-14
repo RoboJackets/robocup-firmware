@@ -83,6 +83,7 @@ $(document).ready(function(){initNavTree('class_m_p_u6050.html','');});
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_m_p_u6050-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">MPU6050 Class Reference</div>  </div>
@@ -809,6 +810,15 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a29594027f88c291708a38fba67c4ecd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea90c3e6a6666f070f7833a913cfa821"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_p_u6050.html#aea90c3e6a6666f070f7833a913cfa821">setDMPConfig2</a> (uint8_t config)</td></tr>
 <tr class="separator:aea90c3e6a6666f070f7833a913cfa821"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a21a3dafd707d161dcd0b7e429b8c3447"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_i2_cdev.html">I2Cdev</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_p_u6050.html#a21a3dafd707d161dcd0b7e429b8c3447">i2Cdev</a></td></tr>
+<tr class="separator:a21a3dafd707d161dcd0b7e429b8c3447"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad248bbf6e9da395ab67f7049b50ae474"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_p_u6050.html#ad248bbf6e9da395ab67f7049b50ae474">devAddr</a></td></tr>
+<tr class="separator:ad248bbf6e9da395ab67f7049b50ae474"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2000cad671bb7b293e26f2d463d4cea"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_p_u6050.html#ad2000cad671bb7b293e26f2d463d4cea">buffer</a> [14]</td></tr>
+<tr class="separator:ad2000cad671bb7b293e26f2d463d4cea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a60a3c96ca481b0b960f1c88daf090b6a"></a>
@@ -10063,6 +10073,73 @@ MPU6050_RA_FIFO_EN </dd></dl>
 
 </div>
 </div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="ad2000cad671bb7b293e26f2d463d4cea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad2000cad671bb7b293e26f2d463d4cea">&#9670;&nbsp;</a></span>buffer</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t MPU6050::buffer[14]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad248bbf6e9da395ab67f7049b50ae474"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad248bbf6e9da395ab67f7049b50ae474">&#9670;&nbsp;</a></span>devAddr</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t MPU6050::devAddr</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a21a3dafd707d161dcd0b7e429b8c3447"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a21a3dafd707d161dcd0b7e429b8c3447">&#9670;&nbsp;</a></span>i2Cdev</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_i2_cdev.html">I2Cdev</a>* MPU6050::i2Cdev</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/developer/robocup-firmware/robot/lib/Inc/drivers/<a class="el" href="_m_p_u6050_8h_source.html">MPU6050.h</a></li>
 <li>/home/developer/robocup-firmware/robot/lib/Src/drivers/<a class="el" href="_m_p_u6050_8cpp.html">MPU6050.cpp</a></li>
@@ -10073,7 +10150,7 @@ MPU6050_RA_FIFO_EN </dd></dl>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_m_p_u6050.html">MPU6050</a></li>
-    <li class="footer">Generated on Mon Jun 8 2020 00:49:57 for GT RoboCup SSL by
+    <li class="footer">Generated on Sun Jun 14 2020 13:26:01 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

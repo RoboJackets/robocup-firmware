@@ -2,5 +2,11 @@ digraph "FPGA"
 {
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
-  Node1 [label="{FPGA\n|+ FPGA_SPI_FREQ\l+ MAX_DUTY_CYCLE\l|+ FPGA()\l+ configure()\l+ isReady()\l+ set_duty_get_enc()\l+ set_duty_cycles()\l+ read_duty_cycles()\l+ read_encs()\l+ read_halls()\l+ motors_en()\l+ watchdog_reset()\l+ git_hash()\l+ gate_drivers()\l+ send_config()\l+ chip_select()\l+ chip_deselect()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node1 [label="{FPGA\n|+ FPGA_SPI_FREQ\l+ MAX_DUTY_CYCLE\l- _isInit\l- _nCs\l- _initB\l- _done\l- _progB\l|+ FPGA()\l+ configure()\l+ isReady()\l+ set_duty_get_enc()\l+ set_duty_cycles()\l+ read_duty_cycles()\l+ read_encs()\l+ read_halls()\l+ motors_en()\l+ watchdog_reset()\l+ git_hash()\l+ gate_drivers()\l+ send_config()\l+ chip_select()\l+ chip_deselect()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node2 -> Node1 [color="grey25",fontsize="10",style="solid",label=" -_spi_bus" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node2 [label="{std::unique_ptr\< SPI \>\n|+ ptr\l|+ operator-\>()\l}",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node3 -> Node2 [dir="back",color="orange",fontsize="10",style="solid",label=" \< SPI \>" ,fontname="Helvetica"];
+  Node3 [label="{std::unique_ptr\< T \>\n||+ operator-\>()\l}",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip="STL class. "];
+  Node4 -> Node3 [color="grey25",fontsize="10",style="solid",label=" +ptr" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node4 [label="{T\n||}",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
 }

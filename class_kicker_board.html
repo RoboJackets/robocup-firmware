@@ -84,6 +84,7 @@ $(document).ready(function(){initNavTree('class_kicker_board.html','');});
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_kicker_board-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">KickerBoard Class Reference</div>  </div>
@@ -116,10 +117,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3dd5dc981a48f17ec42e79d9e065dc7e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kicker_board.html#a3dd5dc981a48f17ec42e79d9e065dc7e">KickerBoard</a> (<a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; SPI &gt; &amp;spi, std::shared_ptr&lt; DigitalOut &gt; nCs, PinName nReset)</td></tr>
 <tr class="memdesc:a3dd5dc981a48f17ec42e79d9e065dc7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for KickerBoard.  <a href="#a3dd5dc981a48f17ec42e79d9e065dc7e">More...</a><br /></td></tr>
 <tr class="separator:a3dd5dc981a48f17ec42e79d9e065dc7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a28cc7187d0a26480ecab58f733913adb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kicker_board.html#a28cc7187d0a26480ecab58f733913adb">flash</a> (const std::string &amp;progFilename, bool onlyIfDifferent=true, bool verbose=false)</td></tr>
+<tr class="memitem:a28cc7187d0a26480ecab58f733913adb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kicker_board.html#a28cc7187d0a26480ecab58f733913adb">flash</a> (const std::string &amp;progFilename, bool onlyIfDifferent=true, bool <a class="el" href="class_kicker_board.html#a47d3b5a13ebd27deb9b7ebcca873ec65">verbose</a>=false)</td></tr>
 <tr class="memdesc:a28cc7187d0a26480ecab58f733913adb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reflashes the program on the kicker board MCU with the file specified.  <a href="#a28cc7187d0a26480ecab58f733913adb">More...</a><br /></td></tr>
 <tr class="separator:a28cc7187d0a26480ecab58f733913adb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a61455be0828684366a62465ddb33fdb5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kicker_board.html#a61455be0828684366a62465ddb33fdb5">flash</a> (bool onlyIfDifferent=true, bool verbose=false)</td></tr>
+<tr class="memitem:a61455be0828684366a62465ddb33fdb5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kicker_board.html#a61455be0828684366a62465ddb33fdb5">flash</a> (bool onlyIfDifferent=true, bool <a class="el" href="class_kicker_board.html#a47d3b5a13ebd27deb9b7ebcca873ec65">verbose</a>=false)</td></tr>
 <tr class="memdesc:a61455be0828684366a62465ddb33fdb5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reflashes the program on the kicker board MCU with the default binary found in the device-bins/kicker_bin.h header.  <a href="#a61455be0828684366a62465ddb33fdb5">More...</a><br /></td></tr>
 <tr class="separator:a61455be0828684366a62465ddb33fdb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aae6db87403d0bb354f76071ea2182e7a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kicker_board.html#aae6db87403d0bb354f76071ea2182e7a">kickType</a> (bool isKick)</td></tr>
@@ -193,6 +194,41 @@ Protected Member Functions</h2></td></tr>
 <tr class="separator:a6390cd4b442aa6267d934357ebdb42b9 inherit pro_methods_class_a_v_r910"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4b33111389ef72e6e05e2951505e1821 inherit pro_methods_class_a_v_r910"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; SPI &gt;::Lock&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_v_r910.html#a4b33111389ef72e6e05e2951505e1821">lock_spi</a> ()</td></tr>
 <tr class="separator:a4b33111389ef72e6e05e2951505e1821 inherit pro_methods_class_a_v_r910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a47d3b5a13ebd27deb9b7ebcca873ec65"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kicker_board.html#a47d3b5a13ebd27deb9b7ebcca873ec65">verbose</a></td></tr>
+<tr class="separator:a47d3b5a13ebd27deb9b7ebcca873ec65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8abf76bb65dd5cb11552ab8ba3be03c"><td class="memItemLeft" align="right" valign="top">const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kicker_board.html#ab8abf76bb65dd5cb11552ab8ba3be03c">isChargedCutoff</a> = 230</td></tr>
+<tr class="memdesc:ab8abf76bb65dd5cb11552ab8ba3be03c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Voltage threshold for kicker board to be considered charged (voltage mapped to 0-255)  <a href="#ab8abf76bb65dd5cb11552ab8ba3be03c">More...</a><br /></td></tr>
+<tr class="separator:ab8abf76bb65dd5cb11552ab8ba3be03c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60e041ab915882940a668f3a64962dd8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kicker_board.html#a60e041ab915882940a668f3a64962dd8">_ball_sensed</a> = false</td></tr>
+<tr class="memdesc:a60e041ab915882940a668f3a64962dd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores whether the breakbeam has been tripped.  <a href="#a60e041ab915882940a668f3a64962dd8">More...</a><br /></td></tr>
+<tr class="separator:a60e041ab915882940a668f3a64962dd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb7e19108540d9831d576804b8d81755"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kicker_board.html#abb7e19108540d9831d576804b8d81755">_is_healthy</a> = true</td></tr>
+<tr class="memdesc:abb7e19108540d9831d576804b8d81755"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores whether Kicker is responding back with non-zero voltage values.  <a href="#abb7e19108540d9831d576804b8d81755">More...</a><br /></td></tr>
+<tr class="separator:abb7e19108540d9831d576804b8d81755"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a757f4ec5e7a572e5e6acf6d5bb2c31ed"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kicker_board.html#a757f4ec5e7a572e5e6acf6d5bb2c31ed">_current_voltage</a> = 0</td></tr>
+<tr class="memdesc:a757f4ec5e7a572e5e6acf6d5bb2c31ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current voltage stored in Kicker (volts)  <a href="#a757f4ec5e7a572e5e6acf6d5bb2c31ed">More...</a><br /></td></tr>
+<tr class="separator:a757f4ec5e7a572e5e6acf6d5bb2c31ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67599411839fcb7c86131b665cf494a4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kicker_board.html#a67599411839fcb7c86131b665cf494a4">_is_kick</a> = false</td></tr>
+<tr class="memdesc:a67599411839fcb7c86131b665cf494a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores whether current maneuver is a kick (true) or a chip (false)  <a href="#a67599411839fcb7c86131b665cf494a4">More...</a><br /></td></tr>
+<tr class="separator:a67599411839fcb7c86131b665cf494a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada7aa9c80eb160a04def05f83d213051"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kicker_board.html#ada7aa9c80eb160a04def05f83d213051">_kick_immediate</a> = false</td></tr>
+<tr class="memdesc:ada7aa9c80eb160a04def05f83d213051"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores whether kick is to be performed immediately.  <a href="#ada7aa9c80eb160a04def05f83d213051">More...</a><br /></td></tr>
+<tr class="separator:ada7aa9c80eb160a04def05f83d213051"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1fb81e9329d24103de40eb6a5bcf482b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kicker_board.html#a1fb81e9329d24103de40eb6a5bcf482b">_kick_breakbeam</a> = false</td></tr>
+<tr class="memdesc:a1fb81e9329d24103de40eb6a5bcf482b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores whether to kick when breakbeam is triggered.  <a href="#a1fb81e9329d24103de40eb6a5bcf482b">More...</a><br /></td></tr>
+<tr class="separator:a1fb81e9329d24103de40eb6a5bcf482b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac63a4131a80088d0a6fcbcee16b78b78"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kicker_board.html#ac63a4131a80088d0a6fcbcee16b78b78">_cancel_kick</a> = true</td></tr>
+<tr class="memdesc:ac63a4131a80088d0a6fcbcee16b78b78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores whether to cancel kick on breakbeam.  <a href="#ac63a4131a80088d0a6fcbcee16b78b78">More...</a><br /></td></tr>
+<tr class="separator:ac63a4131a80088d0a6fcbcee16b78b78"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab0ba8cf1eb5a21e77437216368c4080"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kicker_board.html#aab0ba8cf1eb5a21e77437216368c4080">_charge_allowed</a> = false</td></tr>
+<tr class="memdesc:aab0ba8cf1eb5a21e77437216368c4080"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores whether the kicker board can safely charge the capacitors.  <a href="#aab0ba8cf1eb5a21e77437216368c4080">More...</a><br /></td></tr>
+<tr class="separator:aab0ba8cf1eb5a21e77437216368c4080"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5a1dfd475b721fcf6c048f341f5d250"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kicker_board.html#af5a1dfd475b721fcf6c048f341f5d250">_kick_strength</a> = 0</td></tr>
+<tr class="memdesc:af5a1dfd475b721fcf6c048f341f5d250"><td class="mdescLeft">&#160;</td><td class="mdescRight">8-bit encoding of the kick's strength (0-255)  <a href="#af5a1dfd475b721fcf6c048f341f5d250">More...</a><br /></td></tr>
+<tr class="separator:af5a1dfd475b721fcf6c048f341f5d250"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -730,6 +766,269 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a60e041ab915882940a668f3a64962dd8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60e041ab915882940a668f3a64962dd8">&#9670;&nbsp;</a></span>_ball_sensed</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool KickerBoard::_ball_sensed = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Stores whether the breakbeam has been tripped. </p>
+
+</div>
+</div>
+<a id="ac63a4131a80088d0a6fcbcee16b78b78"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac63a4131a80088d0a6fcbcee16b78b78">&#9670;&nbsp;</a></span>_cancel_kick</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool KickerBoard::_cancel_kick = true</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Stores whether to cancel kick on breakbeam. </p>
+
+</div>
+</div>
+<a id="aab0ba8cf1eb5a21e77437216368c4080"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aab0ba8cf1eb5a21e77437216368c4080">&#9670;&nbsp;</a></span>_charge_allowed</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool KickerBoard::_charge_allowed = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Stores whether the kicker board can safely charge the capacitors. </p>
+
+</div>
+</div>
+<a id="a757f4ec5e7a572e5e6acf6d5bb2c31ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a757f4ec5e7a572e5e6acf6d5bb2c31ed">&#9670;&nbsp;</a></span>_current_voltage</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t KickerBoard::_current_voltage = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Current voltage stored in Kicker (volts) </p>
+
+</div>
+</div>
+<a id="abb7e19108540d9831d576804b8d81755"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb7e19108540d9831d576804b8d81755">&#9670;&nbsp;</a></span>_is_healthy</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool KickerBoard::_is_healthy = true</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Stores whether Kicker is responding back with non-zero voltage values. </p>
+
+</div>
+</div>
+<a id="a67599411839fcb7c86131b665cf494a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a67599411839fcb7c86131b665cf494a4">&#9670;&nbsp;</a></span>_is_kick</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool KickerBoard::_is_kick = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Stores whether current maneuver is a kick (true) or a chip (false) </p>
+
+</div>
+</div>
+<a id="a1fb81e9329d24103de40eb6a5bcf482b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1fb81e9329d24103de40eb6a5bcf482b">&#9670;&nbsp;</a></span>_kick_breakbeam</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool KickerBoard::_kick_breakbeam = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Stores whether to kick when breakbeam is triggered. </p>
+
+</div>
+</div>
+<a id="ada7aa9c80eb160a04def05f83d213051"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada7aa9c80eb160a04def05f83d213051">&#9670;&nbsp;</a></span>_kick_immediate</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool KickerBoard::_kick_immediate = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Stores whether kick is to be performed immediately. </p>
+
+</div>
+</div>
+<a id="af5a1dfd475b721fcf6c048f341f5d250"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5a1dfd475b721fcf6c048f341f5d250">&#9670;&nbsp;</a></span>_kick_strength</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t KickerBoard::_kick_strength = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>8-bit encoding of the kick's strength (0-255) </p>
+
+</div>
+</div>
+<a id="ab8abf76bb65dd5cb11552ab8ba3be03c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8abf76bb65dd5cb11552ab8ba3be03c">&#9670;&nbsp;</a></span>isChargedCutoff</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const uint8_t KickerBoard::isChargedCutoff = 230</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Voltage threshold for kicker board to be considered charged (voltage mapped to 0-255) </p>
+
+</div>
+</div>
+<a id="a47d3b5a13ebd27deb9b7ebcca873ec65"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a47d3b5a13ebd27deb9b7ebcca873ec65">&#9670;&nbsp;</a></span>verbose</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool KickerBoard::verbose</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/developer/robocup-firmware/robot/lib/Inc/drivers/<a class="el" href="_kicker_board_8hpp_source.html">KickerBoard.hpp</a></li>
 <li>/home/developer/robocup-firmware/robot/lib/Src/drivers/<a class="el" href="_kicker_board_8cpp.html">KickerBoard.cpp</a></li>
@@ -740,7 +1039,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_kicker_board.html">KickerBoard</a></li>
-    <li class="footer">Generated on Mon Jun 8 2020 00:49:57 for GT RoboCup SSL by
+    <li class="footer">Generated on Sun Jun 14 2020 13:26:01 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

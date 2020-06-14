@@ -7,5 +7,5 @@ digraph "sgn"
   Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node2 [label="DribblerController\l::calculate",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_dribbler_controller.html#a82486fc0dec2674be10327b39f60a156",tooltip="Updates the controller with the latest input and calculates the correct motor command to reach this t..."];
   Node2 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node3 [label="MotionControlModule\l::entry",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_motion_control_module.html#ae9ce65e3c14d0effbac1c1a3b93fb5b1",tooltip="Called by the RTOS at the desired update rate. "];
+  Node3 [label="MotionControlModule\l::entry",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_motion_control_module.html#ae9ce65e3c14d0effbac1c1a3b93fb5b1",tooltip="Code to run when called by RTOS once per system tick (kperiod) "];
 }

@@ -3,5 +3,5 @@ digraph "Graphical Class Hierarchy"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node0 [label="RobotEstimator",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_robot_estimator.html"];
+  Node0 [label="RobotEstimator",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_robot_estimator.html",tooltip="This class implements a Kalman Filter in order to estimate a robot&#39;s current state. "];
 }

@@ -2,5 +2,7 @@ digraph "LockedStruct&lt; T &gt;"
 {
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
-  Node14 [label="{LockedStruct\< T \>\n||+ LockedStruct()\l+ LockedStruct()\l+ operator=()\l+ LockedStruct()\l+ operator=()\l+ ~LockedStruct()\l+ lock()\l+ unsafe_value()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node14 [label="{LockedStruct\< T \>\n|- mutex_depth\l- mutex\l|+ LockedStruct()\l+ LockedStruct()\l+ operator=()\l+ LockedStruct()\l+ operator=()\l+ ~LockedStruct()\l+ lock()\l+ unsafe_value()\l- acquire_mutex()\l- release_mutex()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node15 -> Node14 [color="grey25",fontsize="10",style="solid",label=" -value" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node15 [label="{T\n||}",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
 }
