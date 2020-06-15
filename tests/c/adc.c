@@ -9,7 +9,7 @@ int main(void) {
   pin_name leds[] = {LED1, LED2, LED3, LED4};
 
   adc_handle handle;
-  analogin_init(PF6, &handle);
+  analogin_init(adc3, &handle);
 
   while(1) {
     uint32_t adc_val = analogin_read(&handle);

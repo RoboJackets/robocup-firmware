@@ -8,10 +8,10 @@ const float ADC_RATIO = 3.3 / 4096;
 void analogin_init(adc_pin_name pin, adc_handle* handle) {
   __HAL_RCC_ADC3_CLK_ENABLE();
   GPIO_InitTypeDef GPIO_InitStruct = {};
-  GPIO_InitStruct.Pin = pin.pin;
+  GPIO_InitStruct.Pin = pin.pin.pin;
   GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
   GPIO_InitStruct.Pull  = GPIO_NOPULL;
-  HAL_GPIO_Init(pin.port, &GPIO_InitStruct);
+  HAL_GPIO_Init(pin.pin.port, &GPIO_InitStruct);
 
   // TODO Possibly give init back to the user by having these just be a default by checking if field is zeroed
   handle->ADC_InitStruct.Instance                   = pin.adc;

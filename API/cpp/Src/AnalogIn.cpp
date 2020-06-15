@@ -7,19 +7,14 @@ const int REFRESH_PERIOD = 10;
 const int ADC_MAX = 4096;
 const float ADC_RATIO = 3.3 / ADC_MAX;
 
-AnalogIn::AnalogIn(ADCPinName pin) {
-   ADC_Init(pin);
-   HAL_ADC_Start(&ADC_InitStruct);
-}
-
 // TODO this setup means 1 adc can go to 1 pin only and thus only 3 adc pins can be inited need to setup multi sampling indepently
-void AnalogIn::ADC_Init(ADCPinName pin) {
-  __HAL_RCC_ADC3_CLK_ENABLE();
+AnalogIn::AnalogIn(ADCPinName pin) {
+
   GPIO_InitTypeDef GPIO_InitStruct = {};
-  GPIO_InitStruct.Pin = pin.pin;
+  GPIO_InitStruct.Pin = pin.pin_name.pin;
   GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
   GPIO_InitStruct.Pull  = GPIO_NOPULL;
-  HAL_GPIO_Init(pin.port, &GPIO_InitStruct);
+  HAL_GPIO_Init(pin.pin_name.port, &GPIO_InitStruct);
 
   ADC_InitStruct.Instance                   = pin.adc;
   ADC_InitStruct.Init.ClockPrescaler        = ADC_CLOCK_SYNC_PCLK_DIV2;
@@ -48,18 +43,40 @@ void AnalogIn::ADC_Init(ADCPinName pin) {
   if (HAL_ADC_ConfigChannel(&ADC_InitStruct, &sConfig) != HAL_OK) {
     // TODO ERROR HANDLING
   }
+
+  HAL_ADC_Start(&ADC_InitStruct);
+
 }
+
 
 AnalogIn::~AnalogIn() {
 
 }
 
+
+/**
+ * @brief  Initializes the ADC .
+ * @param  hadc: pointer to a ADC_HandleTypeDef structure that contains
+ *         the configuration information for the specified ADC.
+ * @retval None
+ */
+void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc) {
+    if (hadc->Instance == ADC1) {
+      __HAL_RCC_ADC1_CLK_ENABLE();
+    } else if (hadc->Instance == ADC2) {
+      __HAL_RCC_ADC2_CLK_ENABLE();
+    } else if (hadc->Instance == ADC3) {
+      __HAL_RCC_ADC3_CLK_ENABLE();
+    }
+}
+
+
 // Get the ADC value, does not use DMA
-uint32_t AnalogIn::read () {
+uint32_t AnalogIn::read() {
   return HAL_ADC_GetValue(&ADC_InitStruct);
 }
 
-uint16_t AnalogIn::read_u16 () {
+uint16_t AnalogIn::read_u16() {
   return (uint16_t) HAL_ADC_GetValue(&ADC_InitStruct);
 }
 

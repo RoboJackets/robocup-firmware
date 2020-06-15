@@ -14,10 +14,9 @@ typedef struct pin_name {
 } pin_name;
 
 typedef struct adc_pin_name {
+  pin_name pin;
   ADC_TypeDef* adc;
   uint32_t channel;
-  GPIO_TypeDef* port;
-  uint16_t pin;
 } adc_pin_name;
 
 #define PIN3 (pin_name) {GPIOA, GPIO_PIN_8}
@@ -56,7 +55,7 @@ typedef struct adc_pin_name {
 #define LED3 (pin_name) {GPIOE, GPIO_PIN_6}
 #define LED4 (pin_name) {GPIOE, GPIO_PIN_5}
 
-#define PF6 (adc_pin_name) {ADC3, ADC_CHANNEL_4, GPIOF, GPIO_PIN_6} // pin 30
+#define adc3 (adc_pin_name) {PIN30, ADC3, ADC_CHANNEL_4} // pin 30
 
 typedef enum {
     PULL_NONE = GPIO_NOPULL,

@@ -15,10 +15,9 @@ typedef struct PinName {
 } PinName;
 
 typedef struct ADCPinName {
+  PinName pin_name;
   ADC_TypeDef* adc;
   uint32_t channel;
-  GPIO_TypeDef* port;
-  uint16_t pin;
 } ADCPinName;
 
 constexpr PinName p3  = { GPIOA, GPIO_PIN_8  };
@@ -57,7 +56,8 @@ constexpr PinName LED2 = { GPIOE, GPIO_PIN_3 };
 constexpr PinName LED3 = { GPIOE, GPIO_PIN_6 };
 constexpr PinName LED4 = { GPIOE, GPIO_PIN_5 };
 
-constexpr ADCPinName pf6 = { ADC3, ADC_CHANNEL_4, GPIOF, GPIO_PIN_6 }; // pin 30
+// This doesn not mean this is the only pin it can take just with our current setup only 1 pin can be mapped to 1 adc unit
+constexpr ADCPinName adc3 = {p30, ADC3, ADC_CHANNEL_4}; // pin 30
 
 
 typedef enum PullType {
