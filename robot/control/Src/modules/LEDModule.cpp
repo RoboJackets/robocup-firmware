@@ -22,7 +22,7 @@ void LEDModule::start() {
     auto ioExpanderLock = ioExpander.lock();
     ioExpanderLock->init();
     setColor(0xFFFFFF, 0xFFFFFF);
-
+    index = 0;
     ioExpanderLock->config(0x00FF, 0x00FF, 0x00FF);
     ioExpanderLock->writeMask(static_cast<uint16_t>(~IOExpanderErrorLEDMask), IOExpanderErrorLEDMask);
 }
@@ -87,6 +87,8 @@ void LEDModule::entry() {
     static bool state = true;
     state = !state;
     leds[0].write(state);
+
+    displayErrors();
 }
 
 void LEDModule::fpgaInitialized() {
@@ -168,4 +170,18 @@ void LEDModule::setColor(uint32_t led0, uint32_t led1) {
     dotStarNCS.write(false);
     dotStarSPI.lock()->transmit(data);
     dotStarNCS.write(true);
+}
+
+void displayErrors() {
+    // Check if there are errors to display, else exit
+    if (colorQueue.size() == 0) {
+        return;
+    }
+
+    // Make sure index loops back if it has reached end of vector
+    if (++index > colorQueue.size()-1) {
+        index = 0;
+    }
+    std::array<uint32_t,2> colors = colorQueue.at(index);
+    setColor(colors.at(0), colors.at(1));
 }

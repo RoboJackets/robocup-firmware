@@ -2,6 +2,7 @@
 
 #include <array>
 #include <memory>
+#include <vector>
 
 #include "LockedStruct.hpp"
 #include "DigitalOut.hpp"
@@ -121,6 +122,11 @@ private:
      */
     void setColor(uint32_t led0, uint32_t led1);
 
+    /**
+     * Cycle through error color codes to display
+     */
+    void displayErrors();
+
     const static uint16_t IOExpanderErrorLEDMask = 0xFF00;
 
     LockedStruct<MCP23017>& ioExpander;
@@ -132,6 +138,16 @@ private:
     LockedStruct<RadioError>& radioError;
 
     DigitalOut dotStarNCS;
+
+    /**
+     * Vector of colors for dotStars to display sequentially based on current errors
+     */
+    std::vector<std::array<std::uint32_t, 2>> colorQueue;
+
+    /**
+     * Current index of displayed color
+     */
+    int index;
 
     /**
      * Array of mTrain LEDs as `DigitalOut`s
