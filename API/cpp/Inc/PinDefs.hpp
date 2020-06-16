@@ -1,11 +1,24 @@
 #pragma once
 
 #include "stm32f7xx_hal.h"
+#include "stm32f769xx.h"
+#include <stdint.h>
 
+// This file defines mappings of GPIO Pin Labels to pins of the border of the mtrain chip itself (pins 3 - 36)
+
+// Port is the GPIO Bank Pin is which pins
+// pins formed with GPIO and pin correspond to pin label on the data sheet not their BGA name
+// PA8 is gpio bank A pin 8
 typedef struct PinName {
-    GPIO_TypeDef* port;
-    uint16_t pin;
+  GPIO_TypeDef* port;
+  uint16_t pin;
 } PinName;
+
+typedef struct ADCPinName {
+  PinName pin_name;
+  ADC_TypeDef* adc;
+  uint32_t channel;
+} ADCPinName;
 
 constexpr PinName p3  = { GPIOA, GPIO_PIN_8  };
 constexpr PinName p4  = { GPIOB, GPIO_PIN_15 };
@@ -42,6 +55,10 @@ constexpr PinName LED1 = { GPIOE, GPIO_PIN_4 };
 constexpr PinName LED2 = { GPIOE, GPIO_PIN_3 };
 constexpr PinName LED3 = { GPIOE, GPIO_PIN_6 };
 constexpr PinName LED4 = { GPIOE, GPIO_PIN_5 };
+
+// This doesn not mean this is the only pin it can take just with our current setup only 1 pin can be mapped to 1 adc unit
+constexpr ADCPinName adc3 = {p30, ADC3, ADC_CHANNEL_4}; // pin 30
+
 
 typedef enum PullType {
     PullNone = GPIO_NOPULL,
