@@ -127,6 +127,11 @@ private:
      */
     void displayErrors();
 
+    /**
+     * Add error to colorQueue
+     */
+    void addError(uint32_t led0, uint32_t led1);
+
     const static uint16_t IOExpanderErrorLEDMask = 0xFF00;
 
     LockedStruct<MCP23017>& ioExpander;
@@ -147,7 +152,24 @@ private:
     /**
      * Current index of displayed color
      */
-    int index;
+    int index = 0;
+
+    /**
+     * Number of frames (1/kPeriod seconds) for which the error lights will be on, to cycle through error LEDs
+     */
+    int framesOn = 2;
+    int framesOnCounter = 0;
+
+    /**
+     * Number of frames (1/kPeriod seconds) for which the error lights will be off, to cycle through error LEDs
+     */
+    int framesOff = 3;
+    int framesOffCounter = 0;
+
+    /**
+     * Toggles whether dotStar LEDs are on or off for blinking between errors
+     */
+    bool lightsOn = true;
 
     /**
      * Array of mTrain LEDs as `DigitalOut`s

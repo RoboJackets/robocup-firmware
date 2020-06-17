@@ -178,10 +178,29 @@ void displayErrors() {
         return;
     }
 
-    // Make sure index loops back if it has reached end of vector
-    if (++index > colorQueue.size()-1) {
-        index = 0;
+    if (lightsOn && framesOn == framesOnCounter){
+        // If error lights have been on long enough, switch them off
+        framesOnCounter = 0;
+        lightsOn = false;
+        setColor(0x000000,0x000000);
+    } else if (lightsOff && framesOff == framesOffCounter)
+        // If error lights have been off long enough, switch them back on to next error color
+        framesOffCounter = 0;
+        lightsOn = true;
+
+        // Make sure index loops back if it has reached end of vector
+        if (++index > colorQueue.size()-1) {
+            index = 0;
+        }
+        std::array<uint32_t,2> colors = colorQueue.at(index);
+        setColor(colors.at(0), colors.at(1));
+    } else {
+        // Increment frame counters for lights on/off
+        lightsOn ? framesOnCounter++ : framesOffCounter++;
     }
-    std::array<uint32_t,2> colors = colorQueue.at(index);
-    setColor(colors.at(0), colors.at(1));
+}
+
+void addError(uint32_t led0, uint32_t led1) {
+    std::array<uint32_t, 2> errorColors = {led0, led1};
+    colorQueue.pushBack(errorColors);
 }
