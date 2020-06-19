@@ -172,7 +172,7 @@ void LEDModule::setColor(uint32_t led0, uint32_t led1) {
     dotStarNCS.write(true);
 }
 
-void displayErrors() {
+void LEDModule::displayErrors() {
     // Check if there are errors to display, else exit
     if (colorQueue.size() == 0) {
         return;
@@ -183,7 +183,7 @@ void displayErrors() {
         framesOnCounter = 0;
         lightsOn = false;
         setColor(0x000000,0x000000);
-    } else if (lightsOff && framesOff == framesOffCounter)
+    } else if (!lightsOn && framesOff == framesOffCounter)
         // If error lights have been off long enough, switch them back on to next error color
         framesOffCounter = 0;
         lightsOn = true;
@@ -192,15 +192,27 @@ void displayErrors() {
         if (++index > colorQueue.size()-1) {
             index = 0;
         }
-        std::array<uint32_t,2> colors = colorQueue.at(index);
-        setColor(colors.at(0), colors.at(1));
+        Error e = colorQueue.at(index);
+        setColor(e.led0, e.led1);
     } else {
         // Increment frame counters for lights on/off
         lightsOn ? framesOnCounter++ : framesOffCounter++;
     }
 }
 
-void addError(uint32_t led0, uint32_t led1) {
-    std::array<uint32_t, 2> errorColors = {led0, led1};
-    colorQueue.pushBack(errorColors);
+void LEDModule::addError(Error newError) {
+    for(Error currentError: colorQueue) {
+        if (currentError.name.compare(newError.name)) {
+            return;
+        }
+    }
+    colorQueue.pushBack(newError);
+}
+
+void LEDModule::removeError(std::string name) {
+    for(Error currentError: colorQueue) {
+        if (currentError.name.compare(newError.name)) {
+            colorQueue.erase(currentError);
+        }
+    }
 }

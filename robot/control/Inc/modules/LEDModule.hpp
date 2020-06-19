@@ -12,6 +12,12 @@
 #include "MicroPackets.hpp"
 #include "drivers/MCP23017.hpp"
 
+struct Error {
+    const std::string name;
+    const uint32_t led0;
+    const uint32_t led1;
+};
+
 /**
  * Module interfacing with debugging LEDS based on the statuses of other electronics
  */
@@ -130,7 +136,12 @@ private:
     /**
      * Add error to colorQueue
      */
-    void addError(uint32_t led0, uint32_t led1);
+    void addError(Error e);
+
+    /**
+     * Remove error from colorQueue
+     */
+    void removeError(std::string name)
 
     const static uint16_t IOExpanderErrorLEDMask = 0xFF00;
 
@@ -147,7 +158,7 @@ private:
     /**
      * Vector of colors for dotStars to display sequentially based on current errors
      */
-    std::vector<std::array<std::uint32_t, 2>> colorQueue;
+    std::vector<Error> colorQueue;
 
     /**
      * Current index of displayed color
