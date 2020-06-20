@@ -3,7 +3,7 @@
 ![Build Status](https://github.com/RoboJackets/robocup-firmware/workflows/CI/badge.svg)
 
 The Georgia Tech RoboJackets team competes in the annual RoboCup Small Size League (SSL) competition.  This repository contains all of the firmware that we run on our robots. More information on how our software works can be found on our [documentation page](http://robojackets.github.io/robocup-firmware/), our [wiki](http://wiki.robojackets.org/w/RoboCup_Software) or on our [website](http://www.robojackets.org/).
-Also, check out our [2019 qualification video](https://www.youtube.com/watch?v=-neayQX3K30/) to see our robots in action!
+Also, check out our [2020 qualification video](https://www.youtube.com/watch?v=2MZREc9aj8/) to see our robots in action!
 
 ## The Competition
 
@@ -85,7 +85,7 @@ Generic firmware tests can be run with `make test-firmware`. (Still not complete
 
 ## Documentation
 
-We use [Doxygen](www.doxygen.org) for documentation.  This allows us to convert specially-formatted comments within code files into a nifty website that lets us easily see how things are laid out.  Our compiled doxygen documentation can be found here:
+We use [Doxygen](https://www.doxygen.nl/index.html) for documentation.  This allows us to convert specially-formatted comments within code files into a nifty website that lets us easily see how things are laid out.  Our compiled doxygen documentation can be found here:
 
 http://robojackets.github.io/robocup-firmware/
 
