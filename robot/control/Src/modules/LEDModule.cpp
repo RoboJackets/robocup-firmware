@@ -202,7 +202,7 @@ void LEDModule::displayErrors() {
 
 void LEDModule::addError(Error newError) {
     for(Error currentError: colorQueue) {
-        if (currentError.name.compare(newError.name)) {
+        if (currentError.name.compare(newError->name) == 0) {
             return;
         }
     }
@@ -210,8 +210,8 @@ void LEDModule::addError(Error newError) {
 }
 
 void LEDModule::removeError(std::string name) {
-    for(Error currentError: colorQueue) {
-        if (currentError.name.compare(newError.name)) {
+    for(Error &currentError : colorQueue) {
+        if (currentError.name.compare(newError.name) == 0) {
             colorQueue.erase(currentError);
         }
     }

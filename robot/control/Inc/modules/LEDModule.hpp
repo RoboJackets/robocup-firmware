@@ -12,6 +12,40 @@
 #include "MicroPackets.hpp"
 #include "drivers/MCP23017.hpp"
 
+
+/**
+ * Constants for DotStar LEDs (BGR)
+ * First LED in error display format: Category / Level / Info
+ */
+enum errorColors_0 : uint32_t {
+    RADIO_ERROR = 0x0080FF;  // ORANGE
+    IMU_ERROR = 0x00FFFF;    // YELLOW
+    KICKER_ERROR = 0x00FF00; // GREEN
+    FPGA_ERROR = 0xFF0000;   // BLUE
+};
+
+/**
+ * Constants for DotStar LEDs (BGR)
+ * Second LED in error display format: Category / Level / Info
+ */
+enum errorColors_1 : uint32_t {
+    FATAL = 0x0000FF; // RED
+    ERROR = 0x0080FF; // ORANGE
+    WARN = 0xFFFF00;  // YELLOW
+    INFO = 0xFF0000;  // BLUE
+};
+
+/**
+ * Constants for DotStar LEDs (BGR)
+ * Third LED in error display format: Category / Level / Info
+ */
+enum errorColors_2 : uint32_t {
+    RADIO_BOOT_FAIL = 0x0000FF; // RED
+};
+
+/**
+ * Struct to store error names and LED values in colorQueue
+ */
 struct Error {
     const std::string name;
     const uint32_t led0;
