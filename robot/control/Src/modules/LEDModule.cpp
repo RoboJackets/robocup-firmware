@@ -21,7 +21,7 @@ LEDModule::LEDModule(LockedStruct<MCP23017>& ioExpander,
 void LEDModule::start() {
     auto ioExpanderLock = ioExpander.lock();
     ioExpanderLock->init();
-    setColor(0xFFFFFF, 0xFFFFFF);
+    setColor(0xFFFFFF, 0xFFFFFF, 0xFFFFFF);
     index = 0;
     ioExpanderLock->config(0x00FF, 0x00FF, 0x00FF);
     ioExpanderLock->writeMask(static_cast<uint16_t>(~IOExpanderErrorLEDMask), IOExpanderErrorLEDMask);
@@ -50,7 +50,7 @@ void LEDModule::entry() {
                 errors |= (1 << motors[i]);
             }
 
-            setColor(0x0000FF, 0xFFFFFF);
+            setColor(0x0000FF, 0xFFFFFF, 0xFFFFFF);
         } else {
             for (int i = 0; i < 5; i++) {
                 errors |= (fpgaLock->motorHasErrors[i] << motors[i]);
@@ -93,25 +93,25 @@ void LEDModule::entry() {
 
 void LEDModule::fpgaInitialized() {
     // neo pixel stuff
-    setColor(0xFFFF00, 0xFFFFFF);
+    setColor(0xFFFF00, 0xFFFFFF, 0xFFFFFF);
     leds[0] = 1;
 }
 
 void LEDModule::radioInitialized() {
     // neo pixel stuff
-    setColor(0xFF00FF, 0xFFFFFF);
+    setColor(0xFF00FF, 0xFFFFFF, 0xFFFFFF);
     leds[1] = 1;
 }
 
 void LEDModule::kickerInitialized() {
     // neo pixel stuff
-    setColor(0x00FFFF, 0xFFFFFF);
+    setColor(0x00FFFF, 0xFFFFFF, 0xFFFFFF);
     leds[2] = 1;
 }
 
 void LEDModule::fullyInitialized() {
     // green neo pixel
-    setColor(0x00FF00, 0x00FF00);
+    setColor(0x00FF00, 0x00FF00, 0x00FF00);
     leds[3] = 1;
 }
 
@@ -123,7 +123,7 @@ void LEDModule::missedSuperLoop() {
     missedSuperLoopToggle = !missedSuperLoopToggle;
 
     // Orange
-    setColor(0x3376DC, 0xFFFFFF);
+    setColor(0x3376DC, 0xFFFFFF, 0xFFFFFF);
 }
 
 void LEDModule::missedModuleRun() {
@@ -138,10 +138,10 @@ void LEDModule::missedModuleRun() {
     missedModuleRunToggle = !missedModuleRunToggle;
 
     // Yellow
-    setColor(0x3FD0F4, 0xFFFFFF);
+    setColor(0x3FD0F4, 0xFFFFFF, 0xFFFFFF);
 }
 
-void LEDModule::setColor(uint32_t led0, uint32_t led1) {
+void LEDModule::setColor(uint32_t led0, uint32_t led1, uint32_t led2) {
     // 0 - 31
     uint8_t brightness = 2 | 0xE0;
 
@@ -161,6 +161,11 @@ void LEDModule::setColor(uint32_t led0, uint32_t led1) {
     data.push_back((led1 >> 16) & 0xFF);
     data.push_back((led1 >> 8) & 0xFF);
     data.push_back((led1 >> 0) & 0xFF);
+
+    data.push_back(brightness);
+    data.push_back((led2 >> 16) & 0xFF);
+    data.push_back((led2 >> 8) & 0xFF);
+    data.push_back((led2 >> 0) & 0xFF);
     
     data.push_back(0xFF);
     data.push_back(0xFF);
@@ -182,8 +187,8 @@ void LEDModule::displayErrors() {
         // If error lights have been on long enough, switch them off
         framesOnCounter = 0;
         lightsOn = false;
-        setColor(0x000000,0x000000);
-    } else if (!lightsOn && framesOff == framesOffCounter)
+        setColor(0x000000,0x000000, 0x000000);
+    } else if (!lightsOn && framesOff == framesOffCounter) {
         // If error lights have been off long enough, switch them back on to next error color
         framesOffCounter = 0;
         lightsOn = true;
@@ -193,7 +198,7 @@ void LEDModule::displayErrors() {
             index = 0;
         }
         Error e = colorQueue.at(index);
-        setColor(e.led0, e.led1);
+        setColor(e.led0, e.led1, e.led2);
     } else {
         // Increment frame counters for lights on/off
         lightsOn ? framesOnCounter++ : framesOffCounter++;
@@ -206,7 +211,7 @@ void LEDModule::addError(Error newError) {
             return;
         }
     }
-    colorQueue.pushBack(newError);
+    colorQueue.push_back(newError);
 }
 
 void LEDModule::removeError(std::string name) {

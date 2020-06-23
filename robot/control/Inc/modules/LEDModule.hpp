@@ -18,10 +18,10 @@
  * First LED in error display format: Category / Level / Info
  */
 enum errorColors_0 : uint32_t {
-    RADIO_ERROR = 0x0080FF;  // ORANGE
-    IMU_ERROR = 0x00FFFF;    // YELLOW
-    KICKER_ERROR = 0x00FF00; // GREEN
-    FPGA_ERROR = 0xFF0000;   // BLUE
+    RADIO_ERROR = 0x0080FF,  // ORANGE
+    IMU_ERROR = 0x00FFFF,    // YELLOW
+    KICKER_ERROR = 0x00FF00, // GREEN
+    FPGA_ERROR = 0xFF0000   // BLUE
 };
 
 /**
@@ -29,10 +29,10 @@ enum errorColors_0 : uint32_t {
  * Second LED in error display format: Category / Level / Info
  */
 enum errorColors_1 : uint32_t {
-    FATAL = 0x0000FF; // RED
-    ERROR = 0x0080FF; // ORANGE
-    WARN = 0xFFFF00;  // YELLOW
-    INFO = 0xFF0000;  // BLUE
+    FATAL = 0x0000FF, // RED
+    ERROR = 0x0080FF, // ORANGE
+    WARN = 0xFFFF00,  // YELLOW
+    INFO = 0xFF0000,  // BLUE
 };
 
 /**
@@ -40,7 +40,7 @@ enum errorColors_1 : uint32_t {
  * Third LED in error display format: Category / Level / Info
  */
 enum errorColors_2 : uint32_t {
-    RADIO_BOOT_FAIL = 0x0000FF; // RED
+    RADIO_BOOT_FAIL = 0x0000FF // RED
 };
 
 /**
@@ -50,6 +50,7 @@ struct Error {
     const std::string name;
     const uint32_t led0;
     const uint32_t led1;
+    const uint32_t led2;
 };
 
 /**
@@ -148,7 +149,7 @@ public:
 
 private:
     /**
-     * Sets the color of the two dot stars
+     * Sets the color of the three dot stars
      *
      * @param led0 0..7 red
      *             8..15 green
@@ -159,8 +160,13 @@ private:
      *             8..15 green
      *             16..23 blue
      *             24..31 don't care
+     *
+     * @param led1 0..7 red
+     *             8..15 green
+     *             16..23 blue
+     *             24..31 don't care
      */
-    void setColor(uint32_t led0, uint32_t led1);
+    void setColor(uint32_t led0, uint32_t led1, uint32_t led2);
 
     /**
      * Cycle through error color codes to display
@@ -175,7 +181,7 @@ private:
     /**
      * Remove error from colorQueue
      */
-    void removeError(std::string name)
+    void removeError(std::string name);
 
     const static uint16_t IOExpanderErrorLEDMask = 0xFF00;
 
