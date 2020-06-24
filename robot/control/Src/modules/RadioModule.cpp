@@ -37,6 +37,7 @@ RadioModule::RadioModule(LockedStruct<BatteryVoltage>& batteryVoltage,
     radioErrorLock->isValid = false;
     radioErrorLock->lastUpdate = 0;
     radioErrorLock->hasError = false;
+    radioErrorLock->hasConnectionError = false;
 }
 
 void RadioModule::start() {
@@ -78,6 +79,7 @@ void RadioModule::entry() {
 
         radioErrorLock->isValid = true;
         radioErrorLock->lastUpdate = HAL_GetTick();
-        radioErrorLock->hasError = false;
+        radioErrorLock->hasConnectionError = link.isRadioConnected();
+        radioErrorLock->hasError = radioErrorLock->hasConnectionError;
     }
 }

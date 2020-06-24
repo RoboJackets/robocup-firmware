@@ -68,6 +68,10 @@ void LEDModule::entry() {
         if (!radioLock->isValid || radioLock->hasError) {
             errors |= (1 << ERR_LED_RADIO);
         }
+
+        if (radioLock->hasConnectionError) {
+            addError(ERR_RADIO_CONN_FAIL);
+        }
     }
 
     {
@@ -207,17 +211,15 @@ void LEDModule::displayErrors() {
 
 void LEDModule::addError(Error newError) {
     for(Error currentError: colorQueue) {
-        if (currentError.name.compare(newError->name) == 0) {
+        if (currentError.led0 == newError.led0 &&
+            currentError.led1 == newError.led1 &&
+            currentError.led2 == newError.led2) {
             return;
         }
     }
     colorQueue.push_back(newError);
 }
 
-void LEDModule::removeError(std::string name) {
-    for(Error &currentError : colorQueue) {
-        if (currentError.name.compare(newError.name) == 0) {
-            colorQueue.erase(currentError);
-        }
-    }
+void LEDModule::removeError(Error error) {
+    colorQueue.erase(std::remove(colorQueue.begin(), colorQueue.end(), error), colorQueue.end());
 }

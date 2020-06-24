@@ -111,6 +111,7 @@ struct RadioError {
     uint32_t lastUpdate;      /**< Time at which RadioError was last updated (milliseconds) */
 
     bool hasError;            /**< Stores whether Radio has an error */
+    bool hasConnectionError;   /**< Stores if Radio is having trouble connecting to WiFi */
 };
 
 /** @struct RobotID

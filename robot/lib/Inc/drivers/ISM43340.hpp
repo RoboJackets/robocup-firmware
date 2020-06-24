@@ -371,7 +371,8 @@ public:
 
     void pingRouter();
 
-    bool isConnected() const { return isInit; }
+    bool isInitialized() const { return isInit; }
+    bool isConnected() { return connected; }
 
     int32_t testPrint();
 
@@ -448,4 +449,5 @@ private:
     uint8_t *cmdStart;
 
     bool isInit = false;
+    bool connected = false;
 };

@@ -83,5 +83,7 @@ bool RadioLink::receive(KickerCommand& kickerCommand,
     motionCommand.bodyWVel = static_cast<float>(control->bodyW) / rtp::ControlMessage::VELOCITY_SCALE_FACTOR;
     motionCommand.dribbler = control->dribbler;
 
+    radioConnected = true;
+
     return true;
 }

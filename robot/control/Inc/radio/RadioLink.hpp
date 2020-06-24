@@ -40,6 +40,9 @@ public:
     bool receive(KickerCommand& kickerCommand,
                  MotionCommand& motionCommand);
 
+    bool isRadioConnected() { return radioConnected; }
 private:
     std::unique_ptr<GenericRadio> radio;
+    bool radioConnected = false;
+
 };

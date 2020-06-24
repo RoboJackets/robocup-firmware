@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <array>
 #include <memory>
 #include <vector>
@@ -40,14 +41,14 @@ enum errorColors_1 : uint32_t {
  * Third LED in error display format: Category / Level / Info
  */
 enum errorColors_2 : uint32_t {
-    RADIO_BOOT_FAIL = 0x0000FF // RED
+    RADIO_BOOT_FAIL = 0x0000FF, // RED
+    RADIO_CONN_FAIL = 0x0080FF // ORANGE
 };
 
 /**
  * Struct to store error names and LED values in colorQueue
  */
 struct Error {
-    const std::string name;
     const uint32_t led0;
     const uint32_t led1;
     const uint32_t led2;
@@ -176,12 +177,12 @@ private:
     /**
      * Add error to colorQueue
      */
-    void addError(Error e);
+    void addError(Error newError);
 
     /**
      * Remove error from colorQueue
      */
-    void removeError(std::string name);
+    void removeError(Error error);
 
     const static uint16_t IOExpanderErrorLEDMask = 0xFF00;
 
@@ -194,6 +195,10 @@ private:
     LockedStruct<RadioError>& radioError;
 
     DigitalOut dotStarNCS;
+
+    const struct Error ERR_RADIO_BOOT_FAIL = {errorColors_0::RADIO_ERROR, errorColors_1::FATAL, errorColors_2::RADIO_BOOT_FAIL};
+    const struct Error ERR_RADIO_CONN_FAIL = {errorColors_0::RADIO_ERROR, errorColors_1::FATAL, errorColors_2::RADIO_CONN_FAIL};
+
 
     /**
      * Vector of colors for dotStars to display sequentially based on current errors
