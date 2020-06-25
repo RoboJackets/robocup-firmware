@@ -220,6 +220,11 @@ void LEDModule::addError(Error newError) {
     colorQueue.push_back(newError);
 }
 
-void LEDModule::removeError(Error error) {
-    colorQueue.erase(std::remove(colorQueue.begin(), colorQueue.end(), error), colorQueue.end());
+void LEDModule::removeError(Error target) {
+    colorQueue.erase(std::remove_if(colorQueue.begin(), colorQueue.end(),
+            [&](Error err) {
+                return err.led0 == target.led0 &&
+                       err.led1 == target.led1 &&
+                       err.led2 == target.led2;
+           }), colorQueue.end());
 }

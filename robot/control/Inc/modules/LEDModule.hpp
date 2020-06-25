@@ -31,7 +31,7 @@ enum errorColors_0 : uint32_t {
  */
 enum errorColors_1 : uint32_t {
     FATAL = 0x0000FF, // RED
-    ERROR = 0x0080FF, // ORANGE
+    ERR = 0x0080FF, // ORANGE
     WARN = 0xFFFF00,  // YELLOW
     INFO = 0xFF0000,  // BLUE
 };
@@ -42,16 +42,16 @@ enum errorColors_1 : uint32_t {
  */
 enum errorColors_2 : uint32_t {
     RADIO_BOOT_FAIL = 0x0000FF, // RED
-    RADIO_CONN_FAIL = 0x0080FF // ORANGE
+    RADIO_CONN_WIFI_FAIL = 0x0080FF  // ORANGE
 };
 
 /**
  * Struct to store error names and LED values in colorQueue
  */
 struct Error {
-    const uint32_t led0;
-    const uint32_t led1;
-    const uint32_t led2;
+    uint32_t led0;
+    uint32_t led1;
+    uint32_t led2;
 };
 
 /**
@@ -196,8 +196,12 @@ private:
 
     DigitalOut dotStarNCS;
 
-    const struct Error ERR_RADIO_BOOT_FAIL = {errorColors_0::RADIO_ERROR, errorColors_1::FATAL, errorColors_2::RADIO_BOOT_FAIL};
-    const struct Error ERR_RADIO_CONN_FAIL = {errorColors_0::RADIO_ERROR, errorColors_1::FATAL, errorColors_2::RADIO_CONN_FAIL};
+    const struct Error ERR_RADIO_BOOT_FAIL = {errorColors_0::RADIO_ERROR,
+                                              errorColors_1::FATAL,
+                                              errorColors_2::RADIO_BOOT_FAIL};
+    const struct Error ERR_RADIO_CONN_FAIL = {errorColors_0::RADIO_ERROR,
+                                              errorColors_1::FATAL,
+                                              errorColors_2::RADIO_CONN_WIFI_FAIL};
 
 
     /**
@@ -208,7 +212,7 @@ private:
     /**
      * Current index of displayed color
      */
-    int index = 0;
+    size_t index = 0;
 
     /**
      * Number of frames (1/kPeriod seconds) for which the error lights will be on, to cycle through error LEDs
