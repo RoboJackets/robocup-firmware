@@ -18,13 +18,12 @@ configure : robot/build/conaninfo.txt
 
 ROBOT_TESTS = test
 
-robot : robot/build/conaninfo.txt
-	cd robot && conan build . -bf build
-
 # Temp fix
-control-upload: configure
+control-upload: configure robot
 	./util/flash-mtrain
-# cd robot/build; make control-upload
+
+robot: robot/build/conaninfo.txt
+	cd robot && conan build . -bf build
 
 $(ROBOT_TESTS:%=test-%-upload): configure
 	cd robot/build; make $(@F)

@@ -24,7 +24,7 @@ public:
     /**
      * Using the previous state and the next input
      * We can guess where we are this time step
-     * 
+     *
      * @param u Last motor command
      */
     void predict(Eigen::Matrix<float, numInputs, 1> u);
@@ -32,7 +32,7 @@ public:
     /**
      * Using the next measurements, we can move our prediction
      * closer to the true target
-     * 
+     *
      * @param z Encoders 1-4 then gyro
      */
     void update(Eigen::Matrix<float, numOutputs, 1> z);
@@ -51,13 +51,10 @@ private:
     Eigen::Matrix<float, numStates,  numStates>  F;
     Eigen::Matrix<float, numStates,  numInputs>  B;
     Eigen::Matrix<float, numOutputs, numStates>  H;
-    Eigen::Matrix<float, numStates,  numStates>  Q;
-    Eigen::Matrix<float, numOutputs, numOutputs> R;
-    Eigen::Matrix<float, numStates,  numStates>  P;
 
     // Identity
     Eigen::Matrix<float, numStates, numStates> I;
 
     // Current estimate
-    Eigen::Matrix<float, numStates, 1> x_hat;
+    Eigen::Matrix<float, numStates * 2, 1> x_hat;
 };
