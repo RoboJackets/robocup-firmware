@@ -18,12 +18,17 @@ namespace Registers {
 
     constexpr uint8_t GYRO_Z_OUT_H  = 0x37;
     constexpr uint8_t GYRO_Z_OUT_L  = 0x38;
+    constexpr uint8_t ACCEL_X_OUT_H  = 0x2D;
+    constexpr uint8_t ACCEL_X_OUT_L  = 0x2E;
+    constexpr uint8_t ACCEL_Y_OUT_H  = 0x2F;
+    constexpr uint8_t ACCEL_Y_OUT_L  = 0x30;
 
     constexpr uint8_t FIFO_MODE     = 0x69;
 
     // Bank 2
     constexpr uint8_t GYRO_CONFIG_1 = 0x01;
-
+    constexpr uint8_t ACCEL_CONFIG  = 0x14;
+    
     enum GyroFS {
         DPS_2000 = 3,
         DPS_1000 = 2,
@@ -81,11 +86,14 @@ bool ICM20948::initialize() {
     // Turn FIFO off
     write_register(0, Registers::FIFO_MODE, 0x00);
 
-    // Enable gyro
+    // Enable gyro and accelerometer
     write_register(0, Registers::PWR_MGMT_2, 0x00);
 
     // Configure gyro
     write_register(2, Registers::GYRO_CONFIG_1, 0x04);
+
+    // Configure acclerometer
+    write_register(2, Registers::ACCEL_CONFIG, 0x02);
 
     // Check whoami again
     whoami = read_register(0, Registers::WHO_AM_I);
@@ -112,6 +120,34 @@ double ICM20948::gyro_z() {
     const double lsbToDps = 1000.0f / 32768.f;
     const double degToRad = M_PI / 180.0f;
     return total * (degToRad * lsbToDps);
+}
+
+double ICM20948::accel_x() {
+
+    uint16_t hi = read_register(0, Registers::ACCEL_X_OUT_H),
+             lo = read_register(0, Registers::ACCEL_X_OUT_L);
+
+
+    // Reinterpret the bits as a signed 16-bit integer
+    int16_t total = hi << 8 | lo;
+
+    // +-4g max, for 16-bit signed integers, comes out to 8192lsb/g.
+    const double lsbToG = 4.0f / 32768.f;
+    return total * lsbToG;
+}
+
+double ICM20948::accel_y() {
+
+    uint16_t hi = read_register(0, Registers::ACCEL_Y_OUT_H),
+             lo = read_register(0, Registers::ACCEL_Y_OUT_L);
+
+
+    // Reinterpret the bits as a signed 16-bit integer
+    int16_t total = hi << 8 | lo;
+
+    // +-4g max, for 16-bit signed integers, comes out to 8192lsb/g.
+    const double lsbToG = 4.0f / 32768.f;
+    return total * lsbToG;
 }
 
 void ICM20948::chip_select(bool cs_state) {
