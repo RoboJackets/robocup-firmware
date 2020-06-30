@@ -14,7 +14,7 @@ add_library(firm-lib
 )
 target_link_libraries(firm-lib
     CONAN_PKG::mTrain
-    CONAN_PKG::Eigen3
+    CONAN_PKG::eigen
     rc-fshare
 )
 

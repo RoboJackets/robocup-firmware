@@ -12,6 +12,10 @@ public:
     bool initialize();
 
     double gyro_z();
+    
+    double accel_x();
+
+    double accel_y();
 
 private:
     void write_register(uint8_t bank, uint8_t address, uint8_t value);

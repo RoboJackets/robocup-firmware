@@ -42,6 +42,7 @@ public:
      */
     void getState(Eigen::Matrix<float, numStates, 1>& state);
 
+    void updateVision(Eigen::Matrix<float, numStates, 1> z); 
 private:
     static constexpr float processNoise = 0.05;
     static constexpr float encoderNoise = 0.04;

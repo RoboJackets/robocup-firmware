@@ -125,7 +125,9 @@ void FPGAModule::entry() {
         // Force dt to be nonzero so nan's don't filter up. If it's too small
         // or too large just exit early and reset velocities.
         if (dt < 0.0001 || dt > 0.015) {
-            motorFeedbackLock->encoders = {0.0, 0.0, 0.0, 0.0};
+            for (int i = 0; i < 4; i++) {
+                motorFeedbackLock->encoders[i] = 0.0f;
+            }
             motorFeedbackLock->isValid = false;
             return;
         }
