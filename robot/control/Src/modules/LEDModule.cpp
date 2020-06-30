@@ -43,6 +43,9 @@ void LEDModule::entry() {
 
         if (fpgaLock->initialized) {
             fpgaInitialized();
+            removeError(ERR_FPGA_BOOT_FAIL);
+        } else {
+            addError(ERR_FPGA_BOOT_FAIL);
         }
 
         if (!fpgaLock->isValid || fpgaLock->FPGAHasError) {
@@ -63,6 +66,9 @@ void LEDModule::entry() {
 
         if (radioLock->initialized) {
             radioInitialized();
+            removeError(ERR_RADIO_BOOT_FAIL);
+        } else {
+            addError(ERR_RADIO_BOOT_FAIL);
         }
 
         if (!radioLock->isValid || radioLock->hasError) {
@@ -71,6 +77,8 @@ void LEDModule::entry() {
 
         if (radioLock->hasConnectionError) {
             addError(ERR_RADIO_CONN_FAIL);
+        } else {
+            removeError(ERR_RADIO_CONN_FAIL);
         }
     }
 
@@ -78,7 +86,10 @@ void LEDModule::entry() {
         auto kickerLock = kickerInfo.lock();
 
         if (kickerLock->initialized) {
-            radioInitialized();
+            kickerInitialized();
+            addError(ERR_KICKER_BOOT_FAIL);
+        } else {
+            removeError(ERR_KICKER_BOOT_FAIL);
         }
 
         if (kickerLock->isValid || kickerLock->kickerHasError) {
@@ -97,25 +108,21 @@ void LEDModule::entry() {
 
 void LEDModule::fpgaInitialized() {
     // neo pixel stuff
-    setColor(0xFFFF00, 0xFFFFFF, 0xFFFFFF);
     leds[0] = 1;
 }
 
 void LEDModule::radioInitialized() {
     // neo pixel stuff
-    setColor(0xFF00FF, 0xFFFFFF, 0xFFFFFF);
     leds[1] = 1;
 }
 
 void LEDModule::kickerInitialized() {
     // neo pixel stuff
-    setColor(0x00FFFF, 0xFFFFFF, 0xFFFFFF);
     leds[2] = 1;
 }
 
 void LEDModule::fullyInitialized() {
     // green neo pixel
-    setColor(0x00FF00, 0x00FF00, 0x00FF00);
     leds[3] = 1;
 }
 

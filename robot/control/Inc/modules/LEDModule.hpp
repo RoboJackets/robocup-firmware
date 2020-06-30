@@ -42,7 +42,9 @@ enum errorColors_1 : uint32_t {
  */
 enum errorColors_2 : uint32_t {
     RADIO_BOOT_FAIL = 0x0000FF, // RED
-    RADIO_CONN_WIFI_FAIL = 0x0080FF  // ORANGE
+    RADIO_CONN_WIFI_FAIL = 0x0080FF,  // ORANGE
+    KICKER_BOOT_FAIL = 0x000FF, // RED
+    FPGA_BOOT_FAIL = 0x000FF // RED
 };
 
 /**
@@ -202,7 +204,12 @@ private:
     const struct Error ERR_RADIO_CONN_FAIL = {errorColors_0::RADIO_ERROR,
                                               errorColors_1::FATAL,
                                               errorColors_2::RADIO_CONN_WIFI_FAIL};
-
+    const struct Error ERR_KICKER_BOOT_FAIL = {errorColors_0::KICKER_ERROR,
+                                               errorColors_1::FATAL,
+                                               errorColors_2::KICKER_BOOT_FAIL};
+    const struct Error ERR_FPGA_BOOT_FAIL = {errorColors_0::FPGA_ERROR,
+                                             errorColors_1::FATAL,
+                                             errorColors_2::FPGA_BOOT_FAIL};
 
     /**
      * Vector of colors for dotStars to display sequentially based on current errors
