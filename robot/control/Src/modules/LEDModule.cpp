@@ -76,9 +76,15 @@ void LEDModule::entry() {
         }
 
         if (radioLock->hasConnectionError) {
-            addError(ERR_RADIO_CONN_FAIL);
+            addError(ERR_RADIO_WIFI_FAIL);
         } else {
-            removeError(ERR_RADIO_CONN_FAIL);
+            removeError(ERR_RADIO_WIFI_FAIL);
+        }
+
+        if (radioLock->hasSoccerConnectionError) {
+            addError(ERR_RADIO_SOCCER_FAIL);
+        } else {
+            removeError(ERR_RADIO_SOCCER_FAIL);
         }
     }
 

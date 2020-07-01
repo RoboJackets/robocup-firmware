@@ -54,6 +54,7 @@ bool RadioLink::receive(KickerCommand& kickerCommand,
                        MotionCommand& motionCommand) {
     // Make sure there is actually data to read
     if (!radio->isAvailable()) {
+        cyclesWithoutPackets++;
         return false;
     }
 
@@ -61,6 +62,7 @@ bool RadioLink::receive(KickerCommand& kickerCommand,
 
     if (radio->receive(packet.data(), rtp::ForwardSize) != rtp::ForwardSize) {
         // didn't get enough bytes
+        cyclesWithoutPackets++;
         return false;
     }
 
@@ -84,6 +86,6 @@ bool RadioLink::receive(KickerCommand& kickerCommand,
     motionCommand.dribbler = control->dribbler;
 
     radioConnected = true;
-
+    cyclesWithoutPackets = 0;
     return true;
 }

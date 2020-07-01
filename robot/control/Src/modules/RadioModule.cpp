@@ -38,6 +38,7 @@ RadioModule::RadioModule(LockedStruct<BatteryVoltage>& batteryVoltage,
     radioErrorLock->lastUpdate = 0;
     radioErrorLock->hasError = false;
     radioErrorLock->hasConnectionError = false;
+    radioErrorLock->hasSoccerConnectionError = false;
 }
 
 void RadioModule::start() {
@@ -80,6 +81,7 @@ void RadioModule::entry() {
         radioErrorLock->isValid = true;
         radioErrorLock->lastUpdate = HAL_GetTick();
         radioErrorLock->hasConnectionError = link.isRadioConnected();
-        radioErrorLock->hasError = radioErrorLock->hasConnectionError;
+        radioErrorLock->hasSoccerConnectionError = link.hasSoccerTimedOut();
+        radioErrorLock->hasError = radioErrorLock->hasConnectionError || radioErrorLock->hasSoccerConnectionError;
     }
 }

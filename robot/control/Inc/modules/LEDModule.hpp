@@ -33,7 +33,7 @@ enum errorColors_1 : uint32_t {
     FATAL = 0x0000FF, // RED
     ERR = 0x0080FF, // ORANGE
     WARN = 0xFFFF00,  // YELLOW
-    INFO = 0xFF0000,  // BLUE
+    INFO = 0xFF0000  // BLUE
 };
 
 /**
@@ -43,6 +43,7 @@ enum errorColors_1 : uint32_t {
 enum errorColors_2 : uint32_t {
     RADIO_BOOT_FAIL = 0x0000FF, // RED
     RADIO_CONN_WIFI_FAIL = 0x0080FF,  // ORANGE
+    RADIO_CONN_SOCCER_FAIL = 0x00FFFF, // YELLOW
     KICKER_BOOT_FAIL = 0x000FF, // RED
     FPGA_BOOT_FAIL = 0x000FF // RED
 };
@@ -201,9 +202,12 @@ private:
     const struct Error ERR_RADIO_BOOT_FAIL = {errorColors_0::RADIO_ERROR,
                                               errorColors_1::FATAL,
                                               errorColors_2::RADIO_BOOT_FAIL};
-    const struct Error ERR_RADIO_CONN_FAIL = {errorColors_0::RADIO_ERROR,
+    const struct Error ERR_RADIO_WIFI_FAIL = {errorColors_0::RADIO_ERROR,
                                               errorColors_1::FATAL,
                                               errorColors_2::RADIO_CONN_WIFI_FAIL};
+    const struct Error ERR_RADIO_SOCCER_FAIL = {errorColors_0::RADIO_ERROR,
+                                                errorColors_1::FATAL,
+                                                errorColors_2::RADIO_CONN_SOCCER_FAIL};
     const struct Error ERR_KICKER_BOOT_FAIL = {errorColors_0::KICKER_ERROR,
                                                errorColors_1::FATAL,
                                                errorColors_2::KICKER_BOOT_FAIL};
