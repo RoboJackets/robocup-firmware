@@ -6,10 +6,12 @@ LEDModule::LEDModule(LockedStruct<MCP23017>& ioExpander,
                      LockedStruct<BatteryVoltage>& batteryVoltage,
                      LockedStruct<FPGAStatus>& fpgaStatus,
                      LockedStruct<KickerInfo>& kickerInfo,
-                     LockedStruct<RadioError>& radioError)
+                     LockedStruct<RadioError>& radioError,
+                     LockedStruct<IMUData>& imuData)
     : GenericModule(kPeriod, "led", kPriority),
       batteryVoltage(batteryVoltage), fpgaStatus(fpgaStatus),
       kickerInfo(kickerInfo), radioError(radioError),
+      imuData(imuData),
       ioExpander(ioExpander),
       dotStarSPI(sharedSPI),
       dotStarNCS(DOT_STAR_CS),
@@ -93,13 +95,23 @@ void LEDModule::entry() {
 
         if (kickerLock->initialized) {
             kickerInitialized();
-            addError(ERR_KICKER_BOOT_FAIL);
-        } else {
             removeError(ERR_KICKER_BOOT_FAIL);
+        } else {
+            addError(ERR_KICKER_BOOT_FAIL);
         }
 
         if (kickerLock->isValid || kickerLock->kickerHasError) {
             errors |= (1 << ERR_LED_KICK);
+        }
+    }
+
+    {
+        auto imuLock = imuData.lock();
+
+        if(imuLock->initialized) {
+            removeError(ERR_IMU_BOOT_FAIL);
+        } else {
+            addError(ERR_IMU_BOOT_FAIL);
         }
     }
 
