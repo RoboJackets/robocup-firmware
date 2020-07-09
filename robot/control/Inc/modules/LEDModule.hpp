@@ -50,7 +50,7 @@ enum errorColors_2 : uint32_t {
 };
 
 /**
- * Struct to store error names and LED values in colorQueue
+ * Struct to store LED values in colorQueue
  */
 struct Error {
     uint32_t led0;
@@ -114,28 +114,24 @@ public:
     /**
      * Toggles LEDs to signal fpga initialization
      * - mTrain LED1 turned on
-     * - dotstars set to [yellow, white]
      */
     void fpgaInitialized();
 
     /**
      * Toggles LEDs to signal radio initialization
      * - mTrain LED2 turned on
-     * - dotstars set to [pink, white]
      */
     void radioInitialized();
 
     /**
      * Toggles LEDs to signal fpga initialization
      * - mTrain LED3 turned on
-     * - dotstars set to [blue, white]
      */
     void kickerInitialized();
 
     /**
      * Toggles LEDs to signal full system initialization
      * - mTrain LED4 turned on
-     * - dotstars set to [green, green]
      */
     void fullyInitialized();
 
@@ -147,7 +143,7 @@ public:
     void missedSuperLoop();
 
     /**
-     * Specific toggling pattern for missing a module run X times in a row
+     * Set specific toggling pattern for missing a module run X times in a row
      *
      * mTrain LED 3 toggles opposite of LEDs 2 and 4, indicating that due to priority and timing, some module never runs
      */
@@ -167,7 +163,7 @@ private:
      *             16..23 blue
      *             24..31 don't care
      *
-     * @param led1 0..7 red
+     * @param led2 0..7 red
      *             8..15 green
      *             16..23 blue
      *             24..31 don't care

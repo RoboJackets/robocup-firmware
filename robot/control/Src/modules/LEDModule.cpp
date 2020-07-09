@@ -150,9 +150,6 @@ void LEDModule::missedSuperLoop() {
     }
 
     missedSuperLoopToggle = !missedSuperLoopToggle;
-
-    // Orange
-    setColor(0x3376DC, 0xFFFFFF, 0xFFFFFF);
 }
 
 void LEDModule::missedModuleRun() {
@@ -165,9 +162,6 @@ void LEDModule::missedModuleRun() {
     }
 
     missedModuleRunToggle = !missedModuleRunToggle;
-
-    // Yellow
-    setColor(0x3FD0F4, 0xFFFFFF, 0xFFFFFF);
 }
 
 void LEDModule::setColor(uint32_t led0, uint32_t led1, uint32_t led2) {
