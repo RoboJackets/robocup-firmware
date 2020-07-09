@@ -212,12 +212,12 @@ void LEDModule::displayErrors() {
         return;
     }
 
-    if (lightsOn && framesOn == framesOnCounter){
+    if (lightsOn && framesOnCounter >= framesOn){
         // If error lights have been on long enough, switch them off
         framesOnCounter = 0;
         lightsOn = false;
         setColor(0x000000,0x000000, 0x000000);
-    } else if (!lightsOn && framesOff == framesOffCounter) {
+    } else if (!lightsOn && framesOffCounter >= framesOff) {
         // If error lights have been off long enough, switch them back on to next error color
         framesOffCounter = 0;
         lightsOn = true;

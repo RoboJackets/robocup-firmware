@@ -233,7 +233,7 @@ private:
     std::vector<Error> colorQueue;
 
     /**
-     * Current index of displayed color
+     * Current index of colorQueue
      */
     size_t index = 0;
 
