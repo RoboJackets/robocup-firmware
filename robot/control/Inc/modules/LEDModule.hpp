@@ -18,7 +18,7 @@
  * Constants for DotStar LEDs (BGR)
  * First LED in error display format: Category / Level / Info
  */
-enum errorColors_0 : uint32_t {
+enum CategoryColors : uint32_t {
     RADIO_ERROR = 0x0080FF,  // ORANGE
     FPGA_ERROR = 0x00FFFF,    // YELLOW
     KICKER_ERROR = 0x00FF00, // GREEN
@@ -29,7 +29,7 @@ enum errorColors_0 : uint32_t {
  * Constants for DotStar LEDs (BGR)
  * Second LED in error display format: Category / Level / Info
  */
-enum errorColors_1 : uint32_t {
+enum LevelColors : uint32_t {
     FATAL = 0x0000FF, // RED
     ERR = 0x0080FF, // ORANGE
     WARN = 0xFFFF00,  // YELLOW
@@ -40,7 +40,7 @@ enum errorColors_1 : uint32_t {
  * Constants for DotStar LEDs (BGR)
  * Third LED in error display format: Category / Level / Info
  */
-enum errorColors_2 : uint32_t {
+enum InfoColors : uint32_t {
     // GENERAL
     BOOT_FAIL = 0x0000FF,  // RED
 
@@ -50,7 +50,7 @@ enum errorColors_2 : uint32_t {
 };
 
 /**
- * Struct to store LED values in colorQueue
+ * Struct to store LED values in ERR_LIST
  */
 struct Error {
     uint32_t led0;
@@ -194,28 +194,28 @@ private:
     DigitalOut dotStarNCS;
 
     // RADIO
-    const struct Error ERR_RADIO_BOOT_FAIL = {errorColors_0::RADIO_ERROR,
-                                              errorColors_1::FATAL,
-                                              errorColors_2::BOOT_FAIL};
-    const struct Error ERR_RADIO_WIFI_FAIL = {errorColors_0::RADIO_ERROR,
-                                              errorColors_1::FATAL,
-                                              errorColors_2::RADIO_CONN_WIFI_FAIL};
-    const struct Error ERR_RADIO_SOCCER_FAIL = {errorColors_0::RADIO_ERROR,
-                                                errorColors_1::FATAL,
-                                                errorColors_2::RADIO_CONN_SOCCER_FAIL};
+    const struct Error ERR_RADIO_BOOT_FAIL = {CategoryColors::RADIO_ERROR,
+                                              LevelColors::FATAL,
+                                              InfoColors::BOOT_FAIL};
+    const struct Error ERR_RADIO_WIFI_FAIL = {CategoryColors::RADIO_ERROR,
+                                              LevelColors::FATAL,
+                                              InfoColors::RADIO_CONN_WIFI_FAIL};
+    const struct Error ERR_RADIO_SOCCER_FAIL = {CategoryColors::RADIO_ERROR,
+                                                LevelColors::FATAL,
+                                                InfoColors::RADIO_CONN_SOCCER_FAIL};
     // FPGA
-    const struct Error ERR_FPGA_BOOT_FAIL = {errorColors_0::FPGA_ERROR,
-                                             errorColors_1::FATAL,
-                                             errorColors_2::BOOT_FAIL};
+    const struct Error ERR_FPGA_BOOT_FAIL = {CategoryColors::FPGA_ERROR,
+                                             LevelColors::FATAL,
+                                             InfoColors::BOOT_FAIL};
 
     // KICKER
-    const struct Error ERR_KICKER_BOOT_FAIL = {errorColors_0::KICKER_ERROR,
-                                               errorColors_1::FATAL,
-                                               errorColors_2::BOOT_FAIL};
+    const struct Error ERR_KICKER_BOOT_FAIL = {CategoryColors::KICKER_ERROR,
+                                               LevelColors::FATAL,
+                                               InfoColors::BOOT_FAIL};
     // IMU
-    const struct Error ERR_IMU_BOOT_FAIL =  {errorColors_0::IMU_ERROR,
-                                             errorColors_1::FATAL,
-                                             errorColors_2::BOOT_FAIL};
+    const struct Error ERR_IMU_BOOT_FAIL =  {CategoryColors::IMU_ERROR,
+                                             LevelColors::FATAL,
+                                             InfoColors::BOOT_FAIL};
 
     const std::array<Error, 6> ERR_LIST = {ERR_RADIO_BOOT_FAIL,
                                                ERR_RADIO_WIFI_FAIL,
