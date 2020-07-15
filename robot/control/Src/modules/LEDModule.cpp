@@ -24,6 +24,7 @@ void LEDModule::start() {
     auto ioExpanderLock = ioExpander.lock();
     ioExpanderLock->init();
     setColor(0xFFFFFF, 0xFFFFFF, 0xFFFFFF);
+    errToggles.fill(false);
     index = 0;
     ioExpanderLock->config(0x00FF, 0x00FF, 0x00FF);
     ioExpanderLock->writeMask(static_cast<uint16_t>(~IOExpanderErrorLEDMask), IOExpanderErrorLEDMask);
@@ -45,9 +46,9 @@ void LEDModule::entry() {
 
         if (fpgaLock->initialized) {
             fpgaInitialized();
-            removeError(ERR_FPGA_BOOT_FAIL);
+            setError(ERR_FPGA_BOOT_FAIL, false);
         } else {
-            addError(ERR_FPGA_BOOT_FAIL);
+            setError(ERR_FPGA_BOOT_FAIL, true);
         }
 
         if (!fpgaLock->isValid || fpgaLock->FPGAHasError) {
@@ -68,9 +69,9 @@ void LEDModule::entry() {
 
         if (radioLock->initialized) {
             radioInitialized();
-            removeError(ERR_RADIO_BOOT_FAIL);
+            setError(ERR_RADIO_BOOT_FAIL, false);
         } else {
-            addError(ERR_RADIO_BOOT_FAIL);
+            setError(ERR_RADIO_BOOT_FAIL, true);
         }
 
         if (!radioLock->isValid || radioLock->hasError) {
@@ -78,15 +79,15 @@ void LEDModule::entry() {
         }
 
         if (radioLock->hasConnectionError) {
-            addError(ERR_RADIO_WIFI_FAIL);
+            setError(ERR_RADIO_WIFI_FAIL, false);
         } else {
-            removeError(ERR_RADIO_WIFI_FAIL);
+            setError(ERR_RADIO_WIFI_FAIL, true);
         }
 
         if (radioLock->hasSoccerConnectionError) {
-            addError(ERR_RADIO_SOCCER_FAIL);
+            setError(ERR_RADIO_SOCCER_FAIL, false);
         } else {
-            removeError(ERR_RADIO_SOCCER_FAIL);
+            setError(ERR_RADIO_SOCCER_FAIL, true);
         }
     }
 
@@ -95,9 +96,9 @@ void LEDModule::entry() {
 
         if (kickerLock->initialized) {
             kickerInitialized();
-            removeError(ERR_KICKER_BOOT_FAIL);
+            setError(ERR_KICKER_BOOT_FAIL, false);
         } else {
-            addError(ERR_KICKER_BOOT_FAIL);
+            setError(ERR_KICKER_BOOT_FAIL, true);
         }
 
         if (kickerLock->isValid || kickerLock->kickerHasError) {
@@ -109,9 +110,9 @@ void LEDModule::entry() {
         auto imuLock = imuData.lock();
 
         if(imuLock->initialized) {
-            removeError(ERR_IMU_BOOT_FAIL);
+            setError(ERR_IMU_BOOT_FAIL, false);
         } else {
-            addError(ERR_IMU_BOOT_FAIL);
+            setError(ERR_IMU_BOOT_FAIL, true);
         }
     }
 
@@ -125,22 +126,18 @@ void LEDModule::entry() {
 }
 
 void LEDModule::fpgaInitialized() {
-    // neo pixel stuff
     leds[0] = 1;
 }
 
 void LEDModule::radioInitialized() {
-    // neo pixel stuff
     leds[1] = 1;
 }
 
 void LEDModule::kickerInitialized() {
-    // neo pixel stuff
     leds[2] = 1;
 }
 
 void LEDModule::fullyInitialized() {
-    // green neo pixel
     leds[3] = 1;
 }
 
@@ -201,26 +198,29 @@ void LEDModule::setColor(uint32_t led0, uint32_t led1, uint32_t led2) {
 }
 
 void LEDModule::displayErrors() {
-    // Check if there are errors to display, else exit
-    if (colorQueue.size() == 0) {
+    // If there are no errors, then there is no point in displaying anything
+    if (std::find(errToggles.begin(), errToggles.end(), true) == errToggles.end()) {
+        setColor(0x000000, 0x000000, 0x000000);
         return;
     }
-
     if (lightsOn && framesOnCounter >= framesOn){
         // If error lights have been on long enough, switch them off
         framesOnCounter = 0;
         lightsOn = false;
-        setColor(0x000000,0x000000, 0x000000);
+        setColor(0x000000, 0x000000, 0x000000);
     } else if (!lightsOn && framesOffCounter >= framesOff) {
         // If error lights have been off long enough, switch them back on to next error color
         framesOffCounter = 0;
         lightsOn = true;
 
         // Make sure index loops back if it has reached end of vector
-        if (++index > colorQueue.size()-1) {
-            index = 0;
+        // Since we know there is at least one error, we can safely use a while loop to find it.
+        index = (index + 1) % errToggles.size();
+        while(!errToggles.at(index)) {
+            index = (index + 1) % errToggles.size();
         }
-        Error e = colorQueue.at(index);
+
+        Error e = ERR_LIST.at(index);
         setColor(e.led0, e.led1, e.led2);
     } else {
         // Increment frame counters for lights on/off
@@ -228,22 +228,11 @@ void LEDModule::displayErrors() {
     }
 }
 
-void LEDModule::addError(Error newError) {
-    for(Error currentError: colorQueue) {
-        if (currentError.led0 == newError.led0 &&
-            currentError.led1 == newError.led1 &&
-            currentError.led2 == newError.led2) {
-            return;
-        }
-    }
-    colorQueue.push_back(newError);
-}
-
-void LEDModule::removeError(Error target) {
-    colorQueue.erase(std::remove_if(colorQueue.begin(), colorQueue.end(),
-            [&](Error err) {
-                return err.led0 == target.led0 &&
-                       err.led1 == target.led1 &&
-                       err.led2 == target.led2;
-           }), colorQueue.end());
+void LEDModule::setError(const Error e, bool toggle) {
+    const Error *error = std::find_if(ERR_LIST.begin(), ERR_LIST.end(), [&](Error err) {
+        return err.led0 == e.led0 &&
+               err.led1 == e.led1 &&
+               err.led2 == e.led2;
+    });
+    errToggles.at(std::distance(ERR_LIST.begin(), error)) = toggle;
 }

@@ -176,14 +176,9 @@ private:
     void displayErrors();
 
     /**
-     * Add error to colorQueue
+     * Toggle error in errToggles
      */
-    void addError(Error newError);
-
-    /**
-     * Remove error from colorQueue
-     */
-    void removeError(Error error);
+    void setError(const Error e, bool toggle);
 
     const static uint16_t IOExpanderErrorLEDMask = 0xFF00;
 
@@ -222,14 +217,20 @@ private:
                                              errorColors_1::FATAL,
                                              errorColors_2::BOOT_FAIL};
 
+    const std::array<Error, 6> ERR_LIST = {ERR_RADIO_BOOT_FAIL,
+                                               ERR_RADIO_WIFI_FAIL,
+                                               ERR_RADIO_SOCCER_FAIL,
+                                               ERR_FPGA_BOOT_FAIL,
+                                               ERR_KICKER_BOOT_FAIL,
+                                               ERR_IMU_BOOT_FAIL};
 
     /**
-     * Vector of colors for dotStars to display sequentially based on current errors
+     * Array of toggles whose values indicates where the error at the same index in ERR_LIST is active or not
      */
-    std::vector<Error> colorQueue;
+    std::array<bool, 6> errToggles;
 
     /**
-     * Current index of colorQueue
+     * Current index of errToggles
      */
     size_t index = 0;
 
