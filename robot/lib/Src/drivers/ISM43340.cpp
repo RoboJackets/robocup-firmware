@@ -307,7 +307,6 @@ void ISM43340::reset() {
 
         radioSPI->frequency(ISMConstants::SPI_FREQ);
 
-        int counter = 0;
         // Wait for device to turn on
         for (int counter = 0; counter < 1500; counter++) {
             vTaskDelay(10);

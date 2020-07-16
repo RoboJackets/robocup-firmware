@@ -36,7 +36,6 @@ RadioModule::RadioModule(LockedStruct<BatteryVoltage>& batteryVoltage,
     auto radioErrorLock = radioError.unsafe_value();
     radioErrorLock->isValid = false;
     radioErrorLock->lastUpdate = 0;
-    radioErrorLock->hasError = false;
     radioErrorLock->hasConnectionError = false;
     radioErrorLock->hasSoccerConnectionError = false;
 }
@@ -44,7 +43,7 @@ RadioModule::RadioModule(LockedStruct<BatteryVoltage>& batteryVoltage,
 void RadioModule::start() {
     link.init();
     printf("INFO: Radio initialized\r\n");
-    radioError.lock()->initialized = true;
+    radioError.lock()->initialized = link.isRadioInitialized();
 }
 
 void RadioModule::entry() {
@@ -82,6 +81,5 @@ void RadioModule::entry() {
         radioErrorLock->lastUpdate = HAL_GetTick();
         radioErrorLock->hasConnectionError = link.isRadioConnected();
         radioErrorLock->hasSoccerConnectionError = link.hasSoccerTimedOut();
-        radioErrorLock->hasError = radioErrorLock->hasConnectionError || radioErrorLock->hasSoccerConnectionError;
     }
 }

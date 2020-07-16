@@ -18,6 +18,7 @@ void RadioLink::init() {
                                        RADIO_R0_CS,
                                        RADIO_GLB_RST,
                                        RADIO_R0_INT);
+    radioInitialized = radio->isInitialized();
 }
 
 void RadioLink::send(const BatteryVoltage& batteryVoltage,
@@ -85,7 +86,7 @@ bool RadioLink::receive(KickerCommand& kickerCommand,
     motionCommand.bodyWVel = static_cast<float>(control->bodyW) / rtp::ControlMessage::VELOCITY_SCALE_FACTOR;
     motionCommand.dribbler = control->dribbler;
 
-    radioConnected = true;
+    radioConnected = radio->isConnected();
     cyclesWithoutPackets = 0;
     return true;
 }

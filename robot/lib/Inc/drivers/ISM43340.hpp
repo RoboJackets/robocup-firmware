@@ -371,8 +371,8 @@ public:
 
     void pingRouter();
 
-    bool isInitialized() const { return isInit; }
-    bool isConnected() { return connected; }
+    virtual bool isInitialized() { return isInit; }
+    virtual bool isConnected() { return connected; }
 
     int32_t testPrint();
 

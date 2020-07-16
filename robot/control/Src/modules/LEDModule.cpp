@@ -74,7 +74,7 @@ void LEDModule::entry() {
             setError(ERR_RADIO_BOOT_FAIL, true);
         }
 
-        if (!radioLock->isValid || radioLock->hasError) {
+        if (!radioLock->isValid || radioLock->hasConnectionError || radioLock->hasSoccerConnectionError) {
             errors |= (1 << ERR_LED_RADIO);
         }
 
@@ -215,10 +215,10 @@ void LEDModule::displayErrors() {
 
         // Make sure index loops back if it has reached end of vector
         // Since we know there is at least one error, we can safely use a while loop to find it.
-        index = (index + 1) % errToggles.size();
-        while(!errToggles.at(index)) {
+        do {
             index = (index + 1) % errToggles.size();
         }
+        while(!errToggles.at(index));
 
         Error e = ERR_LIST.at(index);
         setColor(e.led0, e.led1, e.led2);

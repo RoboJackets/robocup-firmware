@@ -41,9 +41,11 @@ public:
                  MotionCommand& motionCommand);
 
     bool isRadioConnected() { return radioConnected; }
+    bool isRadioInitialized() { return radioInitialized;}
     bool hasSoccerTimedOut() { return (cyclesWithoutPackets > 10);}
 private:
     std::unique_ptr<GenericRadio> radio;
     bool radioConnected = false;
+    bool radioInitialized = false;
     int cyclesWithoutPackets = 0;
 };
