@@ -40,9 +40,9 @@ public:
     bool receive(KickerCommand& kickerCommand,
                  MotionCommand& motionCommand);
 
-    bool isRadioConnected() { return radioConnected; }
-    bool isRadioInitialized() { return radioInitialized;}
-    bool hasSoccerTimedOut() { return (cyclesWithoutPackets > 10);}
+    bool isRadioConnected() { return radio->isConnected(); }
+    bool isRadioInitialized() { return radioInitialized; }
+    bool hasSoccerTimedOut() { return (cyclesWithoutPackets > 10); }
 private:
     std::unique_ptr<GenericRadio> radio;
     bool radioConnected = false;
