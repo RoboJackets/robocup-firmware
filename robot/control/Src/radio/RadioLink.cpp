@@ -18,6 +18,7 @@ void RadioLink::init() {
                                        RADIO_R0_CS,
                                        RADIO_GLB_RST,
                                        RADIO_R0_INT);
+    radioInitialized = radio->isInitialized();
 }
 
 void RadioLink::send(const BatteryVoltage& batteryVoltage,
@@ -54,6 +55,7 @@ bool RadioLink::receive(KickerCommand& kickerCommand,
                        MotionCommand& motionCommand) {
     // Make sure there is actually data to read
     if (!radio->isAvailable()) {
+        cyclesWithoutPackets++;
         return false;
     }
 
@@ -61,6 +63,7 @@ bool RadioLink::receive(KickerCommand& kickerCommand,
 
     if (radio->receive(packet.data(), rtp::ForwardSize) != rtp::ForwardSize) {
         // didn't get enough bytes
+        cyclesWithoutPackets++;
         return false;
     }
 
@@ -83,5 +86,6 @@ bool RadioLink::receive(KickerCommand& kickerCommand,
     motionCommand.bodyWVel = static_cast<float>(control->bodyW) / rtp::ControlMessage::VELOCITY_SCALE_FACTOR;
     motionCommand.dribbler = control->dribbler;
 
+    cyclesWithoutPackets = 0;
     return true;
 }

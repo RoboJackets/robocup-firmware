@@ -307,7 +307,6 @@ void ISM43340::reset() {
 
         radioSPI->frequency(ISMConstants::SPI_FREQ);
 
-        int counter = 0;
         // Wait for device to turn on
         for (int counter = 0; counter < 1500; counter++) {
             vTaskDelay(10);
@@ -382,7 +381,7 @@ void ISM43340::reset() {
     if (readBuffer.size() == 0 || (int)readBuffer[0] == 0) {
         // Failed to connect to network
         // not sure what to have it do here
-
+        connected = false;
         printf("Failed to connect to network\r\n");
         return;
     }
@@ -430,6 +429,6 @@ void ISM43340::reset() {
                 ISMConstants::TYPE_TRANSPORT_CLIENT::ENABLE);
 
     currentSocket = SOCKET_TYPE::SEND;
-
+    connected = true;
     printf("Radio initialized\r\n");
 }

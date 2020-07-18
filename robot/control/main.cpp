@@ -126,7 +126,8 @@ int main() {
                          batteryVoltage,
                          fpgaStatus,
                          kickerInfo,
-                         radioError);
+                         radioError,
+                         imuData);
     createModule(&led);
 
     static FPGAModule fpga(std::move(fpgaSPI),

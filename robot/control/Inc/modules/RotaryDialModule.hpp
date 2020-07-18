@@ -15,7 +15,7 @@ public:
     /**
      * Number of times per second (frequency) that RotaryDialModule should run (Hz)
      */
-    static constexpr float kFrequency = 1.0f
+    static constexpr float kFrequency = 1.0f;
 
     /**
      * Number of seconds elapsed (period) between RotaryDialModule runs (milliseconds)

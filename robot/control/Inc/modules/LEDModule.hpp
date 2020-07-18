@@ -1,7 +1,9 @@
 #pragma once
 
+#include <algorithm>
 #include <array>
 #include <memory>
+#include <vector>
 
 #include "LockedStruct.hpp"
 #include "DigitalOut.hpp"
@@ -10,6 +12,51 @@
 #include "GenericModule.hpp"
 #include "MicroPackets.hpp"
 #include "drivers/MCP23017.hpp"
+
+
+/**
+ * Constants for DotStar LEDs (BGR)
+ * First LED in error display format: Category / Level / Info
+ */
+enum CategoryColors : uint32_t {
+    RADIO_ERROR = 0x0080FF,  // ORANGE
+    FPGA_ERROR = 0x00FFFF,    // YELLOW
+    KICKER_ERROR = 0x00FF00, // GREEN
+    IMU_ERROR = 0xFF0000   // BLUE
+};
+
+/**
+ * Constants for DotStar LEDs (BGR)
+ * Second LED in error display format: Category / Level / Info
+ */
+enum LevelColors : uint32_t {
+    FATAL = 0x0000FF, // RED
+    ERR = 0x0080FF, // ORANGE
+    WARN = 0xFFFF00,  // YELLOW
+    INFO = 0xFF0000  // BLUE
+};
+
+/**
+ * Constants for DotStar LEDs (BGR)
+ * Third LED in error display format: Category / Level / Info
+ */
+enum InfoColors : uint32_t {
+    // GENERAL
+    BOOT_FAIL = 0x0000FF,  // RED
+
+    // RADIO
+    RADIO_CONN_WIFI_FAIL = 0x0080FF,  // ORANGE
+    RADIO_CONN_SOCCER_FAIL = 0x00FFFF // YELLOW
+};
+
+/**
+ * Struct to store LED values in ERR_LIST
+ */
+struct Error {
+    uint32_t led0;
+    uint32_t led1;
+    uint32_t led2;
+};
 
 /**
  * Module interfacing with debugging LEDS based on the statuses of other electronics
@@ -48,7 +95,8 @@ public:
               LockedStruct<BatteryVoltage>& batteryVoltage,
               LockedStruct<FPGAStatus>& fpgaStatus,
               LockedStruct<KickerInfo>& kickerInfo,
-              LockedStruct<RadioError>& radioError);
+              LockedStruct<RadioError>& radioError,
+              LockedStruct<IMUData>& imuData);
 
     /**
      * Code which initializes module
@@ -66,28 +114,24 @@ public:
     /**
      * Toggles LEDs to signal fpga initialization
      * - mTrain LED1 turned on
-     * - dotstars set to [yellow, white]
      */
     void fpgaInitialized();
 
     /**
      * Toggles LEDs to signal radio initialization
      * - mTrain LED2 turned on
-     * - dotstars set to [pink, white]
      */
     void radioInitialized();
 
     /**
      * Toggles LEDs to signal fpga initialization
      * - mTrain LED3 turned on
-     * - dotstars set to [blue, white]
      */
     void kickerInitialized();
 
     /**
      * Toggles LEDs to signal full system initialization
      * - mTrain LED4 turned on
-     * - dotstars set to [green, green]
      */
     void fullyInitialized();
 
@@ -99,7 +143,7 @@ public:
     void missedSuperLoop();
 
     /**
-     * Specific toggling pattern for missing a module run X times in a row
+     * Set specific toggling pattern for missing a module run X times in a row
      *
      * mTrain LED 3 toggles opposite of LEDs 2 and 4, indicating that due to priority and timing, some module never runs
      */
@@ -107,7 +151,7 @@ public:
 
 private:
     /**
-     * Sets the color of the two dot stars
+     * Sets the color of the three dot stars
      *
      * @param led0 0..7 red
      *             8..15 green
@@ -118,8 +162,23 @@ private:
      *             8..15 green
      *             16..23 blue
      *             24..31 don't care
+     *
+     * @param led2 0..7 red
+     *             8..15 green
+     *             16..23 blue
+     *             24..31 don't care
      */
-    void setColor(uint32_t led0, uint32_t led1);
+    void setColor(uint32_t led0, uint32_t led1, uint32_t led2);
+
+    /**
+     * Cycle through error color codes to display
+     */
+    void displayErrors();
+
+    /**
+     * Toggle error in errToggles
+     */
+    void setError(const Error e, bool toggle);
 
     const static uint16_t IOExpanderErrorLEDMask = 0xFF00;
 
@@ -130,8 +189,67 @@ private:
     LockedStruct<FPGAStatus>& fpgaStatus;
     LockedStruct<KickerInfo>& kickerInfo;
     LockedStruct<RadioError>& radioError;
+    LockedStruct<IMUData>& imuData;
 
     DigitalOut dotStarNCS;
+
+    // RADIO
+    const struct Error ERR_RADIO_BOOT_FAIL = {CategoryColors::RADIO_ERROR,
+                                              LevelColors::FATAL,
+                                              InfoColors::BOOT_FAIL};
+    const struct Error ERR_RADIO_WIFI_FAIL = {CategoryColors::RADIO_ERROR,
+                                              LevelColors::FATAL,
+                                              InfoColors::RADIO_CONN_WIFI_FAIL};
+    const struct Error ERR_RADIO_SOCCER_FAIL = {CategoryColors::RADIO_ERROR,
+                                                LevelColors::FATAL,
+                                                InfoColors::RADIO_CONN_SOCCER_FAIL};
+    // FPGA
+    const struct Error ERR_FPGA_BOOT_FAIL = {CategoryColors::FPGA_ERROR,
+                                             LevelColors::FATAL,
+                                             InfoColors::BOOT_FAIL};
+
+    // KICKER
+    const struct Error ERR_KICKER_BOOT_FAIL = {CategoryColors::KICKER_ERROR,
+                                               LevelColors::FATAL,
+                                               InfoColors::BOOT_FAIL};
+    // IMU
+    const struct Error ERR_IMU_BOOT_FAIL =  {CategoryColors::IMU_ERROR,
+                                             LevelColors::FATAL,
+                                             InfoColors::BOOT_FAIL};
+
+    const std::array<Error, 6> ERR_LIST = {ERR_RADIO_BOOT_FAIL,
+                                               ERR_RADIO_WIFI_FAIL,
+                                               ERR_RADIO_SOCCER_FAIL,
+                                               ERR_FPGA_BOOT_FAIL,
+                                               ERR_KICKER_BOOT_FAIL,
+                                               ERR_IMU_BOOT_FAIL};
+
+    /**
+     * Array of toggles whose values indicates where the error at the same index in ERR_LIST is active or not
+     */
+    std::array<bool, 6> errToggles;
+
+    /**
+     * Current index of errToggles
+     */
+    size_t index = 0;
+
+    /**
+     * Number of frames (1/kPeriod seconds) for which the error lights will be on, to cycle through error LEDs
+     */
+    int framesOn = 20;
+    int framesOnCounter = 0;
+
+    /**
+     * Number of frames (1/kPeriod seconds) for which the error lights will be off, to cycle through error LEDs
+     */
+    int framesOff = 10;
+    int framesOffCounter = 0;
+
+    /**
+     * Toggles whether dotStar LEDs are on or off for blinking between errors
+     */
+    bool lightsOn = true;
 
     /**
      * Array of mTrain LEDs as `DigitalOut`s

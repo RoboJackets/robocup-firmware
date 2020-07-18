@@ -34,4 +34,14 @@ public:
      * Returns true when there is data to read from the radio
      */
     virtual bool isAvailable() = 0;
+
+    /**
+     * Returns whether the radio is connected to WiFi or not
+     */
+    virtual bool isConnected() = 0;
+
+    /**
+     * Returns whether the radio is properly initialized or not
+     */
+    virtual bool isInitialized() = 0;
 };
