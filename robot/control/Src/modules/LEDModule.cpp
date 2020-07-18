@@ -199,7 +199,7 @@ void LEDModule::setColor(uint32_t led0, uint32_t led1, uint32_t led2) {
 
 void LEDModule::displayErrors() {
     // If there are no errors, then there is no point in displaying anything
-    if (std::find(errToggles.begin(), errToggles.end(), true) == errToggles.end()) {
+    if (std::none_of(errToggles.begin(), errToggles.end(), [](bool b){return b;})) {
         setColor(0x000000, 0x000000, 0x000000);
         return;
     }

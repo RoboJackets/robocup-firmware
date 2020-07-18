@@ -237,13 +237,13 @@ private:
     /**
      * Number of frames (1/kPeriod seconds) for which the error lights will be on, to cycle through error LEDs
      */
-    int framesOn = 2;
+    int framesOn = 20;
     int framesOnCounter = 0;
 
     /**
      * Number of frames (1/kPeriod seconds) for which the error lights will be off, to cycle through error LEDs
      */
-    int framesOff = 3;
+    int framesOff = 10;
     int framesOffCounter = 0;
 
     /**
