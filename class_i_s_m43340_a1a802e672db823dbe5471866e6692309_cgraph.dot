@@ -3,12 +3,12 @@ digraph "ISM43340::reset"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node32 [label="ISM43340::reset",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
-  Node32 -> Node33 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node33 [label="ISM43340::readFromSpi",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_s_m43340.html#ae3999e5b5745b81fbc6e10992bf0cd5c",tooltip="Blocking read from the SPI bus. "];
-  Node32 -> Node34 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node34 [label="ISM43340::sendCommand",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_s_m43340.html#a55f5fa5d826f8056d5f7d43f43a55691",tooltip="Base send command function. "];
+  Node34 [label="ISM43340::reset",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
   Node34 -> Node35 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node35 [label="ISM43340::writeToSpi",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_s_m43340.html#a6f39b288c0a4ecde7c0bbf5bf73302ad",tooltip="Write the byte array to the spi bus. "];
-  Node34 -> Node33 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node35 [label="ISM43340::readFromSpi",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_s_m43340.html#ae3999e5b5745b81fbc6e10992bf0cd5c",tooltip="Blocking read from the SPI bus. "];
+  Node34 -> Node36 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node36 [label="ISM43340::sendCommand",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_s_m43340.html#a55f5fa5d826f8056d5f7d43f43a55691",tooltip="Base send command function. "];
+  Node36 -> Node37 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node37 [label="ISM43340::writeToSpi",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_s_m43340.html#a6f39b288c0a4ecde7c0bbf5bf73302ad",tooltip="Write the byte array to the spi bus. "];
+  Node36 -> Node35 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
 }

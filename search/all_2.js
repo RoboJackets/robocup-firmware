@@ -33,6 +33,7 @@ var searchData=
   ['bodyxvel',['bodyXVel',['../struct_motion_command.html#a18f72b9a8370d0730ef6c4398cc98cc1',1,'MotionCommand']]],
   ['bodyy',['bodyY',['../structrtp_1_1_control_message.html#a54861e8ef21fcf5c988760bfbaca6236',1,'rtp::ControlMessage::bodyY()'],['../rtp_8hpp.html#a833a8823265fbf4fd2139a1ef499e7b5',1,'bodyY():&#160;rtp.hpp']]],
   ['bodyyvel',['bodyYVel',['../struct_motion_command.html#a5599db7982fc509c81dafc2b5b3a43aa',1,'MotionCommand']]],
+  ['boot_5ffail',['BOOT_FAIL',['../_l_e_d_module_8hpp.html#a70d5f642b81250279ac9f8305c9a59fdabf423ad6f51eb924b4f2f5308a88a937',1,'LEDModule.hpp']]],
   ['bottowheel',['BotToWheel',['../class_robot_model.html#ab57cfae1ca9a6b62813f60e303b88e65',1,'RobotModel']]],
   ['boundscaling',['boundScaling',['../_robot_controller_8cpp.html#a0be031a2377dc2d785f9d68cb8a52d0f',1,'RobotController.cpp']]],
   ['breakbeam_5ftripped',['BREAKBEAM_TRIPPED',['../kicker__commands_8h.html#ae2ddd027a4f39d6faa24016003c62709',1,'kicker_commands.h']]],

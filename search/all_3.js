@@ -5,6 +5,7 @@ var searchData=
   ['calculatewheel',['calculateWheel',['../class_robot_controller.html#a0707cb5415d1d8abc6179199d7595b8a',1,'RobotController']]],
   ['cancel_5fkick',['CANCEL_KICK',['../kicker__commands_8h.html#ad652d11c57926e8a2d5cfeb08ea782f5',1,'kicker_commands.h']]],
   ['cancelbreakbeam',['cancelBreakbeam',['../class_kicker_board.html#ad7fe6bbf240ec17f50d3b9551166ed95',1,'KickerBoard']]],
+  ['categorycolors',['CategoryColors',['../_l_e_d_module_8hpp.html#a1fe0fcca0d6af57aaf39afa40e635579',1,'LEDModule.hpp']]],
   ['charge_5fallowed',['charge_allowed',['../main_8c.html#a01bbd779f25a828ba61d738cfad6bd8e',1,'charge_allowed():&#160;main.c'],['../kicker__commands_8h.html#a2ff7e7c836029bc8037818d9a737af44',1,'CHARGE_ALLOWED():&#160;kicker_commands.h']]],
   ['charge_5fcaps',['charge_caps',['../main_8c.html#a8b188dc3ad96f5f0741a7d2de916212b',1,'main.c']]],
   ['charge_5fphase',['charge_phase',['../main_8c.html#a6953728e5e26a7e10bde53509a07f3ba',1,'main.c']]],
@@ -30,6 +31,7 @@ var searchData=
   ['conanfile_2epy',['conanfile.py',['../conanfile_8py.html',1,'']]],
   ['config',['config',['../class_m_c_p23017.html#a0012ecd9ece2bbe2f1ac473abf76fe29',1,'MCP23017']]],
   ['configure',['configure',['../class_f_p_g_a.html#a77752bb708e4d7f5e691110e3e2480e7',1,'FPGA']]],
+  ['connected',['connected',['../class_i_s_m43340.html#a05709c1cecdc6ce84551d29d0908b6b5',1,'ISM43340']]],
   ['contributing_2emd',['Contributing.md',['../_contributing_8md.html',1,'']]],
   ['control',['CONTROL',['../namespacertp_1_1_port_type_namespace.html#aa4aec9e3af6e48136ec9a1e072d22288ae92f299edfd2a807855cb806578bce50',1,'rtp::PortTypeNamespace::CONTROL()'],['../namespacertp_1_1_message_type_namespace.html#adc037e9081cafd7131456daea23cc59dae01c0e6f53f392748b861808b3390bce',1,'rtp::MessageTypeNamespace::CONTROL()']]],
   ['controlmessage',['ControlMessage',['../structrtp_1_1_control_message.html',1,'rtp::ControlMessage'],['../unionrtp_1_1_robot_tx_message_1_1_robot_tx_messages.html#aad0c5cccee755462da052ee5c7bca9f4',1,'rtp::RobotTxMessage::RobotTxMessages::controlMessage()'],['../union_robot_tx_messages.html#a07e222fff4d4ec738cd99719be20c5e1',1,'RobotTxMessages::controlMessage()']]],
@@ -40,6 +42,7 @@ var searchData=
   ['currents',['currents',['../struct_motor_feedback.html#aa19dbad1c45449593ac32a68d401d0ef',1,'MotorFeedback']]],
   ['currentsocket',['currentSocket',['../class_i_s_m43340.html#a66dbe602665fd62773374dea0d3ed938',1,'ISM43340']]],
   ['currentstate',['currentState',['../_i_s_m43340_8cpp.html#a0aa4cf65018a785748e1ac7480da330a',1,'ISM43340.cpp']]],
+  ['cycleswithoutpackets',['cyclesWithoutPackets',['../class_radio_link.html#ab75129be2f9ebd36c876e505b0550781',1,'RadioLink']]],
   ['command_20line_20basics',['Command Line Basics',['../md__command_line_basics.html',1,'']]],
   ['conan',['Conan',['../md__conan.html',1,'']]],
   ['contributing_20guide',['Contributing Guide',['../md__contributing.html',1,'']]]

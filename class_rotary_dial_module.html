@@ -111,9 +111,12 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
-<tr class="memitem:a58d2cef4e5ab9111f45cc40a1394bb86"><td class="memItemLeft" align="right" valign="top">static constexpr float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_rotary_dial_module.html#a58d2cef4e5ab9111f45cc40a1394bb86">kFrequency</a></td></tr>
+<tr class="memitem:a58d2cef4e5ab9111f45cc40a1394bb86"><td class="memItemLeft" align="right" valign="top">static constexpr float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_rotary_dial_module.html#a58d2cef4e5ab9111f45cc40a1394bb86">kFrequency</a> = 1.0f</td></tr>
 <tr class="memdesc:a58d2cef4e5ab9111f45cc40a1394bb86"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of times per second (frequency) that RotaryDialModule should run (Hz)  <a href="#a58d2cef4e5ab9111f45cc40a1394bb86">More...</a><br /></td></tr>
 <tr class="separator:a58d2cef4e5ab9111f45cc40a1394bb86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe044d7b4cbde97f38f98a386dc9a2d6"><td class="memItemLeft" align="right" valign="top">static constexpr std::chrono::milliseconds&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_rotary_dial_module.html#afe044d7b4cbde97f38f98a386dc9a2d6">kPeriod</a> {static_cast&lt;int&gt;(1000 / <a class="el" href="class_rotary_dial_module.html#a58d2cef4e5ab9111f45cc40a1394bb86">kFrequency</a>)}</td></tr>
+<tr class="memdesc:afe044d7b4cbde97f38f98a386dc9a2d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of seconds elapsed (period) between RotaryDialModule runs (milliseconds)  <a href="#afe044d7b4cbde97f38f98a386dc9a2d6">More...</a><br /></td></tr>
+<tr class="separator:afe044d7b4cbde97f38f98a386dc9a2d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6d386ee5a63884ba624d927cadae0b38"><td class="memItemLeft" align="right" valign="top">static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_rotary_dial_module.html#a6d386ee5a63884ba624d927cadae0b38">kPriority</a> = 3</td></tr>
 <tr class="memdesc:a6d386ee5a63884ba624d927cadae0b38"><td class="mdescLeft">&#160;</td><td class="mdescRight">Priority used by RTOS.  <a href="#a6d386ee5a63884ba624d927cadae0b38">More...</a><br /></td></tr>
 <tr class="separator:a6d386ee5a63884ba624d927cadae0b38"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -324,7 +327,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr float RotaryDialModule::kFrequency</td>
+          <td class="memname">constexpr float RotaryDialModule::kFrequency = 1.0f</td>
         </tr>
       </table>
   </td>
@@ -333,8 +336,32 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">= 1.0f</div><div class="line"></div><div class="line">    </div><div class="line">    <span class="keyword">static</span> constexpr std::chrono::milliseconds kPeriod{<span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(1000 / <a class="code" href="class_rotary_dial_module.html#a58d2cef4e5ab9111f45cc40a1394bb86">kFrequency</a>)}</div></div><!-- fragment -->
+
 <p>Number of times per second (frequency) that RotaryDialModule should run (Hz) </p>
+
+</div>
+</div>
+<a id="afe044d7b4cbde97f38f98a386dc9a2d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afe044d7b4cbde97f38f98a386dc9a2d6">&#9670;&nbsp;</a></span>kPeriod</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr std::chrono::milliseconds RotaryDialModule::kPeriod {static_cast&lt;int&gt;(1000 / <a class="el" href="class_rotary_dial_module.html#a58d2cef4e5ab9111f45cc40a1394bb86">kFrequency</a>)}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Number of seconds elapsed (period) between RotaryDialModule runs (milliseconds) </p>
 
 </div>
 </div>
@@ -416,7 +443,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_rotary_dial_module.html">RotaryDialModule</a></li>
-    <li class="footer">Generated on Wed Jul 15 2020 00:22:03 for GT RoboCup SSL by
+    <li class="footer">Generated on Sat Jul 18 2020 13:48:14 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

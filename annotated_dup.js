@@ -9,6 +9,7 @@ var annotated_dup =
     [ "BatteryVoltage", "struct_battery_voltage.html", "struct_battery_voltage" ],
     [ "DebugInfo", "struct_debug_info.html", "struct_debug_info" ],
     [ "DribblerController", "class_dribbler_controller.html", "class_dribbler_controller" ],
+    [ "Error", "struct_error.html", "struct_error" ],
     [ "FPGA", "class_f_p_g_a.html", "class_f_p_g_a" ],
     [ "FPGAModule", "class_f_p_g_a_module.html", "class_f_p_g_a_module" ],
     [ "FPGAStatus", "struct_f_p_g_a_status.html", "struct_f_p_g_a_status" ],

@@ -3,5 +3,5 @@ digraph "Graphical Class Hierarchy"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node0 [label="RotarySelector\< DIGITAL\l_IN, NUM_PINS \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_rotary_selector.html",tooltip="This class facilitates reading the value from a rotary selector. "];
+  Node0 [label="RobotTxMessages",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$union_robot_tx_messages.html"];
 }

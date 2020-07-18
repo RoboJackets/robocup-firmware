@@ -8,6 +8,7 @@ var hierarchy =
     [ "rtp::ControlMessage", "structrtp_1_1_control_message.html", null ],
     [ "DebugInfo", "struct_debug_info.html", null ],
     [ "DribblerController", "class_dribbler_controller.html", null ],
+    [ "Error", "struct_error.html", null ],
     [ "FPGA", "class_f_p_g_a.html", null ],
     [ "FPGAStatus", "struct_f_p_g_a_status.html", null ],
     [ "GenericModule", "class_generic_module.html", [

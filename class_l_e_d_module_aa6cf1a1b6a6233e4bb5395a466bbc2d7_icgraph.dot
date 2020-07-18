@@ -1,0 +1,14 @@
+digraph "LEDModule::setColor"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node33 [label="LEDModule::setColor",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node33 -> Node34 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node34 [label="LEDModule::start",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_l_e_d_module.html#aac9491cb79f42b71e117838766930357",tooltip="Code which initializes module. "];
+  Node33 -> Node35 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node35 [label="LEDModule::entry",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_l_e_d_module.html#a8413c6960dc269a7771da47c1ad5bc6d",tooltip="Code to run when called by RTOS once per system tick (kperiod) "];
+  Node33 -> Node36 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node36 [label="LEDModule::displayErrors",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_l_e_d_module.html#ae0c06c926b1b4fec093733a0232896cd",tooltip="Cycle through error color codes to display. "];
+  Node36 -> Node35 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+}

@@ -100,6 +100,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a40c525e1097ea507c9445c370b28a6ea"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_radio.html#a40c525e1097ea507c9445c370b28a6ea">isAvailable</a> ()=0</td></tr>
 <tr class="memdesc:a40c525e1097ea507c9445c370b28a6ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true when there is data to read from the radio.  <a href="#a40c525e1097ea507c9445c370b28a6ea">More...</a><br /></td></tr>
 <tr class="separator:a40c525e1097ea507c9445c370b28a6ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7076eb40485f1b00e93cf0a88ae50866"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_radio.html#a7076eb40485f1b00e93cf0a88ae50866">isConnected</a> ()=0</td></tr>
+<tr class="memdesc:a7076eb40485f1b00e93cf0a88ae50866"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether the radio is connected to WiFi or not.  <a href="#a7076eb40485f1b00e93cf0a88ae50866">More...</a><br /></td></tr>
+<tr class="separator:a7076eb40485f1b00e93cf0a88ae50866"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae41e81590dadb98c2dc6087ecd129b10"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_generic_radio.html#ae41e81590dadb98c2dc6087ecd129b10">isInitialized</a> ()=0</td></tr>
+<tr class="memdesc:ae41e81590dadb98c2dc6087ecd129b10"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether the radio is properly initialized or not.  <a href="#ae41e81590dadb98c2dc6087ecd129b10">More...</a><br /></td></tr>
+<tr class="separator:ae41e81590dadb98c2dc6087ecd129b10"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for GenericRadio:</div>
@@ -146,6 +152,64 @@ Public Member Functions</h2></td></tr>
 <p>Returns true when there is data to read from the radio. </p>
 
 <p>Implemented in <a class="el" href="class_i_s_m43340.html#ab0678ac375792c9c9499ae9b42e5b6a3">ISM43340</a>.</p>
+
+</div>
+</div>
+<a id="a7076eb40485f1b00e93cf0a88ae50866"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7076eb40485f1b00e93cf0a88ae50866">&#9670;&nbsp;</a></span>isConnected()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool GenericRadio::isConnected </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns whether the radio is connected to WiFi or not. </p>
+
+<p>Implemented in <a class="el" href="class_i_s_m43340.html#ab2b1576581341330d227e51859228d2b">ISM43340</a>.</p>
+
+</div>
+</div>
+<a id="ae41e81590dadb98c2dc6087ecd129b10"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae41e81590dadb98c2dc6087ecd129b10">&#9670;&nbsp;</a></span>isInitialized()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool GenericRadio::isInitialized </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns whether the radio is properly initialized or not. </p>
+
+<p>Implemented in <a class="el" href="class_i_s_m43340.html#a578017a3d15e6b41f7d595fc0dc82f6c">ISM43340</a>.</p>
 
 </div>
 </div>
@@ -256,7 +320,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_generic_radio.html">GenericRadio</a></li>
-    <li class="footer">Generated on Wed Jul 15 2020 00:22:03 for GT RoboCup SSL by
+    <li class="footer">Generated on Sat Jul 18 2020 13:48:14 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

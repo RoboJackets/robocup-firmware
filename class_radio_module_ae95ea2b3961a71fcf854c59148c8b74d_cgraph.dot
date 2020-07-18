@@ -10,4 +10,8 @@ digraph "RadioModule::entry"
   Node5 [label="RadioLink::send",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_radio_link.html#a8189adde363d5fe27b29e045b775ae7f",tooltip="Sends a packet of data to the radio. "];
   Node3 -> Node6 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node6 [label="RadioLink::receive",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_radio_link.html#a12a8932314eab725e90308ae23dfa5aa",tooltip="Receive the latest packet from the radio Only fills data portion of structs. "];
+  Node3 -> Node7 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="RadioLink::isRadioConnected",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_radio_link.html#a38aad17454475de769e21ee314e3bbaa"];
+  Node3 -> Node8 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node8 [label="RadioLink::hasSoccerTimedOut",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_radio_link.html#a7c9b1df6449bc8e99c759ae79c90d9cb"];
 }

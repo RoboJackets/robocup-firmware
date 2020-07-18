@@ -25,6 +25,7 @@ var searchData=
   ['dip_5fswitch_5f3',['DIP_SWITCH_3',['../iodefs_8h.html#a67f133669bb321379b59793c3aa7ebe3',1,'iodefs.h']]],
   ['dir_5finput',['DIR_INPUT',['../class_m_c_p23017.html#a722f23d7767a135c669222da836339bea2edc7b553859d242d65404f71a6da0d3',1,'MCP23017']]],
   ['dir_5foutput',['DIR_OUTPUT',['../class_m_c_p23017.html#a722f23d7767a135c669222da836339bea80b0a688232a4f3b0712285be56d1f2e',1,'MCP23017']]],
+  ['displayerrors',['displayErrors',['../class_l_e_d_module.html#ae0c06c926b1b4fec093733a0232896cd',1,'LEDModule']]],
   ['dot_5fstar_5fcs',['DOT_STAR_CS',['../iodefs_8h.html#a8a283cb9fa013689d5a76622ae1278a7',1,'iodefs.h']]],
   ['dotstarncs',['dotStarNCS',['../class_l_e_d_module.html#abc0364864fb54a0143a36adb214242e1',1,'LEDModule']]],
   ['dotstarspi',['dotStarSPI',['../class_l_e_d_module.html#a5975d2df0087e540993addba4e2450bc',1,'LEDModule']]],

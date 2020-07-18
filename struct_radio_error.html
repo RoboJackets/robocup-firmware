@@ -103,9 +103,12 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a98804308b9129108cf5700ac30757e7e"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_radio_error.html#a98804308b9129108cf5700ac30757e7e">lastUpdate</a></td></tr>
 <tr class="memdesc:a98804308b9129108cf5700ac30757e7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time at which RadioError was last updated (milliseconds)  <a href="#a98804308b9129108cf5700ac30757e7e">More...</a><br /></td></tr>
 <tr class="separator:a98804308b9129108cf5700ac30757e7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ba48d6d836109c4ee966096c2216a2a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_radio_error.html#a6ba48d6d836109c4ee966096c2216a2a">hasError</a></td></tr>
-<tr class="memdesc:a6ba48d6d836109c4ee966096c2216a2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores whether Radio has an error.  <a href="#a6ba48d6d836109c4ee966096c2216a2a">More...</a><br /></td></tr>
-<tr class="separator:a6ba48d6d836109c4ee966096c2216a2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66c25b9e0be28ef25ff40679651e2b33"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_radio_error.html#a66c25b9e0be28ef25ff40679651e2b33">hasConnectionError</a></td></tr>
+<tr class="memdesc:a66c25b9e0be28ef25ff40679651e2b33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores if Radio is having trouble connecting to WiFi.  <a href="#a66c25b9e0be28ef25ff40679651e2b33">More...</a><br /></td></tr>
+<tr class="separator:a66c25b9e0be28ef25ff40679651e2b33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ea181deaf572eb040a999f75c60f572"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_radio_error.html#a2ea181deaf572eb040a999f75c60f572">hasSoccerConnectionError</a></td></tr>
+<tr class="memdesc:a2ea181deaf572eb040a999f75c60f572"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores if Radio is having trouble communicating with Soccer.  <a href="#a2ea181deaf572eb040a999f75c60f572">More...</a><br /></td></tr>
+<tr class="separator:a2ea181deaf572eb040a999f75c60f572"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Contains data on whether Radio is working properly on not. </p>
@@ -120,19 +123,35 @@ Public Attributes</h2></td></tr>
 </map>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a6ba48d6d836109c4ee966096c2216a2a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6ba48d6d836109c4ee966096c2216a2a">&#9670;&nbsp;</a></span>hasError</h2>
+<a id="a66c25b9e0be28ef25ff40679651e2b33"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a66c25b9e0be28ef25ff40679651e2b33">&#9670;&nbsp;</a></span>hasConnectionError</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool RadioError::hasError</td>
+          <td class="memname">bool RadioError::hasConnectionError</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Stores whether Radio has an error. </p>
+<p>Stores if Radio is having trouble connecting to WiFi. </p>
+
+</div>
+</div>
+<a id="a2ea181deaf572eb040a999f75c60f572"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ea181deaf572eb040a999f75c60f572">&#9670;&nbsp;</a></span>hasSoccerConnectionError</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool RadioError::hasSoccerConnectionError</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Stores if Radio is having trouble communicating with Soccer. </p>
 
 </div>
 </div>
@@ -193,7 +212,7 @@ Public Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="struct_radio_error.html">RadioError</a></li>
-    <li class="footer">Generated on Wed Jul 15 2020 00:22:03 for GT RoboCup SSL by
+    <li class="footer">Generated on Sat Jul 18 2020 13:48:14 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

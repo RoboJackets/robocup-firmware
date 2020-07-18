@@ -106,11 +106,23 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a12a8932314eab725e90308ae23dfa5aa"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_radio_link.html#a12a8932314eab725e90308ae23dfa5aa">receive</a> (<a class="el" href="struct_kicker_command.html">KickerCommand</a> &amp;kickerCommand, <a class="el" href="struct_motion_command.html">MotionCommand</a> &amp;motionCommand)</td></tr>
 <tr class="memdesc:a12a8932314eab725e90308ae23dfa5aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Receive the latest packet from the radio Only fills data portion of structs.  <a href="#a12a8932314eab725e90308ae23dfa5aa">More...</a><br /></td></tr>
 <tr class="separator:a12a8932314eab725e90308ae23dfa5aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38aad17454475de769e21ee314e3bbaa"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_radio_link.html#a38aad17454475de769e21ee314e3bbaa">isRadioConnected</a> ()</td></tr>
+<tr class="separator:a38aad17454475de769e21ee314e3bbaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ba0d932ea2b30e1512e6dd39d41e895"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_radio_link.html#a2ba0d932ea2b30e1512e6dd39d41e895">isRadioInitialized</a> ()</td></tr>
+<tr class="separator:a2ba0d932ea2b30e1512e6dd39d41e895"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c9b1df6449bc8e99c759ae79c90d9cb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_radio_link.html#a7c9b1df6449bc8e99c759ae79c90d9cb">hasSoccerTimedOut</a> ()</td></tr>
+<tr class="separator:a7c9b1df6449bc8e99c759ae79c90d9cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a0b56fb304190359cdb084ac44c2354d8"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="class_generic_radio.html">GenericRadio</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_radio_link.html#a0b56fb304190359cdb084ac44c2354d8">radio</a></td></tr>
 <tr class="separator:a0b56fb304190359cdb084ac44c2354d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed3c02d14602479fac26295477713bcc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_radio_link.html#aed3c02d14602479fac26295477713bcc">radioConnected</a> = false</td></tr>
+<tr class="separator:aed3c02d14602479fac26295477713bcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66bc07bb36fbf97bfb48260375120269"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_radio_link.html#a66bc07bb36fbf97bfb48260375120269">radioInitialized</a> = false</td></tr>
+<tr class="separator:a66bc07bb36fbf97bfb48260375120269"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab75129be2f9ebd36c876e505b0550781"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_radio_link.html#ab75129be2f9ebd36c876e505b0550781">cyclesWithoutPackets</a> = 0</td></tr>
+<tr class="separator:ab75129be2f9ebd36c876e505b0550781"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Sends and receives data to/from the radio Converts the simplified structures to the rtp packet to send to the radio driver Reverse happens on receive, raw data -&gt; rtp packet -&gt; simplified structures. </p>
@@ -142,6 +154,40 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a7c9b1df6449bc8e99c759ae79c90d9cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c9b1df6449bc8e99c759ae79c90d9cb">&#9670;&nbsp;</a></span>hasSoccerTimedOut()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool RadioLink::hasSoccerTimedOut </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-1-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_radio_link_a7c9b1df6449bc8e99c759ae79c90d9cb_icgraph.png" border="0" usemap="#class_radio_link_a7c9b1df6449bc8e99c759ae79c90d9cb_icgraph" alt=""/></div>
+<map name="class_radio_link_a7c9b1df6449bc8e99c759ae79c90d9cb_icgraph" id="class_radio_link_a7c9b1df6449bc8e99c759ae79c90d9cb_icgraph">
+</map>
+</div>
+
+</div>
+</div>
 <a id="a4a7d2412966c35c0e253535c16c56a15"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4a7d2412966c35c0e253535c16c56a15">&#9670;&nbsp;</a></span>init()</h2>
 
@@ -158,13 +204,81 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Initialize the radio. </p>
-<div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-2-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-2-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-1-content" class="dyncontent" style="display:none;">
+<div id="dynsection-2-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="class_radio_link_a4a7d2412966c35c0e253535c16c56a15_icgraph.png" border="0" usemap="#class_radio_link_a4a7d2412966c35c0e253535c16c56a15_icgraph" alt=""/></div>
 <map name="class_radio_link_a4a7d2412966c35c0e253535c16c56a15_icgraph" id="class_radio_link_a4a7d2412966c35c0e253535c16c56a15_icgraph">
+</map>
+</div>
+
+</div>
+</div>
+<a id="a38aad17454475de769e21ee314e3bbaa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a38aad17454475de769e21ee314e3bbaa">&#9670;&nbsp;</a></span>isRadioConnected()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool RadioLink::isRadioConnected </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-3-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-3-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-3-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_radio_link_a38aad17454475de769e21ee314e3bbaa_icgraph.png" border="0" usemap="#class_radio_link_a38aad17454475de769e21ee314e3bbaa_icgraph" alt=""/></div>
+<map name="class_radio_link_a38aad17454475de769e21ee314e3bbaa_icgraph" id="class_radio_link_a38aad17454475de769e21ee314e3bbaa_icgraph">
+</map>
+</div>
+
+</div>
+</div>
+<a id="a2ba0d932ea2b30e1512e6dd39d41e895"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ba0d932ea2b30e1512e6dd39d41e895">&#9670;&nbsp;</a></span>isRadioInitialized()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool RadioLink::isRadioInitialized </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div id="dynsection-4" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-4-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-4-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-4-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_radio_link_a2ba0d932ea2b30e1512e6dd39d41e895_icgraph.png" border="0" usemap="#class_radio_link_a2ba0d932ea2b30e1512e6dd39d41e895_icgraph" alt=""/></div>
+<map name="class_radio_link_a2ba0d932ea2b30e1512e6dd39d41e895_icgraph" id="class_radio_link_a2ba0d932ea2b30e1512e6dd39d41e895_icgraph">
 </map>
 </div>
 
@@ -198,11 +312,11 @@ Private Attributes</h2></td></tr>
 
 <p>Receive the latest packet from the radio Only fills data portion of structs. </p>
 <dl class="section return"><dt>Returns</dt><dd>true if it returned a valid packet, false if there is no packet to return </dd></dl>
-<div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-2-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-2-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-5" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-5-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-5-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-2-content" class="dyncontent" style="display:none;">
+<div id="dynsection-5-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="class_radio_link_a12a8932314eab725e90308ae23dfa5aa_icgraph.png" border="0" usemap="#class_radio_link_a12a8932314eab725e90308ae23dfa5aa_icgraph" alt=""/></div>
 <map name="class_radio_link_a12a8932314eab725e90308ae23dfa5aa_icgraph" id="class_radio_link_a12a8932314eab725e90308ae23dfa5aa_icgraph">
 </map>
@@ -250,11 +364,11 @@ Private Attributes</h2></td></tr>
 
 <p>Sends a packet of data to the radio. </p>
 <p>Assumes data in structs are valid </p>
-<div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-3-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-3-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-6" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-6-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-6-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-3-content" class="dyncontent" style="display:none;">
+<div id="dynsection-6-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="class_radio_link_a8189adde363d5fe27b29e045b775ae7f_icgraph.png" border="0" usemap="#class_radio_link_a8189adde363d5fe27b29e045b775ae7f_icgraph" alt=""/></div>
 <map name="class_radio_link_a8189adde363d5fe27b29e045b775ae7f_icgraph" id="class_radio_link_a8189adde363d5fe27b29e045b775ae7f_icgraph">
 </map>
@@ -263,6 +377,28 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="ab75129be2f9ebd36c876e505b0550781"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab75129be2f9ebd36c876e505b0550781">&#9670;&nbsp;</a></span>cyclesWithoutPackets</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int RadioLink::cyclesWithoutPackets = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a0b56fb304190359cdb084ac44c2354d8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0b56fb304190359cdb084ac44c2354d8">&#9670;&nbsp;</a></span>radio</h2>
 
@@ -285,6 +421,50 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="aed3c02d14602479fac26295477713bcc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed3c02d14602479fac26295477713bcc">&#9670;&nbsp;</a></span>radioConnected</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool RadioLink::radioConnected = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a66bc07bb36fbf97bfb48260375120269"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a66bc07bb36fbf97bfb48260375120269">&#9670;&nbsp;</a></span>radioInitialized</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool RadioLink::radioInitialized = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/developer/robocup-firmware/robot/control/Inc/radio/<a class="el" href="_radio_link_8hpp_source.html">RadioLink.hpp</a></li>
 <li>/home/developer/robocup-firmware/robot/control/Src/radio/<a class="el" href="_radio_link_8cpp.html">RadioLink.cpp</a></li>
@@ -295,7 +475,7 @@ Private Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_radio_link.html">RadioLink</a></li>
-    <li class="footer">Generated on Wed Jul 15 2020 00:22:03 for GT RoboCup SSL by
+    <li class="footer">Generated on Sat Jul 18 2020 13:48:14 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

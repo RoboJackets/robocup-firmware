@@ -13,10 +13,13 @@ var searchData=
   ['isballsensed',['isBallSensed',['../class_kicker_board.html#a24d20274376b425dcecfde77eefffbb9',1,'KickerBoard']]],
   ['isbattcritical',['isBattCritical',['../class_battery.html#afb3dd22b444cb281d76e187a92ce8ec1',1,'Battery']]],
   ['ischarged',['isCharged',['../class_kicker_board.html#a183b9c1bd871f9124b706b053157dada',1,'KickerBoard']]],
-  ['isconnected',['isConnected',['../class_i_s_m43340.html#af8a5973f0a9b438b58a8799daed460c5',1,'ISM43340']]],
+  ['isconnected',['isConnected',['../class_generic_radio.html#a7076eb40485f1b00e93cf0a88ae50866',1,'GenericRadio::isConnected()'],['../class_i_s_m43340.html#ab2b1576581341330d227e51859228d2b',1,'ISM43340::isConnected()']]],
   ['ishealthy',['isHealthy',['../class_kicker_board.html#ad4598424736ecde08789e4d4d5feb83e',1,'KickerBoard']]],
+  ['isinitialized',['isInitialized',['../class_generic_radio.html#ae41e81590dadb98c2dc6087ecd129b10',1,'GenericRadio::isInitialized()'],['../class_i_s_m43340.html#a578017a3d15e6b41f7d595fc0dc82f6c',1,'ISM43340::isInitialized()']]],
   ['ism43340',['ISM43340',['../class_i_s_m43340.html#a2c19b9ec46df497471e44eb5c791844a',1,'ISM43340']]],
   ['isr',['ISR',['../main_8c.html#af9cad97352f5ba9bbd800446131125a6',1,'ISR(SPI_STC_vect):&#160;main.c'],['../main_8c.html#aec43762dc86e029b395d4e5819192c2d',1,'ISR(TIMER0_COMPA_vect):&#160;main.c']]],
+  ['isradioconnected',['isRadioConnected',['../class_radio_link.html#a38aad17454475de769e21ee314e3bbaa',1,'RadioLink']]],
+  ['isradioinitialized',['isRadioInitialized',['../class_radio_link.html#a2ba0d932ea2b30e1512e6dd39d41e895',1,'RadioLink']]],
   ['isready',['isReady',['../class_f_p_g_a.html#a3a19d0de422731d1686bf8b6d3b0a800',1,'FPGA']]],
   ['isrecentupdate',['isRecentUpdate',['../class_motion_control_module.html#aa465c7f948ee9c5522b14b8def68f241',1,'MotionControlModule']]]
 ];

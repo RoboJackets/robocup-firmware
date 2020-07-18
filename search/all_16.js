@@ -1,6 +1,7 @@
 var searchData=
 [
   ['w',['w',['../class_quaternion.html#aa44a65ab99e36f6ab8771030eed8a7ad',1,'Quaternion']]],
+  ['warn',['WARN',['../_l_e_d_module_8hpp.html#a6189023456c55830ab1301757517ddb3a74dac7ac23d5b810db6d4067f14e8676',1,'LEDModule.hpp']]],
   ['watchdog_5freset',['watchdog_reset',['../class_f_p_g_a.html#aaf55a1decbb2783031f56c99a885f54d',1,'FPGA']]],
   ['wheelangles',['WheelAngles',['../class_robot_model.html#adc445a62a4f3b4f5deda26e2a1b01c15',1,'RobotModel']]],
   ['wheeldist',['WheelDist',['../class_robot_model.html#ab8da558c04d41619982d546a24b7d0d0',1,'RobotModel']]],

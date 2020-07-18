@@ -82,7 +82,8 @@ $(document).ready(function(){initNavTree('_l_e_d_module_8hpp.html','');});
 
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a>  </div>
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#enum-members">Enumerations</a>  </div>
   <div class="headertitle">
 <div class="title">LEDModule.hpp File Reference</div>  </div>
 </div><!--header-->
@@ -110,17 +111,109 @@ $(document).ready(function(){initNavTree('_l_e_d_module_8hpp.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_error.html">Error</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Struct to store LED values in ERR_LIST.  <a href="struct_error.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_l_e_d_module.html">LEDModule</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Module interfacing with debugging LEDS based on the statuses of other electronics.  <a href="class_l_e_d_module.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:a1fe0fcca0d6af57aaf39afa40e635579"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_l_e_d_module_8hpp.html#a1fe0fcca0d6af57aaf39afa40e635579">CategoryColors</a> : uint32_t { <a class="el" href="_l_e_d_module_8hpp.html#a1fe0fcca0d6af57aaf39afa40e635579a2f196a4aab36590797b20bdbc3130889">RADIO_ERROR</a> = 0x0080FF, 
+<a class="el" href="_l_e_d_module_8hpp.html#a1fe0fcca0d6af57aaf39afa40e635579a6942d4a34ab2f483c75735e14cf284f7">FPGA_ERROR</a> = 0x00FFFF, 
+<a class="el" href="_l_e_d_module_8hpp.html#a1fe0fcca0d6af57aaf39afa40e635579a9faef45f6aa3175fa17c158dff4f96ac">KICKER_ERROR</a> = 0x00FF00, 
+<a class="el" href="_l_e_d_module_8hpp.html#a1fe0fcca0d6af57aaf39afa40e635579a73ddd528222cd33a9686dff18ca943c9">IMU_ERROR</a> = 0xFF0000
+ }<tr class="memdesc:a1fe0fcca0d6af57aaf39afa40e635579"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constants for DotStar LEDs (BGR) First LED in error display format: Category / Level / Info.  <a href="_l_e_d_module_8hpp.html#a1fe0fcca0d6af57aaf39afa40e635579">More...</a><br /></td></tr>
+</td></tr>
+<tr class="separator:a1fe0fcca0d6af57aaf39afa40e635579"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6189023456c55830ab1301757517ddb3"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_l_e_d_module_8hpp.html#a6189023456c55830ab1301757517ddb3">LevelColors</a> : uint32_t { <a class="el" href="_l_e_d_module_8hpp.html#a6189023456c55830ab1301757517ddb3a651d8a47a6976d6fe05c0e03fb4cd2d0">FATAL</a> = 0x0000FF, 
+<a class="el" href="_l_e_d_module_8hpp.html#a6189023456c55830ab1301757517ddb3a0f886785b600b91048fcdc434c6b4a8e">ERR</a> = 0x0080FF, 
+<a class="el" href="_l_e_d_module_8hpp.html#a6189023456c55830ab1301757517ddb3a74dac7ac23d5b810db6d4067f14e8676">WARN</a> = 0xFFFF00, 
+<a class="el" href="_l_e_d_module_8hpp.html#a6189023456c55830ab1301757517ddb3a748005382152808a72b1a9177d9dc806">INFO</a> = 0xFF0000
+ }<tr class="memdesc:a6189023456c55830ab1301757517ddb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constants for DotStar LEDs (BGR) Second LED in error display format: Category / Level / Info.  <a href="_l_e_d_module_8hpp.html#a6189023456c55830ab1301757517ddb3">More...</a><br /></td></tr>
+</td></tr>
+<tr class="separator:a6189023456c55830ab1301757517ddb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a70d5f642b81250279ac9f8305c9a59fd"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_l_e_d_module_8hpp.html#a70d5f642b81250279ac9f8305c9a59fd">InfoColors</a> : uint32_t { <a class="el" href="_l_e_d_module_8hpp.html#a70d5f642b81250279ac9f8305c9a59fdabf423ad6f51eb924b4f2f5308a88a937">BOOT_FAIL</a> = 0x0000FF, 
+<a class="el" href="_l_e_d_module_8hpp.html#a70d5f642b81250279ac9f8305c9a59fda3b9cb63bbe45131163e35f5f79c878a4">RADIO_CONN_WIFI_FAIL</a> = 0x0080FF, 
+<a class="el" href="_l_e_d_module_8hpp.html#a70d5f642b81250279ac9f8305c9a59fdac2226aed90511bf726befc788fa3f1cd">RADIO_CONN_SOCCER_FAIL</a> = 0x00FFFF
+ }<tr class="memdesc:a70d5f642b81250279ac9f8305c9a59fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constants for DotStar LEDs (BGR) Third LED in error display format: Category / Level / Info.  <a href="_l_e_d_module_8hpp.html#a70d5f642b81250279ac9f8305c9a59fd">More...</a><br /></td></tr>
+</td></tr>
+<tr class="separator:a70d5f642b81250279ac9f8305c9a59fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="a1fe0fcca0d6af57aaf39afa40e635579"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1fe0fcca0d6af57aaf39afa40e635579">&#9670;&nbsp;</a></span>CategoryColors</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="_l_e_d_module_8hpp.html#a1fe0fcca0d6af57aaf39afa40e635579">CategoryColors</a> : uint32_t</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constants for DotStar LEDs (BGR) First LED in error display format: Category / Level / Info. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a1fe0fcca0d6af57aaf39afa40e635579a2f196a4aab36590797b20bdbc3130889"></a>RADIO_ERROR&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a1fe0fcca0d6af57aaf39afa40e635579a6942d4a34ab2f483c75735e14cf284f7"></a>FPGA_ERROR&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a1fe0fcca0d6af57aaf39afa40e635579a9faef45f6aa3175fa17c158dff4f96ac"></a>KICKER_ERROR&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a1fe0fcca0d6af57aaf39afa40e635579a73ddd528222cd33a9686dff18ca943c9"></a>IMU_ERROR&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<a id="a70d5f642b81250279ac9f8305c9a59fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a70d5f642b81250279ac9f8305c9a59fd">&#9670;&nbsp;</a></span>InfoColors</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="_l_e_d_module_8hpp.html#a70d5f642b81250279ac9f8305c9a59fd">InfoColors</a> : uint32_t</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constants for DotStar LEDs (BGR) Third LED in error display format: Category / Level / Info. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a70d5f642b81250279ac9f8305c9a59fdabf423ad6f51eb924b4f2f5308a88a937"></a>BOOT_FAIL&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a70d5f642b81250279ac9f8305c9a59fda3b9cb63bbe45131163e35f5f79c878a4"></a>RADIO_CONN_WIFI_FAIL&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a70d5f642b81250279ac9f8305c9a59fdac2226aed90511bf726befc788fa3f1cd"></a>RADIO_CONN_SOCCER_FAIL&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<a id="a6189023456c55830ab1301757517ddb3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6189023456c55830ab1301757517ddb3">&#9670;&nbsp;</a></span>LevelColors</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="_l_e_d_module_8hpp.html#a6189023456c55830ab1301757517ddb3">LevelColors</a> : uint32_t</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constants for DotStar LEDs (BGR) Second LED in error display format: Category / Level / Info. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a6189023456c55830ab1301757517ddb3a651d8a47a6976d6fe05c0e03fb4cd2d0"></a>FATAL&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a6189023456c55830ab1301757517ddb3a0f886785b600b91048fcdc434c6b4a8e"></a>ERR&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a6189023456c55830ab1301757517ddb3a74dac7ac23d5b810db6d4067f14e8676"></a>WARN&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a6189023456c55830ab1301757517ddb3a748005382152808a72b1a9177d9dc806"></a>INFO&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_ecf8ca46b2885291d59feefec80b5002.html">robot</a></li><li class="navelem"><a class="el" href="dir_7529ff68e4b4e38733d6d92fd59bd4e6.html">control</a></li><li class="navelem"><a class="el" href="dir_fd52124c4ca61b3c99db413ceca9f983.html">Inc</a></li><li class="navelem"><a class="el" href="dir_46be606fe712097f815c5f164a99c858.html">modules</a></li><li class="navelem"><a class="el" href="_l_e_d_module_8hpp.html">LEDModule.hpp</a></li>
-    <li class="footer">Generated on Wed Jul 15 2020 00:22:03 for GT RoboCup SSL by
+    <li class="footer">Generated on Sat Jul 18 2020 13:48:14 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

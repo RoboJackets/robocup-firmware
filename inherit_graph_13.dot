@@ -3,5 +3,5 @@ digraph "Graphical Class Hierarchy"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node0 [label="KickerCommand",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_kicker_command.html",tooltip="Contains data on whether to kick, chip, kick on breakbeam etc Contains data on whether to kick or chi..."];
+  Node0 [label="IOExpanderDigitalInOut",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_o_expander_digital_in_out.html",tooltip="A DigitalInOut class meant to replicate basic functionality of the mBed DigitalOut and DigitalIn on t..."];
 }

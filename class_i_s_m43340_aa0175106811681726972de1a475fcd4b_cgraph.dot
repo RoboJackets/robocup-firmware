@@ -3,11 +3,11 @@ digraph "ISM43340::sendCommand"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node59 [label="ISM43340::sendCommand",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
-  Node59 -> Node60 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node60 [label="ISM43340::sendCommand",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_s_m43340.html#a55f5fa5d826f8056d5f7d43f43a55691",tooltip="Base send command function. "];
-  Node60 -> Node61 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node61 [label="ISM43340::writeToSpi",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_s_m43340.html#a6f39b288c0a4ecde7c0bbf5bf73302ad",tooltip="Write the byte array to the spi bus. "];
-  Node60 -> Node62 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node62 [label="ISM43340::readFromSpi",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_s_m43340.html#ae3999e5b5745b81fbc6e10992bf0cd5c",tooltip="Blocking read from the SPI bus. "];
+  Node61 [label="ISM43340::sendCommand",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node61 -> Node62 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node62 [label="ISM43340::sendCommand",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_s_m43340.html#a55f5fa5d826f8056d5f7d43f43a55691",tooltip="Base send command function. "];
+  Node62 -> Node63 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node63 [label="ISM43340::writeToSpi",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_s_m43340.html#a6f39b288c0a4ecde7c0bbf5bf73302ad",tooltip="Write the byte array to the spi bus. "];
+  Node62 -> Node64 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node64 [label="ISM43340::readFromSpi",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_s_m43340.html#ae3999e5b5745b81fbc6e10992bf0cd5c",tooltip="Blocking read from the SPI bus. "];
 }

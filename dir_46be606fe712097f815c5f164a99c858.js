@@ -15,9 +15,7 @@ var dir_46be606fe712097f815c5f164a99c858 =
     [ "KickerModule.hpp", "_kicker_module_8hpp.html", [
       [ "KickerModule", "class_kicker_module.html", "class_kicker_module" ]
     ] ],
-    [ "LEDModule.hpp", "_l_e_d_module_8hpp.html", [
-      [ "LEDModule", "class_l_e_d_module.html", "class_l_e_d_module" ]
-    ] ],
+    [ "LEDModule.hpp", "_l_e_d_module_8hpp.html", "_l_e_d_module_8hpp" ],
     [ "MotionControlModule.hpp", "_motion_control_module_8hpp.html", [
       [ "MotionControlModule", "class_motion_control_module.html", "class_motion_control_module" ]
     ] ],

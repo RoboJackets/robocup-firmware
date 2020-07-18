@@ -2,11 +2,11 @@ digraph "RadioLink"
 {
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
-  Node1 [label="{RadioLink\n||+ RadioLink()\l+ init()\l+ send()\l+ receive()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node1 [label="{RadioLink\n|- radioConnected\l- radioInitialized\l- cyclesWithoutPackets\l|+ RadioLink()\l+ init()\l+ send()\l+ receive()\l+ isRadioConnected()\l+ isRadioInitialized()\l+ hasSoccerTimedOut()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
   Node2 -> Node1 [color="grey25",fontsize="10",style="solid",label=" -radio" ,arrowhead="odiamond",fontname="Helvetica"];
   Node2 [label="{std::unique_ptr\< Generic\lRadio \>\n||+ operator-\>()\l}",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
   Node3 -> Node2 [color="grey25",fontsize="10",style="solid",label=" +ptr" ,arrowhead="odiamond",fontname="Helvetica"];
-  Node3 [label="{GenericRadio\n||+ send()\l+ receive()\l+ isAvailable()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_generic_radio.html"];
+  Node3 [label="{GenericRadio\n||+ send()\l+ receive()\l+ isAvailable()\l+ isConnected()\l+ isInitialized()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_generic_radio.html"];
   Node4 -> Node2 [dir="back",color="orange",fontsize="10",style="solid",label=" \< GenericRadio \>" ,fontname="Helvetica"];
   Node4 [label="{std::unique_ptr\< T \>\n||+ operator-\>()\l}",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip="STL class. "];
   Node5 -> Node4 [color="grey25",fontsize="10",style="solid",label=" +ptr" ,arrowhead="odiamond",fontname="Helvetica"];
