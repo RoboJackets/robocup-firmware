@@ -55,8 +55,6 @@ void LEDModule::entry() {
             for (int i = 0; i < 5; i++) {
                 errors |= (1 << motors[i]);
             }
-
-            setColor(0x0000FF, 0xFFFFFF, 0xFFFFFF);
         } else {
             for (int i = 0; i < 5; i++) {
                 errors |= (fpgaLock->motorHasErrors[i] << motors[i]);
@@ -167,6 +165,10 @@ void LEDModule::setColor(uint32_t led0, uint32_t led1, uint32_t led2) {
 
     std::vector<uint8_t> data;
 
+    led0 = RGB_TO_BGR(led0);
+    led1 = RGB_TO_BGR(led1);
+    led2 = RGB_TO_BGR(led2);
+
     data.push_back(0x00);
     data.push_back(0x00);
     data.push_back(0x00);
@@ -226,6 +228,13 @@ void LEDModule::displayErrors() {
         // Increment frame counters for lights on/off
         lightsOn ? framesOnCounter++ : framesOffCounter++;
     }
+}
+
+uint32_t LEDModule::RGB_TO_BGR(uint32_t rgb) {
+    uint32_t r = rgb & 0xFF0000;
+    uint32_t g = rgb & 0x00FF00;
+    uint32_t b = rgb & 0x0000FF;
+    return ((b << 16) | g | (r >> 16));
 }
 
 void LEDModule::setError(const Error e, bool toggle) {
