@@ -55,8 +55,6 @@ void LEDModule::entry() {
             for (int i = 0; i < 5; i++) {
                 errors |= (1 << motors[i]);
             }
-
-            setColor(0x0000FF, 0xFFFFFF, 0xFFFFFF);
         } else {
             for (int i = 0; i < 5; i++) {
                 errors |= (fpgaLock->motorHasErrors[i] << motors[i]);
@@ -172,20 +170,21 @@ void LEDModule::setColor(uint32_t led0, uint32_t led1, uint32_t led2) {
     data.push_back(0x00);
     data.push_back(0x00);
 
+    // LEDs values are converted from RGB to BGR
     data.push_back(brightness);
-    data.push_back((led0 >> 16) & 0xFF);
-    data.push_back((led0 >> 8) & 0xFF);
     data.push_back((led0 >> 0) & 0xFF);
+    data.push_back((led0 >> 8) & 0xFF);
+    data.push_back((led0 >> 16) & 0xFF);
     
     data.push_back(brightness);
-    data.push_back((led1 >> 16) & 0xFF);
-    data.push_back((led1 >> 8) & 0xFF);
     data.push_back((led1 >> 0) & 0xFF);
+    data.push_back((led1 >> 8) & 0xFF);
+    data.push_back((led1 >> 16) & 0xFF);
 
     data.push_back(brightness);
-    data.push_back((led2 >> 16) & 0xFF);
-    data.push_back((led2 >> 8) & 0xFF);
     data.push_back((led2 >> 0) & 0xFF);
+    data.push_back((led2 >> 8) & 0xFF);
+    data.push_back((led2 >> 16) & 0xFF);
     
     data.push_back(0xFF);
     data.push_back(0xFF);

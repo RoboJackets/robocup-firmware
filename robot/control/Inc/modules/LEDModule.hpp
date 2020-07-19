@@ -15,38 +15,38 @@
 
 
 /**
- * Constants for DotStar LEDs (BGR)
+ * Constants for DotStar LEDs (RGB)
  * First LED in error display format: Category / Level / Info
  */
 enum CategoryColors : uint32_t {
-    RADIO_ERROR = 0x0080FF,  // ORANGE
-    FPGA_ERROR = 0x00FFFF,    // YELLOW
+    RADIO_ERROR = 0xFF8000,  // ORANGE
+    FPGA_ERROR = 0xFFFF00,    // YELLOW
     KICKER_ERROR = 0x00FF00, // GREEN
-    IMU_ERROR = 0xFF0000   // BLUE
+    IMU_ERROR = 0x0000FF   // BLUE
 };
 
 /**
- * Constants for DotStar LEDs (BGR)
+ * Constants for DotStar LEDs (RGB)
  * Second LED in error display format: Category / Level / Info
  */
 enum LevelColors : uint32_t {
-    FATAL = 0x0000FF, // RED
-    ERR = 0x0080FF, // ORANGE
+    FATAL = 0xFF0000, // RED
+    ERR = 0xFF8000, // ORANGE
     WARN = 0xFFFF00,  // YELLOW
-    INFO = 0xFF0000  // BLUE
+    INFO = 0x0000FF  // BLUE
 };
 
 /**
- * Constants for DotStar LEDs (BGR)
+ * Constants for DotStar LEDs (RGB)
  * Third LED in error display format: Category / Level / Info
  */
 enum InfoColors : uint32_t {
     // GENERAL
-    BOOT_FAIL = 0x0000FF,  // RED
+    BOOT_FAIL = 0xFF0000,  // RED
 
     // RADIO
-    RADIO_CONN_WIFI_FAIL = 0x0080FF,  // ORANGE
-    RADIO_CONN_SOCCER_FAIL = 0x00FFFF // YELLOW
+    RADIO_CONN_WIFI_FAIL = 0xFF8000,  // ORANGE
+    RADIO_CONN_SOCCER_FAIL = 0xFFFF00 // YELLOW
 };
 
 /**
@@ -153,20 +153,11 @@ private:
     /**
      * Sets the color of the three dot stars
      *
-     * @param led0 0..7 red
-     *             8..15 green
-     *             16..23 blue
-     *             24..31 don't care
-     * 
-     * @param led1 0..7 red
-     *             8..15 green
-     *             16..23 blue
-     *             24..31 don't care
+     * Internally converts RGB (more readable and practical) to BGR (for dotStars)
      *
-     * @param led2 0..7 red
-     *             8..15 green
-     *             16..23 blue
-     *             24..31 don't care
+     * @param led0 Color in RGB format
+     * @param led1 Color in RGB format
+     * @param led2 Color in RGB format
      */
     void setColor(uint32_t led0, uint32_t led1, uint32_t led2);
 
