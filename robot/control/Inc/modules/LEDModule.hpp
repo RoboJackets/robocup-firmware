@@ -171,11 +171,6 @@ private:
      */
     void setError(const Error e, bool toggle);
 
-    /**
-     * Convert RGB to BGR for dotStars
-     */
-    uint32_t RGB_TO_BGR(uint32_t rgb);
-
     const static uint16_t IOExpanderErrorLEDMask = 0xFF00;
 
     LockedStruct<MCP23017>& ioExpander;

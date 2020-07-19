@@ -165,29 +165,26 @@ void LEDModule::setColor(uint32_t led0, uint32_t led1, uint32_t led2) {
 
     std::vector<uint8_t> data;
 
-    led0 = RGB_TO_BGR(led0);
-    led1 = RGB_TO_BGR(led1);
-    led2 = RGB_TO_BGR(led2);
-
     data.push_back(0x00);
     data.push_back(0x00);
     data.push_back(0x00);
     data.push_back(0x00);
 
+    // LEDs values are converted from RGB to BGR
     data.push_back(brightness);
-    data.push_back((led0 >> 16) & 0xFF);
-    data.push_back((led0 >> 8) & 0xFF);
     data.push_back((led0 >> 0) & 0xFF);
+    data.push_back((led0 >> 8) & 0xFF);
+    data.push_back((led0 >> 16) & 0xFF);
     
     data.push_back(brightness);
-    data.push_back((led1 >> 16) & 0xFF);
-    data.push_back((led1 >> 8) & 0xFF);
     data.push_back((led1 >> 0) & 0xFF);
+    data.push_back((led1 >> 8) & 0xFF);
+    data.push_back((led1 >> 16) & 0xFF);
 
     data.push_back(brightness);
-    data.push_back((led2 >> 16) & 0xFF);
-    data.push_back((led2 >> 8) & 0xFF);
     data.push_back((led2 >> 0) & 0xFF);
+    data.push_back((led2 >> 8) & 0xFF);
+    data.push_back((led2 >> 16) & 0xFF);
     
     data.push_back(0xFF);
     data.push_back(0xFF);
@@ -228,13 +225,6 @@ void LEDModule::displayErrors() {
         // Increment frame counters for lights on/off
         lightsOn ? framesOnCounter++ : framesOffCounter++;
     }
-}
-
-uint32_t LEDModule::RGB_TO_BGR(uint32_t rgb) {
-    uint32_t r = rgb & 0xFF0000;
-    uint32_t g = rgb & 0x00FF00;
-    uint32_t b = rgb & 0x0000FF;
-    return ((b << 16) | g | (r >> 16));
 }
 
 void LEDModule::setError(const Error e, bool toggle) {
