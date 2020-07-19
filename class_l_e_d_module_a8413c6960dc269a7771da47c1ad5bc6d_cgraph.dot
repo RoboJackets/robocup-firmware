@@ -11,13 +11,12 @@ digraph "LEDModule::entry"
   Node7 -> Node10 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node10 [label="LEDModule::setError",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_l_e_d_module.html#aaea3e4a443bfbb86ba711d322e056e4f",tooltip="Toggle error in errToggles. "];
   Node7 -> Node11 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node11 [label="LEDModule::setColor",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_l_e_d_module.html#aa6cf1a1b6a6233e4bb5395a466bbc2d7",tooltip="Sets the color of the three dot stars. "];
-  Node11 -> Node8 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node11 [label="LEDModule::radioInitialized",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_l_e_d_module.html#a00403b436a96603d807aec0ca88899e1",tooltip="Toggles LEDs to signal radio initialization. "];
   Node7 -> Node12 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node12 [label="LEDModule::radioInitialized",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_l_e_d_module.html#a00403b436a96603d807aec0ca88899e1",tooltip="Toggles LEDs to signal radio initialization. "];
+  Node12 [label="LEDModule::kickerInitialized",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_l_e_d_module.html#a257cc53a6966c74659f8b5e1697960a7",tooltip="Toggles LEDs to signal fpga initialization. "];
   Node7 -> Node13 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node13 [label="LEDModule::kickerInitialized",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_l_e_d_module.html#a257cc53a6966c74659f8b5e1697960a7",tooltip="Toggles LEDs to signal fpga initialization. "];
-  Node7 -> Node14 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node14 [label="LEDModule::displayErrors",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_l_e_d_module.html#ae0c06c926b1b4fec093733a0232896cd",tooltip="Cycle through error color codes to display. "];
-  Node14 -> Node11 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node13 [label="LEDModule::displayErrors",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_l_e_d_module.html#ae0c06c926b1b4fec093733a0232896cd",tooltip="Cycle through error color codes to display. "];
+  Node13 -> Node14 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node14 [label="LEDModule::setColor",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_l_e_d_module.html#aa6cf1a1b6a6233e4bb5395a466bbc2d7",tooltip="Sets the color of the three dot stars. "];
+  Node14 -> Node8 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
 }

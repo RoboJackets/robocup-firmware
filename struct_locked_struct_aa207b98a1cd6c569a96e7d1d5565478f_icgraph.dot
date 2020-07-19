@@ -25,7 +25,6 @@ digraph "LockedStruct::lock"
   Node12 -> Node22 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node22 [label="LEDModule::setColor",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_l_e_d_module.html#aa6cf1a1b6a6233e4bb5395a466bbc2d7",tooltip="Sets the color of the three dot stars. "];
   Node22 -> Node20 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node22 -> Node21 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node22 -> Node23 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node23 [label="LEDModule::displayErrors",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_l_e_d_module.html#ae0c06c926b1b4fec093733a0232896cd",tooltip="Cycle through error color codes to display. "];
   Node23 -> Node21 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
