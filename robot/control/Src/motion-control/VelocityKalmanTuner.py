@@ -1,4 +1,6 @@
 import sys
+import os
+import re
 
 import numpy as np
 from PyQt5.QtWidgets import QApplication
@@ -159,6 +161,7 @@ class Main(QApplication):
         self.window = UIMainWindow()
         self.populate_gains()
         self.window.sim_bttn.clicked.connect(self.simulate)
+        self.window.gen_bttn.clicked.connect(self.generate_code)
         self.window.save_action.triggered.connect(self.save)
         self.window.load_action.triggered.connect(self.load)
         self.window.filter_type_select.setCurrentText("Steady State" if self.kalmanFilter.steady_state else "Regular")
@@ -207,7 +210,6 @@ class Main(QApplication):
     def set_filter_type(self, new_option):
         self.kalmanFilter.steady_state = (new_option == "Steady State")
 
-    # @profile(immediate=True)
     def simulate(self):
         for var_list in self.lists:
             var_list.clear()
@@ -237,6 +239,51 @@ class Main(QApplication):
             P, A, B, H, K, Q, R = [eval(gain.split(': ')[1]) for gain in gains_string.strip().split('\n')]
             self.kalmanFilter.set_gains(P, A, B, H, K, Q, R)
             self.populate_gains()
+
+    def generate_code(self):
+        hpp_path = os.path.dirname(__file__).split("/")
+        hpp_path[-2] = "Inc"
+        hpp_path = "/".join(hpp_path)
+        cpp_path = os.path.dirname(__file__) + "/RobotEstimator.cpp"
+
+        with open(cpp_path, 'r+') as file:
+            cpp_code = file.read()
+
+            q_start = cpp_code.find("Q << ") + 5
+            q_end = q_start + cpp_code[q_start:].find(";")
+            q_str = ""
+            for row in self.kalmanFilter.Q.tolist():
+                q_str += " " * 9
+                for element in row:
+                    q_str += str(element) + ", "
+                q_str += "\n"
+            q_str = q_str.strip(' ,\n')
+            cpp_code = cpp_code[:q_start] + q_str + cpp_code[q_end:]
+
+            r_start = cpp_code.find("R << ") + 5
+            r_end = r_start + cpp_code[r_start:].find(";")
+            r_str = ""
+            for row in self.kalmanFilter.R.tolist():
+                r_str += " " * 9
+                for element in row:
+                    r_str += str(element) + ", "
+                r_str += "\n"
+            r_str = r_str.strip(' ,\n')
+            cpp_code = cpp_code[:r_start] + r_str + cpp_code[r_end:]
+            
+            k_start = cpp_code.find("K << ")+5
+            k_end = k_start + cpp_code[k_start:].find(";")
+            k_str = ""
+            for row in self.kalmanFilter.K.tolist():
+                k_str += " " * 9
+                for element in row:
+                    k_str += str(element) + ", "
+                k_str += "\n"
+            k_str = k_str.strip(' ,\n')
+            cpp_code = cpp_code[:k_start] + k_str + cpp_code[k_end:]
+
+            file.truncate(0)
+            file.write(cpp_code)
 
 class KalmanFilter(object):
     def __init__(self, x_hat_init, init_covariance, steady_state=False):
@@ -414,6 +461,7 @@ class KalmanFilter(object):
         }
 
     def set_gains(self, P, A, B, H, K, Q, R):
+        self.P = np.array(P).reshape((self.num_states, self.num_states))
         self.A = np.array(A).reshape((self.num_states, self.num_states))
         self.B = np.array(B).reshape((self.num_states, self.num_inputs))
         self.H = np.array(H).reshape((self.num_outputs, self.num_states))
