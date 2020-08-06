@@ -1,9 +1,14 @@
+import sys
+
 import numpy as np
+from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import (QGridLayout, QMainWindow, QWidget, QVBoxLayout, QGroupBox, QLabel, QLineEdit, QPushButton,
+                             QHBoxLayout, QAction, QFileDialog, QComboBox)
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT
 import matplotlib.pyplot as plt
-from matplotlib.widgets import TextBox
 from functools import partial
-import matplotlib.gridspec as gridspec
 import scipy.linalg
+
 
 '''
 Credit: https://www.bzarg.com/p/how-a-kalman-filter-works-in-pictures/
@@ -12,96 +17,181 @@ https://www.mathworks.com/videos/understanding-kalman-filters-part-4-optimal-sta
 '''
 
 
-class Application(object):
-    def __init__(self, kalmanFilter, verbose=False):
-        self.fig = plt.figure('Velocity Kalman Filter Tuner', figsize=(7.2, 6.4))
-        self.gs = self.fig.add_gridspec(3, 2, hspace=0.5)
-        self.kalmanFilter = kalmanFilter
-        self.verbose = verbose
-        self.vx_ax = self.fig.add_subplot(self.gs[0, 0])
+class UIMainWindow(QMainWindow):
+    """Main Window for Application"""
+
+    def __init__(self):
+        super(UIMainWindow, self).__init__()
+        self.setWindowTitle("Velocity Kalman Filter Tuner")
+        self.resize(self.screen().size()*2/3)
+        self.central_widget = QWidget(self)
+        self.master_grid_layout = QGridLayout()
+
+        self.plot_box = QGroupBox(self.central_widget)
+        self.plot_box_layout = QVBoxLayout(self.plot_box)
+        self.plot_fig = plt.figure()
+        self.plot_canvas = FigureCanvasQTAgg(self.plot_fig)
+        self.vx_ax = self.plot_fig.add_subplot(3, 1, 1)
+        self.vy_ax = self.plot_fig.add_subplot(3, 1, 2)
+        self.omega_ax = self.plot_fig.add_subplot(3, 1, 3)
+        self.plot_axs = [self.vx_ax, self.vy_ax, self.omega_ax]
+
         self.vx_ax.set_title('X velocity over Time')
         self.vx_ax.set_xlabel('t')
         self.vx_ax.set_ylabel('vx')
-        self.vx_ax.spines['top'].set_visible(False)
-        self.vx_ax.spines['right'].set_visible(False)
 
-        # Second Row: vy plot and R gains
-        self.vy_ax = self.fig.add_subplot(self.gs[1, 0])
         self.vy_ax.set_title('Y velocity over Time')
         self.vy_ax.set_xlabel('t')
         self.vy_ax.set_ylabel('vy')
-        self.vy_ax.spines['top'].set_visible(False)
-        self.vy_ax.spines['right'].set_visible(False)
 
-        # Third Row: Omega plot and buttons
-        self.omega_ax = self.fig.add_subplot(self.gs[2, 0])
         self.omega_ax.set_title('Omega vs Time')
         self.omega_ax.set_xlabel('t')
         self.omega_ax.set_ylabel('\u03C9')  # omega character
-        self.omega_ax.spines['top'].set_visible(False)
-        self.omega_ax.spines['right'].set_visible(False)
 
-        self.panel_ax = self.fig.add_subplot(self.gs[:, 1])
-        self.panel_ax.axis('off')
-        self.inner_gs = gridspec.GridSpecFromSubplotSpec(3, 1, self.panel_ax, height_ratios=[3, 5, 1])
+        for ax in self.plot_axs:
+            ax.spines['top'].set_visible(False)
+            ax.spines['right'].set_visible(False)
 
-        self.Q_ax = self.fig.add_subplot(self.inner_gs[0, 0])
-        self.Q_ax.axis('off')
-        self.Q_gs = gridspec.GridSpecFromSubplotSpec(3, 1, self.Q_ax, hspace=0)
-        self.Q_axs = [self.fig.add_subplot(self.Q_gs[i, 0]) for i in range(0, 3)]
-        self.Q_textboxes = [TextBox(ax, "", str(self.kalmanFilter.Q.tolist()[i])) for i, ax in enumerate(self.Q_axs)]
+        self.plot_toolbar = NavigationToolbar2QT(self.plot_canvas, self)
+        self.plot_box_layout.addWidget(self.plot_canvas)
+        self.plot_box_layout.addWidget(self.plot_toolbar)
 
-        self.R_ax = self.fig.add_subplot(self.inner_gs[1, 0])
-        self.R_ax.axis('off')
-        self.R_gs = gridspec.GridSpecFromSubplotSpec(5, 1, self.R_ax, hspace=0)
-        self.R_axs = [self.fig.add_subplot(self.R_gs[i, 0]) for i in range(0, 5)]
-        self.R_textboxes = [TextBox(ax, "", str(self.kalmanFilter.R.tolist()[i])) for i, ax in
-                            enumerate(self.R_axs)]
+        self.right_box = QGroupBox(self.central_widget, title="Gains")
+        self.right_box_layout = QVBoxLayout(self.right_box)
 
-        for i, textbox in enumerate(self.Q_textboxes):
-            textbox.on_text_change(partial(self.Q_array_change, row=i))
+        self.settings_box = QGroupBox(self.central_widget)
+        self.settings_box_layout = QVBoxLayout(self.settings_box)
+        self.filter_type_box = QGroupBox(self.central_widget)
+        self.filter_type_box_layout = QHBoxLayout(self.filter_type_box)
+        self.filter_type_label = QLabel("Kalman Filter Type: ")
+        self.filter_type_select = QComboBox(self.central_widget)
+        self.filter_type_select.addItem("Regular")
+        self.filter_type_select.addItem("Steady State")
+        self.filter_type_box_layout.addWidget(self.filter_type_label)
+        self.filter_type_box_layout.addWidget(self.filter_type_select)
+        self.filter_type_box.setFlat(True)
 
-        for i, textbox in enumerate(self.R_textboxes):
-            textbox.on_text_change(partial(self.R_array_change, row=i))
+        self.settings_box_layout.addWidget(self.filter_type_box)
+        self.settings_box.setFlat(True)
 
-        self.Q_axs[0].set_title("Q gains")
-        self.R_axs[0].set_title("R gains")
+        self.Q_box = QGroupBox(self.central_widget)
+        self.Q_box_layout = QGridLayout(self.Q_box)
+        self.Q_label = QLabel("Q Gains")
+        self.Q_box_layout.addWidget(self.Q_label, 0, 0, 1, 1)
+        self.Q_textboxes = []
+        for i in range(1, 4):
+            row = []
+            for j in range(0, 3):
+                textbox = QLineEdit(self.central_widget)
+                row.append(textbox)
+                self.Q_box_layout.addWidget(textbox, i, j, 1, 1)
+            self.Q_textboxes.append(row)
+        self.Q_box.setFlat(True)
 
-        self.button_ax = self.fig.add_subplot(self.inner_gs[2, 0])
-        self.button_ax.axis('off')
-        self.button_gs = gridspec.GridSpecFromSubplotSpec(1, 2, self.button_ax)
+        self.R_box = QGroupBox(self.central_widget)
+        self.R_box_layout = QGridLayout(self.R_box)
+        self.R_label = QLabel("R Gains")
+        self.R_box_layout.addWidget(self.R_label, 0, 0, 1, 1)
+        self.R_textboxes = []
+        for i in range(1, 6):
+            row = []
+            for j in range(0, 5):
+                textbox = QLineEdit(self.central_widget)
+                row.append(textbox)
+                self.R_box_layout.addWidget(textbox, i, j, 1, 1)
+            self.R_textboxes.append(row)
+        self.R_box.setFlat(True)
 
-        self.sim_ax = self.fig.add_subplot(self.button_gs[0, 0])
-        self.simulate_btn = plt.Button(self.sim_ax, 'Simulate')
-        self.simulate_btn.on_clicked(self.simulate)
+        self.buttons_box = QGroupBox(self.central_widget)
+        self.buttons_box_layout = QHBoxLayout(self.buttons_box)
+        self.sim_bttn = QPushButton("Simulate")
+        self.gen_bttn = QPushButton("Generate C++ Code")
+        self.buttons_box_layout.addWidget(self.sim_bttn)
+        self.buttons_box_layout.addWidget(self.gen_bttn)
+        self.buttons_box.setFlat(True)
 
-        self.code_ax = self.fig.add_subplot(self.button_gs[0, 1])
-        self.generate_code_btn = plt.Button(self.code_ax, 'Generate\nC++ Code')
+        self.right_box_layout.addWidget(self.filter_type_box)
+        self.right_box_layout.addWidget(self.Q_box)
+        self.right_box_layout.addWidget(self.R_box)
+        self.right_box_layout.addWidget(self.buttons_box)
 
+        self.master_grid_layout.addWidget(self.plot_box, 0, 0, 1, 1)
+        self.master_grid_layout.addWidget(self.right_box, 0, 1, 1, 1)
+        self.master_grid_layout.setColumnStretch(0, 2)
+        self.master_grid_layout.setColumnStretch(1, 1)
+
+        self.setCentralWidget(self.central_widget)
+        self.central_widget.setLayout(self.master_grid_layout)
+
+        self.menu_bar = self.menuBar()
+        self.save_action = QAction('Save Gains', self)
+        self.save_action.setShortcut('Ctrl+S')
+        self.load_action = QAction('Import Gains', self)
+        self.load_action.setShortcut('Ctrl+I')
+        self.file_menu = self.menu_bar.addMenu('File')
+        self.file_menu.addAction(self.save_action)
+        self.file_menu.addAction(self.load_action)
+
+
+    def set_plot_data(self, ts, vxs, vxs_obs, vys, vys_obs, omegas, omegas_obs):
+        for ax in self.plot_axs:
+            ax.lines.clear()
+
+        self.vx_ax.plot(ts, vxs, '-', c='tab:blue')
+        self.vy_ax.plot(ts, vys, '-', c='tab:blue')
+        self.omega_ax.plot(ts, omegas, '-', c='tab:blue')
+
+        self.vx_ax.plot(ts, vxs_obs, '-', c='tab:green')
+        self.vy_ax.plot(ts, vys_obs, '-', c='tab:green')
+        self.omega_ax.plot(ts, omegas_obs, '-', c='tab:green')
+
+        for ax in self.plot_axs:
+            ax.relim()
+            ax.legend(['x_hat', 'x'])
+
+        self.plot_canvas.draw()
+
+class Main(QApplication):
+    def __init__(self, kalmanFilter, verbose=False):
+        super(Main, self).__init__([])
+        self.kalmanFilter = kalmanFilter
+        self.verbose = verbose
+        self.window = UIMainWindow()
+        self.populate_gains()
+        self.window.sim_bttn.clicked.connect(self.simulate)
+        self.window.save_action.triggered.connect(self.save)
+        self.window.load_action.triggered.connect(self.load)
+        self.window.filter_type_select.setCurrentText("Steady State" if self.kalmanFilter.steady_state else "Regular")
+        self.window.filter_type_select.currentTextChanged.connect(self.set_filter_type)
+        self.window.show()
         self.ts, self.vxs, self.vys, self.omegas = np.arange(0, 10, 0.01), [], [], []
         self.vxs_obs, self.vys_obs, self.omegas_obs = [], [], []
         self.lists = [self.vxs, self.vys, self.omegas, self.vxs_obs, self.vys_obs, self.omegas_obs]
-        self.axs = [self.vx_ax, self.vy_ax, self.omega_ax]
 
-        self.simulate(None)
-        self.write()
-        plt.show()
+        self.simulate()
 
-    def Q_array_change(self, _, row):
+    def populate_gains(self):
+        for r, row in enumerate(self.kalmanFilter.Q):
+            for c, element in enumerate(row):
+                self.window.Q_textboxes[r][c].setText(str(self.kalmanFilter.Q[r,c]))
+                self.window.Q_textboxes[r][c].textChanged.connect(partial(self.Q_array_change, r, c))
+
+        for r, row in enumerate(self.kalmanFilter.R):
+            for c, element in enumerate(row):
+                self.window.R_textboxes[r][c].setText(str(self.kalmanFilter.R[r,c]))
+                self.window.R_textboxes[r][c].textChanged.connect(partial(self.R_array_change, r, c))
+
+    def Q_array_change(self, row, col):
         try:
-            self.kalmanFilter.Q[row] = eval(self.Q_textboxes[row].text)
-        except SyntaxError:
-            print("Make sure each array element is separated by a comma and starts/ends with square brackets")
-        except ValueError:
-            print("Make sure that each element is a valid number")
+            self.kalmanFilter.Q[row, col] = eval(self.window.Q_textboxes[row][col].text())
+        except Exception:
+            print("Make sure that element {},{} of the Q gains matrix is a valid number!".format(row, col))
 
-    def R_array_change(self, _, row):
+    def R_array_change(self, row, col):
         try:
-            self.kalmanFilter.R[row] = eval(self.R_textboxes[row].text)
-        except SyntaxError:
-            print("Make sure each array element is separated by a comma and starts/ends with square brackets")
-        except ValueError:
-            print("Make sure that each element is a valid number")
+            self.kalmanFilter.R[row, col] = eval(self.window.R_textboxes[row][col].text())
+        except Exception:
+            print("Make sure that element {},{} of the R gains matrix is a valid number!".format(row, col))
 
     def update(self):
         t, x_hat, x = self.kalmanFilter.step(0.005, self.verbose, changeable_only=True)
@@ -114,11 +204,11 @@ class Application(object):
         self.vys_obs.append(vy_obs)
         self.omegas_obs.append(omega_obs)
 
-    # @profile(immediate=True)
-    def simulate(self, _):
-        for ax in self.axs:
-            ax.lines.clear()
+    def set_filter_type(self, new_option):
+        self.kalmanFilter.steady_state = (new_option == "Steady State")
 
+    # @profile(immediate=True)
+    def simulate(self):
         for var_list in self.lists:
             var_list.clear()
 
@@ -126,29 +216,27 @@ class Application(object):
 
         for _ in self.ts:
             self.update()
+        self.window.set_plot_data(self.ts,
+                                  self.vxs, self.vxs_obs,
+                                  self.vys, self.vys_obs,
+                                  self.omegas, self.omegas_obs)
+        self.window.plot_fig.tight_layout()
 
-        self.vx_ax.plot(self.ts, self.vxs, '-', c='tab:blue')
-        self.vy_ax.plot(self.ts, self.vys, '-', c='tab:blue')
-        self.omega_ax.plot(self.ts, self.omegas, '-', c='tab:blue')
+    def save(self):
+        file_dialog = QFileDialog()
+        file_name = file_dialog.getSaveFileName(self.window.central_widget, "Save Gains")[0] + '.txt'
+        with open(file_name, 'w') as file:
+            for key, pair in self.kalmanFilter.gains().items():
+                file.write(str(key) + ": " + str(pair) + "\n")
 
-        self.vx_ax.plot(self.ts, self.vxs_obs, '-', c='tab:green')
-        self.vy_ax.plot(self.ts, self.vys_obs, '-', c='tab:green')
-        self.omega_ax.plot(self.ts, self.omegas_obs, '-', c='tab:green')
-
-        for ax in self.axs:
-            ax.relim()
-            ax.legend(['x_hat', 'x'])
-
-    def write(self):
-        code = None
-        with open('RobotEstimator.cpp', 'r') as file:
-            code = file.read()
-
-        print(code)
-
-        #with open('RobotEstimator.cpp', 'w') as file:
-        #   file.write()
-
+    def load(self):
+        file_dialog = QFileDialog()
+        file_name = file_dialog.getOpenFileName(self.window.central_widget, "Import Gains")[0]
+        with open(file_name, 'r') as file:
+            gains_string = file.read()
+            P, A, B, H, K, Q, R = [eval(gain.split(': ')[1]) for gain in gains_string.strip().split('\n')]
+            self.kalmanFilter.set_gains(P, A, B, H, K, Q, R)
+            self.populate_gains()
 
 class KalmanFilter(object):
     def __init__(self, x_hat_init, init_covariance, steady_state=False):
@@ -314,9 +402,28 @@ class KalmanFilter(object):
                 'R': self.R
             }
 
+    def gains(self):
+        return {
+            'P': self.P,
+            'A': self.A,
+            'B': self.B,
+            'H': self.H,
+            'K': self.K,
+            'Q': self.Q,
+            'R': self.R
+        }
+
+    def set_gains(self, P, A, B, H, K, Q, R):
+        self.A = np.array(A).reshape((self.num_states, self.num_states))
+        self.B = np.array(B).reshape((self.num_states, self.num_inputs))
+        self.H = np.array(H).reshape((self.num_outputs, self.num_states))
+        self.K = np.array(K).reshape((self.num_states, self.num_outputs))
+        self.Q = np.array(Q).reshape((self.num_states, self.num_states))
+        self.R = np.array(R).reshape((self.num_outputs, self.num_outputs))
 
 if __name__ == '__main__':
-    app = Application(kalmanFilter=KalmanFilter(x_hat_init=np.array([1, 0, 0]).reshape((3, 1)),
+    m = Main(kalmanFilter=KalmanFilter(x_hat_init=np.array([1, 0, 0]).reshape((3, 1)),
                                                 init_covariance=0.1,
-                                                steady_state=False),
+                                                steady_state=True),
                       verbose=False)
+    sys.exit(m.exec_())
