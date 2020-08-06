@@ -225,65 +225,45 @@ class Main(QApplication):
         self.window.plot_fig.tight_layout()
 
     def save(self):
-        file_dialog = QFileDialog()
-        file_name = file_dialog.getSaveFileName(self.window.central_widget, "Save Gains")[0] + '.txt'
-        with open(file_name, 'w') as file:
-            for key, pair in self.kalmanFilter.gains().items():
-                file.write(str(key) + ": " + str(pair) + "\n")
+        file_name = QFileDialog.getSaveFileName(self.window.central_widget, "Save Gains", '', "Text File (*.txt)")[0]
+        if file_name:
+            with open(file_name, 'w') as file:
+                for key, pair in self.kalmanFilter.gains().items():
+                    file.write(str(key) + ": " + str(pair) + "\n")
 
     def load(self):
-        file_dialog = QFileDialog()
-        file_name = file_dialog.getOpenFileName(self.window.central_widget, "Import Gains")[0]
-        with open(file_name, 'r') as file:
-            gains_string = file.read()
-            P, A, B, H, K, Q, R = [eval(gain.split(': ')[1]) for gain in gains_string.strip().split('\n')]
-            self.kalmanFilter.set_gains(P, A, B, H, K, Q, R)
-            self.populate_gains()
+        file_name = QFileDialog.getOpenFileName(self.window.central_widget, "Import Gains", '', "Text File (*.txt)")[0]
+        if file_name:
+            with open(file_name, 'r') as file:
+                gains_string = file.read()
+                P, A, B, H, K, Q, R = [eval(gain.split(': ')[1]) for gain in gains_string.strip().split('\n')]
+                self.kalmanFilter.set_gains(P, A, B, H, K, Q, R)
+                self.populate_gains()
+
+    def replace_gain(self, cpp_code, matrix_name, matrix):
+        start = cpp_code.find("{} << ".format(matrix_name)) + 5
+        end = start + cpp_code[start:].find(";")
+        string = ""
+        for row in matrix:
+            string += " " * 9
+            for element in row:
+                string += str(element) + ", "
+            string += "\n"
+        string = string.strip(' ,\n')
+        cpp_code = cpp_code[:start] + string + cpp_code[end:]
+        return cpp_code
 
     def generate_code(self):
-        hpp_path = os.path.dirname(__file__).split("/")
-        hpp_path[-2] = "Inc"
-        hpp_path = "/".join(hpp_path)
-        cpp_path = os.path.dirname(__file__) + "/RobotEstimator.cpp"
+        file_name = QFileDialog.getSaveFileName(self.window.central_widget, "Export C++ Code", '', "C++ (*.cpp)")[0]
+        if file_name:
+            with open(file_name, 'r+') as file:
+                cpp_code = file.read()
+                cpp_code = self.replace_gain(cpp_code, matrix_name="Q", matrix=self.kalmanFilter.Q.tolist())
+                cpp_code = self.replace_gain(cpp_code, matrix_name="R", matrix=self.kalmanFilter.R.tolist())
+                cpp_code = self.replace_gain(cpp_code, matrix_name="K", matrix=self.kalmanFilter.K.tolist())
 
-        with open(cpp_path, 'r+') as file:
-            cpp_code = file.read()
-
-            q_start = cpp_code.find("Q << ") + 5
-            q_end = q_start + cpp_code[q_start:].find(";")
-            q_str = ""
-            for row in self.kalmanFilter.Q.tolist():
-                q_str += " " * 9
-                for element in row:
-                    q_str += str(element) + ", "
-                q_str += "\n"
-            q_str = q_str.strip(' ,\n')
-            cpp_code = cpp_code[:q_start] + q_str + cpp_code[q_end:]
-
-            r_start = cpp_code.find("R << ") + 5
-            r_end = r_start + cpp_code[r_start:].find(";")
-            r_str = ""
-            for row in self.kalmanFilter.R.tolist():
-                r_str += " " * 9
-                for element in row:
-                    r_str += str(element) + ", "
-                r_str += "\n"
-            r_str = r_str.strip(' ,\n')
-            cpp_code = cpp_code[:r_start] + r_str + cpp_code[r_end:]
-            
-            k_start = cpp_code.find("K << ")+5
-            k_end = k_start + cpp_code[k_start:].find(";")
-            k_str = ""
-            for row in self.kalmanFilter.K.tolist():
-                k_str += " " * 9
-                for element in row:
-                    k_str += str(element) + ", "
-                k_str += "\n"
-            k_str = k_str.strip(' ,\n')
-            cpp_code = cpp_code[:k_start] + k_str + cpp_code[k_end:]
-
-            file.truncate(0)
-            file.write(cpp_code)
+                file.truncate(0)
+                file.write(cpp_code)
 
 class KalmanFilter(object):
     def __init__(self, x_hat_init, init_covariance, steady_state=False):
