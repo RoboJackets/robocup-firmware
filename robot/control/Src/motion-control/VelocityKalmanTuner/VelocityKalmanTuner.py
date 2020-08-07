@@ -15,12 +15,17 @@ https://en.wikipedia.org/wiki/Kalman_filter
 https://www.mathworks.com/videos/understanding-kalman-filters-part-4-optimal-state-estimator-algorithm--1493129749201.html
 '''
 
+
 class Main(QApplication):
     def __init__(self, args, kalmanFilter, verbose=False):
         super(Main, self).__init__([])
         self.args = args
         self.kalmanFilter = kalmanFilter
         self.verbose = self.args.verbose
+
+        self.t_total = 2.0
+        self.dt = 0.005
+
         if not self.args.headless:
             self.window = UIMainWindow()
             self.populate_gains()
@@ -28,10 +33,13 @@ class Main(QApplication):
             self.window.gen_bttn.clicked.connect(self.generate_code)
             self.window.save_action.triggered.connect(self.save)
             self.window.load_action.triggered.connect(self.load)
-            self.window.filter_type_select.setCurrentText("Steady State" if self.kalmanFilter.steady_state else "Regular")
+            self.window.filter_type_select.setCurrentText(
+                "Steady State" if self.kalmanFilter.steady_state else "Regular")
             self.window.filter_type_select.currentTextChanged.connect(self.set_filter_type)
+            self.window.data_type_select.currentTextChanged.connect(self.set_data_type)
+            self.window.verbose_check.stateChanged.connect(self.set_verbose)
             self.window.show()
-        self.ts, self.vxs, self.vys, self.omegas = np.arange(0, 10, 0.01), [], [], []
+        self.ts, self.vxs, self.vys, self.omegas = np.arange(0, self.t_total, self.dt), [], [], []
         self.vxs_obs, self.vys_obs, self.omegas_obs = [], [], []
         self.lists = [self.vxs, self.vys, self.omegas, self.vxs_obs, self.vys_obs, self.omegas_obs]
 
@@ -48,7 +56,7 @@ class Main(QApplication):
                     print("Error: Argument provided to -l/--loadfile must be a .txt file!")
                     self.terminate()
 
-            # Savefile must contain a valid directory
+            # Savefile must be a valid.txt file in a valid directory
             if self.args.savefile:
                 if not os.path.isdir(os.path.split(os.path.abspath(self.args.savefile))[0]):
                     print("Error: Argument provided to -s/--savefile is not a valid path!")
@@ -58,6 +66,7 @@ class Main(QApplication):
                     print("Error: Argument provided to -s/--savefile must be a .txt file!")
                     self.terminate()
 
+            # Outfile must be a valid .cpp file in a valid directory
             if self.args.outfile:
                 if not os.path.isdir(os.path.split(os.path.abspath(self.args.outfile))[0]):
                     print("Error: Argument provided to -o/--outfile is not a valid path!")
@@ -87,28 +96,14 @@ class Main(QApplication):
     def populate_gains(self):
         for r, row in enumerate(self.kalmanFilter.Q):
             for c, element in enumerate(row):
-                self.window.Q_textboxes[r][c].setText(str(self.kalmanFilter.Q[r,c]))
-                self.window.Q_textboxes[r][c].textChanged.connect(partial(self.Q_array_change, r, c))
+                self.window.Q_textboxes[r][c].setText(str(self.kalmanFilter.Q[r, c]))
 
         for r, row in enumerate(self.kalmanFilter.R):
             for c, element in enumerate(row):
-                self.window.R_textboxes[r][c].setText(str(self.kalmanFilter.R[r,c]))
-                self.window.R_textboxes[r][c].textChanged.connect(partial(self.R_array_change, r, c))
-
-    def Q_array_change(self, row, col):
-        try:
-            self.kalmanFilter.Q[row, col] = eval(self.window.Q_textboxes[row][col].text())
-        except Exception:
-            print("Make sure that element {},{} of the Q gains matrix is a valid number!".format(row, col))
-
-    def R_array_change(self, row, col):
-        try:
-            self.kalmanFilter.R[row, col] = eval(self.window.R_textboxes[row][col].text())
-        except Exception:
-            print("Make sure that element {},{} of the R gains matrix is a valid number!".format(row, col))
+                self.window.R_textboxes[r][c].setText(str(self.kalmanFilter.R[r, c]))
 
     def update(self):
-        t, x_hat, x = self.kalmanFilter.step(0.005, self.verbose, changeable_only=True)
+        t, x_hat, x = self.kalmanFilter.step(self.dt, self.verbose, changeable_only=True)
         vx, vy, omega = x_hat
         vx_obs, vy_obs, omega_obs = x
         self.vxs.append(vx)
@@ -117,11 +112,48 @@ class Main(QApplication):
         self.vxs_obs.append(vx_obs)
         self.vys_obs.append(vy_obs)
         self.omegas_obs.append(omega_obs)
+        if self.verbose:
+            self.console_print("-" * 40)
+            v = self.kalmanFilter.vars(True)
+            for key in v:
+                self.console_print(str(key) + ":\n" + str(np.round(v[key], 5)))
 
     def set_filter_type(self, new_option):
         self.kalmanFilter.steady_state = (new_option == "Steady State")
 
+    def set_data_type(self, new_option):
+        self.kalmanFilter.step_response = (new_option == "Step Response")
+
+    def set_verbose(self):
+        self.verbose = self.window.verbose_check.isChecked()
+
     def simulate(self):
+        self.window.console.clear()
+        err = False
+        # Validate gains
+        for row in range(self.kalmanFilter.num_states):
+            for col in range(self.kalmanFilter.num_states):
+                try:
+                    self.kalmanFilter.Q[row, col] = eval(self.window.Q_textboxes[row][col].text())
+                except Exception:
+                    err = True
+                    self.console_print(
+                        "Make sure that element {},{} of the Q gains matrix is a valid number!".format(row, col))
+                    print("Make sure that element {},{} of the Q gains matrix is a valid number!".format(row, col))
+
+        for row in range(self.kalmanFilter.num_outputs):
+            for col in range(self.kalmanFilter.num_outputs):
+                try:
+                    self.kalmanFilter.R[row, col] = eval(self.window.R_textboxes[row][col].text())
+                except Exception:
+                    err = True
+                    self.console_print(
+                        "Make sure that element {},{} of the R gains matrix is a valid number!".format(row, col))
+                    print("Make sure that element {},{} of the R gains matrix is a valid number!".format(row, col))
+
+        if err:
+            return
+
         for var_list in self.lists:
             var_list.clear()
 
@@ -129,6 +161,7 @@ class Main(QApplication):
 
         for _ in self.ts:
             self.update()
+
         if not self.args.headless:
             self.window.set_plot_data(self.ts,
                                       self.vxs, self.vxs_obs,
@@ -140,17 +173,19 @@ class Main(QApplication):
         if self.args.headless and self.args.savefile:
             file_name = self.args.savefile
         else:
-            file_name = QFileDialog.getSaveFileName(self.window.central_widget, "Save Gains", '', "Text File (*.txt)")[0]
+            file_name = QFileDialog.getSaveFileName(self.window.central_widget, "Save Gains", '', "Text File (*.txt)")[
+                0]
         if file_name:
             with open(file_name, 'w') as file:
                 for key, pair in self.kalmanFilter.gains().items():
-                    file.write(str(key) + ": " + str(pair) + "\n")
+                    file.write(str(key) + ": " + str(pair.tolist()) + "\n")
 
     def load(self):
         if self.args.headless and self.args.loadfile:
             file_name = self.args.loadfile
         else:
-            file_name = QFileDialog.getOpenFileName(self.window.central_widget, "Import Gains", '', "Text File (*.txt)")[0]
+            file_name = \
+            QFileDialog.getOpenFileName(self.window.central_widget, "Import Gains", '', "Text File (*.txt)")[0]
         if file_name:
             with open(file_name, 'r') as file:
                 gains_string = file.read()
@@ -187,6 +222,11 @@ class Main(QApplication):
                 file.truncate(0)
                 file.write(cpp_code)
 
+    def console_print(self, msg):
+        if not self.args.headless:
+            self.window.console.insertPlainText(msg + "\n")
+
+
 if __name__ == '__main__':
     p = ArgumentParser()
     p.add_argument("-l", "--loadfile", dest="loadfile", help="File to load gains")
@@ -197,7 +237,7 @@ if __name__ == '__main__':
     p.add_argument("-v", "--verbose", action='store_true', help="Prints Kalman Filter gains for every simulation step")
     args = p.parse_args()
     m = Main(args, kalmanFilter=KalmanFilter(x_hat_init=np.array([1, 0, 0]).reshape((3, 1)),
-                                                init_covariance=0.1,
-                                                steady_state=True),
-                      verbose=False)
+                                             init_covariance=0.1,
+                                             steady_state=True),
+             verbose=True)
     sys.exit(m.exec_())

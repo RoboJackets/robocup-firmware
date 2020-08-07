@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import (QGridLayout, QMainWindow, QWidget, QVBoxLayout, QGroupBox, QLabel, QLineEdit, QPushButton,
-                             QHBoxLayout, QAction, QComboBox)
+                             QHBoxLayout, QAction, QComboBox, QTextEdit, QCheckBox)
+import PyQt5.QtCore as QtCore
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT
 import matplotlib.pyplot as plt
 
@@ -48,6 +49,31 @@ class UIMainWindow(QMainWindow):
 
         self.settings_box = QGroupBox(self.central_widget)
         self.settings_box_layout = QVBoxLayout(self.settings_box)
+
+        self.verbose_box = QWidget(self.central_widget)
+        self.verbose_box_layout = QHBoxLayout(self.verbose_box)
+        self.verbose_box_label = QLabel("Verbose")
+        self.verbose_check = QCheckBox()
+        self.verbose_box_layout.addWidget(self.verbose_box_label)
+        self.verbose_box_layout.addWidget(self.verbose_check)
+        self.verbose_box_layout.addStretch()
+        self.verbose_box_layout.setSpacing(5)
+
+        self.console_box = QGroupBox(self.central_widget)
+        self.console_box_layout = QVBoxLayout(self.console_box)
+        self.console_box_label = QLabel("Console")
+        self.console_top_box = QWidget(self.central_widget)
+        self.console_top_box_layout = QHBoxLayout(self.console_top_box)
+        self.console_top_box_layout.addWidget(self.console_box_label, alignment=QtCore.Qt.AlignLeft)
+        self.console_top_box_layout.addWidget(self.verbose_box, alignment=QtCore.Qt.AlignRight)
+        self.console_top_box_layout.setContentsMargins(0, 0, 0, 0)
+
+        self.console = QTextEdit()
+        self.console.setReadOnly(True)
+        self.console_box_layout.addWidget(self.console_top_box)
+        self.console_box_layout.addWidget(self.console)
+        self.console_box.setFlat(True)
+
         self.filter_type_box = QGroupBox(self.central_widget)
         self.filter_type_box_layout = QHBoxLayout(self.filter_type_box)
         self.filter_type_label = QLabel("Kalman Filter Type: ")
@@ -58,7 +84,18 @@ class UIMainWindow(QMainWindow):
         self.filter_type_box_layout.addWidget(self.filter_type_select)
         self.filter_type_box.setFlat(True)
 
+        self.data_type_box = QGroupBox(self.central_widget)
+        self.data_type_box_layout = QHBoxLayout(self.data_type_box)
+        self.data_type_label = QLabel("Data Type: ")
+        self.data_type_select = QComboBox(self.central_widget)
+        self.data_type_select.addItem("Predefined Sequence")
+        self.data_type_select.addItem("Step Response")
+        self.data_type_box_layout.addWidget(self.data_type_label)
+        self.data_type_box_layout.addWidget(self.data_type_select)
+        self.data_type_box.setFlat(True)
+
         self.settings_box_layout.addWidget(self.filter_type_box)
+        self.settings_box_layout.addWidget(self.data_type_box)
         self.settings_box.setFlat(True)
 
         self.Q_box = QGroupBox(self.central_widget)
@@ -97,7 +134,9 @@ class UIMainWindow(QMainWindow):
         self.buttons_box_layout.addWidget(self.gen_bttn)
         self.buttons_box.setFlat(True)
 
+        self.right_box_layout.addWidget(self.console_box)
         self.right_box_layout.addWidget(self.filter_type_box)
+        self.right_box_layout.addWidget(self.data_type_box)
         self.right_box_layout.addWidget(self.Q_box)
         self.right_box_layout.addWidget(self.R_box)
         self.right_box_layout.addWidget(self.buttons_box)

@@ -18,7 +18,7 @@ class KalmanFilter(object):
         :param Q: (3 x 3) matrix
         :param R: (5 x 5) matrix:
         """
-
+        self.step_response = False
         self.steady_state = steady_state
 
         # Deg to Rad
@@ -49,8 +49,12 @@ class KalmanFilter(object):
         self.v = np.zeros((self.num_outputs, 1))
         self.w = np.zeros((self.num_states, 1))
 
-        self.x_hat = self.x_hat_init
-        self.x = self.x_hat_init
+        if self.step_response:
+            self.x_hat = np.zeros((self.num_states, 1))
+            self.x = np.zeros((self.num_states, 1))
+        else:
+            self.x_hat = self.x_hat_init
+            self.x = self.x_hat_init
 
         self.A = np.eye(self.num_states)
         self.B = np.zeros((self.num_states, self.num_inputs))
@@ -81,7 +85,7 @@ class KalmanFilter(object):
             print("-" * 40)
             v = self.vars(changeable_only)
             for key in v:
-                print(key, ":\n", v[key])
+                print(key, ":\n", np.round(v[key], 5))
         return self.t, self.x_hat, self.x
 
     def generate_u(self):
@@ -107,8 +111,12 @@ class KalmanFilter(object):
             self.K = self.P @ self.H.T @ np.linalg.inv(self.H @ self.P @ self.H.T + self.R)
 
         # self.w = self.rng.multivariate_normal((0, 0, 0), self.Q, method='eigh').reshape((self.num_states,1))
-        self.w = self.Q @ np.random.randn(self.num_states, 1)
-        self.x = self.A @ self.x + self.B @ self.u + self.w
+        if self.step_response:
+            a = 1
+            self.x = np.heaviside((self.t-a)*np.ones((self.num_states,1)), a)
+        else:
+            self.w = self.Q @ np.random.randn(self.num_states, 1)
+            self.x = self.A @ self.x + self.B @ self.u + self.w
 
         # Observation
         # self.v = self.rng_5.multivariate_normal((0, 0, 0, 0, 0), self.R, method='eigh').reshape((self.num_outputs,1))
