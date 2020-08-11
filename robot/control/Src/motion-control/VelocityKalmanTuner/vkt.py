@@ -202,7 +202,6 @@ class Main(QApplication):
             self.update()
 
         if self.args.headless:
-            print(self.args.savefig)
             if self.args.savefig:
                 fig = plt.figure()
                 vx_ax = fig.add_subplot(3, 1, 1)
@@ -237,7 +236,11 @@ class Main(QApplication):
 
                 fig.tight_layout()
                 if self.args.savefig != ' ':
-                    plt.savefig(self.args.savefig)
+                    try:
+                        plt.savefig(self.args.savefig)
+                    except ValueError as ve:
+                        print(ve)
+                        self.terminate()
                 else:
                     plt.savefig(datetime.datetime.now().strftime('vkt_%m-%d-%Y-%H_%M_%S.png'))
 
@@ -286,7 +289,6 @@ class Main(QApplication):
             for element in row:
                 row_str += "%g, " % element
             block += row_str + "\n"
-        # Remove \n and ,
         block = header + block[:-3] + ").finished();\n" + indent_level + "}\n"
         return block
 
@@ -296,7 +298,6 @@ class Main(QApplication):
         else:
             file_name = QFileDialog.getSaveFileName(self.window.central_widget, "Export C++ Code", '', "C++ (*.hpp)")[0]
         if file_name:
-
             with open(file_name, 'w') as file:
                 file.write("#pragma once\n")
                 file.write("#include <Eigen/Dense>\n\n")

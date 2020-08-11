@@ -33,8 +33,8 @@ class KalmanFilter(object):
         self.num_inputs = 4
         self.num_outputs = 5
 
-        self.rng = np.random.default_rng()
-        self.rng_5 = np.random.default_rng()
+        #self.rng = np.random.default_rng()
+        #self.rng_5 = np.random.default_rng()
 
         self.process_noise = 0.05
         self.encoder_noise = 0.04
