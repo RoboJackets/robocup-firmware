@@ -10,13 +10,13 @@ class KalmanFilter(object):
         (4 x 1) control input: [motor_1, motor_2, motor_3, motor_4] (% V)
         (5 x 1) output: [enc_1, enc_2, enc_3, enc_4, gyro_vel] (rad/s)
 
-        :param x_hat: (3 x 1) state vector
-        :param A: (3 x 3) matrix: transition/dynamics matrix
-        :param B: (4 x 4) matrix: control matrix
-        :param P: (3 x 3) matrix: covariance
-        :param H: (5 x 3) matrix
-        :param Q: (3 x 3) matrix
-        :param R: (5 x 5) matrix:
+        x_hat: (3 x 1) state vector
+        A: (3 x 3) matrix: transition/dynamics matrix
+        B: (4 x 4) matrix: control matrix
+        P: (3 x 3) matrix: covariance
+        H: (5 x 3) matrix
+        Q: (3 x 3) matrix
+        R: (5 x 5) matrix:
         """
         self.step_response = False
         self.steady_state = steady_state

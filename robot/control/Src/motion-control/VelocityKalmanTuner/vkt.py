@@ -1,18 +1,19 @@
-import sys
+import datetime
 import os
+import sys
+
 from argparse import ArgumentParser
 
 import numpy as np
+import matplotlib.pyplot as plt
 from PyQt5.QtWidgets import QApplication, QFileDialog
 
-from functools import partial
 from UI import UIMainWindow
 from KalmanFilter import KalmanFilter
 
 '''
 Credit: https://www.bzarg.com/p/how-a-kalman-filter-works-in-pictures/
 https://en.wikipedia.org/wiki/Kalman_filter
-https://www.mathworks.com/videos/understanding-kalman-filters-part-4-optimal-state-estimator-algorithm--1493129749201.html
 '''
 
 
@@ -21,10 +22,29 @@ class Main(QApplication):
         super(Main, self).__init__([])
         self.args = args
         self.kalmanFilter = kalmanFilter
+
+        if self.args.time:
+            try:
+                self.t_total = float(self.args.time)
+            except ValueError:
+                print("Argument 'time' must be a number!")
+                self.terminate()
+        else:
+            self.t_total = 2.0
+
+        if self.args.timestep:
+            try:
+                self.dt = float(self.args.timestep)
+            except ValueError:
+                print("Argument 'timestep' must be a number!")
+                self.terminate()
+        else:
+            self.dt = 0.005
+
         self.verbose = self.args.verbose
 
-        self.t_total = 2.0
-        self.dt = 0.005
+        if self.args.headless:
+            self.kalmanFilter.steady_state = not self.args.regular
 
         if not self.args.headless:
             self.window = UIMainWindow()
@@ -43,7 +63,6 @@ class Main(QApplication):
         self.vxs_obs, self.vys_obs, self.omegas_obs = [], [], []
         self.lists = [self.vxs, self.vys, self.omegas, self.vxs_obs, self.vys_obs, self.omegas_obs]
 
-        self.simulate()
         if self.args.headless:
             # Check arguments:
 
@@ -72,7 +91,7 @@ class Main(QApplication):
                     print("Error: Argument provided to -o/--outfile is not a valid path!")
                     self.terminate()
 
-                if os.path.splitext(self.args.outfile)[1] != ".cpp":
+                if os.path.splitext(self.args.outfile)[1] != ".hpp":
                     print("Error: Argument provided to -o/--outfile must be a .cpp file!")
                     self.terminate()
 
@@ -123,36 +142,56 @@ class Main(QApplication):
 
     def set_data_type(self, new_option):
         self.kalmanFilter.step_response = (new_option == "Step Response")
+        if new_option == "Sensor Data":
+            file_name = \
+            QFileDialog.getOpenFileName(self.window.central_widget, "Import Sensor Data", '', "Text File (*.txt)")[0]
+            with open(file_name, "r") as file:
+                data = file.read()
+                print(data.split("\n"))
+                if len(data.split("\n")) != self.kalmanFilter.num_states + 1:
+                    print("Make sure that there are {} rows of data: 1 for sample frequency, {} for states".format(
+                        self.kalmanFilter.num_states + 1, self.kalmanFilter.num_states))
+                if len(data.split("\n")[0].split(",")) != 1:
+                    print("The first line of the file must be the sample rate")
+                try:
+                    float(data.split("\n")[0])
+                except ValueError:
+                    print("The sample rate must be a number!")
+                lengths = [len(row.split(",")) for row in data.split("\n")[1:]]
+                if len(set(lengths)) != 1:
+                    print("Make sure that each row of sensor data is of the same length!")
 
     def set_verbose(self):
-        self.verbose = self.window.verbose_check.isChecked()
+        if not self.args.headless:
+            self.verbose = self.window.verbose_check.isChecked()
 
     def simulate(self):
-        self.window.console.clear()
-        err = False
-        # Validate gains
-        for row in range(self.kalmanFilter.num_states):
-            for col in range(self.kalmanFilter.num_states):
-                try:
-                    self.kalmanFilter.Q[row, col] = eval(self.window.Q_textboxes[row][col].text())
-                except Exception:
-                    err = True
-                    self.console_print(
-                        "Make sure that element {},{} of the Q gains matrix is a valid number!".format(row, col))
-                    print("Make sure that element {},{} of the Q gains matrix is a valid number!".format(row, col))
+        if not self.args.headless:
+            self.window.console.clear()
+            err = False
+            # Validate gains
+            for row in range(self.kalmanFilter.num_states):
+                for col in range(self.kalmanFilter.num_states):
+                    try:
+                        self.kalmanFilter.Q[row, col] = eval(self.window.Q_textboxes[row][col].text())
+                    except Exception:
+                        err = True
+                        self.console_print(
+                            "Make sure that element {},{} of the Q gains matrix is a valid number!".format(row, col))
+                        print("Make sure that element {},{} of the Q gains matrix is a valid number!".format(row, col))
 
-        for row in range(self.kalmanFilter.num_outputs):
-            for col in range(self.kalmanFilter.num_outputs):
-                try:
-                    self.kalmanFilter.R[row, col] = eval(self.window.R_textboxes[row][col].text())
-                except Exception:
-                    err = True
-                    self.console_print(
-                        "Make sure that element {},{} of the R gains matrix is a valid number!".format(row, col))
-                    print("Make sure that element {},{} of the R gains matrix is a valid number!".format(row, col))
+            for row in range(self.kalmanFilter.num_outputs):
+                for col in range(self.kalmanFilter.num_outputs):
+                    try:
+                        self.kalmanFilter.R[row, col] = eval(self.window.R_textboxes[row][col].text())
+                    except Exception:
+                        err = True
+                        self.console_print(
+                            "Make sure that element {},{} of the R gains matrix is a valid number!".format(row, col))
+                        print("Make sure that element {},{} of the R gains matrix is a valid number!".format(row, col))
 
-        if err:
-            return
+            if err:
+                return
 
         for var_list in self.lists:
             var_list.clear()
@@ -162,7 +201,47 @@ class Main(QApplication):
         for _ in self.ts:
             self.update()
 
-        if not self.args.headless:
+        if self.args.headless:
+            print(self.args.savefig)
+            if self.args.savefig:
+                fig = plt.figure()
+                vx_ax = fig.add_subplot(3, 1, 1)
+                vy_ax = fig.add_subplot(3, 1, 2)
+                omega_ax = fig.add_subplot(3, 1, 3)
+
+                vx_ax.set_title('X velocity over Time')
+                vx_ax.set_xlabel('t')
+                vx_ax.set_ylabel('vx')
+
+                vy_ax.set_title('Y velocity over Time')
+                vy_ax.set_xlabel('t')
+                vy_ax.set_ylabel('vy')
+
+                omega_ax.set_title('Omega vs Time')
+                omega_ax.set_xlabel('t')
+                omega_ax.set_ylabel('\u03C9')  # omega character
+
+                vx_ax.plot(self.ts, self.vxs, '-', c='tab:blue')
+                vy_ax.plot(self.ts, self.vys, '-', c='tab:blue')
+                omega_ax.plot(self.ts, self.omegas, '-', c='tab:blue')
+
+                vx_ax.plot(self.ts, self.vxs_obs, '-', c='tab:green')
+                vy_ax.plot(self.ts, self.vys_obs, '-', c='tab:green')
+                omega_ax.plot(self.ts, self.omegas_obs, '-', c='tab:green')
+
+                for ax in [vx_ax, vy_ax, omega_ax]:
+                    ax.spines['top'].set_visible(False)
+                    ax.spines['right'].set_visible(False)
+                    ax.relim()
+                    ax.legend(['x_hat', 'x'])
+
+                fig.tight_layout()
+                if self.args.savefig != ' ':
+                    plt.savefig(self.args.savefig)
+                else:
+                    plt.savefig(datetime.datetime.now().strftime('vkt_%m-%d-%Y-%H_%M_%S.png'))
+
+        else:
             self.window.set_plot_data(self.ts,
                                       self.vxs, self.vxs_obs,
                                       self.vys, self.vys_obs,
@@ -194,33 +273,43 @@ class Main(QApplication):
                 if not self.args.headless:
                     self.populate_gains()
 
-    def replace_gain(self, cpp_code, matrix_name, matrix):
-        start = cpp_code.find("{} << ".format(matrix_name)) + 5
-        end = start + cpp_code[start:].find(";")
-        string = ""
-        for row in matrix:
-            string += " " * 9
+    def generate_gain(self, name, matrix):
+        num_rows, num_cols = matrix.shape
+        indent_level = " "*4
+        header = indent_level + \
+                 "inline static Eigen::Matrix<double, %d, %d> make_%s_matrix() {\n" % (num_rows, num_cols, name)
+        rtrn = indent_level + "    return (Eigen::Matrix<double, %d, %d>() << " % (num_rows, num_cols)
+        indent = " " * len(rtrn)
+        block = rtrn
+        for i, row in enumerate(matrix):
+            row_str = str(indent) if i != 0 else ""
             for element in row:
-                string += str(element) + ", "
-            string += "\n"
-        string = string.strip(' ,\n')
-        cpp_code = cpp_code[:start] + string + cpp_code[end:]
-        return cpp_code
+                row_str += "%g, " % element
+            block += row_str + "\n"
+        # Remove \n and ,
+        block = header + block[:-3] + ").finished();\n" + indent_level + "}\n"
+        return block
 
     def generate_code(self):
         if self.args.headless and self.args.outfile:
             file_name = self.args.outfile
         else:
-            file_name = QFileDialog.getSaveFileName(self.window.central_widget, "Export C++ Code", '', "C++ (*.cpp)")[0]
+            file_name = QFileDialog.getSaveFileName(self.window.central_widget, "Export C++ Code", '', "C++ (*.hpp)")[0]
         if file_name:
-            with open(file_name, 'r+') as file:
-                cpp_code = file.read()
-                cpp_code = self.replace_gain(cpp_code, matrix_name="Q", matrix=self.kalmanFilter.Q.tolist())
-                cpp_code = self.replace_gain(cpp_code, matrix_name="R", matrix=self.kalmanFilter.R.tolist())
-                cpp_code = self.replace_gain(cpp_code, matrix_name="K", matrix=self.kalmanFilter.K.tolist())
 
-                file.truncate(0)
-                file.write(cpp_code)
+            with open(file_name, 'w') as file:
+                file.write("#pragma once\n")
+                file.write("#include <Eigen/Dense>\n\n")
+                file.write("namespace drivetrain_controls {\n\n")
+                gains_list = [self.kalmanFilter.A, self.kalmanFilter.B, self.kalmanFilter.Q, self.kalmanFilter.R,
+                              self.kalmanFilter.K]
+                names_list = ["dynamics", "control", "process_noise", "observation_noise",
+                              "ss_kalman_gain" if self.kalmanFilter.steady_state else "kalman_gain"]
+                code = ""
+                for name, gain in zip(names_list, gains_list):
+                    code += self.generate_gain(name, gain) + "\n"
+                file.write(code)
+                file.write("}")
 
     def console_print(self, msg):
         if not self.args.headless:
@@ -233,10 +322,14 @@ if __name__ == '__main__':
     p.add_argument("-hd", "--headless", action='store_true', help="Runs without gui")
     p.add_argument("-o", "--outfile", dest="outfile", help="File to export cpp code")
     p.add_argument("-r", "--regular", action='store_true', help="Runs Kalman filter without steady-state")
+    p.add_argument("-f", "--savefig", nargs='?', const=' ', help="Saves figure from simulation to specified file. If blank, "
+                                                              "file will be of type PNG and have a datetime string as a name")
     p.add_argument("-s", "--savefile", dest="savefile", help="File to save gains")
+    p.add_argument("-t", "--time", dest="time", help="Total time in seconds to run simulation. Default: 2s")
+    p.add_argument("-dt", "--timestep", dest="timestep", help="Timestep for simulation, in seconds. Default: 0.005s")
     p.add_argument("-v", "--verbose", action='store_true', help="Prints Kalman Filter gains for every simulation step")
     args = p.parse_args()
-    m = Main(args, kalmanFilter=KalmanFilter(x_hat_init=np.array([1, 0, 0]).reshape((3, 1)),
+    m = Main(args, kalmanFilter=KalmanFilter(x_hat_init=np.array([0, 0, 0]).reshape((3, 1)),
                                              init_covariance=0.1,
                                              steady_state=True),
              verbose=True)
