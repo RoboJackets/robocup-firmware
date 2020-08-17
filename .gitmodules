@@ -4,3 +4,6 @@
 [submodule "lib/robocup-fshare"]
 	path = robot/lib/robocup-fshare
 	url = https://github.com/robojackets/robocup-fshare
+[submodule "control/mtrain/mjackets-api"]
+	path = control/mtrain/mjackets-api
+	url = https://github.com/RoboJackets/mjackets-api.git
