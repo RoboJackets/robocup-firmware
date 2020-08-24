@@ -21,7 +21,8 @@ class KalmanFilter(object):
         self.step_response = False
         self.steady_state = steady_state
 
-        # Deg to Rad
+
+        # wheel_angles, wheel_dist, & wheel_radius can all be found in robot_model.hpp
         self.wheel_angles = np.deg2rad([180 - 30,
                                         180 + 39,
                                         360 - 39,
@@ -136,6 +137,10 @@ class KalmanFilter(object):
             # P = (I - K * H) * P'
             self.P = (np.eye(self.num_states) - self.K @ self.H) @ self.P
 
+        # Postfit
+        # y = z - H * x_hat
+        y = self.z - self.H @ self.x_hat
+
     def reset(self):
         self.t = 0
         self.u = np.zeros((self.num_inputs, 1))
@@ -145,7 +150,12 @@ class KalmanFilter(object):
         self.x_hat = self.x_hat_init
         self.x = self.x_hat_init
         if self.steady_state:
-            self.P = scipy.linalg.solve_discrete_are(self.A.T, self.H.T, self.Q, self.R)
+            # Needed to deal with xGEBAL error. P is correct even if error occurs
+            # TODO(Thomas): Figure out why this happens with newer versions of numpy/scipy
+            try:
+                self.P = scipy.linalg.solve_discrete_are(self.A.T, self.H.T, self.Q, self.R)
+            except Exception as e:
+                pass
             self.K = self.P @ self.H.T @ np.linalg.inv(self.H @ self.P @ self.H.T + self.R)
         else:
             self.P = np.eye(self.num_states) * self.init_covariance

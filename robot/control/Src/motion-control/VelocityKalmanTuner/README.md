@@ -23,10 +23,15 @@ For more detailed and better understanding, here are a few useful sources:
 
 ## Using the Tool
 ###Installation
-This tool was last tested with Python 3.7 and requires the following external libraries
+This tool was last tested with Python 3.7 and requires the following major packages:
 - matplotlib
 - numpy
 - PyQt5
+- scipy
+
+A detailed list of package requirements and dependencies can be found in [requirement.txt](requirements.txt)
+
+
 
 ###Running The Program
 To open the program via the command line, navigate to the ```VelocityKalmanTuner``` folder
@@ -56,7 +61,7 @@ Here is a table of all possible CLI arguments for headless mode
 | ```-h``` | ```--help``` | Display help menu showing argument descriptions and syntaxes
 | ```-hd``` | ```--headless``` | Run code in headless mode |
 | ```-l``` | ```--loadfile``` | Specify .txt file to load gains from |
-| ```-o``` | ```--outfile``` | Specify .cpp file to export code to |
+| ```-o``` | ```--outfile``` | Specify .hpp file to export code to |
 |```-f``` | ```--savefig``` | Specify filename to save simulation plot as. If none specified, file will be saved as a PNG with datetime string
 |```-r``` | ```--regular``` | By default, the simulation runs a steady-state Kalman filter. Using this flag will allow the Kalman filter to iterate the `P` and `K` matrices.
 | ```-s``` | ```--savefile``` | Specify .txt file to save gains to |

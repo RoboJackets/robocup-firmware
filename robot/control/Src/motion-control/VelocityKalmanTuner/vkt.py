@@ -85,14 +85,14 @@ class Main(QApplication):
                     print("Error: Argument provided to -s/--savefile must be a .txt file!")
                     self.terminate()
 
-            # Outfile must be a valid .cpp file in a valid directory
+            # Outfile must be a valid .hpp file in a valid directory
             if self.args.outfile:
                 if not os.path.isdir(os.path.split(os.path.abspath(self.args.outfile))[0]):
                     print("Error: Argument provided to -o/--outfile is not a valid path!")
                     self.terminate()
 
                 if os.path.splitext(self.args.outfile)[1] != ".hpp":
-                    print("Error: Argument provided to -o/--outfile must be a .cpp file!")
+                    print("Error: Argument provided to -o/--outfile must be a .hpp file!")
                     self.terminate()
 
             if self.args.loadfile:
@@ -144,7 +144,7 @@ class Main(QApplication):
         self.kalmanFilter.step_response = (new_option == "Step Response")
         if new_option == "Sensor Data":
             file_name = \
-            QFileDialog.getOpenFileName(self.window.central_widget, "Import Sensor Data", '', "Text File (*.txt)")[0]
+            QFileDialog.getOpenFileName(self.window.central_widget, "Import Sensor Data", '', "CSV file (*.csv)")[0]
             with open(file_name, "r") as file:
                 data = file.read()
                 print(data.split("\n"))
@@ -321,7 +321,7 @@ if __name__ == '__main__':
     p = ArgumentParser()
     p.add_argument("-l", "--loadfile", dest="loadfile", help="File to load gains")
     p.add_argument("-hd", "--headless", action='store_true', help="Runs without gui")
-    p.add_argument("-o", "--outfile", dest="outfile", help="File to export cpp code")
+    p.add_argument("-o", "--outfile", dest="outfile", help="File to export as hpp code")
     p.add_argument("-r", "--regular", action='store_true', help="Runs Kalman filter without steady-state")
     p.add_argument("-f", "--savefig", nargs='?', const=' ', help="Saves figure from simulation to specified file. If blank, "
                                                               "file will be of type PNG and have a datetime string as a name")

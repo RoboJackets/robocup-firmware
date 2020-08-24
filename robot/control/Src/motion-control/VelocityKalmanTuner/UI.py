@@ -15,6 +15,7 @@ class UIMainWindow(QMainWindow):
         self.central_widget = QWidget(self)
         self.master_grid_layout = QGridLayout()
 
+        # Create figure for plots
         self.plot_box = QGroupBox(self.central_widget)
         self.plot_box_layout = QVBoxLayout(self.plot_box)
         self.plot_fig = plt.figure()
@@ -24,21 +25,23 @@ class UIMainWindow(QMainWindow):
         self.omega_ax = self.plot_fig.add_subplot(3, 1, 3)
         self.plot_axs = [self.vx_ax, self.vy_ax, self.omega_ax]
 
+        # Set up subplot axes and titles
         self.vx_ax.set_title('X velocity over Time')
         self.vx_ax.set_xlabel('t')
         self.vx_ax.set_ylabel('vx')
-
         self.vy_ax.set_title('Y velocity over Time')
         self.vy_ax.set_xlabel('t')
         self.vy_ax.set_ylabel('vy')
-
         self.omega_ax.set_title('Omega vs Time')
         self.omega_ax.set_xlabel('t')
         self.omega_ax.set_ylabel('\u03C9')  # omega character
 
+        # Remove top and right lines on subplot for cleanliness
         for ax in self.plot_axs:
             ax.spines['top'].set_visible(False)
             ax.spines['right'].set_visible(False)
+
+        self.plot_fig.tight_layout()
 
         self.plot_toolbar = NavigationToolbar2QT(self.plot_canvas, self)
         self.plot_box_layout.addWidget(self.plot_canvas)
@@ -74,6 +77,9 @@ class UIMainWindow(QMainWindow):
         self.console_box_layout.addWidget(self.console)
         self.console_box.setFlat(True)
 
+        # Create box which allows user to select whether Kalman filter will
+        # operate in steady state (convergent P/K already set)
+        # or regular (P and K eventually converge)
         self.filter_type_box = QGroupBox(self.central_widget)
         self.filter_type_box_layout = QHBoxLayout(self.filter_type_box)
         self.filter_type_label = QLabel("Kalman Filter Type: ")
@@ -84,6 +90,7 @@ class UIMainWindow(QMainWindow):
         self.filter_type_box_layout.addWidget(self.filter_type_select)
         self.filter_type_box.setFlat(True)
 
+        # Create box which allows user to select type of observed data
         self.data_type_box = QGroupBox(self.central_widget)
         self.data_type_box_layout = QHBoxLayout(self.data_type_box)
         self.data_type_label = QLabel("Data Type: ")
@@ -99,6 +106,7 @@ class UIMainWindow(QMainWindow):
         self.settings_box_layout.addWidget(self.data_type_box)
         self.settings_box.setFlat(True)
 
+        # Make 3 x 3 grid of textboxes for Q gains
         self.Q_box = QGroupBox(self.central_widget)
         self.Q_box_layout = QGridLayout(self.Q_box)
         self.Q_label = QLabel("Q Gains")
@@ -113,6 +121,7 @@ class UIMainWindow(QMainWindow):
             self.Q_textboxes.append(row)
         self.Q_box.setFlat(True)
 
+        # Make 5 x 5 grid of textboxes for R gains
         self.R_box = QGroupBox(self.central_widget)
         self.R_box_layout = QGridLayout(self.R_box)
         self.R_label = QLabel("R Gains")
@@ -127,6 +136,7 @@ class UIMainWindow(QMainWindow):
             self.R_textboxes.append(row)
         self.R_box.setFlat(True)
 
+        # Create box with "Simulate" and "Generate C++ Code" buttons
         self.buttons_box = QGroupBox(self.central_widget)
         self.buttons_box_layout = QHBoxLayout(self.buttons_box)
         self.sim_bttn = QPushButton("Simulate")
@@ -135,6 +145,7 @@ class UIMainWindow(QMainWindow):
         self.buttons_box_layout.addWidget(self.gen_bttn)
         self.buttons_box.setFlat(True)
 
+        # Set up layout for rightmost column of GUI
         self.right_box_layout.addWidget(self.console_box)
         self.right_box_layout.addWidget(self.filter_type_box)
         self.right_box_layout.addWidget(self.data_type_box)
@@ -150,6 +161,7 @@ class UIMainWindow(QMainWindow):
         self.setCentralWidget(self.central_widget)
         self.central_widget.setLayout(self.master_grid_layout)
 
+        # Create menu bar
         self.menu_bar = self.menuBar()
         self.save_action = QAction('Save Gains', self)
         self.save_action.setShortcut('Ctrl+S')
@@ -159,19 +171,23 @@ class UIMainWindow(QMainWindow):
         self.file_menu.addAction(self.save_action)
         self.file_menu.addAction(self.load_action)
 
-
     def set_plot_data(self, ts, vxs, vxs_obs, vys, vys_obs, omegas, omegas_obs):
+
+        # Clear Plots
         for ax in self.plot_axs:
             ax.lines.clear()
 
+        # Plot estimated state values
         self.vx_ax.plot(ts, vxs, '-', c='tab:blue')
         self.vy_ax.plot(ts, vys, '-', c='tab:blue')
         self.omega_ax.plot(ts, omegas, '-', c='tab:blue')
 
+        # Plot observed state values
         self.vx_ax.plot(ts, vxs_obs, '-', c='tab:green')
         self.vy_ax.plot(ts, vys_obs, '-', c='tab:green')
         self.omega_ax.plot(ts, omegas_obs, '-', c='tab:green')
 
+        # Rescale axes and recreate legend
         for ax in self.plot_axs:
             ax.relim()
             ax.legend(['x_hat', 'x'])
