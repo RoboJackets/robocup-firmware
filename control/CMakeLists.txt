@@ -4,12 +4,6 @@ project(control
     LANGUAGES C CXX
 )
 
-# find_package (Eigen3 3.3 NO_MODULE)
-
-# set(CMAKE_NO_SYSTEM_FROM_IMPORTED True)
-# include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-# conan_basic_setup(TARGETS)
-
 set(CMAKE_CXX_COMPILER_VERSION "7.3")
 set( CMAKE_RUNTIME_OUTPUT_DIRECTORY  "${CMAKE_BINARY_DIR}/bin" )
 
@@ -18,17 +12,11 @@ add_definitions(-Wall)
 # TODO: remove
 add_definitions(-Wno-register)
 
-# C++ version
-set(CMAKE_CXX_STANDARD 17)
-# Don't fall back to older versions
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-
 add_subdirectory(mtrain)
 add_subdirectory(external)
 
 add_executable(control.elf
-    main.cpp
+    src/robocup/main.cpp
     src/robocup/radio/RadioLink.cpp
     src/robocup/modules/BatteryModule.cpp
     src/robocup/modules/FPGAModule.cpp
@@ -51,15 +39,15 @@ add_executable(control.elf
     src/drivers/MPU6050.cpp)
 )
 
+## Shouldnt need explicit inclusion since mtrain dev relies on these
 target_include_directories(control.elf PUBLIC
 	include
+    ${KICKER_HEADER_OUTPUT}
     # include/robocup
-    # should be included in mtrain lib target
-	# "${CONAN_MTRAIN_ROOT}/external/middleware/STM32_USB_Device_Library/Core/Inc/"
-	# "${CONAN_MTRAIN_ROOT}/external/middleware/STM32_USB_Device_Library/Class/CDC/Inc"
 )
 
 target_link_libraries(control.elf
+    # By linking against rc-fshare it should already have eigen
     # Eigen3::Eigen
     rc-fshare
     mtrain
