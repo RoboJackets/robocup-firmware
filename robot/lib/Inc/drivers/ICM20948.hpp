@@ -27,5 +27,7 @@ private:
     LockedStruct<SPI>& imuSPI;
 
     DigitalOut nCs;
+
+    int last_bank = 0;
 };
 
