@@ -31,10 +31,10 @@ namespace Registers {
     constexpr uint8_t ACCEL_CONFIG  = 0x14;
     
     enum GyroFS {
-        DPS_2000 = 3,
-        DPS_1000 = 2,
-        DPS_500 = 1,
-        DPS_250 = 0,
+        DPS_2000 = 3 << 2,
+        DPS_1000 = 2 << 2,
+        DPS_500 = 1 << 2,
+        DPS_250 = 0 << 2,
     };
     
     enum PWR_MGMT {
@@ -44,7 +44,7 @@ namespace Registers {
     };
 
     enum USER_CTRL_REG {
-        I2C_IF_DIS = 1, // disable I2C, enable SPI
+        I2C_IF_DIS = 1 << 4, // disable I2C, enable SPI
     }; 
 };
 
@@ -97,7 +97,7 @@ bool ICM20948::initialize() {
     // Disable I2C
     write_register(
         Registers::USER_CTRL,
-        Registers::USER_CTRL_REG::I2C_IF_DIS << 4);
+        Registers::USER_CTRL_REG::I2C_IF_DIS);
 
     // Enable gyro
     write_register(Registers::PWR_MGMT_2, 0x00);
@@ -106,7 +106,8 @@ bool ICM20948::initialize() {
     write_register(
         2, 
         Registers::GYRO_CONFIG_1, 
-        Registers::GYRO_FS_SEL::DPS_1000 << 2);
+        Registers::GYRO_FS_SEL::DPS_1000);
+
     
     // Configure acclerometer
     write_register(2, Registers::ACCEL_CONFIG, 0x02);
