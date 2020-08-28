@@ -4,6 +4,7 @@
 #include "SPI.hpp"
 #include "LockedStruct.hpp"
 #include <memory>
+#include <vector>
 
 class ICM20948 {
 public:
@@ -16,6 +17,9 @@ public:
     double accel_x();
 
     double accel_y();
+
+    <template T>
+    std::vector<T> burst_read(uint8_t bank, uint8_t address, uint8_t length);
 
 private:
     void write_register(uint8_t bank, uint8_t address, uint8_t value);

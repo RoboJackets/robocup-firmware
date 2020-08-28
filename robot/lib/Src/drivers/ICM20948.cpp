@@ -205,3 +205,27 @@ uint8_t ICM20948::read_register(uint8_t bank, uint8_t address) {
 
     return data;
 }
+
+<template T>
+std::vector<T> ICM20948::burst_read(uint8_t bank, uint8_t address, uint8_t length) {
+    if (bank != last_bank) {
+        chip_select(true);
+        lock->transmit(Registers::REG_BANK_SEL);
+        lock->transmit(bank);
+        chip_select(false);
+
+        last_bank = bank;
+    }
+
+    std::vector<T> data;
+    data.reserve(length); 
+    
+    chip_select(true);
+    lock->transmit(address);
+    for (int i = 0; i < length; i++) {
+        data[i] = lock->transmit(0x00);
+    }
+    chip_select(false);
+
+    return data;
+}
