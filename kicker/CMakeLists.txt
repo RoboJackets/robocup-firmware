@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 3.4)
 
+project(kicker
+    LANGUAGES C
+    )
+
 # set the AVR toolchain
 set( CMAKE_TOOLCHAIN_FILE attiny_toolchain.cmake )
 include(attiny_toolchain.cmake)

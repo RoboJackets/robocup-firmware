@@ -1,8 +1,6 @@
 # Set your project name
 project(mtrain LANGUAGES C CXX ASM)
 
-set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/mjackets-api/cmake/stm32-gcc-arm-none-eabi.cmake)
-
 # Set chip model so mjackets knows what to build
 set(CHIP STM32F769NI CACHE STRING "Full STM32 Chip Model")
 add_definitions(-DSTM32F769NI)
