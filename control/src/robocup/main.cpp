@@ -1,4 +1,4 @@
-#include "mtrain.hpp"
+#include "mJackets.hpp"
 #include "FreeRTOSConfig.h"
 #include "FreeRTOS.h"
 #include "task.h"
@@ -24,6 +24,9 @@
 #include "modules/RadioModule.hpp"
 #include "modules/RotaryDialModule.hpp"
 #include "LockedStruct.hpp"
+#include <vector>
+#include <algorithm>
+#include <cstdio>
 
 #define SUPER_LOOP_FREQ 200
 #define SUPER_LOOP_PERIOD (1000000L / SUPER_LOOP_FREQ)

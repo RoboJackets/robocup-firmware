@@ -1,5 +1,11 @@
 cmake_minimum_required(VERSION 3.4)
 
+# set the AVR toolchain
+set( CMAKE_TOOLCHAIN_FILE attiny_toolchain.cmake )
+include(attiny_toolchain.cmake)
+set(CMAKE_C_COMPILER    ${AVR_C_COMPILER})
+set(CMAKE_CXX_COMPILER  ${AVR_CXX_COMPILER})
+
 set( CMAKE_RUNTIME_OUTPUT_DIRECTORY  "${CMAKE_BINARY_DIR}/bin" )
 
 # compile executable for kicker firmware
@@ -14,7 +20,7 @@ target_include_directories(kicker.elf PUBLIC
 
 # NOTE control should be dependent on this target and I think the includes should transfer through to the control target
 
-
+# TODO FIX THE NIB OUTPUT PATH
 # custom target to convert kicker.elf to the kickerFW binary file
 add_custom_target(kicker
     # the -j options tell objcopy what sections to include in the output
@@ -25,11 +31,3 @@ add_custom_target(kicker
     DEPENDS kicker.elf
     COMMENT "objcopying to convert kicker.elf to kicker.nib"
 )
-
-# # add command to copy the kicker firmware onto the mbed
-# add_custom_target(kicker-upload
-#     COMMAND ${MBED_COPY_SCRIPT} kicker.nib
-#     WORKING_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
-#     DEPENDS kicker
-#     COMMENT "Copying the kicker board's binary over to the mbed"
-# )

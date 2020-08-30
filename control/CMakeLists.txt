@@ -36,7 +36,7 @@ add_executable(control.elf
     src/drivers/ISM43340.cpp
     src/drivers/KickerBoard.cpp
     src/drivers/MCP23017.cpp
-    src/drivers/MPU6050.cpp)
+    src/drivers/MPU6050.cpp
 )
 
 ## Shouldnt need explicit inclusion since mtrain dev relies on these
@@ -48,7 +48,6 @@ target_include_directories(control.elf PUBLIC
 
 target_link_libraries(control.elf
     # By linking against rc-fshare it should already have eigen
-    # Eigen3::Eigen
     rc-fshare
     mtrain
 )

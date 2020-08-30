@@ -20,4 +20,6 @@ avrdude
 python3-pip
 python3-setuptools
 
+libeigen3-dev
+
 iverilog
