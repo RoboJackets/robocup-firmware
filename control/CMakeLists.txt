@@ -1,18 +1,8 @@
 cmake_minimum_required(VERSION 3.14.7)
+# NOTE CMAKE_CURRENT_SOURCE_DIR should point to /robocup-firmware/control
+set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/mtrain/mjackets-api/cmake/stm32-gcc-arm-none-eabi.cmake)
 
-project(control
-    LANGUAGES C CXX
-)
-
-set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/mjackets-api/cmake/stm32-gcc-arm-none-eabi.cmake)
-
-set(CMAKE_CXX_COMPILER_VERSION "7.3")
-set( CMAKE_RUNTIME_OUTPUT_DIRECTORY  "${CMAKE_BINARY_DIR}/bin" )
-
-add_definitions(-Wall)
-
-# TODO: remove
-add_definitions(-Wno-register)
+project(control LANGUAGES C CXX ASM)
 
 add_subdirectory(mtrain)
 add_subdirectory(external)
