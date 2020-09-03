@@ -1,3 +1,5 @@
+message("------------------------ AVR INCLUDED")
+
 set(CMAKE_SYSTEM_NAME       Generic)
 set(CMAKE_SYSTEM_PROCESSOR  avr)
 set(CMAKE_SYSTEM_VERSION    1)
@@ -15,12 +17,13 @@ set(AVR_TARGET_ARCH         attiny167)
 # set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 
 set(AVR_PREFIX                  avr)
-find_program(AVR_C_COMPILER     ${AVR_PREFIX}-gcc)
-find_program(AVR_CXX_COMPILER   ${AVR_PREFIX}-g++)
-find_program(AVR_OBJCOPY        ${AVR_PREFIX}-objcopy)
+find_program(CMAKE_C_COMPILER     ${AVR_PREFIX}-gcc)
+find_program(CMAKE_CXX_COMPILER   ${AVR_PREFIX}-g++)
+find_program(CMAKE_OBJCOPY        ${AVR_PREFIX}-objcopy)
 
-set(CMAKE_C_COMPILER    ${AVR_C_COMPILER})
-set(CMAKE_CXX_COMPILER  ${AVR_CXX_COMPILER})
+# set(CMAKE_C_COMPILER    ${AVR_C_COMPILER})
+# set(CMAKE_CXX_COMPILER  ${AVR_CXX_COMPILER})
+# set(CMAKE_OBJCOPY  ${AVR_OBJCOPY})
 
 # F_CPU specifies the frequency (in Hz) of the cpu clock so that the delay functions work appropriately
 # the ATTiny13 has an internal 9.6MHz clock with the prescaler, don't scale back

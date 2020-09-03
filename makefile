@@ -4,6 +4,9 @@ current_dir=$(shell pwd)
 all:
 	cmake -H$(current_dir) -B$(current_dir)/build -G "Unix Makefiles"
 	@echo "\n=> Built RoboCup Firmware"
+
+clean: 
+	rm -r build
 # .PHONY : all kicker configure robot control-upload docs $(ROBOT_TESTS:%=test-%-upload)
 
 # all: kicker robot
