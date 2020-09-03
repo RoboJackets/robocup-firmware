@@ -1,8 +1,15 @@
 cmake_minimum_required(VERSION 3.14.7)
 # NOTE CMAKE_CURRENT_SOURCE_DIR should point to /robocup-firmware/control
 set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/mtrain/mjackets-api/cmake/stm32-gcc-arm-none-eabi.cmake)
+# include(${CMAKE_TOOLCHAIN_FILE})
+
 
 project(control LANGUAGES C CXX ASM)
+
+message("----------------------CMAKE_C_COMPILER ${CMAKE_C_COMPILER}" )
+message("----------------------CMAKE_OBJCOPY ${CMAKE_OBJCOPY}" )
+
+set( CMAKE_RUNTIME_OUTPUT_DIRECTORY  "${CMAKE_BINARY_DIR}/bin" )
 
 add_subdirectory(mtrain)
 add_subdirectory(external)
@@ -34,7 +41,7 @@ add_executable(control.elf
 ## Shouldnt need explicit inclusion since mtrain dev relies on these
 target_include_directories(control.elf PUBLIC
 	include
-    ${KICKER_HEADER_OUTPUT}
+    "${CMAKE_BINARY_DIR}/device-bins"
     # include/robocup
 )
 

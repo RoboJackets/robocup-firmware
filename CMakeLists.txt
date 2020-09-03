@@ -7,6 +7,6 @@ set(FLASH_COPY_SCRIPT python3 ${PROJECT_SOURCE_DIR}/util/flash.py)
 
 
 # run all the other CMakeLists files
-add_subdirectory(kicker)
-add_subdirectory(fpga)
+# add_subdirectory(kicker)
+# add_subdirectory(fpga)
 add_subdirectory(control)

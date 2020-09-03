@@ -1,15 +1,19 @@
-project(kicker LANGUAGES C)
-
 set( CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/attiny_toolchain.cmake )
 include( ${CMAKE_TOOLCHAIN_FILE})
 
-set(CMAKE_C_COMPILER    ${AVR_C_COMPILER})
-set(CMAKE_CXX_COMPILER  ${AVR_CXX_COMPILER})
-set(CMAKE_OBJCOPY  ${AVR_OBJCOPY})
+project(kicker LANGUAGES C)
+
+# include(
+#     ${CMAKE_CURRENT_SOURCE_DIR}/attiny_toolchain.cmake
+# )
+
+# set(CMAKE_C_COMPILER    ${AVR_C_COMPILER})
+# set(CMAKE_CXX_COMPILER  ${AVR_CXX_COMPILER})
+# set(CMAKE_OBJCOPY  ${AVR_OBJCOPY})
 
 message("----------------------CMAKE_C_COMPILER ${CMAKE_C_COMPILER}" )
 message("----------------------CMAKE_OBJCOPY ${CMAKE_OBJCOPY}" )
-set( CMAKE_RUNTIME_OUTPUT_DIRECTORY  "${CMAKE_BINARY_DIR}/device-bin" )
+set( CMAKE_RUNTIME_OUTPUT_DIRECTORY  "${CMAKE_BINARY_DIR}/device-bins" )
 
 # compile executable for kicker firmware
 add_executable(kicker.elf

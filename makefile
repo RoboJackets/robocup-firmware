@@ -1,10 +1,9 @@
 .PHONY : all
 
+current_dir=$(shell pwd)
 all:
-	mkdir -p build
-	cd build && cmake ../ ./ && make
+	cmake -H$(current_dir) -B$(current_dir)/build -G "Unix Makefiles"
 	@echo "\n=> Built RoboCup Firmware"
-
 # .PHONY : all kicker configure robot control-upload docs $(ROBOT_TESTS:%=test-%-upload)
 
 # all: kicker robot
