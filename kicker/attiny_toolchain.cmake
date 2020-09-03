@@ -30,4 +30,4 @@ find_program(CMAKE_OBJCOPY        ${AVR_PREFIX}-objcopy)
 # change above to match ATTINY84A =====================================================================
 # to keep timing for neopixel
 # The -O2 turns on optimizations, which are required to use the delay_*() functions
-list(APPEND CMAKE_C_FLAGS "-std=c11 -O2 -mmcu=${AVR_TARGET_ARCH} -DF_CPU=8000000")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11 -O2 -mmcu=${AVR_TARGET_ARCH} -DF_CPU=8000000")

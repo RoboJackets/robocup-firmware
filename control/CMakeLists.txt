@@ -1,14 +1,13 @@
 cmake_minimum_required(VERSION 3.14.7)
 set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/mtrain/mjackets-api/cmake/stm32-gcc-arm-none-eabi.cmake)
-# include(${CMAKE_TOOLCHAIN_FILE})
+include(${CMAKE_TOOLCHAIN_FILE})
 # set(CMAKE_C_COMPILER    ${AVR_C_COMPILER})
 # set(CMAKE_CXX_COMPILER  ${AVR_CXX_COMPILER})
 
 project(control LANGUAGES C CXX)
 
-
-message("----------------------CMAKE_C_COMPILER ${CMAKE_C_COMPILER}" )
-message("----------------------CMAKE_OBJCOPY ${CMAKE_OBJCOPY}" )
+message("---------------------- CONTROL CMAKE_C_COMPILER ${CMAKE_C_COMPILER}" )
+message("---------------------- CONTROL CMAKE_OBJCOPY ${CMAKE_OBJCOPY}" )
 
 set(CMAKE_CXX_COMPILER_VERSION "7.3")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY  "${CMAKE_BINARY_DIR}/bin" )
