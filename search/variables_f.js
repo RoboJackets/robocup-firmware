@@ -11,5 +11,7 @@ var searchData=
   ['prevkicktime',['prevKickTime',['../class_kicker_module.html#ae9540f765de190a67f3f07a07b32dff0',1,'KickerModule']]],
   ['priority',['priority',['../class_generic_module.html#a37f43c666f3457c63651c3c4834dc543',1,'GenericModule']]],
   ['processnoise',['processNoise',['../class_robot_estimator.html#aeaac1317d46b4269b68a4136a07ac99b',1,'RobotEstimator']]],
-  ['pv',['pv',['../class_dribbler_controller.html#a8d68333e7f7dd21ac1056f77c9956d28',1,'DribblerController']]]
+  ['pv',['pv',['../class_dribbler_controller.html#a8d68333e7f7dd21ac1056f77c9956d28',1,'DribblerController']]],
+  ['pwr_5fmgmt_5f1',['PWR_MGMT_1',['../namespace_registers.html#ac755071e0e07a0d42d9c72d1ee0573c5',1,'Registers']]],
+  ['pwr_5fmgmt_5f2',['PWR_MGMT_2',['../namespace_registers.html#a3e79294359afae2216fcc8aa9ba41196',1,'Registers']]]
 ];

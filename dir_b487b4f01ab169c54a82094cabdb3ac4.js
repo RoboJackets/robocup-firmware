@@ -11,6 +11,9 @@ var dir_b487b4f01ab169c54a82094cabdb3ac4 =
     [ "GenericRadio.hpp", "_generic_radio_8hpp.html", [
       [ "GenericRadio", "class_generic_radio.html", "class_generic_radio" ]
     ] ],
+    [ "ICM20948.hpp", "_i_c_m20948_8hpp.html", [
+      [ "ICM20948", "class_i_c_m20948.html", "class_i_c_m20948" ]
+    ] ],
     [ "IOExpanderDigitalInOut.hpp", "_i_o_expander_digital_in_out_8hpp.html", [
       [ "IOExpanderDigitalInOut", "class_i_o_expander_digital_in_out.html", "class_i_o_expander_digital_in_out" ]
     ] ],

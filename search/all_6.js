@@ -3,6 +3,7 @@ var searchData=
   ['f',['F',['../class_robot_estimator.html#a19b077b3a4382b64b752f61fe745b6c5',1,'RobotEstimator']]],
   ['failed_5fmodules',['failed_modules',['../control_2main_8cpp.html#a6e4d80d3dc4c9d8deb53ef95ee66e009',1,'failed_modules():&#160;main.cpp'],['../_l_e_d_module_8cpp.html#a6e4d80d3dc4c9d8deb53ef95ee66e009',1,'failed_modules():&#160;main.cpp']]],
   ['fatal',['FATAL',['../_l_e_d_module_8hpp.html#a6189023456c55830ab1301757517ddb3a651d8a47a6976d6fe05c0e03fb4cd2d0',1,'LEDModule.hpp']]],
+  ['fifo_5fmode',['FIFO_MODE',['../namespace_registers.html#ab42dccd2c1e69b6f8bdf802ad5853986',1,'Registers']]],
   ['fill_5fspi_5freturn',['fill_spi_return',['../main_8c.html#af4a30028f5fcf211d1d914e6d73fb75c',1,'main.c']]],
   ['firmware_2emd',['Firmware.md',['../_firmware_8md.html',1,'']]],
   ['flash',['flash',['../class_kicker_board.html#a28cc7187d0a26480ecab58f733913adb',1,'KickerBoard::flash(const std::string &amp;progFilename, bool onlyIfDifferent=true, bool verbose=false)'],['../class_kicker_board.html#a61455be0828684366a62465ddb33fdb5',1,'KickerBoard::flash(bool onlyIfDifferent=true, bool verbose=false)']]],

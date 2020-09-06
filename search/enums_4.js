@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['levelcolors',['LevelColors',['../_l_e_d_module_8hpp.html#a6189023456c55830ab1301757517ddb3',1,'LEDModule.hpp']]]
+  ['infocolors',['InfoColors',['../_l_e_d_module_8hpp.html#a70d5f642b81250279ac9f8305c9a59fd',1,'LEDModule.hpp']]]
 ];

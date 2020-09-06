@@ -2,6 +2,8 @@ var searchData=
 [
   ['i2cdev_2ecpp',['I2Cdev.cpp',['../_i2_cdev_8cpp.html',1,'']]],
   ['i2cdev_2eh',['I2Cdev.h',['../_i2_cdev_8h.html',1,'']]],
+  ['icm20948_2ecpp',['ICM20948.cpp',['../_i_c_m20948_8cpp.html',1,'']]],
+  ['icm20948_2ehpp',['ICM20948.hpp',['../_i_c_m20948_8hpp.html',1,'']]],
   ['imumodule_2ecpp',['IMUModule.cpp',['../_i_m_u_module_8cpp.html',1,'']]],
   ['imumodule_2ehpp',['IMUModule.hpp',['../_i_m_u_module_8hpp.html',1,'']]],
   ['iodefs_2eh',['iodefs.h',['../iodefs_8h.html',1,'']]],

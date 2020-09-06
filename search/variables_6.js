@@ -2,6 +2,7 @@ var searchData=
 [
   ['f',['F',['../class_robot_estimator.html#a19b077b3a4382b64b752f61fe745b6c5',1,'RobotEstimator']]],
   ['failed_5fmodules',['failed_modules',['../control_2main_8cpp.html#a6e4d80d3dc4c9d8deb53ef95ee66e009',1,'failed_modules():&#160;main.cpp'],['../_l_e_d_module_8cpp.html#a6e4d80d3dc4c9d8deb53ef95ee66e009',1,'failed_modules():&#160;main.cpp']]],
+  ['fifo_5fmode',['FIFO_MODE',['../namespace_registers.html#ab42dccd2c1e69b6f8bdf802ad5853986',1,'Registers']]],
   ['flow_5fphase',['flow_phase',['../main_8c.html#a8c3e079bed1c7ac64bdfd530d00f421d',1,'main.c']]],
   ['fpga',['fpga',['../class_f_p_g_a_module.html#a334f0bf41107691d5a4456d46dd6054e',1,'FPGAModule']]],
   ['fpga_5fspi_5ffreq',['FPGA_SPI_FREQ',['../class_f_p_g_a.html#a0335b1e6dc2fd18799bc18c7869a9e97',1,'FPGA']]],

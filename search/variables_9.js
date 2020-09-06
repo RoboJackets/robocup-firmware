@@ -5,6 +5,7 @@ var searchData=
   ['i2cdev',['i2Cdev',['../class_m_p_u6050.html#a21a3dafd707d161dcd0b7e429b8c3447',1,'MPU6050']]],
   ['imu',['imu',['../class_i_m_u_module.html#a33b2cf520ed3dbc3c6ac80d71104d6d8',1,'IMUModule']]],
   ['imudata',['imuData',['../class_i_m_u_module.html#a5170390891f04c6be5af4a4c8ce339e9',1,'IMUModule::imuData()'],['../class_l_e_d_module.html#a6159a8a9d36fba1c97398de6bd436d2d',1,'LEDModule::imuData()'],['../class_motion_control_module.html#a1afd02f786d51923eb78af587b4fab9b',1,'MotionControlModule::imuData()']]],
+  ['imuspi',['imuSPI',['../class_i_c_m20948.html#af18e44f1f74f28dae22edc69f591fcc9',1,'ICM20948']]],
   ['in_5fdebug_5fmode',['in_debug_mode',['../main_8c.html#a985287c43a01651e39e8563ed2062d6b',1,'main.c']]],
   ['index',['index',['../class_l_e_d_module.html#acbba7563a104779e86e5fd2d38a35de5',1,'LEDModule']]],
   ['initcovariance',['initCovariance',['../class_robot_estimator.html#a22808bcbf394d638a94d2739f2538ba1',1,'RobotEstimator']]],

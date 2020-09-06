@@ -8,6 +8,7 @@ var searchData=
   ['radiospi',['radioSPI',['../class_i_s_m43340.html#add1ad3929231213eea8f337ed4c8316a',1,'ISM43340']]],
   ['rawvoltage',['rawVoltage',['../struct_battery_voltage.html#aba125a0242a15226daea2c9b76641576',1,'BatteryVoltage::rawVoltage()'],['../class_battery.html#a987fe263bc4c7b5d5d093fae612ee5db',1,'Battery::rawVoltage()']]],
   ['readbuffer',['readBuffer',['../class_i_s_m43340.html#ae61436a76cd0f5054c61d0f66d390809',1,'ISM43340']]],
+  ['reg_5fbank_5fsel',['REG_BANK_SEL',['../namespace_registers.html#a2562e641b5fb8d5dc41600fad27c91b3',1,'Registers']]],
   ['requires',['requires',['../classconanfile_1_1_robo_cup_firmware_conan.html#a1b5d31fab3e12bfd5d41173f25eb312b',1,'conanfile::RoboCupFirmwareConan']]],
   ['robot_5faddress',['ROBOT_ADDRESS',['../namespacertp.html#ab69c67ceceac3e0bcf89ccf40a60204a',1,'rtp']]],
   ['robotcontroller',['robotController',['../class_motion_control_module.html#a0beef0155ae4274389cefdb8e52974ef',1,'MotionControlModule']]],

@@ -1,0 +1,22 @@
+digraph "ICM20948::chip_select"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node16 [label="ICM20948::chip_select",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node16 -> Node17 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node17 [label="ICM20948::write_register",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_c_m20948.html#a85207eba3f7e4ecc7f4c6e2e4cf812b0"];
+  Node17 -> Node18 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node18 [label="ICM20948::initialize",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_c_m20948.html#a874be85ce182b369b030c88bb85871b5"];
+  Node16 -> Node19 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node19 [label="ICM20948::read_register",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_c_m20948.html#af90dbbef53872f46ae5759947bc8b652"];
+  Node19 -> Node18 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node19 -> Node20 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node20 [label="ICM20948::gyro_z",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_c_m20948.html#a2f9286dc3e184cd5cc7e2b0161f776fd"];
+  Node19 -> Node21 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node21 [label="ICM20948::accel_x",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_c_m20948.html#a902d8262a3c35f62a3502f1939b77085"];
+  Node19 -> Node22 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node22 [label="ICM20948::accel_y",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_c_m20948.html#a1536b8a4ad6bcb7f84fe9fe013bccf5c"];
+  Node16 -> Node23 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node23 [label="ICM20948::burst_read",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_c_m20948.html#ab84dd4ab49a40b191ce38d0cf76e4221"];
+}

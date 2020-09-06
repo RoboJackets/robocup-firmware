@@ -3,5 +3,5 @@ digraph "Graphical Class Hierarchy"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node0 [label="RobotController",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_robot_controller.html",tooltip="Controller for wheel velocities. "];
+  Node0 [label="RadioLink",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_radio_link.html",tooltip="Sends and receives data to/from the radio Converts the simplified structures to the rtp packet to sen..."];
 }

@@ -63,5 +63,8 @@ var searchData=
   ['prog_5fuchar',['prog_uchar',['../_m_p_u6050_8cpp.html#af345cb3ceab4e846233b87e95b442c28',1,'MPU6050.cpp']]],
   ['program',['program',['../class_a_v_r910.html#a355ef9fb0c84d822fb50bff21ff1a7b8',1,'AVR910::program(FILE *binary, int pageSize, int numPages=1)'],['../class_a_v_r910.html#a122ca70af276f5b5d5ca71ae1ffe06a9',1,'AVR910::program(const uint8_t *binary, unsigned int length, int pageSize, int numPages=1)']]],
   ['pushbutton',['PUSHBUTTON',['../iodefs_8h.html#adf8e68aa3f7ed1388355e53619b2b736',1,'iodefs.h']]],
-  ['pv',['pv',['../class_dribbler_controller.html#a8d68333e7f7dd21ac1056f77c9956d28',1,'DribblerController']]]
+  ['pv',['pv',['../class_dribbler_controller.html#a8d68333e7f7dd21ac1056f77c9956d28',1,'DribblerController']]],
+  ['pwr_5fmgmt',['PWR_MGMT',['../namespace_registers.html#a0062e4dd4e409b420863ec2c544a6194',1,'Registers']]],
+  ['pwr_5fmgmt_5f1',['PWR_MGMT_1',['../namespace_registers.html#ac755071e0e07a0d42d9c72d1ee0573c5',1,'Registers']]],
+  ['pwr_5fmgmt_5f2',['PWR_MGMT_2',['../namespace_registers.html#a3e79294359afae2216fcc8aa9ba41196',1,'Registers']]]
 ];

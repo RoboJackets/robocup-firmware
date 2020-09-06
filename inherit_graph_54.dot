@@ -3,5 +3,5 @@ digraph "Graphical Class Hierarchy"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node0 [label="VectorFloat",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_vector_float.html"];
+  Node0 [label="rtp::RobotTxMessage\l::RobotTxMessages",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$unionrtp_1_1_robot_tx_message_1_1_robot_tx_messages.html"];
 }

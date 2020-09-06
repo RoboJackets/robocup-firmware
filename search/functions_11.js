@@ -7,6 +7,7 @@ var searchData=
   ['read_5fduty_5fcycles',['read_duty_cycles',['../class_f_p_g_a.html#a6f7976dddd569c0b75a94c004ecfe478',1,'FPGA']]],
   ['read_5fencs',['read_encs',['../class_f_p_g_a.html#a6e2b0841e4e0eca35b463ccc8f70a26e',1,'FPGA']]],
   ['read_5fhalls',['read_halls',['../class_f_p_g_a.html#a767569caa2aa4d2e9423b6f3a6d2a7a8',1,'FPGA']]],
+  ['read_5fregister',['read_register',['../class_i_c_m20948.html#af90dbbef53872f46ae5759947bc8b652',1,'ICM20948']]],
   ['readbit',['readBit',['../class_i2_cdev.html#a9f104431c59658432e8b2f02c3e1acd6',1,'I2Cdev']]],
   ['readbits',['readBits',['../class_i2_cdev.html#ab507de3d1a8f9e1528038ed2b2301d31',1,'I2Cdev']]],
   ['readbitsw',['readBitsW',['../class_i2_cdev.html#afbeeb8ece31be866c9d7169ae1d91f6b',1,'I2Cdev']]],

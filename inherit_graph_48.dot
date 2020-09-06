@@ -3,5 +3,5 @@ digraph "Graphical Class Hierarchy"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node0 [label="rtp::ControlMessage",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structrtp_1_1_control_message.html"];
+  Node0 [label="RotarySelector\< IOExpander\lDigitalInOut \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_rotary_selector.html"];
 }

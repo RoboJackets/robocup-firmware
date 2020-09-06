@@ -155,5 +155,6 @@ var searchData=
   ['getzgyrooffsettc',['getZGyroOffsetTC',['../class_m_p_u6050.html#afb9254a04feb7909cb808e94fa4fc44c',1,'MPU6050']]],
   ['getznegmotiondetected',['getZNegMotionDetected',['../class_m_p_u6050.html#a3601b732eb15644212b8f29cf396e142',1,'MPU6050']]],
   ['getzposmotiondetected',['getZPosMotionDetected',['../class_m_p_u6050.html#a33c766cd415fc5780417b1ed76717875',1,'MPU6050']]],
-  ['git_5fhash',['git_hash',['../class_f_p_g_a.html#ad4634d18d494835c0dab25ed991eff18',1,'FPGA']]]
+  ['git_5fhash',['git_hash',['../class_f_p_g_a.html#ad4634d18d494835c0dab25ed991eff18',1,'FPGA']]],
+  ['gyro_5fz',['gyro_z',['../class_i_c_m20948.html#a2f9286dc3e184cd5cc7e2b0161f776fd',1,'ICM20948']]]
 ];

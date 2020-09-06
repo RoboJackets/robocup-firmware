@@ -26,6 +26,7 @@ var hierarchy =
     ] ],
     [ "rtp::Header", "structrtp_1_1_header.html", null ],
     [ "I2Cdev", "class_i2_cdev.html", null ],
+    [ "ICM20948", "class_i_c_m20948.html", null ],
     [ "IMUData", "struct_i_m_u_data.html", null ],
     [ "IOExpanderDigitalInOut", "class_i_o_expander_digital_in_out.html", null ],
     [ "KickerCommand", "struct_kicker_command.html", null ],

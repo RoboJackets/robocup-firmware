@@ -7,5 +7,6 @@ var searchData=
   ['wheelprevtarget',['WheelPrevTarget',['../class_robot_controller.html#a9acb62a71864049d441008a6878ea986',1,'RobotController']]],
   ['wheelradius',['WheelRadius',['../class_robot_model.html#ae402759dd96abcf5c840633972a67628',1,'RobotModel']]],
   ['wheels',['wheels',['../struct_motor_command.html#afd6666629a9936c6ca79d162f5b70657',1,'MotorCommand']]],
-  ['wheeltobot',['WheelToBot',['../class_robot_model.html#a9553f6715c61922ef329ba3ffe89f850',1,'RobotModel']]]
+  ['wheeltobot',['WheelToBot',['../class_robot_model.html#a9553f6715c61922ef329ba3ffe89f850',1,'RobotModel']]],
+  ['who_5fam_5fi',['WHO_AM_I',['../namespace_registers.html#a7b7a2ce260e23c687eb50ee0072792b9',1,'Registers']]]
 ];

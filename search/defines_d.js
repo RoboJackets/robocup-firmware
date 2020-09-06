@@ -6,6 +6,7 @@ var searchData=
   ['radio_5fr1_5fcs',['RADIO_R1_CS',['../iodefs_8h.html#a0c4b76a17ffc7fa61d17c613001d3189',1,'iodefs.h']]],
   ['radio_5fr1_5fint',['RADIO_R1_INT',['../iodefs_8h.html#a5063c892639aef779a926ab14f59d6aa',1,'iodefs.h']]],
   ['radio_5fspi_5fbus',['RADIO_SPI_BUS',['../iodefs_8h.html#ad19d1006c923c4e10dfa7b6db08b4b54',1,'iodefs.h']]],
+  ['read_5fbit',['READ_BIT',['../_i_c_m20948_8cpp.html#a2f493ed233e66342493f155ebda5c183',1,'ICM20948.cpp']]],
   ['read_5fhigh_5fbyte',['READ_HIGH_BYTE',['../_a_v_r910_8hpp.html#ac4d4f9d45ebc1116744464bb57eef9f0',1,'AVR910.hpp']]],
   ['read_5flow_5fbyte',['READ_LOW_BYTE',['../_a_v_r910_8hpp.html#afa1a97393a08679251199e183d65b165',1,'AVR910.hpp']]]
 ];
