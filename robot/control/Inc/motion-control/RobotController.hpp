@@ -3,15 +3,30 @@
 #include <cstdint>
 #include <Eigen/Dense>
 
+/**
+ * Controller for wheel velocities
+ */
 class RobotController {
 private:
-    // X Y W bot velocities (m/s)
+    /**
+     * Number of tracked states (number of states in state vector)
+     *
+     * X and Y: linear velocities of robot body (m/s)
+     * W: angular velocity of robot body around z axis (rad/s)
+     */
     const static int numStates = 3;
 
-    // Wheel 1-4 duty cycle % max
+    /**
+     * Number of wheels controlled
+     */
     const static int numWheels = 4;
 
 public:
+    /**
+     * Constructor
+     *
+     * @param dt_us Expected period of the controller (microseconds)
+     */
     RobotController(uint32_t dt_us);
 
     /**
@@ -39,8 +54,13 @@ public:
                         Eigen::Matrix<float, numWheels, 1>& outputs);
 
 private:
-    // Body Vel
+    /**
+     * Body velocity control gains (1/s, 1/s, 1/s)
+     */
     Eigen::Matrix<float, numStates, 1> BodyKp;
 
+    /**
+     * Interval of control calculations (seconds)
+     */
     float dt;
 };

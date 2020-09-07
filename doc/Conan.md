@@ -10,8 +10,9 @@ It is not intended as a full guide to Conan as it only walks through the basic s
 
 
 ## What is Conan?
-Conan is a decentralized c++ package manager. This means that much like git it can work it multiple remotes to obtain the dependencies it requires and it can upload built packages to these remotes. The remotes are merely just package storage and do not build the packages themselves.
-The default location for your conan directory will be ~/.conan/ . Here conan stores all user configurations and packages (under the data directory). It is ill advised to modify any of these files by hand but it is sometimes helpful to force rebuild packages by deleting the contents of the data directory.
+Conan is a decentralized c++ package manager. This means that much like git there is no completely central authority. Conan can search multiple registered remotes (just servers running the Conan protocol) to obtain the dependencies it requires. These dependencies are either distributed pre built binary for whatever library we may be looking for or, if no binary exists, Conan recipies which instruct your machine on how to compile the binary for your platform. 
+Afterwards you can upload the binaries for these package to these remotes. The remotes are merely just package storage and do not build the packages themselves. The default location for your conan directory will be ~/.conan/ . 
+Here conan stores all user configurations and packages (under the data directory). It is ill advised to modify any of these files by hand but it is sometimes helpful to force rebuild packages by deleting the contents of the data directory.
 
 To learn more about Conan see the introduction page on the official docs:
 https://docs.conan.io/en/latest/introduction.html

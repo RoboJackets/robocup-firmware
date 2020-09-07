@@ -1,5 +1,5 @@
-# Command Line Basic
-s
+# Command Line Basics
+
 ## Navigation
 To navigate what directory we are in we use cd.
 

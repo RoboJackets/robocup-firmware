@@ -32,13 +32,12 @@ $(ROBOT_TESTS:%=test-%-upload): configure
 debug : BUILDTYPE = "Debug"
 debug : kicker robot
 
-# Markdowns and target for doxygen are built in doc and then symlinked to docs for easy access and github pages usage
-docs:
-	doxygen doc/Doxyfile
-	cp doc/doxygen.css docs/
-
 clean:
 	rm -rf kicker/build
 	rm -rf robot/build
 	conan remove RoboCupFirmware/* --builds
 	conan remove mTrain/* --builds
+
+docs:
+	cd doc && doxygen Doxyfile
+	@echo "\n=> Open up 'generated-docs/index.html' in a browser to view a local copy of the documentation"
