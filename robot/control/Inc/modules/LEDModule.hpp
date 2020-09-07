@@ -248,6 +248,4 @@ private:
     std::array<DigitalOut, 4> leds;
     bool missedSuperLoopToggle;
     bool missedModuleRunToggle;
-
-    double t = 0;
 };

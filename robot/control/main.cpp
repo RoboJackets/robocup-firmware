@@ -101,24 +101,7 @@ void createModule(GenericModule *module) {
 
 LockedStruct<DebugInfo> debugInfo;
 
-class BlinkModule : public GenericModule {
-public:
-    BlinkModule() : GenericModule(std::chrono::milliseconds(100), "Blink"), pin(LED1) {}
-
-    void entry() override {
-        pin.write(value);
-        value = !value;
-    }
-
-private:
-    DigitalOut pin;
-    bool value = false;
-};
-
-[[noreturn]]
 int main() {
-    DWT_Delay(500'000);
-
     static LockedStruct<I2C> sharedI2C(SHARED_I2C_BUS);
     static std::unique_ptr<SPI> fpgaSPI = std::make_unique<SPI>(FPGA_SPI_BUS, std::nullopt, 16'000'000);
     static LockedStruct<SPI> sharedSPI(SHARED_SPI_BUS, std::nullopt, 100'000);

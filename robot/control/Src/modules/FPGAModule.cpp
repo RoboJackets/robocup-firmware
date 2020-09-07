@@ -81,12 +81,6 @@ void FPGAModule::entry() {
                     dutyCycles.at(i) = -fpga.MAX_DUTY_CYCLE;
                 }
             }
-            dutyCycles.at(4) = motorCommandLock->dribbler * 2u;
-            if (dutyCycles.at(4) > 255) {
-                dutyCycles.at(4) = 255;
-            } else if (dutyCycles.at(4) < -255) {
-                dutyCycles.at(4) = -255;
-            }
         }
     }
 
