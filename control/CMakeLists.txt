@@ -1,14 +1,10 @@
 cmake_minimum_required(VERSION 3.14.7)
-set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/mtrain/mjackets-api/cmake/stm32-gcc-arm-none-eabi.cmake)
-include(${CMAKE_TOOLCHAIN_FILE})
-# set(CMAKE_C_COMPILER    ${AVR_C_COMPILER})
-# set(CMAKE_CXX_COMPILER  ${AVR_CXX_COMPILER})
+set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_LIST_DIR}/mtrain/mjackets-api/cmake/stm32-gcc-arm-none-eabi.cmake)
 
-project(control LANGUAGES C CXX)
+project(control LANGUAGES ASM C CXX)
 
-message("---------------------- CONTROL CMAKE_C_COMPILER ${CMAKE_C_COMPILER}" )
-message("---------------------- CONTROL CMAKE_OBJCOPY ${CMAKE_OBJCOPY}" )
-
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON) # Don't fall back to older versions
 set(CMAKE_CXX_COMPILER_VERSION "7.3")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY  "${CMAKE_BINARY_DIR}/bin" )
 
@@ -42,7 +38,7 @@ add_executable(control.elf
 ## Shouldnt need explicit inclusion since mtrain dev relies on these
 target_include_directories(control.elf PUBLIC
 	include
-    "${CMAKE_BINARY_DIR}/device-bins"
+    "${SHARED_DIR}/device-bins"
     # include/robocup
 )
 
@@ -60,7 +56,7 @@ add_custom_target(control ALL
 )
 
 add_custom_target(control-upload
-    COMMAND $ENV{FLASH_COPY_SCRIPT} "control.bin"
+    COMMAND ${FLASH_COPY_SCRIPT} "control.bin"
     WORKING_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
     DEPENDS control
     COMMENT "Copying binary control to MCU"

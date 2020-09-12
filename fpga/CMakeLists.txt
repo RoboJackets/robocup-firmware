@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.14.7)
+
 # This is the root path to anything Xilinx related
 set(XILINX_SYSTEM_ROOT "/opt/Xilinx" CACHE PATH "Path to Xilinx ISE tools. Change for non-standard install")
 if(NOT EXISTS XILINX_SYSTEM_ROOT)
