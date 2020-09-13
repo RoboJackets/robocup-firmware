@@ -1,10 +1,10 @@
 #pragma once
 
+#include "mJackets.hpp"
 #include "AVR910.hpp"
 #include "DigitalOut.hpp"
-#include "Internal/kicker_commands.h"
+#include "kicker_commands.h"
 #include "SPI.hpp"
-#include "mtrain.hpp"
 #include "LockedStruct.hpp"
 
 #include <string>
@@ -55,7 +55,7 @@ public:
 
     /**
      * Sets whether the KickerBoard should chip or kick
-     * 
+     *
      * @param isKick true to linear kick on next kick command,
      *               false to chip on next kick command
      */
@@ -86,7 +86,7 @@ public:
 
     /**
      * @return true if the ball triggers the breakbeam
-     * 
+     *
      * @note Small low pass filter on the AVR910 that only returns true
      * after a ms or two of the same state
      */

@@ -1,10 +1,10 @@
 #pragma once
 
+#include "mJackets.hpp"
 #include "GenericModule.hpp"
-#include "MicroPackets.hpp" 
+#include "MicroPackets.hpp"
 #include "drivers/FPGA.hpp"
 
-#include "mtrain.hpp"
 #include "SPI.hpp"
 
 #include <memory>
@@ -65,7 +65,7 @@ private:
     /**
      * Max amount of time that can elapse from the latest
      * command from motion control
-     * 
+     *
      * This is a safety feature to prevent the motors from moving
      * if the motion control dies
      */

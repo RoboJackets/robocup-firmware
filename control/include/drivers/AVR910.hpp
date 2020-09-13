@@ -38,11 +38,12 @@
 
 #pragma once
 
-#include "mtrain.hpp"
+#include "mJackets.hpp"
 #include "SPI.hpp"
 #include "DigitalOut.hpp"
 #include "LockedStruct.hpp"
 #include <memory>
+#include <cstdio>
 
 // AVR SPI Commands
 #define ATMEL_VENDOR_CODE 0x1E

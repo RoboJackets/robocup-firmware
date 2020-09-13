@@ -1,6 +1,6 @@
 #pragma once
 
-#include "mtrain.hpp"
+#include "mJackets.hpp"
 #include "rc-fshare/rtp.hpp"
 #include <memory>
 #include "drivers/GenericRadio.hpp"
@@ -23,7 +23,7 @@ public:
 
     /**
      * Sends a packet of data to the radio
-     * 
+     *
      * Assumes data in structs are valid
      */
     void send(const BatteryVoltage& batteryVoltage,
@@ -34,7 +34,7 @@ public:
     /**
      * Receive the latest packet from the radio
      * Only fills data portion of structs
-     * 
+     *
      * @return true if it returned a valid packet, false if there is no packet to return
      */
     bool receive(KickerCommand& kickerCommand,

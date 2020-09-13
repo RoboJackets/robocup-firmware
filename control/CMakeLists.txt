@@ -37,9 +37,14 @@ add_executable(control.elf
 
 ## Shouldnt need explicit inclusion since mtrain dev relies on these
 target_include_directories(control.elf PUBLIC
-	include
-    "${SHARED_DIR}/device-bins"
-    # include/robocup
+    include
+    include/robocup
+    # needs kicker commands
+    ${CMAKE_CURRENT_LIST_DIR}/../kicker/include
+    # needs kicker final binary for flashing
+    ${CMAKE_CURRENT_LIST_DIR}/../kicker/build/bin
+    # needs fpga final binary for flashing
+    ${CMAKE_CURRENT_LIST_DIR}/../fpga/build/bin
 )
 
 target_link_libraries(control.elf

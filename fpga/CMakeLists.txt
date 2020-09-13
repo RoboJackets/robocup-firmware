@@ -1,9 +1,14 @@
 cmake_minimum_required(VERSION 3.14.7)
 
+project(fpga)
+
 # This is the root path to anything Xilinx related
 set(XILINX_SYSTEM_ROOT "/opt/Xilinx" CACHE PATH "Path to Xilinx ISE tools. Change for non-standard install")
 if(NOT EXISTS XILINX_SYSTEM_ROOT)
-    # If the toolchain isnt installed dont build fpga
+    # If the toolchain isnt installed dont build fpga copy perm binary to build/bin
+    execute_process (
+        COMMAND bash -c "mkdir -p build/bin && cp perm-bin/fpga.h"
+    )
     return()
 endif()
 
