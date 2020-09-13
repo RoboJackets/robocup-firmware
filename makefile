@@ -9,20 +9,21 @@ all: control
 
 control-upload: control
 
-control: fpga kicker
+# control: fpga kicker
+control: kicker
 	cd control && \
 mkdir -p build && cd build && \
-cmake -DSHARED_DIR=${SHARED_DIR} -DFLASH_COPY_SCRIPT=${FLASH_COPY_SCRIPT} .. && make
+cmake -DFLASH_COPY_SCRIPT=${FLASH_COPY_SCRIPT} .. && make
 
-fpga:
-	cd fpga && \
-mkdir -p build && cd build && \
-cmake -DSHARED_DIR=${SHARED_DIR} .. && make
+# fpga:
+# 	cd fpga && \
+# mkdir -p build && cd build && \
+# cmake  .. && make
 
 kicker:
 	cd kicker && \
 mkdir -p build && cd build && \
-cmake -DSHARED_DIR=${SHARED_DIR} -DCONVERT_SCRIPT=${CONVERT_SCRIPT} .. && make
+cmake -DCONVERT_SCRIPT=${CONVERT_SCRIPT} .. && make
 
 docs:
 	cd doc && doxygen Doxyfile

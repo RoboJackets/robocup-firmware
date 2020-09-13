@@ -1,6 +1,6 @@
 #include "modules/IMUModule.hpp"
-#include "mtrain.hpp"
-#include <cmath>
+#include "mJackets.hpp"
+#include <cstdio>
 
 IMUModule::IMUModule(std::shared_ptr<I2C> sharedI2C, LockedStruct<IMUData>& imuData)
     : GenericModule(kPeriod, "imu", kPriority),

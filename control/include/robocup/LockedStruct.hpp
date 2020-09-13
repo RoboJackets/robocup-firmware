@@ -5,6 +5,7 @@
 #include "FreeRTOS.h"
 #include "semphr.h"
 #include "task.h"
+#include <utility>
 
 /**
  * A locked-struct abstraction. To access the inner value (either read or write)

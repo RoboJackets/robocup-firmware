@@ -1,6 +1,6 @@
 #include "modules/KickerModule.hpp"
 
-#include "mtrain.hpp"
+#include "mJackets.hpp"
 #include "iodefs.h"
 
 KickerModule::KickerModule(LockedStruct<SPI>& spi,

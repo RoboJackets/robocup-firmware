@@ -1,12 +1,12 @@
 #include "drivers/FPGA.hpp"
-
-#include <memory>
-#include <stdint.h>
-
-#include "device-bins/fpga_bin.h"
+#include "fpga_bin.h"
 
 #include "FreeRTOS.h"
 #include "task.h"
+
+#include <memory>
+#include <algorithm>
+#include <stdint.h>
 
 template <size_t SIGN_INDEX>
 uint16_t toSignMag(int16_t val) {

@@ -44,7 +44,8 @@ target_include_directories(control.elf PUBLIC
     # needs kicker final binary for flashing
     ${CMAKE_CURRENT_LIST_DIR}/../kicker/build/bin
     # needs fpga final binary for flashing
-    ${CMAKE_CURRENT_LIST_DIR}/../fpga/build/bin
+    ${CMAKE_CURRENT_LIST_DIR}/../fpga/perm-bin
+    # ${CMAKE_CURRENT_LIST_DIR}/../fpga/build/bin
 )
 
 target_link_libraries(control.elf

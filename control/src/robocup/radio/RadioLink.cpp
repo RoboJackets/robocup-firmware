@@ -1,12 +1,5 @@
 #include "radio/RadioLink.hpp"
-
-#include "mtrain.hpp"
-#include "SPI.hpp"
-
-#include "iodefs.h"
 #include "drivers/ISM43340.hpp"
-
-#include "MicroPackets.hpp"
 
 extern DebugInfo debugInfo;
 
@@ -34,7 +27,7 @@ void RadioLink::send(const BatteryVoltage& batteryVoltage,
     header->type    = rtp::MessageType::CONTROL;
 
     uint8_t motorErrors = 0;
-    for (int i = 0; i < 4; i++) 
+    for (int i = 0; i < 4; i++)
         motorErrors |= static_cast<int>(fpgaStatus.motorHasErrors[i]) << i;
 
     status->uid             = robotID.robotID;

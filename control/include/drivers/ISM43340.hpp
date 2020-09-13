@@ -3,10 +3,10 @@
 #include "mJackets.hpp"
 #include "SPI.hpp"
 #include "GenericRadio.hpp"
+#include "PinDefs.hpp"
+#include <string>
 #include <vector>
 #include <memory>
-#include "pin_defs.h"
-#include <string>
 
 namespace ISMConstants {
     // Hardware/driver config values
@@ -427,7 +427,7 @@ private:
 
     DigitalOut nCs;
     DigitalOut nReset;
-    pin_name dataReady;
+    PinName dataReady;
 
     // Current socket selected on the device
     enum SOCKET_TYPE { SEND = 0, RECEIVE = 1 };
