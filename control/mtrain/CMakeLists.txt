@@ -9,6 +9,4 @@ add_subdirectory(bsp)
 
 add_library(mtrain)
 
-target_include_directories(mtrain PUBLIC bsp/)
-
 target_link_libraries(mtrain PUBLIC API)
