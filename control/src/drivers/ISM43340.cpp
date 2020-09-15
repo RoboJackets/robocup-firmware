@@ -1,6 +1,6 @@
 #include "drivers/ISM43340.hpp"
+#include "InterruptIn.hpp"
 #include "delay.h"
-#include "interrupt_in.h"
 
 #include "FreeRTOS.h"
 #include "task.h"
@@ -33,7 +33,7 @@ ISM43340::ISM43340(std::unique_ptr<SPI> radioSPI, PinName nCsPin, PinName nReset
       cmdStart(nullptr) {
 
     currentState = ISMConstants::State::CommandReady;
-    interruptin_init_ex(dataReady, &dataReady_cb, PULL_DOWN, INTERRUPT_RISING_FALLING);
+    interruptin_init_ex(dataReady, &dataReady_cb, PullType::PullDown, INTERRUPT_RISING_FALLING);
 
     nCs = ISMConstants::CHIP_DESELECT;
 

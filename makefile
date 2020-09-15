@@ -30,6 +30,6 @@ docs:
 	@echo "\n=> Open up 'generated-docs/index.html' in a browser to view a local copy of the documentation"
 
 clean:
-	cd control && rm -r build
-	cd fpga && rm -r build
-	cd kicker && rm -r build
+	cd control && rm -rf build
+	cd fpga && rm -rf build
+	cd kicker && rm -rf build

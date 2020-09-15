@@ -1,8 +1,10 @@
 #include "drivers/KickerBoard.hpp"
+#include "kicker_bin.h"
 
 #include "delay.h"
-#include "device-bins/kicker_bin.h"
 #include <tuple>
+#include <string>
+#include <cstdio>
 
 using namespace std;
 
@@ -113,7 +115,7 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
     if (onlyIfDifferent &&
         (checkMemory(ATTINY_PAGESIZE, ATTINY_NUM_PAGES, progBinary, length, false) == 0))
         shouldProgram = false;
-    
+
     if (!shouldProgram) {
         printf("[INFO] Kicker: Kicker up-to-date, no need to flash.\r\n");
 
