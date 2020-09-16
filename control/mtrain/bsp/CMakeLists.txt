@@ -8,7 +8,7 @@ string(TOLOWER ${TYPE} TYPE_L)
 
 find_path(BSP_INCLUDE_PATH
     NAMES stm32${FAMILY_L}xx_hal_conf.h
-    PATHS "${BSP_PATH}" 
+    PATHS "${BSP_PATH}"
     NO_DEFAULT_PATH
     REQUIRED
 )
@@ -16,4 +16,3 @@ find_path(BSP_INCLUDE_PATH
 add_library(BSP INTERFACE)
 target_include_directories(BSP INTERFACE "${BSP_INCLUDE_PATH}")
 target_link_libraries(BSP INTERFACE API)
-

@@ -8,6 +8,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON) # Don't fall back to older versions
 set(CMAKE_CXX_COMPILER_VERSION "7.3")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY  "${CMAKE_BINARY_DIR}/bin" )
 
+set(CMAKE_BUILD_TYPE RelWithDebInfo)
+
 add_subdirectory(mtrain)
 add_subdirectory(external)
 

@@ -1,4 +1,5 @@
 #include "mJackets.hpp"
+#include "mtrain_hardware_init.h"
 #include "FreeRTOSConfig.h"
 #include "FreeRTOS.h"
 #include "task.h"
@@ -106,6 +107,9 @@ LockedStruct<DebugInfo> debugInfo;
 
 [[noreturn]]
 int main() {
+    // TODO Remove this call when system init through mjackets api matures
+    bsp_config();
+
 //    free_space = xPortGetFreeHeapSize();
     static LockedStruct<I2C> sharedI2C(SHARED_I2C_BUS);
     static std::unique_ptr<SPI> fpgaSPI = std::make_unique<SPI>(FPGA_SPI_BUS, std::nullopt, 16'000'000);
