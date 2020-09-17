@@ -2,5 +2,5 @@ digraph "RobotController"
 {
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
-  Node1 [label="{RobotController\n|- BodyKp\l- BodyKi\l- BodyErrorSum\l- BodyILimit\l- BodyUseILimit\l- BodyInputLimited\l- BodyOutputLimited\l- BodyPrevTarget\l- WheelKp\l- WheelPrevTarget\l- dt\l- numStates\l- numWheels\l- maxWheelAccel\l- maxForwardAccel\l- maxSideAccel\l- maxAngularAccel\l|+ RobotController()\l+ calculateBody()\l+ calculateWheel()\l- limitBodyAccel()\l- limitWheelAccel()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node1 [label="{RobotController\n|- BodyKp\l- dt\l- numStates\l- numWheels\l|+ RobotController()\l+ calculateBody()\l+ calculateWheel()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
 }

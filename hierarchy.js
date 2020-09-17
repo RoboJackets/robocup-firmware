@@ -13,6 +13,7 @@ var hierarchy =
     [ "FPGAStatus", "struct_f_p_g_a_status.html", null ],
     [ "GenericModule", "class_generic_module.html", [
       [ "BatteryModule", "class_battery_module.html", null ],
+      [ "BlinkModule", "class_blink_module.html", null ],
       [ "FPGAModule", "class_f_p_g_a_module.html", null ],
       [ "IMUModule", "class_i_m_u_module.html", null ],
       [ "KickerModule", "class_kicker_module.html", null ],

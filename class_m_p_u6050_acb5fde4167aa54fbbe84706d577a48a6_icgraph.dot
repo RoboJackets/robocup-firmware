@@ -3,12 +3,9 @@ digraph "MPU6050::getStandbyXGyroEnabled"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node507 [label="MPU6050::getStandbyXGyro\lEnabled",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
-  Node507 -> Node508 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node508 [label="MPU6050::setClockSource",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_p_u6050.html#a4c1cd147d038e024bdeaa053c4d77734",tooltip="Set clock source setting. "];
-  Node508 -> Node509 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node509 [label="IMUModule::start",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_m_u_module.html#aba29f7665d8ec8f0eefe802f1c2b741c",tooltip="Code which initializes module. "];
-  Node508 -> Node510 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node510 [label="MPU6050::initialize",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_p_u6050.html#abd8fc6c18adf158011118fbccc7e7054",tooltip="Power on and prepare for general usage. "];
-  Node510 -> Node509 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node487 [label="MPU6050::getStandbyXGyro\lEnabled",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node487 -> Node488 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node488 [label="MPU6050::setClockSource",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_p_u6050.html#a4c1cd147d038e024bdeaa053c4d77734",tooltip="Set clock source setting. "];
+  Node488 -> Node489 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node489 [label="MPU6050::initialize",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_p_u6050.html#abd8fc6c18adf158011118fbccc7e7054",tooltip="Power on and prepare for general usage. "];
 }

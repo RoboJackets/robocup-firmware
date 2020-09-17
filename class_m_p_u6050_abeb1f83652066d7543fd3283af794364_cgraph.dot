@@ -3,15 +3,15 @@ digraph "MPU6050::setSlaveWordByteSwap"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node1349 [label="MPU6050::setSlaveWordByteSwap",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
-  Node1349 -> Node1350 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node1350 [label="I2Cdev::writeBit",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i2_cdev.html#aa68890af87de5471d32e583ebbd91acb",tooltip="write a single bit in an 8-bit device register. "];
-  Node1350 -> Node1351 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node1351 [label="I2Cdev::readByte",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i2_cdev.html#aef1db446b45660c6631fc780278ac366",tooltip="Read single byte from an 8-bit device register. "];
-  Node1351 -> Node1352 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node1352 [label="I2Cdev::readBytes",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i2_cdev.html#ae1eed9468ce4653e080bfd8481d2ac88",tooltip="Read multiple bytes from an 8-bit device register. "];
-  Node1350 -> Node1353 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node1353 [label="I2Cdev::writeByte",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i2_cdev.html#aeb297637ef985cd562da465ba61b7042",tooltip="Write single byte to an 8-bit device register. "];
-  Node1353 -> Node1354 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node1354 [label="I2Cdev::writeBytes",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i2_cdev.html#aa4e39cac6c0eac5112f9132084bcc93e"];
+  Node1273 [label="MPU6050::setSlaveWordByteSwap",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node1273 -> Node1274 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1274 [label="I2Cdev::writeBit",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i2_cdev.html#aa68890af87de5471d32e583ebbd91acb",tooltip="write a single bit in an 8-bit device register. "];
+  Node1274 -> Node1275 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1275 [label="I2Cdev::readByte",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i2_cdev.html#aef1db446b45660c6631fc780278ac366",tooltip="Read single byte from an 8-bit device register. "];
+  Node1275 -> Node1276 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1276 [label="I2Cdev::readBytes",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i2_cdev.html#ae1eed9468ce4653e080bfd8481d2ac88",tooltip="Read multiple bytes from an 8-bit device register. "];
+  Node1274 -> Node1277 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1277 [label="I2Cdev::writeByte",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i2_cdev.html#aeb297637ef985cd562da465ba61b7042",tooltip="Write single byte to an 8-bit device register. "];
+  Node1277 -> Node1278 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1278 [label="I2Cdev::writeBytes",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i2_cdev.html#aa4e39cac6c0eac5112f9132084bcc93e"];
 }

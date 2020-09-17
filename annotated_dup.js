@@ -7,6 +7,7 @@ var annotated_dup =
     [ "Battery", "class_battery.html", "class_battery" ],
     [ "BatteryModule", "class_battery_module.html", "class_battery_module" ],
     [ "BatteryVoltage", "struct_battery_voltage.html", "struct_battery_voltage" ],
+    [ "BlinkModule", "class_blink_module.html", "class_blink_module" ],
     [ "DebugInfo", "struct_debug_info.html", "struct_debug_info" ],
     [ "DribblerController", "class_dribbler_controller.html", "class_dribbler_controller" ],
     [ "Error", "struct_error.html", "struct_error" ],

@@ -16,8 +16,6 @@ var searchData=
   ['legacy',['LEGACY',['../namespacertp_1_1_port_type_namespace.html#aa4aec9e3af6e48136ec9a1e072d22288ae63c112a95651b7a3b2e6ef59e1bb210',1,'rtp::PortTypeNamespace']]],
   ['levelcolors',['LevelColors',['../_l_e_d_module_8hpp.html#a6189023456c55830ab1301757517ddb3',1,'LEDModule.hpp']]],
   ['lightson',['lightsOn',['../class_l_e_d_module.html#a0d384306a91957ae6d69e6a86ddbff5c',1,'LEDModule']]],
-  ['limitbodyaccel',['limitBodyAccel',['../class_robot_controller.html#a3d6033a398ba89afad79af746eceeab5',1,'RobotController']]],
-  ['limitwheelaccel',['limitWheelAccel',['../class_robot_controller.html#aa4d23a9a654037bd5a63a5d331988299',1,'RobotController']]],
   ['link',['link',['../class_radio_module.html#aaf4994f9d9549841dba0556175a93aba',1,'RadioModule::link()'],['../namespacertp_1_1_port_type_namespace.html#aa4aec9e3af6e48136ec9a1e072d22288acfc701921e6179207d0074ccc1c39fa9',1,'rtp::PortTypeNamespace::LINK()']]],
   ['loadmemorypage',['loadMemoryPage',['../class_a_v_r910.html#a1e5ff38fc05efa757b90a9d1e3a8e53d',1,'AVR910']]],
   ['lock',['Lock',['../struct_locked_struct_1_1_lock.html',1,'LockedStruct&lt; T &gt;::Lock'],['../struct_locked_struct.html#aa207b98a1cd6c569a96e7d1d5565478f',1,'LockedStruct::lock(bool *first_lock=nullptr)'],['../struct_locked_struct.html#a7d4c5dda19bd55777506fa2b09dafc19',1,'LockedStruct::Lock()'],['../struct_locked_struct_1_1_lock.html#a114a6b364423baf17d26a66b488e41c4',1,'LockedStruct::Lock::Lock(const Lock &amp;)=delete'],['../struct_locked_struct_1_1_lock.html#a9f5314631f93fc270fd3e32a02f97602',1,'LockedStruct::Lock::Lock(Lock &amp;&amp;other)=default'],['../struct_locked_struct_1_1_lock.html#a66d133d8e6c54b58e713bc0d68fc621d',1,'LockedStruct::Lock::Lock(LockedStruct *locked, bool *first_lock)']]],

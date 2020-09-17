@@ -3,6 +3,9 @@ var dir_46be606fe712097f815c5f164a99c858 =
     [ "BatteryModule.hpp", "_battery_module_8hpp.html", [
       [ "BatteryModule", "class_battery_module.html", "class_battery_module" ]
     ] ],
+    [ "BlinkModule.hpp", "_blink_module_8hpp.html", [
+      [ "BlinkModule", "class_blink_module.html", "class_blink_module" ]
+    ] ],
     [ "FPGAModule.hpp", "_f_p_g_a_module_8hpp.html", [
       [ "FPGAModule", "class_f_p_g_a_module.html", "class_f_p_g_a_module" ]
     ] ],

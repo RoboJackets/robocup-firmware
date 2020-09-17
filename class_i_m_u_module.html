@@ -96,9 +96,9 @@ $(document).ready(function(){initNavTree('class_i_m_u_module.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a1f691ac4f40252d106767cbbb98b1075"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_m_u_module.html#a1f691ac4f40252d106767cbbb98b1075">IMUModule</a> (std::shared_ptr&lt; I2C &gt; sharedI2C, <a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_i_m_u_data.html">IMUData</a> &gt; &amp;<a class="el" href="class_i_m_u_module.html#a5170390891f04c6be5af4a4c8ce339e9">imuData</a>)</td></tr>
-<tr class="memdesc:a1f691ac4f40252d106767cbbb98b1075"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for IMUModule.  <a href="#a1f691ac4f40252d106767cbbb98b1075">More...</a><br /></td></tr>
-<tr class="separator:a1f691ac4f40252d106767cbbb98b1075"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b9d1b1e1f1507572118711cc460ce71"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_m_u_module.html#a9b9d1b1e1f1507572118711cc460ce71">IMUModule</a> (<a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; SPI &gt; &amp;sharedSPI, <a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_i_m_u_data.html">IMUData</a> &gt; &amp;<a class="el" href="class_i_m_u_module.html#a5170390891f04c6be5af4a4c8ce339e9">imuData</a>)</td></tr>
+<tr class="memdesc:a9b9d1b1e1f1507572118711cc460ce71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for IMUModule.  <a href="#a9b9d1b1e1f1507572118711cc460ce71">More...</a><br /></td></tr>
+<tr class="separator:a9b9d1b1e1f1507572118711cc460ce71"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba29f7665d8ec8f0eefe802f1c2b741c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_m_u_module.html#aba29f7665d8ec8f0eefe802f1c2b741c">start</a> () override</td></tr>
 <tr class="memdesc:aba29f7665d8ec8f0eefe802f1c2b741c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Code which initializes module.  <a href="#aba29f7665d8ec8f0eefe802f1c2b741c">More...</a><br /></td></tr>
 <tr class="separator:aba29f7665d8ec8f0eefe802f1c2b741c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -123,8 +123,8 @@ Static Public Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a33b2cf520ed3dbc3c6ac80d71104d6d8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_m_p_u6050.html">MPU6050</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_m_u_module.html#a33b2cf520ed3dbc3c6ac80d71104d6d8">imu</a></td></tr>
-<tr class="separator:a33b2cf520ed3dbc3c6ac80d71104d6d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36fa1d24e11ba5d8a40dcf2fe4007f86"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_i_c_m20948.html">ICM20948</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_m_u_module.html#a36fa1d24e11ba5d8a40dcf2fe4007f86">imu</a></td></tr>
+<tr class="separator:a36fa1d24e11ba5d8a40dcf2fe4007f86"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5170390891f04c6be5af4a4c8ce339e9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; <a class="el" href="struct_i_m_u_data.html">IMUData</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_m_u_module.html#a5170390891f04c6be5af4a4c8ce339e9">imuData</a></td></tr>
 <tr class="separator:a5170390891f04c6be5af4a4c8ce339e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -166,8 +166,8 @@ Additional Inherited Members</h2></td></tr>
 </map>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a1f691ac4f40252d106767cbbb98b1075"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1f691ac4f40252d106767cbbb98b1075">&#9670;&nbsp;</a></span>IMUModule()</h2>
+<a id="a9b9d1b1e1f1507572118711cc460ce71"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b9d1b1e1f1507572118711cc460ce71">&#9670;&nbsp;</a></span>IMUModule()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -175,8 +175,8 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">IMUModule::IMUModule </td>
           <td>(</td>
-          <td class="paramtype">std::shared_ptr&lt; I2C &gt;&#160;</td>
-          <td class="paramname"><em>sharedI2C</em>, </td>
+          <td class="paramtype"><a class="el" href="struct_locked_struct.html">LockedStruct</a>&lt; SPI &gt; &amp;&#160;</td>
+          <td class="paramname"><em>sharedSPI</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -195,7 +195,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Constructor for IMUModule. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">sharedI2C</td><td>Pointer to I2C object which reads/writes on I2C bus </td></tr>
+    <tr><td class="paramname">sharedSPI</td><td>Pointer to SPI object which reads/writes on SPI bus </td></tr>
     <tr><td class="paramname">imuData</td><td>Shared memory location containing linear acceleration and angular velocity along/about X,Y, and Z axes </td></tr>
   </table>
   </dd>
@@ -205,8 +205,8 @@ Additional Inherited Members</h2></td></tr>
 <div id="dynsection-2-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-2-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="class_i_m_u_module_a1f691ac4f40252d106767cbbb98b1075_cgraph.png" border="0" usemap="#class_i_m_u_module_a1f691ac4f40252d106767cbbb98b1075_cgraph" alt=""/></div>
-<map name="class_i_m_u_module_a1f691ac4f40252d106767cbbb98b1075_cgraph" id="class_i_m_u_module_a1f691ac4f40252d106767cbbb98b1075_cgraph">
+<div class="center"><img src="class_i_m_u_module_a9b9d1b1e1f1507572118711cc460ce71_cgraph.png" border="0" usemap="#class_i_m_u_module_a9b9d1b1e1f1507572118711cc460ce71_cgraph" alt=""/></div>
+<map name="class_i_m_u_module_a9b9d1b1e1f1507572118711cc460ce71_cgraph" id="class_i_m_u_module_a9b9d1b1e1f1507572118711cc460ce71_cgraph">
 </map>
 </div>
 
@@ -293,8 +293,8 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a33b2cf520ed3dbc3c6ac80d71104d6d8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a33b2cf520ed3dbc3c6ac80d71104d6d8">&#9670;&nbsp;</a></span>imu</h2>
+<a id="a36fa1d24e11ba5d8a40dcf2fe4007f86"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36fa1d24e11ba5d8a40dcf2fe4007f86">&#9670;&nbsp;</a></span>imu</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -303,7 +303,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_m_p_u6050.html">MPU6050</a> IMUModule::imu</td>
+          <td class="memname"><a class="el" href="class_i_c_m20948.html">ICM20948</a> IMUModule::imu</td>
         </tr>
       </table>
   </td>
@@ -419,7 +419,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_i_m_u_module.html">IMUModule</a></li>
-    <li class="footer">Generated on Sun Sep 6 2020 15:46:48 for GT RoboCup SSL by
+    <li class="footer">Generated on Thu Sep 17 2020 15:52:54 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

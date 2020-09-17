@@ -3,12 +3,9 @@ digraph "MPU6050::setStandbyXGyroEnabled"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node1385 [label="MPU6050::setStandbyXGyro\lEnabled",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
-  Node1385 -> Node1386 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node1386 [label="MPU6050::setClockSource",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_p_u6050.html#a4c1cd147d038e024bdeaa053c4d77734",tooltip="Set clock source setting. "];
-  Node1386 -> Node1387 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node1387 [label="IMUModule::start",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_m_u_module.html#aba29f7665d8ec8f0eefe802f1c2b741c",tooltip="Code which initializes module. "];
-  Node1386 -> Node1388 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node1388 [label="MPU6050::initialize",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_p_u6050.html#abd8fc6c18adf158011118fbccc7e7054",tooltip="Power on and prepare for general usage. "];
-  Node1388 -> Node1387 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1307 [label="MPU6050::setStandbyXGyro\lEnabled",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node1307 -> Node1308 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1308 [label="MPU6050::setClockSource",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_p_u6050.html#a4c1cd147d038e024bdeaa053c4d77734",tooltip="Set clock source setting. "];
+  Node1308 -> Node1309 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1309 [label="MPU6050::initialize",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_p_u6050.html#abd8fc6c18adf158011118fbccc7e7054",tooltip="Power on and prepare for general usage. "];
 }

@@ -2,11 +2,11 @@ var _i_c_m20948_8cpp =
 [
     [ "READ_BIT", "_i_c_m20948_8cpp.html#a2f493ed233e66342493f155ebda5c183", null ],
     [ "WHOAMI_VAL", "_i_c_m20948_8cpp.html#a1800f5c84c55d1b4ffb7725992491d99", null ],
-    [ "GyroFS", "_i_c_m20948_8cpp.html#a40bc5d1256e35f3668bc1a0ed63ba55c", [
-      [ "DPS_2000", "_i_c_m20948_8cpp.html#a40bc5d1256e35f3668bc1a0ed63ba55cac6c3aae8dd0567a828f414d02484efbc", null ],
-      [ "DPS_1000", "_i_c_m20948_8cpp.html#a40bc5d1256e35f3668bc1a0ed63ba55caaa889246886cea7fd05138f9816f377a", null ],
-      [ "DPS_500", "_i_c_m20948_8cpp.html#a40bc5d1256e35f3668bc1a0ed63ba55ca36e11f82c9cd80b2a7b2725d6f43c6bc", null ],
-      [ "DPS_250", "_i_c_m20948_8cpp.html#a40bc5d1256e35f3668bc1a0ed63ba55caa138c6e9ef89c239b08cecef1247e315", null ]
+    [ "GYRO_FS_SEL", "_i_c_m20948_8cpp.html#aae9dbe9ec3c277024edb40738b709e30", [
+      [ "DPS_2000", "_i_c_m20948_8cpp.html#aae9dbe9ec3c277024edb40738b709e30ac6c3aae8dd0567a828f414d02484efbc", null ],
+      [ "DPS_1000", "_i_c_m20948_8cpp.html#aae9dbe9ec3c277024edb40738b709e30aaa889246886cea7fd05138f9816f377a", null ],
+      [ "DPS_500", "_i_c_m20948_8cpp.html#aae9dbe9ec3c277024edb40738b709e30a36e11f82c9cd80b2a7b2725d6f43c6bc", null ],
+      [ "DPS_250", "_i_c_m20948_8cpp.html#aae9dbe9ec3c277024edb40738b709e30aa138c6e9ef89c239b08cecef1247e315", null ]
     ] ],
     [ "PWR_MGMT", "_i_c_m20948_8cpp.html#a0062e4dd4e409b420863ec2c544a6194", [
       [ "DEVICE_RESET", "_i_c_m20948_8cpp.html#a0062e4dd4e409b420863ec2c544a6194a036878067c752d04f3eb767b44e60784", null ],

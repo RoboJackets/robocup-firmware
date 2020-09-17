@@ -1,7 +1,7 @@
 var searchData=
 [
   ['m_5fpins',['m_pins',['../class_rotary_selector.html#a158f8c0eb47c41db2a5ab324cad713e9',1,'RotarySelector']]],
-  ['main',['main',['../base_2main_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'main():&#160;main.cpp'],['../control_2main_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'main():&#160;main.cpp'],['../radio-test_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'main():&#160;radio-test.cpp'],['../rtos_8cpp.html#a840291bc02cba5474a4cb46a9b9566fe',1,'main(void):&#160;rtos.cpp'],['../git__version__test_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'main():&#160;git_version_test.cpp'],['../main_8c.html#acdef7a1fd863a6d3770c1268cb06add3',1,'main():&#160;main.c']]],
+  ['main',['main',['../base_2main_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'main():&#160;main.cpp'],['../control_2main_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'main():&#160;main.cpp'],['../icm-20498-angle_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'main():&#160;icm-20498-angle.cpp'],['../icm-20498-rate_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'main():&#160;icm-20498-rate.cpp'],['../radio-test_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'main():&#160;radio-test.cpp'],['../rtos_8cpp.html#a840291bc02cba5474a4cb46a9b9566fe',1,'main(void):&#160;rtos.cpp'],['../git__version__test_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'main():&#160;git_version_test.cpp'],['../main_8c.html#acdef7a1fd863a6d3770c1268cb06add3',1,'main():&#160;main.c']]],
   ['main_2ec',['main.c',['../main_8c.html',1,'']]],
   ['main_2ecpp',['main.cpp',['../base_2main_8cpp.html',1,'(Global Namespace)'],['../control_2main_8cpp.html',1,'(Global Namespace)']]],
   ['max_5fdeltav_5fper_5fs',['MAX_DELTAV_PER_S',['../class_dribbler_controller.html#a2863dc19fb3c83b65e593a01c9dd1730',1,'DribblerController']]],
@@ -13,10 +13,6 @@ var searchData=
   ['max_5fspeed',['MAX_SPEED',['../class_dribbler_controller.html#a4ae85baca52b2ee1f88507560d709d87',1,'DribblerController']]],
   ['max_5fspeed_5framp_5ftime',['MAX_SPEED_RAMP_TIME',['../class_dribbler_controller.html#a712f64602539c71f08fe45476e01114e',1,'DribblerController']]],
   ['max_5ftimer_5ffreq',['MAX_TIMER_FREQ',['../main_8c.html#a7d9a9b2252a47b6f31eb3878fdde32f5',1,'main.c']]],
-  ['maxangularaccel',['maxAngularAccel',['../class_robot_controller.html#a7deed0c6038897f812c36a02c754bee4',1,'RobotController']]],
-  ['maxforwardaccel',['maxForwardAccel',['../class_robot_controller.html#a5751bde1ddf4914a772fe6dad7715656',1,'RobotController']]],
-  ['maxsideaccel',['maxSideAccel',['../class_robot_controller.html#a66a636c7eee6b54ae028c67fac5ca634',1,'RobotController']]],
-  ['maxwheelaccel',['maxWheelAccel',['../class_robot_controller.html#a1e7c93f2fa4f19fb0d3933292ed82336',1,'RobotController']]],
   ['mcp23017',['MCP23017',['../class_m_c_p23017.html',1,'MCP23017'],['../class_m_c_p23017.html#a16ce3f11e46c85426a0c24f25a783566',1,'MCP23017::MCP23017()']]],
   ['mcp23017_2ecpp',['MCP23017.cpp',['../_m_c_p23017_8cpp.html',1,'']]],
   ['mcp23017_2ehpp',['MCP23017.hpp',['../_m_c_p23017_8hpp.html',1,'']]],

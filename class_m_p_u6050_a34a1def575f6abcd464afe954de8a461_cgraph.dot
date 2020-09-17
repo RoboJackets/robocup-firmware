@@ -3,9 +3,9 @@ digraph "MPU6050::setSlaveOutputByte"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node1334 [label="MPU6050::setSlaveOutputByte",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
-  Node1334 -> Node1335 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node1335 [label="I2Cdev::writeByte",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i2_cdev.html#aeb297637ef985cd562da465ba61b7042",tooltip="Write single byte to an 8-bit device register. "];
-  Node1335 -> Node1336 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node1336 [label="I2Cdev::writeBytes",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i2_cdev.html#aa4e39cac6c0eac5112f9132084bcc93e"];
+  Node1258 [label="MPU6050::setSlaveOutputByte",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node1258 -> Node1259 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1259 [label="I2Cdev::writeByte",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i2_cdev.html#aeb297637ef985cd562da465ba61b7042",tooltip="Write single byte to an 8-bit device register. "];
+  Node1259 -> Node1260 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1260 [label="I2Cdev::writeBytes",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i2_cdev.html#aa4e39cac6c0eac5112f9132084bcc93e"];
 }

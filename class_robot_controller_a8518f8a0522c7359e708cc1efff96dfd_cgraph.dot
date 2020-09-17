@@ -14,7 +14,4 @@ digraph "RobotController::calculateBody"
   Node6 [label="RobotModel::recalculateBot\lToWheel",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_robot_model.html#a371f2a73a77c19c7771bfdef12b7b5a9",tooltip="This should be called when any of the other parameters are changed. "];
   Node3 -> Node7 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node7 [label="RobotModel::operator=",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_robot_model.html#a4d9233b399324c653083e78e779cc098"];
-  Node2 -> Node8 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node8 [label="apply_wheel_force",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_robot_controller_8cpp.html#a71e48812e11f8c3991f75c5958a75d61"];
-  Node8 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
 }

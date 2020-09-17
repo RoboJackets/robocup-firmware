@@ -103,8 +103,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a902d8262a3c35f62a3502f1939b77085"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1536b8a4ad6bcb7f84fe9fe013bccf5c"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_c_m20948.html#a1536b8a4ad6bcb7f84fe9fe013bccf5c">accel_y</a> ()</td></tr>
 <tr class="separator:a1536b8a4ad6bcb7f84fe9fe013bccf5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab84dd4ab49a40b191ce38d0cf76e4221"><td class="memItemLeft" align="right" valign="top">&lt; template T &gt; std::vector&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_c_m20948.html#ab84dd4ab49a40b191ce38d0cf76e4221">burst_read</a> (uint8_t bank, uint8_t <a class="el" href="rtp_8hpp.html#af3f726014b044194def151079f1f2d89">address</a>, uint8_t length)</td></tr>
-<tr class="separator:ab84dd4ab49a40b191ce38d0cf76e4221"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8c5da0bf5f0dd69d2b08e89705e536f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_c_m20948.html#ac8c5da0bf5f0dd69d2b08e89705e536f">burst_read</a> (uint8_t bank, uint8_t <a class="el" href="rtp_8hpp.html#af3f726014b044194def151079f1f2d89">address</a>, uint8_t *buffer_out, size_t length)</td></tr>
+<tr class="separator:ac8c5da0bf5f0dd69d2b08e89705e536f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -215,14 +215,14 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ab84dd4ab49a40b191ce38d0cf76e4221"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab84dd4ab49a40b191ce38d0cf76e4221">&#9670;&nbsp;</a></span>burst_read()</h2>
+<a id="ac8c5da0bf5f0dd69d2b08e89705e536f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8c5da0bf5f0dd69d2b08e89705e536f">&#9670;&nbsp;</a></span>burst_read()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">&lt; template T &gt; std::vector&lt; T &gt; ICM20948::burst_read </td>
+          <td class="memname">void ICM20948::burst_read </td>
           <td>(</td>
           <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>bank</em>, </td>
@@ -236,7 +236,13 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>buffer_out</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
           <td class="paramname"><em>length</em>&#160;</td>
         </tr>
         <tr>
@@ -251,8 +257,8 @@ Private Attributes</h2></td></tr>
 <div id="dynsection-3-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-3-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="class_i_c_m20948_ab84dd4ab49a40b191ce38d0cf76e4221_cgraph.png" border="0" usemap="#class_i_c_m20948_ab84dd4ab49a40b191ce38d0cf76e4221_cgraph" alt=""/></div>
-<map name="class_i_c_m20948_ab84dd4ab49a40b191ce38d0cf76e4221_cgraph" id="class_i_c_m20948_ab84dd4ab49a40b191ce38d0cf76e4221_cgraph">
+<div class="center"><img src="class_i_c_m20948_ac8c5da0bf5f0dd69d2b08e89705e536f_cgraph.png" border="0" usemap="#class_i_c_m20948_ac8c5da0bf5f0dd69d2b08e89705e536f_cgraph" alt=""/></div>
+<map name="class_i_c_m20948_ac8c5da0bf5f0dd69d2b08e89705e536f_cgraph" id="class_i_c_m20948_ac8c5da0bf5f0dd69d2b08e89705e536f_cgraph">
 </map>
 </div>
 
@@ -316,6 +322,15 @@ Private Attributes</h2></td></tr>
 <map name="class_i_c_m20948_a2f9286dc3e184cd5cc7e2b0161f776fd_cgraph" id="class_i_c_m20948_a2f9286dc3e184cd5cc7e2b0161f776fd_cgraph">
 </map>
 </div>
+<div id="dynsection-6" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-6-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-6-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-6-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_i_c_m20948_a2f9286dc3e184cd5cc7e2b0161f776fd_icgraph.png" border="0" usemap="#class_i_c_m20948_a2f9286dc3e184cd5cc7e2b0161f776fd_icgraph" alt=""/></div>
+<map name="class_i_c_m20948_a2f9286dc3e184cd5cc7e2b0161f776fd_icgraph" id="class_i_c_m20948_a2f9286dc3e184cd5cc7e2b0161f776fd_icgraph">
+</map>
+</div>
 
 </div>
 </div>
@@ -333,13 +348,22 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<div id="dynsection-6" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-6-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-6-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-7" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-7-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-7-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-6-content" class="dyncontent" style="display:none;">
+<div id="dynsection-7-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="class_i_c_m20948_a874be85ce182b369b030c88bb85871b5_cgraph.png" border="0" usemap="#class_i_c_m20948_a874be85ce182b369b030c88bb85871b5_cgraph" alt=""/></div>
 <map name="class_i_c_m20948_a874be85ce182b369b030c88bb85871b5_cgraph" id="class_i_c_m20948_a874be85ce182b369b030c88bb85871b5_cgraph">
+</map>
+</div>
+<div id="dynsection-8" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-8-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-8-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-8-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_i_c_m20948_a874be85ce182b369b030c88bb85871b5_icgraph.png" border="0" usemap="#class_i_c_m20948_a874be85ce182b369b030c88bb85871b5_icgraph" alt=""/></div>
+<map name="class_i_c_m20948_a874be85ce182b369b030c88bb85871b5_icgraph" id="class_i_c_m20948_a874be85ce182b369b030c88bb85871b5_icgraph">
 </map>
 </div>
 
@@ -378,20 +402,20 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<div id="dynsection-7" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-7-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-7-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-9" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-9-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-9-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-7-content" class="dyncontent" style="display:none;">
+<div id="dynsection-9-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="class_i_c_m20948_af90dbbef53872f46ae5759947bc8b652_cgraph.png" border="0" usemap="#class_i_c_m20948_af90dbbef53872f46ae5759947bc8b652_cgraph" alt=""/></div>
 <map name="class_i_c_m20948_af90dbbef53872f46ae5759947bc8b652_cgraph" id="class_i_c_m20948_af90dbbef53872f46ae5759947bc8b652_cgraph">
 </map>
 </div>
-<div id="dynsection-8" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-8-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-8-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-10" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-10-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-10-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-8-content" class="dyncontent" style="display:none;">
+<div id="dynsection-10-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="class_i_c_m20948_af90dbbef53872f46ae5759947bc8b652_icgraph.png" border="0" usemap="#class_i_c_m20948_af90dbbef53872f46ae5759947bc8b652_icgraph" alt=""/></div>
 <map name="class_i_c_m20948_af90dbbef53872f46ae5759947bc8b652_icgraph" id="class_i_c_m20948_af90dbbef53872f46ae5759947bc8b652_icgraph">
 </map>
@@ -438,20 +462,20 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<div id="dynsection-9" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-9-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-9-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-11" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-11-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-11-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-9-content" class="dyncontent" style="display:none;">
+<div id="dynsection-11-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="class_i_c_m20948_a85207eba3f7e4ecc7f4c6e2e4cf812b0_cgraph.png" border="0" usemap="#class_i_c_m20948_a85207eba3f7e4ecc7f4c6e2e4cf812b0_cgraph" alt=""/></div>
 <map name="class_i_c_m20948_a85207eba3f7e4ecc7f4c6e2e4cf812b0_cgraph" id="class_i_c_m20948_a85207eba3f7e4ecc7f4c6e2e4cf812b0_cgraph">
 </map>
 </div>
-<div id="dynsection-10" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-10-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
-<div id="dynsection-10-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-12" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-12-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-12-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-10-content" class="dyncontent" style="display:none;">
+<div id="dynsection-12-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="class_i_c_m20948_a85207eba3f7e4ecc7f4c6e2e4cf812b0_icgraph.png" border="0" usemap="#class_i_c_m20948_a85207eba3f7e4ecc7f4c6e2e4cf812b0_icgraph" alt=""/></div>
 <map name="class_i_c_m20948_a85207eba3f7e4ecc7f4c6e2e4cf812b0_icgraph" id="class_i_c_m20948_a85207eba3f7e4ecc7f4c6e2e4cf812b0_icgraph">
 </map>
@@ -536,7 +560,7 @@ Private Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_i_c_m20948.html">ICM20948</a></li>
-    <li class="footer">Generated on Sun Sep 6 2020 15:46:48 for GT RoboCup SSL by
+    <li class="footer">Generated on Thu Sep 17 2020 15:52:54 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

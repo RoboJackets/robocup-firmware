@@ -3,7 +3,7 @@ digraph "I2Cdev::writeBitsW"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node575 [label="I2Cdev::writeBitsW",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
-  Node575 -> Node576 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node576 [label="I2Cdev::I2Cdev",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i2_cdev.html#a2f70586510cbda5c5267a10b4ca220b9"];
+  Node568 [label="I2Cdev::writeBitsW",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node568 -> Node569 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node569 [label="I2Cdev::I2Cdev",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i2_cdev.html#a2f70586510cbda5c5267a10b4ca220b9"];
 }

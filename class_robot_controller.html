@@ -83,7 +83,6 @@ $(document).ready(function(){initNavTree('class_robot_controller.html','');});
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="class_robot_controller-members.html">List of all members</a>  </div>
@@ -107,40 +106,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a0707cb5415d1d8abc6179199d7595b8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the wheels such that they try to follow the target Outputs the correct motor commands to do this.  <a href="#a0707cb5415d1d8abc6179199d7595b8a">More...</a><br /></td></tr>
 <tr class="separator:a0707cb5415d1d8abc6179199d7595b8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
-Private Member Functions</h2></td></tr>
-<tr class="memitem:a3d6033a398ba89afad79af746eceeab5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_controller.html#a3d6033a398ba89afad79af746eceeab5">limitBodyAccel</a> (const Eigen::Matrix&lt; float, <a class="el" href="class_robot_controller.html#ad787476afb4ad71174a657c66fe1ece4">numStates</a>, 1 &gt; finalTarget, Eigen::Matrix&lt; float, <a class="el" href="class_robot_controller.html#ad787476afb4ad71174a657c66fe1ece4">numStates</a>, 1 &gt; &amp;dampened)</td></tr>
-<tr class="memdesc:a3d6033a398ba89afad79af746eceeab5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Limits the difference between the previous target and the new target such that the acceleration limits below are never broken.  <a href="#a3d6033a398ba89afad79af746eceeab5">More...</a><br /></td></tr>
-<tr class="separator:a3d6033a398ba89afad79af746eceeab5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa4d23a9a654037bd5a63a5d331988299"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_controller.html#aa4d23a9a654037bd5a63a5d331988299">limitWheelAccel</a> (const Eigen::Matrix&lt; float, <a class="el" href="class_robot_controller.html#a5c3fda2672a7ad3023f017b9107d79fd">numWheels</a>, 1 &gt; finalTarget, Eigen::Matrix&lt; float, <a class="el" href="class_robot_controller.html#a5c3fda2672a7ad3023f017b9107d79fd">numWheels</a>, 1 &gt; &amp;dampened)</td></tr>
-<tr class="separator:aa4d23a9a654037bd5a63a5d331988299"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:aa0739b048cb6f5ae364f3422416c244e"><td class="memItemLeft" align="right" valign="top">Eigen::Matrix&lt; float, <a class="el" href="class_robot_controller.html#ad787476afb4ad71174a657c66fe1ece4">numStates</a>, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_controller.html#aa0739b048cb6f5ae364f3422416c244e">BodyKp</a></td></tr>
-<tr class="memdesc:aa0739b048cb6f5ae364f3422416c244e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector of proportional constants for body velocity PID control.  <a href="#aa0739b048cb6f5ae364f3422416c244e">More...</a><br /></td></tr>
+<tr class="memdesc:aa0739b048cb6f5ae364f3422416c244e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Body velocity control gains (1/s, 1/s, 1/s)  <a href="#aa0739b048cb6f5ae364f3422416c244e">More...</a><br /></td></tr>
 <tr class="separator:aa0739b048cb6f5ae364f3422416c244e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abde1b8613f937e7708f102af5d6a1e5e"><td class="memItemLeft" align="right" valign="top">Eigen::Matrix&lt; float, <a class="el" href="class_robot_controller.html#ad787476afb4ad71174a657c66fe1ece4">numStates</a>, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_controller.html#abde1b8613f937e7708f102af5d6a1e5e">BodyKi</a></td></tr>
-<tr class="memdesc:abde1b8613f937e7708f102af5d6a1e5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector of integral constants for body velocity PID control.  <a href="#abde1b8613f937e7708f102af5d6a1e5e">More...</a><br /></td></tr>
-<tr class="separator:abde1b8613f937e7708f102af5d6a1e5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aab3ef45afffc0035e8cf1f269a38e753"><td class="memItemLeft" align="right" valign="top">Eigen::Matrix&lt; float, <a class="el" href="class_robot_controller.html#ad787476afb4ad71174a657c66fe1ece4">numStates</a>, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_controller.html#aab3ef45afffc0035e8cf1f269a38e753">BodyErrorSum</a></td></tr>
-<tr class="separator:aab3ef45afffc0035e8cf1f269a38e753"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a72c63a0338446d792053b1c7bc9fc48f"><td class="memItemLeft" align="right" valign="top">Eigen::Matrix&lt; float, <a class="el" href="class_robot_controller.html#ad787476afb4ad71174a657c66fe1ece4">numStates</a>, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_controller.html#a72c63a0338446d792053b1c7bc9fc48f">BodyILimit</a></td></tr>
-<tr class="memdesc:a72c63a0338446d792053b1c7bc9fc48f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector of limits for integral constants of body velocity PID control.  <a href="#a72c63a0338446d792053b1c7bc9fc48f">More...</a><br /></td></tr>
-<tr class="separator:a72c63a0338446d792053b1c7bc9fc48f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa5b54a3f7fa8da86fd7a3ba49cdee1ac"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_controller.html#aa5b54a3f7fa8da86fd7a3ba49cdee1ac">BodyUseILimit</a></td></tr>
-<tr class="separator:aa5b54a3f7fa8da86fd7a3ba49cdee1ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1cdf4ae48226f99c6c26c30cbd739dfd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_controller.html#a1cdf4ae48226f99c6c26c30cbd739dfd">BodyInputLimited</a></td></tr>
-<tr class="separator:a1cdf4ae48226f99c6c26c30cbd739dfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a417dbcbcbba8eb5ad7374254910dd17c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_controller.html#a417dbcbcbba8eb5ad7374254910dd17c">BodyOutputLimited</a></td></tr>
-<tr class="separator:a417dbcbcbba8eb5ad7374254910dd17c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5f181f4b2cf8249f3cd0874434013382"><td class="memItemLeft" align="right" valign="top">Eigen::Matrix&lt; float, <a class="el" href="class_robot_controller.html#ad787476afb4ad71174a657c66fe1ece4">numStates</a>, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_controller.html#a5f181f4b2cf8249f3cd0874434013382">BodyPrevTarget</a></td></tr>
-<tr class="separator:a5f181f4b2cf8249f3cd0874434013382"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c1cdce0f45b747dce1f5f7cd0693974"><td class="memItemLeft" align="right" valign="top">Eigen::Matrix&lt; float, <a class="el" href="class_robot_controller.html#a5c3fda2672a7ad3023f017b9107d79fd">numWheels</a>, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_controller.html#a5c1cdce0f45b747dce1f5f7cd0693974">WheelKp</a></td></tr>
-<tr class="memdesc:a5c1cdce0f45b747dce1f5f7cd0693974"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector of proportional constants for wheel velocity PID control.  <a href="#a5c1cdce0f45b747dce1f5f7cd0693974">More...</a><br /></td></tr>
-<tr class="separator:a5c1cdce0f45b747dce1f5f7cd0693974"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9acb62a71864049d441008a6878ea986"><td class="memItemLeft" align="right" valign="top">Eigen::Matrix&lt; float, <a class="el" href="class_robot_controller.html#a5c3fda2672a7ad3023f017b9107d79fd">numWheels</a>, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_controller.html#a9acb62a71864049d441008a6878ea986">WheelPrevTarget</a></td></tr>
-<tr class="separator:a9acb62a71864049d441008a6878ea986"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7d22001bbe5cfab5687f2f4df2e4885"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_controller.html#ac7d22001bbe5cfab5687f2f4df2e4885">dt</a></td></tr>
 <tr class="memdesc:ac7d22001bbe5cfab5687f2f4df2e4885"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interval of control calculations (seconds)  <a href="#ac7d22001bbe5cfab5687f2f4df2e4885">More...</a><br /></td></tr>
 <tr class="separator:ac7d22001bbe5cfab5687f2f4df2e4885"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -153,18 +123,6 @@ Static Private Attributes</h2></td></tr>
 <tr class="memitem:a5c3fda2672a7ad3023f017b9107d79fd"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_controller.html#a5c3fda2672a7ad3023f017b9107d79fd">numWheels</a> = 4</td></tr>
 <tr class="memdesc:a5c3fda2672a7ad3023f017b9107d79fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of wheels controlled.  <a href="#a5c3fda2672a7ad3023f017b9107d79fd">More...</a><br /></td></tr>
 <tr class="separator:a5c3fda2672a7ad3023f017b9107d79fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1e7c93f2fa4f19fb0d3933292ed82336"><td class="memItemLeft" align="right" valign="top">static constexpr float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_controller.html#a1e7c93f2fa4f19fb0d3933292ed82336">maxWheelAccel</a> = 160</td></tr>
-<tr class="memdesc:a1e7c93f2fa4f19fb0d3933292ed82336"><td class="mdescLeft">&#160;</td><td class="mdescRight">Max wheel acceleration (rad/s^2)  <a href="#a1e7c93f2fa4f19fb0d3933292ed82336">More...</a><br /></td></tr>
-<tr class="separator:a1e7c93f2fa4f19fb0d3933292ed82336"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5751bde1ddf4914a772fe6dad7715656"><td class="memItemLeft" align="right" valign="top">static constexpr float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_controller.html#a5751bde1ddf4914a772fe6dad7715656">maxForwardAccel</a> = 8</td></tr>
-<tr class="memdesc:a5751bde1ddf4914a772fe6dad7715656"><td class="mdescLeft">&#160;</td><td class="mdescRight">Max foward acceleration (m/s^2)  <a href="#a5751bde1ddf4914a772fe6dad7715656">More...</a><br /></td></tr>
-<tr class="separator:a5751bde1ddf4914a772fe6dad7715656"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a66a636c7eee6b54ae028c67fac5ca634"><td class="memItemLeft" align="right" valign="top">static constexpr float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_controller.html#a66a636c7eee6b54ae028c67fac5ca634">maxSideAccel</a> = 8</td></tr>
-<tr class="memdesc:a66a636c7eee6b54ae028c67fac5ca634"><td class="mdescLeft">&#160;</td><td class="mdescRight">Max side acceleration (m/s^2)  <a href="#a66a636c7eee6b54ae028c67fac5ca634">More...</a><br /></td></tr>
-<tr class="separator:a66a636c7eee6b54ae028c67fac5ca634"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7deed0c6038897f812c36a02c754bee4"><td class="memItemLeft" align="right" valign="top">static constexpr float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_robot_controller.html#a7deed0c6038897f812c36a02c754bee4">maxAngularAccel</a> = 40.0</td></tr>
-<tr class="memdesc:a7deed0c6038897f812c36a02c754bee4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Max angular acceleration (rad/s^2)  <a href="#a7deed0c6038897f812c36a02c754bee4">More...</a><br /></td></tr>
-<tr class="separator:a7deed0c6038897f812c36a02c754bee4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Controller for wheel velocities. </p>
@@ -309,10 +267,19 @@ Static Private Attributes</h2></td></tr>
   </dd>
 </dl>
 <div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-3-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+  <img id="dynsection-3-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-3-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-3-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="class_robot_controller_a0707cb5415d1d8abc6179199d7595b8a_cgraph.png" border="0" usemap="#class_robot_controller_a0707cb5415d1d8abc6179199d7595b8a_cgraph" alt=""/></div>
+<map name="class_robot_controller_a0707cb5415d1d8abc6179199d7595b8a_cgraph" id="class_robot_controller_a0707cb5415d1d8abc6179199d7595b8a_cgraph">
+</map>
+</div>
+<div id="dynsection-4" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-4-trigger" src="closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-4-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-4-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="class_robot_controller_a0707cb5415d1d8abc6179199d7595b8a_icgraph.png" border="0" usemap="#class_robot_controller_a0707cb5415d1d8abc6179199d7595b8a_icgraph" alt=""/></div>
 <map name="class_robot_controller_a0707cb5415d1d8abc6179199d7595b8a_icgraph" id="class_robot_controller_a0707cb5415d1d8abc6179199d7595b8a_icgraph">
 </map>
@@ -320,193 +287,7 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a3d6033a398ba89afad79af746eceeab5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3d6033a398ba89afad79af746eceeab5">&#9670;&nbsp;</a></span>limitBodyAccel()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool RobotController::limitBodyAccel </td>
-          <td>(</td>
-          <td class="paramtype">const Eigen::Matrix&lt; float, <a class="el" href="class_robot_controller.html#ad787476afb4ad71174a657c66fe1ece4">numStates</a>, 1 &gt;&#160;</td>
-          <td class="paramname"><em>finalTarget</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Eigen::Matrix&lt; float, <a class="el" href="class_robot_controller.html#ad787476afb4ad71174a657c66fe1ece4">numStates</a>, 1 &gt; &amp;&#160;</td>
-          <td class="paramname"><em>dampened</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Limits the difference between the previous target and the new target such that the acceleration limits below are never broken. </p>
-<div id="dynsection-4" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-4-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-4-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-4-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="class_robot_controller_a3d6033a398ba89afad79af746eceeab5_cgraph.png" border="0" usemap="#class_robot_controller_a3d6033a398ba89afad79af746eceeab5_cgraph" alt=""/></div>
-<map name="class_robot_controller_a3d6033a398ba89afad79af746eceeab5_cgraph" id="class_robot_controller_a3d6033a398ba89afad79af746eceeab5_cgraph">
-</map>
-</div>
-
-</div>
-</div>
-<a id="aa4d23a9a654037bd5a63a5d331988299"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa4d23a9a654037bd5a63a5d331988299">&#9670;&nbsp;</a></span>limitWheelAccel()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool RobotController::limitWheelAccel </td>
-          <td>(</td>
-          <td class="paramtype">const Eigen::Matrix&lt; float, <a class="el" href="class_robot_controller.html#a5c3fda2672a7ad3023f017b9107d79fd">numWheels</a>, 1 &gt;&#160;</td>
-          <td class="paramname"><em>finalTarget</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Eigen::Matrix&lt; float, <a class="el" href="class_robot_controller.html#a5c3fda2672a7ad3023f017b9107d79fd">numWheels</a>, 1 &gt; &amp;&#160;</td>
-          <td class="paramname"><em>dampened</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<div id="dynsection-5" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-5-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-5-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-5-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="class_robot_controller_aa4d23a9a654037bd5a63a5d331988299_cgraph.png" border="0" usemap="#class_robot_controller_aa4d23a9a654037bd5a63a5d331988299_cgraph" alt=""/></div>
-<map name="class_robot_controller_aa4d23a9a654037bd5a63a5d331988299_cgraph" id="class_robot_controller_aa4d23a9a654037bd5a63a5d331988299_cgraph">
-</map>
-</div>
-
-</div>
-</div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="aab3ef45afffc0035e8cf1f269a38e753"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aab3ef45afffc0035e8cf1f269a38e753">&#9670;&nbsp;</a></span>BodyErrorSum</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Eigen::Matrix&lt;float, <a class="el" href="class_robot_controller.html#ad787476afb4ad71174a657c66fe1ece4">numStates</a>, 1&gt; RobotController::BodyErrorSum</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a72c63a0338446d792053b1c7bc9fc48f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a72c63a0338446d792053b1c7bc9fc48f">&#9670;&nbsp;</a></span>BodyILimit</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Eigen::Matrix&lt;float, <a class="el" href="class_robot_controller.html#ad787476afb4ad71174a657c66fe1ece4">numStates</a>, 1&gt; RobotController::BodyILimit</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Vector of limits for integral constants of body velocity PID control. </p>
-<p>Thresholds to prevent integral term from blowing up (e.g. if robot is stuck) </p>
-
-</div>
-</div>
-<a id="a1cdf4ae48226f99c6c26c30cbd739dfd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1cdf4ae48226f99c6c26c30cbd739dfd">&#9670;&nbsp;</a></span>BodyInputLimited</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool RobotController::BodyInputLimited</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="abde1b8613f937e7708f102af5d6a1e5e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abde1b8613f937e7708f102af5d6a1e5e">&#9670;&nbsp;</a></span>BodyKi</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Eigen::Matrix&lt;float, <a class="el" href="class_robot_controller.html#ad787476afb4ad71174a657c66fe1ece4">numStates</a>, 1&gt; RobotController::BodyKi</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Vector of integral constants for body velocity PID control. </p>
-<p>Weighting of total error terms (integral) </p>
-
-</div>
-</div>
 <a id="aa0739b048cb6f5ae364f3422416c244e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa0739b048cb6f5ae364f3422416c244e">&#9670;&nbsp;</a></span>BodyKp</h2>
 
@@ -527,74 +308,7 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Vector of proportional constants for body velocity PID control. </p>
-<p>Weighting of current error terms </p>
-
-</div>
-</div>
-<a id="a417dbcbcbba8eb5ad7374254910dd17c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a417dbcbcbba8eb5ad7374254910dd17c">&#9670;&nbsp;</a></span>BodyOutputLimited</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool RobotController::BodyOutputLimited</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a5f181f4b2cf8249f3cd0874434013382"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5f181f4b2cf8249f3cd0874434013382">&#9670;&nbsp;</a></span>BodyPrevTarget</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Eigen::Matrix&lt;float, <a class="el" href="class_robot_controller.html#ad787476afb4ad71174a657c66fe1ece4">numStates</a>, 1&gt; RobotController::BodyPrevTarget</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aa5b54a3f7fa8da86fd7a3ba49cdee1ac"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa5b54a3f7fa8da86fd7a3ba49cdee1ac">&#9670;&nbsp;</a></span>BodyUseILimit</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool RobotController::BodyUseILimit</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
+<p>Body velocity control gains (1/s, 1/s, 1/s) </p>
 
 </div>
 </div>
@@ -619,102 +333,6 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Interval of control calculations (seconds) </p>
-
-</div>
-</div>
-<a id="a7deed0c6038897f812c36a02c754bee4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7deed0c6038897f812c36a02c754bee4">&#9670;&nbsp;</a></span>maxAngularAccel</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr float RobotController::maxAngularAccel = 40.0</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Max angular acceleration (rad/s^2) </p>
-
-</div>
-</div>
-<a id="a5751bde1ddf4914a772fe6dad7715656"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5751bde1ddf4914a772fe6dad7715656">&#9670;&nbsp;</a></span>maxForwardAccel</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr float RobotController::maxForwardAccel = 8</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Max foward acceleration (m/s^2) </p>
-
-</div>
-</div>
-<a id="a66a636c7eee6b54ae028c67fac5ca634"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a66a636c7eee6b54ae028c67fac5ca634">&#9670;&nbsp;</a></span>maxSideAccel</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr float RobotController::maxSideAccel = 8</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Max side acceleration (m/s^2) </p>
-
-</div>
-</div>
-<a id="a1e7c93f2fa4f19fb0d3933292ed82336"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1e7c93f2fa4f19fb0d3933292ed82336">&#9670;&nbsp;</a></span>maxWheelAccel</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr float RobotController::maxWheelAccel = 160</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Max wheel acceleration (rad/s^2) </p>
 
 </div>
 </div>
@@ -767,53 +385,6 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a5c1cdce0f45b747dce1f5f7cd0693974"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5c1cdce0f45b747dce1f5f7cd0693974">&#9670;&nbsp;</a></span>WheelKp</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Eigen::Matrix&lt;float, <a class="el" href="class_robot_controller.html#a5c3fda2672a7ad3023f017b9107d79fd">numWheels</a>, 1&gt; RobotController::WheelKp</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Vector of proportional constants for wheel velocity PID control. </p>
-<p>Weighting of current error terms </p>
-
-</div>
-</div>
-<a id="a9acb62a71864049d441008a6878ea986"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9acb62a71864049d441008a6878ea986">&#9670;&nbsp;</a></span>WheelPrevTarget</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Eigen::Matrix&lt;float, <a class="el" href="class_robot_controller.html#a5c3fda2672a7ad3023f017b9107d79fd">numWheels</a>, 1&gt; RobotController::WheelPrevTarget</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/developer/robocup-firmware/robot/control/Inc/motion-control/<a class="el" href="_robot_controller_8hpp_source.html">RobotController.hpp</a></li>
 <li>/home/developer/robocup-firmware/robot/control/Src/motion-control/<a class="el" href="_robot_controller_8cpp.html">RobotController.cpp</a></li>
@@ -824,7 +395,7 @@ Static Private Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="class_robot_controller.html">RobotController</a></li>
-    <li class="footer">Generated on Sun Sep 6 2020 15:46:49 for GT RoboCup SSL by
+    <li class="footer">Generated on Thu Sep 17 2020 15:52:54 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>
