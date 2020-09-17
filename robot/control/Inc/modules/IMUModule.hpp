@@ -2,8 +2,8 @@
 
 #include "I2C.hpp"
 #include "GenericModule.hpp"
-#include "MicroPackets.hpp" 
-#include "drivers/MPU6050.h"
+#include "MicroPackets.hpp"
+#include "drivers/ICM20948.hpp"
 #include "LockedStruct.hpp"
 #include <memory>
 
@@ -29,10 +29,10 @@ public:
 
     /**
      * Constructor for IMUModule
-     * @param sharedI2C Pointer to I2C object which reads/writes on I2C bus
+     * @param sharedSPI Pointer to SPI object which reads/writes on SPI bus
      * @param imuData Shared memory location containing linear acceleration and angular velocity along/about X,Y, and Z axes
      */
-    IMUModule(std::shared_ptr<I2C> sharedI2C, LockedStruct<IMUData>& imuData);
+    IMUModule(LockedStruct<SPI>& sharedSPI, LockedStruct<IMUData>& imuData);
 
     /**
      * Code which initializes module
@@ -47,6 +47,6 @@ public:
     void entry() override;
 
 private:
-    MPU6050 imu;
+    ICM20948 imu;
     LockedStruct<IMUData>& imuData;
 };

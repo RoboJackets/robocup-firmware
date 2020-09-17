@@ -175,7 +175,7 @@ void LEDModule::setColor(uint32_t led0, uint32_t led1, uint32_t led2) {
     data.push_back((led0 >> 0) & 0xFF);
     data.push_back((led0 >> 8) & 0xFF);
     data.push_back((led0 >> 16) & 0xFF);
-    
+
     data.push_back(brightness);
     data.push_back((led1 >> 0) & 0xFF);
     data.push_back((led1 >> 8) & 0xFF);
@@ -185,7 +185,7 @@ void LEDModule::setColor(uint32_t led0, uint32_t led1, uint32_t led2) {
     data.push_back((led2 >> 0) & 0xFF);
     data.push_back((led2 >> 8) & 0xFF);
     data.push_back((led2 >> 16) & 0xFF);
-    
+
     data.push_back(0xFF);
     data.push_back(0xFF);
     data.push_back(0xFF);

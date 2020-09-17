@@ -13,13 +13,12 @@ public:
     bool initialize();
 
     double gyro_z();
-    
+
     double accel_x();
 
     double accel_y();
 
-    <template T>
-    std::vector<T> burst_read(uint8_t bank, uint8_t address, uint8_t length);
+    void burst_read(uint8_t bank, uint8_t address, uint8_t* buffer_out, size_t length);
 
 private:
     void write_register(uint8_t bank, uint8_t address, uint8_t value);

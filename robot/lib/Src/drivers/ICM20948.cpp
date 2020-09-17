@@ -21,7 +21,6 @@ namespace Registers {
     constexpr uint8_t ACCEL_X_OUT_H  = 0x2D;
     constexpr uint8_t ACCEL_X_OUT_L  = 0x2E;
     constexpr uint8_t ACCEL_Y_OUT_H  = 0x2F;
-
     constexpr uint8_t ACCEL_Y_OUT_L  = 0x30;
 
     constexpr uint8_t FIFO_MODE     = 0x69;
@@ -29,14 +28,14 @@ namespace Registers {
     // Bank 2
     constexpr uint8_t GYRO_CONFIG_1 = 0x01;
     constexpr uint8_t ACCEL_CONFIG  = 0x14;
-    
-    enum GyroFS {
+
+    enum GYRO_FS_SEL {
         DPS_2000 = 3 << 2,
         DPS_1000 = 2 << 2,
         DPS_500 = 1 << 2,
         DPS_250 = 0 << 2,
     };
-    
+
     enum PWR_MGMT {
         DEVICE_RESET = 1 << 7,
         SLEEP = 1 << 6,  // 1: enter sleep mode
@@ -45,7 +44,7 @@ namespace Registers {
 
     enum USER_CTRL_REG {
         I2C_IF_DIS = 1 << 4, // disable I2C, enable SPI
-    }; 
+    };
 };
 
 ICM20948::ICM20948(LockedStruct<SPI>& imuSPI, PinName cs_pin)
@@ -64,15 +63,15 @@ bool ICM20948::initialize() {
     vTaskDelay(100);
 
     uint8_t whoami = read_register(0, Registers::WHO_AM_I);
-    bool failed_init = false;
 
     if (whoami != WHOAMI_VAL) {
         printf("Failed to connect to IMU.");
-        failed_init = true;
+        return false;
     }
 
     // Reset
-    write_register( 
+    write_register(
+        0,
         Registers::PWR_MGMT_1,
         Registers::PWR_MGMT::DEVICE_RESET |
         Registers::PWR_MGMT::SLEEP |
@@ -85,30 +84,32 @@ bool ICM20948::initialize() {
 
     while (whoami != WHOAMI_VAL) {
         printf("Waiting for IMU to boot.");
-        whoami = read_register(Registers::WHO_AM_I);
+        whoami = read_register(0, Registers::WHO_AM_I);
         vTaskDelay(100);
     }
 
     // Wakes the IMU and auto selects best clock source
     write_register(
-        Registers::PWR_MGMT_1, 
+        0,
+        Registers::PWR_MGMT_1,
         Registers::PWR_MGMT::CLKSEL);
-    
+
     // Disable I2C
     write_register(
+        0,
         Registers::USER_CTRL,
         Registers::USER_CTRL_REG::I2C_IF_DIS);
 
     // Enable gyro
-    write_register(Registers::PWR_MGMT_2, 0x00);
-    
+    write_register(0, Registers::PWR_MGMT_2, 0x00);
+
     // Configure gyro
     write_register(
-        2, 
-        Registers::GYRO_CONFIG_1, 
+        2,
+        Registers::GYRO_CONFIG_1,
         Registers::GYRO_FS_SEL::DPS_1000);
 
-    
+
     // Configure acclerometer
     write_register(2, Registers::ACCEL_CONFIG, 0x02);
 
@@ -122,10 +123,8 @@ bool ICM20948::initialize() {
 }
 
 double ICM20948::gyro_z() {
-
     uint16_t hi = read_register(0, Registers::GYRO_Z_OUT_H),
              lo = read_register(0, Registers::GYRO_Z_OUT_L);
-
 
     // Reinterpret the bits as a signed 16-bit integer
     int16_t total = hi << 8 | lo;
@@ -137,7 +136,6 @@ double ICM20948::gyro_z() {
 }
 
 double ICM20948::accel_x() {
-
     uint16_t hi = read_register(0, Registers::ACCEL_X_OUT_H),
              lo = read_register(0, Registers::ACCEL_X_OUT_L);
 
@@ -151,7 +149,6 @@ double ICM20948::accel_x() {
 }
 
 double ICM20948::accel_y() {
-
     uint16_t hi = read_register(0, Registers::ACCEL_Y_OUT_H),
              lo = read_register(0, Registers::ACCEL_Y_OUT_L);
 
@@ -168,7 +165,6 @@ void ICM20948::chip_select(bool cs_state) {
 }
 
 void ICM20948::write_register(uint8_t bank, uint8_t address, uint8_t value) {
-
     auto lock = imuSPI.lock();
 
     if (bank != last_bank) {
@@ -179,7 +175,7 @@ void ICM20948::write_register(uint8_t bank, uint8_t address, uint8_t value) {
 
         last_bank = bank;
     }
-     
+
     chip_select(true);
     lock->transmit(address);
     lock->transmit(value);
@@ -206,8 +202,9 @@ uint8_t ICM20948::read_register(uint8_t bank, uint8_t address) {
     return data;
 }
 
-<template T>
-std::vector<T> ICM20948::burst_read(uint8_t bank, uint8_t address, uint8_t length) {
+void ICM20948::burst_read(uint8_t bank, uint8_t address, uint8_t* buffer_out, size_t length) {
+    auto lock = imuSPI.lock();
+
     if (bank != last_bank) {
         chip_select(true);
         lock->transmit(Registers::REG_BANK_SEL);
@@ -217,15 +214,10 @@ std::vector<T> ICM20948::burst_read(uint8_t bank, uint8_t address, uint8_t lengt
         last_bank = bank;
     }
 
-    std::vector<T> data;
-    data.reserve(length); 
-    
     chip_select(true);
     lock->transmit(address);
     for (int i = 0; i < length; i++) {
-        data[i] = lock->transmit(0x00);
+        buffer_out[i] = lock->transmitReceive(0x00);
     }
     chip_select(false);
-
-    return data;
 }
