@@ -7,11 +7,12 @@
 cmake
 ccache
 
-# program to generate api documentation from comments in code files
-doxygen
+# C/C++ (and more) code-formatting tool (just use the newest version)
+clang-format
 
-# C/C++ (and more) code-formatting tool
-clang-format-3.9
+# Arm GCC Toolchain
+gcc-arm-none-eabi
+gdb-multiarch
 
 # AVR
 avr-libc
