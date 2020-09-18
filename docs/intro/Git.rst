@@ -1,22 +1,28 @@
-# Git
 
-## Initial Prerequisites
+Git
+===
+
+Initial Prerequisites
+---------------------
+
 Before starting, you'll need a Unix-like environment. This means you need to be
 running OSX or Ubuntu Linux (other flavors of Debian may work, but we do not
 officially support them or FedoraCore).
 
-You'll also need a GitHub account, which you can create [here](http://github.com).
+You'll also need a GitHub account, which you can create `here <http://github.com>`_.
 GitHub is a web front-end for a program called Git, which allows multiple people to
 work on and contribute to the same code base, at the same time.
 
 Before you can begin work, you'll need to setup our RoboCup toolchain. You can
-run the script located in `util/ubuntu-setup` or which ever script applies to
+run the script located in ``util/ubuntu-setup`` or which ever script applies to
 your operating system.
 
-## Git
-We use Git as our version control system (if you already know git, you can continue on to contributing guidelines [here](Contributing.md)). A Version control system allows many people to code for the same project at the same time.
+Git
+---
 
-A "cheat-sheet" of Git commands can be found [here](https://education.github.com/git-cheat-sheet-education.pdf).
+We use Git as our version control system (if you already know git, you can continue on to contributing guidelines `here <Contributing.md>`_\ ). A Version control system allows many people to code for the same project at the same time.
+
+A "cheat-sheet" of Git commands can be found `here <https://education.github.com/git-cheat-sheet-education.pdf>`_.
 
 To ease new contributors into Git, I'll repeatedly use the analogy of the
 classroom test.
@@ -25,7 +31,9 @@ If you simply want to learn about the workflow we use, and are less interested
 in learning the relationships between Git elements, you can skip to the "Overall
 Workflow" section.
 
-### Master
+Master
+^^^^^^
+
 If Git is like a test, then you can think of the master branch as the final copy
 you submit for grading. This copy should have the correct answer, should contain
 the most effective or efficient solution, and should be highly neat and readable
@@ -34,14 +42,16 @@ explore in other locations such as scrap paper. Once you have several solutions,
 you can pick the one you like the best, and more neatly copy the work on to the
 test you will hand in.
 
-Our master branch can be found [here](https://github.com/RoboJackets/robocup-software).
+Our master branch can be found `here <https://github.com/RoboJackets/robocup-software>`_.
 The code in latest master is always neat and untouched. It can always compile. When you
 first clone our codebase from git to view the simulator and soccer, you are
 using the code in master. It is in all respects, the master copy from which all
 other contributions are derived. Even if you are eventually given permission to
 write to master, you should never do so.
 
-### Forks
+Forks
+^^^^^
+
 If the professor puts test questions on the whiteboard for the whole class, you
 would not be allowed to solve the problems on the board; you would be expected
 to copy any relevant information to your own paper and solve the problems there.
@@ -64,7 +74,9 @@ repository. When you have contributed something and want it placed in master,
 whoever is reviewing your code will look at your fork of the code and compare
 it to the master branch.
 
-### Branches
+Branches
+^^^^^^^^
+
 Branches are like pieces of scrap paper. You can use them to organize your work
 and solutions to the test questions. You should not have work regarding
 different problems mixed across several pieces of paper; you may get your
@@ -78,9 +90,15 @@ stays clean. You should never solve more than one issue at a time and you should
 never have changes or additions for multiple things in the same branch. You can
 look at a typical branching layout.
 
-![branchingModel](http://justinhileman.info/article/changing-history/git-flow.png)
 
-### Remotes
+.. image:: http://justinhileman.info/article/changing-history/git-flow.png
+   :target: http://justinhileman.info/article/changing-history/git-flow.png
+   :alt: branchingModel
+
+
+Remotes
+^^^^^^^
+
 If Git is like a test, then remotes would be copying/collabortaion (cheating
 to some people). A remote allows you to view the solution(s) of another
 classmate, and pull those additions into your repostory as if they were on the
@@ -95,13 +113,19 @@ cause for you. This is a decently advanced concept for those new to distributed
 environments, and won't be used too often. We encourage you learn more about
 this independently if interested.
 
-### Overall Workflow (important)
+Overall Workflow (important)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 If you read the previous sections, you may be a little overwhelmed. This section
 will describe how these elements interact to form a coherent workflow that will
 allow you to make contributions more easily. You can view an overall diagram of
 how data moves between team members and GitHub.
 
-![githubDataFlow](http://www.dalescott.net/wp-content/uploads/2012/09/centralized-github-4.png)
+
+.. image:: http://www.dalescott.net/wp-content/uploads/2012/09/centralized-github-4.png
+   :target: http://www.dalescott.net/wp-content/uploads/2012/09/centralized-github-4.png
+   :alt: githubDataFlow
+
 
 Ensure you have a fork of the main repository and that you've cloned it onto
 your desktop.
@@ -119,13 +143,13 @@ You now have a branch with your contribution, but you haven't contributed until
 the code makes it into the main repository. This involves several steps. First,
 any changes others have made in the team's repository need to be merged into
 your code. If there are any conflics Git can't resolve automatically, it is
-your job to [resolve](https://help.github.com/articles/resolving-a-merge-conflict-from-the-command-line) those errors. By merging changes into your contribution,
+your job to `resolve <https://help.github.com/articles/resolving-a-merge-conflict-from-the-command-line>`_ those errors. By merging changes into your contribution,
 rather than the other way around, you ensure the act of bringing your code into
 the team's repository will go smoothly. This helps when another member of the
 team reviews your code as well.
 
 Now that you have a merged branch, you should push the branch to your GitHub.
-From GitHub, you can make a [pull request](https://help.github.com/articles/using-pull-requests/) from your repository against the
+From GitHub, you can make a `pull request <https://help.github.com/articles/using-pull-requests/>`_ from your repository against the
 team's repository. This will notify an older team member that you are ready to
 have your contribution reviewed. Requirements for pull request standards are
 listed in several sections below. The older team member may ask that you fix
@@ -142,36 +166,40 @@ have worked on.
 
 If you've done all this successfully, you are now an official contributor.
 
-#### Example (with technical details)
+Example (with technical details)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Here we will work through a very possible scenario that may arise while
 contributing to the project. At this point, you should have created a GitHub
 account and forked the main RoboCup repository. You should also look at
-creating a ssh key for GitHub [here](https://help.github.com/articles/generating-ssh-keys/).
-
-1. Clone your repository.
-2. You've decided to write some radio firmware. Create a new branch for radio
-development using `git checkout -b radioFirmware`. You will automatically be
-switched to the new branch,
-3. Start reasearching and coding.
-4. A bug in the path planning code has surfaced and the team wants you to try
-to fix it. You're still on the radioFirmware branch, but you should never work
-on more than one feature per branch. Return to the master branch using
-`git checkout master`. Now create a new branch for the bug fix like so
-`git checkout -b pathPlanningHotfix`.
-5. Fix the buggy code.
-6. Commit, push, and submit a pull request for the bug fix.
-7. Switch back to the radioFirmware branch with `git checkout radioFirmware`.
-You can now (optionally) delete the pathPlanningHotfix branch once the pull
-request has been accepted.
-8. Continue radio firmware development. If any more urgent problems arises,
-you can repeat steps 4-7.
-9. Push the new radio firmware and submit a pull request.
+creating a ssh key for GitHub `here <https://help.github.com/articles/generating-ssh-keys/>`_.
 
 
-#### You Done Messed Up A-a-ron (and you need some help with Git)
+#. Clone your repository.
+#. You've decided to write some radio firmware. Create a new branch for radio
+   development using ``git checkout -b radioFirmware``. You will automatically be
+   switched to the new branch,
+#. Start reasearching and coding.
+#. A bug in the path planning code has surfaced and the team wants you to try
+   to fix it. You're still on the radioFirmware branch, but you should never work
+   on more than one feature per branch. Return to the master branch using
+   ``git checkout master``. Now create a new branch for the bug fix like so
+   ``git checkout -b pathPlanningHotfix``.
+#. Fix the buggy code.
+#. Commit, push, and submit a pull request for the bug fix.
+#. Switch back to the radioFirmware branch with ``git checkout radioFirmware``.
+   You can now (optionally) delete the pathPlanningHotfix branch once the pull
+   request has been accepted.
+#. Continue radio firmware development. If any more urgent problems arises,
+   you can repeat steps 4-7.
+#. Push the new radio firmware and submit a pull request.
+
+You Done Messed Up A-a-ron (and you need some help with Git)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Don't panic! Git saves history every time you commit, and thus you should
 always be able to recover and progress you've made and undo mistakes affecting
-others. When in doubt consult [this](http://justinhileman.info/article/git-pretty/git-pretty.png). Feel free to ask for help at any time, and always ask for help when attempting
+others. When in doubt consult `this <http://justinhileman.info/article/git-pretty/git-pretty.png>`_. Feel free to ask for help at any time, and always ask for help when attempting
 anything in the "DangerZone".
 
 If you are interested in learning how to deal with more complex situations that may arise with Git the below are two highly recommended online sample projects to help you learn.

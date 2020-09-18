@@ -1,0 +1,232 @@
+.. _zephyr_doc:
+
+Documentation Generation
+########################
+
+These instructions will walk you through generating the mJacket API
+documentation on your local system using the same documentation sources
+as we use to create the online documentation found at
+https://docs.robojackets.org/mjackets-api
+
+.. _documentation-overview:
+
+Documentation overview
+**********************
+
+mJackets documentation content is written using the reStructuredText markup
+language (.rst file extension) with Sphinx extensions, and processed
+using Sphinx to create a formatted stand-alone website. Developers can
+view this content either in its raw form as .rst markup files, or you
+can generate the HTML content and view it with a web browser directly on
+your workstation.
+
+You can read details about `reStructuredText`_, and `Sphinx`_ from
+their respective websites.
+
+The project's documentation contains the following items:
+
+* ReStructuredText source files used to generate documentation found at the
+  https://docs.robojackets.org/mjackets-api website. Most of the reStructuredText sources
+  are found in the ``/doc`` directory, but others are stored within the
+  code source tree near their specific component (such as ``/samples`` and
+  ``/boards``)
+
+* Doxygen-generated material used to create all API-specific documents
+  also found at https://docs.robojackets.org/mjackets-api
+
+
+The reStructuredText files are processed by the Sphinx documentation system,
+and make use of the breathe extension for including the doxygen-generated API
+material.  Additional tools are required to generate the
+documentation locally, as described in the following sections.
+
+.. _documentation-processors:
+
+Installing the documentation processors
+***************************************
+
+Our documentation processing has been tested to run with:
+
+* Doxygen version 1.8.13
+* Sphinx version 1.7.5
+* Breathe version 4.9.1
+* docutils version 0.14
+* sphinx_rtd_theme version 0.4.0
+* sphinxcontrib-svg2pdfconverter version 0.1.0
+* Latexmk version 4.56
+
+In order to install the documentation tools, first install mJackets as
+described in :ref:`getting_started`. Then install additional tools
+that are only required to generate the documentation,
+as described below:
+
+On Ubuntu Linux:
+
+.. code-block:: console
+
+   sudo apt-get install --no-install-recommends doxygen librsvg2-bin \
+     texlive-latex-base texlive-latex-extra latexmk texlive-fonts-recommended
+
+On Fedora Linux:
+
+.. code-block:: console
+
+   sudo dnf install doxygen texlive-latex latexmk \
+     texlive-collection-fontsrecommended librsvg2-tools
+
+On Clear Linux:
+
+.. code-block:: console
+
+  sudo swupd bundle-add texlive
+
+On Arch Linux:
+
+.. code-block:: console
+
+   sudo pacman -S doxygen librsvg texlive-core texlive-bin
+
+On macOS:
+
+.. code-block:: console
+
+   brew install doxygen mactex librsvg
+   tlmgr install latexmk
+   tlmgr install collection-fontsrecommended
+
+On Windows in an Administrator ``cmd.exe`` prompt:
+
+.. code-block:: console
+
+   choco install doxygen.install strawberryperl miktex rsvg-convert
+
+.. note::
+   On Windows, the Sphinx executable ``sphinx-build.exe`` is placed in
+   the ``Scripts`` folder of your Python installation path.
+   Dependending on how you have installed Python, you may need to
+   add this folder to your ``PATH`` environment variable. Follow
+   the instructions in `Windows Python Path`_ to add those if needed.
+
+Documentation presentation theme
+********************************
+
+Sphinx supports easy customization of the generated documentation
+appearance through the use of themes. Replace the theme files and do
+another ``make htmldocs`` and the output layout and style is changed.
+The ``read-the-docs`` theme is installed as part of the
+:ref:`install_py_requirements` step you took in the getting started
+guide.
+
+Running the documentation processors
+************************************
+
+The ``/doc`` directory in your cloned copy of the mJackets git
+repo has all the .rst source files, extra tools, and Makefile for
+generating a local copy of mJackets' technical documentation.
+Assuming the local mJackets copy is in a folder ``mjackets-api`` in your home
+folder, here are the commands to generate the html content locally:
+
+.. code-block:: console
+
+   # On Linux/macOS
+   cd ~/mjackets-api/doc
+   # On Windows
+   cd %userprofile%\mjackets-apir\doc
+
+   # Use cmake to configure a Ninja-based build system:
+   cmake -GNinja -B_build .
+
+   # Enter the build directory
+   cd _build
+
+   # To generate HTML output, run ninja on the generated build system:
+   ninja htmldocs
+   # If you modify or add .rst files, run ninja again:
+   ninja htmldocs
+
+   # To generate PDF output, run ninja on the generated build system:
+   ninja pdfdocs
+
+.. warning::
+
+   The documentation build system creates copies in the build
+   directory of every .rst file used to generate the documentation,
+   along with dependencies referenced by those .rst files.
+
+   This means that Sphinx warnings and errors refer to the **copies**,
+   and **not the version-controlled original files in mJackets**. Be
+   careful to make sure you don't accidentally edit the copy of the
+   file in an error message, as these changes will not be saved.
+
+Depending on your development system, it will take up to 15 minutes to
+collect and generate the HTML content.  When done, you can view the HTML
+output with your browser started at ``doc/_build/html/index.html`` and
+if generated, the PDF file is available at ``doc/_build/pdf/mJackets.pdf``.
+
+If you want to build the documentation from scratch just delete the contents
+of the build folder and run ``cmake`` and then ``ninja`` again.
+
+.. note::
+
+   If you add or remove a file from the documentation, you need to re-run CMake.
+
+On Unix platforms a convenience :file:`Makefile` at the root folder
+of the mJackets repository can be used to build the documentation directly from
+there:
+
+.. code-block:: console
+
+   cd ~/mjackets-api
+
+   # To generate HTML output
+   make htmldocs
+
+   # To generate PDF output
+   make pdfdocs
+
+Filtering expected warnings
+***************************
+
+Alas, there are some known issues with the doxygen/Sphinx/Breathe
+processing that generates warnings for some constructs, in particular
+around unnamed structures in nested unions or structs.
+While these issues are being considered for fixing in
+Sphinx/Breathe, we've added a post-processing filter on the output of
+the documentation build process to check for "expected" messages from the
+generation process output.
+
+The output from the Sphinx build is processed by the python script
+``scripts/filter-known-issues.py`` together with a set of filter
+configuration files in the ``.known-issues/doc`` folder.  (This
+filtering is done as part of the ``doc/CMakeLists.txt`` CMake listfile.)
+
+If you're contributing components included in the Zephyr API
+documentation and run across these warnings, you can include filtering
+them out as "expected" warnings by adding a conf file to the
+``.known-issues/doc`` folder, following the example of other conf files
+found there.
+
+Developer-mode Document Building
+********************************
+
+Building the documentation for all the Kconfig options significantly
+adds to the total doc build time.  When making and testing major changes
+to the documentation, we provide an option to temporarily stub-out
+the auto-generated configuration documentation so the doc build process
+runs much faster.
+
+To enable this mode, set the following option when invoking cmake::
+
+   -DKCONFIG_TURBO_MODE=1
+
+or invoke make with the following target::
+
+   cd ~/mjackets-api
+
+   # To generate HTML output without detailed Kconfig
+   make htmldocs-fast
+
+
+.. _reStructuredText: http://sphinx-doc.org/rest.html
+.. _Sphinx: http://sphinx-doc.org/
+.. _Windows Python Path: https://docs.python.org/3/using/windows.html#finding-the-python-executable
