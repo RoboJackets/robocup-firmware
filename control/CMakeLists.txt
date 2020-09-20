@@ -5,10 +5,10 @@ project(control LANGUAGES ASM C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON) # Don't fall back to older versions
-set(CMAKE_CXX_COMPILER_VERSION "7.3")
+# set(CMAKE_CXX_COMPILER_VERSION "7.3")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY  "${CMAKE_BINARY_DIR}/bin" )
 
-set(CMAKE_BUILD_TYPE RelWithDebInfo)
+set(CMAKE_BUILD_TYPE Debug)
 
 add_subdirectory(mtrain)
 add_subdirectory(external)
@@ -35,7 +35,11 @@ add_executable(control.elf
     src/drivers/KickerBoard.cpp
     src/drivers/MCP23017.cpp
     src/drivers/MPU6050.cpp
-)
+    )
+
+
+target_compile_features(API PRIVATE cxx_std_17)
+set_property(TARGET API PROPERTY CXX_STANDARD 17)
 
 ## Shouldnt need explicit inclusion since mtrain dev relies on these
 target_include_directories(control.elf PUBLIC
