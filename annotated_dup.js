@@ -18,6 +18,7 @@ var annotated_dup =
     [ "GenericRadio", "class_generic_radio.html", "class_generic_radio" ],
     [ "I2Cdev", "class_i2_cdev.html", "class_i2_cdev" ],
     [ "ICM20948", "class_i_c_m20948.html", "class_i_c_m20948" ],
+    [ "ICM42605", "class_i_c_m42605.html", "class_i_c_m42605" ],
     [ "IMUData", "struct_i_m_u_data.html", "struct_i_m_u_data" ],
     [ "IMUModule", "class_i_m_u_module.html", "class_i_m_u_module" ],
     [ "IOExpanderDigitalInOut", "class_i_o_expander_digital_in_out.html", "class_i_o_expander_digital_in_out" ],

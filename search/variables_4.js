@@ -6,6 +6,7 @@ var searchData=
   ['derivalpha',['derivAlpha',['../class_pid.html#a0b2d864820b6a11ee2685dbb6ac6622b',1,'Pid']]],
   ['description',['description',['../classconanfile_1_1_robo_cup_firmware_conan.html#aa419af7c8fa2e7e9984afd95aced993a',1,'conanfile::RoboCupFirmwareConan']]],
   ['devaddr',['devAddr',['../class_m_p_u6050.html#ad248bbf6e9da395ab67f7049b50ae474',1,'MPU6050']]],
+  ['device_5fconfig',['DEVICE_CONFIG',['../namespace_registers.html#aea53f9e8cf9cc9bdc0d4993c66230a16',1,'Registers']]],
   ['dial',['dial',['../class_rotary_dial_module.html#aed93e5a3446aa999fd573a942dc1d3c2',1,'RotaryDialModule']]],
   ['dotstarncs',['dotStarNCS',['../class_l_e_d_module.html#abc0364864fb54a0143a36adb214242e1',1,'LEDModule']]],
   ['dotstarspi',['dotStarSPI',['../class_l_e_d_module.html#a5975d2df0087e540993addba4e2450bc',1,'LEDModule']]],

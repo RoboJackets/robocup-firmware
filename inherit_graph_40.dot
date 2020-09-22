@@ -3,5 +3,5 @@ digraph "Graphical Class Hierarchy"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node0 [label="RadioError",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_radio_error.html",tooltip="Contains data on whether Radio is working properly on not. "];
+  Node0 [label="Quaternion",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_quaternion.html"];
 }

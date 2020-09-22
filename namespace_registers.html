@@ -105,6 +105,80 @@ Enumerations</h2></td></tr>
 <tr class="memitem:acfa0ddd827f054f808776585944b5651"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_registers.html#acfa0ddd827f054f808776585944b5651">USER_CTRL_REG</a> { <a class="el" href="namespace_registers.html#acfa0ddd827f054f808776585944b5651a975bcfd21b4ef66c9397fb6c03667ebb">I2C_IF_DIS</a> = 1 &lt;&lt; 4
  }</td></tr>
 <tr class="separator:acfa0ddd827f054f808776585944b5651"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade2ba6be797d0a70afdad7f30fcf728d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_registers.html#ade2ba6be797d0a70afdad7f30fcf728d">PwrMgmt</a> { <br />
+&#160;&#160;<a class="el" href="namespace_registers.html#ade2ba6be797d0a70afdad7f30fcf728dacd20fe6518e1f156a0ec3f1f50b69fdd">TEMP_DIS</a> = 0b1 &lt;&lt; 5, 
+<a class="el" href="namespace_registers.html#ade2ba6be797d0a70afdad7f30fcf728da92a5d91eb78f027a4e8d0321b12a5391">IDLE</a> = 0b1 &lt;&lt; 4, 
+<a class="el" href="namespace_registers.html#ade2ba6be797d0a70afdad7f30fcf728da2e11faf75044c5d09438fb6f430486a5">GYRO_MODE_OFF</a> = 0b00 &lt;&lt; 2, 
+<a class="el" href="namespace_registers.html#ade2ba6be797d0a70afdad7f30fcf728daa99657e394f4aa533b4b5a1d9d659d5f">GYRO_MODE_STANDBY</a> = 0b01 &lt;&lt; 2, 
+<br />
+&#160;&#160;<a class="el" href="namespace_registers.html#ade2ba6be797d0a70afdad7f30fcf728dada163f93ef2b74f558a5b588519dbd70">GYRO_MODE_LOW_NOISE</a> = 0b11 &lt;&lt; 2, 
+<a class="el" href="namespace_registers.html#ade2ba6be797d0a70afdad7f30fcf728da0029fdf6ca4aaf9a0f2dc04d8cfd462b">ACCEL_MODE_OFF</a> = 0b00, 
+<a class="el" href="namespace_registers.html#ade2ba6be797d0a70afdad7f30fcf728da2066d3fbf64e5925217178b951a0e12d">ACCEL_MODE_LOW_POWER</a> = 0b10, 
+<a class="el" href="namespace_registers.html#ade2ba6be797d0a70afdad7f30fcf728daac41d1af867fcc9bf605d90cd43e9171">ACCEL_MODE_LOW_NOISE</a> = 0b11
+<br />
+ }</td></tr>
+<tr class="separator:ade2ba6be797d0a70afdad7f30fcf728d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad700c424d102a00b1c8aabce7938020d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_registers.html#ad700c424d102a00b1c8aabce7938020d">DeviceConfig</a> { <br />
+&#160;&#160;<a class="el" href="namespace_registers.html#ad700c424d102a00b1c8aabce7938020da0d4052cdefc2e0290a59d49e4f0f28a9">SPI_MODE_0</a> = 0b0 &lt;&lt; 4, 
+<a class="el" href="namespace_registers.html#ad700c424d102a00b1c8aabce7938020da0261ba8f38890e6b5e59fd4ddb6583cb">SPI_MODE_1</a> = 0b1 &lt;&lt; 4, 
+<a class="el" href="namespace_registers.html#ad700c424d102a00b1c8aabce7938020da13d5110e9ad2b936cfe5e2d1ce0a49ca">SPI_MODE_2</a> = 0b1 &lt;&lt; 4, 
+<a class="el" href="namespace_registers.html#ad700c424d102a00b1c8aabce7938020dab5377b9b0e57ef056bc39810591bb0ed">SPI_MODE_3</a> = 0b0 &lt;&lt; 4, 
+<br />
+&#160;&#160;<a class="el" href="namespace_registers.html#ad700c424d102a00b1c8aabce7938020da94b3b14fb8405dba479dab9e3218fe15">RESET</a> = 0b1
+<br />
+ }</td></tr>
+<tr class="separator:ad700c424d102a00b1c8aabce7938020d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c8d84b008e2212da865f4c96751b941"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_registers.html#a7c8d84b008e2212da865f4c96751b941">GyroConfig</a> { <br />
+&#160;&#160;<a class="el" href="namespace_registers.html#a7c8d84b008e2212da865f4c96751b941a979e5dfe1b9296b478c666c1cb3f2537">GYRO_FS_2000</a> = 0b000 &lt;&lt; 5, 
+<a class="el" href="namespace_registers.html#a7c8d84b008e2212da865f4c96751b941adeee000954320f968fee1fb0bf1f9111">GYRO_FS_1000</a> = 0b001 &lt;&lt; 5, 
+<a class="el" href="namespace_registers.html#a7c8d84b008e2212da865f4c96751b941aba1d6f7598450ec22bdbf2ebc7c2ebb5">GYRO_FS_500</a> = 0b010 &lt;&lt; 5, 
+<a class="el" href="namespace_registers.html#a7c8d84b008e2212da865f4c96751b941ac9cc4aedf55fc37c439f49ca674f9695">GYRO_FS_250</a> = 0b011 &lt;&lt; 5, 
+<br />
+&#160;&#160;<a class="el" href="namespace_registers.html#a7c8d84b008e2212da865f4c96751b941a593e38ca7558600e29919e908d6079eb">GYRO_FS_125</a> = 0b110 &lt;&lt; 5, 
+<a class="el" href="namespace_registers.html#a7c8d84b008e2212da865f4c96751b941af29bc04743061fb4e72bcd10df26e703">GYRO_FS_62_5</a> = 0b101 &lt;&lt; 5, 
+<a class="el" href="namespace_registers.html#a7c8d84b008e2212da865f4c96751b941a8bb1bcec82c573d91f66fdc7f3b56ed6">GYRO_FS_31_25</a> = 0b110 &lt;&lt; 5, 
+<a class="el" href="namespace_registers.html#a7c8d84b008e2212da865f4c96751b941ac3f7a5b6d6a705c00f80dbd24b068c20">GYRO_FS_15_625</a> = 0b111 &lt;&lt; 5, 
+<br />
+&#160;&#160;<a class="el" href="namespace_registers.html#a7c8d84b008e2212da865f4c96751b941a88e99e435bd943c73776d941a0039fe2">GYRO_ODR_8kHz</a> = 0b0011, 
+<a class="el" href="namespace_registers.html#a7c8d84b008e2212da865f4c96751b941adead071a4c1ca7acc58415c157b3c996">GYRO_ODR_4kHz</a> = 0b0100, 
+<a class="el" href="namespace_registers.html#a7c8d84b008e2212da865f4c96751b941aea3cfa57e043ea79ed3dae37c0ed482b">GYRO_ODR_2kHz</a> = 0b0101, 
+<a class="el" href="namespace_registers.html#a7c8d84b008e2212da865f4c96751b941a03cb12a243f0da5410cf932f8ca92c5e">GYRO_ODR_1kHz</a> = 0b0110, 
+<br />
+&#160;&#160;<a class="el" href="namespace_registers.html#a7c8d84b008e2212da865f4c96751b941a8871f28aa7d12a94cb7163fadd70cfcc">GYRO_ODR_200Hz</a> = 0b0111, 
+<a class="el" href="namespace_registers.html#a7c8d84b008e2212da865f4c96751b941a2200ba4759e7306114cd0c8dbb853216">GYRO_ODR_100Hz</a> = 0b1000, 
+<a class="el" href="namespace_registers.html#a7c8d84b008e2212da865f4c96751b941a028c745e94304e932d771b7bfaf1d0be">GYRO_ODR_50Hz</a> = 0b1001, 
+<a class="el" href="namespace_registers.html#a7c8d84b008e2212da865f4c96751b941a15304beadd2e56bcde3ffca163e8ec82">GYRO_ODR_25Hz</a> = 0b1010, 
+<br />
+&#160;&#160;<a class="el" href="namespace_registers.html#a7c8d84b008e2212da865f4c96751b941a73b7a6ee642bcb060a0ca5445aca0b4c">GYRO_ODR_12_5Hz</a> = 0b1011, 
+<a class="el" href="namespace_registers.html#a7c8d84b008e2212da865f4c96751b941a652c4dda23bb4c49b12f0c2cb496ece7">GYRO_ODR_500Hz</a> = 0b1111
+<br />
+ }</td></tr>
+<tr class="separator:a7c8d84b008e2212da865f4c96751b941"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afbecf12b5a40e8bf39825bf508a7e8f3"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3">AccelConfig</a> { <br />
+&#160;&#160;<a class="el" href="namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3a36d4decc0321e1921de4e294b6e55ba2">ACCEL_FS_16</a> = 0b000 &lt;&lt; 5, 
+<a class="el" href="namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3aaaf8d6a4cc05bcbedc8dec1db73efe91">ACCEL_FS_8</a> = 0b001 &lt;&lt; 5, 
+<a class="el" href="namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3a846e99383d75cb6c837c63b010d44595">ACCEL_FS_4</a> = 0b010 &lt;&lt; 5, 
+<a class="el" href="namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3a9f015ddb25e7110fb11af2cb05f3f2d8">ACCEL_FS_2</a> = 0b011 &lt;&lt; 5, 
+<br />
+&#160;&#160;<a class="el" href="namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3a4afe33b544932f0456ad4597c4822933">ACCEL_ODR_8kHz</a> = 0b0011, 
+<a class="el" href="namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3abb960ed0aee03a8fd16703bde7d5e1c9">ACCEL_ODR_4kHz</a> = 0b0100, 
+<a class="el" href="namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3ae443833b2782ce66555b47f4806c3e90">ACCEL_ODR_2kHz</a> = 0b0101, 
+<a class="el" href="namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3a155304b140e392561821b1f65ef03f6e">ACCEL_ODR_1kHz</a> = 0b0110, 
+<br />
+&#160;&#160;<a class="el" href="namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3aad783c248f840c6474f8b9d4106c35b0">ACCEL_ODR_200Hz</a> = 0b0111, 
+<a class="el" href="namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3ab17eeaa4f5d149a9438bded2b4e6a574">ACCEL_ODR_100Hz</a> = 0b1000, 
+<a class="el" href="namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3afb9b9a411b4541c5fe01724743bde1bb">ACCEL_ODR_50Hz</a> = 0b1001, 
+<a class="el" href="namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3aa5bb41e363796abf2dee2daa089e6384">ACCEL_ODR_25Hz</a> = 0b1010, 
+<br />
+&#160;&#160;<a class="el" href="namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3a6e0aa19b53eb18910d8c8fdff11fbd96">ACCEL_ODR_12_5Hz</a> = 0b1011, 
+<a class="el" href="namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3a59992dc27ed0fa6eb56cff8c23d0547c">ACCEL_ODR_6_25Hz</a> = 0b1100, 
+<a class="el" href="namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3a9710f1be3b03b1df6826ece8daabe19c">ACCEL_ODR_3_125Hz</a> = 0b1101, 
+<a class="el" href="namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3ad4af1fe026ea3ab72f20e19993b91c06">ACCEL_ODR_1_5625Hz</a> = 0b1110, 
+<br />
+&#160;&#160;<a class="el" href="namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3a045a0df2e17f854bac1c9fda6cdb54db">ACCEL_ODR_500Hz</a> = 0b1111
+<br />
+ }</td></tr>
+<tr class="separator:afbecf12b5a40e8bf39825bf508a7e8f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -138,8 +212,82 @@ Variables</h2></td></tr>
 <tr class="separator:a3f597b4228772dd4eca7255550201df9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af1350359e9d2906777c933274ad64fc0"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_registers.html#af1350359e9d2906777c933274ad64fc0">ACCEL_CONFIG</a> = 0x14</td></tr>
 <tr class="separator:af1350359e9d2906777c933274ad64fc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ca61d8e1ef14b704a0b4e7eddfb19a5"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_registers.html#a5ca61d8e1ef14b704a0b4e7eddfb19a5">PWR_MGMT0</a> = 0x4E</td></tr>
+<tr class="separator:a5ca61d8e1ef14b704a0b4e7eddfb19a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea53f9e8cf9cc9bdc0d4993c66230a16"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_registers.html#aea53f9e8cf9cc9bdc0d4993c66230a16">DEVICE_CONFIG</a> = 0x11</td></tr>
+<tr class="separator:aea53f9e8cf9cc9bdc0d4993c66230a16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d58737daf2a52eb56a139b8d4665f16"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_registers.html#a2d58737daf2a52eb56a139b8d4665f16">ACCEL_DATA_X1</a> = 0x1F</td></tr>
+<tr class="separator:a2d58737daf2a52eb56a139b8d4665f16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab51346a1511cf70035a36489429e3d0"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_registers.html#aab51346a1511cf70035a36489429e3d0">ACCEL_DATA_X0</a> = 0x20</td></tr>
+<tr class="separator:aab51346a1511cf70035a36489429e3d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7dc91d421fb018974e6eef010d561761"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_registers.html#a7dc91d421fb018974e6eef010d561761">ACCEL_DATA_Y1</a> = 0x21</td></tr>
+<tr class="separator:a7dc91d421fb018974e6eef010d561761"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d9b0e42a7c5e0a670e66a863f20f079"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_registers.html#a2d9b0e42a7c5e0a670e66a863f20f079">ACCEL_DATA_Y0</a> = 0x22</td></tr>
+<tr class="separator:a2d9b0e42a7c5e0a670e66a863f20f079"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1cd9e8e0f8890cc33ab7c2057cde2bac"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_registers.html#a1cd9e8e0f8890cc33ab7c2057cde2bac">GYRO_DATA_Z1</a> = 0x29</td></tr>
+<tr class="separator:a1cd9e8e0f8890cc33ab7c2057cde2bac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab159d4392bbccf0eb051cfd280ac4f3d"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_registers.html#ab159d4392bbccf0eb051cfd280ac4f3d">GYRO_DATA_Z0</a> = 0x2A</td></tr>
+<tr class="separator:ab159d4392bbccf0eb051cfd280ac4f3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c750bbfbec0bcba926ffc08537ba6e7"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_registers.html#a8c750bbfbec0bcba926ffc08537ba6e7">GYRO_CONFIG0</a> = 0x4F</td></tr>
+<tr class="separator:a8c750bbfbec0bcba926ffc08537ba6e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a751663343e20f62636a79fa1b2c376a9"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_registers.html#a751663343e20f62636a79fa1b2c376a9">ACCEL_CONFIG0</a> = 0x50</td></tr>
+<tr class="separator:a751663343e20f62636a79fa1b2c376a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="afbecf12b5a40e8bf39825bf508a7e8f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afbecf12b5a40e8bf39825bf508a7e8f3">&#9670;&nbsp;</a></span>AccelConfig</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3">Registers::AccelConfig</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="afbecf12b5a40e8bf39825bf508a7e8f3a36d4decc0321e1921de4e294b6e55ba2"></a>ACCEL_FS_16&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="afbecf12b5a40e8bf39825bf508a7e8f3aaaf8d6a4cc05bcbedc8dec1db73efe91"></a>ACCEL_FS_8&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="afbecf12b5a40e8bf39825bf508a7e8f3a846e99383d75cb6c837c63b010d44595"></a>ACCEL_FS_4&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="afbecf12b5a40e8bf39825bf508a7e8f3a9f015ddb25e7110fb11af2cb05f3f2d8"></a>ACCEL_FS_2&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="afbecf12b5a40e8bf39825bf508a7e8f3a4afe33b544932f0456ad4597c4822933"></a>ACCEL_ODR_8kHz&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="afbecf12b5a40e8bf39825bf508a7e8f3abb960ed0aee03a8fd16703bde7d5e1c9"></a>ACCEL_ODR_4kHz&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="afbecf12b5a40e8bf39825bf508a7e8f3ae443833b2782ce66555b47f4806c3e90"></a>ACCEL_ODR_2kHz&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="afbecf12b5a40e8bf39825bf508a7e8f3a155304b140e392561821b1f65ef03f6e"></a>ACCEL_ODR_1kHz&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="afbecf12b5a40e8bf39825bf508a7e8f3aad783c248f840c6474f8b9d4106c35b0"></a>ACCEL_ODR_200Hz&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="afbecf12b5a40e8bf39825bf508a7e8f3ab17eeaa4f5d149a9438bded2b4e6a574"></a>ACCEL_ODR_100Hz&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="afbecf12b5a40e8bf39825bf508a7e8f3afb9b9a411b4541c5fe01724743bde1bb"></a>ACCEL_ODR_50Hz&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="afbecf12b5a40e8bf39825bf508a7e8f3aa5bb41e363796abf2dee2daa089e6384"></a>ACCEL_ODR_25Hz&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="afbecf12b5a40e8bf39825bf508a7e8f3a6e0aa19b53eb18910d8c8fdff11fbd96"></a>ACCEL_ODR_12_5Hz&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="afbecf12b5a40e8bf39825bf508a7e8f3a59992dc27ed0fa6eb56cff8c23d0547c"></a>ACCEL_ODR_6_25Hz&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="afbecf12b5a40e8bf39825bf508a7e8f3a9710f1be3b03b1df6826ece8daabe19c"></a>ACCEL_ODR_3_125Hz&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="afbecf12b5a40e8bf39825bf508a7e8f3ad4af1fe026ea3ab72f20e19993b91c06"></a>ACCEL_ODR_1_5625Hz&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="afbecf12b5a40e8bf39825bf508a7e8f3a045a0df2e17f854bac1c9fda6cdb54db"></a>ACCEL_ODR_500Hz&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<a id="ad700c424d102a00b1c8aabce7938020d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad700c424d102a00b1c8aabce7938020d">&#9670;&nbsp;</a></span>DeviceConfig</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespace_registers.html#ad700c424d102a00b1c8aabce7938020d">Registers::DeviceConfig</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ad700c424d102a00b1c8aabce7938020da0d4052cdefc2e0290a59d49e4f0f28a9"></a>SPI_MODE_0&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ad700c424d102a00b1c8aabce7938020da0261ba8f38890e6b5e59fd4ddb6583cb"></a>SPI_MODE_1&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ad700c424d102a00b1c8aabce7938020da13d5110e9ad2b936cfe5e2d1ce0a49ca"></a>SPI_MODE_2&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ad700c424d102a00b1c8aabce7938020dab5377b9b0e57ef056bc39810591bb0ed"></a>SPI_MODE_3&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ad700c424d102a00b1c8aabce7938020da94b3b14fb8405dba479dab9e3218fe15"></a>RESET&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
 <a id="aae9dbe9ec3c277024edb40738b709e30"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aae9dbe9ec3c277024edb40738b709e30">&#9670;&nbsp;</a></span>GYRO_FS_SEL</h2>
 
@@ -160,6 +308,40 @@ Variables</h2></td></tr>
 
 </div>
 </div>
+<a id="a7c8d84b008e2212da865f4c96751b941"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c8d84b008e2212da865f4c96751b941">&#9670;&nbsp;</a></span>GyroConfig</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespace_registers.html#a7c8d84b008e2212da865f4c96751b941">Registers::GyroConfig</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a7c8d84b008e2212da865f4c96751b941a979e5dfe1b9296b478c666c1cb3f2537"></a>GYRO_FS_2000&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a7c8d84b008e2212da865f4c96751b941adeee000954320f968fee1fb0bf1f9111"></a>GYRO_FS_1000&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a7c8d84b008e2212da865f4c96751b941aba1d6f7598450ec22bdbf2ebc7c2ebb5"></a>GYRO_FS_500&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a7c8d84b008e2212da865f4c96751b941ac9cc4aedf55fc37c439f49ca674f9695"></a>GYRO_FS_250&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a7c8d84b008e2212da865f4c96751b941a593e38ca7558600e29919e908d6079eb"></a>GYRO_FS_125&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a7c8d84b008e2212da865f4c96751b941af29bc04743061fb4e72bcd10df26e703"></a>GYRO_FS_62_5&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a7c8d84b008e2212da865f4c96751b941a8bb1bcec82c573d91f66fdc7f3b56ed6"></a>GYRO_FS_31_25&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a7c8d84b008e2212da865f4c96751b941ac3f7a5b6d6a705c00f80dbd24b068c20"></a>GYRO_FS_15_625&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a7c8d84b008e2212da865f4c96751b941a88e99e435bd943c73776d941a0039fe2"></a>GYRO_ODR_8kHz&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a7c8d84b008e2212da865f4c96751b941adead071a4c1ca7acc58415c157b3c996"></a>GYRO_ODR_4kHz&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a7c8d84b008e2212da865f4c96751b941aea3cfa57e043ea79ed3dae37c0ed482b"></a>GYRO_ODR_2kHz&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a7c8d84b008e2212da865f4c96751b941a03cb12a243f0da5410cf932f8ca92c5e"></a>GYRO_ODR_1kHz&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a7c8d84b008e2212da865f4c96751b941a8871f28aa7d12a94cb7163fadd70cfcc"></a>GYRO_ODR_200Hz&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a7c8d84b008e2212da865f4c96751b941a2200ba4759e7306114cd0c8dbb853216"></a>GYRO_ODR_100Hz&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a7c8d84b008e2212da865f4c96751b941a028c745e94304e932d771b7bfaf1d0be"></a>GYRO_ODR_50Hz&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a7c8d84b008e2212da865f4c96751b941a15304beadd2e56bcde3ffca163e8ec82"></a>GYRO_ODR_25Hz&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a7c8d84b008e2212da865f4c96751b941a73b7a6ee642bcb060a0ca5445aca0b4c"></a>GYRO_ODR_12_5Hz&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a7c8d84b008e2212da865f4c96751b941a652c4dda23bb4c49b12f0c2cb496ece7"></a>GYRO_ODR_500Hz&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
 <a id="a0062e4dd4e409b420863ec2c544a6194"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0062e4dd4e409b420863ec2c544a6194">&#9670;&nbsp;</a></span>PWR_MGMT</h2>
 
@@ -175,6 +357,30 @@ Variables</h2></td></tr>
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a0062e4dd4e409b420863ec2c544a6194a036878067c752d04f3eb767b44e60784"></a>DEVICE_RESET&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a0062e4dd4e409b420863ec2c544a6194aa36c79c60a3521aa593c4f08ad9bfb41"></a>SLEEP&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a0062e4dd4e409b420863ec2c544a6194ab9e4984d92f48cae5ecf77016d7f88e7"></a>CLKSEL&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<a id="ade2ba6be797d0a70afdad7f30fcf728d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade2ba6be797d0a70afdad7f30fcf728d">&#9670;&nbsp;</a></span>PwrMgmt</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespace_registers.html#ade2ba6be797d0a70afdad7f30fcf728d">Registers::PwrMgmt</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ade2ba6be797d0a70afdad7f30fcf728dacd20fe6518e1f156a0ec3f1f50b69fdd"></a>TEMP_DIS&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ade2ba6be797d0a70afdad7f30fcf728da92a5d91eb78f027a4e8d0321b12a5391"></a>IDLE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ade2ba6be797d0a70afdad7f30fcf728da2e11faf75044c5d09438fb6f430486a5"></a>GYRO_MODE_OFF&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ade2ba6be797d0a70afdad7f30fcf728daa99657e394f4aa533b4b5a1d9d659d5f"></a>GYRO_MODE_STANDBY&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ade2ba6be797d0a70afdad7f30fcf728dada163f93ef2b74f558a5b588519dbd70"></a>GYRO_MODE_LOW_NOISE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ade2ba6be797d0a70afdad7f30fcf728da0029fdf6ca4aaf9a0f2dc04d8cfd462b"></a>ACCEL_MODE_OFF&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ade2ba6be797d0a70afdad7f30fcf728da2066d3fbf64e5925217178b951a0e12d"></a>ACCEL_MODE_LOW_POWER&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ade2ba6be797d0a70afdad7f30fcf728daac41d1af867fcc9bf605d90cd43e9171"></a>ACCEL_MODE_LOW_NOISE&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
 </div>
@@ -205,6 +411,76 @@ Variables</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">constexpr uint8_t Registers::ACCEL_CONFIG = 0x14</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a751663343e20f62636a79fa1b2c376a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a751663343e20f62636a79fa1b2c376a9">&#9670;&nbsp;</a></span>ACCEL_CONFIG0</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr uint8_t Registers::ACCEL_CONFIG0 = 0x50</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aab51346a1511cf70035a36489429e3d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aab51346a1511cf70035a36489429e3d0">&#9670;&nbsp;</a></span>ACCEL_DATA_X0</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr uint8_t Registers::ACCEL_DATA_X0 = 0x20</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2d58737daf2a52eb56a139b8d4665f16"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d58737daf2a52eb56a139b8d4665f16">&#9670;&nbsp;</a></span>ACCEL_DATA_X1</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr uint8_t Registers::ACCEL_DATA_X1 = 0x1F</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2d9b0e42a7c5e0a670e66a863f20f079"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d9b0e42a7c5e0a670e66a863f20f079">&#9670;&nbsp;</a></span>ACCEL_DATA_Y0</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr uint8_t Registers::ACCEL_DATA_Y0 = 0x22</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7dc91d421fb018974e6eef010d561761"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7dc91d421fb018974e6eef010d561761">&#9670;&nbsp;</a></span>ACCEL_DATA_Y1</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr uint8_t Registers::ACCEL_DATA_Y1 = 0x21</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -267,6 +543,20 @@ Variables</h2></td></tr>
 
 </div>
 </div>
+<a id="aea53f9e8cf9cc9bdc0d4993c66230a16"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea53f9e8cf9cc9bdc0d4993c66230a16">&#9670;&nbsp;</a></span>DEVICE_CONFIG</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr uint8_t Registers::DEVICE_CONFIG = 0x11</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ab42dccd2c1e69b6f8bdf802ad5853986"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab42dccd2c1e69b6f8bdf802ad5853986">&#9670;&nbsp;</a></span>FIFO_MODE</h2>
 
@@ -281,6 +571,20 @@ Variables</h2></td></tr>
 
 </div>
 </div>
+<a id="a8c750bbfbec0bcba926ffc08537ba6e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c750bbfbec0bcba926ffc08537ba6e7">&#9670;&nbsp;</a></span>GYRO_CONFIG0</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr uint8_t Registers::GYRO_CONFIG0 = 0x4F</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a3f597b4228772dd4eca7255550201df9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3f597b4228772dd4eca7255550201df9">&#9670;&nbsp;</a></span>GYRO_CONFIG_1</h2>
 
@@ -289,6 +593,34 @@ Variables</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">constexpr uint8_t Registers::GYRO_CONFIG_1 = 0x01</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab159d4392bbccf0eb051cfd280ac4f3d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab159d4392bbccf0eb051cfd280ac4f3d">&#9670;&nbsp;</a></span>GYRO_DATA_Z0</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr uint8_t Registers::GYRO_DATA_Z0 = 0x2A</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1cd9e8e0f8890cc33ab7c2057cde2bac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1cd9e8e0f8890cc33ab7c2057cde2bac">&#9670;&nbsp;</a></span>GYRO_DATA_Z1</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr uint8_t Registers::GYRO_DATA_Z1 = 0x29</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -331,6 +663,20 @@ Variables</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">constexpr uint8_t Registers::LP_CONFIG = 0x05</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5ca61d8e1ef14b704a0b4e7eddfb19a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ca61d8e1ef14b704a0b4e7eddfb19a5">&#9670;&nbsp;</a></span>PWR_MGMT0</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr uint8_t Registers::PWR_MGMT0 = 0x4E</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -413,7 +759,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespace_registers.html">Registers</a></li>
-    <li class="footer">Generated on Thu Sep 17 2020 15:52:54 for GT RoboCup SSL by
+    <li class="footer">Generated on Tue Sep 22 2020 21:22:55 for GT RoboCup SSL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

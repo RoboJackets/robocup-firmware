@@ -2,10 +2,11 @@ var searchData=
 [
   ['i2cdev',['I2Cdev',['../class_i2_cdev.html#a2f70586510cbda5c5267a10b4ca220b9',1,'I2Cdev']]],
   ['icm20948',['ICM20948',['../class_i_c_m20948.html#aebecf0cb2e7800208924e0b99c684a7c',1,'ICM20948']]],
-  ['imu_5ftask',['imu_task',['../icm-20498-angle_8cpp.html#a33bb98d041c45cf1a53b22339fd1fd27',1,'icm-20498-angle.cpp']]],
+  ['icm42605',['ICM42605',['../class_i_c_m42605.html#a35d9ed8b1f2ca0f6964cb24645b12efe',1,'ICM42605']]],
+  ['imu_5ftask',['imu_task',['../icm-20498-angle_8cpp.html#a33bb98d041c45cf1a53b22339fd1fd27',1,'imu_task(void *):&#160;icm-20498-angle.cpp'],['../icm-42605-angle_8cpp.html#a33bb98d041c45cf1a53b22339fd1fd27',1,'imu_task(void *):&#160;icm-42605-angle.cpp']]],
   ['imumodule',['IMUModule',['../class_i_m_u_module.html#a9b9d1b1e1f1507572118711cc460ce71',1,'IMUModule']]],
   ['init',['init',['../class_radio_link.html#a4a7d2412966c35c0e253535c16c56a15',1,'RadioLink::init()'],['../class_a_v_r910.html#a8af9bfcbc0a4fdea5a9909b6125faaa0',1,'AVR910::init()'],['../class_i_o_expander_digital_in_out.html#a2b7fd6147f7abc8eea43afbcbb80e1b6',1,'IOExpanderDigitalInOut::init()'],['../class_m_c_p23017.html#ad4c300620b841f0ab9b3f7e11b88314c',1,'MCP23017::init()'],['../class_rotary_selector.html#ad5accc435c1c50b45aec45d3ebb87fcf',1,'RotarySelector::init()'],['../main_8c.html#a02fd73d861ef2e4aabb38c0c9ff82947',1,'init():&#160;main.c']]],
-  ['initialize',['initialize',['../class_i_c_m20948.html#a874be85ce182b369b030c88bb85871b5',1,'ICM20948::initialize()'],['../class_m_p_u6050.html#abd8fc6c18adf158011118fbccc7e7054',1,'MPU6050::initialize()']]],
+  ['initialize',['initialize',['../class_i_c_m20948.html#a874be85ce182b369b030c88bb85871b5',1,'ICM20948::initialize()'],['../class_i_c_m42605.html#a4a1ddbbdd8501d770ddb3259e396f039',1,'ICM42605::initialize()'],['../class_m_p_u6050.html#abd8fc6c18adf158011118fbccc7e7054',1,'MPU6050::initialize()']]],
   ['inputoutputmask',['inputOutputMask',['../class_m_c_p23017.html#a67248b8a39c498bfd3b5f32496d1f78c',1,'MCP23017']]],
   ['inputpolaritymask',['inputPolarityMask',['../class_m_c_p23017.html#a7fa7c9f00e4fad5e767439fd9f7a690f',1,'MCP23017']]],
   ['internalpullupmask',['internalPullupMask',['../class_m_c_p23017.html#a167b866cd44e3389b1cc8315d547db95',1,'MCP23017']]],

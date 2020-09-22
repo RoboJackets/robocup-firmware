@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['basecontrolcommand',['BaseControlCommand',['../usb-interface_8hpp.html#aa9b8c1931aea37c993e208687aca5ab6',1,'usb-interface.hpp']]]
+  ['accelconfig',['AccelConfig',['../namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3',1,'Registers']]]
 ];

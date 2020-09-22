@@ -65,6 +65,8 @@ var searchData=
   ['pushbutton',['PUSHBUTTON',['../iodefs_8h.html#adf8e68aa3f7ed1388355e53619b2b736',1,'iodefs.h']]],
   ['pv',['pv',['../class_dribbler_controller.html#a8d68333e7f7dd21ac1056f77c9956d28',1,'DribblerController']]],
   ['pwr_5fmgmt',['PWR_MGMT',['../namespace_registers.html#a0062e4dd4e409b420863ec2c544a6194',1,'Registers']]],
+  ['pwr_5fmgmt0',['PWR_MGMT0',['../namespace_registers.html#a5ca61d8e1ef14b704a0b4e7eddfb19a5',1,'Registers']]],
   ['pwr_5fmgmt_5f1',['PWR_MGMT_1',['../namespace_registers.html#ac755071e0e07a0d42d9c72d1ee0573c5',1,'Registers']]],
-  ['pwr_5fmgmt_5f2',['PWR_MGMT_2',['../namespace_registers.html#a3e79294359afae2216fcc8aa9ba41196',1,'Registers']]]
+  ['pwr_5fmgmt_5f2',['PWR_MGMT_2',['../namespace_registers.html#a3e79294359afae2216fcc8aa9ba41196',1,'Registers']]],
+  ['pwrmgmt',['PwrMgmt',['../namespace_registers.html#ade2ba6be797d0a70afdad7f30fcf728d',1,'Registers']]]
 ];

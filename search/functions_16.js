@@ -3,7 +3,7 @@ var searchData=
   ['watchdog_5freset',['watchdog_reset',['../class_f_p_g_a.html#aaf55a1decbb2783031f56c99a885f54d',1,'FPGA']]],
   ['windup',['windup',['../class_pid.html#aa5f15a38ac5cbe06cf21fc86dd1a18dd',1,'Pid']]],
   ['write',['write',['../class_i_o_expander_digital_in_out.html#aa7f37890760ec610beebfdf6a7cd17a0',1,'IOExpanderDigitalInOut']]],
-  ['write_5fregister',['write_register',['../class_i_c_m20948.html#a85207eba3f7e4ecc7f4c6e2e4cf812b0',1,'ICM20948']]],
+  ['write_5fregister',['write_register',['../class_i_c_m20948.html#a85207eba3f7e4ecc7f4c6e2e4cf812b0',1,'ICM20948::write_register()'],['../class_i_c_m42605.html#ab48292e5f0f5c625ba1e147aaf4011ea',1,'ICM42605::write_register()']]],
   ['writebit',['writeBit',['../class_i2_cdev.html#aa68890af87de5471d32e583ebbd91acb',1,'I2Cdev']]],
   ['writebits',['writeBits',['../class_i2_cdev.html#a913371251b6a41520c080115650e1b59',1,'I2Cdev']]],
   ['writebitsw',['writeBitsW',['../class_i2_cdev.html#a8f8652a1328224cce867eed665a45c4d',1,'I2Cdev']]],

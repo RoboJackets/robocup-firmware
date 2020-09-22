@@ -1,5 +1,15 @@
 var searchData=
 [
-  ['kick',['KICK',['../struct_kicker_command.html#a7334a1861569334fa12adeb9fe1c3bdcace1d76922b0dc26071c8e43ddf4dc606',1,'KickerCommand']]],
-  ['kicker_5ferror',['KICKER_ERROR',['../_l_e_d_module_8hpp.html#a1fe0fcca0d6af57aaf39afa40e635579a9faef45f6aa3175fa17c158dff4f96ac',1,'LEDModule.hpp']]]
+  ['i2c_5fif_5fdis',['I2C_IF_DIS',['../namespace_registers.html#acfa0ddd827f054f808776585944b5651a975bcfd21b4ef66c9397fb6c03667ebb',1,'Registers']]],
+  ['idle',['IDLE',['../namespace_registers.html#ade2ba6be797d0a70afdad7f30fcf728da92a5d91eb78f027a4e8d0321b12a5391',1,'Registers']]],
+  ['immediate',['IMMEDIATE',['../struct_kicker_command.html#a73b1776f87841b7952e4993a76496479a7b3fc300669c4f3762bdf8349ce9658b',1,'KickerCommand']]],
+  ['imu_5ferror',['IMU_ERROR',['../_l_e_d_module_8hpp.html#a1fe0fcca0d6af57aaf39afa40e635579a73ddd528222cd33a9686dff18ca943c9',1,'LEDModule.hpp']]],
+  ['info',['INFO',['../_l_e_d_module_8hpp.html#a6189023456c55830ab1301757517ddb3a748005382152808a72b1a9177d9dc806',1,'LEDModule.hpp']]],
+  ['intcap',['INTCAP',['../class_m_c_p23017.html#a3f402d0f5722dfbbfca400a36bc5d66ead0d156ad8096b42b8ee540ebb45a967b',1,'MCP23017']]],
+  ['intcon',['INTCON',['../class_m_c_p23017.html#a3f402d0f5722dfbbfca400a36bc5d66ea997137e4c9abc6dc18852d25f641a803',1,'MCP23017']]],
+  ['intf',['INTF',['../class_m_c_p23017.html#a3f402d0f5722dfbbfca400a36bc5d66ea288c6c2b9c091a7b825d234c84c11401',1,'MCP23017']]],
+  ['invalid',['INVALID',['../struct_kicker_command.html#a73b1776f87841b7952e4993a76496479a352787e2a6b17786c33667bb399cf9b9',1,'KickerCommand']]],
+  ['iocon',['IOCON',['../class_m_c_p23017.html#a3f402d0f5722dfbbfca400a36bc5d66ea2a7d73a4428b37634b31fc5b1c4e797a',1,'MCP23017']]],
+  ['iodir',['IODIR',['../class_m_c_p23017.html#a3f402d0f5722dfbbfca400a36bc5d66ea42950497aa7d7a73779ed35662d72c31',1,'MCP23017']]],
+  ['ipol',['IPOL',['../class_m_c_p23017.html#a3f402d0f5722dfbbfca400a36bc5d66ea8d6375bf006ae95cebc8c1ff1f60e3ad',1,'MCP23017']]]
 ];

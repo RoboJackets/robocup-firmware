@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['temp_5fdis',['TEMP_DIS',['../namespace_registers.html#ade2ba6be797d0a70afdad7f30fcf728dacd20fe6518e1f156a0ec3f1f50b69fdd',1,'Registers']]],
   ['testconnection',['testConnection',['../class_m_p_u6050.html#a95ffab7b44fce3834236e0813687d11a',1,'MPU6050']]],
   ['testprint',['testPrint',['../class_i_s_m43340.html#a9d4a7334f5c290f607e1c056b7e24e9e',1,'ISM43340']]],
   ['time',['time',['../main_8c.html#a343cf4964867abd5554c451848c7eaba',1,'main.c']]],

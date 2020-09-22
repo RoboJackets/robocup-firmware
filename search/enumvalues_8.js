@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['legacy',['LEGACY',['../namespacertp_1_1_port_type_namespace.html#aa4aec9e3af6e48136ec9a1e072d22288ae63c112a95651b7a3b2e6ef59e1bb210',1,'rtp::PortTypeNamespace']]],
-  ['link',['LINK',['../namespacertp_1_1_port_type_namespace.html#aa4aec9e3af6e48136ec9a1e072d22288acfc701921e6179207d0074ccc1c39fa9',1,'rtp::PortTypeNamespace']]]
+  ['kick',['KICK',['../struct_kicker_command.html#a7334a1861569334fa12adeb9fe1c3bdcace1d76922b0dc26071c8e43ddf4dc606',1,'KickerCommand']]],
+  ['kicker_5ferror',['KICKER_ERROR',['../_l_e_d_module_8hpp.html#a1fe0fcca0d6af57aaf39afa40e635579a9faef45f6aa3175fa17c158dff4f96ac',1,'LEDModule.hpp']]]
 ];

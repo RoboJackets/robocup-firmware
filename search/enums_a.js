@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['triggermode',['TriggerMode',['../struct_kicker_command.html#a73b1776f87841b7952e4993a76496479',1,'KickerCommand']]]
+  ['register',['Register',['../class_m_c_p23017.html#a3f402d0f5722dfbbfca400a36bc5d66e',1,'MCP23017']]]
 ];

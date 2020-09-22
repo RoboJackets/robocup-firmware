@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['levelcolors',['LevelColors',['../_l_e_d_module_8hpp.html#a6189023456c55830ab1301757517ddb3',1,'LEDModule.hpp']]]
+  ['gyro_5ffs_5fsel',['GYRO_FS_SEL',['../namespace_registers.html#aae9dbe9ec3c277024edb40738b709e30',1,'Registers']]],
+  ['gyroconfig',['GyroConfig',['../namespace_registers.html#a7c8d84b008e2212da865f4c96751b941',1,'Registers']]]
 ];

@@ -1,4 +1,23 @@
 var searchData=
 [
-  ['boot_5ffail',['BOOT_FAIL',['../_l_e_d_module_8hpp.html#a70d5f642b81250279ac9f8305c9a59fdabf423ad6f51eb924b4f2f5308a88a937',1,'LEDModule.hpp']]]
+  ['accel_5ffs_5f16',['ACCEL_FS_16',['../namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3a36d4decc0321e1921de4e294b6e55ba2',1,'Registers']]],
+  ['accel_5ffs_5f2',['ACCEL_FS_2',['../namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3a9f015ddb25e7110fb11af2cb05f3f2d8',1,'Registers']]],
+  ['accel_5ffs_5f4',['ACCEL_FS_4',['../namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3a846e99383d75cb6c837c63b010d44595',1,'Registers']]],
+  ['accel_5ffs_5f8',['ACCEL_FS_8',['../namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3aaaf8d6a4cc05bcbedc8dec1db73efe91',1,'Registers']]],
+  ['accel_5fmode_5flow_5fnoise',['ACCEL_MODE_LOW_NOISE',['../namespace_registers.html#ade2ba6be797d0a70afdad7f30fcf728daac41d1af867fcc9bf605d90cd43e9171',1,'Registers']]],
+  ['accel_5fmode_5flow_5fpower',['ACCEL_MODE_LOW_POWER',['../namespace_registers.html#ade2ba6be797d0a70afdad7f30fcf728da2066d3fbf64e5925217178b951a0e12d',1,'Registers']]],
+  ['accel_5fmode_5foff',['ACCEL_MODE_OFF',['../namespace_registers.html#ade2ba6be797d0a70afdad7f30fcf728da0029fdf6ca4aaf9a0f2dc04d8cfd462b',1,'Registers']]],
+  ['accel_5fodr_5f100hz',['ACCEL_ODR_100Hz',['../namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3ab17eeaa4f5d149a9438bded2b4e6a574',1,'Registers']]],
+  ['accel_5fodr_5f12_5f5hz',['ACCEL_ODR_12_5Hz',['../namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3a6e0aa19b53eb18910d8c8fdff11fbd96',1,'Registers']]],
+  ['accel_5fodr_5f1_5f5625hz',['ACCEL_ODR_1_5625Hz',['../namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3ad4af1fe026ea3ab72f20e19993b91c06',1,'Registers']]],
+  ['accel_5fodr_5f1khz',['ACCEL_ODR_1kHz',['../namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3a155304b140e392561821b1f65ef03f6e',1,'Registers']]],
+  ['accel_5fodr_5f200hz',['ACCEL_ODR_200Hz',['../namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3aad783c248f840c6474f8b9d4106c35b0',1,'Registers']]],
+  ['accel_5fodr_5f25hz',['ACCEL_ODR_25Hz',['../namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3aa5bb41e363796abf2dee2daa089e6384',1,'Registers']]],
+  ['accel_5fodr_5f2khz',['ACCEL_ODR_2kHz',['../namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3ae443833b2782ce66555b47f4806c3e90',1,'Registers']]],
+  ['accel_5fodr_5f3_5f125hz',['ACCEL_ODR_3_125Hz',['../namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3a9710f1be3b03b1df6826ece8daabe19c',1,'Registers']]],
+  ['accel_5fodr_5f4khz',['ACCEL_ODR_4kHz',['../namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3abb960ed0aee03a8fd16703bde7d5e1c9',1,'Registers']]],
+  ['accel_5fodr_5f500hz',['ACCEL_ODR_500Hz',['../namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3a045a0df2e17f854bac1c9fda6cdb54db',1,'Registers']]],
+  ['accel_5fodr_5f50hz',['ACCEL_ODR_50Hz',['../namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3afb9b9a411b4541c5fe01724743bde1bb',1,'Registers']]],
+  ['accel_5fodr_5f6_5f25hz',['ACCEL_ODR_6_25Hz',['../namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3a59992dc27ed0fa6eb56cff8c23d0547c',1,'Registers']]],
+  ['accel_5fodr_5f8khz',['ACCEL_ODR_8kHz',['../namespace_registers.html#afbecf12b5a40e8bf39825bf508a7e8f3a4afe33b544932f0456ad4597c4822933',1,'Registers']]]
 ];

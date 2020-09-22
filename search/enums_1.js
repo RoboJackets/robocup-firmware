@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['categorycolors',['CategoryColors',['../_l_e_d_module_8hpp.html#a1fe0fcca0d6af57aaf39afa40e635579',1,'LEDModule.hpp']]]
+  ['basecontrolcommand',['BaseControlCommand',['../usb-interface_8hpp.html#aa9b8c1931aea37c993e208687aca5ab6',1,'usb-interface.hpp']]]
 ];

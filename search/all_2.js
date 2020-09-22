@@ -35,5 +35,5 @@ var searchData=
   ['buffer',['buffer',['../class_m_p_u6050.html#ad2000cad671bb7b293e26f2d463d4cea',1,'MPU6050']]],
   ['build',['build',['../classconanfile_1_1_robo_cup_firmware_conan.html#a6227acfdd03ca9e400bbae68127793c5',1,'conanfile::RoboCupFirmwareConan']]],
   ['builtcommand',['builtCommand',['../class_i_s_m43340.html#a95d5dc4449cfa59c8870c555bda12fb8',1,'ISM43340']]],
-  ['burst_5fread',['burst_read',['../class_i_c_m20948.html#ac8c5da0bf5f0dd69d2b08e89705e536f',1,'ICM20948']]]
+  ['burst_5fread',['burst_read',['../class_i_c_m20948.html#ac8c5da0bf5f0dd69d2b08e89705e536f',1,'ICM20948::burst_read()'],['../class_i_c_m42605.html#aa596b121f991d899a369d18c827ef509',1,'ICM42605::burst_read()']]]
 ];

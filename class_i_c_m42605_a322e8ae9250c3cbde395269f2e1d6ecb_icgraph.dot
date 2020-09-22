@@ -1,0 +1,15 @@
+digraph "ICM42605::read_register"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node39 [label="ICM42605::read_register",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node39 -> Node40 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node40 [label="ICM42605::initialize",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_c_m42605.html#a4a1ddbbdd8501d770ddb3259e396f039"];
+  Node39 -> Node41 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node41 [label="ICM42605::gyro_z",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_c_m42605.html#ab43f16d2205c99c8a37070355406216c"];
+  Node39 -> Node42 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node42 [label="ICM42605::accel_x",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_c_m42605.html#a267b83d3e0794bfa4f1e8f88a3dd1ff0"];
+  Node39 -> Node43 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node43 [label="ICM42605::accel_y",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_i_c_m42605.html#ad94c46f395f8620d4ade80021a6e93c4"];
+}

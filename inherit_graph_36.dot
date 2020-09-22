@@ -3,5 +3,5 @@ digraph "Graphical Class Hierarchy"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node0 [label="MPU6050",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_m_p_u6050.html"];
+  Node0 [label="MotorFeedback",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_motor_feedback.html",tooltip="Contains current and encoder data for each motor. "];
 }

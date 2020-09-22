@@ -14,7 +14,7 @@ var searchData=
   ['chip',['CHIP',['../struct_kicker_command.html#a7334a1861569334fa12adeb9fe1c3bdcaf4ae4c68a3c16e3a786c3317615bc09c',1,'KickerCommand']]],
   ['chip_5fdeselect',['chip_deselect',['../class_f_p_g_a.html#af55b40be0ecf22fae18ff4c2811c0d46',1,'FPGA']]],
   ['chip_5fpin',['CHIP_PIN',['../pins_8h.html#a0b1a8f1fdfc3b711daa23af5f6deb20c',1,'pins.h']]],
-  ['chip_5fselect',['chip_select',['../class_f_p_g_a.html#abfd93a2d6b356b3338b598b8d9c1d5b4',1,'FPGA::chip_select()'],['../class_i_c_m20948.html#a9c09349b12d32525fbec5a31440dfe79',1,'ICM20948::chip_select()']]],
+  ['chip_5fselect',['chip_select',['../class_f_p_g_a.html#abfd93a2d6b356b3338b598b8d9c1d5b4',1,'FPGA::chip_select()'],['../class_i_c_m20948.html#a9c09349b12d32525fbec5a31440dfe79',1,'ICM20948::chip_select()'],['../class_i_c_m42605.html#a47bbdf7f6490b91b21009b8df891b931',1,'ICM42605::chip_select()']]],
   ['chiperase',['chipErase',['../class_a_v_r910.html#a97502aa5764608dcd9c9b3f22629026c',1,'AVR910']]],
   ['clearwindup',['clearWindup',['../class_pid.html#a63308bb7bc14653d961b1f79f1824aaf',1,'Pid']]],
   ['clk_5ffreq',['CLK_FREQ',['../main_8c.html#aafc10c8bbf3d3c18ed615f24925bbb10',1,'main.c']]],
