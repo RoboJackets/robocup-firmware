@@ -11,6 +11,7 @@ add_library(firm-lib
   Src/drivers/MCP23017.cpp
   Src/drivers/MPU6050.cpp
   Src/drivers/ICM20948.cpp
+  Src/drivers/ICM42605.cpp
 )
 target_link_libraries(firm-lib
     CONAN_PKG::mTrain
