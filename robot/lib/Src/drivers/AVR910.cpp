@@ -45,6 +45,8 @@ AVR910::AVR910(LockedStruct<SPI>& spi, std::shared_ptr<DigitalOut> nCs, PinName 
 bool AVR910::init() {
     int tryCnt = 0;
     bool enabled = false;
+    nCs_->write(1);
+
     do {
         // Give nReset a positive pulse for at least two CPU clock cycles
         nReset_ = 1;

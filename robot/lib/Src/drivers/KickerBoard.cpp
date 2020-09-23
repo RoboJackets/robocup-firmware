@@ -36,7 +36,7 @@ bool KickerBoard::flash(const string& proFilename,
                    0xFF),
         make_tuple("Part Family", AVR_FAMILY_ID,
                    &AVR910::readPartFamilyAndFlashSize, AVR_FAMILY_MASK),
-        make_tuple("Device ID", ATTINY_DEVICE_ID, &AVR910::readPartNumber,
+        make_tuple("Device ID", ATMEGA_DEVICE_ID, &AVR910::readPartNumber,
                    0xFF),
     };
     for (auto& check : checks) {
@@ -59,7 +59,7 @@ bool KickerBoard::flash(const string& proFilename,
         //LOG(INFO, "Opened kicker binary, attempting to program kicker.");
         bool shouldProgram = true;
         if (onlyIfDifferent &&
-            (checkMemory(ATTINY_PAGESIZE, ATTINY_NUM_PAGES, fp, false) == 0))
+            (checkMemory(ATMEGA_PAGESIZE, ATMEGA_NUM_PAGES, fp, false) == 0))
             shouldProgram = false;
 
         if (!shouldProgram) {
@@ -68,7 +68,7 @@ bool KickerBoard::flash(const string& proFilename,
             // exit programming mode by bringing nReset high
             exitProgramming();
         } else {
-            bool success = program(fp, ATTINY_PAGESIZE, ATTINY_NUM_PAGES);
+            bool success = program(fp, ATMEGA_PAGESIZE, ATMEGA_NUM_PAGES);
 
             if (!success) {
                 //LOG(WARN, "Failed to program kicker.");
@@ -95,7 +95,7 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
                    0xFF),
         make_tuple("Part Family", AVR_FAMILY_ID,
                    &AVR910::readPartFamilyAndFlashSize, AVR_FAMILY_MASK),
-        make_tuple("Device ID", ATTINY_DEVICE_ID, &AVR910::readPartNumber,
+        make_tuple("Device ID", ATMEGA_DEVICE_ID, &AVR910::readPartNumber,
                    0xFF),
     };
     for (auto& check : checks) {
@@ -111,7 +111,7 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
     printf("[INFO] Kicker: Attempting to program kicker.\r\n");
     bool shouldProgram = true;
     if (onlyIfDifferent &&
-        (checkMemory(ATTINY_PAGESIZE, ATTINY_NUM_PAGES, progBinary, length, false) == 0))
+        (checkMemory(ATMEGA_PAGESIZE, ATMEGA_NUM_PAGES, progBinary, length, false) == 0))
         shouldProgram = false;
     
     if (!shouldProgram) {
@@ -120,7 +120,7 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
         // exit programming mode by bringing nReset high
         exitProgramming();
     } else {
-        bool success = program(progBinary, length, ATTINY_PAGESIZE, ATTINY_NUM_PAGES);
+        bool success = program(progBinary, length, ATMEGA_PAGESIZE, ATMEGA_NUM_PAGES);
 
         if (!success) {
             printf("[WARN] Kicker: Failed to program kicker.\r\n");
