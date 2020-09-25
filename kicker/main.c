@@ -264,7 +264,7 @@ void init() {
   DDRB |= _BV(CHIP_PIN);
 
   // latch debug state
-  _in_debug_mode = (PINC & _BV(DB_SWITCH));
+  _in_debug_mode = !(PINC & _BV(DB_SWITCH));
 
   // configure core io
   DDRB |= _BV(KICK_MISO_PIN);
