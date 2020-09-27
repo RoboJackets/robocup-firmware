@@ -9,7 +9,9 @@ import matplotlib.pyplot as plt
 from PyQt5.QtWidgets import QApplication, QFileDialog
 
 from UI import UIMainWindow
-from KalmanFilter import KalmanFilter
+from KalmanFilter import KF
+from SteadyStateKalmanFilter import SS_KF
+from RobotModel import RobotModel
 
 '''
 Credit: https://www.bzarg.com/p/how-a-kalman-filter-works-in-pictures/
@@ -18,10 +20,17 @@ https://en.wikipedia.org/wiki/Kalman_filter
 
 
 class Main(QApplication):
-    def __init__(self, args, kalmanFilter, verbose=False):
+    def __init__(self, args, model, verbose=False):
         super(Main, self).__init__([])
         self.args = args
-        self.kalmanFilter = kalmanFilter
+        self.model = model
+        self.observer_type = "SS_KF"
+
+        A, B, H, D, P, Q, R = model.generate_model().values()
+        self.kalmanFilter = KF(x_hat_init=np.zeros((3,1)), A=A, B=B, H=H, D=D, P=P, Q=Q, R=R)
+        self.ss_kalmanFilter = SS_KF(x_hat_init=np.zeros((3,1)), A=A, B=B, H=H, D=D, Q=Q, R=R)
+
+        self.observer = self.ss_kalmanFilter
 
         if self.args.time:
             try:
@@ -44,7 +53,8 @@ class Main(QApplication):
         self.verbose = self.args.verbose
 
         if self.args.headless:
-            self.kalmanFilter.steady_state = not self.args.regular
+            self.observer_type = "SS_KF" if not self.args.regular else "KF"
+            pass
 
         if not self.args.headless:
             self.window = UIMainWindow()
@@ -53,9 +63,8 @@ class Main(QApplication):
             self.window.gen_bttn.clicked.connect(self.generate_code)
             self.window.save_action.triggered.connect(self.save)
             self.window.load_action.triggered.connect(self.load)
-            self.window.filter_type_select.setCurrentText(
-                "Steady State" if self.kalmanFilter.steady_state else "Regular")
-            self.window.filter_type_select.currentTextChanged.connect(self.set_filter_type)
+            self.window.filter_type_select.setCurrentText("Steady State" if self.observer_type=="SS_KF" else "Regular")
+            self.window.filter_type_select.currentTextChanged.connect(self.change_observer_type)
             self.window.data_type_select.currentTextChanged.connect(self.set_data_type)
             self.window.verbose_check.stateChanged.connect(self.set_verbose)
             self.window.show()
@@ -113,16 +122,16 @@ class Main(QApplication):
         sys.exit(0)
 
     def populate_gains(self):
-        for r, row in enumerate(self.kalmanFilter.Q):
+        for r, row in enumerate(self.observer.gains.Q):
             for c, element in enumerate(row):
-                self.window.Q_textboxes[r][c].setText(str(self.kalmanFilter.Q[r, c]))
+                self.window.Q_textboxes[r][c].setText(str(self.observer.gains.Q[r, c]))
 
-        for r, row in enumerate(self.kalmanFilter.R):
+        for r, row in enumerate(self.observer.gains.R):
             for c, element in enumerate(row):
-                self.window.R_textboxes[r][c].setText(str(self.kalmanFilter.R[r, c]))
+                self.window.R_textboxes[r][c].setText(str(self.observer.gains.R[r, c]))
 
     def update(self):
-        t, x_hat, x = self.kalmanFilter.step(self.dt, self.verbose, changeable_only=True)
+        t, x_hat, x = self.observer.step()
         vx, vy, omega = x_hat
         vx_obs, vy_obs, omega_obs = x
         self.vxs.append(vx)
@@ -131,14 +140,11 @@ class Main(QApplication):
         self.vxs_obs.append(vx_obs)
         self.vys_obs.append(vy_obs)
         self.omegas_obs.append(omega_obs)
-        if self.verbose:
+        '''if self.verbose:
             self.console_print("-" * 40)
-            v = self.kalmanFilter.vars(True)
+            v = self.observer.vars(True)
             for key in v:
-                self.console_print(str(key) + ":\n" + str(np.round(v[key], 5)))
-
-    def set_filter_type(self, new_option):
-        self.kalmanFilter.steady_state = (new_option == "Steady State")
+                self.console_print(str(key) + ":\n" + str(np.round(v[key], 5)))'''
 
     def set_data_type(self, new_option):
         self.kalmanFilter.step_response = (new_option == "Step Response")
@@ -148,9 +154,9 @@ class Main(QApplication):
             with open(file_name, "r") as file:
                 data = file.read()
                 print(data.split("\n"))
-                if len(data.split("\n")) != self.kalmanFilter.num_states + 1:
+                if len(data.split("\n")) != self.model.num_states + 1:
                     print("Make sure that there are {} rows of data: 1 for sample frequency, {} for states".format(
-                        self.kalmanFilter.num_states + 1, self.kalmanFilter.num_states))
+                        self.model.num_states + 1, self.model.num_states))
                 if len(data.split("\n")[0].split(",")) != 1:
                     print("The first line of the file must be the sample rate")
                 try:
@@ -165,25 +171,41 @@ class Main(QApplication):
         if not self.args.headless:
             self.verbose = self.window.verbose_check.isChecked()
 
+    def set_observer(self, observer_type="KF"):
+        observer_types = ["KF", "SS_KF"]
+        if observer_type not in observer_types:
+            raise ValueError("Type must be one of: KF, SS_KF")
+        self.observer_type = observer_type
+        if observer_type == "KF":
+            self.observer = self.kalmanFilter
+        elif observer_type == "SS_KF":
+            self.observer = self.ss_kalmanFilter
+
+    def change_observer_type(self, newType):
+        if newType == "Steady State":
+            self.set_observer("SS_KF")
+        else:
+            self.set_observer("KF")
+
     def simulate(self):
         if not self.args.headless:
             self.window.console.clear()
             err = False
             # Validate gains
-            for row in range(self.kalmanFilter.num_states):
-                for col in range(self.kalmanFilter.num_states):
+            for row in range(self.model.num_states):
+                for col in range(self.model.num_states):
                     try:
-                        self.kalmanFilter.Q[row, col] = eval(self.window.Q_textboxes[row][col].text())
+                        self.observer.gains.Q[row, col] = eval(self.window.Q_textboxes[row][col].text())
                     except Exception:
                         err = True
                         self.console_print(
                             "Make sure that element {},{} of the Q gains matrix is a valid number!".format(row, col))
                         print("Make sure that element {},{} of the Q gains matrix is a valid number!".format(row, col))
 
-            for row in range(self.kalmanFilter.num_outputs):
-                for col in range(self.kalmanFilter.num_outputs):
+            for row in range(self.model.num_outputs):
+                for col in range(self.model.num_outputs):
                     try:
-                        self.kalmanFilter.R[row, col] = eval(self.window.R_textboxes[row][col].text())
+                        self.observer.gains.R[row, col] = eval(self.window.R_textboxes[row][col].text())
                     except Exception:
                         err = True
                         self.console_print(
@@ -196,7 +218,7 @@ class Main(QApplication):
         for var_list in self.lists:
             var_list.clear()
 
-        self.kalmanFilter.reset()
+        self.observer.reset()
 
         for _ in self.ts:
             self.update()
@@ -259,8 +281,12 @@ class Main(QApplication):
                 0]
         if file_name:
             with open(file_name, 'w') as file:
-                for key, pair in self.kalmanFilter.gains().items():
-                    file.write(str(key) + ": " + str(pair.tolist()) + "\n")
+                gains = self.observer.get_gains().items()
+                for key, pair in gains:
+                    if key == 'dt':
+                        file.write(str(key) + ": " + str(pair) + "\n")
+                    else:
+                        file.write(str(key) + ": " + str(pair.tolist()) + "\n")
 
     def load(self):
         if self.args.headless and self.args.loadfile:
@@ -271,8 +297,8 @@ class Main(QApplication):
         if file_name:
             with open(file_name, 'r') as file:
                 gains_string = file.read()
-                P, A, B, H, K, Q, R = [eval(gain.split(': ')[1]) for gain in gains_string.strip().split('\n')]
-                self.kalmanFilter.set_gains(P, A, B, H, K, Q, R)
+                dt, P, A, B, H, D, K, Q, R = [np.array(eval(gain.split(': ')[1])) for gain in gains_string.strip().split('\n')]
+                self.observer.set_gains(P, A, B, H, D, K, Q, R)
                 if not self.args.headless:
                     self.populate_gains()
 
@@ -302,10 +328,11 @@ class Main(QApplication):
                 file.write("#pragma once\n")
                 file.write("#include <Eigen/Dense>\n\n")
                 file.write("namespace drivetrain_controls {\n\n")
-                gains_list = [self.kalmanFilter.A, self.kalmanFilter.B, self.kalmanFilter.Q, self.kalmanFilter.R,
-                              self.kalmanFilter.K]
-                names_list = ["dynamics", "control", "process_noise", "observation_noise",
-                              "ss_kalman_gain" if self.kalmanFilter.steady_state else "kalman_gain"]
+                gains_list = [self.observer.dynamics.gains.A, self.observer.dynamics.gains.B, self.observer.dynamics.gains.H,
+                              self.observer.dynamics.gains.D, self.observer.gains.Q, self.observer.gains.R,
+                              self.observer.gains.K]
+                names_list = ["dynamics", "control", "output", "feed_forward", "process_noise", "observation_noise",
+                              "ss_kalman_gain" if self.observer_type=="SS_KF" else "kalman_gain"]
                 code = ""
                 for name, gain in zip(names_list, gains_list):
                     code += self.generate_gain(name, gain) + "\n"
@@ -330,8 +357,7 @@ if __name__ == '__main__':
     p.add_argument("-dt", "--timestep", dest="timestep", help="Timestep for simulation, in seconds. Default: 0.005s")
     p.add_argument("-v", "--verbose", action='store_true', help="Prints Kalman Filter gains for every simulation step")
     args = p.parse_args()
-    m = Main(args, kalmanFilter=KalmanFilter(x_hat_init=np.array([0, 0, 0]).reshape((3, 1)),
-                                             init_covariance=0.1,
-                                             steady_state=True),
-             verbose=True)
-    sys.exit(m.exec_())
+
+    model = RobotModel()
+    app = Main(args, model=model, verbose=True)
+    sys.exit(app.exec_())

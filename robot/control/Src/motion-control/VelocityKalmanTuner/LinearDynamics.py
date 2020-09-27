@@ -1,6 +1,9 @@
 from dynamics import Dynamics
 from LinearDynamicsGains import LinearDynamicsGains
-import scipy
+import scipy.signal
+import numpy as np
+
+
 class LinearDynamics(Dynamics):
     """
     A class which steps through a dynamic linear system of the form
@@ -8,30 +11,35 @@ class LinearDynamics(Dynamics):
     y = Hx
     """
 
-    def __init__(self, A, B, H, D, x_init):
+    def __init__(self, A_k, B_k, H_k, D_k, x_init, dt=0.01):
         """
         Initializes constants for the system
         :param A: Dynamics matrix, converts current state to next state
         :param B: Control matrix, converts control input into state change
         :param H: Measurement matrix, converts state into measurements
         :param x_init: Initial state
+        :param dt: Species the interval between timesteps. Helps save computation by computing discretized system
+        only once if dt is the same for all timesteps.
+        If 'None', then the system will be computed every time the function "step" is called
         """
-        self.gains = LinearDynamicsGains(A=A, B=B, H=H, D=D, x_init=x_init)
+        self.gains = LinearDynamicsGains(A_k=A_k, B_k=B_k, H_k=H_k, D_k=D_k, x_init=x_init)
         self.x = x_init
-        self.y = self.gains.H @ self.x
+        self.y = self.gains.H_k @ self.x
+        self.dt = dt
 
-    def step(self, dt):
+    def process_noise(self, Q):
+        return Q @ np.random.randn(self.x.shape[0], 1)
+
+    def measurement_noise(self, R):
+        return R @ np.random.randn(self.y.shape[0], 1)
+
+    def step(self, x, u, Q, R):
         """
         Based on currently tracked state, update state according to discrete
         dynamics
-        :param dt:
-        :return:
         """
-        A_k, B_k, H_k, _, _ = scipy.signal.cont2discrete(system=
-                                                         (self.gains.A, self.gains.B, self.gains.H, self.gains.D),
-                                                         dt=dt)
-        self.x = A_k @ self.x + B_k @ self.u
-        self.y = H_k @ self.x
+        self.x = self.gains.A_k @ x + self.gains.B_k @ u + self.process_noise(Q=Q)
+        self.y = self.gains.H_k @ x + self.gains.D_k @ u + self.measurement_noise(R=R)
 
     def get_state(self):
         return self.x

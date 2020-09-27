@@ -5,10 +5,10 @@ from KalmanFilterGains import KalmanFilterGains
 from LinearDynamics import LinearDynamics
 
 
-class KF(Observer):
+class SS_KF(Observer):
     """
-    Discrete Kalman Filter.
-    Estimates state through iteratively tuning Kalman Gain to eventual convergence
+    Steady State Discrete Kalman Filter.
+    Estimates state using a precalculated convergent Kalman Gain
     Let n be the number of states, m the number of inputs, and o the number of outputs
     :param A (n x n) : Continuous-time state transition matrix
     :param B (n x m) : Continuous-time control matrix
@@ -19,25 +19,25 @@ class KF(Observer):
     :param dt: Time interval for system discretization
     """
 
-    def __init__(self, x_hat_init, A, B, H, D, P, Q, R, dt=0.01):
-        self.x_hat_init = x_hat_init
-        self.P_init = P
+    def __init__(self, x_hat_init, A, B, H, D, Q, R, dt=0.01):
+        self.t = 0
         self.dt = dt
+
+        self.x_hat_init = x_hat_init
+        self.x_hat = x_hat_init
 
         A_k, B_k, H_k, D_k, _ = scipy.signal.cont2discrete(system=(A, B, H, D), dt=self.dt)
 
         self.dynamics = LinearDynamics(A_k, B_k, H_k, D_k, x_init=x_hat_init, dt=dt)
-        self.gains = KalmanFilterGains(H_k, P, Q, R)
         self.num_states = self.dynamics.gains.A_k.shape[1]
         self.num_inputs = self.dynamics.gains.B_k.shape[1]
         self.num_outputs = self.dynamics.gains.H_k.shape[0]
-        self.x_hat = x_hat_init
-        self.t = 0
-        self.dt = dt
+
+        P_ss = scipy.linalg.solve_discrete_are(self.dynamics.gains.A_k.T, self.dynamics.gains.H_k.T, Q, R)
+
+        self.gains = KalmanFilterGains(H=H, P=P_ss, Q=Q, R=R)
 
     def predict(self):
-        self.t += self.dt
-
         # Control input, returns 0 for now
         u = self.generate_u()
 
@@ -45,10 +45,6 @@ class KF(Observer):
         # x_hat' = A * x_hat_prev + B * u
         self.dynamics.step(dt=self.dt, x=self.x_hat, u=u, Q=self.gains.Q, R=self.gains.R)
         self.x_hat = self.dynamics.get_state()
-
-        # A priori covariance estimate
-        # P' = A * P_prev * A.T + Q
-        self.gains.P = self.dynamics.gains.A_k @ self.gains.P @ self.dynamics.gains.A_k.T + self.gains.Q
 
     def generate_u(self):
         return np.zeros((self.dynamics.gains.B_k.shape[1], 1))
@@ -58,40 +54,34 @@ class KF(Observer):
         # y = z - H * x_hat
         y = self.dynamics.get_measurements() - self.gains.H @ self.x_hat
 
-        self.gains.update_K()
-
         # A posteriori state estimate
         # x_hat = x_hat' + K * (y - H * x_hat_est)
         self.x_hat += self.gains.K @ y
 
-        # A posteriori covariance estimate
-        # P = (I - K * H) * P'
-        self.gains.P = (np.eye(self.x_hat.shape[0]) - self.gains.K @ self.dynamics.gains.H_k) @ self.gains.P
-
         # Postfit
         # y = z - H * x_hat
         y = self.dynamics.get_measurements() - self.gains.H @ self.x_hat
+
+    def get_state_estimate(self):
+        return self.x_hat
 
     def step(self):
         self.predict()
         self.update()
         return self.t, self.get_state_estimate(), self.dynamics.get_state()
 
-    def get_state_estimate(self):
-        return self.x_hat
+    def set_gains(self, P_ss, A_k, B_k, H_k, D_k, K_k, Q_k, R_k):
 
-    def set_gains(self, P, A, B, H, D, K, Q, R):
-        self.dynamics.gains.set_gains(A=A, B=B, H=H, D=D)
-        self.gains.set_gains(H=H, P=P, Q=Q, R=R, K=K)
+        self.dynamics.gains.set_gains(A_k, B_k, H_k, D_k)
+        self.gains.set_gains(H_k, P_ss, Q_k, R_k)
 
     def reset(self):
         self.t = 0
         self.x_hat = self.x_hat_init
-        self.gains.P = self.P_init
 
     def get_gains(self):
         return {
-            'dt' : self.dt,
+            'dt': self.dt,
             'P_k': self.gains.P,
             'A_k': self.dynamics.gains.A_k,
             'B_k': self.dynamics.gains.B_k,
