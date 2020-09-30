@@ -1,6 +1,9 @@
-.PHONY : all kicker configure robot control-upload docs $(ROBOT_TESTS:%=test-%-upload)
+.PHONY : all kicker kicker-test flash configure robot docs $(ROBOT_TESTS:%=test-%-upload)
 
-all: robot
+all: robot flash
+
+flash:
+	./util/flash-mtrain
 
 kicker:
 	cd kicker && \
@@ -24,10 +27,6 @@ configure : robot/build/conaninfo.txt
 
 
 ROBOT_TESTS = test
-
-# Temp fix
-control-upload: configure robot
-	./util/flash-mtrain
 
 robot: robot/build/conaninfo.txt
 	cd robot && conan build . -bf build
