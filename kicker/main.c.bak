@@ -135,7 +135,8 @@ uint8_t get_voltage() {
     ;
 
   // ADHC will range from 0 to 255 corresponding to 0 through VCC
-  return ADCH;
+  // Shifted by 1 to account for voltage divider (250V ~ 127)
+  return ADCH >> 1;
 }
 
 void main() {
@@ -156,10 +157,8 @@ void main() {
       /* PORTC |= _BV(MCU_RED); */
       /* PORTC &= ~(charge_db_pressed ? _BV(MCU_RED) : 0); */
 
-      if (!kick_db_down_ && kick_db_pressed){
-        //kick(255, false);
-        PORTC |= _BV(MCU_RED);
-      }
+      if (!kick_db_down_ && kick_db_pressed)
+        kick(255, false);
 
       if(!chip_db_down_ && chip_db_pressed)
         kick(255, true);
