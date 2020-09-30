@@ -9,6 +9,7 @@
 #
 # Example usage:
 # python3 convert.py kicker/build/bin/kicker.nib robot/lib/Inc/device-bins/kicker_bin.h KICKER_BYTES
+# python3 convert.py kicker/build/bin/kicker-test.nib robot/lib/Inc/device-bins/kicker_bin.h KICKER_BYTES
 #
 # FPGA should be very similar
 #

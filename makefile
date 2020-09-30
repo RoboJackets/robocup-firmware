@@ -1,11 +1,18 @@
 .PHONY : all kicker configure robot control-upload docs $(ROBOT_TESTS:%=test-%-upload)
 
-all: kicker robot
+all: robot
 
 kicker:
 	cd kicker && \
 mkdir -p build && cd build && \
-cmake -DCMAKE_TOOLCHAIN_FILE=../attiny_toolchain.cmake .. && make
+cmake -DCMAKE_TOOLCHAIN_FILE=../atmega_toolchain.cmake .. && make && cd ../.. && \
+python3 convert.py kicker/build/bin/kicker.nib robot/lib/Inc/device-bins/kicker_bin.h KICKER_BYTES
+
+kicker-test:
+	cd kicker && \
+mkdir -p build && cd build && \
+cmake -DCMAKE_TOOLCHAIN_FILE=../atmega_toolchain.cmake .. && make kicker-test && cd ../.. && \
+python3 convert.py kicker/build/bin/kicker-test.nib robot/lib/Inc/device-bins/kicker_bin.h KICKER_BYTES
 
 # Define BUILDTYPE as Release if not already set for this target and subtargets
 robot/build/conaninfo.txt : BUILDTYPE ?= "Release"
