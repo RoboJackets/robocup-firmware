@@ -29,10 +29,12 @@
 // number of steps of resolution we want per millisecond
 #define TIMER_PER_MS 4
 
+#define BALL_SENSE_MAX_SAMPLES 5
+
 // calculate our TIMING_CONSTANT (timer cmp val) from the desired resolution
 #define CLK_FREQ 8000000 // after removing default CLKDIV8 prescale
 #define TIMER_PRESCALE                                                         \
- 8 // set by TCCR0B |= _BV(CS01) which also starts the timer
+  8 // set by TCCR0B |= _BV(CS01) which also starts the timer
 #define MS_PER_SECOND 1000
 
 #define MAX_TIMER_FREQ (CLK_FREQ / TIMER_PRESCALE)
@@ -41,8 +43,6 @@
 #define TIMING_CONSTANT ((MAX_TIMER_FREQ / DESIRED_TIMER_FREQ) - 1)
 
 // get different ball reading for 20 * 100 us = 2 ms before switching
-#define BALL_SENSE_MAX_SAMPLES 5
-
 // Used to time kick and chip durations, -1 indicates inactive state
 volatile int32_t pre_kick_cooldown_ = -1;
 volatile int32_t timer_cnts_left_ = -1;
@@ -89,7 +89,7 @@ uint8_t execute_cmd(uint8_t);
  */
 bool is_kicking() {
   return pre_kick_cooldown_ >= 0 || timer_cnts_left_ >= 0 ||
-         post_kick_cooldown_ >= 0 || kick_wait_ >= 0;
+    post_kick_cooldown_ >= 0 || kick_wait_ >= 0;
 }
 
 /*
@@ -112,7 +112,7 @@ void kick(uint8_t strength, bool is_chip) {
   // min and max effective FET enabled times
   float strength_ratio = (strength / MAX_KICK_STRENGTH);
   float time_cnt_flt_ms =
-      KICK_TIME_SLOPE * strength_ratio + MIN_EFFECTIVE_KICK_FET_EN_TIME;
+    KICK_TIME_SLOPE * strength_ratio + MIN_EFFECTIVE_KICK_FET_EN_TIME;
   float time_cnt_flt = time_cnt_flt_ms * TIMER_PER_MS;
   timer_cnts_left_ = (int)(time_cnt_flt + 0.5f); // round
 
@@ -135,7 +135,7 @@ uint8_t get_voltage() {
     ;
 
   // ADHC will range from 0 to 255 corresponding to 0 through VCC
-  return ADCH;
+  return (ADCH << 1);
 }
 
 void main() {
@@ -157,8 +157,7 @@ void main() {
       /* PORTC &= ~(charge_db_pressed ? _BV(MCU_RED) : 0); */
 
       if (!kick_db_down_ && kick_db_pressed){
-        //kick(255, false);
-        PORTC |= _BV(MCU_RED);
+        kick(255, false);
       }
 
       if(!chip_db_down_ && chip_db_pressed)
@@ -189,13 +188,33 @@ void main() {
     // don't run the adc every loop
     if (time % 1000 == 0) {
       int voltage_accum =
-          (255 - kalpha) * last_voltage_ + kalpha * get_voltage();
+        (255 - kalpha) * last_voltage_ + kalpha * (get_voltage());
       last_voltage_ = voltage_accum / 255;
 
       int num_lights = ((int) last_voltage_ / 47);
 
       PORTA |= (0x1F << 1);
-      PORTA &= ~((0xFF >> abs(num_lights - (sizeof(unsigned char) * 8))) << 1);
+      //PORTA &= ~((0xFF >> abs(num_lights - sizeof(unsigned char) * 8)) << 1);
+      //PORTA &= 0b11011111;
+      switch (num_lights) {
+        case 1:
+          PORTA &= 0b11011111;
+          break;
+        case 2:
+          PORTA &= 0b11001111;
+          break;
+        case 3:
+          PORTA &= 0b11000111;
+          break;
+        case 4:
+          PORTA &= 0b11000011;
+          break;
+        case 5:
+          PORTA &= 0b11000001;
+          break;
+        default:
+          PORTA &= 0xFF;
+      }
     }
     time++;
 
@@ -264,6 +283,7 @@ void init() {
   PORTC |= _BV(MCU_RED);
 
   DDRB |= _BV(CHIP_PIN);
+  DDRB |= _BV(KICK_PIN);
 
   // latch debug state
   _in_debug_mode = !(PINC & _BV(DB_SWITCH));
@@ -275,7 +295,7 @@ void init() {
   // configure hv mon
   DDRA &= ~(_BV(V_MONITOR_PIN));
   DDRA |= (_BV(HV_IND_MAX) | _BV(HV_IND_HIGH) | _BV(HV_IND_MID) |
-           _BV(HV_IND_LOW) | _BV(HV_IND_MIN));
+      _BV(HV_IND_LOW) | _BV(HV_IND_MIN));
 
   // configure LT3751
   DDRD |= _BV(LT_CHARGE);
@@ -292,16 +312,16 @@ void init() {
   // configure debug
   DDRC &= ~(_BV(DB_SWITCH));
   DDRD &=
-      ~(_BV(DB_CHG_PIN) | _BV(DB_KICK_PIN));
-  DDRB |= (_BV(DB_CHIP_PIN));
+    ~(_BV(DB_CHG_PIN) | _BV(DB_KICK_PIN));
+  DDRB &= ~(_BV(DB_CHIP_PIN));
 
   // disable JTAG
   MCUCSR |= (1 << JTD);
   MCUCSR |= (1 << JTD);
   // configure SPI
   if (!_in_debug_mode) {
-      SPCR = _BV(SPE) | _BV(SPIE);
-      SPCR &= ~(_BV(MSTR));
+    SPCR = _BV(SPE) | _BV(SPIE);
+    SPCR &= ~(_BV(MSTR));
   }
 
   ///////////////////////////////////////////////////////////////////////////
@@ -355,25 +375,25 @@ ISR(SPI_STC_vect) {
  * ISR for PCINT8 - PCINT11
  */
 /*
-ISR(PCINT0_vect) {
-    // First we get the current state of each button, active low
-    int dbg_switched = !(PINB & _BV(DB_SWITCH));
+   ISR(PCINT0_vect) {
+// First we get the current state of each button, active low
+int dbg_switched = !(PINB & _BV(DB_SWITCH));
 
-    if (!dbg_switched) return;
-    int kick_db_pressed = !(PINA & _BV(DB_KICK_PIN));
-    int charge_db_pressed = !(PINA & _BV(DB_CHG_PIN));
+if (!dbg_switched) return;
+int kick_db_pressed = !(PINA & _BV(DB_KICK_PIN));
+int charge_db_pressed = !(PINA & _BV(DB_CHG_PIN));
 
-    if (!kick_db_down_ && kick_db_pressed) kick(255);
+if (!kick_db_down_ && kick_db_pressed) kick(255);
 
-    // toggle charge
-    if (!charge_db_down_ && charge_db_pressed) {
-        // check if charge is already on, toggle appropriately
-        charge_commanded_ = !charge_commanded_;
-    }
+// toggle charge
+if (!charge_db_down_ && charge_db_pressed) {
+// check if charge is already on, toggle appropriately
+charge_commanded_ = !charge_commanded_;
+}
 
-    // Now our last state becomes the current state of the buttons
-    kick_db_down_ = kick_db_pressed;
-    charge_db_down_ = charge_db_pressed;
+// Now our last state becomes the current state of the buttons
+kick_db_down_ = kick_db_pressed;
+charge_db_down_ = charge_db_pressed;
 }
 */
 

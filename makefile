@@ -5,13 +5,13 @@ all: robot flash
 flash:
 	./util/flash-mtrain
 
-kicker: clean
+kicker: 
 	cd kicker && \
 mkdir -p build && cd build && \
 cmake -DCMAKE_TOOLCHAIN_FILE=../atmega_toolchain.cmake .. && make && cd .. && \
 python3 convert.py build/bin/kicker.nib ../robot/lib/Inc/device-bins/kicker_bin.h KICKER_BYTES
 
-kicker-test: clean
+kicker-test: 
 	cd kicker && \
 mkdir -p build && cd build && \
 cmake -DCMAKE_TOOLCHAIN_FILE=../atmega_toolchain.cmake .. && make kicker-test && cd .. && \
