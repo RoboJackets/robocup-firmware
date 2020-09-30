@@ -1,17 +1,17 @@
-.PHONY : all kicker kicker-test flash configure robot docs $(ROBOT_TESTS:%=test-%-upload)
+.PHONY : all flash kicker kicker-test configure robot docs $(ROBOT_TESTS:%=test-%-upload)
 
 all: robot flash
 
 flash:
 	./util/flash-mtrain
 
-kicker: 
+kicker:
 	cd kicker && \
 mkdir -p build && cd build && \
 cmake -DCMAKE_TOOLCHAIN_FILE=../atmega_toolchain.cmake .. && make && cd .. && \
 python3 convert.py build/bin/kicker.nib ../robot/lib/Inc/device-bins/kicker_bin.h KICKER_BYTES
 
-kicker-test: 
+kicker-test:
 	cd kicker && \
 mkdir -p build && cd build && \
 cmake -DCMAKE_TOOLCHAIN_FILE=../atmega_toolchain.cmake .. && make kicker-test && cd .. && \
@@ -24,7 +24,6 @@ robot/build/conaninfo.txt : robot/conanfile.py
 
 configure : robot/build/conaninfo.txt
 	cd robot && conan build . -bf build -c
-
 
 ROBOT_TESTS = test
 
