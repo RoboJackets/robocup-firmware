@@ -5,17 +5,17 @@ all: robot flash
 flash:
 	./util/flash-mtrain
 
-kicker:
+kicker: clean
 	cd kicker && \
 mkdir -p build && cd build && \
-cmake -DCMAKE_TOOLCHAIN_FILE=../atmega_toolchain.cmake .. && make && cd ../.. && \
-python3 convert.py kicker/build/bin/kicker.nib robot/lib/Inc/device-bins/kicker_bin.h KICKER_BYTES
+cmake -DCMAKE_TOOLCHAIN_FILE=../atmega_toolchain.cmake .. && make && cd .. && \
+python3 convert.py build/bin/kicker.nib ../robot/lib/Inc/device-bins/kicker_bin.h KICKER_BYTES
 
-kicker-test:
+kicker-test: clean
 	cd kicker && \
 mkdir -p build && cd build && \
-cmake -DCMAKE_TOOLCHAIN_FILE=../atmega_toolchain.cmake .. && make kicker-test && cd ../.. && \
-python3 convert.py kicker/build/bin/kicker-test.nib robot/lib/Inc/device-bins/kicker_bin.h KICKER_BYTES
+cmake -DCMAKE_TOOLCHAIN_FILE=../atmega_toolchain.cmake .. && make kicker-test && cd .. && \
+python3 convert.py build/bin/kicker-test.nib ../robot/lib/Inc/device-bins/kicker_bin.h KICKER_BYTES
 
 # Define BUILDTYPE as Release if not already set for this target and subtargets
 robot/build/conaninfo.txt : BUILDTYPE ?= "Release"
