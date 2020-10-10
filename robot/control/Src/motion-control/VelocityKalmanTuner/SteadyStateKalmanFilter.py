@@ -1,5 +1,6 @@
 import numpy as np
 import scipy.linalg
+import scipy.integrate as integrate
 from observer import Observer
 from KalmanFilterGains import KalmanFilterGains
 from LinearDynamics import LinearDynamics
@@ -25,6 +26,7 @@ class SS_KF(Observer):
 
         self.x_hat_init = x_hat_init
         self.x_hat = x_hat_init
+        self.x = x_hat_init
 
         A_k, B_k, H_k, D_k, _ = scipy.signal.cont2discrete(system=(A, B, H, D), dt=self.dt)
 
@@ -33,17 +35,23 @@ class SS_KF(Observer):
         self.num_inputs = self.dynamics.gains.B_k.shape[1]
         self.num_outputs = self.dynamics.gains.H_k.shape[0]
 
-        P_ss = scipy.linalg.solve_discrete_are(self.dynamics.gains.A_k.T, self.dynamics.gains.H_k.T, Q, R)
+        # https://en.wikipedia.org/wiki/Discretization
+        Q_k = np.round(integrate.quad_vec(lambda tau: scipy.linalg.expm(A*tau) @ Q @ scipy.linalg.expm(A.T*tau), 0, dt)[0], 10)
+        R_k = R / self.dt
 
-        self.gains = KalmanFilterGains(H=H, P=P_ss, Q=Q, R=R)
+        P_ss = scipy.linalg.solve_discrete_are(self.dynamics.gains.A_k.T, self.dynamics.gains.H_k.T, Q_k, R_k)
+
+        self.gains = KalmanFilterGains(H_k=H_k, P=P_ss, Q_k=Q_k, R_k=R_k)
+        self.step_response = False
 
     def predict(self):
+        self.t += self.dt
         # Control input, returns 0 for now
         u = self.generate_u()
 
         # A priori state estimate
         # x_hat' = A * x_hat_prev + B * u
-        self.dynamics.step(dt=self.dt, x=self.x_hat, u=u, Q=self.gains.Q, R=self.gains.R)
+        self.dynamics.step(x=self.x_hat, u=u, Q=self.gains.Q_k, R=self.gains.R_k)
         self.x_hat = self.dynamics.get_state()
 
     def generate_u(self):
@@ -52,15 +60,21 @@ class SS_KF(Observer):
     def update(self):
         # Prefit
         # y = z - H * x_hat
-        y = self.dynamics.get_measurements() - self.gains.H @ self.x_hat
-
+        y = 0
+        if not self.step_response:
+            y = self.dynamics.get_measurements() - self.gains.H_k @ self.x_hat
+        else:
+            a = 1
+            self.x = np.heaviside((self.t - a) * np.ones((self.num_states, 1)), a)
+            v = self.gains.R_k @ np.random.randn(self.num_outputs, 1)
+            y = self.gains.H_k @ self.x + v - self.gains.H_k @ self.x_hat
         # A posteriori state estimate
         # x_hat = x_hat' + K * (y - H * x_hat_est)
         self.x_hat += self.gains.K @ y
 
         # Postfit
         # y = z - H * x_hat
-        y = self.dynamics.get_measurements() - self.gains.H @ self.x_hat
+        y = self.dynamics.get_measurements() - self.gains.H_k @ self.x_hat
 
     def get_state_estimate(self):
         return self.x_hat
@@ -68,7 +82,10 @@ class SS_KF(Observer):
     def step(self):
         self.predict()
         self.update()
-        return self.t, self.get_state_estimate(), self.dynamics.get_state()
+        if not self.step_response:
+            return self.t, self.get_state_estimate(), self.dynamics.get_state()
+        else:
+            return self.t, self.get_state_estimate(), self.x
 
     def set_gains(self, P_ss, A_k, B_k, H_k, D_k, K_k, Q_k, R_k):
 
@@ -77,7 +94,11 @@ class SS_KF(Observer):
 
     def reset(self):
         self.t = 0
-        self.x_hat = self.x_hat_init
+        if not self.step_response:
+            self.x_hat = self.x_hat_init
+        else:
+            self.x_hat = np.zeros((self.x_hat.shape[0], 1))
+        self.dynamics.reset()
 
     def get_gains(self):
         return {
@@ -88,6 +109,6 @@ class SS_KF(Observer):
             'H_k': self.dynamics.gains.H_k,
             'D_k': self.dynamics.gains.D_k,
             'K_k': self.gains.K,
-            'Q_k': self.gains.Q,
-            'R_k': self.gains.R
+            'Q_k': self.gains.Q_k,
+            'R_k': self.gains.R_k
         }

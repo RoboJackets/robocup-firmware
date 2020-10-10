@@ -23,8 +23,8 @@ class LinearDynamics(Dynamics):
         If 'None', then the system will be computed every time the function "step" is called
         """
         self.gains = LinearDynamicsGains(A_k=A_k, B_k=B_k, H_k=H_k, D_k=D_k, x_init=x_init)
-        self.x = x_init
-        self.y = self.gains.H_k @ self.x
+        self.x_init = x_init
+        self.reset()
         self.dt = dt
 
     def process_noise(self, Q):
@@ -46,3 +46,7 @@ class LinearDynamics(Dynamics):
 
     def get_measurements(self):
         return self.y
+
+    def reset(self):
+        self.x = self.x_init
+        self.y = self.gains.H_k @ self.x

@@ -29,7 +29,7 @@ class Main(QApplication):
         A, B, H, D, P, Q, R = model.generate_model().values()
         self.kalmanFilter = KF(x_hat_init=np.zeros((3,1)), A=A, B=B, H=H, D=D, P=P, Q=Q, R=R)
         self.ss_kalmanFilter = SS_KF(x_hat_init=np.zeros((3,1)), A=A, B=B, H=H, D=D, Q=Q, R=R)
-
+        self.observer_list = [self.kalmanFilter, self.ss_kalmanFilter]
         self.observer = self.ss_kalmanFilter
 
         if self.args.time:
@@ -122,13 +122,13 @@ class Main(QApplication):
         sys.exit(0)
 
     def populate_gains(self):
-        for r, row in enumerate(self.observer.gains.Q):
+        for r, row in enumerate(self.observer.gains.Q_k):
             for c, element in enumerate(row):
-                self.window.Q_textboxes[r][c].setText(str(self.observer.gains.Q[r, c]))
+                self.window.Q_textboxes[r][c].setText(str(self.observer.gains.Q_k[r, c]))
 
-        for r, row in enumerate(self.observer.gains.R):
+        for r, row in enumerate(self.observer.gains.R_k):
             for c, element in enumerate(row):
-                self.window.R_textboxes[r][c].setText(str(self.observer.gains.R[r, c]))
+                self.window.R_textboxes[r][c].setText(str(self.observer.gains.R_k[r, c]))
 
     def update(self):
         t, x_hat, x = self.observer.step()
@@ -147,7 +147,8 @@ class Main(QApplication):
                 self.console_print(str(key) + ":\n" + str(np.round(v[key], 5)))'''
 
     def set_data_type(self, new_option):
-        self.kalmanFilter.step_response = (new_option == "Step Response")
+        for observer in self.observer_list:
+            observer.step_response = (new_option == "Step Response")
         if new_option == "Sensor Data":
             file_name = \
             QFileDialog.getOpenFileName(self.window.central_widget, "Import Sensor Data", '', "CSV file (*.csv)")[0]
@@ -195,7 +196,7 @@ class Main(QApplication):
             for row in range(self.model.num_states):
                 for col in range(self.model.num_states):
                     try:
-                        self.observer.gains.Q[row, col] = eval(self.window.Q_textboxes[row][col].text())
+                        self.observer.gains.Q_k[row, col] = eval(self.window.Q_textboxes[row][col].text())
                     except Exception:
                         err = True
                         self.console_print(
@@ -205,7 +206,7 @@ class Main(QApplication):
             for row in range(self.model.num_outputs):
                 for col in range(self.model.num_outputs):
                     try:
-                        self.observer.gains.R[row, col] = eval(self.window.R_textboxes[row][col].text())
+                        self.observer.gains.R_k[row, col] = eval(self.window.R_textboxes[row][col].text())
                     except Exception:
                         err = True
                         self.console_print(
@@ -298,7 +299,8 @@ class Main(QApplication):
             with open(file_name, 'r') as file:
                 gains_string = file.read()
                 dt, P, A, B, H, D, K, Q, R = [np.array(eval(gain.split(': ')[1])) for gain in gains_string.strip().split('\n')]
-                self.observer.set_gains(P, A, B, H, D, K, Q, R)
+                for observer in self.observer_list:
+                    observer.set_gains(P, A, B, H, D, K, Q, R)
                 if not self.args.headless:
                     self.populate_gains()
 
@@ -328,8 +330,8 @@ class Main(QApplication):
                 file.write("#pragma once\n")
                 file.write("#include <Eigen/Dense>\n\n")
                 file.write("namespace drivetrain_controls {\n\n")
-                gains_list = [self.observer.dynamics.gains.A, self.observer.dynamics.gains.B, self.observer.dynamics.gains.H,
-                              self.observer.dynamics.gains.D, self.observer.gains.Q, self.observer.gains.R,
+                gains_list = [self.observer.dynamics.gains.A_k, self.observer.dynamics.gains.B_k, self.observer.dynamics.gains.H_k,
+                              self.observer.dynamics.gains.D_k, self.observer.gains.Q_k, self.observer.gains.R_k,
                               self.observer.gains.K]
                 names_list = ["dynamics", "control", "output", "feed_forward", "process_noise", "observation_noise",
                               "ss_kalman_gain" if self.observer_type=="SS_KF" else "kalman_gain"]

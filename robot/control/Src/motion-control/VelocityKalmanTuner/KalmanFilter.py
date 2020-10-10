@@ -1,5 +1,6 @@
 import numpy as np
 import scipy.linalg
+import scipy.integrate as integrate
 from observer import Observer
 from KalmanFilterGains import KalmanFilterGains
 from LinearDynamics import LinearDynamics
@@ -26,14 +27,20 @@ class KF(Observer):
 
         A_k, B_k, H_k, D_k, _ = scipy.signal.cont2discrete(system=(A, B, H, D), dt=self.dt)
 
+        # https://en.wikipedia.org/wiki/Discretization
+        Q_k = np.round(integrate.quad_vec(lambda tau: scipy.linalg.expm(A * tau) @ Q @ scipy.linalg.expm(A.T * tau), 0, dt)[0],10)
+        R_k = R / self.dt
+
         self.dynamics = LinearDynamics(A_k, B_k, H_k, D_k, x_init=x_hat_init, dt=dt)
-        self.gains = KalmanFilterGains(H_k, P, Q, R)
+        self.gains = KalmanFilterGains(H_k, P, Q_k, R_k)
         self.num_states = self.dynamics.gains.A_k.shape[1]
         self.num_inputs = self.dynamics.gains.B_k.shape[1]
         self.num_outputs = self.dynamics.gains.H_k.shape[0]
         self.x_hat = x_hat_init
         self.t = 0
         self.dt = dt
+
+        self.step_response = False
 
     def predict(self):
         self.t += self.dt
@@ -43,12 +50,12 @@ class KF(Observer):
 
         # A priori state estimate
         # x_hat' = A * x_hat_prev + B * u
-        self.dynamics.step(dt=self.dt, x=self.x_hat, u=u, Q=self.gains.Q, R=self.gains.R)
+        self.dynamics.step(x=self.x_hat, u=u, Q=self.gains.Q_k, R=self.gains.R_k)
         self.x_hat = self.dynamics.get_state()
 
         # A priori covariance estimate
         # P' = A * P_prev * A.T + Q
-        self.gains.P = self.dynamics.gains.A_k @ self.gains.P @ self.dynamics.gains.A_k.T + self.gains.Q
+        self.gains.P = self.dynamics.gains.A_k @ self.gains.P @ self.dynamics.gains.A_k.T + self.gains.Q_k
 
     def generate_u(self):
         return np.zeros((self.dynamics.gains.B_k.shape[1], 1))
@@ -56,7 +63,7 @@ class KF(Observer):
     def update(self):
         # Prefit
         # y = z - H * x_hat
-        y = self.dynamics.get_measurements() - self.gains.H @ self.x_hat
+        y = self.dynamics.get_measurements() - self.gains.H_k @ self.x_hat
 
         self.gains.update_K()
 
@@ -70,7 +77,7 @@ class KF(Observer):
 
         # Postfit
         # y = z - H * x_hat
-        y = self.dynamics.get_measurements() - self.gains.H @ self.x_hat
+        y = self.dynamics.get_measurements() - self.gains.H_k @ self.x_hat
 
     def step(self):
         self.predict()
@@ -80,14 +87,15 @@ class KF(Observer):
     def get_state_estimate(self):
         return self.x_hat
 
-    def set_gains(self, P, A, B, H, D, K, Q, R):
-        self.dynamics.gains.set_gains(A=A, B=B, H=H, D=D)
-        self.gains.set_gains(H=H, P=P, Q=Q, R=R, K=K)
+    def set_gains(self, P, A_k, B_k, H_k, D_k, K, Q_k, R_k):
+        self.dynamics.gains.set_gains(A_k=A_k, B_k=B_k, H_k=H_k, D_k=D_k)
+        self.gains.set_gains(H_k=H_k, P=P, Q_k=Q_k, R_k=R_k, K=K)
 
     def reset(self):
         self.t = 0
         self.x_hat = self.x_hat_init
         self.gains.P = self.P_init
+        self.dynamics.reset()
 
     def get_gains(self):
         return {
@@ -98,6 +106,6 @@ class KF(Observer):
             'H_k': self.dynamics.gains.H_k,
             'D_k': self.dynamics.gains.D_k,
             'K_k': self.gains.K,
-            'Q_k': self.gains.Q,
-            'R_k': self.gains.R
+            'Q_k': self.gains.Q_k,
+            'R_k': self.gains.R_k
         }
