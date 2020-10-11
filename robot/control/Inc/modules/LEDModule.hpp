@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <array>
 #include <memory>
-#include <vector>
 
 #include "LockedStruct.hpp"
 #include "DigitalOut.hpp"
@@ -57,6 +56,8 @@ struct Error {
     uint32_t led1;
     uint32_t led2;
 };
+
+bool operator==(const Error& e1, const Error& e2);
 
 /**
  * Module interfacing with debugging LEDS based on the statuses of other electronics
@@ -209,11 +210,11 @@ private:
                                              InfoColors::BOOT_FAIL};
 
     const std::array<Error, 6> ERR_LIST = {ERR_RADIO_BOOT_FAIL,
-                                               ERR_RADIO_WIFI_FAIL,
-                                               ERR_RADIO_SOCCER_FAIL,
-                                               ERR_FPGA_BOOT_FAIL,
-                                               ERR_KICKER_BOOT_FAIL,
-                                               ERR_IMU_BOOT_FAIL};
+                                           ERR_RADIO_WIFI_FAIL,
+                                           ERR_RADIO_SOCCER_FAIL,
+                                           ERR_FPGA_BOOT_FAIL,
+                                           ERR_KICKER_BOOT_FAIL,
+                                           ERR_IMU_BOOT_FAIL};
 
     /**
      * Array of toggles whose values indicates where the error at the same index in ERR_LIST is active or not

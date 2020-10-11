@@ -341,7 +341,7 @@ int AVR910::readPartNumber() {
 
 void AVR910::chipErase() {
     auto spi_lock = lock_spi();
-DWT_Delay(10);
+    DWT_Delay(10);
     // Issue chip erase command.
     nCs_->write(0);
     spi_lock->transmit(0xAC);
@@ -388,7 +388,7 @@ void AVR910::loadMemoryPage(int highLow, char address, char data) {
 void AVR910::writeFlashMemoryByte(int highLow, int address, char data) {
     auto spi_lock = lock_spi();
 
-DWT_Delay(10);
+    DWT_Delay(10);
     nCs_->write(0);
     spi_lock->transmit(0x4C);
     spi_lock->transmit(address & 0xFF00 >> 8);
@@ -401,7 +401,7 @@ DWT_Delay(10);
 void AVR910::writeFuseBitsLow() {
     auto spi_lock = lock_spi();
 
-DWT_Delay(10);
+    DWT_Delay(10);
     nCs_->write(0);
     spi_lock->transmit(0xAC);
     spi_lock->transmit(0xA0);
