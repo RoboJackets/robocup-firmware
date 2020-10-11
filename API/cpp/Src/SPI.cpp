@@ -200,50 +200,8 @@ std::vector<uint8_t> SPI::transmitReceive(const std::vector<uint8_t>& data) {
 }
 
 void SPI::transmitReceive(const uint8_t* dataIn, uint8_t* dataOut, size_t size) {
-    SET_BIT(spiHandle.Instance->CR2, SPI_RXFIFO_THRESHOLD);
-    LL_SPI_Enable(spiHandle.Instance);
-
-    const uint8_t* txPtr = dataIn;
-    const uint8_t* txPtrEnd = txPtr + size;
-
-    uint8_t* rxPtr = dataOut;
-
-    if (chipSelect) {
-        HAL_GPIO_WritePin(chipSelect->port, chipSelect->pin, (GPIO_PinState)0);
-    }
-
-    uint8_t count;
-    while (txPtr < txPtrEnd) {
-        count = READ_BIT(spiHandle.Instance->SR, SPI_SR_FTLVL) >> SPI_SR_FTLVL_Pos;
-        count = (count > 3 - (txPtrEnd - txPtr)) ? count : 3 - (txPtrEnd - txPtr);
-        switch (count) {
-            case 0:
-                *(__IO uint8_t *)&spiHandle.Instance->DR = *txPtr++;
-            case 1:
-                *(__IO uint8_t *)&spiHandle.Instance->DR = *txPtr++;
-            case 2:
-                *(__IO uint8_t *)&spiHandle.Instance->DR = *txPtr++;
-        }
-
-        count = READ_BIT(spiHandle.Instance->SR, SPI_SR_FRLVL) >> SPI_SR_FRLVL_Pos;
-        switch (count) {
-            case 3:
-                *rxPtr++ = *(__IO uint8_t *)spiHandle.Instance->DR;
-            case 2:
-                *rxPtr++ = *(__IO uint8_t *)spiHandle.Instance->DR;
-            case 1:
-                *rxPtr++ = *(__IO uint8_t *)spiHandle.Instance->DR;
-        }
-    }
-
-    while (READ_BIT(spiHandle.Instance->SR, SPI_SR_BSY) != 0) { }
-    while (LL_SPI_IsActiveFlag_RXNE(spiHandle.Instance)) {
-        // TODO: make sure this reads everything
-        *rxPtr++ = *(__IO uint8_t *)spiHandle.Instance->DR;
-    }
-
-    if (chipSelect) {
-        HAL_GPIO_WritePin(chipSelect->port, chipSelect->pin, (GPIO_PinState)1);
+    for(int i = 0; i < size; i++) {
+        dataOut[i] = transmitReceive(data[i]);
     }
 }
 
@@ -256,39 +214,7 @@ void SPI::transmit(const std::vector<uint8_t>& data) {
 }
 
 void SPI::transmit(const uint8_t* data, size_t size) {
-    // int size = data.size();
-
-    SET_BIT(spiHandle.Instance->CR2, SPI_RXFIFO_THRESHOLD);
-    LL_SPI_Enable(spiHandle.Instance);
-
-    const uint8_t* txPtr = data;
-    const uint8_t* txPtrEnd = txPtr + size;
-
-    if (chipSelect) {
-        HAL_GPIO_WritePin(chipSelect->port, chipSelect->pin, (GPIO_PinState)0);
-    }
-
-    uint8_t count;
-    while (txPtr < txPtrEnd) {
-        count = READ_BIT(spiHandle.Instance->SR, SPI_SR_FTLVL) >> SPI_SR_FTLVL_Pos;
-        count = (count > 3 - (txPtrEnd - txPtr)) ? count : 3 - (txPtrEnd - txPtr);
-        switch (count) {
-            case 0:
-                *(__IO uint8_t *)&spiHandle.Instance->DR = *txPtr++;
-            case 1:
-                *(__IO uint8_t *)&spiHandle.Instance->DR = *txPtr++;
-            case 2:
-                *(__IO uint8_t *)&spiHandle.Instance->DR = *txPtr++;
-        }
-    }
-
-    while (READ_BIT(spiHandle.Instance->SR, SPI_SR_BSY) != 0) { }
-    while (LL_SPI_IsActiveFlag_RXNE(spiHandle.Instance)) {
-        uint8_t none = *(__IO uint8_t *)spiHandle.Instance->DR;
-        (void)none;
-    }
-
-    if (chipSelect) {
-        HAL_GPIO_WritePin(chipSelect->port, chipSelect->pin, (GPIO_PinState)1);
+    for(int i = 0; i < size; i++) {
+        transmit(data[i]);
     }
 }
