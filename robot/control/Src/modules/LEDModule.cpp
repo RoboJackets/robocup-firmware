@@ -218,10 +218,10 @@ void LEDModule::displayErrors() {
 }
 
 void LEDModule::setError(const Error e, bool toggle) {
-    const Error *error = std::find_if(ERR_LIST.begin(), ERR_LIST.end(), [&](Error err) {
-        return err.led0 == e.led0 &&
-               err.led1 == e.led1 &&
-               err.led2 == e.led2;
-    });
-    errToggles.at(std::distance(ERR_LIST.begin(), error)) = toggle;
+    const Error *error = std::find(ERR_LIST.begin(), ERR_LIST.end(), e);
+    if (error == ERR_LIST.end()) {
+        printf("[ERROR] Invalid error code\r\n");
+    } else {
+        errToggles.at(std::distance(ERR_LIST.begin(), error)) = toggle;
+    }
 }
