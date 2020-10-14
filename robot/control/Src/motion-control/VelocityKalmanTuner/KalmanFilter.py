@@ -21,7 +21,6 @@ class KF(Observer):
     """
 
     def __init__(self, x_hat_init, A, B, H, D, P, Q, R, dt=0.01):
-        self.x_hat_init = x_hat_init
         self.P_init = P
         self.dt = dt
 
@@ -36,7 +35,9 @@ class KF(Observer):
         self.num_states = self.dynamics.gains.A_k.shape[1]
         self.num_inputs = self.dynamics.gains.B_k.shape[1]
         self.num_outputs = self.dynamics.gains.H_k.shape[0]
+        self.x_hat_init = x_hat_init
         self.x_hat = x_hat_init
+        self.x = x_hat_init
         self.t = 0
         self.dt = dt
 
@@ -63,7 +64,14 @@ class KF(Observer):
     def update(self):
         # Prefit
         # y = z - H * x_hat
-        y = self.dynamics.get_measurements() - self.gains.H_k @ self.x_hat
+        y=0
+        if not self.step_response:
+            y = self.dynamics.get_measurements() - self.gains.H_k @ self.x_hat
+        else:
+            a = 1
+            self.x = np.heaviside((self.t - a) * np.ones((self.num_states, 1)), a)
+            v = self.gains.R_k @ np.random.randn(self.num_outputs, 1)
+            y = self.gains.H_k @ self.x + v - self.gains.H_k @ self.x_hat
 
         self.gains.update_K()
 
@@ -82,7 +90,10 @@ class KF(Observer):
     def step(self):
         self.predict()
         self.update()
-        return self.t, self.get_state_estimate(), self.dynamics.get_state()
+        if not self.step_response:
+            return self.t, self.get_state_estimate(), self.dynamics.get_state()
+        else:
+            return self.t, self.get_state_estimate(), self.x
 
     def get_state_estimate(self):
         return self.x_hat
@@ -93,7 +104,10 @@ class KF(Observer):
 
     def reset(self):
         self.t = 0
-        self.x_hat = self.x_hat_init
+        if not self.step_response:
+            self.x_hat = self.x_hat_init
+        else:
+            self.x_hat = np.zeros((self.x_hat.shape[0], 1))
         self.gains.P = self.P_init
         self.dynamics.reset()
 

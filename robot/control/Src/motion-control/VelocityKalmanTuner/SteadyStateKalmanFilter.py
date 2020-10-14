@@ -29,7 +29,6 @@ class SS_KF(Observer):
         self.x = x_hat_init
 
         A_k, B_k, H_k, D_k, _ = scipy.signal.cont2discrete(system=(A, B, H, D), dt=self.dt)
-
         self.dynamics = LinearDynamics(A_k, B_k, H_k, D_k, x_init=x_hat_init, dt=dt)
         self.num_states = self.dynamics.gains.A_k.shape[1]
         self.num_inputs = self.dynamics.gains.B_k.shape[1]
@@ -67,7 +66,7 @@ class SS_KF(Observer):
             a = 1
             self.x = np.heaviside((self.t - a) * np.ones((self.num_states, 1)), a)
             v = self.gains.R_k @ np.random.randn(self.num_outputs, 1)
-            y = self.gains.H_k @ self.x + v - self.gains.H_k @ self.x_hat
+            y = self.gains.H_k @ self.x - self.gains.H_k @ self.x_hat
         # A posteriori state estimate
         # x_hat = x_hat' + K * (y - H * x_hat_est)
         self.x_hat += self.gains.K @ y

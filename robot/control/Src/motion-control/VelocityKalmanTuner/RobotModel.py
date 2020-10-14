@@ -26,7 +26,7 @@ class RobotModel:
         self.num_outputs = 5
 
     def get_A_matrix(self):
-        A = np.eye(self.num_states)
+        A = np.zeros((self.num_states, self.num_states))
         return A
 
     def get_B_matrix(self):

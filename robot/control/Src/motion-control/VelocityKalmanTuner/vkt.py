@@ -39,7 +39,7 @@ class Main(QApplication):
                 print("Argument 'time' must be a number!")
                 self.terminate()
         else:
-            self.t_total = 2.0
+            self.t_total = 20.0
 
         if self.args.timestep:
             try:

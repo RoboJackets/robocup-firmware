@@ -38,7 +38,7 @@ class LinearDynamics(Dynamics):
         Based on currently tracked state, update state according to discrete
         dynamics
         """
-        self.x = self.gains.A_k @ x + self.gains.B_k @ u + self.process_noise(Q=Q)
+        self.x = self.gains.A_k @ x + self.gains.B_k @ u+ self.process_noise(Q=Q)
         self.y = self.gains.H_k @ x + self.gains.D_k @ u + self.measurement_noise(R=R)
 
     def get_state(self):
