@@ -172,7 +172,6 @@ void KickerBoard::service() {
     DWT_Delay(50);
     nCs_->write(1);
 
-
     _current_voltage = (resp & VOLTAGE_MASK) * VOLTAGE_SCALE;
 
     _ball_sensed = resp & BREAKBEAM_TRIPPED;
