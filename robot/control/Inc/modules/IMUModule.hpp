@@ -3,7 +3,7 @@
 #include "I2C.hpp"
 #include "GenericModule.hpp"
 #include "MicroPackets.hpp"
-#include "drivers/ICM20948.hpp"
+#include "drivers/ICM42605.hpp"
 #include "LockedStruct.hpp"
 #include <memory>
 
@@ -47,6 +47,6 @@ public:
     void entry() override;
 
 private:
-    ICM20948 imu;
+    ICM42605 imu;
     LockedStruct<IMUData>& imuData;
 };
