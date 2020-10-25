@@ -1,4 +1,4 @@
-add_executable(control.elf 
+add_executable(control.elf
     main.cpp
 )
 
@@ -22,14 +22,14 @@ target_include_directories(firm-modules PUBLIC
 	"${CONAN_MTRAIN_ROOT}/external/middleware/STM32_USB_Device_Library/Core/Inc/"
 	"${CONAN_MTRAIN_ROOT}/external/middleware/STM32_USB_Device_Library/Class/CDC/Inc"
 )
- 
+
 target_link_libraries(firm-modules
     firm-lib
 )
 
 target_link_libraries(control.elf
     firm-modules
-    CONAN_PKG::eigen
+    CONAN_PKG::Eigen3
     rc-fshare
 )
 
