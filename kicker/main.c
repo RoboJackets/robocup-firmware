@@ -148,13 +148,9 @@ void main() {
   while (true) {
 
     if (_in_debug_mode) {
-      /* PORTC &= ~(_BV(MCU_YELLOW)); */
       char kick_db_pressed = !(PIND & _BV(DB_KICK_PIN));
       char charge_db_pressed = !(PIND & _BV(DB_CHG_PIN));
       char chip_db_pressed = !(PINB & _BV(DB_CHIP_PIN));
-
-      /* PORTC |= _BV(MCU_RED); */
-      /* PORTC &= ~(charge_db_pressed ? _BV(MCU_RED) : 0); */
 
       if (!kick_db_down_ && kick_db_pressed){
         kick(255, false);
@@ -170,7 +166,6 @@ void main() {
       chip_db_down_ = chip_db_pressed;
       charge_db_down_ = charge_db_pressed;
     } else {
-      /* PORTC &= ~(_BV(MCU_YELLOW)); */
     }
 
     if (PINA & _BV(BALL_SENSE_RX))
@@ -186,7 +181,7 @@ void main() {
     // TCP RTT estimates (exponentially weighted sum)
 
     // don't run the adc every loop
-    if (time % 1000 == 0) {
+    if (time % 100 == 0) {
       int voltage_accum =
         (255 - kalpha) * last_voltage_ + kalpha * (get_voltage());
       last_voltage_ = voltage_accum / 255;
@@ -194,8 +189,6 @@ void main() {
       int num_lights = ((int) last_voltage_ / 47);
 
       PORTA |= (0x1F << 1);
-      //PORTA &= ~((0xFF >> abs(num_lights - sizeof(unsigned char) * 8)) << 1);
-      //PORTA &= 0b11011111;
       switch (num_lights) {
         case 1:
           PORTA &= 0b11011111;
