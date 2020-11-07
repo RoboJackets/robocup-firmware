@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cstdint"
+#include <array>
 
 // Micropackets are shared memory locations for values
 // where only the latest matters. There is no guarantee that
@@ -160,8 +161,8 @@ struct KickerInfo {
     bool ballSenseTriggered;  /**< Stores whether Breakbeam is tripped */
 };
 
-/** @struct DebugInfo
- * 18 integers for debug info for any of the modules to pass back to soccer
+/** @struct DebugFrame
+ * Debug info for any of the modules to pass back to soccer
  *
  * @note
  * Use `extern DebugInfo debugInfo;` at the top of any cpp
@@ -172,6 +173,21 @@ struct KickerInfo {
  *
  * Passed from any module to @ref RadioModule
  */
+struct DebugFrame {
+    uint64_t ticks;
+
+    float gyro_z;
+    float accel_x;
+    float accel_y;
+
+	float filtered_velocity[3];
+
+	float motor_outputs[4];
+
+    float encDeltas[4];         // encoder changes since last packet
+};
+
 struct DebugInfo {
-    int16_t val[18]; /**< Array of integers of debug info for soccer */
+    int num_debug_frames = 0;
+    std::array<DebugFrame, 8> debug_frames;
 };

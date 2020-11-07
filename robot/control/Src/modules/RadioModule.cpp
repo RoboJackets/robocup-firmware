@@ -7,12 +7,14 @@ RadioModule::RadioModule(LockedStruct<BatteryVoltage>& batteryVoltage,
                          LockedStruct<RobotID>& robotID,
                          LockedStruct<KickerCommand>& kickerCommand,
                          LockedStruct<MotionCommand>& motionCommand,
-                         LockedStruct<RadioError>& radioError)
+                         LockedStruct<RadioError>& radioError,
+                         LockedStruct<DebugInfo>& debugInfo)
     : GenericModule(kPeriod, "radio", kPriority),
       batteryVoltage(batteryVoltage), fpgaStatus(fpgaStatus),
       kickerInfo(kickerInfo), robotID(robotID),
       kickerCommand(kickerCommand), motionCommand(motionCommand),
-      radioError(radioError), link(),
+      radioError(radioError),
+      debugInfo(debugInfo), link(),
       secondRadioCS(RADIO_R1_CS) {
 
     secondRadioCS = 1;
@@ -47,18 +49,25 @@ void RadioModule::start() {
 }
 
 void RadioModule::entry() {
-    {
-        auto batteryVoltageLock = batteryVoltage.lock();
-        auto fpgaStatusLock = fpgaStatus.lock();
-        auto robotIDLock = robotID.lock();
-        auto kickerInfoLock = kickerInfo.lock();
+    BatteryVoltage battery;
+    FPGAStatus fpga;
+    RobotID id;
+    KickerInfo kicker;
+    DebugInfo debug;
 
-        // Just check to see if our robot id is valid
-        // That way we don't conflict with other robots on the network
-        // that are working
-        if (batteryVoltageLock->isValid && fpgaStatusLock->isValid && robotIDLock->isValid) {
-            link.send(batteryVoltageLock.value(), fpgaStatusLock.value(), kickerInfoLock.value(), robotIDLock.value());
-        }
+    {
+        battery = batteryVoltage.lock().value();
+        fpga = fpgaStatus.lock().value();
+        id = robotID.lock().value();
+        kicker = kickerInfo.lock().value();
+        std::swap(debug, debugInfo.lock().value());
+    }
+
+    // Just check to see if our robot id is valid
+    // That way we don't conflict with other robots on the network
+    // that are working
+    if (battery.isValid && fpga.isValid && id.isValid) {
+        link.send(battery, fpga, kicker, id, debug);
     }
 
     {

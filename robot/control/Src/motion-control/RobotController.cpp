@@ -4,8 +4,6 @@
 #include "MicroPackets.hpp"
 #include <cmath>
 
-extern DebugInfo debugInfo;
-
 RobotController::RobotController(uint32_t dt_us) {
     // Proportional constants.
     BodyKp << 0.1, 0.1, 0.15;

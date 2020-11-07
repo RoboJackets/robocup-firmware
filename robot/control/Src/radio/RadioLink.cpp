@@ -8,8 +8,6 @@
 
 #include "MicroPackets.hpp"
 
-extern DebugInfo debugInfo;
-
 RadioLink::RadioLink() {}
 
 void RadioLink::init() {
@@ -24,7 +22,8 @@ void RadioLink::init() {
 void RadioLink::send(const BatteryVoltage& batteryVoltage,
                      const FPGAStatus& fpgaStatus,
                      const KickerInfo& kickerInfo,
-                     const RobotID& robotID) {
+                     const RobotID& robotID,
+                     DebugInfo& debugInfo) {
     std::array<uint8_t, rtp::ReverseSize> packet;
     rtp::Header* header = reinterpret_cast<rtp::Header*>(&packet[0]);
     rtp::RobotStatusMessage* status = reinterpret_cast<rtp::RobotStatusMessage*>(&packet[rtp::HeaderSize]);
@@ -34,7 +33,7 @@ void RadioLink::send(const BatteryVoltage& batteryVoltage,
     header->type    = rtp::MessageType::CONTROL;
 
     uint8_t motorErrors = 0;
-    for (int i = 0; i < 4; i++) 
+    for (int i = 0; i < 4; i++)
         motorErrors |= static_cast<int>(fpgaStatus.motorHasErrors[i]) << i;
 
     status->uid             = robotID.robotID;
@@ -45,8 +44,28 @@ void RadioLink::send(const BatteryVoltage& batteryVoltage,
     status->kickHealthy     = static_cast<uint8_t>(kickerInfo.kickerHasError);
     status->fpgaStatus      = static_cast<uint8_t>(fpgaStatus.FPGAHasError);
 
-    for (int i = 0; i < 18; i++)
-        status->encDeltas[i] = debugInfo.val[i];
+    status->num_frames = 0;
+
+    for (int i = 0; i < debugInfo.num_debug_frames && status->num_frames < rtp::MAX_DEBUG_FRAMES; i++) {
+        auto& to = status->debug_frames[status->num_frames];
+        const auto& from = debugInfo.debug_frames[i];
+
+        to.time_ticks = from.ticks;
+        to.gyro_z = from.gyro_z;
+        to.accel_x = from.accel_x;
+        to.accel_y = from.accel_y;
+        std::copy(std::begin(from.filtered_velocity),
+                  std::end(from.filtered_velocity),
+                  std::begin(to.filtered_velocity));
+        std::copy(std::begin(from.motor_outputs),
+                  std::end(from.motor_outputs),
+                  std::begin(to.motor_outputs));
+        std::copy(std::begin(from.encDeltas),
+                  std::end(from.encDeltas),
+                  std::begin(to.encDeltas));
+
+        status->num_frames++;
+    }
 
     radio->send(packet.data(), rtp::ReverseSize);
 }

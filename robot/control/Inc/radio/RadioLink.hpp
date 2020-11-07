@@ -29,7 +29,8 @@ public:
     void send(const BatteryVoltage& batteryVoltage,
               const FPGAStatus& FPGAStatus,
               const KickerInfo& kickerInfo,
-              const RobotID& robotID);
+              const RobotID& robotID,
+              DebugInfo& debugInfo);
 
     /**
      * Receive the latest packet from the radio
