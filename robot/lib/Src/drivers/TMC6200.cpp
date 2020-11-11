@@ -10,21 +10,27 @@ namespace Registers {
 } // namespace Registers
 
 
-TMC6200::TMC6200(LockedStruct<SPI>& tmcSPI, PinName cs_pin);
+TMC6200::TMC6200(LockedStruct<SPI>& tmcSPI, PinName cs_pin)
         : tmcSPI(tmcSPI),
           nCs(cs_pin) {
     nCs = 1;
 }
 
 bool TMC6200::initialize() {
-    uint32_t version = (read_register(Registers::VERSION) >> 24);
+    printf("Connecting to TMC6200.");
 
-    while (version != VERSION_VAL) {
-        printf(version)
-        printf("Failed to connect to TMC6200.");
-        vTaskDelay(100);
-        version = read_register(Registers::VERSION);
-    }
+    // uint32_t version = (read_register(Registers::VERSION) >> 24);
+    //
+    // while (version != VERSION_VAL) {
+    //     printf("%d\n", version);
+    //     printf("Failed to connect to TMC6200.");
+    //     vTaskDelay(100);
+    //     version = (read_register(Registers::VERSION) >> 24);
+    // }
+
+    printf("Connected to TMC6200.");
+
+    return true;
 }
 
 void TMC6200::chip_select(bool cs_state) {
@@ -35,7 +41,7 @@ void TMC6200::write_register(uint8_t address, uint32_t value) {
 }
 
 uint32_t TMC6200::read_register(uint8_t address) {
-    auto lock = imuSPI.lock();
+    auto lock = tmcSPI.lock();
 
     chip_select(true);
     uint32_t data = lock->transmitReceive(address);

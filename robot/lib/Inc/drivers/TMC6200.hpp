@@ -13,7 +13,7 @@ public:
     bool initialize();
 
 private:
-    void write_register(uint8_t address, uint32_t value)
+    void write_register(uint8_t address, uint32_t value);
 
     uint32_t read_register(uint8_t address);
 
