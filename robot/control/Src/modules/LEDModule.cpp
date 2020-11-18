@@ -167,23 +167,18 @@ void LEDModule::setColor(uint32_t led0, uint32_t led1, uint32_t led2) {
     // 0 - 31
     uint8_t brightness = 2 | 0xE0;
 
-    std::array<uint8_t, 20> data = {
+    std::vector<uint8_t> data = {
         0x00, 0x00, 0x00, 0x00,
         brightness, (led0 >> 0) & 0xFF, (led0 >> 8) & 0xFF, (led0 >> 16) & 0xFF,
         brightness, (led1 >> 0) & 0xFF, (led1 >> 8) & 0xFF, (led1 >> 16) & 0xFF,
         brightness, (led2 >> 0) & 0xFF, (led2 >> 8) & 0xFF, (led2 >> 16) & 0xFF,
         0xFF, 0xFF, 0xFF, 0xFF
     };
-    std::array<uint8_t, 20> out;
-
     {
         auto dotStarSPILock = dotStarSPI.lock();
         dotStarSPILock->frequency(200'000);
         dotStarNCS.write(false);
-        // dotStarSPILock->transmitReceive(&data[0], &out[0], data.size());
-        for (uint8_t byte : data) {
-            dotStarSPILock->transmit(byte);
-        }
+        dotStarSPILock->transmitReceive(data);
         dotStarNCS.write(true);
     }
 }
