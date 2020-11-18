@@ -10,11 +10,11 @@ SPI::SPI(SpiBus spiBus, std::optional<PinName> cs, int hz): chipSelect(cs) {
         GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
         GPIO_InitStruct.Pull = GPIO_NOPULL;
         GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-        
+
         HAL_GPIO_Init(chipSelect->port, &GPIO_InitStruct);
         HAL_GPIO_WritePin(chipSelect->port, chipSelect->pin, (GPIO_PinState)1);
     }
-    
+
     switch (spiBus) {
         case SpiBus::SpiBus2:
             spiHandle.Instance = SPI2;
@@ -164,6 +164,7 @@ uint32_t SPI::freqToPrescaler(int hz) {
             return (i-2) << 3;
         }
     }
+
     return LL_SPI_BAUDRATEPRESCALER_DIV256;
 }
 
@@ -171,7 +172,21 @@ void SPI::frequency(int hz) {
     LL_SPI_SetBaudRatePrescaler(spiHandle.Instance, freqToPrescaler(hz));
 }
 
-uint8_t SPI::transmitReceive(uint8_t data) {
+void SPI::transmit(const uint8_t data) {
+    transmitReceive(data);
+}
+
+void SPI::transmit(const std::vector<uint8_t>& data) {
+    transmit(data.data(), data.size());
+}
+
+void SPI::transmit(const uint8_t* const data, const size_t size) {
+    for(int i = 0; i < size; i++) {
+        transmit(data[i]);
+    }
+}
+
+uint8_t SPI::transmitReceive(const uint8_t data) {
     if (chipSelect) {
         HAL_GPIO_WritePin(chipSelect->port, chipSelect->pin, (GPIO_PinState)0);
     }
@@ -188,6 +203,7 @@ uint8_t SPI::transmitReceive(uint8_t data) {
     if (chipSelect) {
         HAL_GPIO_WritePin(chipSelect->port, chipSelect->pin, (GPIO_PinState)1);
     }
+
     return recievedData;
 }
 
@@ -199,22 +215,8 @@ std::vector<uint8_t> SPI::transmitReceive(const std::vector<uint8_t>& data) {
     return dataOut;
 }
 
-void SPI::transmitReceive(const uint8_t* dataIn, uint8_t* dataOut, size_t size) {
+void SPI::transmitReceive(const uint8_t* const data, uint8_t* const dataOut, const size_t size) {
     for(int i = 0; i < size; i++) {
         dataOut[i] = transmitReceive(data[i]);
-    }
-}
-
-void SPI::transmit(uint8_t data) {
-    transmitReceive(data);
-}
-
-void SPI::transmit(const std::vector<uint8_t>& data) {
-    transmit(data.data(), data.size());
-}
-
-void SPI::transmit(const uint8_t* data, size_t size) {
-    for(int i = 0; i < size; i++) {
-        transmit(data[i]);
     }
 }
