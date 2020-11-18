@@ -56,7 +56,7 @@
  */
 __STATIC_INLINE uint32_t __get_CONTROL(void)
 {
-  register uint32_t __regControl         __ASM("control");
+  uint32_t __regControl         __ASM("control");
   return(__regControl);
 }
 
@@ -68,7 +68,7 @@ __STATIC_INLINE uint32_t __get_CONTROL(void)
  */
 __STATIC_INLINE void __set_CONTROL(uint32_t control)
 {
-  register uint32_t __regControl         __ASM("control");
+  uint32_t __regControl         __ASM("control");
   __regControl = control;
 }
 
@@ -80,7 +80,7 @@ __STATIC_INLINE void __set_CONTROL(uint32_t control)
  */
 __STATIC_INLINE uint32_t __get_IPSR(void)
 {
-  register uint32_t __regIPSR          __ASM("ipsr");
+  uint32_t __regIPSR          __ASM("ipsr");
   return(__regIPSR);
 }
 
@@ -92,7 +92,7 @@ __STATIC_INLINE uint32_t __get_IPSR(void)
  */
 __STATIC_INLINE uint32_t __get_APSR(void)
 {
-  register uint32_t __regAPSR          __ASM("apsr");
+  uint32_t __regAPSR          __ASM("apsr");
   return(__regAPSR);
 }
 
@@ -104,7 +104,7 @@ __STATIC_INLINE uint32_t __get_APSR(void)
  */
 __STATIC_INLINE uint32_t __get_xPSR(void)
 {
-  register uint32_t __regXPSR          __ASM("xpsr");
+  uint32_t __regXPSR          __ASM("xpsr");
   return(__regXPSR);
 }
 
@@ -116,7 +116,7 @@ __STATIC_INLINE uint32_t __get_xPSR(void)
  */
 __STATIC_INLINE uint32_t __get_PSP(void)
 {
-  register uint32_t __regProcessStackPointer  __ASM("psp");
+  uint32_t __regProcessStackPointer  __ASM("psp");
   return(__regProcessStackPointer);
 }
 
@@ -128,7 +128,7 @@ __STATIC_INLINE uint32_t __get_PSP(void)
  */
 __STATIC_INLINE void __set_PSP(uint32_t topOfProcStack)
 {
-  register uint32_t __regProcessStackPointer  __ASM("psp");
+  uint32_t __regProcessStackPointer  __ASM("psp");
   __regProcessStackPointer = topOfProcStack;
 }
 
@@ -140,7 +140,7 @@ __STATIC_INLINE void __set_PSP(uint32_t topOfProcStack)
  */
 __STATIC_INLINE uint32_t __get_MSP(void)
 {
-  register uint32_t __regMainStackPointer     __ASM("msp");
+  uint32_t __regMainStackPointer     __ASM("msp");
   return(__regMainStackPointer);
 }
 
@@ -152,7 +152,7 @@ __STATIC_INLINE uint32_t __get_MSP(void)
  */
 __STATIC_INLINE void __set_MSP(uint32_t topOfMainStack)
 {
-  register uint32_t __regMainStackPointer     __ASM("msp");
+  uint32_t __regMainStackPointer     __ASM("msp");
   __regMainStackPointer = topOfMainStack;
 }
 
@@ -164,7 +164,7 @@ __STATIC_INLINE void __set_MSP(uint32_t topOfMainStack)
  */
 __STATIC_INLINE uint32_t __get_PRIMASK(void)
 {
-  register uint32_t __regPriMask         __ASM("primask");
+  uint32_t __regPriMask         __ASM("primask");
   return(__regPriMask);
 }
 
@@ -176,7 +176,7 @@ __STATIC_INLINE uint32_t __get_PRIMASK(void)
  */
 __STATIC_INLINE void __set_PRIMASK(uint32_t priMask)
 {
-  register uint32_t __regPriMask         __ASM("primask");
+  uint32_t __regPriMask         __ASM("primask");
   __regPriMask = (priMask);
 }
 
@@ -206,7 +206,7 @@ __STATIC_INLINE void __set_PRIMASK(uint32_t priMask)
  */
 __STATIC_INLINE uint32_t  __get_BASEPRI(void)
 {
-  register uint32_t __regBasePri         __ASM("basepri");
+  uint32_t __regBasePri         __ASM("basepri");
   return(__regBasePri);
 }
 
@@ -218,7 +218,7 @@ __STATIC_INLINE uint32_t  __get_BASEPRI(void)
  */
 __STATIC_INLINE void __set_BASEPRI(uint32_t basePri)
 {
-  register uint32_t __regBasePri         __ASM("basepri");
+  uint32_t __regBasePri         __ASM("basepri");
   __regBasePri = (basePri & 0xFFU);
 }
 
@@ -231,7 +231,7 @@ __STATIC_INLINE void __set_BASEPRI(uint32_t basePri)
  */
 __STATIC_INLINE void __set_BASEPRI_MAX(uint32_t basePri)
 {
-  register uint32_t __regBasePriMax      __ASM("basepri_max");
+  uint32_t __regBasePriMax      __ASM("basepri_max");
   __regBasePriMax = (basePri & 0xFFU);
 }
 
@@ -243,7 +243,7 @@ __STATIC_INLINE void __set_BASEPRI_MAX(uint32_t basePri)
  */
 __STATIC_INLINE uint32_t __get_FAULTMASK(void)
 {
-  register uint32_t __regFaultMask       __ASM("faultmask");
+  uint32_t __regFaultMask       __ASM("faultmask");
   return(__regFaultMask);
 }
 
@@ -255,7 +255,7 @@ __STATIC_INLINE uint32_t __get_FAULTMASK(void)
  */
 __STATIC_INLINE void __set_FAULTMASK(uint32_t faultMask)
 {
-  register uint32_t __regFaultMask       __ASM("faultmask");
+  uint32_t __regFaultMask       __ASM("faultmask");
   __regFaultMask = (faultMask & (uint32_t)1);
 }
 
@@ -272,7 +272,7 @@ __STATIC_INLINE void __set_FAULTMASK(uint32_t faultMask)
 __STATIC_INLINE uint32_t __get_FPSCR(void)
 {
 #if (__FPU_PRESENT == 1U) && (__FPU_USED == 1U)
-  register uint32_t __regfpscr         __ASM("fpscr");
+  uint32_t __regfpscr         __ASM("fpscr");
   return(__regfpscr);
 #else
    return(0U);
@@ -288,7 +288,7 @@ __STATIC_INLINE uint32_t __get_FPSCR(void)
 __STATIC_INLINE void __set_FPSCR(uint32_t fpscr)
 {
 #if (__FPU_PRESENT == 1U) && (__FPU_USED == 1U)
-  register uint32_t __regfpscr         __ASM("fpscr");
+  uint32_t __regfpscr         __ASM("fpscr");
   __regfpscr = (fpscr);
 #endif
 }

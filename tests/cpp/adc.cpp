@@ -11,7 +11,7 @@ int main(void) {
 
   while(true) {
     uint32_t adc_val = pin.read();
-    printf("Raw Value %u\r\n", adc_val);
+    printf("Raw Value %lu\r\n", adc_val);
     HAL_Delay(100);
     leds[0].toggle();
     if (adc_val > 0) {
