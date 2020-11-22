@@ -2,14 +2,14 @@ from conans import ConanFile, CMake
 
 class RoboCupFirmwareConan(ConanFile):
     name = "RoboCupFirmware"
-    version = "0.2.0"
+    version = "0.3.0"
     url = "https://github.com/RoboJackets/robocup-firmware"
     description = "firmware description"
     settings = {"build_type": None, "compiler": None, "arch": ["armv7hf"]}
     generators = "cmake"
     exports_sources = ['CMakeLists.txt', 'control*', 'lib*']
 
-    requires = (('mTrain/[1.2.0]@arvind/testing'),
+    requires = (('mTrain/[1.3.0]@arvind/testing2'),
                 ('eigen/[3.3.7]@conan/stable'))
 
 
