@@ -18,13 +18,7 @@ ADC124S101::ADC124S101(LockedStruct<SPI>& adcSPI, PinName cs_pin)
 bool ADC124S101::initialize() {
     printf("Connecting to ADC124S101.");
 
-    uint16_t channel4 = read_register(Registers::CHANNEL4);
-
-    while (true) {
-        printf("%d\n", channel4);
-        vTaskDelay(100);
-        channel4 = read_register(Registers::CHANNEL4);
-    }
+    read_register(Registers::CHANNEL1);
 
     return true;
 }
@@ -37,8 +31,11 @@ uint16_t ADC124S101::read_register(uint8_t address) {
     auto lock = adcSPI.lock();
 
     chip_select(true);
-    uint16_t data = lock->transmitReceive(address);
+    uint16_t data1 = lock->transmitReceive(address);
+    uint16_t data2 = lock->transmitReceive(0x00);
     chip_select(false);
+
+    uint16_t data = ((data1 & 0xF) << 8) | data2;
 
     return data;
 }
