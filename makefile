@@ -1,4 +1,4 @@
-.PHONY : all control kicker fpga
+.PHONY : all control kicker fpga docs clean
 
 CURRENT_DIR=$(shell pwd)
 
