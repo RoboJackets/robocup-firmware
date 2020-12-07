@@ -1,20 +1,18 @@
-all : build/conaninfo.txt
-	conan build . -bf build
+.PHONY: all mtrain tests docs clean
 
 C_FIRMWARE_TESTS = blink blink_interrupt gpio flash usb_serial spi us_delay rtos adc
 CPP_FIRMWARE_TESTS = blink gpio spi usb_serial i2c i2c_bus_recovery
 
-$(C_FIRMWARE_TESTS:%=upload-%-c): configure
-	cd build; make $(@F)
-$(CPP_FIRMWARE_TESTS:%=upload-%): configure
-	cd build; make $(@F)
+all : mtrain tests
 
-build/conaninfo.txt : conanfile.py
-	conan install . -if build -pr armv7hf --build missing
+mtrain:
+	mkdir -p build && cd build && \
+cmake .. && make
 
-.PHONY : configure
-configure : build/conaninfo.txt
-	conan build . -bf build -c
+$(C_FIRMWARE_TESTS:%=upload-%-c): tests
+	cd build; make $(@F)
+$(CPP_FIRMWARE_TESTS:%=upload-%): tests
+	cd build; make $(@F)
 
 clean:
 	rm -rf build
