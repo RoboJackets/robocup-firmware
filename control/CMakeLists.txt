@@ -1,21 +1,10 @@
-cmake_minimum_required(VERSION 3.14.7)
-set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_LIST_DIR}/mtrain/cmake/stm32-gcc-arm-none-eabi.cmake)
+cmake_minimum_required(VERSION 3.4)
+set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_LIST_DIR}/mtrain/cmake/mtrain-toolchain.cmake)
 
 project(
     control
     LANGUAGES ASM C CXX
 )
-
-# TODO Do this in the correct way via target properties
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY  "${CMAKE_BINARY_DIR}/bin" )
-
-# TODO Figure out how to remove these
-add_definitions(-Wall)
-set(CMAKE_BUILD_TYPE Debug)
-add_definitions(-DSTM32F769xx -DUSE_USB_HS)
-set(CHIP STM32F769NI CACHE STRING "Full STM32 Chip Model")
 
 add_subdirectory(mtrain)
 add_subdirectory(external)
@@ -62,7 +51,9 @@ target_link_libraries(control-lib
     mtrain
 )
 
-add_executable(control.elf)
+add_executable(control.elf
+    src/robocup/main.cpp
+)
 
 target_link_libraries(control.elf
     control-lib

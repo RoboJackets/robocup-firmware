@@ -13,17 +13,17 @@ control-upload: control
 control: kicker
 	cd control && \
 mkdir -p build && cd build && \
-cmake -DFLASH_COPY_SCRIPT=${FLASH_COPY_SCRIPT} .. && make
+cmake -DFLASH_COPY_SCRIPT=${FLASH_COPY_SCRIPT} .. && make -j$(nproc)
 
 # fpga:
 # 	cd fpga && \
 # mkdir -p build && cd build && \
-# cmake  .. && make
+# cmake  .. && make -j$(nproc)
 
 kicker:
 	cd kicker && \
 mkdir -p build && cd build && \
-cmake -DCONVERT_SCRIPT=${CONVERT_SCRIPT} .. && make
+cmake -DCONVERT_SCRIPT=${CONVERT_SCRIPT} .. && make -j$(nproc)
 
 docs:
 	cd doc && doxygen Doxyfile

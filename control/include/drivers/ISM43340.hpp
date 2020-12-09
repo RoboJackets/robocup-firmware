@@ -3,7 +3,7 @@
 #include "mtrain.hpp"
 #include "SPI.hpp"
 #include "GenericRadio.hpp"
-#include "PinDefs.hpp"
+#include "pin_defs.h"
 #include <string>
 #include <vector>
 #include <memory>
@@ -427,7 +427,7 @@ private:
 
     DigitalOut nCs;
     DigitalOut nReset;
-    PinName dataReady;
+    pin_name dataReady;
 
     // Current socket selected on the device
     enum SOCKET_TYPE { SEND = 0, RECEIVE = 1 };
