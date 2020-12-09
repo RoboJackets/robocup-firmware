@@ -7,12 +7,12 @@ all : mtrain tests
 
 mtrain:
 	mkdir -p build && cd build && \
-cmake .. && make
+cmake .. && make -j$(nproc)
 
 $(C_FIRMWARE_TESTS:%=upload-%-c): tests
-	cd build; make $(@F)
+	cd build; make $(@F) -j$(nproc)
 $(CPP_FIRMWARE_TESTS:%=upload-%): tests
-	cd build; make $(@F)
+	cd build; make $(@F) -j$(nproc)
 
 clean:
 	rm -rf build
