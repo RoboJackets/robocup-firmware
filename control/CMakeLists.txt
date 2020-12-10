@@ -1,20 +1,26 @@
 cmake_minimum_required(VERSION 3.14.7)
-set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_LIST_DIR}/mtrain/mjackets-api/cmake/stm32-gcc-arm-none-eabi.cmake)
+set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_LIST_DIR}/mtrain/cmake/stm32-gcc-arm-none-eabi.cmake)
 
-project(control LANGUAGES ASM C CXX)
+project(
+    control
+    LANGUAGES ASM C CXX
+)
 
+# TODO Do this in the correct way via target properties
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON) # Don't fall back to older versions
-# set(CMAKE_CXX_COMPILER_VERSION "7.3")
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY  "${CMAKE_BINARY_DIR}/bin" )
 
+# TODO Figure out how to remove these
+add_definitions(-Wall)
 set(CMAKE_BUILD_TYPE Debug)
+add_definitions(-DSTM32F769xx -DUSE_USB_HS)
+set(CHIP STM32F769NI CACHE STRING "Full STM32 Chip Model")
 
 add_subdirectory(mtrain)
 add_subdirectory(external)
 
-add_executable(control.elf
-    src/robocup/main.cpp
+add_library(control-lib
     src/robocup/radio/RadioLink.cpp
     src/robocup/modules/BatteryModule.cpp
     src/robocup/modules/FPGAModule.cpp
@@ -35,14 +41,10 @@ add_executable(control.elf
     src/drivers/KickerBoard.cpp
     src/drivers/MCP23017.cpp
     src/drivers/MPU6050.cpp
-    )
-
-
-target_compile_features(API PRIVATE cxx_std_17)
-set_property(TARGET API PROPERTY CXX_STANDARD 17)
+)
 
 ## Shouldnt need explicit inclusion since mtrain dev relies on these
-target_include_directories(control.elf PUBLIC
+target_include_directories(control-lib PUBLIC
     include
     include/robocup
     # needs kicker commands
@@ -54,10 +56,16 @@ target_include_directories(control.elf PUBLIC
     # ${CMAKE_CURRENT_LIST_DIR}/../fpga/build/bin
 )
 
-target_link_libraries(control.elf
+target_link_libraries(control-lib
     # By linking against rc-fshare it should already have eigen
     rc-fshare
     mtrain
+)
+
+add_executable(control.elf)
+
+target_link_libraries(control.elf
+    control-lib
 )
 
 add_custom_target(control ALL

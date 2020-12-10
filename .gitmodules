@@ -4,3 +4,6 @@
 [submodule "control/external/robocup-fshare"]
 	path = control/external/robocup-fshare
 	url = https://github.com/RoboJackets/robocup-fshare.git
+[submodule "control/mtrain"]
+	path = control/mtrain
+	url = git@github.com:RoboJackets/mtrain-firmware.git
