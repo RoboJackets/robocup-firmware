@@ -4,10 +4,10 @@ set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_LIST_DIR}/cmake/stm32-gcc-arm-none-eabi
 
 project(
     mTrain
-    LANGUAGES C CXX
+    LANGUAGES C CXX ASM
 )
 
-set(FLASH_COPY_SCRIPT python3 ${PROJECT_SOURCE_DIR}/util/flash.py)
+set(FLASH_COPY_SCRIPT python3 ${CMAKE_CURRENT_LIST_DIR}/util/flash.py)
 
 set( CMAKE_CXX_STANDARD 17)
 set( CMAKE_CXX_STANDARD_REQUIRED  ON )
@@ -20,7 +20,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${C_MACHINE_OPTIONS}")
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${C_MACHINE_OPTIONS} '-fno-exceptions -fno-rtti'")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${C_MACHINE_OPTIONS}")
 set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} ${C_MACHINE_OPTIONS}")
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --specs=nosys.specs --specs=nano.specs -T '${CMAKE_SOURCE_DIR}/BSP/flash.ld'")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --specs=nosys.specs --specs=nano.specs -T '${CMAKE_CURRENT_LIST_DIR}/BSP/flash.ld'")
 
 # TODO: don't leave these here
 add_definitions(-Wall)
