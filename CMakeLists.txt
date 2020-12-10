@@ -6,7 +6,6 @@ project(
     mTrain
     LANGUAGES C CXX ASM
 )
-
 set(FLASH_COPY_SCRIPT python3 ${CMAKE_CURRENT_LIST_DIR}/util/flash.py)
 
 set( CMAKE_CXX_STANDARD 17)
@@ -29,6 +28,8 @@ set(CMAKE_BUILD_TYPE Debug)
 # TODO: remove need for USE_USB_HS def
 # Definitions for HAL
 add_definitions(-DSTM32F769xx -DUSE_USB_HS)
+set(CHIP STM32F769NI CACHE STRING "Full STM32 Chip Model")
+
 add_subdirectory(external)
 
 add_subdirectory(API/c)
