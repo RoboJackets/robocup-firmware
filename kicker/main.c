@@ -181,12 +181,12 @@ void main() {
     // TCP RTT estimates (exponentially weighted sum)
 
     // don't run the adc every loop
-    if (time % 100 == 0) {
+    if (time % 50 == 0) {
       int voltage_accum =
         (255 - kalpha) * last_voltage_ + kalpha * (get_voltage());
       last_voltage_ = voltage_accum / 255;
 
-      int num_lights = ((int) last_voltage_ / 47);
+      int num_lights = ((int) last_voltage_ / 45);
 
       PORTA |= (0x1F << 1);
       switch (num_lights) {
