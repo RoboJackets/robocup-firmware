@@ -132,6 +132,14 @@ void TMC6200::chip_select(bool cs_state) {
 }
 
 void TMC6200::write_register(uint8_t address, uint32_t value) {
+    auto lock = tmcSPI.lock();
+    chip_select(true);
+    // SPI Datagram
+    // Bits 39...32: MSB (RW) + 7-bit address
+    // Bits 31...00: 32-bit data
+    lock->transmit(((WRITE_BIT | address) << 32) | value);
+    chip_select(false);
+
 }
 
 uint32_t TMC6200::read_register(uint8_t address) {
