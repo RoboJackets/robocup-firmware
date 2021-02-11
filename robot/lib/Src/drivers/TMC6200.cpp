@@ -36,6 +36,7 @@ namespace Registers {
         SHORTDET_W = 0b1 << 12;
         S2GV = 0b1 << 13;
         S2VSV = 0b1 << 14;
+        ERROR_BITMASK = 0b111011101111110
     };
 
     constexpr uint8_t IOIN = 0x04;
@@ -111,16 +112,19 @@ TMC6200::TMC6200(LockedStruct<SPI>& tmcSPI, PinName cs_pin)
 }
 
 bool TMC6200::initialize() {
+    errors.fill(false);
+
     printf("Connecting to TMC6200.");
 
-    // uint32_t version = (read_register(Registers::VERSION) >> 24);
+    // TODO: Find out version value, then uncomment
+    // uint8_t version = (read_register(Registers::IOIN) & Registers::IOIn::VERSION);
     //
     // while (version != VERSION_VAL) {
     //     printf("%d\n", version);
     //     printf("Failed to connect to TMC6200.");
     //     vTaskDelay(100);
-    //     version = (read_register(Registers::VERSION) >> 24);
-    // }
+    //     version = read_register(Registers::IOIN) & Registers::IOIn::VERSION;
+    }
 
     printf("Connected to TMC6200.");
 
@@ -150,4 +154,17 @@ uint32_t TMC6200::read_register(uint8_t address) {
     chip_select(false);
 
     return data;
+}
+
+void TMC6200:checkForErrors() {
+    uint32_t gstatData = read_register(TMC6200::GSTAT);
+    // Check if any flags are set
+    if (gStat & TMC6200::GStat::ERROR_BITMASK != 0x0) {
+        for(int i = 0; i < bitMasks.size(); i++) {
+            // If flag set, toggle error at corresponding index
+            if ((gstatData & bitMasks[i]) != 0x0) {
+                errors[i] = true;
+            }
+        }
+    }
 }
