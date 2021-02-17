@@ -153,7 +153,7 @@ void main() {
       char chip_db_pressed = !(PINB & _BV(DB_CHIP_PIN));
 
       if (!kick_db_down_ && kick_db_pressed){
-        kick(255, false);
+        kick(38, false);
       }
 
       if(!chip_db_down_ && chip_db_pressed)
