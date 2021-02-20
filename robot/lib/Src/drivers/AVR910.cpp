@@ -45,6 +45,8 @@ AVR910::AVR910(LockedStruct<SPI>& spi, std::shared_ptr<DigitalOut> nCs, PinName 
 bool AVR910::init() {
     int tryCnt = 0;
     bool enabled = false;
+    nCs_->write(1);
+
     do {
         // Give nReset a positive pulse for at least two CPU clock cycles
         nReset_ = 1;
@@ -272,12 +274,14 @@ bool AVR910::enableProgramming() {
 
     // Programming Enable Command: 0xAC, 0x53, 0x00, 0x00
     // Byte two echo'd back in byte three.
+    DWT_Delay(10);
     nCs_->write(0);
     spi_lock->transmit(0xAC);
     spi_lock->transmit(0x53);
     int response = spi_lock->transmitReceive(0x00);
     spi_lock->transmit(0x00);
     nCs_->write(1);
+    DWT_Delay(10);
 
     if (response == 0x53) {
         return true;
@@ -287,21 +291,23 @@ bool AVR910::enableProgramming() {
 }
 
 void AVR910::poll(int high_low, char page_number, char page_offset) {
-    auto spi_lock = lock_spi();
-
-    // Query the chip until it indicates it's ready by setting the busy bit to 0
-    int response = 0;
-    nCs_->write(0);
-    do {
-        spi_lock->transmit(0xF0);
-        spi_lock->transmit(0x00);
-        spi_lock->transmit(0x00);
-        response = spi_lock->transmitReceive(0x00);
-    } while ((response & 0x01) != 0);
-    nCs_->write(0);
+    // auto spi_lock = lock_spi();
+    //
+    // // Query the chip until it indicates it's ready by setting the busy bit to 0
+    // int response = 0;
+    // nCs_->write(0);
+    // do {
+    //     spi_lock->transmit(0xF0);
+    //     spi_lock->transmit(0x00);
+    //     spi_lock->transmit(0x00);
+    //     response = spi_lock->transmitReceive(0x00);
+    // } while ((response & 0x01) != 0);
+    // nCs_->write(0);
+    vTaskDelay(5);
 }
 
 int AVR910::readRegister(int reg) {
+    DWT_Delay(10);
     auto spi_lock = lock_spi();
 
     nCs_->write(0);
@@ -310,6 +316,7 @@ int AVR910::readRegister(int reg) {
     spi_lock->transmit(reg);
     int val = spi_lock->transmitReceive(0x00);
     nCs_->write(1);
+    DWT_Delay(10);
 
     return val;
 }
@@ -334,7 +341,7 @@ int AVR910::readPartNumber() {
 
 void AVR910::chipErase() {
     auto spi_lock = lock_spi();
-
+    DWT_Delay(10);
     // Issue chip erase command.
     nCs_->write(0);
     spi_lock->transmit(0xAC);
@@ -342,20 +349,21 @@ void AVR910::chipErase() {
     spi_lock->transmit(0x00);
     spi_lock->transmit(0x00);
     nCs_->write(1);
+    DWT_Delay(10);
 
     vTaskDelay(15); // 9 ms min
 }
 
 /**
  * Load program memory page
- * 
+ *
  * @param highLog first byte of the command, whether low or high byte
  *                0100 0000 for low byte
  *                0100 1000 for high byte
  * @param address 6 lsbs of the word address
  *                AKA location in the current page
  * @param data byte of data to be stored
- * 
+ *
  * @note load low before high
  */
 void AVR910::loadMemoryPage(int highLow, char address, char data) {
@@ -367,39 +375,45 @@ void AVR910::loadMemoryPage(int highLow, char address, char data) {
     // low byte must be loaded before Data
     // high byte is applied within the same
     // address.
+    DWT_Delay(10);
     nCs_->write(0);
     spi_lock->transmit(highLow); // 0100 H000
     spi_lock->transmit(0x00); // 00xx xxxx
     spi_lock->transmit(address & 0x3F); // xxxb bbbb
     spi_lock->transmit(data); // iiii iiii
     nCs_->write(1);
+    DWT_Delay(10);
 }
 
 void AVR910::writeFlashMemoryByte(int highLow, int address, char data) {
     auto spi_lock = lock_spi();
 
+    DWT_Delay(10);
     nCs_->write(0);
     spi_lock->transmit(0x4C);
     spi_lock->transmit(address & 0xFF00 >> 8);
     spi_lock->transmit(address & 0x003F);
     spi_lock->transmit(data);
     nCs_->write(1);
+    DWT_Delay(10);
 }
 
 void AVR910::writeFuseBitsLow() {
     auto spi_lock = lock_spi();
 
+    DWT_Delay(10);
     nCs_->write(0);
     spi_lock->transmit(0xAC);
     spi_lock->transmit(0xA0);
     spi_lock->transmit(0x33);
     spi_lock->transmit(0xE4);
     nCs_->write(1);
+    DWT_Delay(10);
 }
 
 /**
  * Write program memory page
- * 
+ *
  * @param pageNumber page number to write
  */
 void AVR910::writeFlashMemoryPage(char pageNumber, char pageOffset, int highlow) {
@@ -408,6 +422,7 @@ void AVR910::writeFlashMemoryPage(char pageNumber, char pageOffset, int highlow)
     // Write program memory page command
     // Write Program Memory Page at
     // address a:b.
+    DWT_Delay(10);
     nCs_->write(0);
     spi_lock->transmit(0x4C); // 0100 1100
     // 11 bits total, 5 for page offset, 6 for page number
@@ -415,19 +430,20 @@ void AVR910::writeFlashMemoryPage(char pageNumber, char pageOffset, int highlow)
     spi_lock->transmit(pageNumber << 6); // 0x00aa aaaa
     spi_lock->transmit(0x00); // xxxx xxxx
     nCs_->write(1);
+    DWT_Delay(10);
 
     poll(highlow, pageNumber, pageOffset);
 }
 
 /**
  * Read program memory
- * 
+ *
  * @param highLow First byte of command
  *                0100 0000 for low byte
  *                0100 0100 for high byte
  * @param pageNumber Page number from [0 - N]
  * @param pageOffset location in words in page to read
- * 
+ *
  * @return value read
  */
 char AVR910::readProgramMemory(int highLow, char pageNumber, char pageOffset) {

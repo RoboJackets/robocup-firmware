@@ -32,10 +32,3 @@ add_custom_target(control ALL
     DEPENDS control.elf
     COMMENT "objcopying to make binary executable for control"
 )
-
-add_custom_target(control-upload
-    COMMAND $ENV{FLASH_COPY_SCRIPT} "control.bin"
-    WORKING_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
-    DEPENDS control
-    COMMENT "Copying binary control to MCU"
-)
