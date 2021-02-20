@@ -1,4 +1,4 @@
-.PHONY : all flash kicker kicker-test configure robot docs $(ROBOT_TESTS:%=test-%-upload)
+.PHONY : all flash kicker kicker-test configure robot docs $(ROBOT_TESTS:%=test-%) $(ROBOT_TESTS:%=test-%-upload)
 
 all: robot flash
 
@@ -25,10 +25,13 @@ robot/build/conaninfo.txt : robot/conanfile.py
 configure : robot/build/conaninfo.txt
 	cd robot && conan build . -bf build -c
 
-ROBOT_TESTS = test
+ROBOT_TESTS = motor rtos radio-test icm-42605 icm-20498-rate icm-20498-angle
 
 robot: robot/build/conaninfo.txt
 	cd robot && conan build . -bf build
+
+$(ROBOT_TESTS:%=test-%): configure
+	cd robot/build; make $(@F)
 
 $(ROBOT_TESTS:%=test-%-upload): configure
 	cd robot/build; make $(@F)
