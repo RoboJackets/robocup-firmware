@@ -12,6 +12,11 @@ public:
     TMC6200(LockedStruct<SPI>& tmcSPI, PinName cs_pin);
 
     bool initialize();
+    bool hasTemperatureError();
+    bool hasPhaseUShort();
+    bool hasPhaseVShort();
+    bool hasPhaseWShort();
+    bool hasError();
 
     void checkForErrors();
 

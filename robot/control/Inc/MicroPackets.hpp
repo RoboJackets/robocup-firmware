@@ -134,7 +134,7 @@ struct RobotID {
  */
 struct KickerCommand {
     bool isValid = false;    /**< Stores whether given data is valid  */
-    uint32_t lastUpdate;     /**< Time at which MotionCommand was last updated (milliseconds) */
+    uint32_t lastUpdate;     /**< Time at which KickerCommand was last updated (milliseconds) */
 
     enum ShootMode { KICK = 0, CHIP = 1 };
     enum TriggerMode { OFF = 0, IMMEDIATE = 1, ON_BREAK_BEAM = 2, INVALID = 3 };
@@ -158,6 +158,18 @@ struct KickerInfo {
     bool kickerHasError;      /**< Stores whether Kicker has an error */
     bool kickerCharged;       /**< Stores whether Kicker is charged above appropriate threshold to kick */
     bool ballSenseTriggered;  /**< Stores whether Breakbeam is tripped */
+};
+
+struct TrinamicInfo {
+    bool isValid = false;     /**< Stores whether given data is valid  */
+    bool initialized = false; /**< Stores whether Trinamic has been initialized */
+    uint32_t lastUpdate;      /**< Time at which TrinamicInfo was last updated (milliseconds) */
+
+    bool trinamicHasError;    /**< Stores whether Trinamic has an error */
+    bool temperatureError;    /**< Stores whether TMC6200 has an overtemperature error */
+    bool phaseUShort;         /**< Stores whether TMC6200's phase U is shorted to ground/supply */
+    bool phaseVShort;         /**< Stores whether TMC6200's phase V is shorted to ground/supply */
+    bool phaseWShort;         /**< Stores whether TMC6200's phase W is shorted to ground/supply */
 };
 
 /** @struct DebugInfo

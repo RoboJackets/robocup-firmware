@@ -23,6 +23,7 @@
 #include "modules/MotionControlModule.hpp"
 #include "modules/RadioModule.hpp"
 #include "modules/RotaryDialModule.hpp"
+#include "modules/Trinamic.hpp"
 #include "LockedStruct.hpp"
 
 #define SUPER_LOOP_FREQ 200
@@ -116,6 +117,7 @@ int main() {
     static LockedStruct<RobotID> robotID{};
     static LockedStruct<KickerCommand> kickerCommand{};
     static LockedStruct<KickerInfo> kickerInfo{};
+    static LockedStruct<TrinamicInfo> trinamicInfo{};
 
     static LockedStruct<MCP23017> ioExpander(MCP23017{sharedI2C, 0x42});
 
@@ -147,6 +149,9 @@ int main() {
                                kickerCommand,
                                kickerInfo);
     createModule(&kicker);
+
+    static TrinamicModule trinamic(sharedSpi, trinamicInfo);
+    createModule(&trinamic)
 
     static BatteryModule battery(batteryVoltage);
     createModule(&battery);

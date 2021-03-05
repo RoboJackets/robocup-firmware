@@ -113,6 +113,11 @@ TMC6200::TMC6200(LockedStruct<SPI>& tmcSPI, PinName cs_pin)
 
 bool TMC6200::initialize() {
     errors.fill(false);
+    _has_Error = false;
+    _temperature_Error = false;
+    _phase_U_Short = false;
+    _phase_V_Short = false;
+    _phase_W_Short = false;
 
     printf("Connecting to TMC6200.");
 
@@ -156,7 +161,7 @@ uint32_t TMC6200::read_register(uint8_t address) {
     return data;
 }
 
-void TMC6200:checkForErrors() {
+void TMC6200::checkForErrors() {
     uint32_t gstatData = read_register(TMC6200::GSTAT);
     // Check if any flags are set
     if (gStat & TMC6200::GStat::ERROR_BITMASK != 0x0) {
@@ -167,4 +172,24 @@ void TMC6200:checkForErrors() {
             }
         }
     }
+}
+
+bool TMC6200::hasTemperatureError() {
+    return errors[0] || errors[1];
+}
+
+bool TMC6200::hasPhaseUShort() {
+    return errors[3] || errors[4] || errors[5];
+}
+
+bool TMC6200::hasPhaseVShort() {
+    return errors[6] || errors[7] || errors[8];
+}
+
+bool TMC6200::hasPhaseWShort() {
+    return errors[9] || errors[10] || errors[11];
+}
+
+bool TMC6200::hasError() {
+    return hasTemperatureError() || hasPhaseUShort() || hasPhaseVShort() || hasPhaseWShort();
 }
