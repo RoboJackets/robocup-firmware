@@ -11,7 +11,7 @@ LEDModule::LEDModule(LockedStruct<MCP23017>& ioExpander,
     : GenericModule(kPeriod, "led", kPriority),
       batteryVoltage(batteryVoltage), fpgaStatus(fpgaStatus),
       kickerInfo(kickerInfo), radioError(radioError),
-      imuData(imuData),
+      imuData(imuData), trinamicInfo(trinamicInfo)
       ioExpander(ioExpander),
       dotStarSPI(sharedSPI),
       dotStarNCS(DOT_STAR_CS),
@@ -112,6 +112,15 @@ void LEDModule::entry() {
         } else {
             setError(ERR_IMU_BOOT_FAIL, true);
         }
+    }
+
+    {
+        auto trinamicLock = imuData.lock();
+        setError(ERR_TRINAMIC_BOOT_FAIL, trinamicLock->initialized);
+        setError(ERR_TRINAMIC_OVERTEMPERATURE, trinamicLock->temperatureError);
+        setError(ERR_TRINAMIC_PHASE_U_SHORT, trinamicLock->phaseUShort);
+        setError(ERR_TRINAMIC_PHASE_V_SHORT, trinamicLock->phaseVShort);
+        setError(ERR_TRINAMIC_PHASE_W_SHORT, trinamicLock->phaseWShort);
     }
 
     //ioExpander->writeMask(errors, IOExpanderErrorLEDMask);

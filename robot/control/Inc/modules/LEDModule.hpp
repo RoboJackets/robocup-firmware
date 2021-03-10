@@ -103,7 +103,8 @@ public:
               LockedStruct<FPGAStatus>& fpgaStatus,
               LockedStruct<KickerInfo>& kickerInfo,
               LockedStruct<RadioError>& radioError,
-              LockedStruct<IMUData>& imuData);
+              LockedStruct<IMUData>& imuData,
+              LockedStruct<TrinamicInfo>& trinamicInfo);
 
     /**
      * Code which initializes module
@@ -188,6 +189,7 @@ private:
     LockedStruct<KickerInfo>& kickerInfo;
     LockedStruct<RadioError>& radioError;
     LockedStruct<IMUData>& imuData;
+    LockedStruct<TrinamicInfo>& trinamicInfo;
 
     DigitalOut dotStarNCS;
 
@@ -215,12 +217,39 @@ private:
                                              LevelColors::FATAL,
                                              InfoColors::BOOT_FAIL};
 
+    // TRINAMIC
+    const struct Error ERR_TRINAMIC_BOOT_FAIL =  {CategoryColors::TRINAMIC_ERROR,
+                                                  LevelColors::FATAL,
+                                                  InfoColors::BOOT_FAIL};
+
+    const struct Error ERR_TRINAMIC_OVERTEMPERATURE =  {CategoryColors::TRINAMIC_ERROR,
+                                                        LevelColors::FATAL,
+                                                        InfoColors::TRINAMIC_OVERTEMPERATURE};
+
+    const struct Error ERR_TRINAMIC_PHASE_U_SHORT =  {CategoryColors::TRINAMIC_ERROR,
+                                                      LevelColors::FATAL,
+                                                      InfoColors::PHASE_U_SHORT};
+
+    const struct Error ERR_TRINAMIC_PHASE_V_SHORT =  {CategoryColors::TRINAMIC_ERROR,
+                                                      LevelColors::FATAL,
+                                                      InfoColors::PHASE_V_SHORT};
+
+    const struct Error ERR_TRINAMIC_PHASE_W_SHORT =  {CategoryColors::TRINAMIC_ERROR,
+                                                      LevelColors::FATAL,
+                                                      InfoColors::PHASE_W_SHORT};
+
+
     const std::array<Error, 6> ERR_LIST = {ERR_RADIO_BOOT_FAIL,
-                                               ERR_RADIO_WIFI_FAIL,
-                                               ERR_RADIO_SOCCER_FAIL,
-                                               ERR_FPGA_BOOT_FAIL,
-                                               ERR_KICKER_BOOT_FAIL,
-                                               ERR_IMU_BOOT_FAIL};
+                                           ERR_RADIO_WIFI_FAIL,
+                                           ERR_RADIO_SOCCER_FAIL,
+                                           ERR_FPGA_BOOT_FAIL,
+                                           ERR_KICKER_BOOT_FAIL,
+                                           ERR_IMU_BOOT_FAIL,
+                                           ERR_TRINAMIC_BOOT_FAIL,
+                                           ERR_TRINAMIC_OVERTEMPERATURE,
+                                           ERR_TRINAMIC_PHASE_U_SHORT,
+                                           ERR_TRINAMIC_PHASE_V_SHORT,
+                                           ERR_TRINAMIC_PHASE_W_SHORT};
 
     /**
      * Array of toggles whose values indicates where the error at the same index in ERR_LIST is active or not

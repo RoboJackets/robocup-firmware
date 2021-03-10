@@ -9,6 +9,7 @@ TrinamicModule::TrinamicModule(LockedStruct<SPI>& spi, LockedStruct<TrinamicInfo
 }
 
 void TrinamicModule::start() {
+    trinamicInfoLock->initialized = true;
     printf("INFO: Trinamic Boards initialized\r\n");
 }
 
