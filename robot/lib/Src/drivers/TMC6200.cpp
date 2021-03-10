@@ -14,11 +14,6 @@ TMC6200::TMC6200(LockedStruct<SPI>& tmcSPI, PinName cs_pin)
 
 bool TMC6200::initialize() {
     errors.fill(false);
-    _has_Error = false;
-    _temperature_Error = false;
-    _phase_U_Short = false;
-    _phase_V_Short = false;
-    _phase_W_Short = false;
 
     printf("Connecting to TMC6200.");
 
@@ -30,7 +25,6 @@ bool TMC6200::initialize() {
     //     printf("Failed to connect to TMC6200.");
     //     vTaskDelay(100);
     //     version = read_register(Registers::IOIN) & Registers::IOIn::VERSION;
-    }
 
     printf("Connected to TMC6200.");
 
@@ -63,12 +57,12 @@ uint32_t TMC6200::read_register(uint8_t address) {
 }
 
 void TMC6200::checkForErrors() {
-    uint32_t gstatData = read_register(TMC6200::GSTAT);
+    uint32_t gStatData = read_register(Registers::GSTAT);
     // Check if any flags are set
-    if (gStat & TMC6200::GStat::ERROR_BITMASK != 0x0) {
+    if (gStatData & Registers::GStat::ERROR_BITMASK != 0x0) {
         for(int i = 0; i < bitMasks.size(); i++) {
             // If flag set, toggle error at corresponding index
-            if ((gstatData & bitMasks[i]) != 0x0) {
+            if ((gStatData & bitMasks[i]) != 0x0) {
                 errors[i] = true;
             }
         }

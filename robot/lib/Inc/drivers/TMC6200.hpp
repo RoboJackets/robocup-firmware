@@ -76,7 +76,7 @@ namespace Registers {
         SHORTFILTER_1us = 0b01 << 16,
         SHORTFILTER_2us = 0b10 << 16,
         SHORTFILTER_3us = 0b11 << 16,
-        SHORTDELAY_NORMAL = 0b0 << 20
+        SHORTDELAY_NORMAL = 0b0 << 20,
         SHORTDELAY_HIGH = 0b1 << 20,
         RETRY_DISABLED = 0b00 << 24,
         RETRY_1 = 0b01 << 24,
@@ -88,7 +88,7 @@ namespace Registers {
         DISABLE_S2G = 0b1 << 29,
         ENABLE_S2VS = 0b0 << 30,
         DISABLE_S2VS = 0b1 << 30,
-    },
+    };
 
     constexpr uint8_t DRV_CONF = 0x0A;
 
@@ -148,16 +148,16 @@ private:
      * 11    | s2vsw        | Short to VS detected on phase W
      */
     std::array<bool, 12> errors;
-    const std::array<TMC6200::GStat, 12> bitMasks = {TMC6200::GStat::DRV_OTPW,
-                                                     TMC6200::GStat::DRV_OT,
-                                                     TMC6200::GStat::UV_CP,
-                                                     TMC6200::GStat::SHORTDET_U,
-                                                     TMC6200::GStat::S2GU,
-                                                     TMC6200::GStat::S2VSU,
-                                                     TMC6200::GStat::SHORTDET_V,
-                                                     TMC6200::GStat::S2GV,
-                                                     TMC6200::GStat::S2VSV,
-                                                     TMC6200::GStat::SHORTDET_W,
-                                                     TMC6200::GStat::S2GW,
-                                                     TMC6200::GStat::S2VSW};
+    const std::array<uint32_t, 12> bitMasks = {Registers::GStat::DRV_OTPW,
+                                                 Registers::GStat::DRV_OT,
+                                                 Registers::GStat::UV_CP,
+                                                 Registers::GStat::SHORTDET_U,
+                                                 Registers::GStat::S2GU,
+                                                 Registers::GStat::S2VSU,
+                                                 Registers::GStat::SHORTDET_V,
+                                                 Registers::GStat::S2GV,
+                                                 Registers::GStat::S2VSV,
+                                                 Registers::GStat::SHORTDET_W,
+                                                 Registers::GStat::S2GW,
+                                                 Registers::GStat::S2VSW};
 };
