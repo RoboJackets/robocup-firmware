@@ -9,6 +9,7 @@ add_executable(control.elf
     Src/modules/MotionControlModule.cpp
     Src/modules/RadioModule.cpp
     Src/modules/RotaryDialModule.cpp
+	Src/modules/TrinamicModule.cpp
     Src/motion-control/DribblerController.cpp
     Src/motion-control/RobotController.cpp
     Src/motion-control/RobotEstimator.cpp
