@@ -115,7 +115,7 @@ void LEDModule::entry() {
     }
 
     {
-        auto trinamicLock = imuData.lock();
+        auto trinamicLock = trinamicInfo.lock();
         setError(ERR_TRINAMIC_BOOT_FAIL, trinamicLock->initialized);
         setError(ERR_TRINAMIC_OVERTEMPERATURE, trinamicLock->temperatureError);
         setError(ERR_TRINAMIC_PHASE_U_SHORT, trinamicLock->phaseUShort);

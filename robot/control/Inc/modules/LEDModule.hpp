@@ -22,7 +22,7 @@ enum CategoryColors : uint32_t {
     RADIO_ERROR = 0xFF8000,  // ORANGE
     FPGA_ERROR = 0xFFFF00,    // YELLOW
     KICKER_ERROR = 0x00FF00, // GREEN
-    IMU_ERROR = 0x0000FF   // BLUE
+    IMU_ERROR = 0x0000FF,   // BLUE
     TRINAMIC_ERROR = 0x800080 // PURPLE
 };
 
@@ -47,7 +47,7 @@ enum InfoColors : uint32_t {
 
     // RADIO
     RADIO_CONN_WIFI_FAIL = 0xFF8000,  // ORANGE
-    RADIO_CONN_SOCCER_FAIL = 0xFFFF00 // YELLOW
+    RADIO_CONN_SOCCER_FAIL = 0xFFFF00, // YELLOW
 
     // TRINAMIC
     TRINAMIC_OVERTEMPERATURE = 0xFF0000,  // RED
@@ -228,18 +228,18 @@ private:
 
     const struct Error ERR_TRINAMIC_PHASE_U_SHORT =  {CategoryColors::TRINAMIC_ERROR,
                                                       LevelColors::FATAL,
-                                                      InfoColors::PHASE_U_SHORT};
+                                                      InfoColors::TRINAMIC_PHASE_U_SHORT};
 
     const struct Error ERR_TRINAMIC_PHASE_V_SHORT =  {CategoryColors::TRINAMIC_ERROR,
                                                       LevelColors::FATAL,
-                                                      InfoColors::PHASE_V_SHORT};
+                                                      InfoColors::TRINAMIC_PHASE_V_SHORT};
 
     const struct Error ERR_TRINAMIC_PHASE_W_SHORT =  {CategoryColors::TRINAMIC_ERROR,
                                                       LevelColors::FATAL,
-                                                      InfoColors::PHASE_W_SHORT};
+                                                      InfoColors::TRINAMIC_PHASE_W_SHORT};
 
 
-    const std::array<Error, 6> ERR_LIST = {ERR_RADIO_BOOT_FAIL,
+    const std::array<Error, 11> ERR_LIST = {ERR_RADIO_BOOT_FAIL,
                                            ERR_RADIO_WIFI_FAIL,
                                            ERR_RADIO_SOCCER_FAIL,
                                            ERR_FPGA_BOOT_FAIL,

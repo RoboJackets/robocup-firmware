@@ -23,7 +23,7 @@
 #include "modules/MotionControlModule.hpp"
 #include "modules/RadioModule.hpp"
 #include "modules/RotaryDialModule.hpp"
-#include "modules/Trinamic.hpp"
+#include "modules/TrinamicModule.hpp"
 #include "LockedStruct.hpp"
 
 #define SUPER_LOOP_FREQ 200
@@ -150,7 +150,7 @@ int main() {
                                kickerInfo);
     createModule(&kicker);
 
-    static TrinamicModule trinamic(sharedSpi, trinamicInfo);
+    static TrinamicModule trinamic(sharedSPI, trinamicInfo);
     createModule(&trinamic)
 
     static BatteryModule battery(batteryVoltage);
