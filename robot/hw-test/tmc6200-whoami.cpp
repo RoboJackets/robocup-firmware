@@ -10,6 +10,13 @@ void tmc_task(void*) {
     printf("Initializing\r\n");
 
     tmc.initialize();
+    printf("Initialized\r\n");
+    uint8_t version = tmc.read_register(Registers::IOIN) & Registers::IOIn::VERSION;
+    printf("Version: %u\r\n", version);
+    while (true) {
+        printf("Pin Status [OT150C/OT143C/OT136C]: %lx \r\n", tmc.read_register(Registers::IOIN) & (0b111 << 8));
+        printf("Pin Status [0/DRV_EN/WH/WL/VH/VL/UH/UL]: %lx \r\n", tmc.read_register(Registers::IOIN) & 0b111111);
+    }
 }
 
 int main() {

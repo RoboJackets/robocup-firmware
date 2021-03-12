@@ -119,10 +119,11 @@ public:
 
     void checkForErrors();
 
+    uint32_t read_register(uint8_t address);
+
 private:
     void write_register(uint8_t address, uint32_t value);
 
-    uint32_t read_register(uint8_t address);
 
     void chip_select(bool cs_state);
 

@@ -15,8 +15,6 @@ TMC6200::TMC6200(LockedStruct<SPI>& tmcSPI, PinName cs_pin)
 bool TMC6200::initialize() {
     errors.fill(false);
 
-    printf("Connecting to TMC6200.");
-
     // TODO: Find out version value, then uncomment
     // uint8_t version = (read_register(Registers::IOIN) & Registers::IOIn::VERSION);
     //

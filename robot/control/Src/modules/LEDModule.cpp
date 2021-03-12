@@ -7,11 +7,12 @@ LEDModule::LEDModule(LockedStruct<MCP23017>& ioExpander,
                      LockedStruct<FPGAStatus>& fpgaStatus,
                      LockedStruct<KickerInfo>& kickerInfo,
                      LockedStruct<RadioError>& radioError,
-                     LockedStruct<IMUData>& imuData)
+                     LockedStruct<IMUData>& imuData,
+                     LockedStruct<TrinamicInfo>& trinamicInfo)
     : GenericModule(kPeriod, "led", kPriority),
       batteryVoltage(batteryVoltage), fpgaStatus(fpgaStatus),
       kickerInfo(kickerInfo), radioError(radioError),
-      imuData(imuData), trinamicInfo(trinamicInfo)
+      imuData(imuData), trinamicInfo(trinamicInfo),
       ioExpander(ioExpander),
       dotStarSPI(sharedSPI),
       dotStarNCS(DOT_STAR_CS),

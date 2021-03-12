@@ -127,7 +127,8 @@ int main() {
                          fpgaStatus,
                          kickerInfo,
                          radioError,
-                         imuData);
+                         imuData,
+                         trinamicInfo);
     createModule(&led);
 
     static FPGAModule fpga(std::move(fpgaSPI),
@@ -151,7 +152,7 @@ int main() {
     createModule(&kicker);
 
     static TrinamicModule trinamic(sharedSPI, trinamicInfo);
-    createModule(&trinamic)
+    createModule(&trinamic);
 
     static BatteryModule battery(batteryVoltage);
     createModule(&battery);
