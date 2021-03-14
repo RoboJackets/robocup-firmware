@@ -7,6 +7,10 @@ function(add_test test_file)
 
     target_link_libraries(${test_name}.elf firm-lib)
 
+    target_include_directories(${test_name}.elf PUBLIC
+    	../control/Inc
+    )
+
     add_custom_target(test-${test_name} ALL
         ${CMAKE_OBJCOPY} -Obinary "${test_name}.elf" "${test_name}.bin"
         WORKING_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"

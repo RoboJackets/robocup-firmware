@@ -1,16 +1,29 @@
 #include "mtrain.hpp"
+#include "FreeRTOSConfig.h"
+#include "FreeRTOS.h"
+#include "task.h"
+
+#include "modules/GenericModule.hpp"
+
 #include "SPI.hpp"
 #include "I2C.hpp"
+#include "delay.h"
+#include "DigitalOut.hpp"
+
+#include <unistd.h>
+
+#include "MicroPackets.hpp"
 #include "iodefs.h"
-// #include "modules/GenericModule.hpp"
+
 #include "modules/BatteryModule.hpp"
 #include "modules/FPGAModule.hpp"
-// #include "modules/IMUModule.hpp"
-// #include "modules/KickerModule.hpp"
+#include "modules/IMUModule.hpp"
+#include "modules/KickerModule.hpp"
 #include "modules/LEDModule.hpp"
-// #include "modules/MotionControlModule.hpp"
-// #include "modules/RadioModule.hpp"
+#include "modules/MotionControlModule.hpp"
+#include "modules/RadioModule.hpp"
 #include "modules/RotaryDialModule.hpp"
+#include "LockedStruct.hpp"
 
 DebugInfo debugInfo;
 // turn RobotID into a motor command
