@@ -33,17 +33,18 @@ int main() {
     std::shared_ptr<MCP23017> ioExpander = std::make_shared<MCP23017>(sharedI2C, 0x42);
     ioExpander->config(0x00FF, 0x00FF, 0x00FF);
 
-    RotaryDialModule dial = new RotaryDialModule(LockedStruct<MCP23017>& ioExpander, LockedStruct<RobotID>& robotID);
+    RotaryDialModule dial = new RotaryDialModule(LockedStruct<MCP23017>ioExpander, LockedStruct<RobotID> robotID);
     dial.start();
 
     {
-        auto motorCommandLock = motorCommand.lock();
-        motorCommandLock.isValid = false;
-        motorCommandLock.lastUpdate = 0;
+        auto motorCommandLock = LockedStruct<MotorCommand> motorCommand;
+        motorCommandLock = motorCommand.lock();
+        motorCommandLock->isValid = false;
+        motorCommandLock->lastUpdate = 0;
         for (int i = 0; i < 4; i++) {
             motorCommandLock.wheels[i] = 0;
         }
-        motorCommandLock.dribbler = 0;
+        motorCommandLock->dribbler = 0;
     }
 
     DigitalOut led1(LED1);
@@ -74,12 +75,14 @@ int main() {
 
         float duty = ((robotIDLock.robotID ^ 8) - 8) % 8 / 8.0;
 
-        motorCommandLock.isValid = true;
-        motorCommandLock.lastUpdate = HAL_GetTick();
+        motorCommandLock->isValid = true;
+        motorCommandLock->lastUpdate = HAL_GetTick();
         for (int i = 0; i < 4; i++) {
-            motorCommandLock.wheels[i] = duty;
+            motorCommandLock->wheels[i] = duty;
         }
-        motorCommandLock.dribbler = abs(duty*127);
+        motorCommandLock->dribbler = abs(duty*127);
+        //compile error that entry is not a method of fpga class
+        // but an entry method is define in the FPGAModule code
         fpga.entry();
         HAL_Delay(100);
     }
