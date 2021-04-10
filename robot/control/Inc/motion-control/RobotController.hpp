@@ -60,6 +60,11 @@ private:
     Eigen::Matrix<float, numStates, 1> BodyKp;
 
     /**
+     * Wheel velocity control gains (duty cycle / speed)
+     */
+    float WheelKp;
+
+    /**
      * Interval of control calculations (seconds)
      */
     float dt;

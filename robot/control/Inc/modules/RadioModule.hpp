@@ -42,7 +42,8 @@ public:
                 LockedStruct<RobotID>& robotID,
                 LockedStruct<KickerCommand>& kickerCommand,
                 LockedStruct<MotionCommand>& motionCommand,
-                LockedStruct<RadioError>& radioError);
+                LockedStruct<RadioError>& radioError,
+                LockedStruct<DebugInfo>& debugInfo);
 
     /**
      * Code which initializes module
@@ -62,10 +63,11 @@ private:
     LockedStruct<FPGAStatus>& fpgaStatus;
     LockedStruct<KickerInfo>& kickerInfo;
     LockedStruct<RobotID>& robotID;
-    
+
     LockedStruct<KickerCommand>& kickerCommand;
     LockedStruct<MotionCommand>& motionCommand;
     LockedStruct<RadioError>& radioError;
+    LockedStruct<DebugInfo>& debugInfo;
 
     /**
      * General radio driver interface acting as a middle man to send and receive radio packets

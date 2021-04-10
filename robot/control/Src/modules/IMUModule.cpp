@@ -30,5 +30,5 @@ void IMUModule::entry(void) {
     imuDataLock->lastUpdate = xTaskGetTickCount();
 
     // IMU is upside-down on prototype. Change this for final version.
-    imuDataLock->omegas[2] = -rate;
+    imuDataLock->omegas[2] = rate;
 }
