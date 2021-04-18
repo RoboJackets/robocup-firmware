@@ -1,7 +1,11 @@
-#!/bin/bash
+#!/bin/bash 
 
 DEVICE=STM32F769NI
 IF=JTAG
 SPEED=4000
 
-JLinkExe -device $DEVICE -if $IF -jtagconf -1,-1 -speed $SPEED -autoconnect 1 -CommanderScript ./util/flash-mtrain.jlink
+if grep -qEi "(Microsoft|WSL)" /proc/version &> /dev/null ; then
+	JLink.exe -device $DEVICE -if $IF -jtagconf -1,-1 -speed $SPEED -autoconnect 1 -CommanderScript ./util/flash-mtrain.jlink
+    else
+	JLinkExe -device $DEVICE -if $IF -jtagconf -1,-1 -speed $SPEED -autoconnect 1 -CommanderScript ./util/flash-mtrain.jlink
+fi

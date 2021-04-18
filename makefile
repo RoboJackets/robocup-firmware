@@ -5,6 +5,9 @@ all: robot flash
 flash:
 	./util/flash-mtrain
 
+flash-test:
+	./util/flash-mtrain-test
+
 kicker:
 	cd kicker && \
 mkdir -p build && cd build && \
@@ -25,13 +28,14 @@ robot/build/conaninfo.txt : robot/conanfile.py
 configure : robot/build/conaninfo.txt
 	cd robot && conan build . -bf build -c
 
-ROBOT_TESTS = test
+ROBOT_TESTS = rtos icm-42605-angle
 
 robot: robot/build/conaninfo.txt
 	cd robot && conan build . -bf build
 
-$(ROBOT_TESTS:%=test-%-upload): configure
+$(ROBOT_TESTS:%=%): configure
 	cd robot/build; make $(@F)
+	make flash-test
 
 # Define BUILDTYPE as Debug for this target and all subtargets
 debug : BUILDTYPE = "Debug"
