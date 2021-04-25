@@ -40,6 +40,10 @@ RobotEstimator::RobotEstimator(uint32_t dt_us) {
 void RobotEstimator::predict(Eigen::Matrix<float, numInputs, 1> u) {
     x_hat = F*x_hat + B*u;
     P = F*P*F.transpose() + Q;
+    static int i = 0;
+    if (i++ % 20 == 0) {
+        printf("u: %f %f %f %f\r\n", u(0), u(1), u(2), u(3));
+    }
 }
 
 void RobotEstimator::update(Eigen::Matrix<float, numOutputs, 1> z) {
@@ -52,6 +56,11 @@ void RobotEstimator::update(Eigen::Matrix<float, numOutputs, 1> z) {
     Eigen::Matrix<float, numOutputs, 1> y = z - zhat;
     Eigen::Matrix<float, numStates,  numOutputs> K;
     K << 0.0009397509971039829, -0.0011827724277488714, -0.0011827724277488686, 0.0009397509971039868, -0.0011276310514651243, 0.00036444308064997926, 0.00032704060073804455, -0.00032704060073804184, -0.00036444308064998137, -1.1132246847540639e-15, -3.972685526745256e-06, -3.7441398088700513e-06, -3.744139808869744e-06, -3.97268552674491e-06, 0.27013068548630365;
+    for (int i = 0; i < 4; i++) {
+        if (std::abs(z(i)) > 100) {
+            y(i) = 0;
+        }
+    }
 
     x_hat += K * y;
     static int i = 0;

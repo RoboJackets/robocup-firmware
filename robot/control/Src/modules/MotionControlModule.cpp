@@ -132,7 +132,7 @@ void MotionControlModule::entry() {
 
         // set motors to real targets
         for (int i = 0; i < 4; i++) {
-            motorCommandLock->wheels[i] = motorCommands(i, 0);
+            motorCommandLock->wheels[i] = 0 * motorCommands(i, 0);
         }
         motorCommandLock->dribbler = dribblerCommand;
     } else {
@@ -150,11 +150,13 @@ void MotionControlModule::entry() {
         frame.encDeltas[i] = static_cast<int16_t>(currentWheels(i));
     }
 
+#if 0
     auto debugInfoLock = debugInfo.lock();
     if (debugInfoLock->num_debug_frames < debugInfoLock->debug_frames.size()) {
         debugInfoLock->debug_frames[debugInfoLock->num_debug_frames] = frame;
         debugInfoLock->num_debug_frames++;
     }
+#endif
 }
 
 bool MotionControlModule::isRecentUpdate(uint32_t lastUpdateTime) {

@@ -44,6 +44,7 @@ void RadioLink::send(const BatteryVoltage& batteryVoltage,
     status->kickHealthy     = static_cast<uint8_t>(kickerInfo.kickerHasError);
     status->fpgaStatus      = static_cast<uint8_t>(fpgaStatus.FPGAHasError);
 
+#if 0
     status->num_frames = 0;
 
     for (int i = 0; i < debugInfo.num_debug_frames && status->num_frames < rtp::MAX_DEBUG_FRAMES; i++) {
@@ -66,6 +67,7 @@ void RadioLink::send(const BatteryVoltage& batteryVoltage,
 
         status->num_frames++;
     }
+#endif
 
     radio->send(packet.data(), rtp::ReverseSize);
 }
