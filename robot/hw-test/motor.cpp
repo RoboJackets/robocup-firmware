@@ -60,7 +60,6 @@ int main() {
 
     while (true) {
         dial.start();
-        auto motorCommandLock = motorCommand.lock();
         printf("RobotID: %d\r\n", robotIDLock->robotID);
 
         float duty = ((robotIDLock->robotID ^ 8) - 8) % 8 / 8.0;
