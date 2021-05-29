@@ -9,57 +9,64 @@
 // #include "modules/IMUModule.hpp"
 // #include "modules/KickerModule.hpp"
 #include "modules/LEDModule.hpp"
+#include "drivers/MCP23017.hpp"
 #include "modules/MotionControlModule.hpp"
 #include "modules/RadioModule.hpp"
 #include "modules/RotaryDialModule.hpp"
 #include <LockedStruct.hpp>
 #include <Micropackets.hpp>
+#include "MicroPackets.hpp"
+#include "drivers/MCP23017.hpp"
+#include "drivers/RotarySelector.hpp"
+#include "drivers/IOExpanderDigitalInOut.hpp"
 
 DebugInfo debugInfo;
 
 int main() {
 
-    LockedStruct<MotorCommand>& motorCommand;
+    LockedStruct<MotorCommand> motorCommand ;
     auto motorCommandLock = motorCommand.lock();
-    motorCommandLock.isValid = false;
-    motorCommandLock.lastUpdate = 0;
+    motorCommandLock->isValid = false;
+    motorCommandLock->lastUpdate = 0;
     for (int i = 0; i < 4; i++) {
-        motorCommandLock.wheels[i] = 0;
+        motorCommandLock->wheels[i] = 0;
     }
-    motorCommandLock.dribbler = 0;
+    motorCommandLock->dribbler = 0;
 
-    LockedStruct<FPGAStatus>& fpgaStatus;
-    LockedStruct<MotorFeedback>& motorFeedback;
-    LockedStruct<RobotID>& robotID;
+    LockedStruct<FPGAStatus> fpgaStatus;
+    LockedStruct<MotorFeedback> motorFeedback;
+    LockedStruct<RobotID> robotID;
     auto robotIDLock = robotID.lock();
 
     DigitalOut led1(LED1);
     DigitalOut led2(LED2);
 
-    std::shared_ptr<SPI> fpgaKickerSPI = std::make_shared<SPI>(FPGA_KICKER_SPI_BUS, std::nullopt, 16'000'000);
+    // made the FPGA SPI BUS a shared SPI Bus to avoid compile error
+    std::shared_ptr<SPI> fpgaKickerSPI = std::make_shared<SPI>(SHARED_SPI_BUS, std::nullopt, 16'000'000);
     std::shared_ptr<I2C> sharedI2C = std::make_shared<I2C>(SHARED_I2C_BUS);
 
-    std::shared_ptr LockedStruct<MCP23017>& ioExpander = std::make_shared<MCP23017>(sharedI2C, 0x42);
+    //std::shared_ptr<MCP23017>
+    //std::shared_ptr<MCP23017> ioExpander = std::make_shared<MCP23017>(sharedI2C, 0x42);
+    //ioExpander.config(0x00FF, 0x00FF, 0x00FF);
 
-    ioExpander->config(0x00FF, 0x00FF, 0x00FF);
-
-    RotaryDialModule dial(ioExpander, robotIDLock);
-
-    FPGAModule fpga(fpgaKickerSPI, &motorCommand, &fpgaStatus, &motorFeedback);
+    RotaryDialModule dial(std::shared_ptr<MCP23017> ioExpander, RobotID robotIDLock);
+    FPGAModule fpga(std::shared_ptr<SPI> spi, MotorCommand motorCommand, FPGAStatus fpgaStatus,
+        MotorFeedback motorFeedback);
 
 
     // Get initial dial value
-    dial.start();
+    // ** ISSUE IS HERE WITH THE method to be used on dial ** 
+    dial.motorTestEntry();
 
-    while (robotID->robotID != 0) {
-        dial.start();
+    while (robotIDLock->robotID != 0) {
+        dial.motorTestEntry();
         HAL_Delay(100);
     }
 
     led1 = 1;
 
     while (true) {
-        dial.start();
+        dial.motorTestEntry();
         printf("RobotID: %d\r\n", robotIDLock->robotID);
 
         float duty = ((robotIDLock->robotID ^ 8) - 8) % 8 / 8.0;
@@ -70,7 +77,9 @@ int main() {
             motorCommandLock->wheels[i] = duty;
         }
         motorCommandLock->dribbler = abs(duty*127);
+        // ** ISSUE IS HERE with the method to be used on fpga ** 
         fpga.entry();
         HAL_Delay(100);
     }
 }
+
