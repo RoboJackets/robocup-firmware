@@ -24,7 +24,7 @@ DebugInfo debugInfo;
 
 int main() {
 
-    LockedStruct<MotorCommand> motorCommand ;
+    LockedStruct<MotorCommand> motorCommand {} ;
     auto motorCommandLock = motorCommand.lock();
     motorCommandLock->isValid = false;
     motorCommandLock->lastUpdate = 0;
@@ -33,10 +33,13 @@ int main() {
     }
     motorCommandLock->dribbler = 0;
 
-    LockedStruct<FPGAStatus> fpgaStatus;
-    LockedStruct<MotorFeedback> motorFeedback;
+    LockedStruct<FPGAStatus> fpgaStatus {};
+    auto fpgaStatusLock = fpgaStatus.lock();
+    LockedStruct<MotorFeedback> motorFeedback {};
+    auto motorFeedbackLock = motorFeedback.lock();
     LockedStruct<RobotID> robotID;
     auto robotIDLock = robotID.lock();
+    LockedStruct<RobotID>& robotIDPtr = robotID;
 
     DigitalOut led1(LED1);
     DigitalOut led2(LED2);
