@@ -41,6 +41,8 @@ int main() {
     DigitalOut led1(LED1);
     DigitalOut led2(LED2);
 
+    LockedStruct<MCP23017> ioExpander(MCP23017{sharedI2C, 0x42});
+
     // made the FPGA SPI BUS a shared SPI Bus to avoid compile error
     std::shared_ptr<SPI> fpgaKickerSPI = std::make_shared<SPI>(SHARED_SPI_BUS, std::nullopt, 16'000'000);
     std::shared_ptr<I2C> sharedI2C = std::make_shared<I2C>(SHARED_I2C_BUS);
@@ -49,24 +51,24 @@ int main() {
     //std::shared_ptr<MCP23017> ioExpander = std::make_shared<MCP23017>(sharedI2C, 0x42);
     //ioExpander.config(0x00FF, 0x00FF, 0x00FF);
 
-    RotaryDialModule dial(std::shared_ptr<MCP23017> ioExpander, RobotID robotIDLock);
+    RotaryDialModule dial(ioExpander, robotIDLock);
     FPGAModule fpga(std::shared_ptr<SPI> spi, MotorCommand motorCommand, FPGAStatus fpgaStatus,
         MotorFeedback motorFeedback);
 
 
     // Get initial dial value
-    // ** ISSUE IS HERE WITH THE method to be used on dial ** 
-    dial.motorTestEntry();
+    // ** ISSUE IS HERE WITH THE method to be used on dial **
+    dial.entry();
 
     while (robotIDLock->robotID != 0) {
-        dial.motorTestEntry();
+        dial.entry();
         HAL_Delay(100);
     }
 
     led1 = 1;
 
     while (true) {
-        dial.motorTestEntry();
+        dial.entry();
         printf("RobotID: %d\r\n", robotIDLock->robotID);
 
         float duty = ((robotIDLock->robotID ^ 8) - 8) % 8 / 8.0;
@@ -77,9 +79,8 @@ int main() {
             motorCommandLock->wheels[i] = duty;
         }
         motorCommandLock->dribbler = abs(duty*127);
-        // ** ISSUE IS HERE with the method to be used on fpga ** 
+        // ** ISSUE IS HERE with the method to be used on fpga **
         fpga.entry();
         HAL_Delay(100);
     }
 }
-
