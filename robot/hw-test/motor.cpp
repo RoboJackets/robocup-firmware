@@ -39,7 +39,7 @@ int main() {
     auto motorFeedbackLock = motorFeedback.lock();
     LockedStruct<RobotID> robotID;
     auto robotIDLock = robotID.lock();
-    LockedStruct<RobotID>& robotIDPtr = robotID;
+    //LockedStruct<RobotID>& robotIDPtr = robotID;
 
     DigitalOut led1(LED1);
     DigitalOut led2(LED2);
@@ -52,7 +52,7 @@ int main() {
     //std::shared_ptr<MCP23017> ioExpander = std::make_shared<MCP23017>(sharedI2C, 0x42);
     // ioExpander.config(0x00FF, 0x00FF, 0x00FF);
 
-    RotaryDialModule dial(ioExpander, robotIDPtr);
+    RotaryDialModule dial(ioExpander, robotID);
     FPGAModule fpga(std::move(fpgaKickerSPI), motorCommand, fpgaStatus, motorFeedback);
 
 
