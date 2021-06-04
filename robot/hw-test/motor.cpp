@@ -44,10 +44,10 @@ int main() {
     DigitalOut led1(LED1);
     DigitalOut led2(LED2);
 
-
+    LockedStruct<I2C> sharedI2C(SHARED_I2C_BUS);
     std::unique_ptr<SPI> fpgaKickerSPI = std::make_unique<SPI>(FPGA_SPI_BUS, std::nullopt, 16'000'000);
-    std::shared_ptr<I2C> sharedI2C = std::make_shared<I2C>(SHARED_I2C_BUS);
     LockedStruct<MCP23017> ioExpander(MCP23017{sharedI2C, 0x42});
+    //std::shared_ptr<I2C> sharedI2C = std::make_shared<I2C>(SHARED_I2C_BUS);
     //std::shared_ptr<MCP23017>
     //std::shared_ptr<MCP23017> ioExpander = std::make_shared<MCP23017>(sharedI2C, 0x42);
     // ioExpander.config(0x00FF, 0x00FF, 0x00FF);
