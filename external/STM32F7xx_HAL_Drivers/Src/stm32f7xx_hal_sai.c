@@ -1855,7 +1855,7 @@ static uint32_t SAI_InterruptFlag(SAI_HandleTypeDef *hsai, uint32_t mode)
   */
 static HAL_StatusTypeDef SAI_Disable(SAI_HandleTypeDef *hsai)
 {
-  register uint32_t count = SAI_DEFAULT_TIMEOUT * (SystemCoreClock /7/1000);
+  uint32_t count = SAI_DEFAULT_TIMEOUT * (SystemCoreClock /7/1000);
   HAL_StatusTypeDef status = HAL_OK;
 
   /* Disable the SAI instance */

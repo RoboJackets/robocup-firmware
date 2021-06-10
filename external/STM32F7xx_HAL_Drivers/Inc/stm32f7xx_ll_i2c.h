@@ -596,7 +596,7 @@ __STATIC_INLINE uint32_t LL_I2C_IsEnabledDMAReq_RX(I2C_TypeDef *I2Cx)
   */
 __STATIC_INLINE uint32_t LL_I2C_DMA_GetRegAddr(I2C_TypeDef *I2Cx, uint32_t Direction)
 {
-  register uint32_t data_reg_addr = 0U;
+  uint32_t data_reg_addr = 0U;
 
   if (Direction == LL_I2C_DMA_REG_DATA_TRANSMIT)
   {

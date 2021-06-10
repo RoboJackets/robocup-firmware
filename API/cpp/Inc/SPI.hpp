@@ -22,13 +22,13 @@ public:
     // TODO: make more clear is set in steps
     void frequency(int hz);
 
-    void transmit(uint8_t data);
+    void transmit(const uint8_t data);
     void transmit(const std::vector<uint8_t>& data);
-    void transmit(const uint8_t*, size_t size);
+    void transmit(const uint8_t* const, const size_t size);
 
-    uint8_t transmitReceive(uint8_t data);
+    uint8_t transmitReceive(const uint8_t data);
     std::vector<uint8_t> transmitReceive(const std::vector<uint8_t>& data);
-    void transmitReceive(const uint8_t* dataIn, uint8_t* dataOut, size_t size);
+    void transmitReceive(const uint8_t* const data, uint8_t* const dataOut, const size_t size);
 
 private:
     SPI_HandleTypeDef spiHandle = {};

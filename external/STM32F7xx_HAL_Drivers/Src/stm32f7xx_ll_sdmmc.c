@@ -1151,7 +1151,7 @@ static uint32_t SDMMC_GetCmdError(SDMMC_TypeDef *SDMMCx)
 {
   /* 8 is the number of required instructions cycles for the below loop statement.
   The SDMMC_CMDTIMEOUT is expressed in ms */
-  register uint32_t count = SDMMC_CMDTIMEOUT * (SystemCoreClock / 8 /1000);
+  uint32_t count = SDMMC_CMDTIMEOUT * (SystemCoreClock / 8 /1000);
   
   do
   {
@@ -1180,7 +1180,7 @@ static uint32_t SDMMC_GetCmdResp1(SDMMC_TypeDef *SDMMCx, uint8_t SD_CMD, uint32_
   
   /* 8 is the number of required instructions cycles for the below loop statement.
   The Timeout is expressed in ms */
-  register uint32_t count = Timeout * (SystemCoreClock / 8 /1000);
+  uint32_t count = Timeout * (SystemCoreClock / 8 /1000);
   
   do
   {
@@ -1307,7 +1307,7 @@ static uint32_t SDMMC_GetCmdResp2(SDMMC_TypeDef *SDMMCx)
 {
   /* 8 is the number of required instructions cycles for the below loop statement.
   The SDMMC_CMDTIMEOUT is expressed in ms */
-  register uint32_t count = SDMMC_CMDTIMEOUT * (SystemCoreClock / 8 /1000);
+  uint32_t count = SDMMC_CMDTIMEOUT * (SystemCoreClock / 8 /1000);
   
   do
   {
@@ -1349,7 +1349,7 @@ static uint32_t SDMMC_GetCmdResp3(SDMMC_TypeDef *SDMMCx)
 {
   /* 8 is the number of required instructions cycles for the below loop statement.
   The SDMMC_CMDTIMEOUT is expressed in ms */
-  register uint32_t count = SDMMC_CMDTIMEOUT * (SystemCoreClock / 8 /1000);
+  uint32_t count = SDMMC_CMDTIMEOUT * (SystemCoreClock / 8 /1000);
   
   do
   {
@@ -1390,7 +1390,7 @@ static uint32_t SDMMC_GetCmdResp6(SDMMC_TypeDef *SDMMCx, uint8_t SD_CMD, uint16_
 
   /* 8 is the number of required instructions cycles for the below loop statement.
   The SDMMC_CMDTIMEOUT is expressed in ms */
-  register uint32_t count = SDMMC_CMDTIMEOUT * (SystemCoreClock / 8 /1000);
+  uint32_t count = SDMMC_CMDTIMEOUT * (SystemCoreClock / 8 /1000);
   
   do
   {
@@ -1455,7 +1455,7 @@ static uint32_t SDMMC_GetCmdResp7(SDMMC_TypeDef *SDMMCx)
 {
   /* 8 is the number of required instructions cycles for the below loop statement.
   The SDMMC_CMDTIMEOUT is expressed in ms */
-  register uint32_t count = SDMMC_CMDTIMEOUT * (SystemCoreClock / 8 /1000);
+  uint32_t count = SDMMC_CMDTIMEOUT * (SystemCoreClock / 8 /1000);
   
   do
   {
