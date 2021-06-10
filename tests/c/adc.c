@@ -14,7 +14,7 @@ int main(void) {
   while(1) {
     uint32_t adc_val = analogin_read(&handle);
     HAL_Delay(100);
-    printf("%u\r\n", adc_val);
+    printf("%lu\r\n", adc_val);
     digitalout_toggle(leds[0]);
     if (adc_val > 0) {
       digitalout_toggle(leds[1]);
