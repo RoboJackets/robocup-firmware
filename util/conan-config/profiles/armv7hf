@@ -15,7 +15,7 @@ GnuArmNoneToolchainInstaller:version=7.3
 GnuArmNoneToolchainInstaller/0.1.0@robojackets/testing
 
 [env]
-LDFLAGS="--specs=nosys.specs --specs=nano.specs"
+LDFLAGS="--specs=nosys.specs --specs=nano.specs -u _printf_float"
 CFLAGS="$C_MACHINE_OPTIONS"
 CXXFLAGS="$C_MACHINE_OPTIONS -fno-exceptions -fno-rtti"
 ASMFLAGS="$C_MACHINE_OPTIONS"
