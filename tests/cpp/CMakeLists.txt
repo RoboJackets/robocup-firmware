@@ -4,12 +4,11 @@ function(add_test test_file)
     get_filename_component(test_name ${test_file} NAME_WE)
 
     add_executable(${test_name}.elf
-        ../rtos_hooks.c
         ${test_file}
         # ${CMAKE_SOURCE_DIR}/BSP/Src/stm32f7xx_it.c #TODO: Fix
     )
 
-    target_link_libraries(${test_name}.elf STM32F7xx STM32F7_API_CPP FreeRTOS)
+    target_link_libraries(${test_name}.elf mtrain)
 
     add_custom_target(test-${test_name} ALL
         arm-none-eabi-objcopy -Obinary "${test_name}.elf" "${test_name}.bin"

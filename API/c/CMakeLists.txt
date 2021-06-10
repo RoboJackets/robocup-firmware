@@ -1,5 +1,3 @@
-project(STM32F7_API_C_lib LANGUAGES C)
-
 aux_source_directory(Src/ API_C_SRC)
 
 add_library(STM32F7_API_C

@@ -1,5 +1,3 @@
-project(STM32F7xx_HAL LANGUAGES C)
-
 add_subdirectory(CMSIS/DSP_Lib)
 add_subdirectory(middleware/FreeRTOS)
 
@@ -18,7 +16,7 @@ target_include_directories(STM32F7xx_HAL PUBLIC
 
 # Include HAL configuration from BSP
 target_compile_definitions(STM32F7xx_HAL PUBLIC USE_HAL_DRIVER)
-target_include_directories(STM32F7xx_HAL PUBLIC ${CMAKE_SOURCE_DIR}/BSP/config/hal)
+target_include_directories(STM32F7xx_HAL PUBLIC ${PROJECT_SOURCE_DIR}/BSP/config/hal)
 
 target_link_libraries(STM32F7xx_HAL PUBLIC DSP)
 

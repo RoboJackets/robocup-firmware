@@ -1,5 +1,3 @@
-project(STM32F7xx_lib LANGUAGES C ASM)
-
 add_library(STM32F7xx
     startup.s
     Src/bsp.c
@@ -8,12 +6,14 @@ add_library(STM32F7xx
     Src/stm32f7xx_hal_msp.c
     Src/usbd_cdc_interface.c
     Src/qspi.c
+    Src/rtos_hooks.c
 )
 
 target_include_directories(STM32F7xx PUBLIC
     Inc
 )
 
-set_target_properties(STM32F7xx PROPERTIES LINK_DEPENDS "${CMAKE_SOURCE_DIR}/BSP/flash.ld")
+set_target_properties(STM32F7xx PROPERTIES LINK_DEPENDS "${PROJECT_SOURCE_DIR}/BSP/flash.ld")
 
-target_link_libraries(STM32F7xx PUBLIC DSP STM32F7xx_HAL STM32_USB_Device)
+target_link_libraries(STM32F7xx PUBLIC DSP STM32F7xx_HAL STM32_USB_Device FreeRTOS)
+# target_link_libraries(STM32F7xx PUBLIC DSP STM32F7xx_HAL STM32_USB_Device)

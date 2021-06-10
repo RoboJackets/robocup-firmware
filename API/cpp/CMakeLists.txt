@@ -1,5 +1,3 @@
-project(STM32F7_API_CPP_lib LANGUAGES CXX)
-
 aux_source_directory(Src/ API_CPP_SRC)
 aux_source_directory(../c/Src/ API_C_SRC)
 
