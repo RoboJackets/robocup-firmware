@@ -36,6 +36,10 @@ do
     esac
 done
 
+echo "-- Updating submodules"
+git submodule sync
+git submodule update --init --recursive
+
 # Become root
 if [ $UID -ne 0 ]; then
 	echo "-- Becoming root"
@@ -63,15 +67,6 @@ apt-get install $ARGS $PACKAGES
 
 # install python3 requirements
 pip3 install -r $BASE/util/requirements3.txt
-
-echo "-- Updating submodules"
-git submodule sync
-git submodule update --init --recursive
-
-SETUP_USER="$SUDO_USER"
-if [ -z "$SETUP_USER" ]; then
-    SETUP_USER="$(whoami)"
-fi
 
 echo "If you are using WSL, please install JLink.exe using the following link: https://www.segger.com/downloads/jlink/JLink_Windows.exe"
 echo "If you are using an Ubuntu VM, please install JLinkExe using the following link: https://www.segger.com/downloads/jlink/JLink_Linux_x86_64.deb"
