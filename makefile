@@ -1,4 +1,4 @@
-.PHONY : all flash kicker kicker-test configure control docs clean $(ROBOT_TESTS:%=test-%-upload)
+.PHONY : all flash kicker kicker-test control docs clean $(ROBOT_TESTS:%=test-%-upload)
 
 CURRENT_DIR=$(shell pwd)
 
@@ -25,7 +25,7 @@ mkdir -p build && cd build && \
 cmake -DCMAKE_TOOLCHAIN_FILE=../atmega_toolchain.cmake .. && make kicker-test && cd .. && \
 python3 convert.py build/bin/kicker-test.nib ../kicker/build/bin/kicker_bin.h KICKER_BYTES
 
-ROBOT_TESTS = rtos icm-42605-angle
+ROBOT_TESTS = rtos icm-42605-anglem
 
 control: kicker
 	cd control && \
