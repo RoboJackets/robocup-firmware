@@ -10,34 +10,18 @@ add_subdirectory(mtrain)
 add_subdirectory(external)
 
 add_library(control-lib
-    src/robocup/radio/RadioLink.cpp
-    src/robocup/modules/BatteryModule.cpp
-    src/robocup/modules/FPGAModule.cpp
-    src/robocup/modules/IMUModule.cpp
-    src/robocup/modules/KickerModule.cpp
-    src/robocup/modules/LEDModule.cpp
-    src/robocup/modules/MotionControlModule.cpp
-    src/robocup/modules/RadioModule.cpp
-    src/robocup/modules/RotaryDialModule.cpp
-    src/robocup/motion-control/DribblerController.cpp
-    src/robocup/motion-control/RobotController.cpp
-    src/robocup/motion-control/RobotEstimator.cpp
-    src/drivers/AVR910.cpp
-    src/drivers/Battery.cpp
-    src/drivers/FPGA.cpp
-    src/drivers/I2Cdev.cpp
-    src/drivers/ISM43340.cpp
-    src/drivers/KickerBoard.cpp
-    src/drivers/MCP23017.cpp
-    src/drivers/MPU6050.cpp
+    src
+    src/robocup
+    src/drivers
 )
 
 ## Shouldnt need explicit inclusion since mtrain dev relies on these
 target_include_directories(control-lib PUBLIC
     include
     include/robocup
+    include/drivers
     # needs kicker commands
-    ${CMAKE_CURRENT_LIST_DIR}/../kicker/include
+    ${CMAKE_CURRENT_LIST_DIR}/../kicker/
     # needs kicker final binary for flashing
     ${CMAKE_CURRENT_LIST_DIR}/../kicker/build/bin
     # needs fpga final binary for flashing

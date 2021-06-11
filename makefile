@@ -17,13 +17,13 @@ kicker:
 	cd kicker && \
 mkdir -p build && cd build && \
 cmake -DCMAKE_TOOLCHAIN_FILE=../atmega_toolchain.cmake .. && make && cd .. && \
-python3 convert.py build/bin/kicker.nib ../robot/lib/Inc/device-bins/kicker_bin.h KICKER_BYTES
+python3 convert.py build/bin/kicker.nib ../kicker/build/bin/kicker_bin.h KICKER_BYTES
 
 kicker-test:
 	cd kicker && \
 mkdir -p build && cd build && \
 cmake -DCMAKE_TOOLCHAIN_FILE=../atmega_toolchain.cmake .. && make kicker-test && cd .. && \
-python3 convert.py build/bin/kicker-test.nib ../robot/lib/Inc/device-bins/kicker_bin.h KICKER_BYTES
+python3 convert.py build/bin/kicker-test.nib ../kicker/build/bin/kicker_bin.h KICKER_BYTES
 
 ROBOT_TESTS = rtos icm-42605-angle
 
@@ -40,11 +40,6 @@ $(ROBOT_TESTS:%=%): configure
 # 	cd fpga && \
 # mkdir -p build && cd build && \
 # cmake  .. && make -j$(nproc)
-
-kicker:
-	cd kicker && \
-mkdir -p build && cd build && \
-cmake -DCONVERT_SCRIPT=${CONVERT_SCRIPT} .. && make -j$(nproc)
 
 docs:
 	cd doc && doxygen Doxyfile
