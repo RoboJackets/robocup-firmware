@@ -2,3 +2,4 @@ cmake
 python3
 avr-gcc
 Eigen
+gcc-arm-none-eabi
