@@ -9,9 +9,9 @@ mtrain:
 	mkdir -p build && cd build && \
 cmake .. && make -j$(nproc)
 
-$(C_FIRMWARE_TESTS:%=upload-%-c): tests
+$(C_FIRMWARE_TESTS:%=%-c): tests
 	cd build; make $(@F) -j$(nproc)
-$(CPP_FIRMWARE_TESTS:%=upload-%): tests
+$(CPP_FIRMWARE_TESTS:%=%): tests
 	cd build; make $(@F) -j$(nproc)
 
 clean:
