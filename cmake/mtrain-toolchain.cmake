@@ -26,6 +26,10 @@ set( CMAKE_RUNTIME_OUTPUT_DIRECTORY  "${CMAKE_BINARY_DIR}/bin" CACHE PATH "")
 set( CMAKE_LIBRARY_OUTPUT_DIRECTORY  "${CMAKE_BINARY_DIR}/lib" CACHE PATH "")
 set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY  "${CMAKE_BINARY_DIR}/lib" CACHE PATH "")
 
+set(ARM_PREFIX                    arm-none-eabi-gcc)
+find_program(CMAKE_C_COMPILER     ${ARM_PREFIX}-gcc)
+find_program(CMAKE_CXX_COMPILER   ${ARM_PREFIX}-g++)
+
 set(C_MACHINE_OPTIONS "-mthumb -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard" CACHE STRING "")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${C_MACHINE_OPTIONS}" CACHE STRING "")
 # TODO Check if we should be using no-rtti

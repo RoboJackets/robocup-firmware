@@ -61,33 +61,9 @@ PACKAGES="$(sed 's/#.*//;/^$/d' $BASE/util/ubuntu-packages.txt)"
 # install all of the packages listed in required_packages.txt
 apt-get install $ARGS $PACKAGES
 
-echo "-- Updating submodules"
-git submodule sync
-git submodule update --init --recursive
-
 # install python3 requirements
 pip3 install -r $BASE/util/requirements3.txt
 
-if [ ! $YES ] ; then
-    # ask for permission to install conan config
-    echo "About to install RJ Conan config profile. Needed to compile but will overwrite pre-existing conan remotes"
-    read -r -p "Is this okay? [y/N] " response
-    case "$response" in
-    [yY][eE][sS]|[yY])
-            ;;
-    *)
-            echo "Exiting without configuring Conan"
-            echo "-- exit"
-            exit 1
-            ;;
-    esac
-fi
-
-SETUP_USER="$SUDO_USER"
-if [ -z "$SETUP_USER" ]; then
-    SETUP_USER="$(whoami)"
-fi
-
-# TODO Should be changed to master one it has these changes
-su $SETUP_USER -c 'conan config install --type git -sf util/conan-config/ https://github.com/RoboJackets/mtrain-firmware.git
-'
+echo "-- Updating submodules"
+git submodule sync
+git submodule update --init --recursive
