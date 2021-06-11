@@ -1,24 +1,11 @@
-<<<<<<< HEAD
-.PHONY : all control kicker fpga docs clean
+.PHONY : all flash kicker kicker-test configure control docs clean $(ROBOT_TESTS:%=test-%-upload)
 
 CURRENT_DIR=$(shell pwd)
 
 CONVERT_SCRIPT="$(CURRENT_DIR)/convert.py"
 FLASH_COPY_SCRIPT="$(CURRENT_DIR)/util/flash-mtrain.py"
 
-all: control
-
-control-upload: control
-
-# control: fpga kicker
-control: kicker
-	cd control && \
-mkdir -p build && cd build && \
-cmake -DFLASH_COPY_SCRIPT=${FLASH_COPY_SCRIPT} .. && make -j$(nproc)
-=======
-.PHONY : all flash kicker kicker-test configure robot docs $(ROBOT_TESTS:%=test-%-upload)
-
-all: robot flash
+all: control flash
 
 flash:
 	./util/flash-mtrain
@@ -38,23 +25,16 @@ mkdir -p build && cd build && \
 cmake -DCMAKE_TOOLCHAIN_FILE=../atmega_toolchain.cmake .. && make kicker-test && cd .. && \
 python3 convert.py build/bin/kicker-test.nib ../robot/lib/Inc/device-bins/kicker_bin.h KICKER_BYTES
 
-# Define BUILDTYPE as Release if not already set for this target and subtargets
-robot/build/conaninfo.txt : BUILDTYPE ?= "Release"
-robot/build/conaninfo.txt : robot/conanfile.py
-	cd robot && conan install . -if build -pr armv7hf -r robojackets -s build_type=$(BUILDTYPE) --build missing
-
-configure : robot/build/conaninfo.txt
-	cd robot && conan build . -bf build -c
-
 ROBOT_TESTS = rtos icm-42605-angle
 
-robot: robot/build/conaninfo.txt
-	cd robot && conan build . -bf build
+control: kicker
+	cd control && \
+mkdir -p build && cd build && \
+cmake -DFLASH_COPY_SCRIPT=${FLASH_COPY_SCRIPT} .. && make -j$(nproc)
 
 $(ROBOT_TESTS:%=%): configure
 	cd robot/build; make $(@F)
 	make flash-test
->>>>>>> a441d5820ed2613e795a1a3dc001243fa67a98b5
 
 # fpga:
 # 	cd fpga && \
