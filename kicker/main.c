@@ -24,6 +24,9 @@
 #define PRE_KICK_SAFETY_MARGIN_MS 5
 #define POST_KICK_SAFETY_MARGIN_MS 5
 
+#define BREAKBEAM_LOW 64
+#define BREAKBEAM_HIGH 200
+
 #define NO_COMMAND 0
 
 // number of steps of resolution we want per millisecond
@@ -125,8 +128,9 @@ void kick(uint8_t strength, bool is_chip) {
 
 void init();
 
-/* Voltage Function */
-uint8_t get_voltage() {
+
+/* ADC Function */
+uint8_t get_adc() {
   // Start conversation by writing to start bit
   ADCSRA |= _BV(ADSC);
 
@@ -136,6 +140,20 @@ uint8_t get_voltage() {
 
   // ADHC will range from 0 to 255 corresponding to 0 through VCC
   return (ADCH << 1);
+}
+
+/* Voltage Function */
+uint8_t get_voltage() {
+  ADMUX |= _BV(ADLAR) | V_MONITOR_PIN; // connect PA6 (V_MONITOR_PIN) to ADC
+
+  return get_adc();
+}
+
+/* Breakbeam Function */
+uint8_t get_breakbeam() {
+  ADMUX |= _BV(ADLAR) | BALL_SENSE_RX; // connect PA0 (BALL_SENSE_RX) to ADC
+
+  return get_adc();
 }
 
 void main() {
@@ -343,7 +361,7 @@ void init() {
   ///////////////////////////////////////////////////////////////////////////
 
   // Set low bits corresponding to pin we read from
-  ADMUX |= _BV(ADLAR) | 0x06; // connect PA6 (V_MONITOR_PIN) to ADC
+  ADMUX |= _BV(ADLAR) | V_MONITOR_PIN; // connect PA6 (V_MONITOR_PIN) to ADC
 
   // ensure ADC isn't shut off
   // PRR &= ~_BV(PRADC);
