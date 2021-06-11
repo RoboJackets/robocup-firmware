@@ -24,12 +24,8 @@ brew install $BASE/util/clang-format@3.6.rb
 brew link clang-format@3.6 --force
 
 echo "-- Installing python packages"
-pip3 install stylize
-pip3 install conan
+pip3 install -r $BASE/util/requirements3.txt
 
 echo "-- Updating submodules"
 git submodule sync
 git submodule update --init --recursive
-
-echo "-- Setting up conan config"
-conan config install --type git -sf util/conan-config/ https://github.com/RoboJackets/mtrain-firmware.git
