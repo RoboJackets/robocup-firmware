@@ -32,7 +32,7 @@ public:
     /**
      * Updates the controller with the latest input and calculates
      * the correct wheel velocities to reach this target
-     * 
+     *
      * @param pv Current state (XYW vel in m/s or rad/s)
      * @param sp Current target (XYW vel in m/s or rad/s)
      * @param output Motor targets (rad/s)
@@ -44,86 +44,23 @@ public:
     /**
      * Updates the wheels such that they try to follow the target
      * Outputs the correct motor commands to do this
-     * 
+     *
      * @param pv Current state (W1-4 in rad/s)
      * @param sp Current target (W1-4 in rad/s)
      * @param output Motor duty cycles in % max (-1 to 1)
      */
     void calculateWheel(Eigen::Matrix<float, numWheels, 1> pv,
-                         Eigen::Matrix<float, numWheels, 1> sp,
-                         Eigen::Matrix<float, numWheels, 1>& outputs);
+                        Eigen::Matrix<float, numWheels, 1> sp,
+                        Eigen::Matrix<float, numWheels, 1>& outputs);
 
 private:
     /**
-     * Limits the difference between the previous target and the new target
-     * such that the acceleration limits below are never broken
-     */
-    bool limitBodyAccel(const Eigen::Matrix<float, numStates, 1> finalTarget,
-                        Eigen::Matrix<float, numStates, 1>& dampened);
-
-    bool limitWheelAccel(const Eigen::Matrix<float, numWheels, 1> finalTarget,
-                        Eigen::Matrix<float, numWheels, 1>& dampened);
-
-    /**
-     * Vector of proportional constants for body velocity PID control
-     *
-     * Weighting of current error terms
+     * Body velocity control gains (1/s, 1/s, 1/s)
      */
     Eigen::Matrix<float, numStates, 1> BodyKp;
-
-    /**
-     * Vector of integral constants for body velocity PID control
-     *
-     * Weighting of total error terms (integral)
-     */
-    Eigen::Matrix<float, numStates, 1> BodyKi;
-
-    Eigen::Matrix<float, numStates, 1> BodyErrorSum;
-
-    /**
-      * Vector of limits for integral constants of body velocity PID control
-      *
-      * Thresholds to prevent integral term from blowing up (e.g. if robot is stuck)
-      */
-    Eigen::Matrix<float, numStates, 1> BodyILimit;
-
-    bool BodyUseILimit;
-    bool BodyInputLimited;
-    bool BodyOutputLimited;
-
-    Eigen::Matrix<float, numStates, 1> BodyPrevTarget;
-
-    /**
-     * Vector of proportional constants for wheel velocity PID control
-     *
-     * Weighting of current error terms
-     */
-    Eigen::Matrix<float, numWheels, 1> WheelKp;
-
-    Eigen::Matrix<float, numWheels, 1> WheelPrevTarget;
 
     /**
      * Interval of control calculations (seconds)
      */
     float dt;
-
-    /**
-     * Max wheel acceleration (rad/s^2)
-     */
-    static constexpr float maxWheelAccel = 160;
-
-    /**
-     * Max foward acceleration (m/s^2)
-     */
-    static constexpr float maxForwardAccel = 8;
-
-    /**
-     * Max side acceleration (m/s^2)
-     */
-    static constexpr float maxSideAccel = 8;
-
-    /**
-     * Max angular acceleration (rad/s^2)
-     */
-    static constexpr float maxAngularAccel = 40.0;
 };

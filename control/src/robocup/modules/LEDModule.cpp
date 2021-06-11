@@ -1,6 +1,10 @@
 #include "modules/LEDModule.hpp"
 #include "iodefs.h"
 
+bool operator==(const Error& e1, const Error& e2) {
+    return e1.led0 == e2.led0 && e1.led1 == e2.led1 && e1.led2 == e2.led2;
+}
+
 LEDModule::LEDModule(LockedStruct<MCP23017>& ioExpander,
                      LockedStruct<SPI>& sharedSPI,
                      LockedStruct<BatteryVoltage>& batteryVoltage,
@@ -163,46 +167,27 @@ void LEDModule::setColor(uint32_t led0, uint32_t led1, uint32_t led2) {
     // 0 - 31
     uint8_t brightness = 2 | 0xE0;
 
-    std::vector<uint8_t> data;
-
-    data.push_back(0x00);
-    data.push_back(0x00);
-    data.push_back(0x00);
-    data.push_back(0x00);
-
-    // LEDs values are converted from RGB to BGR
-    data.push_back(brightness);
-    data.push_back((led0 >> 0) & 0xFF);
-    data.push_back((led0 >> 8) & 0xFF);
-    data.push_back((led0 >> 16) & 0xFF);
-    
-    data.push_back(brightness);
-    data.push_back((led1 >> 0) & 0xFF);
-    data.push_back((led1 >> 8) & 0xFF);
-    data.push_back((led1 >> 16) & 0xFF);
-
-    data.push_back(brightness);
-    data.push_back((led2 >> 0) & 0xFF);
-    data.push_back((led2 >> 8) & 0xFF);
-    data.push_back((led2 >> 16) & 0xFF);
-    
-    data.push_back(0xFF);
-    data.push_back(0xFF);
-    data.push_back(0xFF);
-    data.push_back(0xFF);
-
-    dotStarNCS.write(false);
-    dotStarSPI.lock()->transmit(data);
-    dotStarNCS.write(true);
+    std::vector<uint8_t> data = {
+        0x00, 0x00, 0x00, 0x00,
+        brightness, (led0 >> 0) & 0xFF, (led0 >> 8) & 0xFF, (led0 >> 16) & 0xFF,
+        brightness, (led1 >> 0) & 0xFF, (led1 >> 8) & 0xFF, (led1 >> 16) & 0xFF,
+        brightness, (led2 >> 0) & 0xFF, (led2 >> 8) & 0xFF, (led2 >> 16) & 0xFF,
+        0xFF, 0xFF, 0xFF, 0xFF
+    };
+    {
+        auto dotStarSPILock = dotStarSPI.lock();
+        dotStarSPILock->frequency(200'000);
+        dotStarNCS.write(false);
+        dotStarSPILock->transmitReceive(data);
+        dotStarNCS.write(true);
+    }
 }
 
 void LEDModule::displayErrors() {
     // If there are no errors, then there is no point in displaying anything
-    if (std::none_of(errToggles.begin(), errToggles.end(), [](bool b){return b;})) {
+    if (std::none_of(errToggles.begin(), errToggles.end(), [](bool b) { return b; })) {
         setColor(0x000000, 0x000000, 0x000000);
-        return;
-    }
-    if (lightsOn && framesOnCounter >= framesOn){
+    } else if (lightsOn && framesOnCounter >= framesOn){
         // If error lights have been on long enough, switch them off
         framesOnCounter = 0;
         lightsOn = false;
@@ -228,10 +213,10 @@ void LEDModule::displayErrors() {
 }
 
 void LEDModule::setError(const Error e, bool toggle) {
-    const Error *error = std::find_if(ERR_LIST.begin(), ERR_LIST.end(), [&](Error err) {
-        return err.led0 == e.led0 &&
-               err.led1 == e.led1 &&
-               err.led2 == e.led2;
-    });
-    errToggles.at(std::distance(ERR_LIST.begin(), error)) = toggle;
+    const Error *error = std::find(ERR_LIST.begin(), ERR_LIST.end(), e);
+    if (error == ERR_LIST.end()) {
+        printf("[ERROR] Invalid error code\r\n");
+    } else {
+        errToggles.at(std::distance(ERR_LIST.begin(), error)) = toggle;
+    }
 }

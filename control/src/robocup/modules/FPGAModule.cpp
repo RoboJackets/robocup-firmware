@@ -81,7 +81,6 @@ void FPGAModule::entry() {
                     dutyCycles.at(i) = -fpga.MAX_DUTY_CYCLE;
                 }
             }
-            dutyCycles.at(4) = motorCommandLock->dribbler;
         }
     }
 
@@ -114,28 +113,15 @@ void FPGAModule::entry() {
      */
     float dt = static_cast<float>(encDeltas[4]) * (1 / 18.432e6) * 2 * 128;
 
-    // Force dt to be nonzero
-    // so nan's don't filter up
-    // If it's too small, just assume dt is massive
-    // so theres no recordered encoder outut since it's
-    // probably junk data
-    if (dt < 0.0001) {
-        dt = 1;
-    }
-
     {
         auto motorFeedbackLock = motorFeedback.lock();
+
         // Convert encoders to rad/sec from enc ticks since last reading
         for (int i = 0; i < 4; i++) {
             // (rad / s) = (enc) * (rev / enc) * (rad / rev) * (1 / sec)
             motorFeedbackLock->encoders[i] =
-                    static_cast<float>(encDeltas[i]) * (1 / static_cast<float>(ENC_TICK_PER_REV)) * (2 * M_PI / 1) *
-                    (1 / dt);
-        }
-
-        // Convert from adc lsb to amp
-        for (int i = 0; i < 4; i++) {
-            motorFeedbackLock->currents[i] = 0.0f;
+                    static_cast<float>(encDeltas[i]) / ENC_TICK_PER_REV
+                    * 2 * M_PI * kFrequency;
         }
 
         motorFeedbackLock->isValid = true;
