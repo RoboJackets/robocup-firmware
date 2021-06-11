@@ -11,7 +11,6 @@ add_subdirectory(external)
 
 file(GLOB_RECURSE SRC "src/*.cpp")
 
-
 add_library(control-lib
     ${SRC}
 )
@@ -49,3 +48,5 @@ add_custom_target(control ALL
     DEPENDS control.elf
     COMMENT "objcopying to make binary executable for control"
 )
+
+add_subdirectory(test)
