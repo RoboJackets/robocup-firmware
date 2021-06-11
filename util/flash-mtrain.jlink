@@ -1,3 +1,2 @@
 r
-loadfile ./robot/build/bin/control.bin 0x08000000
-
+loadfile ./control/build/bin/control.bin 0x08000000

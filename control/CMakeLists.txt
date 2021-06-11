@@ -9,17 +9,17 @@ project(
 add_subdirectory(mtrain)
 add_subdirectory(external)
 
+file(GLOB_RECURSE SRC "src/*.cpp")
+
+
 add_library(control-lib
-    src
-    src/robocup
-    src/drivers
+    ${SRC}
 )
 
 ## Shouldnt need explicit inclusion since mtrain dev relies on these
 target_include_directories(control-lib PUBLIC
     include
     include/robocup
-    include/drivers
     # needs kicker commands
     ${CMAKE_CURRENT_LIST_DIR}/../kicker/
     # needs kicker final binary for flashing
@@ -49,12 +49,3 @@ add_custom_target(control ALL
     DEPENDS control.elf
     COMMENT "objcopying to make binary executable for control"
 )
-
-add_custom_target(control-upload
-    COMMAND ${FLASH_COPY_SCRIPT} "control.bin"
-    WORKING_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
-    DEPENDS control
-    COMMENT "Copying binary control to MCU"
-)
-
-add_subdirectory(test)

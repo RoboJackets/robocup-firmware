@@ -1,9 +1,8 @@
-.PHONY : all flash kicker kicker-test control docs clean $(ROBOT_TESTS:%=test-%-upload)
+.PHONY : all flash kicker kicker-test control docs clean $(ROBOT_TESTS:%=%)
 
 CURRENT_DIR=$(shell pwd)
 
 CONVERT_SCRIPT="$(CURRENT_DIR)/convert.py"
-FLASH_COPY_SCRIPT="$(CURRENT_DIR)/util/flash-mtrain.py"
 
 all: control flash
 
@@ -16,30 +15,27 @@ flash-test:
 kicker:
 	cd kicker && \
 mkdir -p build && cd build && \
-cmake -DCMAKE_TOOLCHAIN_FILE=../atmega_toolchain.cmake .. && make && cd .. && \
+cmake -DCMAKE_TOOLCHAIN_FILE=../atmega_toolchain.cmake .. && make -j$(nproc) && cd .. && \
 python3 convert.py build/bin/kicker.nib ../kicker/build/bin/kicker_bin.h KICKER_BYTES
 
 kicker-test:
 	cd kicker && \
 mkdir -p build && cd build && \
-cmake -DCMAKE_TOOLCHAIN_FILE=../atmega_toolchain.cmake .. && make kicker-test && cd .. && \
+cmake -DCMAKE_TOOLCHAIN_FILE=../atmega_toolchain.cmake .. && make -j$(nproc) kicker-test && cd .. && \
 python3 convert.py build/bin/kicker-test.nib ../kicker/build/bin/kicker_bin.h KICKER_BYTES
 
-ROBOT_TESTS = rtos icm-42605-anglem
+ROBOT_TESTS = rtos icm-42605-angle
 
 control: kicker
 	cd control && \
 mkdir -p build && cd build && \
-cmake -DFLASH_COPY_SCRIPT=${FLASH_COPY_SCRIPT} .. && make -j$(nproc)
+cmake .. && make -j$(nproc)
 
-$(ROBOT_TESTS:%=%): configure
-	cd robot/build; make $(@F)
+$(ROBOT_TESTS:%=%):
+	cd control && \
+mkdir -p build && cd build && \
+cmake .. && make -j$(nproc) $(@F)
 	make flash-test
-
-# fpga:
-# 	cd fpga && \
-# mkdir -p build && cd build && \
-# cmake  .. && make -j$(nproc)
 
 docs:
 	cd doc && doxygen Doxyfile
