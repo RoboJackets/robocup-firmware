@@ -57,17 +57,17 @@ int main() {
 
 
     // Get initial dial value
-    dial.motorTestEntry();
+    dial.entry();
 
     while (robotIDLock->robotID != 0) {
-        dial.motorTestEntry();
+        dial.entry();
         HAL_Delay(100);
     }
 
     led1 = 1;
 
     while (true) {
-        dial.motorTestEntry();
+        dial.entry();
         printf("RobotID: %d\r\n", robotIDLock->robotID);
 
         float duty = ((robotIDLock->robotID ^ 8) - 8) % 8 / 8.0;
