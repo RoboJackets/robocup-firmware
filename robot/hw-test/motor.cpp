@@ -57,6 +57,7 @@ int main() {
 
 
     // Get initial dial value
+    dial.start();
     dial.entry();
 
     while (robotIDLock->robotID != 0) {
