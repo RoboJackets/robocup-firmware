@@ -52,23 +52,23 @@ int main() {
     //std::shared_ptr<MCP23017> ioExpander = std::make_shared<MCP23017>(sharedI2C, 0x42);
     // ioExpander.config(0x00FF, 0x00FF, 0x00FF);
 
-    RotaryDialModule dial(ioExpander, robotID);
-    FPGAModule fpga(std::move(fpgaKickerSPI), motorCommand, fpgaStatus, motorFeedback);
+    RotarySelector<DigitalIn> dial({p25, p26, p27, p28});
+    FPGA fpga(std::move(fpgaKickerSPI), p31, p14, p13, p15);
 
 
     // Get initial dial value
-    dial.start();
-    dial.entry();
+    //dial.init();
+    dial.read();
 
     while (robotIDLock->robotID != 0) {
-        dial.entry();
+        dial.read();
         HAL_Delay(100);
     }
 
     led1 = 1;
 
     while (true) {
-        dial.entry();
+        dial.read();
         printf("RobotID: %d\r\n", robotIDLock->robotID);
 
         float duty = ((robotIDLock->robotID ^ 8) - 8) % 8 / 8.0;
@@ -79,7 +79,7 @@ int main() {
             motorCommandLock->wheels[i] = duty;
         }
         motorCommandLock->dribbler = abs(duty*127);
-        fpga.entry();
+        fpga.configure();
         HAL_Delay(100);
     }
 }
