@@ -52,22 +52,23 @@ int main() {
     //std::shared_ptr<MCP23017> ioExpander = std::make_shared<MCP23017>(sharedI2C, 0x42);
     // ioExpander.config(0x00FF, 0x00FF, 0x00FF);
 
-    RotaryDialModule dial(ioExpander, robotID);
+    RotarySelector<DigitalIn> dial({p25, p26, p27, p28});
     FPGAModule fpga(std::move(fpgaKickerSPI), motorCommand, fpgaStatus, motorFeedback);
 
 
     // Get initial dial value
-    dial.entry();
+    dial.init();
+    dial.read();
 
     while (robotIDLock->robotID != 0) {
-        dial.entry();
+        dial.read();
         HAL_Delay(100);
     }
 
     led1 = 1;
 
     while (true) {
-        dial.entry();
+        dial.read();
         printf("RobotID: %d\r\n", robotIDLock->robotID);
 
         float duty = ((robotIDLock->robotID ^ 8) - 8) % 8 / 8.0;
