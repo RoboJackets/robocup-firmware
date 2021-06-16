@@ -132,7 +132,7 @@ void MotionControlModule::entry() {
 
         // set motors to real targets
         for (int i = 0; i < 4; i++) {
-            motorCommandLock->wheels[i] = 0 * motorCommands(i, 0);
+            motorCommandLock->wheels[i] = motorCommands(i, 0);
         }
         motorCommandLock->dribbler = dribblerCommand;
     } else {
