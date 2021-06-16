@@ -79,7 +79,9 @@ int main() {
             motorCommandLock->wheels[i] = duty;
         }
         motorCommandLock->dribbler = abs(duty*127);
-        fpga.configure();
+        int16_t duty_cycles[5] = {500, 500, 500, 500, 500};
+        size_t length = 5;
+        fpga.set_duty_cycles(duty_cycles, length);
         HAL_Delay(100);
     }
 }
