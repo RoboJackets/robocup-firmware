@@ -36,7 +36,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${C_MACHINE_OPTIONS}" CACHE STRING "")
 # cpp 17 deprecated register storage specifier and cmsis uses it everywhere
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${C_MACHINE_OPTIONS} -Wno-register -fno-exceptions -fno-rtti" CACHE STRING "")
 set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} ${C_MACHINE_OPTIONS}" CACHE STRING "")
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --specs=nosys.specs --specs=nano.specs -T '${CMAKE_CURRENT_LIST_DIR}/../BSP/flash.ld'" CACHE STRING "")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --specs=nosys.specs --specs=nano.specs -T '${CMAKE_CURRENT_LIST_DIR}/../BSP/flash.ld' -u _printf_float" CACHE STRING "")
 
 # TODO Trim the Duse usb and stm stuff
 add_definitions(-Wall -DSTM32F769xx -DUSE_USB_HS)
