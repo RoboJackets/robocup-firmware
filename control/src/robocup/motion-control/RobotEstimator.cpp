@@ -39,12 +39,21 @@ void RobotEstimator::predict(Eigen::Matrix<float, numInputs, 1> u) {
     x_hat = F*x_hat + B*u;
     P = F*P*F.transpose() + Q;
     static int i = 0;
+#if 0
     if (i++ % 20 == 0) {
         printf("u: %f %f %f %f\r\n", u(0), u(1), u(2), u(3));
     }
+#endif
 }
 
 void RobotEstimator::update(Eigen::Matrix<float, numOutputs, 1> z) {
+    for (int i = 0; i < numStates; i++) {
+        if (!std::isfinite(x_hat(i)) || std::isnan(x_hat(i))) {
+            printf("Warning: xhat had %f\n", x_hat(i));
+            x_hat = Eigen::Matrix<float, numStates, 1>::Zero();
+        }
+    }
+
     // y = z - H*x_hat
     // S = H*P*H' + R
     // K = P*H'*S^-1
@@ -63,7 +72,7 @@ void RobotEstimator::update(Eigen::Matrix<float, numOutputs, 1> z) {
     x_hat += K * y;
 #if 0
     static int i = 0;
-    if (i++ % 20 == 0) {
+    if (i++ % 50 == 0) {
         printf("xhat: %f %f %f\r\n", x_hat(0), x_hat(1), x_hat(2));
         printf("zhat: %f %f %f\r\n", zhat(0), zhat(1), zhat(2), zhat(3), zhat(4));
         printf("z: %f %f %f %f %f\r\n", z(0), z(1), z(2), z(3), z(4));
