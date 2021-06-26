@@ -67,5 +67,13 @@ private:
     /**
      * Interval of control calculations (seconds)
      */
-    float dt;
+    float dt = 0.005;
+
+    constexpr static float kMaxWheelAcceleration = 500.0;
+    constexpr static float kMaxWheelSpeed = 110;
+
+    Eigen::Matrix<float, numStates, 1> max_acceleration_;
+    Eigen::Matrix<float, numStates, 1> last_body_ = Eigen::Matrix<float, numStates, 1>::Zero();
+
+    Eigen::Matrix<float, numWheels, 1> last_wheels_ = Eigen::Matrix<float, numWheels, 1>::Zero();
 };

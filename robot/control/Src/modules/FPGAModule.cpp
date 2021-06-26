@@ -82,6 +82,7 @@ void FPGAModule::entry() {
                 }
             }
         }
+        dutyCycles.at(4) = static_cast<int16_t>(motorCommandLock->dribbler);
     }
 
     // Communicate with FPGA
