@@ -103,8 +103,6 @@ void createModule(GenericModule *module) {
     }
 }
 
-LockedStruct<DebugInfo> debugInfo;
-
 int main() {
     static LockedStruct<I2C> sharedI2C(SHARED_I2C_BUS);
     static std::unique_ptr<SPI> fpgaSPI = std::make_unique<SPI>(FPGA_SPI_BUS, std::nullopt, 16'000'000);
@@ -120,6 +118,7 @@ int main() {
     static LockedStruct<RobotID> robotID{};
     static LockedStruct<KickerCommand> kickerCommand{};
     static LockedStruct<KickerInfo> kickerInfo{};
+    static LockedStruct<DebugInfo> debugInfo{};
 
     static LockedStruct<MCP23017> ioExpander(MCP23017{sharedI2C, 0x42});
 
@@ -144,7 +143,8 @@ int main() {
                              robotID,
                              kickerCommand,
                              motionCommand,
-                             radioError);
+                             radioError,
+                             debugInfo);
     createModule(&radio);
 
     static KickerModule kicker(sharedSPI,
@@ -163,7 +163,8 @@ int main() {
                                       imuData,
                                       motionCommand,
                                       motorFeedback,
-                                      motorCommand);
+                                      motorCommand,
+                                      debugInfo);
     createModule(&motion);
 
     static IMUModule imu(sharedSPI, imuData);

@@ -42,7 +42,8 @@ public:
                         LockedStruct<IMUData>& imuData,
                         LockedStruct<MotionCommand>& motionCommand,
                         LockedStruct<MotorFeedback>& motorFeedback,
-                        LockedStruct<MotorCommand>& motorCommand);
+                        LockedStruct<MotorCommand>& motorCommand,
+                        LockedStruct<DebugInfo>& debugInfo);
 
     /**
      * Code to run when called by RTOS once per system tick (`kperiod`)
@@ -63,6 +64,7 @@ private:
     LockedStruct<MotionCommand>& motionCommand;
     LockedStruct<MotorFeedback>& motorFeedback;
     LockedStruct<MotorCommand>& motorCommand;
+    LockedStruct<DebugInfo>& debugInfo;
 
     DribblerController dribblerController;
     RobotController robotController;

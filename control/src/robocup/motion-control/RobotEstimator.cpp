@@ -2,8 +2,6 @@
 #include "rc-fshare/robot_model.hpp"
 #include "MicroPackets.hpp"
 
-extern DebugInfo debugInfo;
-
 RobotEstimator::RobotEstimator(uint32_t dt_us) {
     const float dt = dt_us/1000000.0;
 
@@ -18,10 +16,7 @@ RobotEstimator::RobotEstimator(uint32_t dt_us) {
          0, 0, 0, 0,
          0, 0, 0, 0;
 
-    //H = [bot2Wheel;
-    //      0, 0, 1]
-    H.block<4, 3>(0, 0) = RobotModel::get().BotToWheel.cast<float>();
-    H.block<1, 3>(4, 0) << 0, 0, 1;
+    H << 17.946877243359655, 31.0849032227006, -2.8663890882986363, -22.58867160982906, 27.89468634088194, -2.8663890882986363, -22.588671609829067, -27.89468634088193, -2.8663890882986363, 17.946877243359655, -31.0849032227006, -2.8663890882986363, 0.0, 0.0, 1.0;
 
     Q.setIdentity();
     Q *= 3.0*processNoise / (dt*dt);
@@ -43,6 +38,10 @@ RobotEstimator::RobotEstimator(uint32_t dt_us) {
 void RobotEstimator::predict(Eigen::Matrix<float, numInputs, 1> u) {
     x_hat = F*x_hat + B*u;
     P = F*P*F.transpose() + Q;
+    static int i = 0;
+    if (i++ % 20 == 0) {
+        printf("u: %f %f %f %f\r\n", u(0), u(1), u(2), u(3));
+    }
 }
 
 void RobotEstimator::update(Eigen::Matrix<float, numOutputs, 1> z) {
@@ -53,19 +52,24 @@ void RobotEstimator::update(Eigen::Matrix<float, numOutputs, 1> z) {
     // P = (I - K*H)*P
     Eigen::Matrix<float, numOutputs, 1> zhat = H*x_hat;
     Eigen::Matrix<float, numOutputs, 1> y = z - zhat;
-    y(0) = y(1) = y(2) = y(3) = 0;
     Eigen::Matrix<float, numStates,  numOutputs> K;
-    z(4) = x_hat(2);
-    K << 1.83624980e-01, -2.29806179e-01, -2.29806179e-01, 1.83624980e-01, -2.13457449e-04,
-         3.07632598e-01, 2.76060529e-01, -2.76060529e-01, -3.07632598e-01, -2.99584147e-18,
-         -6.86033585e-02, -6.02908809e-02, -6.02908809e-02, -6.86033585e-02, 2.38627208e-02;
+    K << 0.0009397509971039829, -0.0011827724277488714, -0.0011827724277488686, 0.0009397509971039868, -0.0011276310514651243, 0.00036444308064997926, 0.00032704060073804455, -0.00032704060073804184, -0.00036444308064998137, -1.1132246847540639e-15, -3.972685526745256e-06, -3.7441398088700513e-06, -3.744139808869744e-06, -3.97268552674491e-06, 0.27013068548630365;
+    for (int i = 0; i < 4; i++) {
+        if (std::abs(z(i)) > 100) {
+            y(i) = 0;
+        }
+    }
 
     x_hat += K * y;
+#if 0
     static int i = 0;
     if (i++ % 20 == 0) {
         printf("xhat: %f %f %f\r\n", x_hat(0), x_hat(1), x_hat(2));
         printf("zhat: %f %f %f\r\n", zhat(0), zhat(1), zhat(2), zhat(3), zhat(4));
+        printf("z: %f %f %f %f %f\r\n", z(0), z(1), z(2), z(3), z(4));
+        printf("\r\n");
     }
+#endif
 }
 
 void RobotEstimator::getState(Eigen::Matrix<float, numStates, 1>& state) {

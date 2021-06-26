@@ -6,17 +6,17 @@
 #include "DigitalOut.hpp"
 #include <algorithm>
 
-extern DebugInfo debugInfo;
-
 MotionControlModule::MotionControlModule(LockedStruct<BatteryVoltage>& batteryVoltage,
                                          LockedStruct<IMUData>& imuData,
                                          LockedStruct<MotionCommand>& motionCommand,
                                          LockedStruct<MotorFeedback>& motorFeedback,
-                                         LockedStruct<MotorCommand>& motorCommand)
+                                         LockedStruct<MotorCommand>& motorCommand,
+                                         LockedStruct<DebugInfo>& debugInfo)
     : GenericModule(kPeriod, "motion", kPriority, 1024),
       batteryVoltage(batteryVoltage), imuData(imuData),
       motionCommand(motionCommand), motorFeedback(motorFeedback),
       motorCommand(motorCommand),
+      debugInfo(debugInfo),
       dribblerController(kPeriod.count()),
       robotController(kPeriod.count() * 1000),
       robotEstimator(kPeriod.count() * 1000) {
@@ -38,6 +38,12 @@ void MotionControlModule::entry() {
     auto motorFeedbackLock = motorFeedback.lock();
     auto imuDataLock = imuData.lock();
     auto batteryVoltageLock = batteryVoltage.lock();
+
+    DebugFrame frame;
+    frame.ticks = xTaskGetTickCount();
+    frame.gyro_z = imuDataLock->omegas[2];
+    frame.accel_x = imuDataLock->accelerations[0];
+    frame.accel_y = imuDataLock->accelerations[1];
 
     // No radio comm in a little while. Return and die.
     if (!motionCommandLock->isValid || !isRecentUpdate(motionCommandLock->lastUpdate)) {
@@ -102,6 +108,10 @@ void MotionControlModule::entry() {
     Eigen::Matrix<float, 3, 1> currentState;
     robotEstimator.getState(currentState);
 
+    for (int i = 0; i < 3; i++) {
+        frame.filtered_velocity[i] = currentState(i);
+    }
+
     // Run controllers
     uint8_t dribblerCommand = 0;
     dribblerController.calculate(motionCommandLock->dribbler, dribblerCommand);
@@ -135,6 +145,19 @@ void MotionControlModule::entry() {
         }
         motorCommandLock->dribbler = 0;
     }
+
+    for (int i = 0; i < 4; i++) {
+        frame.motor_outputs[i] = static_cast<int16_t>(motorCommandLock->wheels[i] * 511);
+        frame.encDeltas[i] = static_cast<int16_t>(currentWheels(i));
+    }
+
+#if 0
+    auto debugInfoLock = debugInfo.lock();
+    if (debugInfoLock->num_debug_frames < debugInfoLock->debug_frames.size()) {
+        debugInfoLock->debug_frames[debugInfoLock->num_debug_frames] = frame;
+        debugInfoLock->num_debug_frames++;
+    }
+#endif
 }
 
 bool MotionControlModule::isRecentUpdate(uint32_t lastUpdateTime) {
