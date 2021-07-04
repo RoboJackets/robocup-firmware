@@ -9,7 +9,7 @@ This document will go through the two modes of operation, standard and debug, an
 Standard mode takes commands from mtrain, acts on those commands, and returns the latest sensor data. This loop acts continuously.
 
  1. A kick command will be sent to the kicker from mtrain over SPI.
- 2. The attiny will respond to this command by filling the global command structure with the given data. This includes kick type, power, and whether it is safe to charge.
+ 2. The atmega will respond to this command by filling the global command structure with the given data. This includes kick type, power, and whether it is safe to charge.
  3. The current voltage on the caps will be read.
  4. If there is still room to charge to a higher voltage and we are safe to charge, we will do so.
  5. If we are given a kick or chip command, we will then execute that kick.
@@ -30,7 +30,7 @@ The chip button forces a chip immediately, discharging the caps through the chip
 
 See `kicker_commands.h`
 
-In the old'en days, aka Spring of 2019 and before, we used to send multiple SPI transactions to the kicker to fully describe out commands. This was very inefficient due to the lag associated with the attiny processing the transition. It was at least 100 ms delay before another transaction can occur.
+In the old'en days, aka Spring of 2019 and before, we used to send multiple SPI transactions to the kicker to fully describe out commands. This was very inefficient due to the lag associated with the atmega processing the transition. It was at least 100 ms delay before another transaction can occur.
 
 This new protocol was built to send the entire packet in a single byte. Each bit represents a different thing.
 
@@ -64,7 +64,7 @@ Note: When acting on the `SPDR` register, never operate on the register (eg `SPD
 
 ## Voltage Reading
 
-The attiny has a built in analog to digital converter. This takes the analog voltage out the physical trace and converts it to a unitless number. This number is 0 - 255 which corresponds to 0V - Vcc on the physical line. Every 1000 iterations, the device reads the adc and saves it into the current global voltage variable. It is every 1000 iterations because there is a short lag time before starting the adc reading and actually getting the result. This lags the global loop causing a potential slowdown. Additionally, it's not that important that it is updated more than every 10 ms anyways.
+The atmega has a built in analog to digital converter. This takes the analog voltage out the physical trace and converts it to a unitless number. This number is 0 - 255 which corresponds to 0V - Vcc on the physical line. Every 1000 iterations, the device reads the adc and saves it into the current global voltage variable. It is every 1000 iterations because there is a short lag time before starting the adc reading and actually getting the result. This lags the global loop causing a potential slowdown. Additionally, it's not that important that it is updated more than every 10 ms anyways.
 
 Note: Based on the current resistor values on the board, the output of the adc very roughly correspond to the voltage of the board in volts. AKA 200 lsb out of the adc is just about 200 V on the high side
 

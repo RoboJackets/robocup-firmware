@@ -1,3 +1,21 @@
+cmake_minimum_required(VERSION 3.14.7)
+
+project(fpga)
+
+# This is the root path to anything Xilinx related
+# set(XILINX_SYSTEM_ROOT "/opt/Xilinx" CACHE PATH "Path to Xilinx ISE tools. Change for non-standard install")
+if(NOT EXISTS XILINX_SYSTEM_ROOT)
+    # If the toolchain isnt installed dont build fpga copy perm binary to build/bin
+
+    execute_process (
+        COMMAND bash -c "mkdir -p ${CMAKE_CURRENT_LIST_DIR}/build/bin && cp ${CMAKE_CURRENT_LIST_DIR}/perm-bin/fpga_bin.h ${CMAKE_CURRENT_LIST_DIR}build/bin/"
+    )
+    return()
+endif()
+
+project(fpga)
+
+
 ###############################################################################
 ################################ LOCAL VARIABLES ##############################
 ###############################################################################
@@ -20,9 +38,7 @@ set(NIB_OUT_FILENAME ${OUTPUT_FILENAME_BASE}.nib)
 set(BIT_OUT_FILENAME ${TOP_LEVEL_NAME}.bit)
 set(UCF_IN_FILENAME  ${TOP_LEVEL_NAME}.ucf)
 
-# This is the root path to anything Xilinx related
-set(XILINX_SYSTEM_ROOT /opt/Xilinx)
-
+set(GIT_EXECUTABLE git)
 
 ###############################################################################
 ########################## FIND PATH TO ISE WEBPACK ###########################
@@ -181,7 +197,7 @@ execute_process(
     OUTPUT_VARIABLE GIT_HASH
     OUTPUT_STRIP_TRAILING_WHITESPACE
 )
-string(SUBSTRING ${GIT_HASH} 0 8 GIT_HASH_8)
+string( SUBSTRING ${GIT_HASH} 0 8 GIT_HASH_8)
 
 execute_process(
     COMMAND ${GIT_EXECUTABLE} diff --quiet

@@ -7,18 +7,17 @@ We flash code to this address using the J-Link in-order to be executed.
 
 ## Installing J-Link Software
 The J-Link software can be downloaded at:
-https://www.segger.com/downloads/jlink/#J-LinkSoftwareAndDocumentationPack
-For Ubuntu you want to download the file labeled as 'J-Link Software and Documentation pack for Linux, DEB installer, 64-bit'
+https://www.segger.com/downloads/jlink/JLink_Linux_x86_64.deb
 
 Provided that file was stored in your downloads folder you can use the below to install the package:
 ```
-sudo dpkg -i ~/Downloads/JLink_Linux_V656a_x86_64.deb
+sudo dpkg -i ~/Downloads/JLink_Linux_VXXXX_x86_64.deb
 sudo apt install -f
 ```
 
 NOTE The name of the exact file may be slightly different depending on what version you downloaded so copying and pasting the above may not work.
 
-After installing the J-Link software package please restart your terminal emulator and try to tab complete and open the program JLinkExe. If you are successful you will be greeted by the following:
+After installing the J-Link software package please restart your terminal emulator and try to tab complete and open the program JLinkExe. If you are successful you will be greeted by the following or newer:
 
 ```
 SEGGER J-Link Commander V6.56 (Compiled Nov 22 2019 17:14:15)
@@ -47,7 +46,7 @@ make all
 
 After building navigate to the top level of the robojackets firmware repo. Then navigate to the build location of the robocup binaries:
 ```
-cd robot/build/bin/
+cd control/build/bin/
 ```
 
 Run J-LinkExe
@@ -81,9 +80,10 @@ All of the above assumes we are running the program on the same computer we are 
 ```
 JLinkGDBServer -select USB -device STM32F769NI -endian little -if JTAG -speed auto -noLocalhostOnly
 ```
-3. In another terminal you will need to run the version provided with the GnuArmNoneToolchainInstaller package that was install as part of the firmware setup script, with the file to load being the control.elf we built. When run from the bin folder in ./robot/build/ this would look like:
+3. In another terminal you will need to run the version provided with the GnuArmNoneToolchainInstaller package that was install as part of the firmware setup script, with the file to load being the control.elf we built. When run from the bin folder in ./control/build/ this would look like:
 ```
-~/.conan/data/GnuArmNoneToolchainInstaller/0.1.0/robojackets/testing/build/<user-specific-hash>/7.3_Linux/gcc-arm-none-eabi-7-2018-q2-update/bin/arm-none-eabi-gdb ./control.elf
+arm-none-eabi-gdb ./control.elf
+
 ```
 Replacing the <user-specific-hash> section with whatever it is your on your system. It may be easier to navigate to this directory on your system tab completing whatever you dont know from this since there should only be one folder and the use pwd and copy the path.
 
