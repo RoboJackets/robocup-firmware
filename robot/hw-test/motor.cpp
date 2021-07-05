@@ -24,29 +24,29 @@ DebugInfo debugInfo;
 
 int main() {
 
-    LockedStruct<MotorCommand> motorCommand {} ;
-    auto motorCommandLock = motorCommand.lock();
-    motorCommandLock->isValid = false;
-    motorCommandLock->lastUpdate = 0;
+    MotorCommand motorCommand;
+    //auto motorCommandLock = motorCommand.lock();
+    motorCommand.isValid = false;
+    motorCommand.lastUpdate = 0;
     for (int i = 0; i < 4; i++) {
-        motorCommandLock->wheels[i] = 0;
+        motorCommand.wheels[i] = 0;
     }
-    motorCommandLock->dribbler = 0;
+    motorCommand.dribbler = 0;
 
-    LockedStruct<FPGAStatus> fpgaStatus {};
-    auto fpgaStatusLock = fpgaStatus.lock();
-    LockedStruct<MotorFeedback> motorFeedback {};
-    auto motorFeedbackLock = motorFeedback.lock();
-    LockedStruct<RobotID> robotID;
-    auto robotIDLock = robotID.lock();
+    FPGAStatus fpgaStatus;
+    //auto fpgaStatusLock = fpgaStatus.lock();
+    MotorFeedback motorFeedback;
+    //auto motorFeedbackLock = motorFeedback.lock();
+    RobotID robotID;
+    //auto robotIDLock = robotID.lock();
     //LockedStruct<RobotID>& robotIDPtr = robotID;
 
     DigitalOut led1(LED1);
     DigitalOut led2(LED2);
 
-    LockedStruct<I2C> sharedI2C(SHARED_I2C_BUS);
+    //LockedStruct<I2C> sharedI2C(SHARED_I2C_BUS);
     std::unique_ptr<SPI> fpgaKickerSPI = std::make_unique<SPI>(FPGA_SPI_BUS, std::nullopt, 16'000'000);
-    LockedStruct<MCP23017> ioExpander(MCP23017{sharedI2C, 0x42});
+    //LockedStruct<MCP23017> ioExpander(MCP23017{sharedI2C, 0x42});
     //std::shared_ptr<I2C> sharedI2C = std::make_shared<I2C>(SHARED_I2C_BUS);
     //std::shared_ptr<MCP23017>
     //std::shared_ptr<MCP23017> ioExpander = std::make_shared<MCP23017>(sharedI2C, 0x42);
@@ -57,10 +57,10 @@ int main() {
 
 
     // Get initial dial value
-    //dial.init();
+    dial.init();
     dial.read();
 
-    while (robotIDLock->robotID != 0) {
+    while (robotID.robotID != 0) {
         dial.read();
         HAL_Delay(100);
     }
@@ -69,16 +69,16 @@ int main() {
 
     while (true) {
         dial.read();
-        printf("RobotID: %d\r\n", robotIDLock->robotID);
+        printf("RobotID: %d\r\n", robotID.robotID);
 
-        float duty = ((robotIDLock->robotID ^ 8) - 8) % 8 / 8.0;
+        float duty = ((robotID.robotID ^ 8) - 8) % 8 / 8.0;
 
-        motorCommandLock->isValid = true;
-        motorCommandLock->lastUpdate = HAL_GetTick();
+        motorCommand.isValid = true;
+        motorCommand.lastUpdate = HAL_GetTick();
         for (int i = 0; i < 4; i++) {
-            motorCommandLock->wheels[i] = duty;
+            motorCommand.wheels[i] = duty;
         }
-        motorCommandLock->dribbler = abs(duty*127);
+        motorCommand.dribbler = abs(duty*127);
         int16_t duty_cycles[5] = {500, 500, 500, 500, 500};
         size_t length = 5;
         fpga.set_duty_cycles(duty_cycles, length);
