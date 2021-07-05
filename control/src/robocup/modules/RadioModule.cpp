@@ -70,22 +70,22 @@ void RadioModule::entry() {
         link.send(battery, fpga, kicker, id, debug);
     }
 
+    MotionCommand received_motion_command;
+    KickerCommand received_kicker_command;
+
+    // Try read
+    // Clear buffer of old packets such that we can get the lastest packet
+    // If you don't do this there is a significant lag of 300ms or more
+    while (link.receive(received_kicker_command, received_motion_command)) {}
+
+    if (received_motion_command.isValid){
+        motionCommand.lock().value() = received_motion_command;
+    }
+    if (received_kicker_command.isValid){
+        kickerCommand.lock().value() = received_kicker_command;
+    }
     {
-        auto motionCommandLock = motionCommand.lock();
         auto radioErrorLock = radioError.lock();
-        auto kickerCommandLock = kickerCommand.lock();
-
-        // Try read
-        // Clear buffer of old packets such that we can get the lastest packet
-        // If you don't do this there is a significant lag of 300ms or more
-        while (link.receive(kickerCommandLock.value(), motionCommandLock.value())) {
-            kickerCommandLock->isValid = true;
-            kickerCommandLock->lastUpdate = HAL_GetTick();
-
-            motionCommandLock->isValid = true;
-            motionCommandLock->lastUpdate = HAL_GetTick();
-        }
-
         radioErrorLock->isValid = true;
         radioErrorLock->lastUpdate = HAL_GetTick();
         radioErrorLock->hasConnectionError = link.isRadioConnected();
