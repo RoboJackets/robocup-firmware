@@ -7,3 +7,6 @@
 [submodule "control/mtrain"]
 	path = control/mtrain
 	url = https://github.com/RoboJackets/mtrain-firmware.git
+[submodule "control/external/nanopb"]
+	path = control/external/nanopb
+	url = https://github.com/nanopb/nanopb

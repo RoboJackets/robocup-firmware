@@ -6,14 +6,20 @@ project(
     LANGUAGES ASM C CXX
 )
 
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/external/nanopb/extra)
+find_package(Nanopb REQUIRED)
+
 add_subdirectory(mtrain)
 add_subdirectory(external)
+add_subdirectory(src/robocup/proto)
 
 file(GLOB_RECURSE SRC "src/*.cpp")
 
 add_library(control-lib
     ${SRC}
 )
+
+target_link_libraries(control-lib robocup_protos)
 
 ## Shouldnt need explicit inclusion since mtrain dev relies on these
 target_include_directories(control-lib PUBLIC

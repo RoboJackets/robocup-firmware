@@ -1,0 +1,129 @@
+syntax = "proto2";
+
+import "nanopb.proto";
+
+package rj_radio;
+
+// Throughout this file we use 32-bit millisecond timestamps, which corresponds to a rollover time of about 47 days. All
+// timestamps are relative to the robot's bootup time.
+
+message Twist {
+  required float x_velocity_mps = 1;
+  required float y_velocity_mps = 2;
+  required float w_velocity_radps = 3;
+}
+
+message AccelTwist {
+  required float x_acceleration_mpss = 1;
+  required float y_acceleration_mpss = 2;
+  required float w_acceleration_radpss = 3;
+}
+
+message Pose {
+  required float x_position_m = 1;
+  required float y_position_m = 2;
+  required float heading_rad = 3;
+}
+
+message RobotConfig {
+  optional bool send_motion_debug_info = 1;
+  optional bool send_log_messages = 2;
+}
+
+message MotionCommand {
+  message LocalVelocityCommand {
+    required Twist robot_relative_velocity = 1;
+    optional AccelTwist robot_relative_acceleration = 2;
+  }
+
+  message GlobalVelocityCommand {
+    required Twist field_relative = 1;
+    optional AccelTwist field_relative_acceleration = 2;
+    optional float heading_rad = 3;
+  }
+
+  oneof motion_command {
+    LocalVelocityCommand local_velocity = 1;
+    GlobalVelocityCommand global_velocity = 2;
+  }
+}
+
+message RobotCommand {
+  enum KickerTriggerMode {
+    TRIGGER_NONE = 0;
+    TRIGGER_IMMEDIATE = 1;
+    TRIGGER_ON_BREAK_BEAM = 2;
+  }
+
+  message KickCommand {
+    required KickerTriggerMode trigger_mode = 2;
+    required float speed_mps = 3;
+  }
+
+  message ChipCommand {
+    required KickerTriggerMode trigger_mode = 2;
+    required float distance_m = 3;
+  }
+
+  // A sequence number. Packets sent to the robot must be monotonically increasing in sequence number. Out-of-order
+  // packets will be discarded and packets with unexpected sequence numbers will be rejected and logged.
+  required uint32 command_sequence = 1;
+  required MotionCommand motion_command = 2;
+
+  oneof kicker_command {
+    KickCommand kick = 3;
+    ChipCommand chip = 4;
+  }
+
+  required float dribbler_speed_radps = 5;
+
+  optional RobotConfig config_info = 6;
+}
+
+message MotionDebugInfo {
+  required uint32 frame_time_ms = 1;
+  repeated float wheel_speeds_radps = 2 [(nanopb).max_count = 4];
+  repeated float motor_outputs_pwm = 3 [(nanopb).max_count = 4];
+
+  // Relative to the field (if we have a vision lock)
+  optional Pose filtered_pose = 4;
+  // Relative to the robot
+  optional Twist filtered_velocity = 5;
+
+  message LatchedCommand {
+    required uint32 receive_time_ms = 1;
+    required MotionCommand command = 2;
+  }
+  optional LatchedCommand latest_command = 6;
+
+  optional float gyro_rate_radps = 7;
+  optional float measured_acceleration_x_mpss = 8;
+  optional float measured_acceleration_y_mpss = 9;
+  optional float measured_acceleration_z_mpss = 10;
+}
+
+message LogMessage {
+  enum LogLevel {
+    LEVEL_FATAL = 0;
+    LEVEL_ERROR = 1;
+    LEVEL_WARNING = 2;
+    LEVEL_INFO = 3;
+    LEVEL_VERBOSE = 4;
+  }
+
+  required LogLevel level = 1;
+  required uint32 timestamp_ms = 2;
+  optional string subsystem = 3 [(nanopb).max_size = 16];
+  required string message = 4 [(nanopb).max_size = 256];
+}
+
+message RobotStatus {
+  required uint32 time_ms = 1;
+
+  optional uint32 last_received_command = 2;
+  optional uint32 last_kicker_fire = 3;
+  required bool ball_sense_triggered = 4;
+
+  repeated MotionDebugInfo motion_debug_info = 5 [(nanopb).max_count = 8];
+  repeated LogMessage log_messages = 6 [(nanopb).max_count = 16];
+}

@@ -2,6 +2,7 @@
 
 #include "cstdint"
 #include <array>
+#include <vector>
 
 // Micropackets are shared memory locations for values
 // where only the latest matters. There is no guarantee that
@@ -137,8 +138,12 @@ struct KickerCommand {
     bool isValid = false;    /**< Stores whether given data is valid  */
     uint32_t lastUpdate;     /**< Time at which MotionCommand was last updated (milliseconds) */
 
-    enum ShootMode { KICK = 0, CHIP = 1 };
-    enum TriggerMode { OFF = 0, IMMEDIATE = 1, ON_BREAK_BEAM = 2, INVALID = 3 };
+    enum ShootMode {
+        KICK = 0, CHIP = 1
+    };
+    enum TriggerMode {
+        OFF = 0, IMMEDIATE = 1, ON_BREAK_BEAM = 2, INVALID = 3
+    };
 
     ShootMode shootMode;     /**< 1-bit encoding of whether the kicker should perform a ground kicker or a chip */
     TriggerMode triggerMode; /**< 2-bit encoding of when kicker should kick (none, immediately, on breakbeam, cancel) */
@@ -174,20 +179,37 @@ struct KickerInfo {
  * Passed from any module to @ref RadioModule
  */
 struct DebugFrame {
-    uint64_t ticks;
+    uint32_t frame_time_ms;
 
-    float gyro_z;
-    float accel_x;
-    float accel_y;
+    std::array<float, 4> wheel_speeds_radps;
+    std::array<float, 4> motor_outputs_pwm;
 
-    float filtered_velocity[3];
+    std::array<float, 3> filtered_pose;
+    std::array<float, 3> filtered_velocity;
 
-    float motor_outputs[4];
+    bool has_last_motion_command;
+    uint32_t last_motion_command_sequence_number;
 
-    float encDeltas[4];         // encoder changes since last packet
+    float gyro_z_radps;
+    std::array<float, 3> measured_acceleration;
+};
+
+struct LogMessage {
+    enum class LogLevel {
+        LEVEL_FATAL = 0,
+        LEVEL_ERROR = 1,
+        LEVEL_WARNING = 2,
+        LEVEL_INFO = 3,
+        LEVEL_VERBOSE = 4,
+    };
+
+    uint32_t timestamp_ms;
+    LogLevel level;
+    std::array<char, 16> subsystem;
+    std::array<char, 256> message;
 };
 
 struct DebugInfo {
-    int num_debug_frames = 0;
-    std::array<DebugFrame, 8> debug_frames;
+    std::vector<DebugFrame> debug_frames;
+    std::vector<LogMessage> log_messages;
 };

@@ -58,6 +58,7 @@ private:
      * Body velocity control gains (1/s, 1/s, 1/s)
      */
     Eigen::Matrix<float, numStates, 1> BodyKp;
+    float WheelKp = 0.0;
 
     /**
      * Interval of control calculations (seconds)
