@@ -12,6 +12,7 @@ void RadioLink::init() {
                                        RADIO_GLB_RST,
                                        RADIO_R0_INT);
     radioInitialized = radio->isInitialized();
+    radioConnected = radio->isConnected();
 }
 
 void RadioLink::send(const BatteryVoltage& batteryVoltage,
@@ -65,6 +66,7 @@ void RadioLink::send(const BatteryVoltage& batteryVoltage,
 #endif
 
     radio->send(packet.data(), rtp::ReverseSize);
+    radioConnected = radio->isConnected();
 }
 
 bool RadioLink::receive(KickerCommand& kickerCommand,
@@ -103,5 +105,6 @@ bool RadioLink::receive(KickerCommand& kickerCommand,
     motionCommand.dribbler = control->dribbler;
 
     cyclesWithoutPackets = 0;
+    radioConnected = radio->isConnected();
     return true;
 }
