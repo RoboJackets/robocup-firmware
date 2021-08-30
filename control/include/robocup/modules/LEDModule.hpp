@@ -18,10 +18,10 @@
  * First LED in error display format: Category / Level / Info
  */
 enum CategoryColors : uint32_t {
-    RADIO_ERROR = 0xFF8000,  // ORANGE
-    FPGA_ERROR = 0xFFFF00,    // YELLOW
-    KICKER_ERROR = 0x00FF00, // GREEN
-    IMU_ERROR = 0x0000FF   // BLUE
+    RADIO_ERROR = 0xFF0000,  // RED
+    FPGA_ERROR = 0x00FF00,    // GREEN
+    KICKER_ERROR = 0x0000FF, // BLUE
+    IMU_ERROR = 0xFFFFFF   // WHITE
 };
 
 /**
@@ -29,10 +29,10 @@ enum CategoryColors : uint32_t {
  * Second LED in error display format: Category / Level / Info
  */
 enum LevelColors : uint32_t {
-    FATAL = 0xFF0000, // RED
-    ERR = 0xFF8000, // ORANGE
-    WARN = 0xFFFF00,  // YELLOW
-    INFO = 0x0000FF  // BLUE
+    FATAL = 0xFF0000,  // RED
+    ERR = 0x00FF00,    // GREEN
+    WARN = 0x0000FF, // BLUE
+    INFO = 0xFFFFFF   // WHITE
 };
 
 /**
@@ -44,8 +44,8 @@ enum InfoColors : uint32_t {
     BOOT_FAIL = 0xFF0000,  // RED
 
     // RADIO
-    RADIO_CONN_WIFI_FAIL = 0xFF8000,  // ORANGE
-    RADIO_CONN_SOCCER_FAIL = 0xFFFF00 // YELLOW
+    RADIO_CONN_SOCCER_FAIL = 0x00FF00, // GREEN
+    RADIO_CONN_WIFI_FAIL = 0x0000FF  // BLUE
 };
 
 /**

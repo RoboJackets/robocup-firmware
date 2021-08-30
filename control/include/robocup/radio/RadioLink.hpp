@@ -42,7 +42,7 @@ public:
     bool receive(KickerCommand& kickerCommand,
                  MotionCommand& motionCommand);
 
-    bool isRadioConnected() { return radio->isConnected(); }
+    bool isRadioConnected() { return radioConnected; }
     bool isRadioInitialized() { return radioInitialized; }
     bool hasSoccerTimedOut() { return (cyclesWithoutPackets > 10); }
 private:

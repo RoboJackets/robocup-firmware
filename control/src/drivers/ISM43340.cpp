@@ -318,13 +318,13 @@ void ISM43340::reset() {
             }
         }
 
-        isInit = !interruptin_read(dataReady);
+        isInit = interruptin_read(dataReady);
 
         if (isInit) {
-            printf("Could not initialize radio\r\n");
+            break;
             //return;
         } else {
-            break;
+            printf("Could not initialize radio\r\n");
         }
     }
 
@@ -384,7 +384,6 @@ void ISM43340::reset() {
     if (readBuffer.size() == 0 || (int)readBuffer[0] == 0) {
         // Failed to connect to network
         // not sure what to have it do here
-        connected = false;
         printf("Failed to connect to network\r\n");
         return;
     }

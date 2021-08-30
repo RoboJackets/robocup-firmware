@@ -10,7 +10,7 @@ RobotController::RobotController(uint32_t dt_us) {
     // Proportional constants.
     BodyKp << 0.8, 0.8, 1.5;
 
-    WheelKp = 0.01;
+    //WheelKp = 0.01;
     max_acceleration_ << 4.0, 3.0, 30.0;
 }
 
@@ -45,7 +45,7 @@ void RobotController::calculateWheel(Eigen::Matrix<float, numWheels, 1> pv,
     sp /= std::max<float>(1.0, sp.cwiseAbs().maxCoeff() / kMaxWheelSpeed);
 
     Eigen::Matrix<float, numWheels, 1> error = sp - pv;
-    outputs = sp * RobotModel::get().kSpeedToDutyCycle + WheelKp * error;
+    outputs = sp * RobotModel::get().kSpeedToDutyCycle + 0.01 * error;
 
     last_wheels_ = sp;
 }
