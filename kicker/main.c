@@ -497,7 +497,7 @@ uint8_t execute_cmd(uint8_t cmd) {
     kick_on_breakbeam_ = true;
     kick_on_breakbeam_strength_ = kick_power;
   } else if (kick_activation == KICK_IMMEDIATE) {
-    kick(kick_power,false);
+    kick(kick_power,use_chip);
   } else if (kick_activation == CANCEL_KICK) {
     kick_on_breakbeam_ = false;
     kick_on_breakbeam_strength_ = 0;
