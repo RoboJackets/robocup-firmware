@@ -248,7 +248,7 @@ void main() {
 
     if (ball_sensed_ && kick_on_breakbeam_) {
       // pow
-      kick(kick_on_breakbeam_strength_,false);
+      kick(kick_on_breakbeam_strength_,use_chip);
       kick_on_breakbeam_ = false;
     }
 
