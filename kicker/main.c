@@ -95,7 +95,7 @@ bool is_kicking() {
  * start the kick FSM for desired strength. If the FSM is already running,
  * the call will be ignored.
  */
-void kick(uint8_t strength, bool is_chip) {
+void kick(uint8_t strength) {
 
   // check if the kick FSM is running
   if (is_kicking())
@@ -150,11 +150,13 @@ void main() {
       char chip_db_pressed = !(PINB & _BV(DB_CHIP_PIN));
 
       if (!kick_db_down_ && kick_db_pressed){
-        kick(38, false);
+        kick_type_is_chip_ = false;
+        kick(38);
       }
 
       if(!chip_db_down_ && chip_db_pressed)
-        kick(255, true);
+        kick_type_is_chip_ = true;
+        kick(255);
 
       if (!charge_db_down_ && charge_db_pressed)
         charge_commanded_ = !charge_commanded_;
@@ -245,7 +247,7 @@ void main() {
 
     if (ball_sensed_ && kick_on_breakbeam_) {
       // pow
-      kick(kick_on_breakbeam_strength_,false);
+      kick(kick_on_breakbeam_strength_);
       kick_on_breakbeam_ = false;
     }
 
@@ -494,7 +496,7 @@ uint8_t execute_cmd(uint8_t cmd) {
     kick_on_breakbeam_ = true;
     kick_on_breakbeam_strength_ = kick_power;
   } else if (kick_activation == KICK_IMMEDIATE) {
-    kick(kick_power,kick_type_is_chip_);
+    kick(kick_power);
   } else if (kick_activation == CANCEL_KICK) {
     kick_on_breakbeam_ = false;
     kick_on_breakbeam_strength_ = 0;
