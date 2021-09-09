@@ -51,7 +51,6 @@ volatile int32_t kick_wait_ = -1;
 
 //Check for chip type
 volatile bool kick_type_is_chip_ = false;
-volatile bool kick_type_is_chip_command_ = false;
 
 // Used to keep track of current button state
 volatile int kick_db_down_ = 0;
@@ -115,8 +114,6 @@ void kick(uint8_t strength, bool is_chip) {
     KICK_TIME_SLOPE * strength_ratio + MIN_EFFECTIVE_KICK_FET_EN_TIME;
   float time_cnt_flt = time_cnt_flt_ms * TIMER_PER_MS;
   timer_cnts_left_ = (int)(time_cnt_flt + 0.5f); // round
-
-  kick_type_is_chip_ = is_chip;
 
   // start timer to enable the kick FSM processing interrupt
   TCCR0 |= _BV(CS00);
@@ -485,7 +482,7 @@ uint8_t execute_cmd(uint8_t cmd) {
   bool allow_charge = !!(cmd & (1 << 4));
   uint8_t kick_power = (cmd & 0xF) << 4;
   uint8_t kick_activation = cmd & (3 << 5);
-  bool use_chip = !!(cmd & (1 << 7));
+  kick_type_is_chip_ = !!(cmd & (1 << 7));
 
   if (allow_charge) {
     charge_commanded_ = true;
@@ -497,11 +494,12 @@ uint8_t execute_cmd(uint8_t cmd) {
     kick_on_breakbeam_ = true;
     kick_on_breakbeam_strength_ = kick_power;
   } else if (kick_activation == KICK_IMMEDIATE) {
-    kick(kick_power,use_chip);
+    kick(kick_power,kick_type_is_chip_);
   } else if (kick_activation == CANCEL_KICK) {
     kick_on_breakbeam_ = false;
     kick_on_breakbeam_strength_ = 0;
   }
+  
 
   return (ball_sensed_ << 7) | (VOLTAGE_MASK & (last_voltage_ >> 1));
 }
