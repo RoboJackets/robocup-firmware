@@ -51,7 +51,6 @@ volatile int32_t kick_wait_ = -1;
 
 //Check for chip type
 volatile bool kick_type_is_chip_ = false;
-volatile bool kick_type_is_chip_command_ = false;
 
 // Used to keep track of current button state
 volatile int kick_db_down_ = 0;
@@ -96,7 +95,7 @@ bool is_kicking() {
  * start the kick FSM for desired strength. If the FSM is already running,
  * the call will be ignored.
  */
-void kick(uint8_t strength, bool is_chip) {
+void kick(uint8_t strength) {
 
   // check if the kick FSM is running
   if (is_kicking())
@@ -115,8 +114,6 @@ void kick(uint8_t strength, bool is_chip) {
     KICK_TIME_SLOPE * strength_ratio + MIN_EFFECTIVE_KICK_FET_EN_TIME;
   float time_cnt_flt = time_cnt_flt_ms * TIMER_PER_MS;
   timer_cnts_left_ = (int)(time_cnt_flt + 0.5f); // round
-
-  kick_type_is_chip_ = is_chip;
 
   // start timer to enable the kick FSM processing interrupt
   TCCR0 |= _BV(CS00);
@@ -153,15 +150,18 @@ void main() {
       char chip_db_pressed = !(PINB & _BV(DB_CHIP_PIN));
 
       if (!kick_db_down_ && kick_db_pressed){
-        kick(38, false);
+        kick_type_is_chip_ = false;
+        kick(255);
       }
 
-      if(!chip_db_down_ && chip_db_pressed)
-        kick(255, true);
+      if(!chip_db_down_ && chip_db_pressed){
+        kick_type_is_chip_ = true;
+        kick(255);
+        }
 
-      if (!charge_db_down_ && charge_db_pressed)
+      if (!charge_db_down_ && charge_db_pressed){
         charge_commanded_ = !charge_commanded_;
-
+	}
       kick_db_down_ = kick_db_pressed;
       chip_db_down_ = chip_db_pressed;
       charge_db_down_ = charge_db_pressed;
@@ -248,7 +248,7 @@ void main() {
 
     if (ball_sensed_ && kick_on_breakbeam_) {
       // pow
-      kick(kick_on_breakbeam_strength_,use_chip);
+      kick(kick_on_breakbeam_strength_);
       kick_on_breakbeam_ = false;
     }
 
@@ -485,7 +485,7 @@ uint8_t execute_cmd(uint8_t cmd) {
   bool allow_charge = !!(cmd & (1 << 4));
   uint8_t kick_power = (cmd & 0xF) << 4;
   uint8_t kick_activation = cmd & (3 << 5);
-  bool use_chip = !!(cmd & (1 << 7));
+  kick_type_is_chip_ = !!(cmd & (1 << 7));
 
   if (allow_charge) {
     charge_commanded_ = true;
@@ -497,11 +497,12 @@ uint8_t execute_cmd(uint8_t cmd) {
     kick_on_breakbeam_ = true;
     kick_on_breakbeam_strength_ = kick_power;
   } else if (kick_activation == KICK_IMMEDIATE) {
-    kick(kick_power,use_chip);
+    kick(kick_power);
   } else if (kick_activation == CANCEL_KICK) {
     kick_on_breakbeam_ = false;
     kick_on_breakbeam_strength_ = 0;
   }
+  
 
   return (ball_sensed_ << 7) | (VOLTAGE_MASK & (last_voltage_ >> 1));
 }
