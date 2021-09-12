@@ -151,16 +151,17 @@ void main() {
 
       if (!kick_db_down_ && kick_db_pressed){
         kick_type_is_chip_ = false;
-        kick(38);
+        kick(255);
       }
 
-      if(!chip_db_down_ && chip_db_pressed)
+      if(!chip_db_down_ && chip_db_pressed){
         kick_type_is_chip_ = true;
         kick(255);
+        }
 
-      if (!charge_db_down_ && charge_db_pressed)
+      if (!charge_db_down_ && charge_db_pressed){
         charge_commanded_ = !charge_commanded_;
-
+	}
       kick_db_down_ = kick_db_pressed;
       chip_db_down_ = chip_db_pressed;
       charge_db_down_ = charge_db_pressed;
