@@ -45,7 +45,7 @@ Details on the architecture of the FPGA firmware code can be found [here](doc/FP
 
 ## Setup
 Below is a quick guide to getting this RoboCup project setup to build on your computer. If you are a robocup member planning on developing both mtrain and robocup firmware it is highly recommended that you  follow the Firmware [Getting Started](doc/GettingStarted.md) page.
-This project only provides directions for installing on Ubuntu Linux, Arch Linux, and Mac OS X.
+This project only provides directions for installing on Ubuntu Linux, Windows Subsystem for Linux (WSL), and macOS.
 
 1) Clone the repository
 
@@ -55,7 +55,7 @@ git clone git://github.com/RoboJackets/robocup-firmware
 
 2) Install the necessary software
 
-There are a few setup scripts in the util directory for installing required packages, setting up udev rules, etc.  See `ubuntu-setup` and `osx-setup` for more info. If you are using WSL, see `wsl-setup` after using `ubuntu-setup`.
+There are a few setup scripts in the util directory for installing required packages, setting up udev rules, etc.  See `ubuntu-setup` and `macos-setup` for more info. If you are using WSL, see `wsl-setup` after using `ubuntu-setup`.
 
 ```
 $ cd robocup-firmware
