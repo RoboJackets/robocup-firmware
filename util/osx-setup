@@ -14,6 +14,7 @@ brew update
 
 echo "-- Add tap for osx-cross/avr/arv-libc"
 brew tap osx-cross/avr
+brew tap homebrew/cask-drivers
 
 echo "-- Installing required homebrew packages, this may take a while"
 set +e
