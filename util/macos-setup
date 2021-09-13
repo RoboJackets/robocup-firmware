@@ -15,9 +15,12 @@ brew update
 echo "-- Add tap for osx-cross/avr/arv-libc"
 brew tap osx-cross/avr
 
+echo "-- Add tap for homebrew/cask-drivers"
+brew tap homebrew/cask-drivers
+
 echo "-- Installing required homebrew packages, this may take a while"
 set +e
-brew install $(sed 's/#.*//;/^$/d' $BASE/util/osx-packages.txt)
+brew install $(sed 's/#.*//;/^$/d' $BASE/util/macos-packages.txt)
 set -e
 
 brew install $BASE/util/clang-format@3.6.rb

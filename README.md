@@ -1,4 +1,3 @@
-
 # GT RoboJackets RoboCup SSL - Firmware
 
 The Georgia Tech RoboJackets team competes in the annual RoboCup Small Size League (SSL) competition.  This repository contains all of the firmware that we run on our robots. More information on how our software works can be found on our [documentation page](http://robojackets.github.io/robocup-firmware/), our [wiki](http://wiki.robojackets.org/w/RoboCup_Software) or on our [website](http://www.robojackets.org/).
@@ -19,7 +18,7 @@ For a high level overview of architecture of robocup-firmware see [here](doc/Fir
 ### /
 The top level folder contains the firmware code for the different targets that are compiled for the control board, FPGA, IMU, and radio.
 
-### control
+### control/
 Contains the firmware code for the main program run on the mtrain. This controls the overall function of the robot and the interface with various peripheral devices, such as IMU, FPGA, and the radio
 
 Modules are fully independent sections of code that take a well defined input (if applicable), do some action, then produce a well defined output (if applicable). For example, the kicker module takes kicker commands (input), directly interfaces with the kicker and does the communication and unit translation (action), and produces breakbeam and voltage to the rest of the firmware (output).
@@ -45,7 +44,7 @@ Details on the architecture of the FPGA firmware code can be found [here](doc/FP
 
 ## Setup
 Below is a quick guide to getting this RoboCup project setup to build on your computer. If you are a robocup member planning on developing both mtrain and robocup firmware it is highly recommended that you  follow the Firmware [Getting Started](doc/GettingStarted.md) page.
-This project only provides directions for installing on Ubuntu Linux, Arch Linux, and Mac OS X.
+This project only provides directions for installing on Ubuntu Linux, Windows Subsystem for Linux (WSL), and macOS.
 
 1) Clone the repository
 
@@ -55,7 +54,7 @@ git clone git://github.com/RoboJackets/robocup-firmware
 
 2) Install the necessary software
 
-There are a few setup scripts in the util directory for installing required packages, setting up udev rules, etc.  See `ubuntu-setup` and `osx-setup` for more info. If you are using WSL, see `wsl-setup` after using `ubuntu-setup`.
+There are a few setup scripts in the util directory for installing required packages, setting up udev rules, etc.  See `ubuntu-setup` and `macos-setup` for more info. If you are using WSL, see `wsl-setup` after using `ubuntu-setup`.
 
 ```
 $ cd robocup-firmware
@@ -73,7 +72,7 @@ $ make <TARGET>
 
 ## Testing
 
-Firmware tests can be written and placed in `control/test` with the name `test-<TESTNAME>.cpp` then compiled with `make <TESTNAME>`
+Firmware tests can be written and placed in `control/test` with the name `<TESTNAME>.cpp` then compiled with `make <TESTNAME>`
 
 ## Documentation
 
