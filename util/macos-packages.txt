@@ -4,3 +4,4 @@ avr-gcc
 Eigen
 gcc-arm-embedded
 segger-jlink
+doxygen
