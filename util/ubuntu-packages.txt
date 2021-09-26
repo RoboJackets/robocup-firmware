@@ -6,19 +6,17 @@
 # Build system
 cmake
 ccache
+python3
 
-# C/C++ (and more) code-formatting tool (just use the newest version)
-clang-format
+# Docs
+doxygen
+graphviz
 
 # Arm GCC Toolchain
 gcc-arm-none-eabi
 gdb-multiarch
+libeigen3-dev
 
 # AVR
 avr-libc
 avrdude
-
-python3-pip
-python3-setuptools
-
-libeigen3-dev

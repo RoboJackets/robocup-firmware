@@ -1,6 +1,8 @@
 cmake
-python3
-avr-gcc
 Eigen
+python3
 gcc-arm-embedded
+avr-gcc
 segger-jlink
+doxygen
+graphviz

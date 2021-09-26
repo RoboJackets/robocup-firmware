@@ -23,12 +23,6 @@ set +e
 brew install $(sed 's/#.*//;/^$/d' $BASE/util/macos-packages.txt)
 set -e
 
-brew install $BASE/util/clang-format@3.6.rb
-brew link clang-format@3.6 --force
-
-echo "-- Installing python packages"
-pip3 install -r $BASE/util/requirements3.txt
-
 echo "-- Updating submodules"
 git submodule sync
 git submodule update --init --recursive

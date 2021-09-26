@@ -76,11 +76,11 @@ Firmware tests can be written and placed in `control/test` with the name `<TESTN
 
 ## Documentation
 
-We use [Doxygen](https://www.doxygen.nl/index.html) for documentation.  This allows us to convert specially-formatted comments within code files into a nifty website that lets us easily see how things are laid out.  Our compiled doxygen documentation can be found here:
+We use [Doxygen](https://www.doxygen.nl/index.html) for documentation.  This allows us to convert specially-formatted comments within code files into a nifty website that lets us easily see how things are laid out.  Our compiled doxygen documentation can be found by doing:
 
-http://robojackets.github.io/robocup-firmware/
-
-Note: The doxygen documentation site above is updated automacally using circle-ci.  See our autoupdate-docs.sh file for more info.
+```
+$ make docs
+```
 
 ## Contributing
 

@@ -42,3 +42,4 @@ clean:
 	cd control/mtrain && make clean
 	cd fpga && rm -rf build
 	cd kicker && rm -rf build
+	rm -rf generated-docs

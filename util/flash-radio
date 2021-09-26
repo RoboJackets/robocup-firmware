@@ -1,0 +1,7 @@
+#!/bin/bash
+
+DEVICE=STM32F405OG
+IF=JTAG
+SPEED=4000
+
+ JLinkExe -device $DEVICE -if $IF -jtagconf -1,-1 -speed $SPEED -autoconnect 1 -CommanderScript radio.jlink
