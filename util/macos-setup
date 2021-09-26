@@ -12,9 +12,6 @@ fi
 echo "-- Updating homebrew package list"
 brew update
 
-echo "-- Upgrading homebrew package list"
-brew upgrade
-
 echo "-- Add tap for osx-cross/avr/arv-libc"
 brew tap osx-cross/avr
 
