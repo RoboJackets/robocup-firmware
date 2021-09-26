@@ -6,15 +6,14 @@
 # Build system
 cmake
 ccache
+python3
+doxygen
 
 # Arm GCC Toolchain
 gcc-arm-none-eabi
 gdb-multiarch
+libeigen3-dev
 
 # AVR
 avr-libc
 avrdude
-
-python3
-
-libeigen3-dev
