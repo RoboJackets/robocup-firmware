@@ -7,9 +7,6 @@
 cmake
 ccache
 
-# C/C++ (and more) code-formatting tool (just use the newest version)
-clang-format
-
 # Arm GCC Toolchain
 gcc-arm-none-eabi
 gdb-multiarch
@@ -18,7 +15,6 @@ gdb-multiarch
 avr-libc
 avrdude
 
-python3-pip
-python3-setuptools
+python3
 
 libeigen3-dev
