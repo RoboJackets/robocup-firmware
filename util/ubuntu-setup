@@ -1,8 +1,7 @@
 #!/bin/bash -e
 
-HELP_STR="Usage: ./ubuntu-setup [-y | --yes] [-n | --noclobber] [-c | --clobber] [-f | --firmware] [-nf | --nofirmware] [-osl | --overwrite-sources-list ] [-h | --help]
+HELP_STR="Usage: ./ubuntu-setup [-n | --noclobber] [-c | --clobber] [-f | --firmware] [-nf | --nofirmware] [-osl | --overwrite-sources-list ] [-h | --help]
 
-\tyes:\t\t\tassume no user input
 \tnoclobber:\t\tdont install 3rd party repositories
 \tclobber:\t\tInstall 3rd party repositories
 \tfirmware:\t\tInstall firmware repository
@@ -55,18 +54,12 @@ BASE=$(readlink -f $(dirname $0)/..)
 echo "-- Installing required packages"
 
 # if yes option is checked, add  a -y
-ARGS=""
-if $YES; then
-    ARGS="-y"
-fi
+ARGS="-y"
 
 PACKAGES="$(sed 's/#.*//;/^$/d' $BASE/util/ubuntu-packages.txt)"
 
 # install all of the packages listed in required_packages.txt
 apt-get install $ARGS $PACKAGES
-
-# install python3 requirements
-pip3 install -r $BASE/util/requirements3.txt
 
 echo "If you are using WSL, please install JLink.exe using the following link: https://www.segger.com/downloads/jlink/JLink_Windows.exe"
 echo "If you are using an Ubuntu VM, please install JLinkExe using the following link: https://www.segger.com/downloads/jlink/JLink_Linux_x86_64.deb"
