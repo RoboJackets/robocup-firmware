@@ -1,5 +1,5 @@
 # Use phusion/baseimage if problems arise
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 MAINTAINER Collin Avidano collin.avidano@gmail.com
 
 # Setup apt to be happy with no console input
@@ -25,6 +25,6 @@ ENV HOME /home/developer
 COPY . $HOME/mtrain-firmware
 WORKDIR $HOME/mtrain-firmware
 
-RUN sudo ./util/ubuntu-setup --yes
+RUN sudo ./util/ubuntu-setup
 
 RUN sudo chown -R developer:developer $HOME/
