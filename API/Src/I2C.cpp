@@ -1,5 +1,5 @@
 #include "I2C.hpp"
-#include "delay.h"
+#include "delay.hpp"
 
 #define I2C_TIMING 0x10A60D20
 
