@@ -5,7 +5,7 @@ using namespace std;
 
 const int REFRESH_PERIOD = 10;
 const int ADC_MAX = 4096;
-const float ADC_RATIO = 3.3 / 4096;
+const float ADC_RATIO = 3.3 / ADC_MAX;
 
 // TODO this setup means 1 adc can go to 1 pin only and thus only 3 adc pins can be inited need to setup multi sampling indepently
 AnalogIn::AnalogIn(ADCPinName pin) {
