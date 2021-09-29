@@ -29,7 +29,7 @@ $ make
 
 ## Testing
 
-Firmware tests can be written and placed in `tests/cpp` with the name `<TESTNAME>.cpp` then compiled with `make <TESTNAME>`
+Firmware tests can be written and placed in `tests/` with the name `<TESTNAME>.cpp` then compiled with `make <TESTNAME>`
 
 ## Documentation
 
