@@ -1,8 +1,3 @@
-# This is the list of all required packages
-# place each package on its own line
-# these get installed using 'apt-get install ______' whenever the ubuntu-setup
-#   script is run
-
 # Build system
 cmake
 ccache
@@ -14,7 +9,6 @@ graphviz
 
 # Arm GCC Toolchain
 gcc-arm-none-eabi
-gdb-multiarch
 libeigen3-dev
 
 # AVR
