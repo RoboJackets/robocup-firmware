@@ -23,6 +23,5 @@ target_link_libraries(mtrain INTERFACE
 )
 
 if( IS_DIRECTORY  "${CMAKE_CURRENT_LIST_DIR}/tests" )
-    add_subdirectory(tests/c)
     add_subdirectory(tests/cpp)
 endif()
