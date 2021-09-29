@@ -3,10 +3,16 @@
 #include "mtrain.hpp"
 #include "SPI.hpp"
 #include "GenericRadio.hpp"
-#include "pin_defs.h"
+#include "PinDefs.hpp"
 #include <string>
 #include <vector>
 #include <memory>
+#include "delay.hpp"
+#include <cstring>
+#include "interrupt_in.hpp"
+#include "FreeRTOS.h"
+#include "task.h"
+#include <cstdio>
 
 namespace ISMConstants {
     // Hardware/driver config values
@@ -427,7 +433,7 @@ private:
 
     DigitalOut nCs;
     DigitalOut nReset;
-    pin_name dataReady;
+    PinName dataReady;
 
     // Current socket selected on the device
     enum SOCKET_TYPE { SEND = 0, RECEIVE = 1 };

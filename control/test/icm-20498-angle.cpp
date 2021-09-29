@@ -1,6 +1,6 @@
 #include "mtrain.hpp"
 #include "drivers/ICM20948.hpp"
-#include <delay.h>
+#include <delay.hpp>
 
 void imu_task(void*) {
     LockedStruct<SPI> spi(SpiBus::SpiBus2, std::nullopt, 100'000);

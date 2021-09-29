@@ -8,7 +8,7 @@
 
 #include "SPI.hpp"
 #include "I2C.hpp"
-#include "delay.h"
+#include "delay.hpp"
 #include "DigitalOut.hpp"
 
 #include <unistd.h>

@@ -1,7 +1,7 @@
 #include "drivers/KickerBoard.hpp"
 #include "kicker_bin.h"
 
-#include "delay.h"
+#include "delay.hpp"
 #include <tuple>
 #include <string>
 #include <cstdio>
