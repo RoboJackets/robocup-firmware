@@ -1,14 +1,12 @@
 #include "drivers/Battery.hpp"
 
 Battery::Battery()
-    : lastReadPercentage(0.0f), rawVoltage(0) {
-    // init analog pin
+    : lastReadPercentage(0.0f), rawVoltage(0), battVoltagePin(adc) {
 }
 
 void Battery::update() {
-    // read analog pin
-    lastReadPercentage = 100.0;
-    rawVoltage = 255;
+    lastReadPercentage = (battVoltagePin.getVoltage() - MIN_SAFE_BATT_VOLTAGE_READ) / BATT_VOLTAGE_READ_RANGE;
+    rawVoltage = (uint8_t)(lastReadPercentage * 255);
 }
 
 float Battery::getBattPercentage() {
@@ -20,5 +18,5 @@ uint8_t Battery::getRaw() {
 }
 
 bool Battery::isBattCritical() {
-    return lastReadPercentage <= 0.0;
+    return lastReadPercentage <= 0.05 || lastReadPercentage > 1.0;
 }
