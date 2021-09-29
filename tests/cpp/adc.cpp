@@ -5,7 +5,7 @@ using namespace std;
 int main(void) {
   DigitalOut leds[] = {(LED1), (LED2), (LED3), (LED4)};
   DigitalOut output {p34};
-  AnalogIn pin(adc3); //need analog pins
+  AnalogIn pin(adc); //need analog pins
 
   output.write(true);
 
