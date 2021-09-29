@@ -44,3 +44,7 @@ $ make docs
 For resources for beginners to embbedded development see the [Getting Started](https://robojackets.github.io/robocup-firmware/) Page for robocup-firmware.
 
 For resources pertaining to the hardware of the mTrain including datasheets and schematics see the [Resources Page](doc/ExternalResources.md).
+
+## License
+
+This project is licensed under the Apache License v2.0.  See the [LICENSE](LICENSE) file for more information
