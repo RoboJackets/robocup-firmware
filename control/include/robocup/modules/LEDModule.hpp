@@ -12,26 +12,28 @@
 #include "MicroPackets.hpp"
 #include "drivers/MCP23017.hpp"
 
-
 /**
  * Constants for DotStar LEDs (RGB)
  * First LED in error display format: Category / Level / Info
  */
-enum CategoryColors : uint32_t {
+enum CategoryColors : uint32_t
+{
     RADIO_ERROR = 0xFF0000,  // RED
-    FPGA_ERROR = 0x00FF00,    // GREEN
+    FPGA_ERROR = 0x00FF00,   // GREEN
     KICKER_ERROR = 0x0000FF, // BLUE
-    IMU_ERROR = 0xFFFFFF   // WHITE
+    IMU_ERROR = 0xFFFFFF     // WHITE
+    BATT_ERROR = 0xF1C40F    // YELLOW
 };
 
 /**
  * Constants for DotStar LEDs (RGB)
  * Second LED in error display format: Category / Level / Info
  */
-enum LevelColors : uint32_t {
-    FATAL = 0xFF0000,  // RED
-    ERR = 0x00FF00,    // GREEN
-    WARN = 0x0000FF, // BLUE
+enum LevelColors : uint32_t
+{
+    FATAL = 0xFF0000, // RED
+    ERR = 0x00FF00,   // GREEN
+    WARN = 0x0000FF,  // BLUE
     INFO = 0xFFFFFF   // WHITE
 };
 
@@ -39,30 +41,33 @@ enum LevelColors : uint32_t {
  * Constants for DotStar LEDs (RGB)
  * Third LED in error display format: Category / Level / Info
  */
-enum InfoColors : uint32_t {
+enum InfoColors : uint32_t
+{
     // GENERAL
-    BOOT_FAIL = 0xFF0000,  // RED
+    BOOT_FAIL = 0xFF0000, // RED
 
     // RADIO
     RADIO_CONN_SOCCER_FAIL = 0x00FF00, // GREEN
-    RADIO_CONN_WIFI_FAIL = 0x0000FF  // BLUE
+    RADIO_CONN_WIFI_FAIL = 0x0000FF    // BLUE
 };
 
 /**
  * Struct to store LED values in ERR_LIST
  */
-struct Error {
+struct Error
+{
     uint32_t led0;
     uint32_t led1;
     uint32_t led2;
 };
 
-bool operator==(const Error& e1, const Error& e2);
+bool operator==(const Error &e1, const Error &e2);
 
 /**
  * Module interfacing with debugging LEDS based on the statuses of other electronics
  */
-class LEDModule : public GenericModule {
+class LEDModule : public GenericModule
+{
 public:
     /**
      * Number of times per second (frequency) that LEDModule should run (Hz)
@@ -91,13 +96,13 @@ public:
      * @param kickerInfo Shared memory location containing kicker status
      * @param radioError Shared memory location containing whether radio has an error
      */
-    LEDModule(LockedStruct<MCP23017>& ioExpander,
-              LockedStruct<SPI>& dotStarSPI,
-              LockedStruct<BatteryVoltage>& batteryVoltage,
-              LockedStruct<FPGAStatus>& fpgaStatus,
-              LockedStruct<KickerInfo>& kickerInfo,
-              LockedStruct<RadioError>& radioError,
-              LockedStruct<IMUData>& imuData);
+    LEDModule(LockedStruct<MCP23017> &ioExpander,
+              LockedStruct<SPI> &dotStarSPI,
+              LockedStruct<BatteryVoltage> &batteryVoltage,
+              LockedStruct<FPGAStatus> &fpgaStatus,
+              LockedStruct<KickerInfo> &kickerInfo,
+              LockedStruct<RadioError> &radioError,
+              LockedStruct<IMUData> &imuData);
 
     /**
      * Code which initializes module
@@ -174,14 +179,14 @@ private:
 
     const static uint16_t IOExpanderErrorLEDMask = 0xFF00;
 
-    LockedStruct<MCP23017>& ioExpander;
-    LockedStruct<SPI>& dotStarSPI;
+    LockedStruct<MCP23017> &ioExpander;
+    LockedStruct<SPI> &dotStarSPI;
 
-    LockedStruct<BatteryVoltage>& batteryVoltage;
-    LockedStruct<FPGAStatus>& fpgaStatus;
-    LockedStruct<KickerInfo>& kickerInfo;
-    LockedStruct<RadioError>& radioError;
-    LockedStruct<IMUData>& imuData;
+    LockedStruct<BatteryVoltage> &batteryVoltage;
+    LockedStruct<FPGAStatus> &fpgaStatus;
+    LockedStruct<KickerInfo> &kickerInfo;
+    LockedStruct<RadioError> &radioError;
+    LockedStruct<IMUData> &imuData;
 
     DigitalOut dotStarNCS;
 
@@ -205,9 +210,9 @@ private:
                                                LevelColors::FATAL,
                                                InfoColors::BOOT_FAIL};
     // IMU
-    const struct Error ERR_IMU_BOOT_FAIL =  {CategoryColors::IMU_ERROR,
-                                             LevelColors::FATAL,
-                                             InfoColors::BOOT_FAIL};
+    const struct Error ERR_IMU_BOOT_FAIL = {CategoryColors::IMU_ERROR,
+                                            LevelColors::FATAL,
+                                            InfoColors::BOOT_FAIL};
 
     const std::array<Error, 6> ERR_LIST = {ERR_RADIO_BOOT_FAIL,
                                            ERR_RADIO_WIFI_FAIL,
