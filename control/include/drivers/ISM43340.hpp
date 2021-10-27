@@ -324,7 +324,6 @@ namespace ISMConstants {
         ResponseReady = 2,
         ResponseDone = 3,
 
-
         NumStates = 4 // DONT USE
     };
 };
@@ -368,6 +367,11 @@ public:
      */
     virtual bool isAvailable();
 
+    /**
+     * Resets the ISM43340 state machine
+     */
+    void reset();
+
     int32_t selfTest();
 
     void pingRouter();
@@ -383,7 +387,7 @@ private:
      * Power cycles the device, connects to the network,
      * and sets up the two sockets for UDP communication
      */
-    void reset();
+    void hard_reset();
 
     /**
      * Write the byte array to the spi bus

@@ -71,6 +71,11 @@ void RadioLink::send(const BatteryVoltage& batteryVoltage,
 
 bool RadioLink::receive(KickerCommand& kickerCommand,
                        MotionCommand& motionCommand) {
+
+    if(hasSoccerTimedOut()) {
+        radio->reset();
+    }
+
     // Make sure there is actually data to read
     if (!radio->isAvailable()) {
         cyclesWithoutPackets++;
