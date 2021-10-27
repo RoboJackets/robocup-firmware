@@ -34,7 +34,7 @@
  */
 
 #include "drivers/AVR910.hpp"
-#include "delay.hpp"
+#include "delay.h"
 
 using namespace std;
 
