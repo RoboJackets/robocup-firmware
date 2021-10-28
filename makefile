@@ -2,7 +2,7 @@
 
 CPP_FIRMWARE_TESTS = blink gpio spi usb_serial i2c i2c_bus_recovery
 
-all : mtrain tests
+all : mtrain
 
 mtrain:
 	mkdir -p build && cd build && \

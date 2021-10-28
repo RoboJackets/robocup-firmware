@@ -1,4 +1,4 @@
-#include "interrupt_in.hpp"
+#include "interrupt_in.h"
 
 static void (*interrupt0)() = NULL;
 static void (*interrupt4)() = NULL;
@@ -116,7 +116,7 @@ static void NVIC_config(IRQn_Type IRQn) {
     }
 }
 
- void interruptin_init(PinName pin, void (*function)()) {
+ void interruptin_init(pin_name pin, void (*function)()) {
     GPIO_InitTypeDef pin_structure = {};
     pin_structure.Pin = pin.pin;
     pin_structure.Mode = GPIO_MODE_IT_RISING;
@@ -126,7 +126,7 @@ static void NVIC_config(IRQn_Type IRQn) {
     interrupt_config(pin.pin, function);
 }
 
- void interruptin_init_ex(PinName pin, void (*function)(), PullType pull,
+ void interruptin_init_ex(pin_name pin, void (*function)(), pull_type pull,
     interrupt_mode mode) {
     GPIO_InitTypeDef pin_structure = {};
     pin_structure.Pin = pin.pin;
@@ -138,10 +138,10 @@ static void NVIC_config(IRQn_Type IRQn) {
      interrupt_config(pin.pin, function);
 }
 
- void interruptin_deinit(PinName pin) {
+ void interruptin_deinit(pin_name pin) {
     HAL_GPIO_DeInit(pin.port, pin.pin);
 }
 
-int interruptin_read(PinName pin) {
+int interruptin_read(pin_name pin) {
     return HAL_GPIO_ReadPin(pin.port, pin.pin);
 }

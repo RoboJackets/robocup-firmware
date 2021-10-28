@@ -1,6 +1,6 @@
 #include "mtrain.hpp"
 #include "I2C.hpp"
-#include "delay.hpp"
+#include "delay.h"
 
 
 /* I2C test using MMA8452Q */
