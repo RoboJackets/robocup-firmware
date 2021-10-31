@@ -2,7 +2,7 @@
 #include "iodefs.h"
 
 #include <cmath>
-#include <delay.hpp>
+#include <delay.h>
 
 using namespace std::literals;
 
