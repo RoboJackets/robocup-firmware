@@ -18,6 +18,8 @@ public:
 
     bool isBattCritical();     /**< Returns whether battery is critical (at or below 0%) */
 
+    float getVoltage();        /**< Returns the raw voltage */
+
 private:
     /**
      * The maximum voltage the battery can safely hold

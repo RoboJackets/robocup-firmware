@@ -21,7 +21,7 @@ enum CategoryColors : uint32_t
     RADIO_ERROR = 0xFF0000,  // RED
     FPGA_ERROR = 0x00FF00,   // GREEN
     KICKER_ERROR = 0x0000FF, // BLUE
-    IMU_ERROR = 0xFFFFFF     // WHITE
+    IMU_ERROR = 0xFFFFFF,    // WHITE
     BATT_ERROR = 0xF1C40F    // YELLOW
 };
 
