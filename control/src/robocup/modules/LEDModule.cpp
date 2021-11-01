@@ -151,12 +151,14 @@ void LEDModule::entry()
 
     {
         auto batteryLock = batteryVoltage.lock();
-        float voltage = getVoltage();
-        
+        float voltage = battery.getVoltage();
+
+        //Error handling code if the voltage is not
+        //between 3.3 and 5 - chosen randomly as proof of concept
         if (voltage < 3.3){
             printf("reached if statement");
-        } else if (voltage > MAX_SAFE_VOLTAGE) {
-            printf("Reached else statement");
+        } else if (voltage > 5) {
+            printf("reached else statement");
         }
     }
 

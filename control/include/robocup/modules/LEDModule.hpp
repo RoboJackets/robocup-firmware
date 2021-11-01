@@ -12,6 +12,8 @@
 #include "MicroPackets.hpp"
 #include "drivers/MCP23017.hpp"
 
+#include "drivers/Battery.hpp"
+
 /**
  * Constants for DotStar LEDs (RGB)
  * First LED in error display format: Category / Level / Info
@@ -254,4 +256,6 @@ private:
     std::array<DigitalOut, 4> leds;
     bool missedSuperLoopToggle;
     bool missedModuleRunToggle;
+
+    Battery battery;
 };
