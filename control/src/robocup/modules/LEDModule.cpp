@@ -151,11 +151,11 @@ void LEDModule::entry()
 
     {
         auto batteryLock = batteryVoltage.lock();
-        uint8_t voltage = batteryLock->rawVoltage;
-        float percentage = voltage / 255;
-        percentage = percentage * 0.769;
-        percentage = percentage + 1.923;
-        if (percentage < 3.3)
+        uint8_t voltageIn8Bits = batteryLock->rawVoltage;
+        float percentage = voltageIn8Bits / 255; //Percent of the max voltage
+        percentage = percentage * 0.769; //Multiplying by the range
+        voltage = percentage + 1.923; // Adding the MIN_SAFE_VOLTAGE to get battVoltagePin.getVoltage
+        if (voltage < 3.3)
         {
             printf("reached if statement");
         }
