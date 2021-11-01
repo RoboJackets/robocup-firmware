@@ -20,3 +20,7 @@ uint8_t Battery::getRaw() {
 bool Battery::isBattCritical() {
     return lastReadPercentage <= 0.05 || lastReadPercentage > 1.0;
 }
+
+float Battery::getVoltage() {
+    return battVoltagePin.getVoltage();
+}
