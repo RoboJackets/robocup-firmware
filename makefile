@@ -20,7 +20,7 @@ mkdir -p build && cd build && \
 cmake .. && make -j$(nproc) kicker-test && cd .. && \
 python3 convert.py build/bin/kicker-test.nib build/bin/kicker_bin.h KICKER_BYTES
 
-ROBOT_TESTS = rtos icm-42605-angle icm-20498-rate icm-20498-angle radio-test
+ROBOT_TESTS = rtos icm-42605-angle icm-20498-rate icm-20498-angle radio-test led-test
 
 control:
 	cd control && \
