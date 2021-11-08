@@ -18,7 +18,14 @@ uint8_t Battery::getRaw() {
 }
 
 bool Battery::isBattCritical() {
-    return lastReadPercentage <= 0.05 || lastReadPercentage > 1.0;
+    this->update();
+    float voltageValue = this->getVoltage(); 
+    if (voltageValue < 3.3 || voltageValue > 5) {
+        return true; 
+    } else {
+        return false; 
+    }
+ //  return lastReadPercentage <= 0.05 || lastReadPercentage > 1.0;
 }
 
 float Battery::getVoltage() {
