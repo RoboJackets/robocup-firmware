@@ -1,29 +1,29 @@
-#include "mtrain.hpp"
+#include "mtrain.h"
 #include "cmsis_os.h"
 #include <cstdlib>
 
 static void blinkTask( void const *argument )
 {
-  DigitalOut led2(LED2);
+  digitalout_init(LED2);
 
   for(;;) {
     osDelay(500);
-    led2.toggle();
+    digitalout_toggle(LED2);
   }
 }
 
 static void blinkTaskArg( void const *pin )
 {
-  DigitalOut blinkPin(*(struct PinName*)pin);
+  digitalout_init(*(struct pin_name*)pin);
 
   for(;;) {
     osDelay(50);
-    blinkPin.toggle();
+    digitalout_toggle(*(struct pin_name*)pin);
   }
 }
 
-PinName led3 = LED3;
-PinName led4 = LED4;
+pin_name led3 = LED3;
+pin_name led4 = LED4;
 
 /**
  * Blink LEDs at different rates
@@ -31,8 +31,8 @@ PinName led4 = LED4;
 int main(void)
 {
 
-  DigitalOut led1(LED1);
-  led1.write(1);
+  digitalout_init(LED1);
+  digitalout_write(LED1, 1);
 
   osThreadDef(blinkTask, blinkTask, osPriorityAboveNormal, 1, 1000);
   osThreadCreate(osThread(blinkTask), NULL);
