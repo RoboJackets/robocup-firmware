@@ -3,6 +3,7 @@
 #include "mtrain.hpp"
 #include "SPI.hpp"
 #include "GenericRadio.hpp"
+#include "rc-fshare/network_config.hpp"
 #include "pin_defs.h"
 #include <string>
 #include <vector>
@@ -23,20 +24,19 @@ namespace ISMConstants {
 
     static const unsigned int RESET_DELAY = 500;
 
-    // Network config
-    static const std::string NETWORK_SSID = "rj-rc-field";
-    static const std::string NETWORK_PASSWORD = "robojackets";
+    // NETWORK CONFIG
+    // TODO: insert link to robocup-fshare here
+    static const std::string NETWORK_SSID = network_config::NETWORK_SSID;
+    static const std::string NETWORK_PASSWORD = network_config::NETWORK_PASSWORD;
 
-    static const std::string ROUTER_IP = "172.16.1.1";
+    static const std::string ROUTER_IP = network_config::ROUTER_IP;
 
-    static const std::string BASE_STATION_IP = "172.16.1.36";//48//27//36
+    static const std::string BASE_STATION_IP = network_config::BASE_STATION_IP;
 
-    static const std::string RECEIVE_SOCKET = "0";
-    static const std::string LOCAL_PORT = "25566";
-    static const std::string SEND_SOCKET = "1";
-    static const std::string BASE_STATION_PORT = "25565";
-
-
+    static const std::string RECEIVE_SOCKET = network_config::RECEIVE_SOCKET;
+    static const std::string LOCAL_PORT = network_config::LOCAL_PORT;
+    static const std::string SEND_SOCKET = network_config::SEND_SOCKET;
+    static const std::string BASE_STATION_PORT = network_config::BASE_STATION_PORT;
 
     // RETURN VALUES (Not including error)
     static const std::string OK     = "OK\r\n> ";
