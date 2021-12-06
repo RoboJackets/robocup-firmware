@@ -40,7 +40,7 @@ ISM43340::ISM43340(std::unique_ptr<SPI> radioSPI, PinName nCsPin, PinName nReset
 
     readBuffer.reserve(ISMConstants::RECEIVE_BUFF_SIZE);
 
-    reset();
+    hard_reset();
 }
 
 bool ISM43340::isAvailable() {
@@ -302,6 +302,10 @@ void ISM43340::pingRouter() {
 }
 
 void ISM43340::reset() {
+    currentState = ISMConstants::State::CommandReady;
+}
+
+void ISM43340::hard_reset() {
     for(int i = 0; i < 5; i++) {
         nReset = ISMConstants::RESET_TURN_OFF;
         vTaskDelay(ISMConstants::RESET_DELAY);
