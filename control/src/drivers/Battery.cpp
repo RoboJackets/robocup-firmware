@@ -20,11 +20,8 @@ uint8_t Battery::getRaw() {
 bool Battery::isBattCritical() {
     this->update();
     float voltageValue = this->getVoltage(); 
-    if (voltageValue < 3.3 || voltageValue > 5) {
-        return true; 
-    } else {
-        return false; 
-    }
+    return voltageValue < 3.3 || voltageValue > 5
+
  //  return lastReadPercentage <= 0.05 || lastReadPercentage > 1.0;
 }
 

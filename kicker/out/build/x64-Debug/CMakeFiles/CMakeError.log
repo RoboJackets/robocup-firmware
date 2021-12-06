@@ -1,0 +1,165 @@
+Detecting C compiler ABI info failed to compile with the following output:
+Change Dir: C:/Users/ritar/Documents/robocup-firmware/kicker/out/build/x64-Debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/ninja.exe cmTC_c864b && [1/2] Building C object CMakeFiles\cmTC_c864b.dir\CMakeCCompilerABI.c.obj
+Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30705 for x64
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+cl : Command line warning D9035 : option 'o' has been deprecated and will be removed in a future release
+CMakeCCompilerABI.c
+[2/2] Linking C executable cmTC_c864b
+FAILED: cmTC_c864b 
+cmd.exe /C "cd . && C:\PROGRA~1\MICROS~4\2022\COMMUN~1\VC\Tools\MSVC\1430~1.307\bin\Hostx64\x64\cl.exe   CMakeFiles\cmTC_c864b.dir\CMakeCCompilerABI.c.obj -o cmTC_c864b   && cd ."
+Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30705 for x64
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+cl : Command line warning D9035 : option 'o' has been deprecated and will be removed in a future release
+Microsoft (R) Incremental Linker Version 14.30.30705.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+/out:CMakeCCompilerABI.c.exe 
+/out:cmTC_c864b.exe 
+CMakeFiles\cmTC_c864b.dir\CMakeCCompilerABI.c.obj 
+LINK : fatal error LNK1181: cannot open input file 'CMakeFiles\cmTC_c864b.dir\CMakeCCompilerABI.c.obj'
+ninja: build stopped: subcommand failed.
+
+
+
+
+Determining if the C compiler works failed with the following output:
+Change Dir: C:/Users/ritar/Documents/robocup-firmware/kicker/out/build/x64-Debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/ninja.exe cmTC_b934a && [1/2] Building C object CMakeFiles\cmTC_b934a.dir\testCCompiler.c.obj
+Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30705 for x64
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+cl : Command line warning D9035 : option 'o' has been deprecated and will be removed in a future release
+testCCompiler.c
+[2/2] Linking C executable cmTC_b934a
+FAILED: cmTC_b934a 
+cmd.exe /C "cd . && C:\PROGRA~1\MICROS~4\2022\COMMUN~1\VC\Tools\MSVC\1430~1.307\bin\Hostx64\x64\cl.exe   CMakeFiles\cmTC_b934a.dir\testCCompiler.c.obj -o cmTC_b934a   && cd ."
+Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30705 for x64
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+cl : Command line warning D9035 : option 'o' has been deprecated and will be removed in a future release
+Microsoft (R) Incremental Linker Version 14.30.30705.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+/out:testCCompiler.c.exe 
+/out:cmTC_b934a.exe 
+CMakeFiles\cmTC_b934a.dir\testCCompiler.c.obj 
+LINK : fatal error LNK1181: cannot open input file 'CMakeFiles\cmTC_b934a.dir\testCCompiler.c.obj'
+ninja: build stopped: subcommand failed.
+
+
+
+Detecting C compiler ABI info failed to compile with the following output:
+Change Dir: C:/Users/ritar/Documents/robocup-firmware/kicker/out/build/x64-Debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/ninja.exe cmTC_08303 && [1/2] Building C object CMakeFiles\cmTC_08303.dir\CMakeCCompilerABI.c.obj
+Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30705 for x64
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+cl : Command line warning D9035 : option 'o' has been deprecated and will be removed in a future release
+CMakeCCompilerABI.c
+[2/2] Linking C executable cmTC_08303
+FAILED: cmTC_08303 
+cmd.exe /C "cd . && C:\PROGRA~1\MICROS~4\2022\COMMUN~1\VC\Tools\MSVC\1430~1.307\bin\Hostx64\x64\cl.exe   CMakeFiles\cmTC_08303.dir\CMakeCCompilerABI.c.obj -o cmTC_08303   && cd ."
+Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30705 for x64
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+cl : Command line warning D9035 : option 'o' has been deprecated and will be removed in a future release
+Microsoft (R) Incremental Linker Version 14.30.30705.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+/out:CMakeCCompilerABI.c.exe 
+/out:cmTC_08303.exe 
+CMakeFiles\cmTC_08303.dir\CMakeCCompilerABI.c.obj 
+LINK : fatal error LNK1181: cannot open input file 'CMakeFiles\cmTC_08303.dir\CMakeCCompilerABI.c.obj'
+ninja: build stopped: subcommand failed.
+
+
+
+
+Determining if the C compiler works failed with the following output:
+Change Dir: C:/Users/ritar/Documents/robocup-firmware/kicker/out/build/x64-Debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/ninja.exe cmTC_ed075 && [1/2] Building C object CMakeFiles\cmTC_ed075.dir\testCCompiler.c.obj
+Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30705 for x64
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+cl : Command line warning D9035 : option 'o' has been deprecated and will be removed in a future release
+testCCompiler.c
+[2/2] Linking C executable cmTC_ed075
+FAILED: cmTC_ed075 
+cmd.exe /C "cd . && C:\PROGRA~1\MICROS~4\2022\COMMUN~1\VC\Tools\MSVC\1430~1.307\bin\Hostx64\x64\cl.exe   CMakeFiles\cmTC_ed075.dir\testCCompiler.c.obj -o cmTC_ed075   && cd ."
+Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30705 for x64
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+cl : Command line warning D9035 : option 'o' has been deprecated and will be removed in a future release
+Microsoft (R) Incremental Linker Version 14.30.30705.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+/out:testCCompiler.c.exe 
+/out:cmTC_ed075.exe 
+CMakeFiles\cmTC_ed075.dir\testCCompiler.c.obj 
+LINK : fatal error LNK1181: cannot open input file 'CMakeFiles\cmTC_ed075.dir\testCCompiler.c.obj'
+ninja: build stopped: subcommand failed.
+
+
+
+Detecting C compiler ABI info failed to compile with the following output:
+Change Dir: C:/Users/ritar/Documents/robocup-firmware/kicker/out/build/x64-Debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/ninja.exe cmTC_e4f3b && [1/2] Building C object CMakeFiles\cmTC_e4f3b.dir\CMakeCCompilerABI.c.obj
+Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+cl : Command line warning D9035 : option 'o' has been deprecated and will be removed in a future release
+CMakeCCompilerABI.c
+[2/2] Linking C executable cmTC_e4f3b
+FAILED: cmTC_e4f3b 
+cmd.exe /C "cd . && C:\PROGRA~1\MICROS~4\2022\COMMUN~1\VC\Tools\MSVC\1430~1.307\bin\Hostx64\x64\cl.exe   CMakeFiles\cmTC_e4f3b.dir\CMakeCCompilerABI.c.obj -o cmTC_e4f3b   && cd ."
+Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+cl : Command line warning D9035 : option 'o' has been deprecated and will be removed in a future release
+Microsoft (R) Incremental Linker Version 14.30.30706.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+/out:CMakeCCompilerABI.c.exe 
+/out:cmTC_e4f3b.exe 
+CMakeFiles\cmTC_e4f3b.dir\CMakeCCompilerABI.c.obj 
+LINK : fatal error LNK1181: cannot open input file 'CMakeFiles\cmTC_e4f3b.dir\CMakeCCompilerABI.c.obj'
+ninja: build stopped: subcommand failed.
+
+
+
+
+Determining if the C compiler works failed with the following output:
+Change Dir: C:/Users/ritar/Documents/robocup-firmware/kicker/out/build/x64-Debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/ninja.exe cmTC_74629 && [1/2] Building C object CMakeFiles\cmTC_74629.dir\testCCompiler.c.obj
+Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+cl : Command line warning D9035 : option 'o' has been deprecated and will be removed in a future release
+testCCompiler.c
+[2/2] Linking C executable cmTC_74629
+FAILED: cmTC_74629 
+cmd.exe /C "cd . && C:\PROGRA~1\MICROS~4\2022\COMMUN~1\VC\Tools\MSVC\1430~1.307\bin\Hostx64\x64\cl.exe   CMakeFiles\cmTC_74629.dir\testCCompiler.c.obj -o cmTC_74629   && cd ."
+Microsoft (R) C/C++ Optimizing Compiler Version 19.30.30706 for x64
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+cl : Command line warning D9035 : option 'o' has been deprecated and will be removed in a future release
+Microsoft (R) Incremental Linker Version 14.30.30706.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+/out:testCCompiler.c.exe 
+/out:cmTC_74629.exe 
+CMakeFiles\cmTC_74629.dir\testCCompiler.c.obj 
+LINK : fatal error LNK1181: cannot open input file 'CMakeFiles\cmTC_74629.dir\testCCompiler.c.obj'
+ninja: build stopped: subcommand failed.
+
+
+

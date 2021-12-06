@@ -199,9 +199,14 @@ private:
     const struct Error ERR_RADIO_WIFI_FAIL = {CategoryColors::RADIO_ERROR,
                                               LevelColors::FATAL,
                                               InfoColors::RADIO_CONN_WIFI_FAIL};
+
     const struct Error ERR_RADIO_SOCCER_FAIL = {CategoryColors::RADIO_ERROR,
                                                 LevelColors::FATAL,
                                                 InfoColors::RADIO_CONN_SOCCER_FAIL};
+    //BATTERY
+    const struct Error ERR_BATT_CRITICAL_FAIL = {CategoryColors::BATT_ERROR,
+                                                 LevelColors::FATAL,
+                                                 InfoColors::BOOT_FAIL};
     // FPGA
     const struct Error ERR_FPGA_BOOT_FAIL = {CategoryColors::FPGA_ERROR,
                                              LevelColors::FATAL,
@@ -216,9 +221,10 @@ private:
                                             LevelColors::FATAL,
                                             InfoColors::BOOT_FAIL};
 
-    const std::array<Error, 6> ERR_LIST = {ERR_RADIO_BOOT_FAIL,
+    const std::array<Error, 7> ERR_LIST = {ERR_RADIO_BOOT_FAIL,
                                            ERR_RADIO_WIFI_FAIL,
                                            ERR_RADIO_SOCCER_FAIL,
+                                           ERR_BATT_CRITICAL_FAIL,
                                            ERR_FPGA_BOOT_FAIL,
                                            ERR_KICKER_BOOT_FAIL,
                                            ERR_IMU_BOOT_FAIL};
@@ -226,7 +232,7 @@ private:
     /**
      * Array of toggles whose values indicates where the error at the same index in ERR_LIST is active or not
      */
-    std::array<bool, 6> errToggles;
+    std::array<bool, ERR_LIST.size()> errToggles;
 
     /**
      * Current index of errToggles
