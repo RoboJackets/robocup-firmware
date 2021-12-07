@@ -7,11 +7,11 @@ void imu_task(void*) {
     ICM20948 imu{spi, p18};
 
     vTaskDelay(100);
-    printf("Initializing");
+    printf("[INFO] Initializing");
 
     imu.initialize();
 
-    printf("Initialized");
+    printf("[INFO] Initialized");
 
     float angle = 0;
     int i = 0;
@@ -21,7 +21,7 @@ void imu_task(void*) {
         angle += 0.005 * imu_data;
 
         if (i++ % 20 == 0) {
-            printf("Angle: %f\r\n", angle);
+            printf("[INFO] Angle: %f\r\n", angle);
         }
     }
 }
@@ -30,8 +30,8 @@ int main() {
     DWT_Delay(5'000'000);
     xTaskHandle handle;
     xTaskCreate(&imu_task, "IMU", 1024, nullptr, 1, &handle);
-    printf("Starting scheduler\r\n");
+    printf("[INFO] Starting scheduler\r\n");
     vTaskStartScheduler();
-    printf("Died\r\n");
+    printf("[WARNING] Died\r\n");
     for (;;) {}
 }

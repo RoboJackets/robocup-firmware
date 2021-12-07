@@ -9,6 +9,6 @@ int main() {
 
     while(true) {
         float imu_data = imu.gyro_z();
-        printf("Data received: %d\r\n", int(imu_data * 1000));
+        printf("[INFO] Data received: %d\r\n", int(imu_data * 1000));
     }
 }

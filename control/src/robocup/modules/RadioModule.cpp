@@ -44,7 +44,7 @@ RadioModule::RadioModule(LockedStruct<BatteryVoltage>& batteryVoltage,
 
 void RadioModule::start() {
     link.init();
-    printf("INFO: Radio initialized\r\n");
+    printf("[INFO] Radio initialized\r\n");
     radioError.lock()->initialized = link.isRadioInitialized();
 }
 
