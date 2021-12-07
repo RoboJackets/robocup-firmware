@@ -63,7 +63,7 @@ bool AVR910::init() {
 
     if (!enabled) {
         printf(
-                "AVR910 unable to enable programming mode for chip.  "
+                "[WARNING] AVR910 unable to enable programming mode for chip.  "
                 "Further commands will fail\r\n");
     }
 
