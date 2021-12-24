@@ -14,4 +14,11 @@ void TSL2572::writeRegister(TSL2572::Register regAddress, uint16_t data) {
 }
 
 // TODO: write the function that reads a specific register
+void TSL2572::readRegister(TSL2572::Register regAddress) {
+	auto i2c_lock = _i2c.lock(); 
+	std::vector<uint8_t> buffer = i2c_lock->receive(_i2cAddress, regAddress, 2);
+	return (uint16_t)(buffer[0] | (buffer[1] << 8));
+
+}
+
 
