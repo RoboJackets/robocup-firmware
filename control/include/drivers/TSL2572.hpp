@@ -29,7 +29,9 @@ public:
         } Register;
 
     void writeRegister(TSL2572::Register regAddress, uint16_t data); // Declares the Write Function
-    uint16_t TSL2572::readRegister(TSL2572::Register regAddress);    // Declares the Read Function
+    	
+    void reset(); //Declares register values for default state  
+    uint16_t readRegister(TSL2572::Register regAddress);    // Declares the Read Function
 
 private:
     LockedStruct<I2C>& _i2c;
