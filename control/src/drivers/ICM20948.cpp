@@ -65,7 +65,7 @@ bool ICM20948::initialize() {
     uint8_t whoami = read_register(0, Registers::WHO_AM_I);
 
     if (whoami != WHOAMI_VAL) {
-        printf("Failed to connect to IMU.");
+        printf("[ERROR] Failed to connect to IMU.");
         return false;
     }
 
@@ -83,7 +83,7 @@ bool ICM20948::initialize() {
     whoami = read_register(0, Registers::WHO_AM_I);
 
     while (whoami != WHOAMI_VAL) {
-        printf("Waiting for IMU to boot.");
+        printf("[INFO] Waiting for IMU to boot.");
         whoami = read_register(0, Registers::WHO_AM_I);
         vTaskDelay(100);
     }
@@ -114,10 +114,10 @@ bool ICM20948::initialize() {
     write_register(2, Registers::ACCEL_CONFIG, 0x02);
 
     if (whoami != WHOAMI_VAL) {
-        printf("Failed to connect to IMU.");
+        printf("[ERROR] Failed to connect to IMU.");
         return false;
     } else {
-        printf("Initialization Complete!");
+        printf("[INFO] Initialization Complete!");
         return true;
     }
 }

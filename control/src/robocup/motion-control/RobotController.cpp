@@ -33,7 +33,7 @@ void RobotController::calculateWheel(Eigen::Matrix<float, numWheels, 1> pv,
                                      Eigen::Matrix<float, numWheels, 1>& outputs) {
     for (int i = 0; i < numWheels; i++) {
         if (!std::isfinite(last_wheels_(i)) || std::isnan(last_wheels_(i))) {
-            printf("Warning: last wheels had %f\n", last_wheels_(i));
+            printf("[WARNING] last wheels had %f\n", last_wheels_(i));
             last_wheels_ = Eigen::Matrix<float, numWheels, 1>::Zero();
         }
     }

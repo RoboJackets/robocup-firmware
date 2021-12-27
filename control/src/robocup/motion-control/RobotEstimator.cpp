@@ -49,7 +49,7 @@ void RobotEstimator::predict(Eigen::Matrix<float, numInputs, 1> u) {
 void RobotEstimator::update(Eigen::Matrix<float, numOutputs, 1> z) {
     for (int i = 0; i < numStates; i++) {
         if (!std::isfinite(x_hat(i)) || std::isnan(x_hat(i))) {
-            printf("Warning: xhat had %f\n", x_hat(i));
+            printf("[WARNING] xhat had %f\n", x_hat(i));
             x_hat = Eigen::Matrix<float, numStates, 1>::Zero();
         }
     }

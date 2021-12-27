@@ -18,7 +18,7 @@ IMUModule::IMUModule(LockedStruct<SPI>& sharedSPI, LockedStruct<IMUData>& imuDat
 void IMUModule::start() {
     imu.initialize();
 
-    printf("INFO: IMU initialized\r\n");
+    printf("[INFO] IMU initialized\r\n");
     imuData.lock()->initialized = true;
 }
 

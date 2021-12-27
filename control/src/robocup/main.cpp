@@ -8,7 +8,7 @@
 
 #include "SPI.hpp"
 #include "I2C.hpp"
-#include "delay.hpp"
+#include "delay.h"
 #include "DigitalOut.hpp"
 
 #include <unistd.h>
@@ -172,11 +172,11 @@ int main() {
 
     ////////////////////////////////////////////
 
-    printf("Starting scheduler...\r\n");
+    printf("[INFO] Starting scheduler...\r\n");
 
     vTaskStartScheduler();
 
-    printf("Failed to start scheduler!\r\n");
+    printf("[ERROR] Failed to start scheduler!\r\n");
 
     for (;;) {}
 }

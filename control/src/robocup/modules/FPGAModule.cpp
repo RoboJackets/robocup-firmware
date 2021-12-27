@@ -2,7 +2,7 @@
 #include "iodefs.h"
 
 #include <cmath>
-#include <delay.hpp>
+#include <delay.h>
 
 using namespace std::literals;
 
@@ -41,7 +41,7 @@ void FPGAModule::start() {
     vTaskDelay(3000);
     auto fpgaStatusLock = fpgaStatus.lock();
     fpgaInitialized = fpga.configure();
-    printf("INFO: FPGA probably configured\r\n");
+    printf("[INFO] FPGA probably configured\r\n");
     fpgaStatusLock->initialized = fpgaInitialized;
 }
 
