@@ -21,4 +21,8 @@ void TSL2572::readRegister(TSL2572::Register regAddress) {
 
 }
 
+void TSL2572::reset() {
+	auto lock = _i2c.lock(); 
+	
+}
 
