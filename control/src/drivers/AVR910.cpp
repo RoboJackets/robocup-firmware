@@ -63,7 +63,7 @@ bool AVR910::init() {
 
     if (!enabled) {
         printf(
-                "ERROR: AVR910 unable to enable programming mode for chip.  "
+                "[WARNING] AVR910 unable to enable programming mode for chip.  "
                 "Further commands will fail\r\n");
     }
 
@@ -466,7 +466,7 @@ bool AVR910::checkMemory(int pageSize, int numPages, FILE* binary,
                          bool verbose) {
     bool success = true;
 
-    printf("Checking memory? (pagesize: %d, numpages: %d) \r\n", pageSize,
+    printf("[INFO] Checking memory? (pagesize: %d, numpages: %d) \r\n", pageSize,
            numPages);
 
     // Go back to the beginning of the binary file.
@@ -481,9 +481,9 @@ bool AVR910::checkMemory(int pageSize, int numPages, FILE* binary,
 
             if (c != response) {
                 if (verbose || true) {
-                    printf("Page %i low byte %i: 0x%02x : ", page, offset,
+                    printf("[INFO] Page %i low byte %i: 0x%02x : ", page, offset,
                            response);
-                    printf("Correct byte is 0x%02x\r\n", c);
+                    printf("[INFO] Correct byte is 0x%02x\r\n", c);
                 } else {
                     return false;
                 }
@@ -495,9 +495,9 @@ bool AVR910::checkMemory(int pageSize, int numPages, FILE* binary,
 
             if (c != response) {
                 if (verbose || true) {
-                    printf("Page %i high byte %i: 0x%02x : ", page, offset,
+                    printf("[INFO] Page %i high byte %i: 0x%02x : ", page, offset,
                            response);
-                    printf("Correct byte is 0x%02x\r\n", c);
+                    printf("[INFO] Correct byte is 0x%02x\r\n", c);
                 } else {
                     return false;
                 }
@@ -508,9 +508,9 @@ bool AVR910::checkMemory(int pageSize, int numPages, FILE* binary,
 
     if (verbose) {
         if (success) {
-            printf("Kicker Memory Contents: OK.\r\n");
+            printf("[INFO] Kicker Memory Contents: OK.\r\n");
         } else {
-            printf("Kicker Memory Contents: FAILED.\r\n");
+            printf("[ERROR] Kicker Memory Contents: FAILED.\r\n");
         }
     }
 
@@ -521,7 +521,7 @@ bool AVR910::checkMemory(int pageSize, int numPages, const uint8_t* binary,
                          unsigned int length, bool verbose) {
     bool success = true;
 
-    printf("Checking memory? pagesize: %d, numpages: %d \r\n", pageSize,
+    printf("[INFO] Checking memory? pagesize: %d, numpages: %d \r\n", pageSize,
            numPages);
 
     unsigned int binaryLoc = 0;
@@ -533,7 +533,7 @@ bool AVR910::checkMemory(int pageSize, int numPages, const uint8_t* binary,
             binaryLoc++;
 
             if (binaryLoc >= length) {
-                printf("Done reading\r\n");
+                printf("[INFO] Done reading\r\n");
                 break;
             }
 
@@ -542,9 +542,9 @@ bool AVR910::checkMemory(int pageSize, int numPages, const uint8_t* binary,
 
             if (c != response) {
                 if (verbose) {
-                    printf("Page %i low byte %i: 0x%02x\r\n", page, offset,
+                    printf("[INFO] Page %i low byte %i: 0x%02x\r\n", page, offset,
                            response);
-                    printf("Correct byte is 0x%02x\r\n", c);
+                    printf("[INFO] Correct byte is 0x%02x\r\n", c);
                 } else {
                     return false;
                 }
@@ -562,9 +562,9 @@ bool AVR910::checkMemory(int pageSize, int numPages, const uint8_t* binary,
 
             if (c != response) {
                 if (verbose) {
-                    printf("Page %i high byte %i: 0x%02x\r\n", page, offset,
+                    printf("[INFO] Page %i high byte %i: 0x%02x\r\n", page, offset,
                            response);
-                    printf("Correct byte is 0x%02x\r\n", c);
+                    printf("[INFO] Correct byte is 0x%02x\r\n", c);
                 } else {
                     return false;
                 }

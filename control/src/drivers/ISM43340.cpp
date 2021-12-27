@@ -263,7 +263,7 @@ void ISM43340::sendCommand(const std::string& command, const std::string& arg) {
 
 int32_t ISM43340::testPrint() {
     for (unsigned int i = 0; i < readBuffer.size(); i++) {
-        printf("%c", (char) readBuffer[i]);
+        printf("[INFO] %c", (char) readBuffer[i]);
         vTaskDelay(10);
     }
     printf("\r\n");
@@ -323,8 +323,12 @@ void ISM43340::reset() {
         if (isInit) {
             break;
             //return;
-        } else {
-            printf("Could not initialize radio\r\n");
+        } 
+        else if (i == 4){
+            printf("[ERROR] Failed to initialize radio.\r\n");
+        }
+        else {
+            printf("[INFO] Could not initialize radio. Retrying.\r\n");
         }
     }
 
@@ -384,7 +388,7 @@ void ISM43340::reset() {
     if (readBuffer.size() == 0 || (int)readBuffer[0] == 0) {
         // Failed to connect to network
         // not sure what to have it do here
-        printf("Failed to connect to network\r\n");
+        printf("[ERROR] Failed to connect to network\r\n");
         return;
     }
 
@@ -432,5 +436,5 @@ void ISM43340::reset() {
 
     currentSocket = SOCKET_TYPE::SEND;
     connected = true;
-    printf("Radio initialized\r\n");
+    printf("[INFO] Radio initialized\r\n");
 }

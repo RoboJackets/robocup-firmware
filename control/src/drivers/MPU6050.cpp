@@ -97,7 +97,7 @@ void MPU6050::initialize() {
  */
 bool MPU6050::testConnection() {
     uint8_t deviceId = getDeviceID();
-    printf("deviceID = %d\n", deviceId);
+    printf("[INFO] deviceID = %d\n", deviceId);
     return deviceId == 0x34;
 }
 

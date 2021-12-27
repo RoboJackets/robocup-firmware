@@ -15,7 +15,7 @@ KickerBoard::KickerBoard(LockedStruct<SPI>& spi, std::shared_ptr<DigitalOut> nCs
 bool KickerBoard::verify_param(const char* name, char expected,
                                int (AVR910::*paramMethod)(), char mask,
                                bool verbose) {
-    if (verbose) printf("Checking %s...", name);
+    if (verbose) printf("[INFO] Checking %s...", name);
     int val = (*this.*paramMethod)();
     bool success = ((val & mask) == expected);
     if (verbose) {
@@ -125,7 +125,7 @@ bool KickerBoard::flash(bool onlyIfDifferent, bool verbose) {
         bool success = program(progBinary, length, ATMEGA_PAGESIZE, ATMEGA_NUM_PAGES);
 
         if (!success) {
-            printf("[WARN] Kicker: Failed to program kicker.\r\n");
+            printf("[WARNING] Kicker: Failed to program kicker.\r\n");
         } else {
             printf("[INFO] Kicker: Kicker successfully programmed.\r\n");
         }
