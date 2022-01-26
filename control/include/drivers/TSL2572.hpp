@@ -25,16 +25,22 @@ public:
         C0DATAH = 0x15,
         C1DATA = 0x16,
         C1DATAH = 0x17
-        
         } Register;
 
-    void writeRegister(TSL2572::Register regAddress, uint16_t data); // Declares the Write Function
+    //void writeRegister(TSL2572::Register regAddress, uint16_t data); // Declares the Write Function
     	
     void reset(); //Declares register values for default state  
-    uint16_t readRegister(TSL2572::Register regAddress);    // Declares the Read Function
+    uint32_t TSL2572::calculateLux(uint16_t sensor); 
+    //uint16_t readRegister(TSL2572::Register regAddress);    // Declares the Read Function
 
 private:
+
+    boolean _tsl2572initialized; 
     LockedStruct<I2C>& _i2c;
     int _i2cAddress; // physical I2C Address
+
+    void writeRegister(uint8_t reg, uint8_t data);
+    uint8_t readRegister(TSL2572::Register regAddress); 
+
 
 };
