@@ -2,14 +2,13 @@
 #include "drivers/TSL2572.hpp"
 
 //constructor
-TSL2572::TSL2572(int i2cAddress, int32_t sensorID) 
+TSL2572::TSL2572(int i2cAddress, int32_t sensorID)
 {
     _i2cAddress = i2cAddress;
     _tsl2572initialized = false;
-    _tsl2572Integration = TSL2572_INTEGRATIONTIME_101MS; 
-    _tsl2572Gain = TSL2572_GAIN_16X; 
-    int32_t _tsl2572SensorID = sensorID; 
-
+    _tsl2572Integration = TSL2572_INTEGRATIONTIME_101MS;
+    _tsl2572Gain = TSL2572_GAIN_16X;
+    int32_t _tsl2572SensorID = sensorID;
 }
 
 //begin
@@ -24,15 +23,16 @@ boolean TSL2572::begin(LockedStruct<I2C> &sharedI2C)
 boolean TSL2572::init()
 {
     uint8_t readID = read8(ID);
-    if (readID != 0x34) {
-        return false; 
+    if (readID != 0x34)
+    {
+        return false;
     }
     _tsl2572initialized = true;
 
-    setIntegrationTime(_tsl2572IntegrationTime); 
-    setGain(_tsl2572Gain); 
-    disable(); 
-    return true; 
+    setIntegrationTime(_tsl2572IntegrationTime);
+    setGain(_tsl2572Gain);
+    disable();
+    return true;
 }
 
 //13ms
@@ -44,21 +44,30 @@ void TSL2572::setIntegrationTime(tsl2572IntegrationTime_t time)
         begin();
     enable();
 
-    write8(TSL2572_COMMAND_BIT | ATIME,  time | _tsl2572Gain);
-    _tsl2572IntegrationTime = time; 
-    disable(); 
-
+    write8(TSL2572_COMMAND_BIT | ATIME, time | _tsl2572Gain);
+    _tsl2572IntegrationTime = time;
+    disable();
 }
 
-void TSL2572::setGain(tsl2572Gain_t gain) {
-    if (!_tsl2572initialized) 
-        begin(); 
-    
-    enable(); 
+void TSL2572::setGain(tsl2572Gain_t gain)
+{
+    if (!_tsl2572initialized)
+        begin();
 
-    _tsl2572Gain = gain; 
+    enable();
 
-    disable(); 
+    _tsl2572Gain = gain;
+
+    disable();
+}
+
+void TSL2572::getLuminosity(uint16_t *broadband)
+{
+    if (!_tsl2572AutoGain)
+    {
+        getData(broadband);
+        return;
+    }
 }
 
 uint32_t TSL2572::calculateLux(uint16_t sensor)
@@ -106,10 +115,45 @@ void TSL2572::getData(unint16_t *broadband)
 
 void TSL2572::enable(void)
 {
-    writeRegister(CONTROL, ENABLE);
+    write8(TSL2572_COMMAND_BIT | TSL2572_REGISTER_CONTROL, TSL2561_CONTROL_POWERON);
 }
 
 void TSL2572::disable(void)
 {
-    writeRegister(CONTROL, ENABLE);
+    write8(TSL2572_COMMAND_BIT | TSL2572_REGISTER_CONTROL, TSL2572_CONTROL_POWEROFF);
+}
+
+void TSL2572::write8(u_int8_t reg, u_int8_t value)
+{
+    _i2c->beginTransmission(_i2cAddress);
+    _i2c->write(reg);
+    _i2c->write(value);
+    _i2c->endTransmission();
+}
+
+uint8_t TSL2572::read8(uint8_t reg)
+{
+    _i2c->beginTransmission(_i2cAddress);
+    _i2c->write(reg);
+    _i2c->endTransmission();
+
+    _i2c->requestFrom(_i2cAddress, 1); //requestFrom(address, quantity)
+    return _i2c->read()
+}
+
+uint16_t TSL2572::read16(uint8_t reg)
+{
+    uint16_t x;
+    t;
+
+    _i2c->beginTransmission(_i2cAddress);
+    _i2c->write(reg);
+    _i2c->endTransmission();
+
+    _i2c->requestFrom(_i2cAddress, 2); //requestFrom(address, quantity)
+    t = _i2c->read();
+    x = _i2c->read();
+    x <<= 8;
+    x |= t;
+    return x;
 }
