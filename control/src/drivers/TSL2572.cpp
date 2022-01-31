@@ -23,8 +23,23 @@ boolean TSL2572::init()
     _tsl2572initialized = true;
 }
 
+//13ms
+//101ms
+//402ms
+void TSL2572::setIntegrationTime(tsl2572IntegrationTime_t time)
+{
+    if (!_tsl2572initialized)
+        begin();
+    enable();
+
+    write(WTIME, time);
+}
 uint32_t TSL2572::calculateLux(uint16_t sensor)
 {
+    unsigned long channel0;
+    chScale = TSL2572_LUX_CHSCALE_TINT0;
+    channel0 = (broadband * chScale) >> TSL2561_LUX_CHSCALE;
+    return channel0;
 }
 
 // write to a specific register
@@ -50,4 +65,24 @@ void TSL2572::reset()
 
     for (int reg_addr = 2; reg_addr <= OLAT; reg_addr += 2)
         writeRegister(static_cast<MCP23017::Register>(reg_addr), 0x0000);
+}
+
+void TSL2572::getData(unint16_t *broadband)
+{
+    enable();
+    delay(TSL2572_DELAY_INTTME_13MS);
+
+    *broadband = readRegister(C0DATA);
+
+    disable();
+}
+
+void TSL2572::enable(void)
+{
+    writeRegister(CONTROL, ENABLE);
+}
+
+void TSL2572::disable(void)
+{
+    writeRegister(CONTROL, ENABLE);
 }
