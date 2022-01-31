@@ -33,6 +33,17 @@ public:
         C1DATAH = 0x17
     } Register;
 
+    typedef enum 
+    {
+        TSL2572_GAIN_1X = 0x00, //No gain 
+        TSL2572_GAIN_16X = 0x10,  //16x gain 
+    } tsl2572Gain_t
+
+    typedef enum 
+    {
+        TSL2572_INTEGRATIONTIME_101MS = 0xDB, //101 ms 
+    } tsl2572IntegrationTime_t
+
     //void writeRegister(TSL2572::Register regAddress, uint16_t data); // Declares the Write Function
 
     void reset(); //Declares register values for default state
@@ -43,6 +54,9 @@ private:
     boolean _tsl2572initialized;
     LockedStruct<I2C> &_i2c;
     int _i2cAddress; // physical I2C Address
+    tsl2572Gain_t _tsl2572Gain; 
+    tsl2572IntegrationTime_t _tsl2572IntegrationTime; 
+    int32_t _tsl2572SensorID; 
 
     void writeRegister(uint8_t reg, uint8_t data);
     uint8_t readRegister(TSL2572::Register regAddress);

@@ -2,11 +2,14 @@
 #include "drivers/TSL2572.hpp"
 
 //constructor
-TSL2572::TSL2572(LockedStruct<I2C> &sharedI2C, int i2cAddress)
-    : _i2c(sharedI2C), _i2cAddress(i2cAddress)
+TSL2572::TSL2572(int i2cAddress, int32_t sensorID) 
 {
     _i2cAddress = i2cAddress;
     _tsl2572initialized = false;
+    _tsl2572Integration = TSL2572_INTEGRATIONTIME_101MS; 
+    _tsl2572Gain = TSL2572_GAIN_16X; 
+    int32_t _tsl2572SensorID = sensorID; 
+
 }
 
 //begin
@@ -20,7 +23,16 @@ boolean TSL2572::begin(LockedStruct<I2C> &sharedI2C)
 //init
 boolean TSL2572::init()
 {
+    uint8_t readID = read8(ID);
+    if (readID != 0x34) {
+        return false; 
+    }
     _tsl2572initialized = true;
+
+    setIntegrationTime(_tsl2572IntegrationTime); 
+    setGain(_tsl2572Gain); 
+    disable(); 
+    return true; 
 }
 
 //13ms
@@ -32,8 +44,23 @@ void TSL2572::setIntegrationTime(tsl2572IntegrationTime_t time)
         begin();
     enable();
 
-    write(WTIME, time);
+    write8(TSL2572_COMMAND_BIT | ATIME,  time | _tsl2572Gain);
+    _tsl2572IntegrationTime = time; 
+    disable(); 
+
 }
+
+void TSL2572::setGain(tsl2572Gain_t gain) {
+    if (!_tsl2572initialized) 
+        begin(); 
+    
+    enable(); 
+
+    _tsl2572Gain = gain; 
+
+    disable(); 
+}
+
 uint32_t TSL2572::calculateLux(uint16_t sensor)
 {
     unsigned long channel0;
