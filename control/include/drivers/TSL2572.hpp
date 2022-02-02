@@ -59,5 +59,5 @@ private:
     int32_t _tsl2572SensorID; 
 
     void writeRegister(uint8_t reg, uint8_t data);
-    uint8_t readRegister(TSL2572::Register regAddress);
+    uint16_t readRegister(TSL2572::Register regAddress);
 };

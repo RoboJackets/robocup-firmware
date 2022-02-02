@@ -15,7 +15,7 @@ void PCA9858PWJ::writeRegister(PCA9858PWJ::Register regAddress, uint16_t data)
     i2c_lock->transmit(_i2cAddress, regAddress, buffer);
 }
 
-// TODO: write the function that reads a specific register
+// reads a specific register
 void PCA9858PWJ::readRegister(PCA9858PWJ::Register regAddress)
 {
     auto i2c_lock = _i2c.lock();

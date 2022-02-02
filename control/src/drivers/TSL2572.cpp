@@ -87,8 +87,8 @@ void TSL2572::writeRegister(TSL2572::Register regAddress, uint16_t data)
     i2c_lock->transmit(_i2cAddress, regAddress, buffer);
 }
 
-// TODO: write the function that reads a specific register
-void TSL2572::readRegister(TSL2572::Register regAddress)
+// reads a specific register
+uint16_t TSL2572::readRegister(TSL2572::Register regAddress)
 {
     auto i2c_lock = _i2c.lock();
     std::vector<uint8_t> buffer = i2c_lock->receive(_i2cAddress, regAddress, 2);
@@ -143,8 +143,7 @@ uint8_t TSL2572::read8(uint8_t reg)
 
 uint16_t TSL2572::read16(uint8_t reg)
 {
-    uint16_t x;
-    t;
+    uint16_t x; t;
 
     _i2c->beginTransmission(_i2cAddress);
     _i2c->write(reg);
@@ -156,4 +155,3 @@ uint16_t TSL2572::read16(uint8_t reg)
     x <<= 8;
     x |= t;
     return x;
-}
