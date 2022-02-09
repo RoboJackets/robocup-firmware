@@ -39,6 +39,10 @@ public:
         TSL2572_GAIN_16X = 0x10,  //16x gain 
     } tsl2572Gain_t
 
+    typedef enum {
+        I2CADDR = 0x39; 
+    } Address; 
+
     typedef enum 
     {
         TSL2572_INTEGRATIONTIME_101MS = 0xDB, //101 ms 
