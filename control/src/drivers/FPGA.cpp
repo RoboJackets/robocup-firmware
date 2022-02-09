@@ -102,8 +102,8 @@ bool FPGA::configure() {
         for (auto i = 0; i < 1000; i++) {
             vTaskDelay(100);
             if (_done == true) {
-                printf("[INFO] Got done on i=%d, but InitB=%d\r\n", i, _initB.read());
-                configSuccess = _initB;
+                printf("[INFO] Got done on i=%d", i);
+                configSuccess = _done;
                 break;
             }
         }
