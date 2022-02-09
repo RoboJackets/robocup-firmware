@@ -8,7 +8,7 @@
 class TSL2572
 {
 public:
-    /* Register Defines from Data Sheet 
+    /* Register Defines from Data Sheet
     https://ams.com/documents/20143/36005/TSL2572_DS000178_4-00.pdf
     Page 19 */
     typedef enum
@@ -27,41 +27,54 @@ public:
         ID = 0x12,      // ID Register - provides the value for the part number
         STATUS = 0x13,  // Status Register - provides the internal status of the device
         C0DATA = 0x14,  // ADC Channel Data Registers
-        C0DATA = 0x14,
         C0DATAH = 0x15,
         C1DATA = 0x16,
         C1DATAH = 0x17
     } Register;
 
-    typedef enum 
+    typedef enum
     {
-        TSL2572_GAIN_1X = 0x00, //No gain 
-        TSL2572_GAIN_16X = 0x10,  //16x gain 
-    } tsl2572Gain_t
+        TSL2572_GAIN_1X = 0x00,  // No gain
+        TSL2572_GAIN_16X = 0x10, // 16x gain
+    } tsl2572Gain_t;
 
-    typedef enum {
-        I2CADDR = 0x39; 
-    } Address; 
-
-    typedef enum 
+    typedef enum
     {
-        TSL2572_INTEGRATIONTIME_101MS = 0xDB, //101 ms 
-    } tsl2572IntegrationTime_t
+        I2CADDR = 0x39
+    } Address;
 
-    //void writeRegister(TSL2572::Register regAddress, uint16_t data); // Declares the Write Function
+    typedef enum
+    {
+        TSL2572_INTEGRATIONTIME_101MS = 0xDB // 101 ms
+    } tsl2572IntegrationTime_t;
 
-    void reset(); //Declares register values for default state
+    void TSL2572::getData(unint16_t *broadband);
+    void TSL2572::reset();
     uint32_t TSL2572::calculateLux(uint16_t sensor);
-    //uint16_t readRegister(TSL2572::Register regAddress);    // Declares the Read Function
+
+    void TSL2572::getLuminosity(uint16_t *broadband);
+    void TSL2572::setGain(tsl2572Gain_t gain);
+    void TSL2572::setIntegrationTime(tsl2572IntegrationTime_t time);
+    boolean TSL2572::init();
+    boolean TSL2572::begin(LockedStruct<I2C> &sharedI2C);
+    TSL2572::TSL2572(int i2cAddress, int32_t sensorID);
+
+    // uint16_t readRegister(TSL2572::Register regAddress);    // Declares the Read Function
 
 private:
     boolean _tsl2572initialized;
     LockedStruct<I2C> &_i2c;
     int _i2cAddress; // physical I2C Address
-    tsl2572Gain_t _tsl2572Gain; 
-    tsl2572IntegrationTime_t _tsl2572IntegrationTime; 
-    int32_t _tsl2572SensorID; 
+    tsl2572Gain_t _tsl2572Gain;
+    tsl2572IntegrationTime_t _tsl2572IntegrationTime;
+    int32_t _tsl2572SensorID;
 
     void writeRegister(uint8_t reg, uint8_t data);
     uint16_t readRegister(TSL2572::Register regAddress);
+    uint16_t TSL2572::read16(uint8_t reg);
+    uint8_t TSL2572::read8(uint8_t reg);
+    void TSL2572::write8(u_int8_t reg, u_int8_t value);
+
+    void TSL2572::disable(void);
+    void TSL2572::enable(void);
 };

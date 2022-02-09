@@ -1,6 +1,6 @@
 #include "LockedStruct.hpp"
 #include "drivers/PCA9858PWJ.hpp"
-#include "I2CDev.h"
+
 #include "TSL2572.cpp"
 
 PCA9858PWJ::PCA9858PWJ(LockedStruct<I2C> &sharedI2C, int i2cAddress)
@@ -24,20 +24,4 @@ void PCA9858PWJ::readRegister(PCA9858PWJ::Register regAddress)
     std::vector<uint8_t> buffer = i2c_lock->receive(_i2cAddress, regAddress, 2);
     return (uint16_t)(buffer[0] | (buffer[1] << 8));
 }
-
-void PCA9858PWJ::readSensors()
-{
-    auto i2c_lock = _i2c.lock();
-    uint32_t values[4];
-    uint8_t channel = 2 for (int i = 0; i < 4; i++)
-    {
-        //channel selector
-        bool error = writeByte(NULL, 0, channel);
-
-        //reading from light sensor
-        uint32_t value = ;
-        values[i] = NULL;
-
-        channel << 1;
-    }
 }

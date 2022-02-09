@@ -1,7 +1,7 @@
 #include "LockedStruct.hpp"
 #include "drivers/TSL2572.hpp"
 
-//constructor
+// constructor
 TSL2572::TSL2572(int i2cAddress, int32_t sensorID)
 {
     _i2cAddress = i2cAddress;
@@ -11,7 +11,7 @@ TSL2572::TSL2572(int i2cAddress, int32_t sensorID)
     int32_t _tsl2572SensorID = sensorID;
 }
 
-//begin
+// begin
 boolean TSL2572::begin(LockedStruct<I2C> &sharedI2C)
 {
     _i2c = sharedI2C;
@@ -19,7 +19,7 @@ boolean TSL2572::begin(LockedStruct<I2C> &sharedI2C)
     return init();
 }
 
-//init
+// init
 boolean TSL2572::init()
 {
     uint8_t readID = read8(ID);
@@ -35,9 +35,9 @@ boolean TSL2572::init()
     return true;
 }
 
-//13ms
-//101ms
-//402ms
+// 13ms
+// 101ms
+// 402ms
 void TSL2572::setIntegrationTime(tsl2572IntegrationTime_t time)
 {
     if (!_tsl2572initialized)
@@ -137,21 +137,23 @@ uint8_t TSL2572::read8(uint8_t reg)
     _i2c->write(reg);
     _i2c->endTransmission();
 
-    _i2c->requestFrom(_i2cAddress, 1); //requestFrom(address, quantity)
+    _i2c->requestFrom(_i2cAddress, 1); // requestFrom(address, quantity)
     return _i2c->read()
 }
 
 uint16_t TSL2572::read16(uint8_t reg)
 {
-    uint16_t x; t;
+    uint16_t x;
+    t;
 
     _i2c->beginTransmission(_i2cAddress);
     _i2c->write(reg);
     _i2c->endTransmission();
 
-    _i2c->requestFrom(_i2cAddress, 2); //requestFrom(address, quantity)
+    _i2c->requestFrom(_i2cAddress, 2); // requestFrom(address, quantity)
     t = _i2c->read();
     x = _i2c->read();
     x <<= 8;
     x |= t;
     return x;
+}
