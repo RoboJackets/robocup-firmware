@@ -48,21 +48,21 @@ public:
         TSL2572_INTEGRATIONTIME_101MS = 0xDB // 101 ms
     } tsl2572IntegrationTime_t;
 
-    void TSL2572::getData(unint16_t *broadband);
-    void TSL2572::reset();
-    uint32_t TSL2572::calculateLux(uint16_t sensor);
+    void getData(uint16_t *broadband);
+    void reset();
+    uint32_t calculateLux(uint16_t sensor);
 
-    void TSL2572::getLuminosity(uint16_t *broadband);
-    void TSL2572::setGain(tsl2572Gain_t gain);
-    void TSL2572::setIntegrationTime(tsl2572IntegrationTime_t time);
-    boolean TSL2572::init();
-    boolean TSL2572::begin(LockedStruct<I2C> &sharedI2C);
-    TSL2572::TSL2572(int i2cAddress, int32_t sensorID);
+    void getLuminosity(uint16_t *broadband);
+    void setGain(tsl2572Gain_t gain);
+    void setIntegrationTime(tsl2572IntegrationTime_t time);
+    boolean init();
+    boolean begin(LockedStruct<I2C> &sharedI2C);
+    TSL2572(int i2cAddress, int32_t sensorID);
 
     // uint16_t readRegister(TSL2572::Register regAddress);    // Declares the Read Function
 
 private:
-    boolean _tsl2572initialized;
+    bool _tsl2572initialized;
     LockedStruct<I2C> &_i2c;
     int _i2cAddress; // physical I2C Address
     tsl2572Gain_t _tsl2572Gain;
@@ -71,10 +71,10 @@ private:
 
     void writeRegister(uint8_t reg, uint8_t data);
     uint16_t readRegister(TSL2572::Register regAddress);
-    uint16_t TSL2572::read16(uint8_t reg);
-    uint8_t TSL2572::read8(uint8_t reg);
-    void TSL2572::write8(u_int8_t reg, u_int8_t value);
+    uint16_t read16(uint8_t reg);
+    uint8_t read8(uint8_t reg);
+    void write8(u_int8_t reg, u_int8_t value);
 
-    void TSL2572::disable(void);
-    void TSL2572::enable(void);
+    void disable(void);
+    void enable(void);
 };

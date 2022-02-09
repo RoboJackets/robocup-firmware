@@ -4,30 +4,30 @@
 // constructor
 TSL2572::TSL2572(int i2cAddress, int32_t sensorID)
 {
-    _i2cAddress = i2cAddress;
-    _tsl2572initialized = false;
-    _tsl2572Integration = TSL2572_INTEGRATIONTIME_101MS;
-    _tsl2572Gain = TSL2572_GAIN_16X;
+    this->_i2cAddress = i2cAddress;
+    this->_tsl2572initialized = false;
+    this->_tsl2572IntegrationTime = TSL2572_INTEGRATIONTIME_101MS;
+    this->_tsl2572Gain = TSL2572_GAIN_16X;
     int32_t _tsl2572SensorID = sensorID;
 }
 
 // begin
-boolean TSL2572::begin(LockedStruct<I2C> &sharedI2C)
+bool TSL2572::begin(LockedStruct<I2C> &sharedI2C)
 {
-    _i2c = sharedI2C;
-    _i2c->begin();
+    this->_i2c = sharedI2C;
+    this->_i2c->begin();
     return init();
 }
 
 // init
-boolean TSL2572::init()
+bool TSL2572::init()
 {
     uint8_t readID = read8(ID);
     if (readID != 0x34)
     {
         return false;
     }
-    _tsl2572initialized = true;
+    this->_tsl2572initialized = true;
 
     setIntegrationTime(_tsl2572IntegrationTime);
     setGain(_tsl2572Gain);
@@ -40,30 +40,30 @@ boolean TSL2572::init()
 // 402ms
 void TSL2572::setIntegrationTime(tsl2572IntegrationTime_t time)
 {
-    if (!_tsl2572initialized)
+    if (!(this->_tsl2572initialized))
         begin();
     enable();
 
-    write8(TSL2572_COMMAND_BIT | ATIME, time | _tsl2572Gain);
-    _tsl2572IntegrationTime = time;
+    write8(TSL2572_COMMAND_BIT | ATIME, time | this->_tsl2572Gain);
+    this->_tsl2572IntegrationTime = time;
     disable();
 }
 
 void TSL2572::setGain(tsl2572Gain_t gain)
 {
-    if (!_tsl2572initialized)
+    if (!(this->_tsl2572initialized))
         begin();
 
     enable();
 
-    _tsl2572Gain = gain;
+    this->_tsl2572Gain = gain;
 
     disable();
 }
 
 void TSL2572::getLuminosity(uint16_t *broadband)
 {
-    if (!_tsl2572AutoGain)
+    if (!(this->_tsl2572AutoGain))
     {
         getData(broadband);
         return;
@@ -103,7 +103,7 @@ void TSL2572::reset()
         writeRegister(static_cast<MCP23017::Register>(reg_addr), 0x0000);
 }
 
-void TSL2572::getData(unint16_t *broadband)
+void TSL2572::getData(uint16_t *broadband)
 {
     enable();
     delay(TSL2572_DELAY_INTTME_13MS);
