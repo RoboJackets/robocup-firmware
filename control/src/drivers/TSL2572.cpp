@@ -15,7 +15,6 @@ TSL2572::TSL2572(int i2cAddress, int32_t sensorID)
 bool TSL2572::begin(LockedStruct<I2C> &sharedI2C)
 {
     this->_i2c = sharedI2C;
-    this->_i2c->begin();
     return init();
 }
 
@@ -38,16 +37,16 @@ bool TSL2572::init()
 // 13ms
 // 101ms
 // 402ms
-void TSL2572::setIntegrationTime(tsl2572IntegrationTime_t time)
-{
-    if (!(this->_tsl2572initialized))
-        begin();
-    enable();
+// void TSL2572::setIntegrationTime(tsl2572IntegrationTime_t time)
+// {
+//     if (!(this->_tsl2572initialized))
+//         begin();
+//     enable();
 
-    write8(TSL2572_COMMAND_BIT | ATIME, time | this->_tsl2572Gain);
-    this->_tsl2572IntegrationTime = time;
-    disable();
-}
+//     write8(TSL2572_COMMAND_BIT | ATIME, time | this->_tsl2572Gain);
+//     this->_tsl2572IntegrationTime = time;
+//     disable();
+// }
 
 void TSL2572::setGain(tsl2572Gain_t gain)
 {
@@ -63,7 +62,7 @@ void TSL2572::setGain(tsl2572Gain_t gain)
 
 void TSL2572::getLuminosity(uint16_t *broadband)
 {
-    if (!(this->_tsl2572AutoGain))
+    if (!(this->_tsl2572Gain))
     {
         getData(broadband);
         return;
@@ -73,8 +72,8 @@ void TSL2572::getLuminosity(uint16_t *broadband)
 uint32_t TSL2572::calculateLux(uint16_t sensor)
 {
     unsigned long channel0;
-    chScale = TSL2572_LUX_CHSCALE_TINT0;
-    channel0 = (broadband * chScale) >> TSL2561_LUX_CHSCALE;
+    // chScale = TSL2572_LUX_CHSCALE_TINT0;
+    channel0 = (readRegister(C0DATA));
     return channel0;
 }
 
@@ -95,33 +94,33 @@ uint16_t TSL2572::readRegister(TSL2572::Register regAddress)
     return (uint16_t)(buffer[0] | (buffer[1] << 8));
 }
 
-void TSL2572::reset()
-{
-    auto lock = _i2c.lock();
+// void TSL2572::reset()
+// {
+//     auto lock = _i2c.lock();
 
-    for (int reg_addr = 2; reg_addr <= OLAT; reg_addr += 2)
-        writeRegister(static_cast<MCP23017::Register>(reg_addr), 0x0000);
-}
+//     for (int reg_addr = 2; reg_addr <= OLAT; reg_addr += 2)
+//         writeRegister(static_cast<MCP23017::Register>(reg_addr), 0x0000);
+// }
 
-void TSL2572::getData(uint16_t *broadband)
-{
-    enable();
-    delay(TSL2572_DELAY_INTTME_13MS);
+// void TSL2572::getData(uint16_t *broadband)
+// {
+//     enable();
+//     delay(TSL2572_DELAY_INTTME_13MS);
 
-    *broadband = readRegister(C0DATA);
+//     *broadband = readRegister(C0DATA);
 
-    disable();
-}
+//     disable();
+// }
 
-void TSL2572::enable(void)
-{
-    write8(TSL2572_COMMAND_BIT | TSL2572_REGISTER_CONTROL, TSL2561_CONTROL_POWERON);
-}
+// void TSL2572::enable(void)
+// {
+//     write8(TSL2572_COMMAND_BIT | TSL2572_REGISTER_CONTROL, TSL2561_CONTROL_POWERON);
+// }
 
-void TSL2572::disable(void)
-{
-    write8(TSL2572_COMMAND_BIT | TSL2572_REGISTER_CONTROL, TSL2572_CONTROL_POWEROFF);
-}
+// void TSL2572::disable(void)
+// {
+//     write8(TSL2572_COMMAND_BIT | TSL2572_REGISTER_CONTROL, TSL2572_CONTROL_POWEROFF);
+// }
 
 void TSL2572::write8(u_int8_t reg, u_int8_t value)
 {

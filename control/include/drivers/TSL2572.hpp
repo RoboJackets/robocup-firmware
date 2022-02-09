@@ -3,7 +3,7 @@
 
 #define TSL2572_VISIBLE 0
 #define TSL2572_ADDR 0x39
-#define TSL2561_LUX_CHSCALE_TINT0 (0x7517) ///< 322/11 * 2^TSL2561_LUX_CHSCALE
+#define TSL2561_LUX_CHSCALE_TINT0 0x7517 ///< 322/11 * 2^TSL2561_LUX_CHSCALE
 
 class TSL2572
 {
@@ -55,8 +55,8 @@ public:
     void getLuminosity(uint16_t *broadband);
     void setGain(tsl2572Gain_t gain);
     void setIntegrationTime(tsl2572IntegrationTime_t time);
-    boolean init();
-    boolean begin(LockedStruct<I2C> &sharedI2C);
+    bool init();
+    bool begin(LockedStruct<I2C> &sharedI2C);
     TSL2572(int i2cAddress, int32_t sensorID);
 
     // uint16_t readRegister(TSL2572::Register regAddress);    // Declares the Read Function
