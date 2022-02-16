@@ -16,12 +16,14 @@ RotaryDialModule::RotaryDialModule(LockedStruct<MCP23017>& ioExpander, LockedStr
 
 void RotaryDialModule::start() {
     dial.init();
+    printf("[INFO] Dial module initialized\r\n");
 }
 
 void RotaryDialModule::entry(void) {
+    //printf("[INFO] Dial entry\r\n");
     int new_robot_id = dial.read();
 
-    //printf("Rotary dial: %d\r\n", new_robot_id);
+    printf("Rotary dial: %d\r\n", new_robot_id);
 
     auto robotIDLock = robotID.lock();
     if (last_robot_id == new_robot_id) {

@@ -20,13 +20,12 @@ KickerModule::KickerModule(LockedStruct<SPI>& spi,
 
 void KickerModule::start() {
     bool initialized = kicker.flash(false, true);
-    printf("[INFO] Kicker initialized\r\n");
-    {
-        kickerInfo.lock()->initialized = initialized;
-    }
+    kickerInfo.lock()->initialized = initialized;
+    printf("[INFO] Kicker module initialized\r\n");
 }
 
 void KickerModule::entry(void) {
+    //printf("[INFO] Kicker entry\r\n");
     kicker.setChargeAllowed(true);
     // Check if valid
     // and within the last few ms

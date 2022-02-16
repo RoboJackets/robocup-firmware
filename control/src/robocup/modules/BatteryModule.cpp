@@ -19,8 +19,9 @@ BatteryModule::BatteryModule(LockedStruct<BatteryVoltage>& batteryVoltage)
 }
 
 void BatteryModule::entry(void) {
+    //printf("[INFO] Battery entry\r\n");
     battery.update();
-    printf("[INFO] Battery Voltage Percentage: %f\r\n", 100*battery.getBattPercentage());
+    //printf("[INFO] Battery Voltage Percentage: %f\r\n", 100*battery.getBattPercentage());
 
     auto batteryLock = batteryVoltage.lock();
     batteryLock->isValid = true;

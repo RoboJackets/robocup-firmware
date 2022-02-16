@@ -18,11 +18,12 @@ IMUModule::IMUModule(LockedStruct<SPI>& sharedSPI, LockedStruct<IMUData>& imuDat
 void IMUModule::start() {
     imu.initialize();
 
-    printf("[INFO] IMU initialized\r\n");
     imuData.lock()->initialized = true;
+    printf("[INFO] IMU module initialized\r\n");
 }
 
 void IMUModule::entry(void) {
+    //printf("[INFO] IMU entry\r\n");
     float rate = imu.gyro_z();
 
     auto imuDataLock = imuData.lock();

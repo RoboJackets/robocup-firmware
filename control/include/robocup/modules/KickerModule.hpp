@@ -14,7 +14,7 @@ public:
     /**
      * Number of times per second (frequency) that KickerModule should run (Hz)
      */
-    static constexpr float kFrequency = 25.0f;
+    static constexpr float kFrequency = 5.0f;
 
     /**
      * Number of seconds elapsed (period) between KickerModule runs (milliseconds)
@@ -24,7 +24,7 @@ public:
     /**
      * Priority used by RTOS
      */
-    static constexpr int kPriority = 2;
+    static constexpr int kPriority = 3;
 
     /**
      * Constructor for KickerModule

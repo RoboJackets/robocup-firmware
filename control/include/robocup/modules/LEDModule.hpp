@@ -67,7 +67,7 @@ public:
     /**
      * Number of times per second (frequency) that LEDModule should run (Hz)
      */
-    static constexpr float kFrequency = 10.0f;
+    static constexpr float kFrequency = 5.0f;
 
     /**
      * Number of seconds elapsed (period) between LEDModule runs (milliseconds)
@@ -76,10 +76,9 @@ public:
 
     /**
      * Priority used by RTOS
-     *
-     * Uses the default priority of 1.
+     * 
      */
-    static constexpr int kPriority = 1;
+    static constexpr int kPriority = 2;
 
     /**
      * Constructor for LEDModule
@@ -229,13 +228,13 @@ private:
     /**
      * Number of frames (1/kPeriod seconds) for which the error lights will be on, to cycle through error LEDs
      */
-    int framesOn = 20;
+    int framesOn = static_cast<int>(2 * kFrequency);
     int framesOnCounter = 0;
 
     /**
      * Number of frames (1/kPeriod seconds) for which the error lights will be off, to cycle through error LEDs
      */
-    int framesOff = 10;
+    int framesOff = static_cast<int>(1*kFrequency);
     int framesOffCounter = 0;
 
     /**

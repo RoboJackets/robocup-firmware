@@ -41,11 +41,12 @@ void FPGAModule::start() {
     vTaskDelay(3000);
     auto fpgaStatusLock = fpgaStatus.lock();
     fpgaInitialized = fpga.configure();
-    printf("[INFO] FPGA probably configured\r\n");
     fpgaStatusLock->initialized = fpgaInitialized;
+    printf("[INFO] FPGA module initialized\r\n");
 }
 
 void FPGAModule::entry() {
+    //printf("[INFO] FPGA entry\r\n");
     // We've still got an issue in hardware: the INIT_B pin is never pulled
     // high after FPGA boot, so we never actually receive a signal. Until we
     // fix this, just assume it's been initialized properly.

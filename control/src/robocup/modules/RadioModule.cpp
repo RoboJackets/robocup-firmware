@@ -44,11 +44,12 @@ RadioModule::RadioModule(LockedStruct<BatteryVoltage>& batteryVoltage,
 
 void RadioModule::start() {
     link.init();
-    printf("[INFO] Radio initialized\r\n");
     radioError.lock()->initialized = link.isRadioInitialized();
+    printf("[INFO] Radio module initialized\r\n");
 }
 
 void RadioModule::entry() {
+    //printf("[INFO] Radio entry\r\n");
     BatteryVoltage battery;
     FPGAStatus fpga;
     RobotID id;

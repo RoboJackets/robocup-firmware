@@ -32,16 +32,12 @@ void LEDModule::start() {
     index = 0;
     ioExpanderLock->config(0x00FF, 0x00FF, 0x00FF);
     ioExpanderLock->writeMask(static_cast<uint16_t>(~IOExpanderErrorLEDMask), IOExpanderErrorLEDMask);
+    printf("[INFO] LED module initialized\r\n");
 }
 
-extern std::vector<const char*> failed_modules;
-extern size_t free_space;
-
 void LEDModule::entry() {
-    for (const char* c : failed_modules) {
-        printf("[ERROR] Module failed to initialize: %s (initial heap size: %d)\r\n", c, free_space);
-    }
     // update battery, fpga, and radio status leds
+    //printf("[INFO] LED entry\r\n");
     uint16_t errors = 0;
     int motors[5] = {ERR_LED_M1, ERR_LED_M2, ERR_LED_M3, ERR_LED_M4, ERR_LED_DRIB};
 
@@ -215,7 +211,7 @@ void LEDModule::displayErrors() {
 void LEDModule::setError(const Error e, bool toggle) {
     const Error *error = std::find(ERR_LIST.begin(), ERR_LIST.end(), e);
     if (error == ERR_LIST.end()) {
-        printf("[ERROR] Invalid error code\r\n");
+        printf("[WARNING] Invalid error code\r\n");
     } else {
         errToggles.at(std::distance(ERR_LIST.begin(), error)) = toggle;
     }

@@ -33,6 +33,7 @@ MotionControlModule::MotionControlModule(LockedStruct<BatteryVoltage>& batteryVo
 }
 
 void MotionControlModule::entry() {
+    //printf("[INFO] Motion control module initialized\r\n");
     auto motionCommandLock = motionCommand.lock();
     auto motorCommandLock = motorCommand.lock();
     auto motorFeedbackLock = motorFeedback.lock();
