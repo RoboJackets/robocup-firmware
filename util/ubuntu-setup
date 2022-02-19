@@ -1,65 +1,21 @@
-#!/bin/bash -e
+#!/bin/bash
 
-HELP_STR="Usage: ./ubuntu-setup [-n | --noclobber] [-c | --clobber] [-f | --firmware] [-nf | --nofirmware] [-osl | --overwrite-sources-list ] [-h | --help]
-
-\tnoclobber:\t\tdont install 3rd party repositories
-\tclobber:\t\tInstall 3rd party repositories
-\tfirmware:\t\tInstall firmware repository
-\tnofirmware:\t\tPrevents installation of firmware deps firmware repository
-\toverwrite-sources-list:\tOverwrites the sources.list with gatech mirrors for faster ubuntu-setup. Only works on ubuntu > precise.
-\thelp:\t\t\tprint this message!
-
-This script will need root privileges"
-
-# defaults!
-OVERWRITE_SOURCES=false
-YES=false
-
-# parse command line args
-for i in "$@"
-do
-    case $i in
-        -y|--yes)
-            YES=true
-            ;;
-        -h|--help)
-            echo -e "$HELP_STR"
-            exit 1
-            ;;
-        *)
-            echo "Unrecognized Option: $i"
-            echo -e "\n$HELP_STR"
-            exit 1
-            # unknown options
-            ;;
-    esac
-done
+set -e
 
 echo "-- Updating submodules"
 git submodule sync
 git submodule update --init --recursive
 
-# Become root
 if [ $UID -ne 0 ]; then
 	echo "-- Becoming root"
 	exec sudo $0 $@
 fi
 
-apt-get update
-
-# unset DPKG_FLAGS
-
 BASE=$(readlink -f $(dirname $0)/..)
 
-echo "-- Installing required packages"
-
-# if yes option is checked, add  a -y
-ARGS="-y"
-
-PACKAGES="$(sed 's/#.*//;/^$/d' $BASE/util/ubuntu-packages.txt)"
-
-# install all of the packages listed in required_packages.txt
-apt-get install $ARGS $PACKAGES
+echo "-- Installing required apt packages"
+apt-get update
+apt-get install "-y" $(sed 's/#.*//;/^$/d' $BASE/util/ubuntu-packages.txt)
 
 echo "If you are using WSL, please install JLink.exe using the following link: https://www.segger.com/downloads/jlink/JLink_Windows.exe"
 echo "If you are using an Ubuntu VM, please install JLinkExe using the following link: https://www.segger.com/downloads/jlink/JLink_Linux_x86_64.deb"

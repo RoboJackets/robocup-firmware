@@ -1,2 +1,5 @@
-r
+R
 loadfile ./control/build/bin/control.bin 0x08000000
+R
+G
+Exit

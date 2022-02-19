@@ -1,0 +1,11 @@
+#!/bin/bash
+
+sed -e "s/control.bin/$1.bin/g" ./util/flash-mtrain.jlink > ./util/flash-test.jlink
+
+DEVICE=STM32F769NI
+IF=JTAG
+SPEED=4000
+
+JLinkExe -device $DEVICE -if $IF -jtagconf -1,-1 -speed $SPEED -autoconnect 1 -CommanderScript ./util/flash-test.jlink
+
+rm ./util/flash-test.jlink

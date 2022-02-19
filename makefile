@@ -1,4 +1,4 @@
-.PHONY : all flash kicker kicker-test control docs clean $(ROBOT_TESTS:%=%)
+.PHONY : all flash kicker kicker-test control docs clean $(ROBOT_TESTS)
 
 all: control flash
 
@@ -6,7 +6,7 @@ flash:
 	./util/flash-mtrain
 
 flash-test:
-	./util/flash-mtrain-test
+	./util/flash-test $(TEST)
 
 kicker:
 	cd kicker && \
@@ -27,11 +27,11 @@ control:
 mkdir -p build && cd build && \
 cmake .. && make -j$(nproc)
 
-$(ROBOT_TESTS:%=%): kicker-test
+$(ROBOT_TESTS):
 	cd control && \
 mkdir -p build && cd build && \
 cmake .. && make -j$(nproc) $(@F)
-	make flash-test
+	make flash-test TEST=$(@F)
 
 docs:
 	cd doc && doxygen Doxyfile

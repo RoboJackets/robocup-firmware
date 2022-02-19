@@ -1,16 +1,13 @@
 # Build system
 cmake
-ccache
 python3
 
 # Docs
 doxygen
-graphviz
 
 # Arm GCC Toolchain
 gcc-arm-none-eabi
 libeigen3-dev
 
 # AVR
-avr-libc
-avrdude
+gcc-avr

@@ -1,6 +1,6 @@
 # GT RoboJackets RoboCup SSL - Firmware
 
-The Georgia Tech RoboJackets team competes in the annual RoboCup Small Size League (SSL) competition.  This repository contains all of the firmware that we run on our robots. Also, check out our [2020 qualification video](https://www.youtube.com/watch?v=2MZREc9aj8k) to see our robots in action!
+The Georgia Tech RoboJackets team competes in the annual RoboCup Small Size League (SSL) competition.  This repository contains all of the firmware that we run on our robots. Also, check out our [2022 qualification video](https://www.youtube.com/watch?v=o73Pt23qH1g) to see our robots in action!
 
 ## The Competition
 
@@ -40,7 +40,6 @@ Compiled binaries output from the build system for the ATMega on the kicker boar
 Contains the Verilog code to be programmed to the FPGA for motor control.
 Details on the architecture of the FPGA firmware code can be found [here](doc/FPGA.md)
 
-
 ## Setup
 Below is a quick guide to getting this RoboCup project setup to build on your computer. If you are a robocup member planning on developing both mtrain and robocup firmware it is highly recommended that you  follow the Firmware [Getting Started](doc/GettingStarted.md) page.
 This project only provides directions for installing on Ubuntu Linux, Windows Subsystem for Linux (WSL), and macOS.
@@ -48,30 +47,27 @@ This project only provides directions for installing on Ubuntu Linux, Windows Su
 1) Clone the repository
 
 ```
-git clone git://github.com/RoboJackets/robocup-firmware
+git clone https://github.com/RoboJackets/robocup-firmware.git
 ```
 
 2) Install the necessary software
 
-There are a few setup scripts in the util directory for installing required packages, setting up udev rules, etc.  See `ubuntu-setup` and `macos-setup` for more info. If you are using WSL, see `wsl-setup` after using `ubuntu-setup`.
+There are a few setup scripts in the util directory for installing required packages.  Run `ubuntu-setup` or `macos-setup` accordingly. If you are using WSL, run `wsl-setup` after using `ubuntu-setup`.
 
 ```
 $ cd robocup-firmware
 $ ./util/<SYSTEM>-setup
 ```
 
-3) Build the project for the desired target. The `control` target is the firmware for the mTrain.
-The `kicker` target is for the kicker MCU to be uploaded to the MTrain.
-The `clean` target deletes the build directories for both robot and kicker firmware.
+3) Build the project for the desired target. The `control` target is the firmware for the mTrain. The `kicker` target is for the kicker MCU to be uploaded to the MTrain. The `clean` target deletes the build directories for both robot and kicker firmware.
 
 ```
 $ make <TARGET>
 ```
 
-
 ## Testing
 
-Firmware tests can be written and placed in `control/test` with the name `<TESTNAME>.cpp` then compiled with `make <TESTNAME>`
+Firmware tests can be written and placed in `control/test` with the name `<TESTNAME>.cpp` then compiled with `make <TESTNAME>` after editing the top level `makefile`.
 
 ## Documentation
 
@@ -80,10 +76,6 @@ We use [Doxygen](https://www.doxygen.nl/index.html) for documentation.  This all
 ```
 $ make docs
 ```
-
-## Contributing
-
-Please see the [contributing page](doc/Contributing.md) before contributing.
 
 ## License
 
