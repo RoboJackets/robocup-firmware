@@ -12,11 +12,11 @@ fileName = sys.argv[1]
 flashAddress = "0x08000000"
 
 testString = (
-    "r\n"
+    "R\n"
     "loadbin \"" + fileName + "\" " + flashAddress + "\n"
-    "r\n"
-    "g\n"
-    "q\n"
+    "R\n"
+    "G\n"
+    "Exit\n"
 )
 
 p = subprocess.Popen(shlex.split("JLinkExe -device STM32F769NI -if JTAG -speed 4000 -jtagconf -1,-1 -autoconnect 1"), stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT)

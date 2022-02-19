@@ -1,0 +1,7 @@
+cmake
+eigen
+python3
+gcc-arm-embedded
+segger-jlink
+doxygen
+graphviz

@@ -8,12 +8,12 @@ mtrain:
 	mkdir -p build && cd build && \
 cmake .. && make -j$(nproc)
 
-$(CPP_FIRMWARE_TESTS:%=%): tests
+$(CPP_FIRMWARE_TESTS): tests
 	cd build; make $(@F) -j$(nproc)
 
 clean:
 	rm -rf build
-	rm -rf generated-docs    
+	rm -rf generated-docs
 
 docs:
 	cd doc && doxygen Doxyfile

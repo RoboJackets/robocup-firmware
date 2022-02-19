@@ -1,6 +1,0 @@
-cmake
-python3
-doxygen
-graphviz
-gcc-arm-embedded
-segger-jlink
