@@ -1,4 +1,4 @@
-# GT RoboJackets RoboCup SSL - Firmware
+# Georgia Tech RoboJackets RoboCup SSL - Firmware
 
 The Georgia Tech RoboJackets team competes in the annual RoboCup Small Size League (SSL) competition.  This repository contains all of the firmware that we run on our robots. Also, check out our [2022 qualification video](https://www.youtube.com/watch?v=o73Pt23qH1g) to see our robots in action!
 
@@ -41,8 +41,7 @@ Contains the Verilog code to be programmed to the FPGA for motor control.
 Details on the architecture of the FPGA firmware code can be found [here](doc/FPGA.md)
 
 ## Setup
-Below is a quick guide to getting this RoboCup project setup to build on your computer. If you are a robocup member planning on developing both mtrain and robocup firmware it is highly recommended that you  follow the Firmware [Getting Started](doc/GettingStarted.md) page.
-This project only provides directions for installing on Ubuntu Linux, Windows Subsystem for Linux (WSL), and macOS.
+Below is a quick guide to getting this RoboCup project setup to build on your computer. If you are a robocup member planning on developing both mtrain and robocup firmware it is highly recommended that you follow the Firmware [Getting Started](doc/GettingStarted.md) page. This project only provides directions for installing on Ubuntu Linux, Windows Subsystem for Linux (WSL), and macOS.
 
 1) Clone the repository
 
