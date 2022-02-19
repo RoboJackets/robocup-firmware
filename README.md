@@ -8,7 +8,7 @@ Below is a quick guide to getting this mTrain project setup to build on your com
 1) Clone the repository
 
 ```
-git clone https://github.com/RoboJackets/robocup-firmware.git
+git clone https://github.com/RoboJackets/mtrain-firmware.git
 ```
 
 2) Install the necessary software
@@ -16,7 +16,7 @@ git clone https://github.com/RoboJackets/robocup-firmware.git
 There are a few setup scripts in the util directory for installing required packages.  Run `ubuntu-setup` or `macos-setup` accordingly. If you are using WSL, run `wsl-setup` after using `ubuntu-setup`.
 
 ```
-$ cd robocup-firmware
+$ cd mtrain-firmware
 $ ./util/<SYSTEM>-setup
 ```
 3) Build the project for the desired target. The default target builds only the firmware.
