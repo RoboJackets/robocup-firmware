@@ -24,10 +24,11 @@ TODO attach picture here of JLink header and where it connects on the mTrain
 The mini usb powers the mTrain if its not receiving power from the board so it should light up after this.
 
 ## Flashing code to the mTrain
-If you have not already setup robocup-firmware to build do that now (following the guide in getting started).
+See the setup process [here](../README.md) if necessary.
+
 To build it again run the following:
 ```
-make all
+make
 ```
 
 After building navigate to the top level of the robojackets firmware repo. Then navigate to the build location of the robocup binaries:
