@@ -12,13 +12,13 @@ The official [RoboCup site](https://ssl.robocup.org/) has more information on th
 If you are a new member of RoboCup Electrical or Software and are interested in getting involved with firmware it is highly recommend you start with the [getting started](doc/GettingStarted.md) pages.
 
 ## Project Layout
-For a high level overview of architecture of robocup-firmware see [here](doc/Firmware.md)
+For a high level overview of architecture of robocup-firmware see [here](doc/Firmware.md).
 
 ### /
 The top level folder contains the firmware code for the different targets that are compiled for the control board, FPGA, IMU, and radio.
 
 ### control/
-Contains the firmware code for the main program run on the mtrain. This controls the overall function of the robot and the interface with various peripheral devices, such as IMU, FPGA, and the radio
+Contains the firmware code for the main program run on the mtrain. This controls the overall function of the robot and the interface with various peripheral devices, such as IMU, FPGA, and the radio.
 
 Modules are fully independent sections of code that take a well defined input (if applicable), do some action, then produce a well defined output (if applicable). For example, the kicker module takes kicker commands (input), directly interfaces with the kicker and does the communication and unit translation (action), and produces breakbeam and voltage to the rest of the firmware (output).
 
@@ -43,7 +43,7 @@ Details on the architecture of the FPGA firmware code can be found [here](doc/FP
 ## Setup
 Below is a quick guide to getting this RoboCup project setup to build on your computer. If you are a robocup member planning on developing both mtrain and robocup firmware it is highly recommended that you follow the Firmware [Getting Started](doc/GettingStarted.md) page. This project only provides directions for installing on Ubuntu Linux, Windows Subsystem for Linux (WSL), and macOS.
 
-1) Clone the repository
+1) Clone the repository within Ubuntu, WSL, or macOS
 
 ```
 git clone https://github.com/RoboJackets/robocup-firmware.git
@@ -58,7 +58,9 @@ $ cd robocup-firmware
 $ ./util/<SYSTEM>-setup
 ```
 
-3) Build the project for the desired target. The `control` target is the firmware for the mTrain. The `kicker` target is for the kicker MCU to be uploaded to the mTrain. The `clean` target deletes the build directories for both robot and kicker firmware.
+3) Build the project for the desired target. 
+
+The `control` target is the firmware for the mTrain. The `kicker` target is for the kicker MCU to be uploaded to the mTrain. The `clean` target deletes the build directories for both robot and kicker firmware.
 
 ```
 $ make <TARGET>
