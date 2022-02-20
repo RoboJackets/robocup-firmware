@@ -5,7 +5,7 @@ The purpose of this project is to create a small, more capable microcontroller b
 ## Setup
 Below is a quick guide to getting this mTrain project setup to build on your computer. This project only provides directions for installing on Ubuntu Linux, Windows Subsystem for Linux (WSL), and macOS.
 
-1) Clone the repository
+1) Clone the repository within Ubuntu, WSL, or macOS
 
 ```
 git clone https://github.com/RoboJackets/mtrain-firmware.git
@@ -19,7 +19,9 @@ There are a few setup scripts in the util directory for installing required pack
 $ cd mtrain-firmware
 $ ./util/<SYSTEM>-setup
 ```
-3) Build the project for the desired target. The default target builds only the firmware.
+3) Build the project for the desired target. 
+
+The default target builds only the firmware and code.
 
 ```
 $ make
