@@ -24,7 +24,7 @@ void RotaryDialModule::entry(void) {
     int new_robot_id = dial.read();
 
     printf("Rotary dial: %d\r\n", new_robot_id);
-
+    printf("HELLO THERE");
     auto robotIDLock = robotID.lock();
     if (last_robot_id == new_robot_id) {
         robotIDLock->isValid = true;
