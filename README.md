@@ -60,7 +60,7 @@ $ ./util/<SYSTEM>-setup
 
 3) Build the project for the desired target. 
 
-The `control` target is the firmware for the mTrain. The `kicker` target is for the kicker MCU to be uploaded to the mTrain. The `clean` target deletes the build directories for both robot and kicker firmware.
+The default `all` target builds the `control` target and uploads the code. The `control` target is the firmware for the mTrain. The `kicker` target is for the kicker MCU to be uploaded to the mTrain. The `clean` target deletes the build directories for both robot and kicker firmware.
 
 ```
 $ make <TARGET>
