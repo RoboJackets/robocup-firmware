@@ -51,14 +51,14 @@ git clone https://github.com/RoboJackets/robocup-firmware.git
 
 2) Install the necessary software
 
-There are a few setup scripts in the util directory for installing required packages.  Run `ubuntu-setup` or `macos-setup` accordingly. If you are using WSL, run `wsl-setup` after using `ubuntu-setup`.
+There are a few setup scripts in the util directory for installing required packages. Run `ubuntu-setup` or `macos-setup` accordingly. *If you are using WSL*, run `ubuntu-setup` then `wsl-setup`
 
 ```
 $ cd robocup-firmware
 $ ./util/<SYSTEM>-setup
 ```
 
-3) Build the project for the desired target. The `control` target is the firmware for the mTrain. The `kicker` target is for the kicker MCU to be uploaded to the MTrain. The `clean` target deletes the build directories for both robot and kicker firmware.
+3) Build the project for the desired target. The `control` target is the firmware for the mTrain. The `kicker` target is for the kicker MCU to be uploaded to the mTrain. The `clean` target deletes the build directories for both robot and kicker firmware.
 
 ```
 $ make <TARGET>
