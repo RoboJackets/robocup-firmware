@@ -1,12 +1,10 @@
-cmake_minimum_required(VERSION 3.14.7)
+cmake_minimum_required(VERSION 3.16.3)
 
 project(fpga)
 
 # This is the root path to anything Xilinx related
-# set(XILINX_SYSTEM_ROOT "/opt/Xilinx" CACHE PATH "Path to Xilinx ISE tools. Change for non-standard install")
 if(NOT EXISTS XILINX_SYSTEM_ROOT)
     # If the toolchain isnt installed dont build fpga copy perm binary to build/bin
-
     execute_process (
         COMMAND bash -c "mkdir -p ${CMAKE_CURRENT_LIST_DIR}/build/bin && cp ${CMAKE_CURRENT_LIST_DIR}/perm-bin/fpga_bin.h ${CMAKE_CURRENT_LIST_DIR}build/bin/"
     )
@@ -21,7 +19,6 @@ project(fpga)
 ###############################################################################
 # Device specifics
 set(FPGA_PARTNUM "xc3s250e-tq144" CACHE STRING "FPGA partnumber to use during HDL synthesis")
-# set(FPGA_PARTNUM "xc3s100e-tq144-4" CACHE STRING "FPGA partnumber to use during HDL synthesis")
 if(DEFINED ENV{FPGA_SERIES})
     set(FPGA_PARTNUM "$ENV{FPGA_SERIES}")
     set(FPGA_PARTNUM "xc3s${FPGA_PARTNUM}e-tq144-4")
@@ -171,7 +168,7 @@ else()
     message(STATUS "No new or modified source files found for synthesis")
 endif()
 
-# MBED tries to load the most recent .bin file as its main program, so we can't name our fpga file with a .bin extension
+# mTrain tries to load the most recent .bin file as its main program, so we can't name our fpga file with a .bin extension
 add_custom_target(fpga
     cp ${CMAKE_CURRENT_BINARY_DIR}/${BIN_OUT_FILENAME} ${PROJECT_SOURCE_DIR}/run/${NIB_OUT_FILENAME}
     COMMENT "Copying ${BIN_OUT_FILENAME} to ${NIB_OUT_FILENAME} b/c *.bin is a reserved extension on the mbed"
@@ -186,7 +183,6 @@ add_custom_target(fpga-prog
     DEPENDS fpga
 )
 
-
 ###############################################################################
 ###################### PROVIDE GIT HASH FOR SYNTHESIS #########################
 ###############################################################################
@@ -196,12 +192,6 @@ execute_process(
     COMMAND ${GIT_EXECUTABLE} rev-parse HEAD
     OUTPUT_VARIABLE GIT_HASH
     OUTPUT_STRIP_TRAILING_WHITESPACE
-)
-string( SUBSTRING ${GIT_HASH} 0 8 GIT_HASH_8)
-
-execute_process(
-    COMMAND ${GIT_EXECUTABLE} diff --quiet
-    RESULT_VARIABLE GIT_DIRTY
 )
 
 execute_process(
@@ -216,8 +206,6 @@ file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/git_version.vh
     " *  Timestamp:\t${_TIMESTAMP}"
     " */  \n\n"
     "`define GIT_VERSION_HASH\t160'h${GIT_HASH}\n"
-    "`define GIT_VERSION_HASH_32\t32'h${GIT_HASH_8}\n"
-    "`define GIT_VERSION_DIRTY\t1'b${GIT_DIRTY}\n"
 )
 
 

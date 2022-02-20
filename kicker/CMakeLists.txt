@@ -1,4 +1,9 @@
-cmake_minimum_required(VERSION 3.14.7)
+cmake_minimum_required(VERSION 3.16.3)
+
+set(CMAKE_CXX_STANDARD 17 CACHE STRING "")
+set(CMAKE_CXX_STANDARD_REQUIRED ON CACHE BOOL "")
+set(CMAKE_C_STANDARD 11 CACHE STRING "")
+set(CMAKE_C_STANDARD_REQUIRED ON CACHE BOOL "")
 
 # set the AVR toolchain
 set( CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/atmega_toolchain.cmake )
@@ -48,4 +53,4 @@ add_custom_target(kicker-test ALL
 # change above to match ATTINY84A =====================================================================
 # to keep timing for neopixel
 # The -O2 turns on optimizations, which are required to use the delay_*() functions
-list(APPEND CMAKE_C_FLAGS "-std=c11 -O2 -mmcu=${AVR_TARGET_ARCH} -DF_CPU=8000000")
+list(APPEND CMAKE_C_FLAGS "-std=c11 -O3 -Wall -Wextra -Wpedantic -mmcu=${AVR_TARGET_ARCH} -DF_CPU=8000000")

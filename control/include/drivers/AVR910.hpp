@@ -39,8 +39,6 @@
 #pragma once
 
 #include "mtrain.hpp"
-#include "SPI.hpp"
-#include "DigitalOut.hpp"
 #include "LockedStruct.hpp"
 #include <memory>
 #include <cstdio>
