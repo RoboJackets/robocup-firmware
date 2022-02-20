@@ -21,7 +21,7 @@ $ ./util/<SYSTEM>-setup
 ```
 3) Build the project for the desired target. 
 
-The default target builds only the firmware and code.
+The default `all` target builds the firmware and all tests. The `clean` target deletes the build directories for both robot and kicker firmware.
 
 ```
 $ make
