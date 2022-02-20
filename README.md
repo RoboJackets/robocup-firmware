@@ -78,6 +78,10 @@ We use [Doxygen](https://www.doxygen.nl/index.html) for documentation.  This all
 $ make docs
 ```
 
+## Getting Started
+
+For more resources, see [here](doc/GettingStarted.md).
+
 ## License
 
 This project is licensed under the Apache License v2.0.  See the [LICENSE](LICENSE) file for more information.
