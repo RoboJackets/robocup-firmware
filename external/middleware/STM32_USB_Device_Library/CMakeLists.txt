@@ -18,5 +18,4 @@ target_sources(STM32_USB_Device PUBLIC
     ${PROJECT_SOURCE_DIR}/BSP/config/usb/usbd_desc.c
 )
 
-
 target_link_libraries(STM32_USB_Device PUBLIC STM32F7xx_HAL)

@@ -7,19 +7,10 @@ set(CMAKE_C_STANDARD_REQUIRED ON CACHE BOOL "")
 
 project(FreeRTOS_lib LANGUAGES C)
 
-file(GLOB_RECURSE SRC "Source/*.c")
+file(GLOB_RECURSE SRC *.c)
 
 add_library(FreeRTOS STATIC
-    Source/CMSIS_RTOS/cmsis_os.c
-    Source/croutine.c
-    Source/event_groups.c
-    Source/list.c
-    Source/queue.c
-    Source/tasks.c
-    Source/timers.c
-    Source/portable/Common/mpu_wrappers.c
-    Source/portable/GCC/ARM_CM7/r0p1/port.c
-    Source/portable/MemMang/heap_3.c
+    ${SRC}
 )
 
 target_include_directories(FreeRTOS PUBLIC
