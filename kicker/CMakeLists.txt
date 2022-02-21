@@ -52,5 +52,5 @@ add_custom_target(kicker-test ALL
 # the ATTiny13 has an internal 9.6MHz clock with the prescaler, don't scale back
 # change above to match ATTINY84A =====================================================================
 # to keep timing for neopixel
-# The -O2 turns on optimizations, which are required to use the delay_*() functions
+# The -O3 turns on optimizations, which are required to use the delay_*() functions
 list(APPEND CMAKE_C_FLAGS "-std=c11 -O3 -Wall -Wextra -Wpedantic -mmcu=${AVR_TARGET_ARCH} -DF_CPU=8000000")

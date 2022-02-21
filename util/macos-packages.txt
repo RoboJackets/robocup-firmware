@@ -2,6 +2,8 @@ cmake
 eigen
 python3
 gcc-arm-embedded
+minicom
 avr-gcc
 segger-jlink
 doxygen
+graphviz
