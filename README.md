@@ -19,9 +19,9 @@ There are a few setup scripts in the util directory for installing required pack
 $ cd mtrain-firmware
 $ ./util/<SYSTEM>-setup
 ```
-3) Build the project for the desired target. 
+3) Build the project for the desired target.
 
-The default `all` target builds the firmware and all tests. The `clean` target deletes the build directories for both robot and kicker firmware.
+The default `all` target builds all tests. The `clean` target deletes the build directory.
 
 ```
 $ make
