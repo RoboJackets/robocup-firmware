@@ -181,7 +181,7 @@ void SPI::transmit(const std::vector<uint8_t>& data) {
 }
 
 void SPI::transmit(const uint8_t* const data, const size_t size) {
-    for(uint i = 0; i < size; i++) {
+    for(size_t i = 0; i < size; i++) {
         transmit(data[i]);
     }
 }
@@ -216,7 +216,7 @@ std::vector<uint8_t> SPI::transmitReceive(const std::vector<uint8_t>& data) {
 }
 
 void SPI::transmitReceive(const uint8_t* const data, uint8_t* const dataOut, const size_t size) {
-    for(uint i = 0; i < size; i++) {
+    for(size_t i = 0; i < size; i++) {
         dataOut[i] = transmitReceive(data[i]);
     }
 }

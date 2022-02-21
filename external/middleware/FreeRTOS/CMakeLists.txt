@@ -1,22 +1,31 @@
-project(FreeRTOS_lib VERSION 9.0 LANGUAGES C)
+cmake_minimum_required(VERSION 3.16.3)
+
+set(CMAKE_CXX_STANDARD 17 CACHE STRING "")
+set(CMAKE_CXX_STANDARD_REQUIRED ON CACHE BOOL "")
+set(CMAKE_C_STANDARD 11 CACHE STRING "")
+set(CMAKE_C_STANDARD_REQUIRED ON CACHE BOOL "")
+
+project(FreeRTOS_lib LANGUAGES C)
+
+file(GLOB_RECURSE SRC "Source/*.c")
 
 add_library(FreeRTOS STATIC
-    src/CMSIS_RTOS/cmsis_os.c
-    src/croutine.c
-    src/event_groups.c
-    src/list.c
-    src/queue.c
-    src/tasks.c
-    src/timers.c
-    src/portable/Common/mpu_wrappers.c
-    src/portable/GCC/ARM_CM7/r0p1/port.c
-    src/portable/MemMang/heap_3.c
+    Source/CMSIS_RTOS/cmsis_os.c
+    Source/croutine.c
+    Source/event_groups.c
+    Source/list.c
+    Source/queue.c
+    Source/tasks.c
+    Source/timers.c
+    Source/portable/Common/mpu_wrappers.c
+    Source/portable/GCC/ARM_CM7/r0p1/port.c
+    Source/portable/MemMang/heap_3.c
 )
 
 target_include_directories(FreeRTOS PUBLIC
-    src/include
-    src/CMSIS_RTOS
-    src/portable/GCC/ARM_CM7/r0p1
+    Source/include
+    Source/CMSIS_RTOS
+    Source/portable/GCC/ARM_CM7/r0p1
 )
 
 target_link_libraries(FreeRTOS STM32F7xx)

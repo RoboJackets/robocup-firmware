@@ -1,6 +1,3 @@
-add_subdirectory(CMSIS/DSP_Lib)
-add_subdirectory(middleware/FreeRTOS)
-
 aux_source_directory(STM32F7xx_HAL_Drivers/Src STM32F7xx_HAL_SRC)
 
 add_library(STM32F7xx_HAL
@@ -9,7 +6,7 @@ add_library(STM32F7xx_HAL
 )
 
 target_include_directories(STM32F7xx_HAL PUBLIC
-    STM32F7xx_HAL_Drivers/Inc
+    STM32F7xx_HAL_Driver/Inc
     CMSIS/Device/STM32F7xx/Include
     CMSIS/Include
 )
@@ -18,6 +15,5 @@ target_include_directories(STM32F7xx_HAL PUBLIC
 target_compile_definitions(STM32F7xx_HAL PUBLIC USE_HAL_DRIVER)
 target_include_directories(STM32F7xx_HAL PUBLIC ${PROJECT_SOURCE_DIR}/BSP/config/hal)
 
-target_link_libraries(STM32F7xx_HAL PUBLIC DSP)
-
+add_subdirectory(middleware/FreeRTOS)
 add_subdirectory(middleware/STM32_USB_Device_Library)

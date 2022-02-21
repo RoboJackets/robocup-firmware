@@ -20,8 +20,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-set( CMAKE_CXX_STANDARD 17 CACHE STRING "")
-set( CMAKE_CXX_STANDARD_REQUIRED ON CACHE BOOL "")
+cmake_minimum_required(VERSION 3.16.3)
+
+set(CMAKE_CXX_STANDARD 17 CACHE STRING "")
+set(CMAKE_CXX_STANDARD_REQUIRED ON CACHE BOOL "")
+set(CMAKE_C_STANDARD 11 CACHE STRING "")
+set(CMAKE_C_STANDARD_REQUIRED ON CACHE BOOL "")
+
 set( CMAKE_RUNTIME_OUTPUT_DIRECTORY  "${CMAKE_BINARY_DIR}/bin" CACHE PATH "")
 set( CMAKE_LIBRARY_OUTPUT_DIRECTORY  "${CMAKE_BINARY_DIR}/lib" CACHE PATH "")
 set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY  "${CMAKE_BINARY_DIR}/lib" CACHE PATH "")
@@ -30,16 +35,13 @@ set(ARM_PREFIX                    arm-none-eabi-gcc)
 find_program(CMAKE_C_COMPILER     ${ARM_PREFIX}-gcc)
 find_program(CMAKE_CXX_COMPILER   ${ARM_PREFIX}-g++)
 
-set(C_MACHINE_OPTIONS "-mthumb -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard" CACHE STRING "")
+set(C_MACHINE_OPTIONS "-Wall -Wextra -Wpedantic -O3 -mthumb -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard" CACHE STRING "")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${C_MACHINE_OPTIONS}" CACHE STRING "")
-# TODO Check if we should be using no-rtti
-# cpp 17 deprecated register storage specifier and cmsis uses it everywhere
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${C_MACHINE_OPTIONS} -Wno-register -fno-exceptions -fno-rtti" CACHE STRING "")
 set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} ${C_MACHINE_OPTIONS}" CACHE STRING "")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --specs=nosys.specs --specs=nano.specs -T '${CMAKE_CURRENT_LIST_DIR}/../BSP/flash.ld' -u _printf_float" CACHE STRING "")
 
-# TODO Trim the Duse usb and stm stuff
-add_definitions(-Wall -DSTM32F769xx -DUSE_USB_HS)
+add_definitions(-Wall -Wextra -Wpedantic -O3 -DSTM32F769xx -DUSE_USB_HS)
 set(CHIP STM32F769NI CACHE STRING "Full STM32 Chip Model")
 set(CMAKE_BUILD_TYPE DEBUG CACHE STRING "")
 
