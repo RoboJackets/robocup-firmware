@@ -1,5 +1,4 @@
 #include "I2C.hpp"
-#include "delay.h"
 
 #define I2C_TIMING 0x10A60D20
 
@@ -11,7 +10,7 @@ I2C::I2C(I2CBus i2cBus) {
     i2cHandle.Init.AddressingMode   = I2C_ADDRESSINGMODE_7BIT;
     i2cHandle.Init.DualAddressMode  = I2C_DUALADDRESS_DISABLE;
     i2cHandle.Init.GeneralCallMode  = I2C_GENERALCALL_DISABLE;
-    i2cHandle.Init.NoStretchMode    = I2C_NOSTRETCH_DISABLE;  
+    i2cHandle.Init.NoStretchMode    = I2C_NOSTRETCH_DISABLE;
     i2cHandle.Init.OwnAddress1      = 0xFF;
     i2cHandle.Init.OwnAddress2      = 0xFF;
 
@@ -48,7 +47,7 @@ I2C::I2C(I2CBus i2cBus) {
 }
 
 I2C::~I2C() {
-    
+
     if (i2cHandle.Instance == I2C1) {
         __HAL_RCC_I2C1_CLK_DISABLE();
 
@@ -82,7 +81,7 @@ void I2C::recover_bus() {
         DWT_Delay(9);
     }
 
-    
+
     // Configure SDA pin for i2c again
     HAL_GPIO_DeInit(GPIOB, GPIO_PIN_6);
     GPIO_InitStruct.Pin       = GPIO_PIN_6;

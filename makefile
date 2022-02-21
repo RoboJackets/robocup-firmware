@@ -1,6 +1,6 @@
 .PHONY: all mtrain tests docs clean $(CPP_FIRMWARE_TESTS)
 
-CPP_FIRMWARE_TESTS = blink gpio spi usb_serial i2c i2c_bus_recovery
+CPP_FIRMWARE_TESTS = adc blink gpio spi usb_serial i2c
 
 all : mtrain
 
@@ -8,9 +8,11 @@ mtrain:
 	mkdir -p build && cd build && \
 cmake .. && make -j
 
-$(CPP_FIRMWARE_TESTS): tests
+$(CPP_FIRMWARE_TESTS):
 	mkdir -p build && cd build && \
 cmake .. && make -j $(@F)
+
+tests: mtrain
 
 clean:
 	rm -rf build

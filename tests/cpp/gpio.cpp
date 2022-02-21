@@ -1,4 +1,4 @@
-#include "mtrain.hpp"
+#include "mTrain.hpp"
 
 /** DigitalIn and DigitalOut test
  * 

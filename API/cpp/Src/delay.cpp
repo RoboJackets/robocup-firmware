@@ -1,4 +1,4 @@
-#include "delay.h"
+#include "delay.hpp"
 #include "stm32f7xx_hal.h"
 
 uint32_t DWT_GetTick() {
@@ -6,8 +6,8 @@ uint32_t DWT_GetTick() {
     return curTick;
 }
 
-uint64_t DWT_SysTick_To_us() {
-    volatile uint64_t ratio = SystemCoreClock/1000000L;
+uint32_t DWT_SysTick_To_us() {
+    volatile uint32_t ratio = SystemCoreClock/1000000L;
     return ratio;
 }
 

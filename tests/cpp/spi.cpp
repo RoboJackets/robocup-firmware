@@ -1,5 +1,4 @@
-#include "SPI.hpp"
-#include "mtrain.hpp"
+#include "mTrain.hpp"
 #include <vector>
 
 int main(void) {
@@ -11,7 +10,7 @@ int main(void) {
         for (int i = 0; i <= 100; i++) {
             spi2.transmitReceive(i);
         }
-        
+
         spi2.frequency(8'000'000);
 
         std::vector<uint8_t> nums;

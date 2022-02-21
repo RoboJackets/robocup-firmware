@@ -41,10 +41,10 @@
  *----------------------------------------------------------*/
 
 /* Ensure stdint is only used by the compiler, and not the assembler. */
-#if defined(__ICCARM__) || defined(__CC_ARM) || defined(__GNUC__)
- #include <stdint.h>
- extern uint32_t SystemCoreClock;
-#endif
+// #if defined(__ICCARM__) || defined(__CC_ARM) || defined(__GNUC__)
+//  #include <stdint.h>
+//  extern uint32_t SystemCoreClock;
+// #endif
 
 /*  CMSIS-RTOSv2 defines 56 levels of priorities. To be able to use them
  *  all and avoid application misbehavior, configUSE_PORT_OPTIMISED_TASK_SELECTION
@@ -58,7 +58,7 @@
 #define configUSE_TICK_HOOK               0
 #define configMAX_PRIORITIES              (7)
 #define configSUPPORT_STATIC_ALLOCATION   0
-#define configCPU_CLOCK_HZ                (SystemCoreClock)
+#define configCPU_CLOCK_HZ                (16000000)
 #define configTICK_RATE_HZ                ((TickType_t)1000)
 #define configMINIMAL_STACK_SIZE          ((uint16_t)128)
 #define configTOTAL_HEAP_SIZE             ((size_t)(15 * 1024))

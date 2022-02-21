@@ -12,7 +12,7 @@ extern "C" {
  */
 uint32_t DWT_GetTick();
 
-uint64_t DWT_SysTick_To_us();
+uint32_t DWT_SysTick_To_us();
 
 void DWT_Delay_Sys(uint32_t ticks);
 

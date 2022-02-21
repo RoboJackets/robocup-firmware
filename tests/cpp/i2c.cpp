@@ -1,5 +1,4 @@
-#include "mtrain.hpp"
-#include "I2C.hpp"
+#include "mTrain.hpp"
 
 #define CTRL_REG1  0x2A
 

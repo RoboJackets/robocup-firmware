@@ -1,6 +1,4 @@
-#include "mtrain.hpp"
-
-#include "PinDefs.hpp"
+#include "mTrain.hpp"
 
 int main() {
     DigitalOut l1 = DigitalOut(LED2);

@@ -35,14 +35,29 @@ int _write(int file, char *data, int len)
     if (file == STDOUT_FILENO) {
         USBD_CDC_SetTxBuffer(&USBD_Device, (uint8_t*)data, len);
         USBD_CDC_TransmitPacket(&USBD_Device);
-        DWT_Delay(1000); // TODO: why not blocking?
+        DWT_Delay(500); // TODO: why not blocking?
+    } else {
+        return -1;
     }
-    return 0;
+    return len;
+}
+
+int _read(int file, char *data, int len)
+{
+    extern void DWT_Delay(uint32_t);
+    if (file == STDOUT_FILENO) {
+        USBD_CDC_SetRxBuffer(&USBD_Device, (uint8_t*)data);
+        USBD_CDC_ReceivePacket(&USBD_Device);
+        DWT_Delay(500); // TODO: why not blocking?
+    } else {
+        return -1;
+    }
+    return len;
 }
 
 /**
   * @brief  System Clock Configuration
-  *         The system Clock is configured as follow : 
+  *         The system Clock is configured as follow :
   *            System Clock source            = PLL (HSE)
   *            SYSCLK(Hz)                     = 216000000
   *            HCLK(Hz)                       = 216000000
@@ -66,14 +81,14 @@ void SystemClock_Config(void)
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
-  /**Configure LSE Drive Capability 
+  /**Configure LSE Drive Capability
   */
   // HAL_PWR_EnableBkUpAccess();
-  /**Configure the main internal regulator output voltage 
+  /**Configure the main internal regulator output voltage
   */
   __HAL_RCC_PWR_CLK_ENABLE();
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
-  /**Initializes the CPU, AHB and APB busses clocks 
+  /**Initializes the CPU, AHB and APB busses clocks
   */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_BYPASS;
@@ -87,13 +102,13 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  /**Activate the Over-Drive mode 
+  /**Activate the Over-Drive mode
   */
   if (HAL_PWREx_EnableOverDrive() != HAL_OK)
   {
     Error_Handler();
   }
-  /**Initializes the CPU, AHB and APB busses clocks 
+  /**Initializes the CPU, AHB and APB busses clocks
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
@@ -124,7 +139,7 @@ void Error_Handler(void)
 /**
   * @brief  Configure the MPU attributes as Write Through for Internal SRAM1/2.
   * @note   The Base Address is 0x20020000 since this memory interface is the AXI.
-  *         The Configured Region Size is 512KB because the internal SRAM1/2 
+  *         The Configured Region Size is 512KB because the internal SRAM1/2
   *         memory size is 384KB.
   * @param  None
   * @retval None
@@ -132,7 +147,7 @@ void Error_Handler(void)
 void MPU_Config(void)
 {
   MPU_Region_InitTypeDef MPU_InitStruct;
-  
+
   /* Disable the MPU */
   HAL_MPU_Disable();
 
@@ -172,7 +187,7 @@ void CPU_CACHE_Enable(void)
 void DWT_Config(void)
 {
   CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
-  DWT->LAR = 0xC5ACCE55; 
+  DWT->LAR = 0xC5ACCE55;
   DWT->CYCCNT = 0;
   DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
 }
@@ -187,7 +202,7 @@ void DWT_Config(void)
   * @retval None
   */
 void assert_failed(uint8_t* file, uint32_t line)
-{ 
+{
   /* User can add his own implementation to report the file name and line number,
      ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
 

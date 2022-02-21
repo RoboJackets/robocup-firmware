@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PinDefs.hpp"
+#include "delay.hpp"
 
 #include <vector>
 
