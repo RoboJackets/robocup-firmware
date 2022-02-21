@@ -2,6 +2,9 @@
 
 #include <cstdint>
 #include <Eigen/Dense>
+#include "rc-fshare/robot_model.hpp"
+#include "robocup.hpp"
+#include <cstdlib>
 
 /**
  * Controller for wheel velocities

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "cstdint"
-#include "mtrain.hpp"
+#include "robocup.hpp"
 
 /** @class Battery
  * Interfaces with analog pin to get voltage-related data

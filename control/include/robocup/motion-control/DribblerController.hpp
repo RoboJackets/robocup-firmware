@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cstdint"
+#include <stdlib.h>
 
 /**
  * Controller for Dribbler velocity
@@ -17,7 +18,7 @@ public:
     /**
      * Updates the controller with the latest input and calculates
      * the correct motor command to reach this target
-     * 
+     *
      * @param setpoint Target to reach (LSB: 0-128)
      * @param command Next command to send to the motors (LSB: 0-128)
      */

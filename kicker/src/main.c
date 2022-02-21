@@ -7,24 +7,19 @@
 #include <stdlib.h>
 #include <util/delay.h>
 
-#include "kicker_commands.h"
-#include "kicker_config.h"
-#include "pins.h"
-#include "util.h"
+#include "kicker.h"
 
 // kicker parameters
 #define MAX_KICK_STRENGTH 255.0f
 #define MIN_EFFECTIVE_KICK_FET_EN_TIME 0.8f
 #define MAX_EFFECTIVE_KICK_FET_EN_TIME 10.0f
 
-#define KICK_TIME_SLOPE (MAX_EFFECTIVE_KICK_FET_EN_TIME - MIN_EFFECTIVE_KICK_FET_EN_TIME)
+#define KICK_TIME_SLOPE                                                        \
+  (MAX_EFFECTIVE_KICK_FET_EN_TIME - MIN_EFFECTIVE_KICK_FET_EN_TIME)
 
 #define KICK_COOLDOWN_MS 2000
 #define PRE_KICK_SAFETY_MARGIN_MS 5
 #define POST_KICK_SAFETY_MARGIN_MS 5
-
-#define BREAKBEAM_LOW  64
-#define BREAKBEAM_HIGH 200
 
 #define NO_COMMAND 0
 
@@ -35,7 +30,8 @@
 
 // calculate our TIMING_CONSTANT (timer cmp val) from the desired resolution
 #define CLK_FREQ 8000000 // after removing default CLKDIV8 prescale
-#define TIMER_PRESCALE 8 // set by TCCR0B |= _BV(CS01) which also starts the timer
+#define TIMER_PRESCALE                                                         \
+  8 // set by TCCR0B |= _BV(CS01) which also starts the timer
 #define MS_PER_SECOND 1000
 
 #define MAX_TIMER_FREQ (CLK_FREQ / TIMER_PRESCALE)
@@ -64,7 +60,6 @@ volatile uint8_t cur_command_ = NO_COMMAND;
 
 // always up-to-date voltage so we don't have to get_voltage() inside interupts
 volatile uint8_t last_voltage_ = 0;
-volatile uint8_t last_breakbeam_ = 0;
 
 volatile bool ball_sensed_ = 0;
 
@@ -124,9 +119,8 @@ void kick(uint8_t strength) {
 
 void init();
 
-
-/* ADC Function */
-uint8_t get_adc() {
+/* Voltage Function */
+uint8_t get_voltage() {
   // Start conversation by writing to start bit
   ADCSRA |= _BV(ADSC);
 
@@ -138,21 +132,7 @@ uint8_t get_adc() {
   return (ADCH << 1);
 }
 
-/* Voltage Function */
-uint8_t get_voltage() {
-  ADMUX |= _BV(ADLAR) | V_MONITOR_PIN; // connect PA6 (V_MONITOR_PIN) to ADC
-
-  return get_adc();
-}
-
-/* Breakbeam Function */
-uint8_t get_breakbeam() {
-  ADMUX |= _BV(ADLAR) | BALL_SENSE_RX; // connect PA0 (BALL_SENSE_RX) to ADC
-
-  return get_adc();
-}
-
-void main() {
+int main() {
   init();
 
   // needs to be int to force voltage_accum calculation to use ints
@@ -243,16 +223,8 @@ void main() {
       byte_cnt = 0;
     }
 
-    last_breakbeam_ = get_breakbeam();
-
-    bool bs;
-    if(last_breakbeam_ > BREAKBEAM_HIGH) {
-        bs = true;
-    } else if (last_breakbeam_ < BREAKBEAM_LOW) {
-        bs = false;
-    }
-
-    if ((last_breakbeam_ > BREAKBEAM_HIGH || last_breakbeam_ < BREAKBEAM_LOW) && ball_sensed_) {
+    bool bs = PINA & _BV(BALL_SENSE_RX);
+    if (ball_sensed_) {
       if (!bs)
         ball_sense_change_count_++; // wrong reading, inc counter
       else
@@ -368,7 +340,7 @@ void init() {
   ///////////////////////////////////////////////////////////////////////////
 
   // Set low bits corresponding to pin we read from
-  ADMUX |= _BV(ADLAR) | V_MONITOR_PIN; // connect PA6 (V_MONITOR_PIN) to ADC
+  ADMUX |= _BV(ADLAR) | 0x06; // connect PA6 (V_MONITOR_PIN) to ADC
 
   // ensure ADC isn't shut off
   // PRR &= ~_BV(PRADC);
@@ -527,7 +499,7 @@ uint8_t execute_cmd(uint8_t cmd) {
     kick_on_breakbeam_ = false;
     kick_on_breakbeam_strength_ = 0;
   }
-  
+
 
   return (ball_sensed_ << 7) | (VOLTAGE_MASK & (last_voltage_ >> 1));
 }

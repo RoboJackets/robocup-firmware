@@ -1,5 +1,5 @@
 #pragma once
-#include "mtrain.hpp"
+#include "robocup.hpp"
 
 #include "GenericModule.hpp"
 
@@ -19,4 +19,3 @@ private:
     DigitalOut pin;
     bool value = false;
 };
-

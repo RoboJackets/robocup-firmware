@@ -1,11 +1,10 @@
 #pragma once
 
-#include "I2C.hpp"
+
 #include "GenericModule.hpp"
-#include "MicroPackets.hpp"
 #include "drivers/ICM42605.hpp"
-#include "LockedStruct.hpp"
 #include <memory>
+#include <cstdio>
 
 /**
  * Module interfacing with IMU and handling IMU status

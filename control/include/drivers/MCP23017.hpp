@@ -1,8 +1,7 @@
 #pragma once
 
 #include <memory>
-#include "I2C.hpp"
-#include "LockedStruct.hpp"
+#include "robocup.hpp"
 
 /**
  * Allow access to an I2C-connected MCP23017 16-bit I/O extender chip

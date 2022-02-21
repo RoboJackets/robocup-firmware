@@ -2,7 +2,7 @@
 #include <avr/interrupt.h>
 #include <avr/wdt.h>
 
-#include "pins.h"
+#include "kicker.h"
 
 void init() {
     // disable interrupts
@@ -26,7 +26,7 @@ void init() {
     sei();
 }
 
-void main() {
+int main() {
 	init();
 
     for (;;) {

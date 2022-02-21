@@ -1,6 +1,4 @@
 #include "modules/BatteryModule.hpp"
-#include "mtrain.hpp"
-#include <memory>
 
 using namespace std::literals;
 

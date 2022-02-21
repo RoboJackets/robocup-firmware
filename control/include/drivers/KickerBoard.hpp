@@ -1,13 +1,13 @@
 #pragma once
 
-#include "mtrain.hpp"
+#include "robocup.hpp"
 #include "AVR910.hpp"
-#include "DigitalOut.hpp"
 #include "kicker_commands.h"
-#include "SPI.hpp"
-#include "LockedStruct.hpp"
+#include "kicker_bin.h"
 
+#include <tuple>
 #include <string>
+#include <cstdio>
 
 /**
  * A class for interfacing with the kicker board, which is based on an

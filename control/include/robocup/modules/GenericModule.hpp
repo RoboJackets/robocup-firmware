@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <chrono>
+#include "robocup.hpp"
 
 #include "FreeRTOS.h"
 #include "task.h"

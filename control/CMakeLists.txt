@@ -26,7 +26,7 @@ target_include_directories(control-lib PUBLIC
     include
     include/robocup
     # needs kicker commands
-    ${CMAKE_CURRENT_LIST_DIR}/../kicker/
+    ${CMAKE_CURRENT_LIST_DIR}/../kicker/include
     # needs kicker final binary for flashing
     ${CMAKE_CURRENT_LIST_DIR}/../kicker/build/bin
     # needs fpga final binary for flashing
@@ -55,4 +55,4 @@ add_custom_target(control ALL
     COMMENT "objcopying to make binary executable for control"
 )
 
-add_subdirectory(test)
+add_subdirectory(tests)

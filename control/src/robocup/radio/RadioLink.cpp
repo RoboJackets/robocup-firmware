@@ -1,7 +1,4 @@
 #include "radio/RadioLink.hpp"
-#include "drivers/ISM43340.hpp"
-
-#include "MicroPackets.hpp"
 
 RadioLink::RadioLink() {}
 

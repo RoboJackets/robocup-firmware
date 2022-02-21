@@ -1,21 +1,10 @@
 
-#include "mtrain.hpp"
+
 #include "FreeRTOSConfig.h"
 #include "FreeRTOS.h"
 #include "task.h"
 
 #include "modules/GenericModule.hpp"
-
-#include "SPI.hpp"
-#include "I2C.hpp"
-#include "delay.h"
-#include "DigitalOut.hpp"
-
-#include <unistd.h>
-
-#include "MicroPackets.hpp"
-#include "iodefs.h"
-
 #include "modules/BatteryModule.hpp"
 #include "modules/FPGAModule.hpp"
 #include "modules/IMUModule.hpp"
@@ -24,10 +13,10 @@
 #include "modules/MotionControlModule.hpp"
 #include "modules/RadioModule.hpp"
 #include "modules/RotaryDialModule.hpp"
-#include "LockedStruct.hpp"
 #include <vector>
 #include <algorithm>
 #include <cstdio>
+#include <unistd.h>
 
 #define SUPER_LOOP_FREQ 200
 #define SUPER_LOOP_PERIOD (1000000L / SUPER_LOOP_FREQ)
@@ -35,7 +24,6 @@
 // Max number of super loop cycles a proc can miss if it
 // needs to run
 #define MAX_MISS_CNT 5
-
 
 struct MODULE_META_DATA {
     // Time in sysclock ticks of last module execution

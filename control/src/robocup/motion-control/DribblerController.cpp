@@ -1,9 +1,8 @@
 #include "motion-control/DribblerController.hpp"
-#include <stdlib.h>
 
 /**
  * Edited sign function to always return -1 or 1
- * 
+ *
  * Returns 1 if val >= 0, -1 if val < 0
  */
 template <typename T> int sgn(T val) {

@@ -38,8 +38,7 @@
 
 #pragma once
 
-#include "mtrain.hpp"
-#include "LockedStruct.hpp"
+#include "robocup.hpp"
 #include <memory>
 #include <cstdio>
 

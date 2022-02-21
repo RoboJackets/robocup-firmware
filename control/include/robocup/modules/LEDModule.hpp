@@ -4,12 +4,7 @@
 #include <array>
 #include <memory>
 
-#include "LockedStruct.hpp"
-#include "DigitalOut.hpp"
-#include "I2C.hpp"
-#include "SPI.hpp"
 #include "GenericModule.hpp"
-#include "MicroPackets.hpp"
 #include "drivers/MCP23017.hpp"
 
 

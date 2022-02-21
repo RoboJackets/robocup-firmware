@@ -1,10 +1,4 @@
 #include "modules/MotionControlModule.hpp"
-#include "mtrain.hpp"
-#include "rc-fshare/robot_model.hpp"
-#include <math.h>
-#include "MicroPackets.hpp"
-#include "DigitalOut.hpp"
-#include <algorithm>
 
 MotionControlModule::MotionControlModule(LockedStruct<BatteryVoltage>& batteryVoltage,
                                          LockedStruct<IMUData>& imuData,

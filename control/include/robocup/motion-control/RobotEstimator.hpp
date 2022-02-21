@@ -2,6 +2,8 @@
 
 #include <cstdint>
 #include <Eigen/Dense>
+#include "rc-fshare/robot_model.hpp"
+#include "robocup.hpp"
 
 /** @class RobotEstimator
  *  This class implements a Kalman Filter in order to estimate a robot's current state.
@@ -49,7 +51,7 @@ public:
     /**
      * Using the previous state and the next input
      * We can guess where we are this time step
-     * 
+     *
      * @param u Last motor command
      */
     void predict(Eigen::Matrix<float, numInputs, 1> u);
@@ -57,7 +59,7 @@ public:
     /**
      * Using the next measurements, we can move our prediction
      * closer to the true target
-     * 
+     *
      * @param z Encoders 1-4 then gyro
      */
     void update(Eigen::Matrix<float, numOutputs, 1> z);

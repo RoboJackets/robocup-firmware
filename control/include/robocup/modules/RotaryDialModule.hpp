@@ -1,8 +1,6 @@
 #pragma once
 
-#include <LockedStruct.hpp>
 #include "GenericModule.hpp"
-#include "MicroPackets.hpp" 
 #include "drivers/MCP23017.hpp"
 #include "drivers/RotarySelector.hpp"
 #include "drivers/IOExpanderDigitalInOut.hpp"
