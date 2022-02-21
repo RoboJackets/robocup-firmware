@@ -8,7 +8,6 @@ add_library(STM32F7_API_CPP
 
 target_include_directories(STM32F7_API_CPP PUBLIC
     Inc/
-    ./
     ../c/Inc/
 )
 

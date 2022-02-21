@@ -13,13 +13,16 @@ set(ARM_PREFIX                    arm-none-eabi-gcc)
 find_program(CMAKE_C_COMPILER     ${ARM_PREFIX}-gcc)
 find_program(CMAKE_CXX_COMPILER   ${ARM_PREFIX}-g++)
 
-set(C_MACHINE_OPTIONS "-Wall -Wextra -Wpedantic -O3 -mthumb -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard" CACHE STRING "")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Wpedantic -O3 -Wfatal-errors ")
+set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Wpedantic -O3 -Wfatal-errors ")
+
+set(C_MACHINE_OPTIONS "-mthumb -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard" CACHE STRING "")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${C_MACHINE_OPTIONS}" CACHE STRING "")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${C_MACHINE_OPTIONS} -Wno-register -fno-exceptions -fno-rtti" CACHE STRING "")
 set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} ${C_MACHINE_OPTIONS}" CACHE STRING "")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --specs=nosys.specs --specs=nano.specs -T '${CMAKE_CURRENT_LIST_DIR}/../BSP/flash.ld' -u _printf_float" CACHE STRING "")
 
-add_definitions(-Wall -Wextra -Wpedantic -O3 -DSTM32F769xx -DUSE_USB_HS)
+add_definitions(-DSTM32F769xx -DUSE_USB_HS)
 set(CHIP STM32F769NI CACHE STRING "Full STM32 Chip Model")
 set(CMAKE_BUILD_TYPE DEBUG CACHE STRING "")
 

@@ -159,6 +159,6 @@ header file. */
 /* IMPORTANT: FreeRTOS is using the SysTick as internal time base, thus make sure the system and peripherials are
               using a different time base (TIM based for example).
  */
-#define xPortSysTickHandler SysTick_Handler
+/*#define xPortSysTickHandler SysTick_Handler*/
 
 #endif /* FREERTOS_CONFIG_H */

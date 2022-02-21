@@ -17,6 +17,5 @@ int main() {
         HAL_Delay(50);
 
         printf("%u\r\n", i++);
-        fflush(stdout);
     }
 }

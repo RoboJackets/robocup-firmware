@@ -18,6 +18,7 @@ add_subdirectory(external)
 add_subdirectory(API/c)
 add_subdirectory(API/cpp)
 add_subdirectory(BSP)
+add_subdirectory(tests/cpp)
 
 add_library(mtrain INTERFACE)
 
@@ -26,7 +27,3 @@ target_link_libraries(mtrain INTERFACE
     STM32F7_API_C
     STM32F7_API_CPP
 )
-
-if( IS_DIRECTORY  "${CMAKE_CURRENT_LIST_DIR}/tests" )
-    add_subdirectory(tests/cpp)
-endif()

@@ -6,10 +6,11 @@ all : mtrain
 
 mtrain:
 	mkdir -p build && cd build && \
-cmake .. && make -j$(nproc)
+cmake .. && make -j
 
 $(CPP_FIRMWARE_TESTS): tests
-	cd build; make $(@F) -j$(nproc)
+	mkdir -p build && cd build && \
+cmake .. && make -j $(@F)
 
 clean:
 	rm -rf build
