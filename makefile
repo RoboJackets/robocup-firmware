@@ -1,6 +1,6 @@
 .PHONY: all mtrain flash tests docs clean $(CPP_FIRMWARE_TESTS)
 
-CPP_FIRMWARE_TESTS = adc blink gpio spi usb_serial i2c
+CPP_FIRMWARE_TESTS = adc leds gpio spi usb-serial i2c
 
 all : mtrain
 
