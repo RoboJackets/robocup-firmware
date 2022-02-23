@@ -51,7 +51,7 @@ bool TSL2572::init()
 void TSL2572::setGain(tsl2572Gain_t gain)
 {
     if (!(this->_tsl2572initialized))
-        begin();
+        begin(); //the block for this function is commented out, causing compile error
 
     enable();
 
@@ -122,6 +122,7 @@ uint16_t TSL2572::readRegister(TSL2572::Register regAddress)
 //     write8(TSL2572_COMMAND_BIT | TSL2572_REGISTER_CONTROL, TSL2572_CONTROL_POWEROFF);
 // }
 
+//try either . or * for _i2c instead of -> to fix compile error
 void TSL2572::write8(u_int8_t reg, u_int8_t value)
 {
     _i2c->beginTransmission(_i2cAddress);
@@ -137,13 +138,13 @@ uint8_t TSL2572::read8(uint8_t reg)
     _i2c->endTransmission();
 
     _i2c->requestFrom(_i2cAddress, 1); // requestFrom(address, quantity)
-    return _i2c->read()
+    return _i2c->read();
 }
 
 uint16_t TSL2572::read16(uint8_t reg)
 {
     uint16_t x;
-    t;
+    uint16_t t;
 
     _i2c->beginTransmission(_i2cAddress);
     _i2c->write(reg);
