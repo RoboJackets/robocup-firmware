@@ -8,7 +8,8 @@ int main()
 
     auto i2c_lock = _i2c.lock();
     uint32_t values[4];
-    uint8_t channel = 2 for (int i = 0; i < 4; i++)
+    uint8_t channel = 2;
+    for (int i = 0; i < 4; i++)
     {
         //channel selector
         bool error = writeByte(226, 0, channel);
