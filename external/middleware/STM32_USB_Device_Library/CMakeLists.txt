@@ -8,10 +8,8 @@ add_library(STM32_USB_Device
 target_include_directories(STM32_USB_Device PUBLIC
     Core/Inc
     Class/CDC/Inc
+    ${PROJECT_SOURCE_DIR}/BSP/config/usb
 )
-
-# Include HAL configuration from BSP
-target_include_directories(STM32_USB_Device PUBLIC ${PROJECT_SOURCE_DIR}/BSP/config/usb)
 
 target_sources(STM32_USB_Device PUBLIC
     ${PROJECT_SOURCE_DIR}/BSP/config/usb/usbd_conf.c

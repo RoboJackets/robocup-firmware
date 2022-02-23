@@ -1,7 +1,7 @@
 #include "mTrain.hpp"
 
 int main() {
-    DigitalOut l1 = DigitalOut(LED2);
+    DigitalOut l1 = DigitalOut(LED4);
 
     uint8_t i = 0;
 

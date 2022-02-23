@@ -15,5 +15,5 @@ target_include_directories(STM32F7xx_HAL PUBLIC
 target_compile_definitions(STM32F7xx_HAL PUBLIC USE_HAL_DRIVER)
 target_include_directories(STM32F7xx_HAL PUBLIC ${PROJECT_SOURCE_DIR}/BSP/config/hal)
 
-add_subdirectory(middleware/STM32_USB_Device_Library)
 add_subdirectory(middleware/FreeRTOS)
+add_subdirectory(middleware/STM32_USB_Device_Library)
