@@ -27,7 +27,7 @@ control:
 mkdir -p build && cd build && \
 cmake .. && make -j control
 
-$(ROBOT_TESTS):
+$(ROBOT_TESTS): kicker-test
 	cd control && \
 mkdir -p build && cd build && \
 cmake .. && make -j $(@F)
