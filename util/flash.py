@@ -4,7 +4,7 @@ import subprocess
 import sys
 import shlex
 
-if len(sys.argv) < 2:
+if len(sys.argv) < 1:
     print("No file provided")
     exit()
 
@@ -25,4 +25,3 @@ if 'Connecting to J-Link via USB...FAILED' in pOut or 'Cannot connect to J-Link 
     sys.exit('Connection to J-Link failed')
 if 'Cannot connect to target' in pOut:
     sys.exit('Connection to MCU failed')
-# TODO: more checks if something failed

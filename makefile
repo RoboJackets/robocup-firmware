@@ -1,4 +1,4 @@
-.PHONY: all mtrain tests docs clean $(CPP_FIRMWARE_TESTS)
+.PHONY: all mtrain flash tests docs clean $(CPP_FIRMWARE_TESTS)
 
 CPP_FIRMWARE_TESTS = adc blink gpio spi usb_serial i2c
 
@@ -10,7 +10,8 @@ cmake .. && make -j
 
 $(CPP_FIRMWARE_TESTS):
 	mkdir -p build && cd build && \
-cmake .. && make -j $(@F)
+cmake .. && make -j $(@F) && \
+python3 ../util/flash.py bin/$(@F).bin
 
 tests: mtrain
 
