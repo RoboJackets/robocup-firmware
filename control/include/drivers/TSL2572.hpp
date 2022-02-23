@@ -41,7 +41,7 @@ public:
     typedef enum
     {
         I2CADDR = 0x39
-    } Address;
+    } i2cAddress;
 
     typedef enum
     {
@@ -64,7 +64,7 @@ public:
 private:
     bool _tsl2572initialized;
     LockedStruct<I2C> &_i2c;
-    int _i2cAddress; // physical I2C Address
+    i2cAddress _i2cAddress; // physical I2C Address
     tsl2572Gain_t _tsl2572Gain;
     tsl2572IntegrationTime_t _tsl2572IntegrationTime;
     int32_t _tsl2572SensorID;
