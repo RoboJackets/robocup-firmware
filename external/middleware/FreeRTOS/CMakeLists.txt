@@ -7,8 +7,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON CACHE BOOL "")
 set(CMAKE_C_STANDARD 11 CACHE STRING "")
 set(CMAKE_C_STANDARD_REQUIRED ON CACHE BOOL "")
 
-file(GLOB_RECURSE SRC Source/*.c)
-
 add_library(FreeRTOS STATIC
     Source/CMSIS_RTOS/cmsis_os.c
     Source/croutine.c

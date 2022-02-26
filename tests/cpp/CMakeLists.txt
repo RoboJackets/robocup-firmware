@@ -19,18 +19,12 @@ function(add_test test_file)
         arm-none-eabi-objcopy -Obinary "${test_name}.elf" "${test_name}.bin"
         WORKING_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
         DEPENDS ${test_name}.elf
-        COMMENT "objcopying to make binary executable for ${test_name}"
+        COMMENT "Objcopying to make binary executable for ${test_name}"
     )
 
-    add_custom_target(upload-${test_name}
-        COMMAND ${FLASH_COPY_SCRIPT} "${test_name}.bin"
-        WORKING_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
-        DEPENDS ${test_name}
-        COMMENT "Copying binary ${test_name} to MCU"
-    )
 endfunction()
 
-file(GLOB_RECURSE files "./*.cpp")
+file(GLOB files "./*.cpp")
 
 foreach(file ${files})
     add_test(${file})

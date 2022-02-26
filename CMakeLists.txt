@@ -11,7 +11,6 @@ project(
     mTrain
     LANGUAGES C CXX ASM
 )
-set(FLASH_COPY_SCRIPT python3 ${CMAKE_CURRENT_LIST_DIR}/util/flash.py)
 
 add_subdirectory(external)
 
