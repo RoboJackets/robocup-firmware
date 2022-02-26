@@ -30,7 +30,7 @@ function(add_test test_file)
     )
 endfunction()
 
-file(GLOB files "./*.cpp")
+file(GLOB_RECURSE files "./*.cpp")
 
 foreach(file ${files})
     add_test(${file})

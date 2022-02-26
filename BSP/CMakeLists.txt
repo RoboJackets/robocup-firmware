@@ -1,4 +1,4 @@
-file(GLOB SRC "Src/*.c")
+file(GLOB_RECURSE SRC "Src/*.c")
 
 add_library(STM32F7xx
     startup.s
