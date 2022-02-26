@@ -11,12 +11,12 @@ function(add_test test_file)
         ${CMAKE_OBJCOPY} -Obinary "${test_name}.elf" "${test_name}.bin"
         WORKING_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
         DEPENDS ${test_name}.elf
-        COMMENT "objcopying to make binary executable for ${test_name}"
+        COMMENT "Objcopying to make binary executable for ${test_name}"
     )
 
 endfunction()
 
-file(GLOB_RECURSE files "./*.cpp")
+file(GLOB files "./*.cpp")
 
 foreach(file ${files})
     add_test(${file})

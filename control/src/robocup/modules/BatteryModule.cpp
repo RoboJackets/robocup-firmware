@@ -23,6 +23,6 @@ void BatteryModule::entry(void) {
     auto batteryLock = batteryVoltage.lock();
     batteryLock->isValid = true;
     batteryLock->lastUpdate = HAL_GetTick();
-    batteryLock->rawVoltage = battery.getRaw();
+    batteryLock->rawVoltage = battery.getRawVoltage();
     batteryLock->isCritical = battery.isBattCritical();
 }

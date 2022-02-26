@@ -29,7 +29,7 @@ add_custom_target(kicker ALL
     ${AVR_OBJCOPY} -j .text -j .data -O binary kicker.elf kicker.nib
     WORKING_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
     DEPENDS kicker.elf
-    COMMENT "objcopying to convert kicker.elf to kicker.nib"
+    COMMENT "Objcopying to convert kicker.elf to kicker.nib"
 )
 
 # custom target to convert kicker-test.elf to the kicker-test.nib binary file and place it in the 'run' directory
@@ -37,5 +37,5 @@ add_custom_target(kicker-test ALL
     ${AVR_OBJCOPY} -j .text -j .data -O binary kicker-test.elf kicker-test.nib
     WORKING_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
     DEPENDS kicker-test.elf
-    COMMENT "objcopying to convert kicker-test.elf to kicker-test.nib"
+    COMMENT "Objcopying to convert kicker-test.elf to kicker-test.nib"
 )

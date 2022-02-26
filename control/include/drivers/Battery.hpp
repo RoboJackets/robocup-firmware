@@ -14,7 +14,7 @@ public:
 
     float getBattPercentage(); /**< Returns the last battery percentage read */
 
-    uint8_t getRaw();          /**< Returns battery voltage as a raw 8-bit integer */
+    uint8_t getRawVoltage();          /**< Returns battery voltage as a raw 8-bit integer */
 
     bool isBattCritical();     /**< Returns whether battery is critical (at or below 0%) */
 
@@ -46,7 +46,6 @@ private:
         (MAX_SAFE_BATT_VOLTAGE_READ - MIN_SAFE_BATT_VOLTAGE_READ);
 
     float lastReadPercentage; /**< Battery percentage on last read */
-    uint8_t rawVoltage;       /**< Raw battery voltage (0-255) */
 
     AnalogIn battVoltagePin;
 };

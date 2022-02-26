@@ -52,7 +52,7 @@ add_custom_target(control ALL
     arm-none-eabi-objcopy -Obinary "control.elf" "control.bin"
     WORKING_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
     DEPENDS control.elf
-    COMMENT "objcopying to make binary executable for control"
+    COMMENT "Objcopying to make binary executable for control"
 )
 
 add_subdirectory(tests)
