@@ -1,8 +1,12 @@
 #include "modules/BatteryModule.hpp"
 #include "mtrain.hpp"
 #include <memory>
+#include "delay.h"
 
 using namespace std::literals;
+
+int BattCount; 
+uint64_t BattTaskTime; 
 
 BatteryModule::BatteryModule(LockedStruct<BatteryVoltage>& batteryVoltage)
     : GenericModule(1000ms, "battery"),
@@ -16,12 +20,17 @@ BatteryModule::BatteryModule(LockedStruct<BatteryVoltage>& batteryVoltage)
     batteryLock->lastUpdate = 0;
     batteryLock->rawVoltage = 0;
     batteryLock->isCritical = false;
+    BattCount = 1;
+    BattTaskTime = DWT_SysTick_To_us() * DWT_GetTick();
 }
 
 void BatteryModule::entry(void) {
     battery.update();
-    printf("[INFO] Battery Voltage Percentage: %f\r\n", 100*battery.getBattPercentage());
-
+    //printf("[INFO] Battery Voltage Percentage: %f\r\n", 100*battery.getBattPercentage());
+    if (BattCount % 5==0) {
+        printf("Battery Time elapsed: %d\r\n", BattTaskTime - DWT_SysTick_To_us() * DWT_GetTick());
+        BattTaskTime = DWT_SysTick_To_us() * DWT_GetTick();
+    }
     auto batteryLock = batteryVoltage.lock();
     batteryLock->isValid = true;
     batteryLock->lastUpdate = HAL_GetTick();

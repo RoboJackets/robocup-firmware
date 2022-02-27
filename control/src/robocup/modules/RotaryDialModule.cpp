@@ -1,6 +1,14 @@
 #include "modules/RotaryDialModule.hpp"
+#include "mtrain.hpp"
+#include "FreeRTOSConfig.h"
+#include "FreeRTOS.h"
+#include "task.h"
 #include "iodefs.h"
+#include "delay.h"
 
+int Dialcount; 
+ uint64_t DialstartTime;
+ 
 RotaryDialModule::RotaryDialModule(LockedStruct<MCP23017>& ioExpander, LockedStruct<RobotID>& robotID)
     : GenericModule(kPeriod, "dial", kPriority), robotID(robotID), dial({
             IOExpanderDigitalInOut(ioExpander, HEX_SWITCH_BIT0, MCP23017::DIR_INPUT),
@@ -19,6 +27,7 @@ void RotaryDialModule::start() {
 }
 
 void RotaryDialModule::entry(void) {
+    DialstartTime =  DWT_GetTick();
     int new_robot_id = dial.read();
 
     //printf("Rotary dial: %d\r\n", new_robot_id);
@@ -31,22 +40,10 @@ void RotaryDialModule::entry(void) {
     } else {
         robotIDLock->isValid = false;
     }
-    printTaskInfo();
+    //printTaskInfo();
     last_robot_id = new_robot_id;
-}
-
-void RotaryDialModule::printTaskInfo(void) {
-    TaskHandle_t xHandle;
-    TaskStatus_t xTaskDetails;
-
-    xHandle = xTaskGetHandle( "RotaryDial" );
-
-    configASSERT(xHandle);
-    vTaskGetInfo(
-            xHandle,
-            &xTaskDetails,
-            pdTRUE,
-            eInvalid
-            );
-    printf("%c", xTaskDetails.pcTaskName);
+    if (Dialcount % 5==0) {
+        printf("Dial Time Elapsed: %f\r\n", ((DWT_GetTick()) - DialstartTime) / 216.0f);
+    }
+    Dialcount++;
 }

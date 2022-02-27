@@ -165,7 +165,7 @@ int main() {
                                       motorFeedback,
                                       motorCommand,
                                       debugInfo);
-    createModule(&motion);
+   createModule(&motion);
 
     static IMUModule imu(sharedSPI, imuData);
     createModule(&imu);

@@ -5,6 +5,11 @@
 #include "MicroPackets.hpp"
 #include "DigitalOut.hpp"
 #include <algorithm>
+#include "delay.h"
+
+int Motcount;
+uint64_t MotstartTime;
+
 
 MotionControlModule::MotionControlModule(LockedStruct<BatteryVoltage>& batteryVoltage,
                                          LockedStruct<IMUData>& imuData,
@@ -33,6 +38,7 @@ MotionControlModule::MotionControlModule(LockedStruct<BatteryVoltage>& batteryVo
 }
 
 void MotionControlModule::entry() {
+    MotstartTime = DWT_GetTick();
     auto motionCommandLock = motionCommand.lock();
     auto motorCommandLock = motorCommand.lock();
     auto motorFeedbackLock = motorFeedback.lock();
@@ -150,6 +156,13 @@ void MotionControlModule::entry() {
         frame.motor_outputs[i] = static_cast<int16_t>(motorCommandLock->wheels[i] * 511);
         frame.encDeltas[i] = static_cast<int16_t>(currentWheels(i));
     }
+    
+    if (Motcount % 500==0) {
+        printf("Motion Time Elapsed: %f\r\n", ((DWT_GetTick()) - MotstartTime) / 216.0f);
+       
+        
+    }
+    Motcount++;
 
 #if 0
     auto debugInfoLock = debugInfo.lock();

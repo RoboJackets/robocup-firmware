@@ -1,5 +1,9 @@
 #include "modules/RadioModule.hpp"
 #include "iodefs.h"
+#include "delay.h"
+
+int Radiocount; 
+ uint64_t RadiostartTime;
 
 RadioModule::RadioModule(LockedStruct<BatteryVoltage>& batteryVoltage,
                          LockedStruct<FPGAStatus>& fpgaStatus,
@@ -49,6 +53,7 @@ void RadioModule::start() {
 }
 
 void RadioModule::entry() {
+    RadiostartTime =  DWT_GetTick();
     BatteryVoltage battery;
     FPGAStatus fpga;
     RobotID id;
@@ -90,5 +95,10 @@ void RadioModule::entry() {
         radioErrorLock->lastUpdate = HAL_GetTick();
         radioErrorLock->hasConnectionError = link.isRadioConnected();
         radioErrorLock->hasSoccerConnectionError = link.hasSoccerTimedOut();
+        
     }
+    if (Radiocount % 100==0) {
+        printf("Radio Time Elapsed: %f\r\n", ((DWT_GetTick()) - RadiostartTime) / 216.0f);
+    }
+    Radiocount++;
 }

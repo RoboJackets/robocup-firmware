@@ -4,6 +4,8 @@
 #include <cmath>
 #include <delay.h>
 
+int FPGAcount; 
+ uint64_t FPGAstartTime;
 using namespace std::literals;
 
 FPGAModule::FPGAModule(std::unique_ptr<SPI> spi,
@@ -46,6 +48,7 @@ void FPGAModule::start() {
 }
 
 void FPGAModule::entry() {
+    FPGAstartTime =  DWT_GetTick();
     // We've still got an issue in hardware: the INIT_B pin is never pulled
     // high after FPGA boot, so we never actually receive a signal. Until we
     // fix this, just assume it's been initialized properly.
@@ -141,4 +144,10 @@ void FPGAModule::entry() {
             fpgaStatusLock->motorHasErrors[i] = (status & (1 << i)) == 1;
         }
     }
+    if (FPGAcount % 500==0) {
+        printf("FPGA Time Elapsed: %f\r\n", ((DWT_GetTick()) - FPGAstartTime) / 216.0f);
+       
+        
+    }
+    FPGAcount++; 
 }

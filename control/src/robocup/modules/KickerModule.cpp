@@ -2,8 +2,12 @@
 
 #include "mtrain.hpp"
 #include "iodefs.h"
+#include "delay.h"
 #include <cstdio>
 
+int Kickercount; 
+ uint64_t KickerstartTime;
+ 
 KickerModule::KickerModule(LockedStruct<SPI>& spi,
                            LockedStruct<KickerCommand>& kickerCommand,
                            LockedStruct<KickerInfo>& kickerInfo)
@@ -27,6 +31,7 @@ void KickerModule::start() {
 }
 
 void KickerModule::entry(void) {
+    KickerstartTime =  DWT_GetTick();
     kicker.setChargeAllowed(true);
     // Check if valid
     // and within the last few ms
@@ -76,4 +81,10 @@ void KickerModule::entry(void) {
         kickerInfoLock->ballSenseTriggered = kicker.isBallSensed();
         kickerInfoLock->kickerCharged = kicker.isCharged();
     }
+    if (Kickercount % 50==0) {
+        printf("Kicker Time Elapsed: %f\r\n", ((DWT_GetTick()) - KickerstartTime) / 216.0f);
+       
+        
+    }
+    Kickercount++;
 }
