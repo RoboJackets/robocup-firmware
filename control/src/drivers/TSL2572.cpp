@@ -2,7 +2,7 @@
 #include "drivers/TSL2572.hpp"
 
 // constructor
-TSL2572::TSL2572(int i2cAddress, int32_t sensorID)
+TSL2572::TSL2572(i2cAddress, int32_t sensorID)
 {
     this->_i2cAddress = i2cAddress;
     this->_tsl2572initialized = false;
@@ -51,7 +51,7 @@ bool TSL2572::init()
 void TSL2572::setGain(tsl2572Gain_t gain)
 {
     if (!(this->_tsl2572initialized))
-        begin(); //the block for this function is commented out, causing compile error
+        begin(_i2cAddress); //the block for this function is commented out, causing compile error
 
     enable();
 
@@ -78,7 +78,7 @@ uint32_t TSL2572::calculateLux(uint16_t sensor)
 }
 
 // write to a specific register
-void TSL2572::writeRegister(TSL2572::Register regAddress, uint16_t data)
+void TSL2572::writeRegister(TSL2572::Register reg, uint8_t data)
 {
     auto i2c_lock = _i2c.lock();
     std::vector<uint8_t> buffer{static_cast<uint8_t>(data & 0xff),
@@ -125,19 +125,19 @@ uint16_t TSL2572::readRegister(TSL2572::Register regAddress)
 //try either . or * for _i2c instead of -> to fix compile error
 void TSL2572::write8(u_int8_t reg, u_int8_t value)
 {
-    _i2c->beginTransmission(_i2cAddress);
-    _i2c->write(reg);
-    _i2c->write(value);
-    _i2c->endTransmission();
+    _i2c.beginTransmission(_i2cAddress);
+    _i2c.write(reg);
+    _i2c.write(value);
+    _i2c.endTransmission();
 }
 
 uint8_t TSL2572::read8(uint8_t reg)
 {
-    _i2c->beginTransmission(_i2cAddress);
-    _i2c->write(reg);
-    _i2c->endTransmission();
+    _i2c.beginTransmission(_i2cAddress);
+    _i2c.write(reg);
+    _i2c.endTransmission();
 
-    _i2c->requestFrom(_i2cAddress, 1); // requestFrom(address, quantity)
+    _i2c.requestFrom(_i2cAddress, 1); // requestFrom(address, quantity)
     return _i2c->read();
 }
 
@@ -146,11 +146,11 @@ uint16_t TSL2572::read16(uint8_t reg)
     uint16_t x;
     uint16_t t;
 
-    _i2c->beginTransmission(_i2cAddress);
-    _i2c->write(reg);
-    _i2c->endTransmission();
+    _i2c.beginTransmission(_i2cAddress);
+    _i2c.write(reg);
+    _i2c.endTransmission();
 
-    _i2c->requestFrom(_i2cAddress, 2); // requestFrom(address, quantity)
+    _i2c.requestFrom(_i2cAddress, 2); // requestFrom(address, quantity)
     t = _i2c->read();
     x = _i2c->read();
     x <<= 8;
