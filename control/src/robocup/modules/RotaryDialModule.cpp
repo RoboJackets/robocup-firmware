@@ -31,5 +31,22 @@ void RotaryDialModule::entry(void) {
     } else {
         robotIDLock->isValid = false;
     }
+    printTaskInfo();
     last_robot_id = new_robot_id;
+}
+
+void RotaryDialModule::printTaskInfo(void) {
+    TaskHandle_t xHandle;
+    TaskStatus_t xTaskDetails;
+
+    xHandle = xTaskGetHandle( "RotaryDial" );
+
+    configASSERT(xHandle);
+    vTaskGetInfo(
+            xHandle,
+            &xTaskDetails,
+            pdTRUE,
+            eInvalid
+            );
+    printf("%c", xTaskDetails.pcTaskName);
 }

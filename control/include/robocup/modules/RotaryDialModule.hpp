@@ -46,6 +46,8 @@ public:
      */
     void entry() override;
 
+    void printTaskInfo(void);
+
 private:
     LockedStruct<RobotID>& robotID;
 
