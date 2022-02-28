@@ -41,7 +41,7 @@ void IMUModule::entry(void) {
     imuDataLock->lastUpdate = xTaskGetTickCount();
 
     imuDataLock->omegas[2] = rate; 
-    if (IMUcount % 500==0) {
+    if (IMUcount % 1000==0) {
         printf("IMU Time Elapsed: %f\r\n", ((DWT_GetTick()) - IMUstartTime) / 216.0f);
        
         

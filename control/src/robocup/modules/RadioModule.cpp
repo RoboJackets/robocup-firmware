@@ -97,7 +97,7 @@ void RadioModule::entry() {
         radioErrorLock->hasSoccerConnectionError = link.hasSoccerTimedOut();
         
     }
-    if (Radiocount % 100==0) {
+    if (Radiocount % 250==0) {
         printf("Radio Time Elapsed: %f\r\n", ((DWT_GetTick()) - RadiostartTime) / 216.0f);
     }
     Radiocount++;

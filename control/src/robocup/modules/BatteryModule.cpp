@@ -5,9 +5,8 @@
 
 using namespace std::literals;
 
-int BattCount; 
-uint64_t BattTaskTime; 
-
+int Battcount; 
+ uint64_t BattstartTime;
 BatteryModule::BatteryModule(LockedStruct<BatteryVoltage>& batteryVoltage)
     : GenericModule(1000ms, "battery"),
       batteryVoltage(batteryVoltage) {
@@ -20,20 +19,22 @@ BatteryModule::BatteryModule(LockedStruct<BatteryVoltage>& batteryVoltage)
     batteryLock->lastUpdate = 0;
     batteryLock->rawVoltage = 0;
     batteryLock->isCritical = false;
-    BattCount = 1;
-    BattTaskTime = DWT_SysTick_To_us() * DWT_GetTick();
+    Battcount = 0;
 }
 
 void BatteryModule::entry(void) {
+    BattstartTime =  DWT_GetTick();
     battery.update();
     //printf("[INFO] Battery Voltage Percentage: %f\r\n", 100*battery.getBattPercentage());
-    if (BattCount % 5==0) {
-        printf("Battery Time elapsed: %d\r\n", BattTaskTime - DWT_SysTick_To_us() * DWT_GetTick());
-        BattTaskTime = DWT_SysTick_To_us() * DWT_GetTick();
-    }
     auto batteryLock = batteryVoltage.lock();
     batteryLock->isValid = true;
     batteryLock->lastUpdate = HAL_GetTick();
     batteryLock->rawVoltage = battery.getRaw();
     batteryLock->isCritical = battery.isBattCritical();
+    if (Battcount % 5==0) {
+        printf("Batt Time Elapsed: %f\r\n", ((DWT_GetTick()) - BattstartTime) / 216.0f);
+      
+        
+    }
+    Battcount++; 
 }

@@ -81,7 +81,7 @@ void KickerModule::entry(void) {
         kickerInfoLock->ballSenseTriggered = kicker.isBallSensed();
         kickerInfoLock->kickerCharged = kicker.isCharged();
     }
-    if (Kickercount % 50==0) {
+    if (Kickercount % 125==0) {
         printf("Kicker Time Elapsed: %f\r\n", ((DWT_GetTick()) - KickerstartTime) / 216.0f);
        
         

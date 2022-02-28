@@ -157,7 +157,7 @@ void MotionControlModule::entry() {
         frame.encDeltas[i] = static_cast<int16_t>(currentWheels(i));
     }
     
-    if (Motcount % 500==0) {
+    if (Motcount % 1000==0) {
         printf("Motion Time Elapsed: %f\r\n", ((DWT_GetTick()) - MotstartTime) / 216.0f);
        
         

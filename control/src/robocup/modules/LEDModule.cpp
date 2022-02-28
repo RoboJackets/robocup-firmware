@@ -1,5 +1,9 @@
 #include "modules/LEDModule.hpp"
 #include "iodefs.h"
+#include "delay.h"
+
+int LEDcount;
+uint64_t LEDstartTime;
 
 bool operator==(const Error& e1, const Error& e2) {
     return e1.led0 == e2.led0 && e1.led1 == e2.led1 && e1.led2 == e2.led2;
@@ -38,6 +42,7 @@ extern std::vector<const char*> failed_modules;
 extern size_t free_space;
 
 void LEDModule::entry() {
+    LEDstartTime = DWT_GetTick();
     for (const char* c : failed_modules) {
         printf("[ERROR] Module failed to initialize: %s (initial heap size: %d)\r\n", c, free_space);
     }
@@ -125,6 +130,13 @@ void LEDModule::entry() {
     leds[0].write(state);
 
     displayErrors();
+    
+    if (LEDcount % 50==0) {
+    printf("LED Time Elapsed: %f\r\n", ((DWT_GetTick()) - LEDstartTime) / 216.0f);
+   
+    
+}
+LEDcount++;
 }
 
 void LEDModule::fpgaInitialized() {

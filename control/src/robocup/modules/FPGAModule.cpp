@@ -144,7 +144,7 @@ void FPGAModule::entry() {
             fpgaStatusLock->motorHasErrors[i] = (status & (1 << i)) == 1;
         }
     }
-    if (FPGAcount % 500==0) {
+    if (FPGAcount % 1000==0) {
         printf("FPGA Time Elapsed: %f\r\n", ((DWT_GetTick()) - FPGAstartTime) / 216.0f);
        
         
