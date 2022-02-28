@@ -8,7 +8,7 @@ Plug in the mTrain using a mini-USB cable. If you would like to flash the firmwa
 ## Step 2: Turn on the robot
 
 ## Step 3: Open `screen` (or `minicom`)
-Run the program of your choice in the directory `/dev/ttyACM0`. If are using `screen`, you will have to run it *after* starting the robot/flashing the firmware. Minicom should automatically detect when the folder exists and the robot starts.
+Run the program of your choice in the directory `/dev/ttyACM0`. If are using `screen`, you will have to run it *after* starting the robot/flashing the firmware. `minicom` should automatically detect when the folder exists and the robot starts.
 
 ## Step 4: Read the debug messages
 You should now be seeing debug messages in your terminal. You can also add timestamps to your messages if you are using `minicom` by pressing `Ctrl-A-N` simultaneously.
