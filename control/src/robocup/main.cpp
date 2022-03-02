@@ -174,6 +174,9 @@ int main() {
 
     printf("[INFO] Starting scheduler...\r\n");
 
+    SEGGER_SYSVIEW_Conf();
+    SEGGER_SYSVIEW_Start();
+
     vTaskStartScheduler();
 
     printf("[ERROR] Failed to start scheduler!\r\n");
