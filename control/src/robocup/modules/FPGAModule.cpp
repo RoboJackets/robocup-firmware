@@ -62,7 +62,7 @@ void FPGAModule::entry() {
     */
 
     // FPGA initialized so we all good
-    std::array<int16_t, 5> dutyCycles{256, 256, 256, 256, 256};
+    std::array<int16_t, 5> dutyCycles {56, 56, 56, 56, 56};
     std::array<int16_t, 5> encDeltas{};
 
     // DONT DO THIS EVER!
