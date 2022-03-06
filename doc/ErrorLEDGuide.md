@@ -7,3 +7,10 @@
 |White | IMU           | Info         | |
 |Red   | Radio         | Fatal (very bad) |Boot Fail |
 
+## Mtrain Initialization LED Guide
+|Led #| Module |
+|----|----|
+|0   |FPGA|
+|1   |Radio|
+|2   |Kicker|
+|3   |Fully Initialized|
