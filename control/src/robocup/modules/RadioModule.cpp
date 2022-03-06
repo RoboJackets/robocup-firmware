@@ -79,7 +79,7 @@ void RadioModule::entry() {
         // Clear buffer of old packets such that we can get the lastest packet
         // If you don't do this there is a significant lag of 300ms or more
         while (link.receive(kickerCommandLock.value(), motionCommandLock.value())) {
-            kickerCommandLock->isValid = true;
+	    kickerCommandLock->isValid = true;
             kickerCommandLock->lastUpdate = HAL_GetTick();
 
             motionCommandLock->isValid = true;
@@ -90,5 +90,8 @@ void RadioModule::entry() {
         radioErrorLock->lastUpdate = HAL_GetTick();
         radioErrorLock->hasConnectionError = link.isRadioConnected();
         radioErrorLock->hasSoccerConnectionError = link.hasSoccerTimedOut();
+
+    	printf("Command recieved: %d ", link.receive(kickerCommandLock.value(), motionCommandLock.value()));
     }
+
 }
