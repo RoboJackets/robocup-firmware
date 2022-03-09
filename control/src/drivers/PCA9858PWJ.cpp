@@ -25,3 +25,5 @@
 //     return (uint16_t)(buffer[0] | (buffer[1] << 8));
 // }
 // }
+// TODO: look here pls
+// https://github.com/torvalds/linux/blob/master/drivers/i2c/muxes/i2c-mux-pca954x.c
