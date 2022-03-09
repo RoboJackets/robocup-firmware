@@ -91,6 +91,25 @@ The `clean` target deletes the build directories for both robot and kicker firmw
 $ make <TARGET>
 ```
 
+Generally, the flashing process goes by you executing commands in the following order
+
+```
+$ make clean
+$ make kicker
+$ make
+```
+
+If you're on Windows, and after executing make it states that JLink.exe cannot be found, execute the following commands.
+
+```
+$ cd /
+$ export PATH=$PATH:/mnt/c/"Program Files (x86)"/SEGGER/JLink
+$ alias JLinkExe="JLink.exe"
+$ echo 'export PATH=$PATH:/mnt/c/"Program Files (x86)"/SEGGER/JLink' >> ~/.bashrc
+$ echo 'alias JLinkExe="JLink.exe"' >> ~/.bashrc
+$ cd ~
+```
+Then it should work normally.
 
 ## Testing
 
