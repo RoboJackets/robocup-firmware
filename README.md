@@ -58,11 +58,15 @@ You should then see the ubuntu terminal application open in a separate window. I
 
 The path to the root folder using your file explorer is:
 C:\Users\<WindowsUsername>\AppData\Local\Packages\CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc\LocalState\rootfs
+This will be represented as a / in the terminal. You can get here quickly in the Ubuntu terminal by typing "cd /"
 
 By default, when using WSL, you'll be in your user folder for WSL, so: 
 C:\Users\<WindowsUsername>\AppData\Local\Packages\CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc\LocalState\rootfs\home\<WSLUsername>
+This will be represented as a ~ in the terminal. You can get here quickly in the Ubuntu terminal by typing "cd ~"
 
-When you do the following steps, execute them within the WSL user folder.
+When you do the following steps, execute them from the ~ directory.
+
+Additionally, you'll notice you now have two new apps on your computer, those being WSL and Ubuntu. I recommend using the Ubuntu app when you want to execute commands from the command line (for RoboCup purposes) going forward because it'll place you in the ~ directory by default, but operating in both is much the same process.
 
 2) Clone the repository
 
