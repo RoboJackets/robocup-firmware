@@ -40,9 +40,6 @@ bool TSL2572::init()
 
 void TSL2572::setGain(tsl2572Gain_t gain)
 {
-    if (!(this->_tsl2572initialized))
-        begin(_i2cAddress); //the block for this function is commented out, causing compile error
-
     enable();
 
     this->_tsl2572Gain = gain;
@@ -68,7 +65,7 @@ uint32_t TSL2572::calculateLux(uint16_t sensor)
 }
 
 // write to a specific register
-void TSL2572::writeRegister(TSL2572::Register reg, uint8_t data)
+void TSL2572::writeRegister(TSL2572::Register regAddress, uint8_t data)
 {
     auto i2c_lock = _i2c.lock();
     std::vector<uint8_t> buffer{static_cast<uint8_t>(data & 0xff),
@@ -113,8 +110,10 @@ uint16_t TSL2572::readRegister(TSL2572::Register regAddress)
 // }
 
 //try either . or * for _i2c instead of -> to fix compile error
+/*
 void TSL2572::write8(u_int8_t reg, u_int8_t value)
 {
+    auto i2c_lock = _i2c.lock();
     _i2c.beginTransmission(_i2cAddress);
     _i2c.write(reg);
     _i2c.write(value);
@@ -146,4 +145,5 @@ uint16_t TSL2572::read16(uint8_t reg)
     x <<= 8;
     x |= t;
     return x;
+    */
 }
