@@ -38,7 +38,7 @@ public:
         TSL2572_GAIN_16X = 0x10, // 16x gain
     } tsl2572Gain_t;
 
-    uint8_t I2CADDR = 0x39
+    uint8_t I2CADDR = 0x39;
 
     typedef enum
     {
@@ -62,14 +62,14 @@ public:
     void setIntegrationTime(tsl2572IntegrationTime_t time);
     bool init();
     bool begin(LockedStruct<I2C> &sharedI2C);
-    TSL2572(int i2cAddress, int32_t sensorID);
+    TSL2572(int i2cAddress, LockedStruct<I2C>& sharedI2C, int32_t sensorID);
 
     // uint16_t readRegister(TSL2572::Register regAddress);    // Declares the Read Function
 
 private:
     bool _tsl2572initialized;
-    LockedStruct<I2C> &_i2c;
-    i2cAddress _i2cAddress; // physical I2C Address
+    LockedStruct<I2C>& _i2c;
+    int _i2cAddress; // physical I2C Address
     tsl2572Gain_t _tsl2572Gain;
     tsl2572IntegrationTime_t _tsl2572IntegrationTime;
     int32_t _tsl2572SensorID;

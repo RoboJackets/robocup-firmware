@@ -2,22 +2,12 @@
 #include "drivers/TSL2572.hpp"
 
 // constructor
-TSL2572::TSL2572(i2cAddress, int32_t sensorID)
+TSL2572::TSL2572(int i2cAddress, LockedStruct<I2C>& sharedI2C, int32_t sensorID) : _i2cAddress(i2cAddress), _i2c(sharedI2C), _tsl2572SensorID(sensorID)
 {
-    this->_i2cAddress = i2cAddress;
     this->_tsl2572initialized = false;
     this->_tsl2572IntegrationTime = TSL2572_INTEGRATIONTIME_101MS;
     this->_tsl2572Gain = TSL2572_GAIN_16X;
-    int32_t _tsl2572SensorID = sensorID;
 }
-
-// begin
-bool TSL2572::begin(LockedStruct<I2C> &sharedI2C)
-{
-    this->_i2c = sharedI2C;
-    return init();
-}
-
 // init
 bool TSL2572::init()
 {
