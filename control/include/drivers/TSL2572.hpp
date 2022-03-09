@@ -38,10 +38,7 @@ public:
         TSL2572_GAIN_16X = 0x10, // 16x gain
     } tsl2572Gain_t;
 
-    typedef enum
-    {
-        I2CADDR = 0x39
-    } Address;
+    uint8_t I2CADDR = 0x39
 
     typedef enum
     {
@@ -51,6 +48,14 @@ public:
     void getData(uint16_t *broadband);
     void reset();
     uint32_t calculateLux(uint16_t sensor);
+    void writeRegister(TSL2572::Register reg, uint8_t data);
+    uint16_t readRegister(TSL2572::Register regAddress);
+    uint16_t read16(uint8_t reg);
+    uint8_t read8(uint8_t reg);
+    void write8(u_int8_t reg, u_int8_t value);
+
+    void disable(void);
+    void enable(void);
 
     void getLuminosity(uint16_t *broadband);
     void setGain(tsl2572Gain_t gain);
@@ -64,17 +69,8 @@ public:
 private:
     bool _tsl2572initialized;
     LockedStruct<I2C> &_i2c;
-    int _i2cAddress; // physical I2C Address
+    i2cAddress _i2cAddress; // physical I2C Address
     tsl2572Gain_t _tsl2572Gain;
     tsl2572IntegrationTime_t _tsl2572IntegrationTime;
     int32_t _tsl2572SensorID;
-
-    void writeRegister(uint8_t reg, uint8_t data);
-    uint16_t readRegister(TSL2572::Register regAddress);
-    uint16_t read16(uint8_t reg);
-    uint8_t read8(uint8_t reg);
-    void write8(u_int8_t reg, u_int8_t value);
-
-    void disable(void);
-    void enable(void);
 };

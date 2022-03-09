@@ -159,6 +159,9 @@ int main() {
                                  robotID);
     createModule(&dial);
 
+    static RobotShellModule shell();
+    createModule(&shell);
+
     static MotionControlModule motion(batteryVoltage,
                                       imuData,
                                       motionCommand,
