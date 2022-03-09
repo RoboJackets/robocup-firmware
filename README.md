@@ -45,13 +45,32 @@ Details on the architecture of the FPGA firmware code can be found [here](doc/FP
 Below is a quick guide to getting this RoboCup project setup to build on your computer. If you are a robocup member planning on developing both mtrain and robocup firmware it is highly recommended that you  follow the Firmware [Getting Started](doc/GettingStarted.md) page.
 This project only provides directions for installing on Ubuntu Linux, Windows Subsystem for Linux (WSL), and macOS.
 
-1) Clone the repository
+1) Install WSL (Skip to step 2 if using MacOS or Ubuntu)
+
+Follow the steps outlined here: https://docs.microsoft.com/en-us/windows/wsl/install
+Essentially, you'll open PowerShell as Administrator and type:
+
+```
+wsl --install -d Ubuntu
+```
+
+You should then see the ubuntu terminal application open in a separate window. It'll have you create a username and password, so make something memorable.
+
+The path to the root folder using your file explorer is:
+C:\Users\<WindowsUsername>\AppData\Local\Packages\CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc\LocalState\rootfs
+
+By default, when using WSL, you'll be in your user folder for WSL, so: 
+C:\Users\<WindowsUsername>\AppData\Local\Packages\CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc\LocalState\rootfs\home\<WSLUsername>
+
+When you do the following steps, execute them within the WSL user folder.
+
+2) Clone the repository
 
 ```
 git clone git://github.com/RoboJackets/robocup-firmware
 ```
 
-2) Install the necessary software
+3) Install the necessary software
 
 There are a few setup scripts in the util directory for installing required packages, setting up udev rules, etc.  See `ubuntu-setup` and `macos-setup` for more info. If you are using WSL, see `wsl-setup` after using `ubuntu-setup`.
 
@@ -60,7 +79,7 @@ $ cd robocup-firmware
 $ ./util/<SYSTEM>-setup
 ```
 
-3) Build the project for the desired target. The `control` target is the firmware for the mTrain.
+4) Build the project for the desired target. The `control` target is the firmware for the mTrain.
 The `kicker` target is for the kicker MCU to be uploaded to the MTrain.
 The `clean` target deletes the build directories for both robot and kicker firmware.
 
