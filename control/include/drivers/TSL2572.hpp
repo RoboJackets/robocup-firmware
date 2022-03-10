@@ -32,11 +32,16 @@ public:
         C1DATAH = 0x17
     } Register;
 
+    // Note: Don't set gain more than 8x (see configuration register on datasheet)
+    // Also, not quite how this function should work. These bits in the configuration 
+    // register are a two bit value
+    /*
     typedef enum
     {
         TSL2572_GAIN_1X = 0x00,  // No gain
-        TSL2572_GAIN_16X = 0x10, // 16x gain
+        TSL2572_GAIN_16X = 0x08, // 8x gain
     } tsl2572Gain_t;
+    */
 
     uint8_t I2CADDR = 0x39;
 
@@ -50,9 +55,9 @@ public:
     uint32_t calculateLux(uint16_t sensor);
     void writeRegister(TSL2572::Register reg, uint8_t data);
     uint16_t readRegister(TSL2572::Register regAddress);
-    uint16_t read16(uint8_t reg);
-    uint8_t read8(uint8_t reg);
-    void write8(u_int8_t reg, u_int8_t value);
+    //uint16_t read16(uint8_t reg);
+    //uint8_t read8(uint8_t reg);
+    //void write8(u_int8_t reg, u_int8_t value);
 
     void disable(void);
     void enable(void);
@@ -63,8 +68,6 @@ public:
     bool init();
     bool begin(LockedStruct<I2C> &sharedI2C);
     TSL2572(int i2cAddress, LockedStruct<I2C>& sharedI2C, int32_t sensorID);
-
-    // uint16_t readRegister(TSL2572::Register regAddress);    // Declares the Read Function
 
 private:
     bool _tsl2572initialized;

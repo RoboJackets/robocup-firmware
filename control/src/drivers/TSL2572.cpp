@@ -6,47 +6,26 @@ TSL2572::TSL2572(int i2cAddress, LockedStruct<I2C>& sharedI2C, int32_t sensorID)
 {
     this->_tsl2572initialized = false;
     this->_tsl2572IntegrationTime = TSL2572_INTEGRATIONTIME_101MS;
-    this->_tsl2572Gain = TSL2572_GAIN_16X;
 }
 // init
 bool TSL2572::init()
 {
-    uint8_t readID = read8(ID);
-    if (readID != 0x34)
-    {
-        return false;
-    }
     this->_tsl2572initialized = true;
-
     setIntegrationTime(_tsl2572IntegrationTime);
-    setGain(_tsl2572Gain);
-    disable();
     return true;
 }
 
 // 13ms
 // 101ms
 // 402ms
-// void TSL2572::setIntegrationTime(tsl2572IntegrationTime_t time)
-// {
-//     if (!(this->_tsl2572initialized))
-//         begin();
-//     enable();
-
-//     write8(TSL2572_COMMAND_BIT | ATIME, time | this->_tsl2572Gain);
-//     this->_tsl2572IntegrationTime = time;
-//     disable();
-// }
-
-void TSL2572::setGain(tsl2572Gain_t gain)
+void TSL2572::setIntegrationTime(tsl2572IntegrationTime_t time)
 {
-    enable();
-
-    this->_tsl2572Gain = gain;
-
-    disable();
+    this->_tsl2572IntegrationTime = time;
+    writeRegister(ATIME, time);
 }
 
+// Commented out for now b/c relies on gain being set correctly.
+/*
 void TSL2572::getLuminosity(uint16_t *broadband)
 {
     if (!(this->_tsl2572Gain))
@@ -55,14 +34,17 @@ void TSL2572::getLuminosity(uint16_t *broadband)
         return;
     }
 }
+*/
 
-uint32_t TSL2572::calculateLux(uint16_t sensor)
+/*
+uint32_t TSL2572::calculateLux()
 {
     unsigned long channel0;
     // chScale = TSL2572_LUX_CHSCALE_TINT0;
     channel0 = (readRegister(C0DATA));
     return channel0;
 }
+*/
 
 // write to a specific register
 void TSL2572::writeRegister(TSL2572::Register regAddress, uint8_t data)
@@ -145,5 +127,6 @@ uint16_t TSL2572::read16(uint8_t reg)
     x <<= 8;
     x |= t;
     return x;
-    */
 }
+    */
+
