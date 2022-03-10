@@ -8,6 +8,8 @@
 class TSL2572
 {
 public:
+    TSL2572(int i2cAddress, LockedStruct<I2C>& sharedI2C, int32_t sensorID);
+
     /* Register Defines from Data Sheet
     https://ams.com/documents/20143/36005/TSL2572_DS000178_4-00.pdf
     Page 19 */
@@ -51,23 +53,18 @@ public:
     } tsl2572IntegrationTime_t;
 
     void getData(uint16_t *broadband);
-    void reset();
     uint32_t calculateLux(uint16_t sensor);
     void writeRegister(TSL2572::Register reg, uint8_t data);
     uint16_t readRegister(TSL2572::Register regAddress);
-    //uint16_t read16(uint8_t reg);
-    //uint8_t read8(uint8_t reg);
-    //void write8(u_int8_t reg, u_int8_t value);
-
-    void disable(void);
-    void enable(void);
-
     void getLuminosity(uint16_t *broadband);
     void setGain(tsl2572Gain_t gain);
     void setIntegrationTime(tsl2572IntegrationTime_t time);
     bool init();
     bool begin(LockedStruct<I2C> &sharedI2C);
-    TSL2572(int i2cAddress, LockedStruct<I2C>& sharedI2C, int32_t sensorID);
+    //void reset();
+    //uint16_t read16(uint8_t reg);
+    //uint8_t read8(uint8_t reg);
+    //void write8(u_int8_t reg, u_int8_t value);
 
 private:
     bool _tsl2572initialized;
