@@ -317,6 +317,7 @@ void ISM43340::reset() {
         }
         else if (i == 4){
             printf("[ERROR] Failed to initialize radio.\r\n");
+            return;
         }
         else {
             printf("[INFO] Could not initialize radio. Retrying.\r\n");

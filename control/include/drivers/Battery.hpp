@@ -46,6 +46,7 @@ private:
         (MAX_SAFE_BATT_VOLTAGE_READ - MIN_SAFE_BATT_VOLTAGE_READ);
 
     float lastReadPercentage; /**< Battery percentage on last read */
+    uint8_t rawVoltage;       /**< Raw battery voltage (0-255) */
 
     AnalogIn battVoltagePin;
 };

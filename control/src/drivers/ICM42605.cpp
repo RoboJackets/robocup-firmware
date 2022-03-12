@@ -158,7 +158,6 @@ bool ICM42605::initialize() {
         printf("[ERROR] Failed to connect to IMU.");
         return false;
     } else {
-        printf("[INFO] Initialization Complete!");
         return true;
     }
 }

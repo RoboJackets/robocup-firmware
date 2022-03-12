@@ -1,5 +1,3 @@
-
-
 #include "FreeRTOSConfig.h"
 #include "FreeRTOS.h"
 #include "task.h"
@@ -23,7 +21,7 @@
 
 // Max number of super loop cycles a proc can miss if it
 // needs to run
-#define MAX_MISS_CNT 5
+#define MAX_MISS_CNT 3
 
 struct MODULE_META_DATA {
     // Time in sysclock ticks of last module execution
@@ -54,8 +52,6 @@ struct MODULE_META_DATA {
               module(module) {}
 };
 
-static std::vector<GenericModule *> moduleList;
-
 [[noreturn]]
 void startModule(void *pvModule) {
     GenericModule *module = static_cast<GenericModule *>(pvModule);
@@ -76,7 +72,7 @@ void startModule(void *pvModule) {
 std::vector<const char*> failed_modules;
 size_t free_space;
 
-void createModule(GenericModule *module) {
+bool createModule(GenericModule *module) {
     BaseType_t result = xTaskCreate(startModule,
                                     module->name,
                                     module->stackSize,
@@ -86,12 +82,17 @@ void createModule(GenericModule *module) {
     if (result != pdPASS) {
         printf("[ERROR] Failed to initialize task %s for reason %x:\r\n", module->name, module->stackSize);
         failed_modules.push_back(module->name);
+        return false;
     } else {
         printf("[INFO] Initialized task %s.\r\n", module->name);
+        return true;
     }
 }
 
 int main() {
+    // Delay for USB startup
+    DWT_Delay(2500);
+
     static LockedStruct<I2C> sharedI2C(SHARED_I2C_BUS);
     static std::unique_ptr<SPI> fpgaSPI = std::make_unique<SPI>(FPGA_SPI_BUS, std::nullopt, 16'000'000);
     static LockedStruct<SPI> sharedSPI(SHARED_SPI_BUS, std::nullopt, 100'000);
@@ -108,61 +109,65 @@ int main() {
     static LockedStruct<KickerInfo> kickerInfo{};
     static LockedStruct<DebugInfo> debugInfo{};
 
+    bool result = false;
+
     static LockedStruct<MCP23017> ioExpander(MCP23017{sharedI2C, 0x42});
 
     printf("[INFO] Starting up.\r\n");
 
+    static LEDModule led(ioExpander,
+                         sharedSPI,
+                         batteryVoltage,
+                         fpgaStatus,
+                         kickerInfo,
+                         radioError,
+                         imuData);
+
+
     static BatteryModule battery(batteryVoltage);
-    createModule(&battery);
+
 
     static RotaryDialModule dial(ioExpander,
                                  robotID);
-    createModule(&dial);
 
-    // static IMUModule imu(sharedSPI, imuData);
-    // createModule(&imu);
-    //
-    // static RadioModule radio(batteryVoltage,
-    //                          fpgaStatus,
-    //                          kickerInfo,
-    //                          robotID,
-    //                          kickerCommand,
-    //                          motionCommand,
-    //                          radioError,
-    //                          debugInfo);
-    // createModule(&radio);
-    //
-    // static KickerModule kicker(sharedSPI,
-    //                            kickerCommand,
-    //                            kickerInfo);
-    // createModule(&kicker);
-    //
-    // static FPGAModule fpga(std::move(fpgaSPI),
-    //                        motorCommand,
-    //                        fpgaStatus,
-    //                        motorFeedback);
-    // createModule(&fpga);
-    //
-    // static LEDModule led(ioExpander,
-    //                      sharedSPI,
-    //                      batteryVoltage,
-    //                      fpgaStatus,
-    //                      kickerInfo,
-    //                      radioError,
-    //                      imuData);
-    // createModule(&led);
-    //
-    // static MotionControlModule motion(batteryVoltage,
-    //                                   imuData,
-    //                                   motionCommand,
-    //                                   motorFeedback,
-    //                                   motorCommand,
-    //                                   debugInfo);
-    // createModule(&motion);
+    static IMUModule imu(sharedSPI, imuData);
+
+    static RadioModule radio(batteryVoltage,
+                             fpgaStatus,
+                             kickerInfo,
+                             robotID,
+                             kickerCommand,
+                             motionCommand,
+                             radioError,
+                             debugInfo);
+
+    static KickerModule kicker(sharedSPI,
+                               kickerCommand,
+                               kickerInfo);
+
+    static FPGAModule fpga(std::move(fpgaSPI),
+                           motorCommand,
+                           fpgaStatus,
+                           motorFeedback);
+
+    static MotionControlModule motion(batteryVoltage,
+                                      imuData,
+                                      motionCommand,
+                                      motorFeedback,
+                                      motorCommand,
+                                      debugInfo);
+
+    static std::vector<GenericModule *> moduleList = {&led, &dial, &imu, &radio, &kicker, &fpga, &motion};
+    for(int i = 0; i < 7; i++) {
+        result = createModule(moduleList[i]);
+        if(!result) {
+            break;
+        }
+    }
 
     ////////////////////////////////////////////
 
-    printf("[INFO] Starting scheduler...\r\n");
+    printf("[INFO] Starting scheduler!\r\n");
 
     vTaskStartScheduler();
 
