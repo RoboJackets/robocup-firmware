@@ -1,11 +1,14 @@
-#include "drivers/TSL2572.hpp"
-#include "drivers/PCA9858PWJ.hpp"
+#include "modules/RobotShellModule.hpp"
 #include "iodefs.h"
 
+RotaryDialModule::RotaryDialModule(){
+}
 
-int main()
-{
-    static LockedStruct<I2C> sharedI2C(SHARED_I2C_BUS);
+void RotaryDialModule::start() {
+    shell.init();
+}
+
+void RotaryDialModule::entry(void) {
     TSL2572 lightSensor = new TSL2572(57, 0);
     //PCA9858PWJ pca = new PCA9858PWJ(242, 0);
 
@@ -17,10 +20,8 @@ int main()
         //channel selector
         bool error = writeByte(226, 0, channel);
 
-    // while(true) {
-    //     printf("lux: %ld\n", lightSensor.calculateLux(1));
-    // }
-    return 0; 
+        //reading from light sensor
+        values[i] = lightSensor.caculateLux(0);
 
         channel << 1;
     }

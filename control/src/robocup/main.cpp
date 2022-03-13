@@ -60,9 +60,9 @@ struct MODULE_META_DATA {
                      int32_t moduleRunTime,
                      GenericModule *module)
             : lastRunTime(lastRunTime),
-              nextRunTime(lastRunTime + modulePeriod * DWT_SysTick_To_us()),
-              modulePeriod(modulePeriod * DWT_SysTick_To_us()),
-              moduleRunTime(moduleRunTime * DWT_SysTick_To_us()),
+              nextRunTime(lastRunTime + modulePeriod * DWT_us_To_SysTick()),
+              modulePeriod(modulePeriod * DWT_us_To_SysTick()),
+              moduleRunTime(moduleRunTime * DWT_us_To_SysTick()),
               module(module) {}
 };
 
@@ -158,6 +158,9 @@ int main() {
     static RotaryDialModule dial(ioExpander,
                                  robotID);
     createModule(&dial);
+
+    static RobotShellModule shell();
+    createModule(&shell);
 
     static MotionControlModule motion(batteryVoltage,
                                       imuData,
