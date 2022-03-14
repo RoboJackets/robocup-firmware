@@ -20,6 +20,6 @@ int main() {
 
   while (true) {
       l1.toggle();
-      HAL_Delay(100);
+      HAL_Delay(1000);
   }
 }

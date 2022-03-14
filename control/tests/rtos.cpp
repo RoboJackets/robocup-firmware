@@ -7,7 +7,7 @@ static void blinkTask( void const *argument )
   DigitalOut l2(LED2);
 
   for(;;) {
-    osDelay(500);
+    osDelay(1000);
     l2.toggle();
   }
 }
@@ -17,7 +17,7 @@ static void blinkTaskArg( void const *pin )
   DigitalOut l(*(struct PinName*)pin);
 
   for(;;) {
-    osDelay(50);
+    osDelay(500);
     l.toggle();
   }
 }
