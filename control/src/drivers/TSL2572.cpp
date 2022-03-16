@@ -2,18 +2,18 @@
 #include "drivers/TSL2572.hpp"
 
 // constructor
-TSL2572::TSL2572(int i2cAddress, LockedStruct<I2C>& sharedI2C, int32_t sensorID) : _i2cAddress(i2cAddress), _i2c(sharedI2C), _tsl2572SensorID(sensorID)
-{
-    this->_tsl2572initialized = false;
-    this->_tsl2572IntegrationTime = TSL2572_INTEGRATIONTIME_101MS;
+TSL2572::TSL2572(int32_t sensorID, LockedStruct<I2C>& sharedI2C)
+    : _i2c(sharedI2C) {
+        this->_tsl2572SensorID = sensorID; 
 }
+
 // init
-bool TSL2572::init()
-{
-    this->_tsl2572initialized = true;
-    setIntegrationTime(_tsl2572IntegrationTime);
-    return true;
-}
+// bool TSL2572::init()
+// {
+//     this->_tsl2572initialized = true;
+//     setIntegrationTime(_tsl2572IntegrationTime);
+//     return true;
+// }
 // begin
 // bool TSL2572::begin(LockedStruct<I2C> &sharedI2C)
 // {
@@ -38,11 +38,11 @@ bool TSL2572::init()
 // 13ms
 // 101ms
 // 402ms
-void TSL2572::setIntegrationTime(tsl2572IntegrationTime_t time)
-{
-    this->_tsl2572IntegrationTime = time;
-    writeRegister(ATIME, time);
-}
+// void TSL2572::setIntegrationTime(tsl2572IntegrationTime_t time)
+// {
+//     this->_tsl2572IntegrationTime = time;
+//     writeRegister(ATIME, time);
+// }
 
 // writes to a specific register
 void TSL2572::writeRegister(TSL2572::Register regAddress, uint8_t data)
@@ -50,14 +50,14 @@ void TSL2572::writeRegister(TSL2572::Register regAddress, uint8_t data)
     auto i2c_lock = _i2c.lock();
     std::vector<uint8_t> buffer{static_cast<uint8_t>(data & 0xff),
                                 static_cast<uint8_t>(data >> 8)};
-    i2c_lock->transmit(_i2cAddress, regAddress, buffer);
+    i2c_lock->transmit(0x39, regAddress, buffer);
 }
 
 // reads a specific register
 uint16_t TSL2572::readRegister(TSL2572::Register regAddress)
 {
     auto i2c_lock = _i2c.lock();
-    std::vector<uint8_t> buffer = i2c_lock->receive(_i2cAddress, regAddress, 2);
+    std::vector<uint8_t> buffer = i2c_lock->receive(0x39, regAddress, 2);
     return (uint16_t)(buffer[0] | (buffer[1] << 8));
 }
 
