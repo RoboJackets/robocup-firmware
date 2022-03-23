@@ -16,6 +16,7 @@
 #include "MicroPackets.hpp"
 #include "iodefs.h"
 
+#include "modules/RobotShellModule.hpp"
 #include "modules/BatteryModule.hpp"
 #include "modules/FPGAModule.hpp"
 #include "modules/IMUModule.hpp"
@@ -122,56 +123,56 @@ int main() {
 
     static LockedStruct<MCP23017> ioExpander(MCP23017{sharedI2C, 0x42});
 
-    static LEDModule led(ioExpander,
-                         sharedSPI,
-                         batteryVoltage,
-                         fpgaStatus,
-                         kickerInfo,
-                         radioError,
-                         imuData);
-    createModule(&led);
+    // static LEDModule led(ioExpander,
+    //                      sharedSPI,
+    //                      batteryVoltage,
+    //                      fpgaStatus,
+    //                      kickerInfo,
+    //                      radioError,
+    //                      imuData);
+    // createModule(&led);
 
-    static FPGAModule fpga(std::move(fpgaSPI),
-                           motorCommand,
-                           fpgaStatus,
-                           motorFeedback);
-    createModule(&fpga);
+    // static FPGAModule fpga(std::move(fpgaSPI),
+    //                        motorCommand,
+    //                        fpgaStatus,
+    //                        motorFeedback);
+    // createModule(&fpga);
 
-    static RadioModule radio(batteryVoltage,
-                             fpgaStatus,
-                             kickerInfo,
-                             robotID,
-                             kickerCommand,
-                             motionCommand,
-                             radioError,
-                             debugInfo);
-    createModule(&radio);
+    // static RadioModule radio(batteryVoltage,
+    //                          fpgaStatus,
+    //                          kickerInfo,
+    //                          robotID,
+    //                          kickerCommand,
+    //                          motionCommand,
+    //                          radioError,
+    //                          debugInfo);
+    // createModule(&radio);
 
-    static KickerModule kicker(sharedSPI,
-                               kickerCommand,
-                               kickerInfo);
-    createModule(&kicker);
+    // static KickerModule kicker(sharedSPI,
+    //                            kickerCommand,
+    //                            kickerInfo);
+    // createModule(&kicker);
 
-    static BatteryModule battery(batteryVoltage);
-    createModule(&battery);
+    // static BatteryModule battery(batteryVoltage);
+    // createModule(&battery);
 
-    static RotaryDialModule dial(ioExpander,
-                                 robotID);
-    createModule(&dial);
+    // static RotaryDialModule dial(ioExpander,
+    //                              robotID);
+    // createModule(&dial);
 
-    // static RobotShellModule shell();
+    // RobotShellModule shell(sharedI2C);
     // createModule(&shell);
 
-    static MotionControlModule motion(batteryVoltage,
-                                      imuData,
-                                      motionCommand,
-                                      motorFeedback,
-                                      motorCommand,
-                                      debugInfo);
-    createModule(&motion);
+    // static MotionControlModule motion(batteryVoltage,
+    //                                   imuData,
+    //                                   motionCommand,
+    //                                   motorFeedback,
+    //                                   motorCommand,
+    //                                   debugInfo);
+    // createModule(&motion);
 
-    static IMUModule imu(sharedSPI, imuData);
-    createModule(&imu);
+    // static IMUModule imu(sharedSPI, imuData);
+    // createModule(&imu);
 
     ////////////////////////////////////////////
 

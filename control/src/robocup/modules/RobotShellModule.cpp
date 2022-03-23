@@ -1,33 +1,26 @@
 // #include "modules/RobotShellModule.hpp"
+
 // #include "iodefs.h"
 
-// RotaryDialModule::RotaryDialModule(){
+
+
+// RobotShellModule::RobotShellModule(LockedStruct<I2C>& i2c)
+//     : GenericModule(kPeriod, "shell", kPriority),
+//       sharedI2C(i2c) {
+
 // }
 
-// void RotaryDialModule::start() {
-//     shell.init();
-// }
-
-// void RotaryDialModule::entry(void) {
-//     TSL2572 lightSensor = new TSL2572(57, 0);
-//     //PCA9858PWJ pca = new PCA9858PWJ(242, 0);
-
-//     auto i2c_lock = _i2c.lock();
-//     uint32_t values[4];
-//     uint8_t channel = 2;
-//     for (int i = 0; i < 4; i++)
-//     {
-//         //channel selector
-//         bool error = writeByte(226, 0, channel);
-
-//         //reading from light sensor
-//         values[i] = lightSensor.caculateLux(0);
-
-//         channel << 1;
+// void RobotShellModule::entry(void) {
+//     static LockedStruct<I2C> sharedI2C(I2CBus::I2CBus1);
+//      while (true) {
+//         HAL_Delay(100);
+//         printf("hi\n"); 
 //     }
-//     while (true) {
-//         for (uint32_t value : values) {
-//             printf("Here's a fun value =D %d", value);
-//         }
+//     TSL2572 lightSensor(0, sharedI2C);
+//     int i = 4;
+    
+//     for (i = 4; i < 8; i++) {
+//         //mux.writeRegister(0b00010000 << (i - 4)); 
+//         printf("%d:\t%d\n", lightSensor.readRegister(TSL2572::C0DATA), i - 4); 
 //     }
 // }

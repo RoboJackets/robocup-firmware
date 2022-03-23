@@ -30,7 +30,7 @@
 //      * Constructor for RobotShellModule
 //      * 
 //      */
-//     RobotShellModule();
+//     RobotShellModule(LockedStruct<I2C>& i2c);
 
 //     /**
 //      * Code which initializes module
@@ -45,5 +45,6 @@
 //     void entry() override;
 
 // private:
+//     LockedStruct<I2C>& sharedI2C; 
 
 // };

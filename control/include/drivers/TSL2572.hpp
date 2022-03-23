@@ -52,7 +52,7 @@ public:
         TSL2572_INTEGRATIONTIME_101MS = 0xDB // 101 ms
     } tsl2572IntegrationTime_t;
 
-    TSL2572(int32_t sensorID, LockedStruct<I2C>& sharedI2C);
+    TSL2572(int32_t sensorID, I2C& sharedI2C);
     //void getData(uint16_t *broadband);
    // uint32_t calculateLux(uint16_t sensor);
     void writeRegister(TSL2572::Register reg, uint8_t data);
@@ -68,7 +68,7 @@ public:
     //void write8(u_int8_t reg, u_int8_t value);
 
 private:
-    LockedStruct<I2C>& _i2c;
+    I2C& _i2c;
    // int _i2cAddress; // physical I2C Address
     // tsl2572Gain_t _tsl2572Gain;
     // tsl2572IntegrationTime_t _tsl2572IntegrationTime;

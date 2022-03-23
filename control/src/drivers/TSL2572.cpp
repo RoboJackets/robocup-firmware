@@ -2,7 +2,7 @@
 #include "drivers/TSL2572.hpp"
 
 // constructor
-TSL2572::TSL2572(int32_t sensorID, LockedStruct<I2C>& sharedI2C)
+TSL2572::TSL2572(int32_t sensorID, I2C& sharedI2C)
     : _i2c(sharedI2C) {
         this->_tsl2572SensorID = sensorID; 
 }
@@ -47,17 +47,17 @@ TSL2572::TSL2572(int32_t sensorID, LockedStruct<I2C>& sharedI2C)
 // writes to a specific register
 void TSL2572::writeRegister(TSL2572::Register regAddress, uint8_t data)
 {
-    auto i2c_lock = _i2c.lock();
+    //auto i2c_lock = _i2c.lock();
     std::vector<uint8_t> buffer{static_cast<uint8_t>(data & 0xff),
                                 static_cast<uint8_t>(data >> 8)};
-    i2c_lock->transmit(0x39, regAddress, buffer);
+    _i2c.transmit(0x39, regAddress, buffer);
 }
 
 // reads a specific register
 uint16_t TSL2572::readRegister(TSL2572::Register regAddress)
 {
-    auto i2c_lock = _i2c.lock();
-    std::vector<uint8_t> buffer = i2c_lock->receive(0x39, regAddress, 2);
+    //auto i2c_lock = _i2c.lock();
+    std::vector<uint8_t> buffer = _i2c.receive(0x39, regAddress, 2);
     return (uint16_t)(buffer[0] | (buffer[1] << 8));
 }
 
