@@ -2,9 +2,10 @@
 #include "drivers/TSL2572.hpp"
 
 // constructor
-TSL2572::TSL2572(int32_t sensorID, I2C& sharedI2C)
-    : _i2c(sharedI2C) {
-        this->_tsl2572SensorID = sensorID; 
+TSL2572::TSL2572(int32_t sensorID, I2C &sharedI2C)
+    : _i2c(sharedI2C)
+{
+    this->_tsl2572SensorID = sensorID;
 }
 
 // init
@@ -32,7 +33,7 @@ TSL2572::TSL2572(int32_t sensorID, I2C& sharedI2C)
 // // init
 // void TSL2572::init()
 // {
-//     reset(); 
+//     reset();
 // }
 
 // 13ms
@@ -45,20 +46,30 @@ TSL2572::TSL2572(int32_t sensorID, I2C& sharedI2C)
 // }
 
 // writes to a specific register
-void TSL2572::writeRegister(TSL2572::Register regAddress, uint8_t data)
+void TSL2572::writeRegister(uint8_t regAddress, uint8_t data)
 {
-    //auto i2c_lock = _i2c.lock();
-    std::vector<uint8_t> buffer{static_cast<uint8_t>(data & 0xff),
-                                static_cast<uint8_t>(data >> 8)};
-    _i2c.transmit(0x39, regAddress, buffer);
+    // auto i2c_lock = _i2c.lock();
+    // std::vector<uint8_t> buffer{static_cast<uint8_t>(data & 0xff),
+    //                             static_cast<uint8_t>(data >> 8)};
+    // while (true)
+    // {
+    //     printf("inside method %d\n", buffer);
+    // }
+
+    // while (true)
+    // {
+    //     printf("Data: %d\n", data);
+    // }
+
+    _i2c.transmit(0x39, regAddress, data);
 }
 
 // reads a specific register
-uint16_t TSL2572::readRegister(TSL2572::Register regAddress)
+uint8_t TSL2572::readRegister(uint8_t regAddress)
 {
-    //auto i2c_lock = _i2c.lock();
+    // auto i2c_lock = _i2c.lock();
     std::vector<uint8_t> buffer = _i2c.receive(0x39, regAddress, 2);
-    return (uint16_t)(buffer[0] | (buffer[1] << 8));
+    return (uint8_t)(buffer[0] | (buffer[1] << 8));
 }
 
 // Commented out for now b/c relies on gain being set correctly.
@@ -77,10 +88,10 @@ void TSL2572::getLuminosity(uint16_t *broadband)
 uint32_t TSL2572::calculateLux()
 {
     unsigned long channel0;
-    unsigned long channel0H; 
+    unsigned long channel0H;
     // chScale = TSL2572_LUX_CHSCALE_TINT0;
     channel0 = (readRegister(C0DATA));
-    channel0H = readRegister(C0DATAH); 
+    channel0H = readRegister(C0DATAH);
     return channel0;
 }
 */
@@ -89,7 +100,6 @@ uint32_t TSL2572::calculateLux()
 // void TSL2572::reset()
 // {
 //     auto lock = _i2c.lock();
-
 
 // void TSL2572::getData(uint16_t *broadband)
 // {
@@ -111,7 +121,7 @@ uint32_t TSL2572::calculateLux()
 //     write8(TSL2572_COMMAND_BIT | TSL2572_REGISTER_CONTROL, TSL2572_CONTROL_POWEROFF);
 // }
 
-//try either . or * for _i2c instead of -> to fix compile error
+// try either . or * for _i2c instead of -> to fix compile error
 /*
 void TSL2572::write8(u_int8_t reg, u_int8_t value)
 {
@@ -149,4 +159,3 @@ uint16_t TSL2572::read16(uint8_t reg)
     return x;
 }
     */
-

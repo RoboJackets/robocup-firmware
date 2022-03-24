@@ -8,8 +8,6 @@
 class TSL2572
 {
 public:
-  
-
     /* Register Defines from Data Sheet
     https://ams.com/documents/20143/36005/TSL2572_DS000178_4-00.pdf
     Page 19 */
@@ -35,7 +33,7 @@ public:
     } Register;
 
     // Note: Don't set gain more than 8x (see configuration register on datasheet)
-    // Also, not quite how this function should work. These bits in the configuration 
+    // Also, not quite how this function should work. These bits in the configuration
     // register are a two bit value
     /*
     typedef enum
@@ -52,24 +50,24 @@ public:
         TSL2572_INTEGRATIONTIME_101MS = 0xDB // 101 ms
     } tsl2572IntegrationTime_t;
 
-    TSL2572(int32_t sensorID, I2C& sharedI2C);
-    //void getData(uint16_t *broadband);
-   // uint32_t calculateLux(uint16_t sensor);
-    void writeRegister(TSL2572::Register reg, uint8_t data);
-    uint16_t readRegister(TSL2572::Register regAddress);
-    //void getLuminosity(uint16_t *broadband);
-   // void setGain(tsl2572Gain_t gain);
-    //void setIntegrationTime(tsl2572IntegrationTime_t time);
+    TSL2572(int32_t sensorID, I2C &sharedI2C);
+    // void getData(uint16_t *broadband);
+    // uint32_t calculateLux(uint16_t sensor);
+    void writeRegister(uint8_t reg, uint8_t data);
+    uint8_t readRegister(uint8_t regAddress);
+    // void getLuminosity(uint16_t *broadband);
+    // void setGain(tsl2572Gain_t gain);
+    // void setIntegrationTime(tsl2572IntegrationTime_t time);
     bool init();
-    //bool begin(LockedStruct<I2C> &sharedI2C);
-    //void reset();
-    //uint16_t read16(uint8_t reg);
-    //uint8_t read8(uint8_t reg);
-    //void write8(u_int8_t reg, u_int8_t value);
+    // bool begin(LockedStruct<I2C> &sharedI2C);
+    // void reset();
+    // uint16_t read16(uint8_t reg);
+    // uint8_t read8(uint8_t reg);
+    // void write8(u_int8_t reg, u_int8_t value);
 
 private:
-    I2C& _i2c;
-   // int _i2cAddress; // physical I2C Address
+    I2C &_i2c;
+    // int _i2cAddress; // physical I2C Address
     // tsl2572Gain_t _tsl2572Gain;
     // tsl2572IntegrationTime_t _tsl2572IntegrationTime;
     int32_t _tsl2572SensorID;
