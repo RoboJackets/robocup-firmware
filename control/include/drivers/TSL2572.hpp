@@ -53,8 +53,8 @@ public:
     TSL2572(int32_t sensorID, I2C &sharedI2C);
     // void getData(uint16_t *broadband);
     // uint32_t calculateLux(uint16_t sensor);
-    void writeRegister(uint8_t reg, uint8_t data);
-    uint8_t readRegister(uint8_t regAddress);
+    void writeRegister(uint8_t data);
+    uint8_t readRegister();
     // void getLuminosity(uint16_t *broadband);
     // void setGain(tsl2572Gain_t gain);
     // void setIntegrationTime(tsl2572IntegrationTime_t time);

@@ -45,31 +45,29 @@ TSL2572::TSL2572(int32_t sensorID, I2C &sharedI2C)
 //     writeRegister(ATIME, time);
 // }
 
-// writes to a specific register
-void TSL2572::writeRegister(uint8_t regAddress, uint8_t data)
+// write to a specific register
+void TSL2572::writeRegister(uint8_t data)
 {
     // auto i2c_lock = _i2c.lock();
-    // std::vector<uint8_t> buffer{static_cast<uint8_t>(data & 0xff),
-    //                             static_cast<uint8_t>(data >> 8)};
-    // while (true)
-    // {
-    //     printf("inside method %d\n", buffer);
-    // }
-
-    // while (true)
-    // {
-    //     printf("Data: %d\n", data);
-    // }
-
-    _i2c.transmit(0x39, regAddress, data);
+    // std::vector<uint8_t> buffer{static_cast<uint8_t>(data & 0xff), // Essentially, splits the data into the lower 8 bits
+    //                             static_cast<uint8_t>(data >> 8)};  // and the upper 8 bits (the first and second index respectively)
+    // char command[] = { 0x80 | 0x12 };
+    _i2c.transmit(0x39 << 1, 0x92, 0b100000000);
+    //_i2c.transmit(0x39, 0x12, data);
 }
 
 // reads a specific register
-uint8_t TSL2572::readRegister(uint8_t regAddress)
+uint8_t TSL2572::readRegister()
 {
     // auto i2c_lock = _i2c.lock();
-    std::vector<uint8_t> buffer = _i2c.receive(0x39, regAddress, 2);
-    return (uint8_t)(buffer[0] | (buffer[1] << 8));
+
+    uint8_t buffer = _i2c.receive(0x39 << 1, 0x92);
+    while (true)
+    {
+        printf("buffer%d\n", buffer);
+    }
+    return buffer;
+    // return (uint16_t)(buffer[0] | (buffer[1] << 8));
 }
 
 // Commented out for now b/c relies on gain being set correctly.

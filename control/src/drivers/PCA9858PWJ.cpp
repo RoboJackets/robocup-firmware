@@ -11,17 +11,23 @@ PCA9858PWJ::PCA9858PWJ(I2C &sharedI2C)
 void PCA9858PWJ::writeRegister(uint8_t data)
 {
     // auto i2c_lock = _i2c.lock();
-    std::vector<uint8_t> buffer{static_cast<uint8_t>(data & 0xff), // Essentially, splits the data into the lower 8 bits
-                                static_cast<uint8_t>(data >> 8)};  // and the upper 8 bits (the first and second index respectively)
+    // std::vector<uint8_t> buffer{static_cast<uint8_t>(data & 0xff), // Essentially, splits the data into the lower 8 bits
+    //                             static_cast<uint8_t>(data >> 8)};  // and the upper 8 bits (the first and second index respectively)
     _i2c.transmit(0xE2, 0, data);
 }
 
 // reads a specific register
-uint16_t PCA9858PWJ::readRegister()
+uint8_t PCA9858PWJ::readRegister()
 {
     // auto i2c_lock = _i2c.lock();
-    std::vector<uint8_t> buffer = _i2c.receive(0xE2, 0, 2);
-    return (uint16_t)(buffer[0] | (buffer[1] << 8));
+
+    uint8_t buffer = _i2c.receive(0xE2, 0);
+    // while (true)
+    // {
+    //     printf("buffer%d\n", buffer);
+    // }
+    return buffer;
+    // return (uint16_t)(buffer[0] | (buffer[1] << 8));
 }
 
 // TODO: look here pls

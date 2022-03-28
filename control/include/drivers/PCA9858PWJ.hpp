@@ -4,7 +4,7 @@
 class PCA9858PWJ
 {
 public:
-    uint16_t readRegister();
+    uint8_t readRegister();
     void writeRegister(uint8_t data);
     PCA9858PWJ(I2C &sharedI2C);
 

@@ -37,47 +37,32 @@ int main()
   PCA9858PWJ mux(sharedI2C);
   // to initilize
   mux.writeRegister(0b11100011);
+
   // telling the mux which sensor we are talking to
   mux.writeRegister(0b00010000);
 
   TSL2572 lightSensor1(0, sharedI2C);
-  // TSL2572 lightSensor2(2, sharedI2C);
-  // TSL2572 lightSensor3(3, sharedI2C);
-  // TSL2572 lightSensor4(4, sharedI2C);
 
-  int i = 4;
   // writing to light sesnsor enable
-  // lightSensor1.writeRegister(0x00, 0b10000000);
-  lightSensor1.writeRegister(0x00, 0b00000011);
+  // lightSensor1.writeRegister(0, 0b10000000);
+  // lightSensor1.writeRegister(TSL2572::ENABLE, 0b00000011);
+  // lightSensor1.readRegister(0);
+  // int regVal2 = lightSensor1.readRegister(TSL2572::C1DATAH);
+
+  lightSensor1.writeRegister(0b100000000);
+  lightSensor1.readRegister();
+
+  // while (true)
+  // {
+  //   printf("%d", regVal);
+  // }
 
   // lightSensor1.readRegister(TSL2572::ENABLE)
 
-  while (true)
-  {
-    // DWT_Delay(3000);
-    printf("ENABLE: %d\n", lightSensor1.readRegister(0x00));
-    // DWT_Delay(3000);
-  }
-
-  // DWT_Delay(100);
-  // // printf("ID: %x\n", lightSensor1.readRegister(TSL2572::ID));
-  // DWT_Delay(100);
-  // printf("CO: %x\n", lightSensor1.readRegister(TSL2572::ENABLE));
-  // DWT_Delay(100);
-  // printf("C0H: %x\n", lightSensor1.readRegister(TSL2572::C0DATAH));
-  // DWT_Delay(100);
-  // printf("C1: %x\n", lightSensor1.readRegister(TSL2572::C1DATA));
-  // DWT_Delay(100);
-  // printf("C1H: %x\n", lightSensor1.readRegister(TSL2572::C1DATAH));
-  // DWT_Delay(100);
-  // for (i = 4; i < 8; i++)
-
+  // while (true)
   // {
-  //   mux.writeRegister(0b00010000 << (i - 4));
-  //   printf("%d:\t%x\n", i - 4, lightSensor1.readRegister(TSL2572::ID));
+  //   // DWT_Delay(3000);
+  //   printf("ENABLE: %d\n", lightSensor1.readRegister(0x00));
+  //   // DWT_Delay(3000);
   // }
-
-  // printf("%d:\t%d\n", lightSensor2.readRegister(TSL2572::C0DATA), 2);
-  // printf("%d:\t%d\n", lightSensor3.readRegister(TSL2572::C0DATA), 3);
-  // printf("%d:\t%d\n", lightSensor4.readRegister(TSL2572::C0DATA), 4);
 }
