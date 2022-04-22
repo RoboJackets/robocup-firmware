@@ -1,6 +1,6 @@
 # GT RoboJackets RoboCup SSL - Firmware
 
-The Georgia Tech RoboJackets team competes in the annual RoboCup Small Size League (SSL) competition.  This repository contains all of the firmware that we run on our robots. Also, check out our [2020 qualification video](https://www.youtube.com/watch?v=2MZREc9aj8k) to see our robots in action!
+The Georgia Tech RoboJackets team competes in the annual RoboCup Small Size League (SSL) competition.  This repository contains all of the firmware that we run on our robots. Also, check out our [2022 qualification video](https://www.youtube.com/watch?v=o73Pt23qH1g) to see our robots in action!
 
 ## Competition
 
@@ -120,4 +120,4 @@ Please see the [contributing page](doc/Contributing.md) before contributing.
 
 ## License
 
-This project is licensed under the Apache License v2.0.  See the [LICENSE](LICENSE) file for more information.
+This project is licensed under the Apache License v2.0. See the [LICENSE](LICENSE) file for more information.
