@@ -1,8 +1,8 @@
 # GT RoboJackets RoboCup SSL - Firmware
 
-The Georgia Tech RoboJackets team competes in the annual RoboCup Small Size League (SSL) competition.  This repository contains all of the firmware that we run on our robots. Also, check out our [2020 qualification video](https://www.youtube.com/watch?v=2MZREc9aj8k) to see our robots in action!
+The Georgia Tech RoboJackets team competes in the annual RoboCup Small Size League (SSL) competition.  This repository contains all of the firmware that we run on our robots. Also, check out our [2022 qualification video](https://www.youtube.com/watch?v=o73Pt23qH1g) to see our robots in action!
 
-## The Competition
+## Competition
 
 The soccer game is played between two teams of six robots each on a field with overhead cameras.  The field vision computer processes images from the cameras and sends out (x,y) coordinates of the ball and the robots.  Each team has a laptop that accepts the data from the vision computer and uses it to strategize, then send commands to robots on the field.
 
@@ -40,18 +40,38 @@ Compiled binaries output from the build system for the ATMega on the kicker boar
 Contains the Verilog code to be programmed to the FPGA for motor control.
 Details on the architecture of the FPGA firmware code can be found [here](doc/FPGA.md)
 
-
 ## Setup
 Below is a quick guide to getting this RoboCup project setup to build on your computer. If you are a robocup member planning on developing both mtrain and robocup firmware it is highly recommended that you  follow the Firmware [Getting Started](doc/GettingStarted.md) page.
 This project only provides directions for installing on Ubuntu Linux, Windows Subsystem for Linux (WSL), and macOS.
 
-1) Clone the repository
+1) Install WSL (Skip to Step 2 if using MacOS or Ubuntu)
+
+Follow the steps outlined here: https://docs.microsoft.com/en-us/windows/wsl/install
+Essentially, you'll open PowerShell as Administrator and type:
+
+```
+wsl --install -d Ubuntu
+```
+
+You should then see the ubuntu terminal application open in a separate window. It'll have you create a username and password, so make something memorable.
+
+The path to the root folder using your file explorer is:
+`C:\Users\<WindowsUsername>\AppData\Local\Packages\CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc\LocalState\rootfs`
+This will be represented as a / in the terminal. You can get here quickly in the Ubuntu terminal by typing `cd /`
+
+By default, when using WSL, you'll be in your home directory for WSL, so: 
+`C:\Users\<WindowsUsername>\AppData\Local\Packages\CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc\LocalState\rootfs\home\<WSLUsername>`
+This will be represented as a ~ in the terminal. You can get here quickly in the Ubuntu terminal by typing `cd ~`
+
+Additionally, you'll notice you now have two new apps on your computer, those being WSL and Ubuntu. Using the Ubuntu app is recommended going forward because it'll place you in the home directory by default, but operating in both is much the same process. When you do the following steps, execute them from the ~ directory.
+
+2) Clone the repository
 
 ```
 git clone git://github.com/RoboJackets/robocup-firmware
 ```
 
-2) Install the necessary software
+3) Install the necessary software
 
 There are a few setup scripts in the util directory for installing required packages, setting up udev rules, etc.  See `ubuntu-setup` and `macos-setup` for more info. If you are using WSL, see `wsl-setup` after using `ubuntu-setup`.
 
@@ -60,14 +80,27 @@ $ cd robocup-firmware
 $ ./util/<SYSTEM>-setup
 ```
 
-3) Build the project for the desired target. The `control` target is the firmware for the mTrain.
-The `kicker` target is for the kicker MCU to be uploaded to the MTrain.
-The `clean` target deletes the build directories for both robot and kicker firmware.
+4) Build the project for the desired target. The `control` target is the firmware for the mTrain. The `kicker` target is for the kicker MCU to be uploaded to the MTrain. The `clean` target deletes the build directories for both robot and kicker firmware.
 
 ```
 $ make <TARGET>
 ```
 
+Generally, the flashing process goes by you executing commands in the following order
+
+```
+$ make clean
+$ make kicker
+$ make
+```
+
+If you're on Windows, and after executing make it states that JLink.exe cannot be found, make sure you ran
+
+```
+$ ./util/wsl-setup
+```
+
+Then, it should work normally.
 
 ## Testing
 
@@ -87,4 +120,4 @@ Please see the [contributing page](doc/Contributing.md) before contributing.
 
 ## License
 
-This project is licensed under the Apache License v2.0.  See the [LICENSE](LICENSE) file for more information.
+This project is licensed under the Apache License v2.0. See the [LICENSE](LICENSE) file for more information.
