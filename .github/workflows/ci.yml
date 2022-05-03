@@ -12,5 +12,16 @@ jobs:
       run: sudo ./util/ubuntu-setup
     - name: make kicker
       run: make kicker
-    - name: make
-      run: make
+    - name: make control
+      run: make control
+  build-macos:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: sudo ./util/macos-setup
+      - name: make kicker
+        run: make kicker
+      - name: make control
+        run: make control
