@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install dependencies
-        run: sudo ./util/macos-setup
+        run: ./util/macos-setup
       - name: make kicker
         run: make kicker
       - name: make control
