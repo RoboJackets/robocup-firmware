@@ -9,6 +9,7 @@ graphviz
 
 # Arm GCC Toolchain
 gcc-arm-none-eabi
+gdb-multiarch
 libeigen3-dev
 
 # AVR
