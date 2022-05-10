@@ -20,7 +20,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Install dependencies
-      run: sudo ./util/ubuntu-setup && sudo apt install python3-pip && sudo apt install flake8-diff
+      run: sudo ./util/ubuntu-setup && sudo apt install python3-pip && pip install flake8-diff
     - name: Run clang-format
       run: |
           echo "::add-matcher::util/style/clang-format.json"
