@@ -18,8 +18,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Install dependencies
-      run: sudo ./util/ubuntu-setup
-           sudo apt install python3-pip
+      run: sudo ./util/ubuntu-setup && sudo apt install python3-pip
     - name: Run clang-format
       run: |
           echo "::add-matcher::util/clang-format.json"
