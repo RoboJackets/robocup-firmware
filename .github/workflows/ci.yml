@@ -24,13 +24,13 @@ jobs:
     - name: Run clang-format
       run: |
           echo "::add-matcher::util/style/clang-format.json"
-          git diff -U0 --no-color ${{ GITHUB_BASE_REF }} ${{ GITHUB_HEAD_REF }} | python3 util/style/clang-format-diff.py -binary clang-format -p1 -dry_run
+          git diff -U0 --no-color ${{ github.base_ref }} ${{ github.head_ref }} | python3 util/style/clang-format-diff.py -binary clang-format -p1 -dry_run
           echo "::remove-matcher owner=clang-format::"
     - name: Run flake8
       if: always()
       run: |
           echo "::add-matcher::util/style/flake8.json"
           find /usr/ | grep flake8
-          flake8-diff --standard-flake8-output --vcs git ${{ GITHUB_BASE_REF }}
+          flake8-diff --standard-flake8-output --vcs git ${{ github.base_ref }}
           echo "::remove-matcher owner=flake8-error::"
           echo "::remove-matcher owner=flake8-warning::"
