@@ -14,14 +14,22 @@ jobs:
       run: make kicker
     - name: make control
       run: make control
-  build-macos:
-    runs-on: macos-latest
-
+  style:
     steps:
-      - uses: actions/checkout@v3
-      - name: Install dependencies
-        run: ./util/macos-setup
-      - name: make kicker
-        run: make kicker
-      - name: make control
-        run: make control
+    - uses: actions/checkout@v3
+    - name: Install dependencies
+      run: sudo ./util/ubuntu-setup
+           sudo apt install python3-pip
+    - name: Run clang-format
+      run: |
+          echo "::add-matcher::util/clang-format.json"
+          git diff -U0 --no-color ${{ github.base_ref }} HEAD | python3 util/style/clang-format-diff.py -binary clang-format -p1 -dry_run
+          echo "::remove-matcher owner=clang-format::"
+    - name: Run flake8
+      if: always()
+      run: |
+          echo "::add-matcher::util/style/flake8.json"
+          find /usr/ | grep flake8
+          flake8-diff --standard-flake8-output --vcs git ${{ github.base_ref }}
+          echo "::remove-matcher owner=flake8-error::"
+          echo "::remove-matcher owner=flake8-warning::"

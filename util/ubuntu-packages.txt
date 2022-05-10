@@ -15,3 +15,8 @@ libeigen3-dev
 # AVR
 avr-libc
 avrdude
+
+# style
+clang-format-10
+black
+flake8
