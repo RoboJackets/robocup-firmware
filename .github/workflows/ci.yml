@@ -28,6 +28,8 @@ jobs:
       run: |
           git checkout -b ${{ github.base_ref }} --track origin/${{ github.base_ref }}
           git checkout -
+          git checkout -b ${{ github.head_ref }}
+          git checkout -
     - name: Run clang-format
       run: |
           echo "::add-matcher::util/style/clang-format.json"
