@@ -22,7 +22,9 @@ class LinearDynamics(Dynamics):
         only once if dt is the same for all timesteps.
         If 'None', then the system will be computed every time the function "step" is called
         """
-        self.gains = LinearDynamicsGains(A_k=A_k, B_k=B_k, H_k=H_k, D_k=D_k, x_init=x_init)
+        self.gains = LinearDynamicsGains(
+            A_k=A_k, B_k=B_k, H_k=H_k, D_k=D_k, x_init=x_init
+        )
         self.x_init = x_init
         self.reset()
         self.dt = dt
