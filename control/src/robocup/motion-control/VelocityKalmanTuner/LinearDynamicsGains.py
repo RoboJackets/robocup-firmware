@@ -48,10 +48,12 @@ class LinearDynamicsGains:
     def verify_observability(self):
         n = self.A_k.shape[1]
         q = self.H_k.shape[0]
-        O = np.zeros((n * q, n))
+        array = np.zeros((n * q, n))
         for i in range(0, n):
-            O[i * q : (i + 1) * q, :] = self.H_k @ np.linalg.matrix_power(self.A_k, i)
-        if np.linalg.matrix_rank(np.array(O)) != self.A_k.shape[1]:
+            array[i * q : (i + 1) * q, :] = self.H_k @ np.linalg.matrix_power(
+                self.A_k, i
+            )
+        if np.linalg.matrix_rank(np.array(array)) != self.A_k.shape[1]:
             pass
             # TODO(Thomas):
             # Figure out why system is computed as non-observable when imported once
