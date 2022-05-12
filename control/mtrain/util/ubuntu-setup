@@ -1,0 +1,22 @@
+#!/bin/bash
+
+set -e
+
+echo "-- Updating submodules"
+git submodule sync
+git submodule update --init --recursive
+
+if [ $UID -ne 0 ]; then
+	echo "-- Becoming root"
+	exec sudo $0 $@
+fi
+
+BASE=$(readlink -f $(dirname $0)/..)
+
+echo "-- Installing required apt packages"
+apt-get update
+apt-get install "-y" $(sed 's/#.*//;/^$/d' $BASE/util/ubuntu-packages.txt)
+
+echo "If you are using WSL, please install JLink.exe using the following link: https://www.segger.com/downloads/jlink/JLink_Windows.exe"
+echo "If you are using an Ubuntu VM, please install JLinkExe using the following link: https://www.segger.com/downloads/jlink/JLink_Linux_x86_64.deb"
+echo "If you are using WSL, please run the util/wsl-setup script as well"
