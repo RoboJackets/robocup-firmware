@@ -20,3 +20,4 @@ avrdude
 clang-format-10
 black
 flake8
+python3-setuptools
