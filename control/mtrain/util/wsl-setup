@@ -1,9 +1,0 @@
-#!/bin/bash
-
-echo "-- Connecting Windows J-Link.exe to WSL"
-export PATH=$PATH:/mnt/c/"Program Files (x86)"/SEGGER/JLink
-alias JLinkExe="JLink.exe"
-
-echo "-- Exporting alias"
-echo 'export PATH=$PATH:/mnt/c/"Program Files (x86)"/SEGGER/JLink' >> ~/.bashrc
-echo 'alias JLinkExe="JLink.exe"' >> ~/.bashrc
