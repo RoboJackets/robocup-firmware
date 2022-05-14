@@ -27,7 +27,11 @@ class KalmanFilterGains:
         pass
 
     def update_K(self):
-        self.K = self.P @ self.H_k.T @ np.linalg.inv(self.H_k @ self.P @ self.H_k.T + self.R_k)
+        self.K = (
+            self.P
+            @ self.H_k.T
+            @ np.linalg.inv(self.H_k @ self.P @ self.H_k.T + self.R_k)
+        )
 
     def set_gains(self, H_k, P, Q_k, R_k, K=None):
         self.H = H_k
@@ -38,9 +42,4 @@ class KalmanFilterGains:
             self.update_K()
 
     def KF_gains(self):
-        return {
-            'K': self.K,
-            'P': self.P,
-            'Q': self.Q_k,
-            'R': self.R_k
-        }
+        return {"K": self.K, "P": self.P, "Q": self.Q_k, "R": self.R_k}

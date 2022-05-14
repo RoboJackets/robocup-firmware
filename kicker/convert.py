@@ -17,16 +17,16 @@
 import sys
 
 if len(sys.argv) != 4:
-	print("Usage: ./convert.py <input.bin> <output.h> <buf_name>")
-	exit(-1)
+    print("Usage: ./convert.py <input.bin> <output.h> <buf_name>")
+    exit(-1)
 
 data = None
-with open(sys.argv[1], 'rb') as file:
-	data = file.read()
+with open(sys.argv[1], "rb") as file:
+    data = file.read()
 
 if data is None:
-	print("Failed to open file:" + str(sys.argv[1]))
-	exit(-1)
+    print("Failed to open file:" + str(sys.argv[1]))
+    exit(-1)
 
 num_bytes = len(data)
 hdr_sym = sys.argv[2].upper().replace(".", "_").replace("-", "_")
@@ -39,13 +39,21 @@ file_string = ""
 file_string += "#ifndef " + hdr_sym + "\n"
 file_string += "#define " + hdr_sym + "\n"
 file_string += "\n"
-file_string += "static const uint32_t " + str(sys.argv[3]).upper() + "_LEN = " + str(num_bytes) + ";\n"
-file_string += "static const uint8_t " + str(sys.argv[3]) + "[" + str(num_bytes) + "] = {"
+file_string += (
+    "static const uint32_t "
+    + str(sys.argv[3]).upper()
+    + "_LEN = "
+    + str(num_bytes)
+    + ";\n"
+)
+file_string += (
+    "static const uint8_t " + str(sys.argv[3]) + "[" + str(num_bytes) + "] = {"
+)
 
 for i in range(num_bytes):
-	file_string += hex(data[i])
-	if i != num_bytes - 1:
-		file_string += ", "
+    file_string += hex(data[i])
+    if i != num_bytes - 1:
+        file_string += ", "
 
 file_string += "};\n"
 file_string += "\n"
@@ -55,7 +63,7 @@ print("Done.")
 
 print("Opening and writing " + sys.argv[2])
 
-f = open(sys.argv[2], 'w+')
+f = open(sys.argv[2], "w+")
 f.write(file_string)
 
-print('Done.')
+print("Done.")

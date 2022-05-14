@@ -12,7 +12,7 @@ public:
 
     void entry() override {
         pin.write(value);
-        value = !value;
+        value =    !value;
     }
 
 private:
