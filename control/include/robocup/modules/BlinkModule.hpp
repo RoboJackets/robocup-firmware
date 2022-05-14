@@ -17,6 +17,6 @@ public:
 
 private:
     DigitalOut pin;
-    bool value = false;
+    bool value =    false;
 };
 

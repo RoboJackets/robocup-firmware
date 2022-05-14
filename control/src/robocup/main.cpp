@@ -39,7 +39,7 @@
 
 struct MODULE_META_DATA {
     // Time in sysclock ticks of last module execution
-    uint32_t  lastRunTime;
+    uint32_t lastRunTime;
 
     // Time in sysclock ticks of next module execution
     uint32_t nextRunTime;
@@ -73,7 +73,7 @@ void startModule(void *pvModule) {
     GenericModule *module = static_cast<GenericModule *>(pvModule);
 
     printf("[INFO] Starting module %s\r\n", module->name);
-    module->start();
+    module->start() ;
     printf("[INFO] Finished starting module %s\r\n", module->name);
 
     TickType_t last_wait_time = xTaskGetTickCount();
