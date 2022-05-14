@@ -20,7 +20,7 @@ jobs:
       run: make control-tests
     - name: make mtrain and its tests
       run: cd control/mtrain/ && make mtrain
-    - name: build docs
+    - name: make docs
       run: make docs
   style:
     runs-on: ubuntu-20.04
@@ -32,14 +32,24 @@ jobs:
         
     - name: Install dependencies
       run: sudo ./util/ubuntu-setup && sudo apt install python3-pip && pip install flake8-diff
-    - name: Make ${{ github.base_ref }} branch exist
+    - name: Make ${{ github.base_ref }} and ${{ github.head_ref }} branches exist
       run: |
           git checkout -b ${{ github.base_ref }} --track origin/${{ github.base_ref }}
           git checkout -
           git checkout -b ${{ github.head_ref }}
           git checkout -
+    - name: make pretty-lines
+      run: make pretty-lines
+    - uses: stefanzweifel/git-auto-commit-action@v4
+      with: 
+        skip_checkout: true
+        skip_fetch: true
+        commit_message: Automatic style changes
+        create_branch: false
+        commit_options: '--no-verify --signoff'
     - name: Run clang-format
       run: |
+          git pull
           echo "::add-matcher::util/style/clang-format.json"
           git diff -U0 --no-color ${{ github.base_ref }} ${{ github.head_ref }} | python3 util/style/clang-format-diff.py -binary clang-format -p1 -dry_run
           echo "::remove-matcher owner=clang-format::"
