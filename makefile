@@ -2,15 +2,7 @@
 
 all: control flash
 
-all-tests: 
-	cd control && \
-mkdir -p build && cd build && \
-cmake .. && make -j$(nproc)
-
-$(ROBOT_TESTS:%=%): kicker-test
-	cd control && \
-mkdir -p build && cd build && \
-cmake .. && make -j$(nproc) $(@F)
+all-tests: control
 
 flash:
 	./util/flash-mtrain
@@ -40,8 +32,8 @@ cmake .. && make -j$(nproc)
 $(ROBOT_TESTS:%=%): kicker-test
 	cd control && \
 mkdir -p build && cd build && \
-cmake .. && make -j$(nproc) $(@F)
-	make flash-test
+cmake .. && make -j$(nproc) $(@F) && \
+	flash-test
 
 docs:
 	cd doc && doxygen Doxyfile
