@@ -14,8 +14,10 @@ jobs:
       run: make kicker
     - name: make kicker-test
       run: make kicker-test
-    - name: make control and all-tests
-      run: make all-tests
+    - name: make control
+      run: make control
+    - name: make control-tests
+      run: make control-tests
     - name: make mtrain and its tests
       run: cd control/mtrain/ && make mtrain
     - name: build docs
