@@ -12,11 +12,11 @@ public:
 
     void entry() override {
         pin.write(value);
-        value = !value;
+        value =    !value;
     }
 
 private:
     DigitalOut pin;
-    bool value =    false;
+    bool value = false;
 };
 

@@ -73,7 +73,7 @@ void startModule(void *pvModule) {
     GenericModule *module = static_cast<GenericModule *>(pvModule);
 
     printf("[INFO] Starting module %s\r\n", module->name);
-    module->start() ;
+    module->start();
     printf("[INFO] Finished starting module %s\r\n", module->name);
 
     TickType_t last_wait_time = xTaskGetTickCount();

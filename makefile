@@ -50,5 +50,5 @@ clean:
 CLANG_FORMAT_BINARY=clang-format-10
 
 pretty-lines:
-	@git diff -U0 --no-color $(DIFFBASE^) | python3 util/style/clang-format-diff.py -binary $(CLANG_FORMAT_BINARY) -i -p1
-	@git diff -U0 --no-color $(DIFFBASE^) | black . --exclude "control/mtrain/"
+	@git diff $(DIFFBASE) -U0 --no-color | python3 util/style/clang-format-diff.py -binary $(CLANG_FORMAT_BINARY) -i -p1
+	@git diff -U0 --no-color $(DIFFBASE) | black . --exclude "control/mtrain/"
