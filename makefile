@@ -32,8 +32,8 @@ cmake .. && make -j$(nproc)
 $(ROBOT_TESTS:%=%): kicker-test
 	cd control && \
 mkdir -p build && cd build && \
-cmake .. && make -j$(nproc) $(@F) && \
-	flash-test
+cmake .. && make -j$(nproc) $(@F)
+	make flash-test
 
 docs:
 	cd doc && doxygen Doxyfile
