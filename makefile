@@ -2,6 +2,16 @@
 
 all: control flash
 
+all-tests: 
+	cd control && \
+mkdir -p build && cd build && \
+cmake .. && make -j$(nproc)
+
+$(ROBOT_TESTS:%=%): kicker-test
+	cd control && \
+mkdir -p build && cd build && \
+cmake .. && make -j$(nproc) $(@F)
+
 flash:
 	./util/flash-mtrain
 
@@ -48,5 +58,4 @@ CLANG_FORMAT_BINARY=clang-format-10
 
 pretty-lines:
 	@git diff -U0 --no-color $(DIFFBASE) | python3 util/style/clang-format-diff.py -binary $(CLANG_FORMAT_BINARY) -i -p1
-	@git diff -U0 --no-color $(DIFFBASE) | black . --exclude "control/mtrain" 
-	# excludes mtrain to not touch a separate repo
+	@git diff -U0 --no-color $(DIFFBASE) | black .
