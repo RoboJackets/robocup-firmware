@@ -38,7 +38,7 @@ jobs:
           git checkout -
           git checkout -b ${{ github.head_ref }}
           git checkout -
-    - name: run style on all changed files
+    - name: Run style on all changed files
       run: |
           git diff -U0 --no-color ${{ github.base_ref }} ${{ github.head_ref }} | python3 util/style/clang-format-diff.py -binary clang-format-10 -i -p1
           git diff -U0 --no-color ${{ github.base_ref }} ${{ github.head_ref }} | black . --exclude "control/mtrain/"
