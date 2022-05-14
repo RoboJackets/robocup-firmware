@@ -39,7 +39,7 @@
 
 struct MODULE_META_DATA {
     // Time in sysclock ticks of last module execution
-    uint32_t lastRunTime;
+    uint32_t  lastRunTime;
 
     // Time in sysclock ticks of next module execution
     uint32_t nextRunTime;
