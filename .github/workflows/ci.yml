@@ -12,7 +12,9 @@ jobs:
       run: sudo ./util/ubuntu-setup
     - name: make kicker
       run: make kicker
-    - name: make control/all-tests
+    - name: make kicker-test
+      run: make kicker-test
+    - name: make control and all-tests
       run: make all-tests
     - name: make mtrain and its tests
       run: cd control/mtrain/ && make mtrain
