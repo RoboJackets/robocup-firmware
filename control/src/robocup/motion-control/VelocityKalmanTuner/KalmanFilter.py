@@ -24,7 +24,9 @@ class KF(Observer):
         self.P_init = P
         self.dt = dt
 
-        A_k, B_k, H_k, D_k, _ = scipy.signal.cont2discrete(system=(A, B, H, D), dt=self.dt)
+        A_k, B_k, H_k, D_k, _ = scipy.signal.cont2discrete(
+            system=(A, B, H, D), dt=self.dt
+        )
 
         # https://en.wikipedia.org/wiki/Discretization
         # Q_k = np.round(integrate.quad_vec(lambda tau: scipy.linalg.expm(A * tau) @ Q @ scipy.linalg.expm(A.T * tau), 0, dt)[0],10)
@@ -58,7 +60,10 @@ class KF(Observer):
 
         # A priori covariance estimate
         # P' = A * P_prev * A.T + Q
-        self.gains.P = self.dynamics.gains.A_k @ self.gains.P @ self.dynamics.gains.A_k.T + self.gains.Q_k
+        self.gains.P = (
+            self.dynamics.gains.A_k @ self.gains.P @ self.dynamics.gains.A_k.T
+            + self.gains.Q_k
+        )
 
     def generate_u(self):
         return np.zeros((self.dynamics.gains.B_k.shape[1], 1))
@@ -66,7 +71,7 @@ class KF(Observer):
     def update(self):
         # Prefit
         # y = z - H * x_hat
-        y=0
+        y = 0
         if not self.step_response:
             y = self.dynamics.get_measurements() - self.gains.H_k @ self.x_hat
         else:
@@ -83,7 +88,9 @@ class KF(Observer):
 
         # A posteriori covariance estimate
         # P = (I - K * H) * P'
-        self.gains.P = (np.eye(self.x_hat.shape[0]) - self.gains.K @ self.dynamics.gains.H_k) @ self.gains.P
+        self.gains.P = (
+            np.eye(self.x_hat.shape[0]) - self.gains.K @ self.dynamics.gains.H_k
+        ) @ self.gains.P
 
         # Postfit
         # y = z - H * x_hat
@@ -115,13 +122,13 @@ class KF(Observer):
 
     def get_gains(self):
         return {
-            'dt' : self.dt,
-            'P_k': self.gains.P,
-            'A_k': self.dynamics.gains.A_k,
-            'B_k': self.dynamics.gains.B_k,
-            'H_k': self.dynamics.gains.H_k,
-            'D_k': self.dynamics.gains.D_k,
-            'K_k': self.gains.K,
-            'Q_k': self.gains.Q_k,
-            'R_k': self.gains.R_k
+            "dt": self.dt,
+            "P_k": self.gains.P,
+            "A_k": self.dynamics.gains.A_k,
+            "B_k": self.dynamics.gains.B_k,
+            "H_k": self.dynamics.gains.H_k,
+            "D_k": self.dynamics.gains.D_k,
+            "K_k": self.gains.K,
+            "Q_k": self.gains.Q_k,
+            "R_k": self.gains.R_k,
         }

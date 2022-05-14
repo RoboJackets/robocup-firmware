@@ -13,10 +13,10 @@ from KalmanFilter import KF
 from SteadyStateKalmanFilter import SS_KF
 from RobotModel import RobotModel
 
-'''
+"""
 Credit: https://www.bzarg.com/p/how-a-kalman-filter-works-in-pictures/
 https://en.wikipedia.org/wiki/Kalman_filter
-'''
+"""
 
 
 class Main(QApplication):
@@ -27,8 +27,12 @@ class Main(QApplication):
         self.observer_type = "SS_KF"
 
         A, B, H, D, P, Q, R = model.generate_model().values()
-        self.kalmanFilter = KF(x_hat_init=np.zeros((3,1)), A=A, B=B, H=H, D=D, P=P, Q=Q, R=R)
-        self.ss_kalmanFilter = SS_KF(x_hat_init=np.zeros((3,1)), A=A, B=B, H=H, D=D, Q=Q, R=R)
+        self.kalmanFilter = KF(
+            x_hat_init=np.zeros((3, 1)), A=A, B=B, H=H, D=D, P=P, Q=Q, R=R
+        )
+        self.ss_kalmanFilter = SS_KF(
+            x_hat_init=np.zeros((3, 1)), A=A, B=B, H=H, D=D, Q=Q, R=R
+        )
         self.observer_list = [self.kalmanFilter, self.ss_kalmanFilter]
         self.observer = self.ss_kalmanFilter
 
@@ -63,14 +67,30 @@ class Main(QApplication):
             self.window.gen_bttn.clicked.connect(self.generate_code)
             self.window.save_action.triggered.connect(self.save)
             self.window.load_action.triggered.connect(self.load)
-            self.window.filter_type_select.setCurrentText("Steady State" if self.observer_type=="SS_KF" else "Regular")
-            self.window.filter_type_select.currentTextChanged.connect(self.change_observer_type)
+            self.window.filter_type_select.setCurrentText(
+                "Steady State" if self.observer_type == "SS_KF" else "Regular"
+            )
+            self.window.filter_type_select.currentTextChanged.connect(
+                self.change_observer_type
+            )
             self.window.data_type_select.currentTextChanged.connect(self.set_data_type)
             self.window.verbose_check.stateChanged.connect(self.set_verbose)
             self.window.show()
-        self.ts, self.vxs, self.vys, self.omegas = np.arange(0, self.t_total, self.dt), [], [], []
+        self.ts, self.vxs, self.vys, self.omegas = (
+            np.arange(0, self.t_total, self.dt),
+            [],
+            [],
+            [],
+        )
         self.vxs_obs, self.vys_obs, self.omegas_obs = [], [], []
-        self.lists = [self.vxs, self.vys, self.omegas, self.vxs_obs, self.vys_obs, self.omegas_obs]
+        self.lists = [
+            self.vxs,
+            self.vys,
+            self.omegas,
+            self.vxs_obs,
+            self.vys_obs,
+            self.omegas_obs,
+        ]
 
         if self.args.headless:
             # Check arguments:
@@ -78,30 +98,46 @@ class Main(QApplication):
             # Loadfile with gains must be a valid .txt file
             if self.args.loadfile:
                 if not os.path.isfile(os.path.abspath(self.args.loadfile)):
-                    print("Error: Argument provided to -l/--loadfile is a not a valid path!")
+                    print(
+                        "Error: Argument provided to -l/--loadfile is a not a valid path!"
+                    )
                     self.terminate()
                 if os.path.splitext(self.args.loadfile)[1] != ".txt":
-                    print("Error: Argument provided to -l/--loadfile must be a .txt file!")
+                    print(
+                        "Error: Argument provided to -l/--loadfile must be a .txt file!"
+                    )
                     self.terminate()
 
             # Savefile must be a valid.txt file in a valid directory
             if self.args.savefile:
-                if not os.path.isdir(os.path.split(os.path.abspath(self.args.savefile))[0]):
-                    print("Error: Argument provided to -s/--savefile is not a valid path!")
+                if not os.path.isdir(
+                    os.path.split(os.path.abspath(self.args.savefile))[0]
+                ):
+                    print(
+                        "Error: Argument provided to -s/--savefile is not a valid path!"
+                    )
                     self.terminate()
 
                 if os.path.splitext(self.args.savefile)[1] != ".txt":
-                    print("Error: Argument provided to -s/--savefile must be a .txt file!")
+                    print(
+                        "Error: Argument provided to -s/--savefile must be a .txt file!"
+                    )
                     self.terminate()
 
             # Outfile must be a valid .hpp file in a valid directory
             if self.args.outfile:
-                if not os.path.isdir(os.path.split(os.path.abspath(self.args.outfile))[0]):
-                    print("Error: Argument provided to -o/--outfile is not a valid path!")
+                if not os.path.isdir(
+                    os.path.split(os.path.abspath(self.args.outfile))[0]
+                ):
+                    print(
+                        "Error: Argument provided to -o/--outfile is not a valid path!"
+                    )
                     self.terminate()
 
                 if os.path.splitext(self.args.outfile)[1] != ".hpp":
-                    print("Error: Argument provided to -o/--outfile must be a .hpp file!")
+                    print(
+                        "Error: Argument provided to -o/--outfile must be a .hpp file!"
+                    )
                     self.terminate()
 
             if self.args.loadfile:
@@ -124,11 +160,15 @@ class Main(QApplication):
     def populate_gains(self):
         for r, row in enumerate(self.observer.gains.Q_k):
             for c, element in enumerate(row):
-                self.window.Q_textboxes[r][c].setText(str(self.observer.gains.Q_k[r, c]))
+                self.window.Q_textboxes[r][c].setText(
+                    str(self.observer.gains.Q_k[r, c])
+                )
 
         for r, row in enumerate(self.observer.gains.R_k):
             for c, element in enumerate(row):
-                self.window.R_textboxes[r][c].setText(str(self.observer.gains.R_k[r, c]))
+                self.window.R_textboxes[r][c].setText(
+                    str(self.observer.gains.R_k[r, c])
+                )
 
     def update(self):
         t, x_hat, x = self.observer.step()
@@ -140,24 +180,28 @@ class Main(QApplication):
         self.vxs_obs.append(vx_obs)
         self.vys_obs.append(vy_obs)
         self.omegas_obs.append(omega_obs)
-        '''if self.verbose:
+        """if self.verbose:
             self.console_print("-" * 40)
             v = self.observer.vars(True)
             for key in v:
-                self.console_print(str(key) + ":\n" + str(np.round(v[key], 5)))'''
+                self.console_print(str(key) + ":\n" + str(np.round(v[key], 5)))"""
 
     def set_data_type(self, new_option):
         for observer in self.observer_list:
-            observer.step_response = (new_option == "Step Response")
+            observer.step_response = new_option == "Step Response"
         if new_option == "Sensor Data":
-            file_name = \
-            QFileDialog.getOpenFileName(self.window.central_widget, "Import Sensor Data", '', "CSV file (*.csv)")[0]
+            file_name = QFileDialog.getOpenFileName(
+                self.window.central_widget, "Import Sensor Data", "", "CSV file (*.csv)"
+            )[0]
             with open(file_name, "r") as file:
                 data = file.read()
                 print(data.split("\n"))
                 if len(data.split("\n")) != self.model.num_states + 1:
-                    print("Make sure that there are {} rows of data: 1 for sample frequency, {} for states".format(
-                        self.model.num_states + 1, self.model.num_states))
+                    print(
+                        "Make sure that there are {} rows of data: 1 for sample frequency, {} for states".format(
+                            self.model.num_states + 1, self.model.num_states
+                        )
+                    )
                 if len(data.split("\n")[0].split(",")) != 1:
                     print("The first line of the file must be the sample rate")
                 try:
@@ -166,7 +210,9 @@ class Main(QApplication):
                     print("The sample rate must be a number!")
                 lengths = [len(row.split(",")) for row in data.split("\n")[1:]]
                 if len(set(lengths)) != 1:
-                    print("Make sure that each row of sensor data is of the same length!")
+                    print(
+                        "Make sure that each row of sensor data is of the same length!"
+                    )
 
     def set_verbose(self):
         if not self.args.headless:
@@ -196,22 +242,40 @@ class Main(QApplication):
             for row in range(self.model.num_states):
                 for col in range(self.model.num_states):
                     try:
-                        self.observer.gains.Q_k[row, col] = eval(self.window.Q_textboxes[row][col].text())
+                        self.observer.gains.Q_k[row, col] = eval(
+                            self.window.Q_textboxes[row][col].text()
+                        )
                     except Exception:
                         err = True
                         self.console_print(
-                            "Make sure that element {},{} of the Q gains matrix is a valid number!".format(row, col))
-                        print("Make sure that element {},{} of the Q gains matrix is a valid number!".format(row, col))
+                            "Make sure that element {},{} of the Q gains matrix is a valid number!".format(
+                                row, col
+                            )
+                        )
+                        print(
+                            "Make sure that element {},{} of the Q gains matrix is a valid number!".format(
+                                row, col
+                            )
+                        )
 
             for row in range(self.model.num_outputs):
                 for col in range(self.model.num_outputs):
                     try:
-                        self.observer.gains.R_k[row, col] = eval(self.window.R_textboxes[row][col].text())
+                        self.observer.gains.R_k[row, col] = eval(
+                            self.window.R_textboxes[row][col].text()
+                        )
                     except Exception:
                         err = True
                         self.console_print(
-                            "Make sure that element {},{} of the R gains matrix is a valid number!".format(row, col))
-                        print("Make sure that element {},{} of the R gains matrix is a valid number!".format(row, col))
+                            "Make sure that element {},{} of the R gains matrix is a valid number!".format(
+                                row, col
+                            )
+                        )
+                        print(
+                            "Make sure that element {},{} of the R gains matrix is a valid number!".format(
+                                row, col
+                            )
+                        )
 
             if err:
                 return
@@ -233,60 +297,68 @@ class Main(QApplication):
                 vy_ax = fig.add_subplot(3, 1, 2)
                 omega_ax = fig.add_subplot(3, 1, 3)
 
-                vx_ax.set_title('X velocity over Time')
-                vx_ax.set_xlabel('t')
-                vx_ax.set_ylabel('vx')
+                vx_ax.set_title("X velocity over Time")
+                vx_ax.set_xlabel("t")
+                vx_ax.set_ylabel("vx")
 
-                vy_ax.set_title('Y velocity over Time')
-                vy_ax.set_xlabel('t')
-                vy_ax.set_ylabel('vy')
+                vy_ax.set_title("Y velocity over Time")
+                vy_ax.set_xlabel("t")
+                vy_ax.set_ylabel("vy")
 
-                omega_ax.set_title('Omega vs Time')
-                omega_ax.set_xlabel('t')
-                omega_ax.set_ylabel('\u03C9')  # omega character
+                omega_ax.set_title("Omega vs Time")
+                omega_ax.set_xlabel("t")
+                omega_ax.set_ylabel("\u03C9")  # omega character
 
-                vx_ax.plot(self.ts, self.vxs, '-', c='tab:blue')
-                vy_ax.plot(self.ts, self.vys, '-', c='tab:blue')
-                omega_ax.plot(self.ts, self.omegas, '-', c='tab:blue')
+                vx_ax.plot(self.ts, self.vxs, "-", c="tab:blue")
+                vy_ax.plot(self.ts, self.vys, "-", c="tab:blue")
+                omega_ax.plot(self.ts, self.omegas, "-", c="tab:blue")
 
-                vx_ax.plot(self.ts, self.vxs_obs, '-', c='tab:green')
-                vy_ax.plot(self.ts, self.vys_obs, '-', c='tab:green')
-                omega_ax.plot(self.ts, self.omegas_obs, '-', c='tab:green')
+                vx_ax.plot(self.ts, self.vxs_obs, "-", c="tab:green")
+                vy_ax.plot(self.ts, self.vys_obs, "-", c="tab:green")
+                omega_ax.plot(self.ts, self.omegas_obs, "-", c="tab:green")
 
                 for ax in [vx_ax, vy_ax, omega_ax]:
-                    ax.spines['top'].set_visible(False)
-                    ax.spines['right'].set_visible(False)
+                    ax.spines["top"].set_visible(False)
+                    ax.spines["right"].set_visible(False)
                     ax.relim()
-                    ax.legend(['x_hat', 'x'])
+                    ax.legend(["x_hat", "x"])
 
                 fig.tight_layout()
-                if self.args.savefig != ' ':
+                if self.args.savefig != " ":
                     try:
                         plt.savefig(self.args.savefig)
                     except ValueError as ve:
                         print(ve)
                         self.terminate()
                 else:
-                    plt.savefig(datetime.datetime.now().strftime('vkt_%m-%d-%Y-%H_%M_%S.png'))
+                    plt.savefig(
+                        datetime.datetime.now().strftime("vkt_%m-%d-%Y-%H_%M_%S.png")
+                    )
 
         else:
-            self.window.set_plot_data(self.ts,
-                                      self.vxs, self.vxs_obs,
-                                      self.vys, self.vys_obs,
-                                      self.omegas, self.omegas_obs)
+            self.window.set_plot_data(
+                self.ts,
+                self.vxs,
+                self.vxs_obs,
+                self.vys,
+                self.vys_obs,
+                self.omegas,
+                self.omegas_obs,
+            )
             self.window.plot_fig.tight_layout()
 
     def save(self):
         if self.args.headless and self.args.savefile:
             file_name = self.args.savefile
         else:
-            file_name = QFileDialog.getSaveFileName(self.window.central_widget, "Save Gains", '', "Text File (*.txt)")[
-                0]
+            file_name = QFileDialog.getSaveFileName(
+                self.window.central_widget, "Save Gains", "", "Text File (*.txt)"
+            )[0]
         if file_name:
-            with open(file_name, 'w') as file:
+            with open(file_name, "w") as file:
                 gains = self.observer.get_gains().items()
                 for key, pair in gains:
-                    if key == 'dt':
+                    if key == "dt":
                         file.write(str(key) + ": " + str(pair) + "\n")
                     else:
                         file.write(str(key) + ": " + str(pair.tolist()) + "\n")
@@ -295,12 +367,16 @@ class Main(QApplication):
         if self.args.headless and self.args.loadfile:
             file_name = self.args.loadfile
         else:
-            file_name = \
-            QFileDialog.getOpenFileName(self.window.central_widget, "Import Gains", '', "Text File (*.txt)")[0]
+            file_name = QFileDialog.getOpenFileName(
+                self.window.central_widget, "Import Gains", "", "Text File (*.txt)"
+            )[0]
         if file_name:
-            with open(file_name, 'r') as file:
+            with open(file_name, "r") as file:
                 gains_string = file.read()
-                dt, P, A, B, H, D, K, Q, R = [np.array(eval(gain.split(': ')[1])) for gain in gains_string.strip().split('\n')]
+                dt, P, A, B, H, D, K, Q, R = [
+                    np.array(eval(gain.split(": ")[1]))
+                    for gain in gains_string.strip().split("\n")
+                ]
                 for observer in self.observer_list:
                     observer.set_gains(P, A, B, H, D, K, Q, R)
                 if not self.args.headless:
@@ -308,10 +384,16 @@ class Main(QApplication):
 
     def generate_gain(self, name, matrix):
         num_rows, num_cols = matrix.shape
-        indent_level = " "*4
-        header = indent_level + \
-                 "inline static Eigen::Matrix<double, %d, %d> make_%s_matrix() {\n" % (num_rows, num_cols, name)
-        rtrn = indent_level + "    return (Eigen::Matrix<double, %d, %d>() << " % (num_rows, num_cols)
+        indent_level = " " * 4
+        header = (
+            indent_level
+            + "inline static Eigen::Matrix<double, %d, %d> make_%s_matrix() {\n"
+            % (num_rows, num_cols, name)
+        )
+        rtrn = indent_level + "    return (Eigen::Matrix<double, %d, %d>() << " % (
+            num_rows,
+            num_cols,
+        )
         indent = " " * len(rtrn)
         block = rtrn
         for i, row in enumerate(matrix):
@@ -326,17 +408,34 @@ class Main(QApplication):
         if self.args.headless and self.args.outfile:
             file_name = self.args.outfile
         else:
-            file_name = QFileDialog.getSaveFileName(self.window.central_widget, "Export C++ Code", '', "C++ (*.hpp)")[0]
+            file_name = QFileDialog.getSaveFileName(
+                self.window.central_widget, "Export C++ Code", "", "C++ (*.hpp)"
+            )[0]
         if file_name:
-            with open(file_name, 'w') as file:
+            with open(file_name, "w") as file:
                 file.write("#pragma once\n")
                 file.write("#include <Eigen/Dense>\n\n")
                 file.write("namespace drivetrain_controls {\n\n")
-                gains_list = [self.observer.dynamics.gains.A_k, self.observer.dynamics.gains.B_k, self.observer.dynamics.gains.H_k,
-                              self.observer.dynamics.gains.D_k, self.observer.gains.Q_k, self.observer.gains.R_k,
-                              self.observer.gains.K]
-                names_list = ["dynamics", "control", "output", "feed_forward", "process_noise", "observation_noise",
-                              "ss_kalman_gain" if self.observer_type=="SS_KF" else "kalman_gain"]
+                gains_list = [
+                    self.observer.dynamics.gains.A_k,
+                    self.observer.dynamics.gains.B_k,
+                    self.observer.dynamics.gains.H_k,
+                    self.observer.dynamics.gains.D_k,
+                    self.observer.gains.Q_k,
+                    self.observer.gains.R_k,
+                    self.observer.gains.K,
+                ]
+                names_list = [
+                    "dynamics",
+                    "control",
+                    "output",
+                    "feed_forward",
+                    "process_noise",
+                    "observation_noise",
+                    "ss_kalman_gain"
+                    if self.observer_type == "SS_KF"
+                    else "kalman_gain",
+                ]
                 code = ""
                 for name, gain in zip(names_list, gains_list):
                     code += self.generate_gain(name, gain) + "\n"
@@ -348,18 +447,44 @@ class Main(QApplication):
             self.window.console.insertPlainText(msg + "\n")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     p = ArgumentParser()
     p.add_argument("-l", "--loadfile", dest="loadfile", help="File to load gains")
-    p.add_argument("-hd", "--headless", action='store_true', help="Runs without gui")
+    p.add_argument("-hd", "--headless", action="store_true", help="Runs without gui")
     p.add_argument("-o", "--outfile", dest="outfile", help="File to export as hpp code")
-    p.add_argument("-r", "--regular", action='store_true', help="Runs Kalman filter without steady-state")
-    p.add_argument("-f", "--savefig", nargs='?', const=' ', help="Saves figure from simulation to specified file. If blank, "
-                                                              "file will be of type PNG and have a datetime string as a name")
+    p.add_argument(
+        "-r",
+        "--regular",
+        action="store_true",
+        help="Runs Kalman filter without steady-state",
+    )
+    p.add_argument(
+        "-f",
+        "--savefig",
+        nargs="?",
+        const=" ",
+        help="Saves figure from simulation to specified file. If blank, "
+        "file will be of type PNG and have a datetime string as a name",
+    )
     p.add_argument("-s", "--savefile", dest="savefile", help="File to save gains")
-    p.add_argument("-t", "--time", dest="time", help="Total time in seconds to run simulation. Default: 2s")
-    p.add_argument("-dt", "--timestep", dest="timestep", help="Timestep for simulation, in seconds. Default: 0.005s")
-    p.add_argument("-v", "--verbose", action='store_true', help="Prints Kalman Filter gains for every simulation step")
+    p.add_argument(
+        "-t",
+        "--time",
+        dest="time",
+        help="Total time in seconds to run simulation. Default: 2s",
+    )
+    p.add_argument(
+        "-dt",
+        "--timestep",
+        dest="timestep",
+        help="Timestep for simulation, in seconds. Default: 0.005s",
+    )
+    p.add_argument(
+        "-v",
+        "--verbose",
+        action="store_true",
+        help="Prints Kalman Filter gains for every simulation step",
+    )
     args = p.parse_args()
 
     model = RobotModel()

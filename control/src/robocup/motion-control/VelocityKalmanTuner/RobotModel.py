@@ -1,18 +1,16 @@
 import numpy as np
 
+
 class RobotModel:
     """
     Calculates and returns matrices for our current system model
     """
+
     def __init__(self):
         # wheel_angles, wheel_dist, & wheel_radius can all be found in robot_model.hpp
-        self.wheel_angles = np.deg2rad([180 - 30,
-                                        180 + 39,
-                                        360 - 39,
-                                        0 + 30])
+        self.wheel_angles = np.deg2rad([180 - 30, 180 + 39, 360 - 39, 0 + 30])
         self.wheel_dist = 0.0798576
         self.wheel_radius = 0.02786
-
 
         # Noises
         self.init_covariance = 0.003
@@ -62,11 +60,11 @@ class RobotModel:
 
     def generate_model(self):
         return {
-            'A': self.get_A_matrix(),
-            'B': self.get_B_matrix(),
-            'H': self.get_H_matrix(),
-            'D': self.get_D_matrix(),
-            'P': self.get_P_init_matrix(),
-            'Q': self.get_Q_matrix(),
-            'R': self.get_R_matrix()
+            "A": self.get_A_matrix(),
+            "B": self.get_B_matrix(),
+            "H": self.get_H_matrix(),
+            "D": self.get_D_matrix(),
+            "P": self.get_P_init_matrix(),
+            "Q": self.get_Q_matrix(),
+            "R": self.get_R_matrix(),
         }

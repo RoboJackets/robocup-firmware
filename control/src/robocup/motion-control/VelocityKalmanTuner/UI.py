@@ -1,5 +1,18 @@
-from PyQt5.QtWidgets import (QGridLayout, QMainWindow, QWidget, QVBoxLayout, QGroupBox, QLabel, QLineEdit, QPushButton,
-                             QHBoxLayout, QAction, QComboBox, QTextEdit, QCheckBox)
+from PyQt5.QtWidgets import (
+    QGridLayout,
+    QMainWindow,
+    QWidget,
+    QVBoxLayout,
+    QGroupBox,
+    QLabel,
+    QLineEdit,
+    QPushButton,
+    QHBoxLayout,
+    QAction,
+    QComboBox,
+    QTextEdit,
+    QCheckBox,
+)
 import PyQt5.QtCore as QtCore
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT
 import matplotlib.pyplot as plt
@@ -26,20 +39,20 @@ class UIMainWindow(QMainWindow):
         self.plot_axs = [self.vx_ax, self.vy_ax, self.omega_ax]
 
         # Set up subplot axes and titles
-        self.vx_ax.set_title('X velocity over Time')
-        self.vx_ax.set_xlabel('t')
-        self.vx_ax.set_ylabel('vx')
-        self.vy_ax.set_title('Y velocity over Time')
-        self.vy_ax.set_xlabel('t')
-        self.vy_ax.set_ylabel('vy')
-        self.omega_ax.set_title('Omega vs Time')
-        self.omega_ax.set_xlabel('t')
-        self.omega_ax.set_ylabel('\u03C9')  # omega character
+        self.vx_ax.set_title("X velocity over Time")
+        self.vx_ax.set_xlabel("t")
+        self.vx_ax.set_ylabel("vx")
+        self.vy_ax.set_title("Y velocity over Time")
+        self.vy_ax.set_xlabel("t")
+        self.vy_ax.set_ylabel("vy")
+        self.omega_ax.set_title("Omega vs Time")
+        self.omega_ax.set_xlabel("t")
+        self.omega_ax.set_ylabel("\u03C9")  # omega character
 
         # Remove top and right lines on subplot for cleanliness
         for ax in self.plot_axs:
-            ax.spines['top'].set_visible(False)
-            ax.spines['right'].set_visible(False)
+            ax.spines["top"].set_visible(False)
+            ax.spines["right"].set_visible(False)
 
         self.plot_fig.tight_layout()
 
@@ -67,8 +80,12 @@ class UIMainWindow(QMainWindow):
         self.console_box_label = QLabel("Console")
         self.console_top_box = QWidget(self.central_widget)
         self.console_top_box_layout = QHBoxLayout(self.console_top_box)
-        self.console_top_box_layout.addWidget(self.console_box_label, alignment=QtCore.Qt.AlignLeft)
-        self.console_top_box_layout.addWidget(self.verbose_box, alignment=QtCore.Qt.AlignRight)
+        self.console_top_box_layout.addWidget(
+            self.console_box_label, alignment=QtCore.Qt.AlignLeft
+        )
+        self.console_top_box_layout.addWidget(
+            self.verbose_box, alignment=QtCore.Qt.AlignRight
+        )
         self.console_top_box_layout.setContentsMargins(0, 0, 0, 0)
 
         self.console = QTextEdit()
@@ -163,11 +180,11 @@ class UIMainWindow(QMainWindow):
 
         # Create menu bar
         self.menu_bar = self.menuBar()
-        self.save_action = QAction('Save Gains', self)
-        self.save_action.setShortcut('Ctrl+S')
-        self.load_action = QAction('Import Gains', self)
-        self.load_action.setShortcut('Ctrl+I')
-        self.file_menu = self.menu_bar.addMenu('File')
+        self.save_action = QAction("Save Gains", self)
+        self.save_action.setShortcut("Ctrl+S")
+        self.load_action = QAction("Import Gains", self)
+        self.load_action.setShortcut("Ctrl+I")
+        self.file_menu = self.menu_bar.addMenu("File")
         self.file_menu.addAction(self.save_action)
         self.file_menu.addAction(self.load_action)
 
@@ -178,18 +195,18 @@ class UIMainWindow(QMainWindow):
             ax.lines.clear()
 
         # Plot estimated state values
-        self.vx_ax.plot(ts, vxs, '-', c='tab:blue')
-        self.vy_ax.plot(ts, vys, '-', c='tab:blue')
-        self.omega_ax.plot(ts, omegas, '-', c='tab:blue')
+        self.vx_ax.plot(ts, vxs, "-", c="tab:blue")
+        self.vy_ax.plot(ts, vys, "-", c="tab:blue")
+        self.omega_ax.plot(ts, omegas, "-", c="tab:blue")
 
         # Plot observed state values
-        self.vx_ax.plot(ts, vxs_obs, '-', c='tab:green')
-        self.vy_ax.plot(ts, vys_obs, '-', c='tab:green')
-        self.omega_ax.plot(ts, omegas_obs, '-', c='tab:green')
+        self.vx_ax.plot(ts, vxs_obs, "-", c="tab:green")
+        self.vy_ax.plot(ts, vys_obs, "-", c="tab:green")
+        self.omega_ax.plot(ts, omegas_obs, "-", c="tab:green")
 
         # Rescale axes and recreate legend
         for ax in self.plot_axs:
             ax.relim()
-            ax.legend(['x_hat', 'x'])
+            ax.legend(["x_hat", "x"])
 
         self.plot_canvas.draw()
