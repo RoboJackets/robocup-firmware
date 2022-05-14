@@ -44,12 +44,11 @@ jobs:
       with: 
         skip_checkout: true
         skip_fetch: true
-        commit_message: Automatic style changes
+        commit_message: Automatic make pretty-lines
         create_branch: false
         commit_options: '--no-verify --signoff'
     - name: Run clang-format
       run: |
-          git pull
           echo "::add-matcher::util/style/clang-format.json"
           git diff -U0 --no-color ${{ github.base_ref }} ${{ github.head_ref }} | python3 util/style/clang-format-diff.py -binary clang-format -p1 -dry_run
           echo "::remove-matcher owner=clang-format::"
