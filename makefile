@@ -31,7 +31,6 @@ control:
 mkdir -p build && cd build && \
 cmake .. && make -j$(nproc) control
 
-
 control-tests:
 	cd control && \
 mkdir -p build && cd build && \
