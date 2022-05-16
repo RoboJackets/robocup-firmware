@@ -1,5 +1,7 @@
 .PHONY : all flash kicker kicker-test control docs clean $(ROBOT_TESTS:%=%)
 
+ROBOT_TESTS = rtos icm-42605-angle icm-20498-rate icm-20498-angle radio-test
+
 all: control flash
 
 tests: control-tests kicker-test 
@@ -24,8 +26,6 @@ mkdir -p build && cd build && \
 cmake .. && make -j$(nproc) kicker-test && cd .. && \
 python3 convert.py build/bin/kicker-test.nib build/bin/kicker_bin.h KICKER_BYTES
 
-ROBOT_TESTS = rtos icm-42605-angle icm-20498-rate icm-20498-angle radio-test
-
 control:
 	cd control && \
 mkdir -p build && cd build && \
@@ -35,6 +35,12 @@ control-tests:
 	cd control && \
 mkdir -p build && cd build && \
 cmake .. && make -j$(nproc) $(ROBOT_TESTS)
+
+$(ROBOT_TESTS): kicker-test
+	cd control && \
+mkdir -p build && cd build && \
+cmake .. && make -j $(@F)
+	make flash-test TEST=$(@F)
 
 docs:
 	cd doc && doxygen Doxyfile
