@@ -4,7 +4,7 @@
 For a brief introduction to how to use the command line see [here](CommandLineBasics.md)
 
 ## Setup
-See the setup process [here](../README.md)
+See the setup process [here]\ref{README.md}
 
 ## Git Version Control
 Please see [here](Git.md) for a brief tutorial on git as well as links to learning resources
