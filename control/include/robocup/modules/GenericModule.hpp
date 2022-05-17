@@ -8,7 +8,7 @@
 #include "task.h"
 
 /** @class GenericModule
- *  Interface for all modules, so that they can be ran by the scheduler
+ *  Interface for all modules, so that they can be run by the scheduler
  */
 class GenericModule {
 public:

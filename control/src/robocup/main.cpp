@@ -27,14 +27,14 @@ struct MODULE_META_DATA {
     // Time in sysclock ticks of last module execution
     uint32_t lastRunTime;
 
-    // Time in sysclock ticks of next module execution
-    uint32_t nextRunTime;
-
     // Time in sysclock ticks between module executions
     const uint32_t modulePeriod;
 
     // Estimate in sysclock ticks of module runtime
-    const int32_t moduleRunTime;
+    int32_t moduleRunTime;
+
+    // Number of times the module has completed
+    int32_t numCompletions;
 
     GenericModule *module;
 
@@ -46,10 +46,17 @@ struct MODULE_META_DATA {
                      int32_t moduleRunTime,
                      GenericModule *module)
             : lastRunTime(lastRunTime),
-              nextRunTime(lastRunTime + modulePeriod * DWT_SysTick_To_us()),
               modulePeriod(modulePeriod * DWT_SysTick_To_us()),
               moduleRunTime(moduleRunTime * DWT_SysTick_To_us()),
+              numCompletions(0),
               module(module) {}
+    /**
+    * Period and runtime in us
+    */
+    explicit MODULE_META_DATA(GenericModule *module)
+            : lastRunTime(0),
+            modulePeriod(module->period.count()), moduleRunTime(0), numCompletions(0),
+            module(module) {}
 };
 
 [[noreturn]]
@@ -71,7 +78,14 @@ void startModule(void *pvModule) {
 
 std::vector<const char*> failed_modules;
 size_t free_space;
+// Map name of modules to their metadata
+static std::unordered_map<const char *, MODULE_META_DATA> modules;
 
+/**
+ * Wrapper for freeRTOS xTaskCreate
+ * @param module pointer to the module to create a task for
+ * @return whether or not the creation was successful
+ */
 bool createModule(GenericModule *module) {
     BaseType_t result = xTaskCreate(startModule,
                                     module->name,
@@ -108,8 +122,6 @@ int main() {
     static LockedStruct<KickerCommand> kickerCommand{};
     static LockedStruct<KickerInfo> kickerInfo{};
     static LockedStruct<DebugInfo> debugInfo{};
-
-    bool result = false;
 
     static LockedStruct<MCP23017> ioExpander(MCP23017{sharedI2C, 0x42});
 
@@ -157,11 +169,18 @@ int main() {
                                       motorCommand,
                                       debugInfo);
 
-    static std::vector<GenericModule *> moduleList = {&led, &dial, &imu, &radio, &kicker, &fpga, &motion};
-    for(int i = 0; i < 7; i++) {
-        result = createModule(moduleList[i]);
-        if(!result) {
-            break;
+    modules =
+            {{led.name,MODULE_META_DATA(&led)},
+             {dial.name, MODULE_META_DATA(&dial)},
+             {imu.name, MODULE_META_DATA(&imu)},
+             {radio.name, MODULE_META_DATA(&radio)},
+             {kicker.name, MODULE_META_DATA(&kicker)},
+             {fpga.name, MODULE_META_DATA(&fpga)},
+             {motion.name, MODULE_META_DATA(&motion)}};
+
+    for (const auto [ name, data ] : modules) {
+        if (!createModule(data.module)) {
+            printf("[ERROR] A module failed to start!\r\n");
         }
     }
 

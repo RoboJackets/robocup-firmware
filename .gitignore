@@ -10,6 +10,7 @@
 /gmon.out
 *.swp
 /.settings
+**/cmake-*
 # ignore the generated docs
 **/generated-docs
 *~
