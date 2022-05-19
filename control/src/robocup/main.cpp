@@ -1,4 +1,5 @@
 #include "common.hpp"
+#include "FreeRTOS.h"
 #include "task.h"
 #include "core_cm7.h"
 
@@ -180,6 +181,8 @@ bool createModule(GenericModule *module) {
 
     for (const auto [ name, data ] : modules) {
         if (!createModule(data.module)) {
+            printf("[ERROR] A module failed to be initialized!\r\n");
+            printf("Resetting!\r\n");
             NVIC_SystemReset();
         }
     }
