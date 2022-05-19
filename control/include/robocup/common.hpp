@@ -1,3 +1,6 @@
+/**
+ * @file Common headers used by many files.
+ */
 #pragma once
 
 #include "MicroPackets.hpp"

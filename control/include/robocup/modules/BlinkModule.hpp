@@ -1,5 +1,5 @@
 #pragma once
-#include "robocup.hpp"
+#include "common.hpp"
 
 #include "GenericModule.hpp"
 

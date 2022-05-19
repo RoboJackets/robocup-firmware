@@ -1,6 +1,6 @@
 #pragma once
 
-#include "robocup.hpp"
+#include "common.hpp"
 #include <memory>
 #include <vector>
 #include <cmath>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "robocup.hpp"
+#include "common.hpp"
 #include "AVR910.hpp"
 #include "kicker_commands.h"
 #include "kicker_bin.h"

@@ -1,6 +1,6 @@
-#include "FreeRTOSConfig.h"
-#include "FreeRTOS.h"
+#include "common.hpp"
 #include "task.h"
+#include "core_cm7.h"
 
 #include "modules/GenericModule.hpp"
 #include "modules/BatteryModule.hpp"
@@ -103,7 +103,7 @@ bool createModule(GenericModule *module) {
     }
 }
 
-int main() {
+[[ noreturn ]] int main() {
     // Delay for USB startup
     DWT_Delay(2500);
 
@@ -180,7 +180,7 @@ int main() {
 
     for (const auto [ name, data ] : modules) {
         if (!createModule(data.module)) {
-            printf("[ERROR] A module failed to start!\r\n");
+            NVIC_SystemReset();
         }
     }
 

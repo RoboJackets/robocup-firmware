@@ -9,7 +9,7 @@
 
 #include <algorithm>
 #include <stdint.h>
-#include "robocup.hpp"
+#include "common.hpp"
 
 class FPGA {
 public:

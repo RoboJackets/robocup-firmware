@@ -1,6 +1,6 @@
 #pragma once
 
-#include "robocup.hpp"
+#include "common.hpp"
 #include "GenericRadio.hpp"
 #include <string>
 #include <vector>
