@@ -14,7 +14,7 @@ project(
 
 add_subdirectory(external)
 
-add_subdirectory(API/cpp)
+add_subdirectory(API)
 add_subdirectory(BSP)
 add_subdirectory(tests/cpp)
 
@@ -22,5 +22,5 @@ add_library(mtrain INTERFACE)
 
 target_link_libraries(mtrain INTERFACE
     STM32F7xx
-    STM32F7_API_CPP
+    STM32F7_API
 )

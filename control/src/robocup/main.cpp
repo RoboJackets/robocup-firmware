@@ -104,7 +104,7 @@ bool createModule(GenericModule *module) {
     }
 }
 
-[[ noreturn ]] int main() {
+int main() {
     // Delay for USB startup
     DWT_Delay(2500);
 
@@ -181,7 +181,7 @@ bool createModule(GenericModule *module) {
 
     for (const auto [ name, data ] : modules) {
         if (!createModule(data.module)) {
-            printf("[ERROR] A module failed to be initialized!\r\n");
+            printf("[ERROR] Failed to create a module!\r\n");
             printf("Resetting!\r\n");
             NVIC_SystemReset();
         }

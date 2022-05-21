@@ -10,11 +10,11 @@ extern "C" {
 /**
  * Current tick in sysclock ticks
  */
-uint32_t DWT_GetTick();
+[[maybe_unused]] uint32_t DWT_GetTick();
 
-uint32_t DWT_SysTick_To_us();
+[[maybe_unused]] uint32_t DWT_SysTick_To_us();
 
-void DWT_Delay_Sys(uint32_t ticks);
+[[maybe_unused]] void DWT_Delay_Sys(uint32_t ticks);
 
 /**
  * Delay routine itself.

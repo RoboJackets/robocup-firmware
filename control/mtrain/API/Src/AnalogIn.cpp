@@ -1,6 +1,4 @@
 #include "AnalogIn.hpp"
-#include <iostream>
-#include <math.h>
 using namespace std;
 
 const int REFRESH_PERIOD = 10;
@@ -49,9 +47,7 @@ AnalogIn::AnalogIn(ADCPinName pin) {
 }
 
 
-AnalogIn::~AnalogIn() {
-
-}
+AnalogIn::~AnalogIn() = default;
 
 
 /**
