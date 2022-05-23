@@ -9,8 +9,15 @@ graphviz
 
 # Arm GCC Toolchain
 gcc-arm-none-eabi
+gdb-multiarch
 libeigen3-dev
 
 # AVR
 avr-libc
 avrdude
+
+# style
+clang-format-10
+black
+flake8
+python3-setuptools

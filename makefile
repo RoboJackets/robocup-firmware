@@ -1,6 +1,12 @@
 .PHONY : all flash kicker kicker-test control docs clean $(ROBOT_TESTS:%=%)
 
+ROBOT_TESTS = rtos icm-42605-angle icm-20498-rate icm-20498-angle radio-test
+
 all: control flash
+
+tests: control-tests kicker-test 
+
+all-kicker: kicker kicker-test
 
 flash:
 	./util/flash-mtrain
@@ -11,7 +17,7 @@ flash-test:
 kicker:
 	cd kicker && \
 mkdir -p build && cd build && \
-cmake .. && make -j$(nproc) && cd .. && \
+cmake .. && make -j$(nproc) kicker && cd .. && \
 python3 convert.py build/bin/kicker.nib build/bin/kicker_bin.h KICKER_BYTES
 
 kicker-test:
@@ -20,18 +26,21 @@ mkdir -p build && cd build && \
 cmake .. && make -j$(nproc) kicker-test && cd .. && \
 python3 convert.py build/bin/kicker-test.nib build/bin/kicker_bin.h KICKER_BYTES
 
-ROBOT_TESTS = rtos icm-42605-angle icm-20498-rate icm-20498-angle radio-test
-
 control:
 	cd control && \
 mkdir -p build && cd build && \
-cmake .. && make -j$(nproc)
+cmake .. && make -j$(nproc) control
 
-$(ROBOT_TESTS:%=%): kicker-test
+control-tests:
 	cd control && \
 mkdir -p build && cd build && \
-cmake .. && make -j$(nproc) $(@F)
-	make flash-test
+cmake .. && make -j$(nproc) $(ROBOT_TESTS)
+
+$(ROBOT_TESTS): kicker-test
+	cd control && \
+mkdir -p build && cd build && \
+cmake .. && make -j $(@F)
+	make flash-test TEST=$(@F)
 
 docs:
 	cd doc && doxygen Doxyfile
@@ -43,3 +52,10 @@ clean:
 	cd fpga && rm -rf build
 	cd kicker && rm -rf build
 	rm -rf generated-docs
+
+CLANG_FORMAT_BINARY=clang-format-10
+
+# run locally before committing
+pretty-lines:
+	@git diff $(DIFFBASE) -U0 --no-color | python3 util/style/clang-format-diff.py -binary $(CLANG_FORMAT_BINARY) -i -p1
+	@git diff -U0 --no-color $(DIFFBASE) | black . --exclude "control/mtrain/"
