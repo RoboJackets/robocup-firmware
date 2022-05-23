@@ -3,8 +3,9 @@
 set -e
 
 echo "-- Updating submodules"
+git submodule init
 git submodule sync
-git submodule update --init --recursive
+git submodule update --recursive
 
 if [ $UID -ne 0 ]; then
 	echo "-- Becoming root"
