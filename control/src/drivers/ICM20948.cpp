@@ -1,5 +1,4 @@
 #include "drivers/ICM20948.hpp"
-#include <cmath>
 
 #define READ_BIT (1 << 7)
 
@@ -117,7 +116,6 @@ bool ICM20948::initialize() {
         printf("[ERROR] Failed to connect to IMU.");
         return false;
     } else {
-        printf("[INFO] Initialization Complete!");
         return true;
     }
 }

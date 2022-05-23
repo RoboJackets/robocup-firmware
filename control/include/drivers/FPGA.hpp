@@ -2,11 +2,14 @@
 
 #include <memory>
 #include <vector>
+#include "fpga_bin.h"
 
-#include "mtrain.hpp"
-#include "SPI.hpp"
-#include "DigitalIn.hpp"
-#include "DigitalOut.hpp"
+#include "FreeRTOS.h"
+#include "task.h"
+
+#include <algorithm>
+#include <stdint.h>
+#include "common.hpp"
 
 class FPGA {
 public:

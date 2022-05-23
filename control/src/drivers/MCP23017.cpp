@@ -1,4 +1,3 @@
-#include "LockedStruct.hpp"
 #include "drivers/MCP23017.hpp"
 
 MCP23017::MCP23017(LockedStruct<I2C>& sharedI2C, int i2cAddress)

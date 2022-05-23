@@ -1,6 +1,8 @@
-.PHONY : all flash kicker kicker-test control docs clean $(ROBOT_TESTS:%=%)
+.PHONY : all flash kicker kicker-test control tests docs clean $(ROBOT_TESTS)
 
-ROBOT_TESTS = rtos icm-42605-angle icm-20498-rate icm-20498-angle radio-test
+ROBOT_TESTS = rtos icm-42605-angle radio-test blink
+
+ROBOT_TESTS = rtos icm-42605-angle radio-test
 
 all: control flash
 
@@ -12,21 +14,29 @@ flash:
 	./util/flash-mtrain
 
 flash-test:
-	./util/flash-mtrain-test
+	./util/flash-test $(TEST)
 
 kicker:
 	cd kicker && \
 mkdir -p build && cd build && \
+
 cmake .. && make -j$(nproc) kicker && cd .. && \
+
 python3 convert.py build/bin/kicker.nib build/bin/kicker_bin.h KICKER_BYTES
 
 kicker-test:
 	cd kicker && \
 mkdir -p build && cd build && \
-cmake .. && make -j$(nproc) kicker-test && cd .. && \
+cmake .. && make -j kicker-test && cd .. && \
 python3 convert.py build/bin/kicker-test.nib build/bin/kicker_bin.h KICKER_BYTES
 
 control:
+	@if [[ ! -f kicker/build/bin/kicker_bin.h ]]; then echo "=> Please build either 'kicker' or 'kicker-test' prior to building control"; exit 1; else true; fi
+	cd control && \
+mkdir -p build && cd build && \
+cmake .. && make -j control
+
+$(ROBOT_TESTS): kicker-test
 	cd control && \
 mkdir -p build && cd build && \
 cmake .. && make -j$(nproc) control

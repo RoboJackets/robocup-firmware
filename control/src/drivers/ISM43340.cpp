@@ -1,13 +1,4 @@
 #include "drivers/ISM43340.hpp"
-#include "delay.h"
-#include <cstring>
-#include "interrupt_in.h"
-
-
-#include "FreeRTOS.h"
-#include "task.h"
-#include <string>
-#include <cstdio>
 
 volatile ISMConstants::State currentState;
 
@@ -29,12 +20,12 @@ ISM43340::ISM43340(std::unique_ptr<SPI> radioSPI, PinName nCsPin, PinName nReset
     : radioSPI(std::move(radioSPI)),
       nCs(nCsPin),
       nReset(nResetPin),
-      dataReady{dataReadyPin.port, dataReadyPin.pin},
+      dataReady{dataReadyPin},
       currentSocket(SOCKET_TYPE::SEND),
       cmdStart(nullptr) {
 
     currentState = ISMConstants::State::CommandReady;
-    interruptin_init_ex(dataReady, &dataReady_cb, PULL_DOWN, INTERRUPT_RISING_FALLING);
+    interruptin_init_ex(dataReady, &dataReady_cb, PullDown, INTERRUPT_RISING_FALLING);
 
     nCs = ISMConstants::CHIP_DESELECT;
 
@@ -323,9 +314,10 @@ void ISM43340::reset() {
         if (isInit) {
             break;
             //return;
-        } 
+        }
         else if (i == 4){
             printf("[ERROR] Failed to initialize radio.\r\n");
+            return;
         }
         else {
             printf("[INFO] Could not initialize radio. Retrying.\r\n");

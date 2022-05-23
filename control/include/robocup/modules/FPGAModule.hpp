@@ -1,14 +1,9 @@
 #pragma once
 
-#include "mtrain.hpp"
 #include "GenericModule.hpp"
-#include "MicroPackets.hpp"
 #include "drivers/FPGA.hpp"
-
-#include "SPI.hpp"
-
 #include <memory>
-#include <LockedStruct.hpp>
+#include <cmath>
 
 /**
  * Module interfacing with FPGA and handling FPGA status

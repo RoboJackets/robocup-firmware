@@ -1,6 +1,4 @@
 #include "motion-control/RobotEstimator.hpp"
-#include "rc-fshare/robot_model.hpp"
-#include "MicroPackets.hpp"
 
 RobotEstimator::RobotEstimator(uint32_t dt_us) {
     const float dt = dt_us/1000000.0;

@@ -6,6 +6,7 @@ Battery::Battery()
 
 void Battery::update() {
     lastReadPercentage = (battVoltagePin.getVoltage() - MIN_SAFE_BATT_VOLTAGE_READ) / BATT_VOLTAGE_READ_RANGE;
+    lastReadPercentage = lastReadPercentage >= 0 ? lastReadPercentage : 0.0f;
     rawVoltage = (uint8_t)(lastReadPercentage * 255);
 }
 
@@ -13,7 +14,7 @@ float Battery::getBattPercentage() {
     return lastReadPercentage;
 }
 
-uint8_t Battery::getRaw() {
+uint8_t Battery::getRawVoltage() {
     return rawVoltage;
 }
 

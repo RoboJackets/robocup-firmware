@@ -1,12 +1,4 @@
 #include "drivers/FPGA.hpp"
-#include "fpga_bin.h"
-
-#include "FreeRTOS.h"
-#include "task.h"
-
-#include <memory>
-#include <algorithm>
-#include <stdint.h>
 
 template <size_t SIGN_INDEX>
 uint16_t toSignMag(int16_t val) {
@@ -125,12 +117,12 @@ bool FPGA::configure() {
 
 bool FPGA::send_config() {
     chip_select();
-    
+
     _spi_bus->frequency(16'000'000);
     _spi_bus->transmit(FPGA_BYTES, FPGA_BYTES_LEN);
-    
+
     chip_deselect();
-    
+
     return true;
 }
 
@@ -306,4 +298,3 @@ void FPGA::chip_deselect() {
 }
 
 bool FPGA::isReady() { return _isInit; }
-

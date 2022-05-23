@@ -1,10 +1,7 @@
 #pragma once
 
-#include "LockedStruct.hpp"
 #include "GenericModule.hpp"
-#include "MicroPackets.hpp" 
 #include "radio/RadioLink.hpp"
-#include "DigitalOut.hpp"
 
 /**
  * Module interfacing with Radio and handling Radio status

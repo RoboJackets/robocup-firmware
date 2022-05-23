@@ -1,6 +1,4 @@
 #include "modules/IMUModule.hpp"
-#include "mtrain.hpp"
-#include <cstdio>
 
 IMUModule::IMUModule(LockedStruct<SPI>& sharedSPI, LockedStruct<IMUData>& imuData)
     : GenericModule(kPeriod, "imu", kPriority),

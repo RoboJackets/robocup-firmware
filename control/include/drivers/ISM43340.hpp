@@ -1,12 +1,15 @@
 #pragma once
 
-#include "mtrain.hpp"
-#include "SPI.hpp"
+#include "common.hpp"
 #include "GenericRadio.hpp"
-#include "pin_defs.h"
 #include <string>
 #include <vector>
 #include <memory>
+#include <cstring>
+#include <cstdio>
+
+#include "FreeRTOS.h"
+#include "task.h"
 
 namespace ISMConstants {
     // Hardware/driver config values
@@ -29,7 +32,7 @@ namespace ISMConstants {
 
     static const std::string ROUTER_IP = "172.16.1.1";
 
-    static const std::string BASE_STATION_IP = "172.16.1.76";//48//27//36
+    static const std::string BASE_STATION_IP = "172.16.1.76";
 
     static const std::string RECEIVE_SOCKET = "0";
     static const std::string LOCAL_PORT = "25566";
@@ -110,39 +113,39 @@ namespace ISMConstants {
         static const std::string WPA2_AES  = "3";
         static const std::string WPA_WPA2  = "4";
         static const std::string WPA2_TKIP = "5";
-    };
+    }
 
     namespace TYPE_NETWORK_DHCP {
         static const std::string DISABLED = "0";
         static const std::string ENABLED  = "1";
-    };
+    }
 
     namespace TYPE_NETWORK_IP_VERSION {
         static const std::string IPV4 = "0";
         static const std::string IPV6 = "1";
-    };
+    }
 
     namespace TYPE_NETWORK_AUTO_CONNECT {
         static const std::string DISABLED            = "0";
         static const std::string AUTO_JOIN           = "1";
         static const std::string AUTO_RECONNECT      = "2";
         static const std::string AUTO_JOIN_RECONNECT = "3";
-    };
+    }
 
     namespace TYPE_AUTHORIZATION {
         static const std::string OPEN   = "0";
         static const std::string SHARED = "1";
-    };
+    }
 
     namespace TYPE_IGMP_GROUP {
         static const std::string LEAVE = "0";
         static const std::string JOIN  = "1";
-    };
+    }
 
     namespace TYPE_WPS_PIN_PBC {
         static const std::string PIN = "0";
         static const std::string PBC = "1";
-    };
+    }
 
     // DNS COMMANDS
     static const std::string CMD_DNS_LOOKUP          = "D0=";
@@ -169,17 +172,17 @@ namespace ISMConstants {
         static const std::string PIN_BUTTON     = "2";
         static const std::string PIN_DIGITAL_IN = "3";
         static const std::string PIN_ADC        = "5";
-    };
+    }
 
     namespace TYPE_WRITE_GPIO_PIN {
         static const std::string PIN_LED = "1";
         static const std::string PIN_DIGITAL_OUT = "4";
-    };
+    }
 
     namespace TYPE_WRITE_GPIO_VALUE {
         static const std::string LOW = "0";
         static const std::string HIGH = "1";
-    };
+    }
 
     namespace TYPE_GPIO_SETUP {
         static const std::string PIN_LED         = "1";
@@ -187,7 +190,7 @@ namespace ISMConstants {
         static const std::string PIN_DIGITAL_IN  = "3";
         static const std::string PIN_DIGITAL_OUT = "4";
         static const std::string PIN_ADC         = "5";
-    };
+    }
 
     // SOFTWARE AND CONFIGURATION INFORMATION
     static const std::string CMD_IS_ENDPOINT_CONFIGURED       = "IC=";
@@ -204,12 +207,12 @@ namespace ISMConstants {
     namespace TYPE_SUPPRESS_ASYNC {
         static const std::string DISABLED = "0";
         static const std::string SUPPRESS = "1";
-    };
+    }
 
     namespace TYPE_MESSAGE_TYPE {
         static const std::string DISABLED = "0";
         static const std::string SIMPLE   = "1";
-    };
+    }
 
     // TRANSPORT COMMUNICATION
     static const std::string CMD_GET_COMMUNICATION_SOCKET             = "P0";
@@ -244,26 +247,26 @@ namespace ISMConstants {
         static const std::string UDP_LITE_ENABLED = "2";
         static const std::string TCP_SSL          = "3";
         static const std::string MQTT             = "4";
-    };
+    }
 
     namespace TYPE_TRANSPORT_SERVER_MODE {
         static const std::string SERVER_DISABLE            = "0";
         static const std::string SERVER_ENABLE             = "1";
         static const std::string MULTI_ACCEPT_CLOSE_SOCKET = "10";
         static const std::string MULTI_ACCEPT_ENABLE       = "11";
-    };
+    }
 
     namespace TYPE_TRANSPORT_CLIENT {
         static const std::string DISABLE = "0";
         static const std::string ENABLE  = "1";
-    };
+    }
 
     namespace TYPE_REQUEST_TCP_LOOP {
         static const std::string STOP            = "0";
         static const std::string START           = "1";
         static const std::string CLOSE_SOCKET    = "2";
         static const std::string NEXT_CONNECTION = "3";
-    };
+    }
 
     // RECEIVE TRANSPORT DATA
     static const std::string CMD_READ_TRANSPORT_DATA            = "R0";
@@ -275,7 +278,7 @@ namespace ISMConstants {
     namespace TYPE_RECEIVE_MODE {
         static const std::string NORMAL        = "0";
         static const std::string NO_DELIEATION = "1";
-    };
+    }
 
     // WRITE TRANSPORT DATA
     static const std::string CMD_WRITE_TRANSPORT_DATA            = "S0";
@@ -327,7 +330,7 @@ namespace ISMConstants {
 
         NumStates = 4 // DONT USE
     };
-};
+}
 
 class ISM43340 : public GenericRadio {
 public:
@@ -427,7 +430,7 @@ private:
 
     DigitalOut nCs;
     DigitalOut nReset;
-    pin_name dataReady;
+    PinName dataReady;
 
     // Current socket selected on the device
     enum SOCKET_TYPE { SEND = 0, RECEIVE = 1 };

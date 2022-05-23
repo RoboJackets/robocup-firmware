@@ -1,8 +1,4 @@
 #include "modules/FPGAModule.hpp"
-#include "iodefs.h"
-
-#include <cmath>
-#include <delay.h>
 
 using namespace std::literals;
 

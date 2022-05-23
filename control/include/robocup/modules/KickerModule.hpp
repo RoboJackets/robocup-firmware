@@ -1,10 +1,9 @@
 #pragma once
 
-#include "LockedStruct.hpp"
 #include "GenericModule.hpp"
-#include "DigitalOut.hpp"
-#include "MicroPackets.hpp" 
 #include "drivers/KickerBoard.hpp"
+#include <cstdio>
+
 
 /**
  * Module interfacing with Kicker and handling Kicker status

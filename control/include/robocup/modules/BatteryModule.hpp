@@ -1,9 +1,7 @@
 #pragma once
 
-#include <LockedStruct.hpp>
 #include "GenericModule.hpp"
-#include "MicroPackets.hpp" 
-
+#include <memory>
 #include "drivers/Battery.hpp"
 
 /**

@@ -1,5 +1,4 @@
 #include "modules/LEDModule.hpp"
-#include "iodefs.h"
 
 bool operator==(const Error& e1, const Error& e2) {
     return e1.led0 == e2.led0 && e1.led1 == e2.led1 && e1.led2 == e2.led2;

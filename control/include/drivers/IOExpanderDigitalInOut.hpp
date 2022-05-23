@@ -12,7 +12,7 @@ public:
     /// Other constructors for creating objects for pinouts
     IOExpanderDigitalInOut(LockedStruct<MCP23017>& mcp, MCP23017::ExpPinName pin,
                            MCP23017::PinMode mode, bool state = false)
-        : _pin(pin), _mcp23017(mcp), _mode(mode), _state(state) {
+        : _pin(pin), _mode(mode), _state(state), _mcp23017(mcp) {
     }
 
     void init() {

@@ -493,7 +493,6 @@ begin : SPI_SLAVE_LOAD_RESPONSE_BUFFER
                     begin : LATCH_GIT_HASH1
                         spi_slave_res_buf[j+1]    <=  (`GIT_VERSION_HASH >> (8 * j)) & 'hFF;
                     end
-                    spi_slave_res_buf[11] <= `GIT_VERSION_DIRTY;
                 end
 
                 CMD_VERSION2 :
@@ -502,7 +501,6 @@ begin : SPI_SLAVE_LOAD_RESPONSE_BUFFER
                     begin : LATCH_GIT_HASH2
                         spi_slave_res_buf[j+1]    <=  (`GIT_VERSION_HASH >> (8 * (10 + j))) & 'hFF;
                     end
-                    spi_slave_res_buf[11] <= `GIT_VERSION_DIRTY;
                 end
 `endif
                 CMD_GATE_DRV_STATUS :

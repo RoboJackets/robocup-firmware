@@ -1,10 +1,4 @@
 #include "drivers/KickerBoard.hpp"
-#include "kicker_bin.h"
-
-#include "delay.h"
-#include <tuple>
-#include <string>
-#include <cstdio>
 
 using namespace std;
 

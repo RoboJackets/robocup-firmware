@@ -1,4 +1,4 @@
-# What on the robot isn’t working? (Error LED guide)
+# Robot Error LED Guide
 
 |Color | LED1 (Module) | LED2 (Level) | LED3 (Info)|
 |------|---------------|--------------|------------|

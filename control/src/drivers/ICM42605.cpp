@@ -1,5 +1,4 @@
 #include "drivers/ICM42605.hpp"
-#include <cmath>
 
 #define READ_BIT (1 << 7)
 
@@ -159,7 +158,6 @@ bool ICM42605::initialize() {
         printf("[ERROR] Failed to connect to IMU.");
         return false;
     } else {
-        printf("[INFO] Initialization Complete!");
         return true;
     }
 }

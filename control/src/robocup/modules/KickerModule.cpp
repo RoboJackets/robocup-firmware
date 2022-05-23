@@ -1,9 +1,5 @@
 #include "modules/KickerModule.hpp"
 
-#include "mtrain.hpp"
-#include "iodefs.h"
-#include <cstdio>
-
 KickerModule::KickerModule(LockedStruct<SPI>& spi,
                            LockedStruct<KickerCommand>& kickerCommand,
                            LockedStruct<KickerInfo>& kickerInfo)

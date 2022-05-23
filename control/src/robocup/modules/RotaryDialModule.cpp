@@ -1,5 +1,4 @@
 #include "modules/RotaryDialModule.hpp"
-#include "iodefs.h"
 
 RotaryDialModule::RotaryDialModule(LockedStruct<MCP23017>& ioExpander, LockedStruct<RobotID>& robotID)
     : GenericModule(kPeriod, "dial", kPriority), robotID(robotID), dial({

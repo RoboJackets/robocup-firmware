@@ -1,6 +1,5 @@
 # Build system
 cmake
-ccache
 python3
 
 # Docs
@@ -11,8 +10,10 @@ graphviz
 gcc-arm-none-eabi
 gdb-multiarch
 libeigen3-dev
+minicom
 
 # AVR
+gcc-avr
 avr-libc
 avrdude
 

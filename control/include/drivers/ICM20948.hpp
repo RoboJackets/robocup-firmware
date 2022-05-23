@@ -1,10 +1,9 @@
 #pragma once
 
-#include "mtrain.hpp"
-#include "SPI.hpp"
-#include "LockedStruct.hpp"
+#include "common.hpp"
 #include <memory>
 #include <vector>
+#include <cmath>
 
 class ICM20948 {
 public:
@@ -33,4 +32,3 @@ private:
 
     int last_bank = 0;
 };
-

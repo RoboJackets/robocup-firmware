@@ -1,32 +1,18 @@
-# mTrain Flashing and Debugging
+# mTrain Flashing
 
-# Flashing code to the mTrain
 ## Intro
-The mTrain on boot runs the user program located at the predetermined memory address 0x0800000
-We flash code to this address using the J-Link in-order to be executed.
+The mTrain on boot runs the user program located at the predetermined memory address `0x0800000`. We flash code to this address using the J-Link tool in-order for the code to be executed by the mTrain.
 
 ## Installing J-Link Software
-The J-Link software can be downloaded at:
-https://www.segger.com/downloads/jlink/JLink_Linux_x86_64.deb
-
-Provided that file was stored in your downloads folder you can use the below to install the package:
-```
-sudo dpkg -i ~/Downloads/JLink_Linux_VXXXX_x86_64.deb
-sudo apt install -f
-```
-
-NOTE The name of the exact file may be slightly different depending on what version you downloaded so copying and pasting the above may not work.
-
-After installing the J-Link software package please restart your terminal emulator and try to tab complete and open the program JLinkExe. If you are successful you will be greeted by the following or newer:
+The J-Link software can be downloaded at https://www.segger.com/downloads/jlink/ for your operating system. Once you have installed it, you can run the command `jlinkexe` in your terminal and should see the following or newer:
 
 ```
-SEGGER J-Link Commander V6.56 (Compiled Nov 22 2019 17:14:15)
-DLL version V6.56, compiled Nov 22 2019 17:14:02
+SEGGER J-Link Commander V7.60h (Compiled Feb  9 2022 14:10:53)
+DLL version V7.60h, compiled Feb  9 2022 14:10:46
 ```
+Use `exit` to leave JLinkExe.
 
-Followed by a can not connect error if the J-Link is not connected. Close JLinkExe with exit.
-
-## Setup The JLink Unit
+## Using the J-Link
 Plug in the JLink unit to a usb port on your computer
 Attach the ARM-JTAG-20-10 connector to the 20 pin connector side of the J-Link unit.
 
@@ -38,10 +24,11 @@ TODO attach picture here of JLink header and where it connects on the mTrain
 The mini usb powers the mTrain if its not receiving power from the board so it should light up after this.
 
 ## Flashing code to the mTrain
-If you have not already setup robocup-firmware to build do that now (following the guide in getting started).
+See the setup process [here](../README.md) if necessary.
+
 To build it again run the following:
 ```
-make all
+make
 ```
 
 After building navigate to the top level of the robojackets firmware repo. Then navigate to the build location of the robocup binaries:
@@ -65,7 +52,7 @@ To program the mtrain use:
 loadbin ./control.bin 0x08000000
 ```
 
-You should now see a progress bar for erasing flash and subsequently flashing memory. After this completes your are done and can exit J-Link. Restart the mTrain with the push button on top of the module and your code should now be running.
+You should now see a progress bar for erasing flash and subsequently flashing memory. After this completes, you are done and can exit J-Link using `exit`. Restart the mTrain with the push button on top of the module and your code should now be running.
 
 
 # Debugging mTrain
@@ -78,12 +65,11 @@ All of the above assumes we are running the program on the same computer we are 
 1. Follow the steps outlined above for flashing code to the mTrain expect running make clean before you start and running make debug instead of make all
 2. Run the following to start the gdb server on the J-Link:
 ```
-JLinkGDBServer -select USB -device STM32F769NI -endian little -if JTAG -speed auto -noLocalhostOnly
+JLinkGDBServer -select USB -device STM32F769NI -endian little -if JTAG -speed auto -noLocalhostOnly -ir
 ```
 3. In another terminal you will need to run the version provided with the GnuArmNoneToolchainInstaller package that was install as part of the firmware setup script, with the file to load being the control.elf we built. When run from the bin folder in ./control/build/ this would look like:
 ```
 arm-none-eabi-gdb ./control.elf
-
 ```
 Replacing the <user-specific-hash> section with whatever it is your on your system. It may be easier to navigate to this directory on your system tab completing whatever you dont know from this since there should only be one folder and the use pwd and copy the path.
 

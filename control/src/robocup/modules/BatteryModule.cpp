@@ -1,6 +1,4 @@
 #include "modules/BatteryModule.hpp"
-#include "mtrain.hpp"
-#include <memory>
 
 using namespace std::literals;
 
@@ -25,6 +23,6 @@ void BatteryModule::entry(void) {
     auto batteryLock = batteryVoltage.lock();
     batteryLock->isValid = true;
     batteryLock->lastUpdate = HAL_GetTick();
-    batteryLock->rawVoltage = battery.getRaw();
+    batteryLock->rawVoltage = battery.getRawVoltage();
     batteryLock->isCritical = battery.isBattCritical();
 }
