@@ -2,16 +2,15 @@
 #define __BSP_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
+#include "qspi.h"
 #include "stm32f7xx_hal.h"
-
-#include "usbd_core.h"
-#include "usbd_desc.h"
 #include "usbd_cdc.h"
 #include "usbd_cdc_interface.h"
-#include "qspi.h"
+#include "usbd_core.h"
+#include "usbd_desc.h"
 
 extern void bsp_config(void);
 

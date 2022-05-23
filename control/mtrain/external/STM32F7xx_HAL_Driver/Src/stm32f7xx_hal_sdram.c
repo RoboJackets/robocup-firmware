@@ -59,11 +59,11 @@
        (++) HAL_SDRAM_Read()/HAL_SDRAM_Write() for polling read/write access
        (++) HAL_SDRAM_Read_DMA()/HAL_SDRAM_Write_DMA() for DMA read/write transfer
 
-   (#) You can also control the SDRAM device by calling the control APIs HAL_SDRAM_WriteOperation_Enable()/
-       HAL_SDRAM_WriteOperation_Disable() to respectively enable/disable the SDRAM write operation or
-       the function HAL_SDRAM_SendCommand() to send a specified command to the SDRAM
-       device. The command to be sent must be configured with the FMC_SDRAM_CommandTypeDef
-       structure.
+   (#) You can also control the SDRAM device by calling the control APIs
+  HAL_SDRAM_WriteOperation_Enable()/ HAL_SDRAM_WriteOperation_Disable() to respectively
+  enable/disable the SDRAM write operation or the function HAL_SDRAM_SendCommand() to send a
+  specified command to the SDRAM device. The command to be sent must be configured with the
+  FMC_SDRAM_CommandTypeDef structure.
 
    (#) You can continuously monitor the SDRAM device HAL state by calling the function
        HAL_SDRAM_GetState()
@@ -114,31 +114,30 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f7xx_hal.h"
 
-
 /** @addtogroup STM32F7xx_HAL_Driver
-  * @{
-  */
+ * @{
+ */
 
 #ifdef HAL_SDRAM_MODULE_ENABLED
 
 /** @defgroup SDRAM SDRAM
-  * @brief SDRAM driver modules
-  * @{
-  */
+ * @brief SDRAM driver modules
+ * @{
+ */
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
-static void SDRAM_DMACplt(DMA_HandleTypeDef *hdma);
-static void SDRAM_DMACpltProt(DMA_HandleTypeDef *hdma);
-static void SDRAM_DMAError(DMA_HandleTypeDef *hdma);
+static void SDRAM_DMACplt(DMA_HandleTypeDef* hdma);
+static void SDRAM_DMACpltProt(DMA_HandleTypeDef* hdma);
+static void SDRAM_DMAError(DMA_HandleTypeDef* hdma);
 
 /* Exported functions --------------------------------------------------------*/
 /** @defgroup SDRAM_Exported_Functions SDRAM Exported Functions
-  * @{
-  */
+ * @{
+ */
 
 /** @defgroup SDRAM_Exported_Functions_Group1 Initialization and de-initialization functions
   * @brief    Initialization and Configuration functions
@@ -156,193 +155,180 @@ static void SDRAM_DMAError(DMA_HandleTypeDef *hdma);
   */
 
 /**
-  * @brief  Performs the SDRAM device initialization sequence.
-  * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
-  *                the configuration information for SDRAM module.
-  * @param  Timing Pointer to SDRAM control timing structure
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_SDRAM_Init(SDRAM_HandleTypeDef *hsdram, FMC_SDRAM_TimingTypeDef *Timing)
-{
-  /* Check the SDRAM handle parameter */
-  if (hsdram == NULL)
-  {
-    return HAL_ERROR;
-  }
-
-  if (hsdram->State == HAL_SDRAM_STATE_RESET)
-  {
-    /* Allocate lock resource and initialize it */
-    hsdram->Lock = HAL_UNLOCKED;
-#if (USE_HAL_SDRAM_REGISTER_CALLBACKS == 1)
-    if (hsdram->MspInitCallback == NULL)
-    {
-      hsdram->MspInitCallback = HAL_SDRAM_MspInit;
+ * @brief  Performs the SDRAM device initialization sequence.
+ * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
+ *                the configuration information for SDRAM module.
+ * @param  Timing Pointer to SDRAM control timing structure
+ * @retval HAL status
+ */
+HAL_StatusTypeDef HAL_SDRAM_Init(SDRAM_HandleTypeDef* hsdram, FMC_SDRAM_TimingTypeDef* Timing) {
+    /* Check the SDRAM handle parameter */
+    if (hsdram == NULL) {
+        return HAL_ERROR;
     }
-    hsdram->RefreshErrorCallback = HAL_SDRAM_RefreshErrorCallback;
-    hsdram->DmaXferCpltCallback = HAL_SDRAM_DMA_XferCpltCallback;
-    hsdram->DmaXferErrorCallback = HAL_SDRAM_DMA_XferErrorCallback;
 
-    /* Init the low level hardware */
-    hsdram->MspInitCallback(hsdram);
+    if (hsdram->State == HAL_SDRAM_STATE_RESET) {
+        /* Allocate lock resource and initialize it */
+        hsdram->Lock = HAL_UNLOCKED;
+#if (USE_HAL_SDRAM_REGISTER_CALLBACKS == 1)
+        if (hsdram->MspInitCallback == NULL) {
+            hsdram->MspInitCallback = HAL_SDRAM_MspInit;
+        }
+        hsdram->RefreshErrorCallback = HAL_SDRAM_RefreshErrorCallback;
+        hsdram->DmaXferCpltCallback = HAL_SDRAM_DMA_XferCpltCallback;
+        hsdram->DmaXferErrorCallback = HAL_SDRAM_DMA_XferErrorCallback;
+
+        /* Init the low level hardware */
+        hsdram->MspInitCallback(hsdram);
+#else
+        /* Initialize the low level hardware (MSP) */
+        HAL_SDRAM_MspInit(hsdram);
+#endif /* USE_HAL_SDRAM_REGISTER_CALLBACKS */
+    }
+
+    /* Initialize the SDRAM controller state */
+    hsdram->State = HAL_SDRAM_STATE_BUSY;
+
+    /* Initialize SDRAM control Interface */
+    (void)FMC_SDRAM_Init(hsdram->Instance, &(hsdram->Init));
+
+    /* Initialize SDRAM timing Interface */
+    (void)FMC_SDRAM_Timing_Init(hsdram->Instance, Timing, hsdram->Init.SDBank);
+    /* Update the SDRAM controller state */
+    hsdram->State = HAL_SDRAM_STATE_READY;
+
+    return HAL_OK;
+}
+
+/**
+ * @brief  Perform the SDRAM device initialization sequence.
+ * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
+ *                the configuration information for SDRAM module.
+ * @retval HAL status
+ */
+HAL_StatusTypeDef HAL_SDRAM_DeInit(SDRAM_HandleTypeDef* hsdram) {
+#if (USE_HAL_SDRAM_REGISTER_CALLBACKS == 1)
+    if (hsdram->MspDeInitCallback == NULL) {
+        hsdram->MspDeInitCallback = HAL_SDRAM_MspDeInit;
+    }
+
+    /* DeInit the low level hardware */
+    hsdram->MspDeInitCallback(hsdram);
 #else
     /* Initialize the low level hardware (MSP) */
-    HAL_SDRAM_MspInit(hsdram);
+    HAL_SDRAM_MspDeInit(hsdram);
 #endif /* USE_HAL_SDRAM_REGISTER_CALLBACKS */
-  }
 
-  /* Initialize the SDRAM controller state */
-  hsdram->State = HAL_SDRAM_STATE_BUSY;
+    /* Configure the SDRAM registers with their reset values */
+    (void)FMC_SDRAM_DeInit(hsdram->Instance, hsdram->Init.SDBank);
 
-  /* Initialize SDRAM control Interface */
-  (void)FMC_SDRAM_Init(hsdram->Instance, &(hsdram->Init));
+    /* Reset the SDRAM controller state */
+    hsdram->State = HAL_SDRAM_STATE_RESET;
 
-  /* Initialize SDRAM timing Interface */
-  (void)FMC_SDRAM_Timing_Init(hsdram->Instance, Timing, hsdram->Init.SDBank);
-  /* Update the SDRAM controller state */
-  hsdram->State = HAL_SDRAM_STATE_READY;
+    /* Release Lock */
+    __HAL_UNLOCK(hsdram);
 
-  return HAL_OK;
+    return HAL_OK;
 }
 
 /**
-  * @brief  Perform the SDRAM device initialization sequence.
-  * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
-  *                the configuration information for SDRAM module.
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_SDRAM_DeInit(SDRAM_HandleTypeDef *hsdram)
-{
+ * @brief  SDRAM MSP Init.
+ * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
+ *                the configuration information for SDRAM module.
+ * @retval None
+ */
+__weak void HAL_SDRAM_MspInit(SDRAM_HandleTypeDef* hsdram) {
+    /* Prevent unused argument(s) compilation warning */
+    UNUSED(hsdram);
+
+    /* NOTE: This function Should not be modified, when the callback is needed,
+              the HAL_SDRAM_MspInit could be implemented in the user file
+     */
+}
+
+/**
+ * @brief  SDRAM MSP DeInit.
+ * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
+ *                the configuration information for SDRAM module.
+ * @retval None
+ */
+__weak void HAL_SDRAM_MspDeInit(SDRAM_HandleTypeDef* hsdram) {
+    /* Prevent unused argument(s) compilation warning */
+    UNUSED(hsdram);
+
+    /* NOTE: This function Should not be modified, when the callback is needed,
+              the HAL_SDRAM_MspDeInit could be implemented in the user file
+     */
+}
+
+/**
+ * @brief  This function handles SDRAM refresh error interrupt request.
+ * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
+ *                the configuration information for SDRAM module.
+ * @retval HAL status
+ */
+void HAL_SDRAM_IRQHandler(SDRAM_HandleTypeDef* hsdram) {
+    /* Check SDRAM interrupt Rising edge flag */
+    if (__FMC_SDRAM_GET_FLAG(hsdram->Instance, FMC_SDRAM_FLAG_REFRESH_IT)) {
+        /* SDRAM refresh error interrupt callback */
 #if (USE_HAL_SDRAM_REGISTER_CALLBACKS == 1)
-  if (hsdram->MspDeInitCallback == NULL)
-  {
-    hsdram->MspDeInitCallback = HAL_SDRAM_MspDeInit;
-  }
-
-  /* DeInit the low level hardware */
-  hsdram->MspDeInitCallback(hsdram);
+        hsdram->RefreshErrorCallback(hsdram);
 #else
-  /* Initialize the low level hardware (MSP) */
-  HAL_SDRAM_MspDeInit(hsdram);
+        HAL_SDRAM_RefreshErrorCallback(hsdram);
 #endif /* USE_HAL_SDRAM_REGISTER_CALLBACKS */
 
-  /* Configure the SDRAM registers with their reset values */
-  (void)FMC_SDRAM_DeInit(hsdram->Instance, hsdram->Init.SDBank);
-
-  /* Reset the SDRAM controller state */
-  hsdram->State = HAL_SDRAM_STATE_RESET;
-
-  /* Release Lock */
-  __HAL_UNLOCK(hsdram);
-
-  return HAL_OK;
+        /* Clear SDRAM refresh error interrupt pending bit */
+        __FMC_SDRAM_CLEAR_FLAG(hsdram->Instance, FMC_SDRAM_FLAG_REFRESH_ERROR);
+    }
 }
 
 /**
-  * @brief  SDRAM MSP Init.
-  * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
-  *                the configuration information for SDRAM module.
-  * @retval None
-  */
-__weak void HAL_SDRAM_MspInit(SDRAM_HandleTypeDef *hsdram)
-{
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hsdram);
+ * @brief  SDRAM Refresh error callback.
+ * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
+ *                the configuration information for SDRAM module.
+ * @retval None
+ */
+__weak void HAL_SDRAM_RefreshErrorCallback(SDRAM_HandleTypeDef* hsdram) {
+    /* Prevent unused argument(s) compilation warning */
+    UNUSED(hsdram);
 
-  /* NOTE: This function Should not be modified, when the callback is needed,
-            the HAL_SDRAM_MspInit could be implemented in the user file
-   */
+    /* NOTE: This function Should not be modified, when the callback is needed,
+              the HAL_SDRAM_RefreshErrorCallback could be implemented in the user file
+     */
 }
 
 /**
-  * @brief  SDRAM MSP DeInit.
-  * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
-  *                the configuration information for SDRAM module.
-  * @retval None
-  */
-__weak void HAL_SDRAM_MspDeInit(SDRAM_HandleTypeDef *hsdram)
-{
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hsdram);
+ * @brief  DMA transfer complete callback.
+ * @param  hdma pointer to a DMA_HandleTypeDef structure that contains
+ *                the configuration information for the specified DMA module.
+ * @retval None
+ */
+__weak void HAL_SDRAM_DMA_XferCpltCallback(DMA_HandleTypeDef* hdma) {
+    /* Prevent unused argument(s) compilation warning */
+    UNUSED(hdma);
 
-  /* NOTE: This function Should not be modified, when the callback is needed,
-            the HAL_SDRAM_MspDeInit could be implemented in the user file
-   */
+    /* NOTE: This function Should not be modified, when the callback is needed,
+              the HAL_SDRAM_DMA_XferCpltCallback could be implemented in the user file
+     */
 }
 
 /**
-  * @brief  This function handles SDRAM refresh error interrupt request.
-  * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
-  *                the configuration information for SDRAM module.
-  * @retval HAL status
-  */
-void HAL_SDRAM_IRQHandler(SDRAM_HandleTypeDef *hsdram)
-{
-  /* Check SDRAM interrupt Rising edge flag */
-  if (__FMC_SDRAM_GET_FLAG(hsdram->Instance, FMC_SDRAM_FLAG_REFRESH_IT))
-  {
-    /* SDRAM refresh error interrupt callback */
-#if (USE_HAL_SDRAM_REGISTER_CALLBACKS == 1)
-    hsdram->RefreshErrorCallback(hsdram);
-#else
-    HAL_SDRAM_RefreshErrorCallback(hsdram);
-#endif /* USE_HAL_SDRAM_REGISTER_CALLBACKS */
+ * @brief  DMA transfer complete error callback.
+ * @param  hdma DMA handle
+ * @retval None
+ */
+__weak void HAL_SDRAM_DMA_XferErrorCallback(DMA_HandleTypeDef* hdma) {
+    /* Prevent unused argument(s) compilation warning */
+    UNUSED(hdma);
 
-    /* Clear SDRAM refresh error interrupt pending bit */
-    __FMC_SDRAM_CLEAR_FLAG(hsdram->Instance, FMC_SDRAM_FLAG_REFRESH_ERROR);
-  }
+    /* NOTE: This function Should not be modified, when the callback is needed,
+              the HAL_SDRAM_DMA_XferErrorCallback could be implemented in the user file
+     */
 }
 
 /**
-  * @brief  SDRAM Refresh error callback.
-  * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
-  *                the configuration information for SDRAM module.
-  * @retval None
-  */
-__weak void HAL_SDRAM_RefreshErrorCallback(SDRAM_HandleTypeDef *hsdram)
-{
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hsdram);
-
-  /* NOTE: This function Should not be modified, when the callback is needed,
-            the HAL_SDRAM_RefreshErrorCallback could be implemented in the user file
-   */
-}
-
-/**
-  * @brief  DMA transfer complete callback.
-  * @param  hdma pointer to a DMA_HandleTypeDef structure that contains
-  *                the configuration information for the specified DMA module.
-  * @retval None
-  */
-__weak void HAL_SDRAM_DMA_XferCpltCallback(DMA_HandleTypeDef *hdma)
-{
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hdma);
-
-  /* NOTE: This function Should not be modified, when the callback is needed,
-            the HAL_SDRAM_DMA_XferCpltCallback could be implemented in the user file
-   */
-}
-
-/**
-  * @brief  DMA transfer complete error callback.
-  * @param  hdma DMA handle
-  * @retval None
-  */
-__weak void HAL_SDRAM_DMA_XferErrorCallback(DMA_HandleTypeDef *hdma)
-{
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hdma);
-
-  /* NOTE: This function Should not be modified, when the callback is needed,
-            the HAL_SDRAM_DMA_XferErrorCallback could be implemented in the user file
-   */
-}
-
-/**
-  * @}
-  */
+ * @}
+ */
 
 /** @defgroup SDRAM_Exported_Functions_Group2 Input and Output functions
   * @brief    Input Output and memory control functions
@@ -359,633 +345,557 @@ __weak void HAL_SDRAM_DMA_XferErrorCallback(DMA_HandleTypeDef *hdma)
   */
 
 /**
-  * @brief  Reads 8-bit data buffer from the SDRAM memory.
-  * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
-  *                the configuration information for SDRAM module.
-  * @param  pAddress Pointer to read start address
-  * @param  pDstBuffer Pointer to destination buffer
-  * @param  BufferSize Size of the buffer to read from memory
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_SDRAM_Read_8b(SDRAM_HandleTypeDef *hsdram, uint32_t *pAddress, uint8_t *pDstBuffer,
-                                    uint32_t BufferSize)
-{
-  uint32_t size;
-  __IO uint8_t *pSdramAddress = (uint8_t *)pAddress;
-  uint8_t *pdestbuff = pDstBuffer;
-  HAL_SDRAM_StateTypeDef state = hsdram->State;
+ * @brief  Reads 8-bit data buffer from the SDRAM memory.
+ * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
+ *                the configuration information for SDRAM module.
+ * @param  pAddress Pointer to read start address
+ * @param  pDstBuffer Pointer to destination buffer
+ * @param  BufferSize Size of the buffer to read from memory
+ * @retval HAL status
+ */
+HAL_StatusTypeDef HAL_SDRAM_Read_8b(SDRAM_HandleTypeDef* hsdram, uint32_t* pAddress,
+                                    uint8_t* pDstBuffer, uint32_t BufferSize) {
+    uint32_t size;
+    __IO uint8_t* pSdramAddress = (uint8_t*)pAddress;
+    uint8_t* pdestbuff = pDstBuffer;
+    HAL_SDRAM_StateTypeDef state = hsdram->State;
 
-  /* Check the SDRAM controller state */
-  if (state == HAL_SDRAM_STATE_BUSY)
-  {
-    return HAL_BUSY;
-  }
-  else if ((state == HAL_SDRAM_STATE_READY) || (state == HAL_SDRAM_STATE_WRITE_PROTECTED))
-  {
-    /* Process Locked */
-    __HAL_LOCK(hsdram);
+    /* Check the SDRAM controller state */
+    if (state == HAL_SDRAM_STATE_BUSY) {
+        return HAL_BUSY;
+    } else if ((state == HAL_SDRAM_STATE_READY) || (state == HAL_SDRAM_STATE_WRITE_PROTECTED)) {
+        /* Process Locked */
+        __HAL_LOCK(hsdram);
 
-    /* Update the SDRAM controller state */
-    hsdram->State = HAL_SDRAM_STATE_BUSY;
+        /* Update the SDRAM controller state */
+        hsdram->State = HAL_SDRAM_STATE_BUSY;
 
-    /* Read data from source */
-    for (size = BufferSize; size != 0U; size--)
-    {
-      *pdestbuff = *(__IO uint8_t *)pSdramAddress;
-      pdestbuff++;
-      pSdramAddress++;
+        /* Read data from source */
+        for (size = BufferSize; size != 0U; size--) {
+            *pdestbuff = *(__IO uint8_t*)pSdramAddress;
+            pdestbuff++;
+            pSdramAddress++;
+        }
+
+        /* Update the SDRAM controller state */
+        hsdram->State = state;
+
+        /* Process Unlocked */
+        __HAL_UNLOCK(hsdram);
+    } else {
+        return HAL_ERROR;
     }
 
-    /* Update the SDRAM controller state */
-    hsdram->State = state;
-
-    /* Process Unlocked */
-    __HAL_UNLOCK(hsdram);
-  }
-  else
-  {
-    return  HAL_ERROR;
-  }
-
-  return HAL_OK;
+    return HAL_OK;
 }
 
 /**
-  * @brief  Writes 8-bit data buffer to SDRAM memory.
-  * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
-  *                the configuration information for SDRAM module.
-  * @param  pAddress Pointer to write start address
-  * @param  pSrcBuffer Pointer to source buffer to write
-  * @param  BufferSize Size of the buffer to write to memory
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_SDRAM_Write_8b(SDRAM_HandleTypeDef *hsdram, uint32_t *pAddress, uint8_t *pSrcBuffer,
-                                     uint32_t BufferSize)
-{
-  uint32_t size;
-  __IO uint8_t *pSdramAddress = (uint8_t *)pAddress;
-  uint8_t *psrcbuff = pSrcBuffer;
+ * @brief  Writes 8-bit data buffer to SDRAM memory.
+ * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
+ *                the configuration information for SDRAM module.
+ * @param  pAddress Pointer to write start address
+ * @param  pSrcBuffer Pointer to source buffer to write
+ * @param  BufferSize Size of the buffer to write to memory
+ * @retval HAL status
+ */
+HAL_StatusTypeDef HAL_SDRAM_Write_8b(SDRAM_HandleTypeDef* hsdram, uint32_t* pAddress,
+                                     uint8_t* pSrcBuffer, uint32_t BufferSize) {
+    uint32_t size;
+    __IO uint8_t* pSdramAddress = (uint8_t*)pAddress;
+    uint8_t* psrcbuff = pSrcBuffer;
 
-  /* Check the SDRAM controller state */
-  if (hsdram->State == HAL_SDRAM_STATE_BUSY)
-  {
-    return HAL_BUSY;
-  }
-  else if (hsdram->State == HAL_SDRAM_STATE_READY)
-  {
-    /* Process Locked */
-    __HAL_LOCK(hsdram);
+    /* Check the SDRAM controller state */
+    if (hsdram->State == HAL_SDRAM_STATE_BUSY) {
+        return HAL_BUSY;
+    } else if (hsdram->State == HAL_SDRAM_STATE_READY) {
+        /* Process Locked */
+        __HAL_LOCK(hsdram);
 
-    /* Update the SDRAM controller state */
-    hsdram->State = HAL_SDRAM_STATE_BUSY;
+        /* Update the SDRAM controller state */
+        hsdram->State = HAL_SDRAM_STATE_BUSY;
 
-    /* Write data to memory */
-    for (size = BufferSize; size != 0U; size--)
-    {
-      *(__IO uint8_t *)pSdramAddress = *psrcbuff;
-      psrcbuff++;
-      pSdramAddress++;
+        /* Write data to memory */
+        for (size = BufferSize; size != 0U; size--) {
+            *(__IO uint8_t*)pSdramAddress = *psrcbuff;
+            psrcbuff++;
+            pSdramAddress++;
+        }
+
+        /* Update the SDRAM controller state */
+        hsdram->State = HAL_SDRAM_STATE_READY;
+
+        /* Process Unlocked */
+        __HAL_UNLOCK(hsdram);
+    } else {
+        return HAL_ERROR;
     }
 
-    /* Update the SDRAM controller state */
-    hsdram->State = HAL_SDRAM_STATE_READY;
-
-    /* Process Unlocked */
-    __HAL_UNLOCK(hsdram);
-  }
-  else
-  {
-    return  HAL_ERROR;
-  }
-
-  return HAL_OK;
+    return HAL_OK;
 }
 
 /**
-  * @brief  Reads 16-bit data buffer from the SDRAM memory.
-  * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
-  *                the configuration information for SDRAM module.
-  * @param  pAddress Pointer to read start address
-  * @param  pDstBuffer Pointer to destination buffer
-  * @param  BufferSize Size of the buffer to read from memory
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_SDRAM_Read_16b(SDRAM_HandleTypeDef *hsdram, uint32_t *pAddress, uint16_t *pDstBuffer,
-                                     uint32_t BufferSize)
-{
-  uint32_t size;
-  __IO uint32_t *pSdramAddress = pAddress;
-  uint16_t *pdestbuff = pDstBuffer;
-  HAL_SDRAM_StateTypeDef state = hsdram->State;
+ * @brief  Reads 16-bit data buffer from the SDRAM memory.
+ * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
+ *                the configuration information for SDRAM module.
+ * @param  pAddress Pointer to read start address
+ * @param  pDstBuffer Pointer to destination buffer
+ * @param  BufferSize Size of the buffer to read from memory
+ * @retval HAL status
+ */
+HAL_StatusTypeDef HAL_SDRAM_Read_16b(SDRAM_HandleTypeDef* hsdram, uint32_t* pAddress,
+                                     uint16_t* pDstBuffer, uint32_t BufferSize) {
+    uint32_t size;
+    __IO uint32_t* pSdramAddress = pAddress;
+    uint16_t* pdestbuff = pDstBuffer;
+    HAL_SDRAM_StateTypeDef state = hsdram->State;
 
-  /* Check the SDRAM controller state */
-  if (state == HAL_SDRAM_STATE_BUSY)
-  {
-    return HAL_BUSY;
-  }
-  else if ((state == HAL_SDRAM_STATE_READY) || (state == HAL_SDRAM_STATE_WRITE_PROTECTED))
-  {
-    /* Process Locked */
-    __HAL_LOCK(hsdram);
+    /* Check the SDRAM controller state */
+    if (state == HAL_SDRAM_STATE_BUSY) {
+        return HAL_BUSY;
+    } else if ((state == HAL_SDRAM_STATE_READY) || (state == HAL_SDRAM_STATE_WRITE_PROTECTED)) {
+        /* Process Locked */
+        __HAL_LOCK(hsdram);
 
-    /* Update the SDRAM controller state */
-    hsdram->State = HAL_SDRAM_STATE_BUSY;
+        /* Update the SDRAM controller state */
+        hsdram->State = HAL_SDRAM_STATE_BUSY;
 
-    /* Read data from memory */
-    for (size = BufferSize; size >= 2U ; size -= 2U)
-    {
-      *pdestbuff = (uint16_t)((*pSdramAddress) & 0x0000FFFFU);
-      pdestbuff++;
-      *pdestbuff = (uint16_t)(((*pSdramAddress) & 0xFFFF0000U) >> 16U);
-      pdestbuff++;
-      pSdramAddress++;
+        /* Read data from memory */
+        for (size = BufferSize; size >= 2U; size -= 2U) {
+            *pdestbuff = (uint16_t)((*pSdramAddress) & 0x0000FFFFU);
+            pdestbuff++;
+            *pdestbuff = (uint16_t)(((*pSdramAddress) & 0xFFFF0000U) >> 16U);
+            pdestbuff++;
+            pSdramAddress++;
+        }
+
+        /* Read last 16-bits if size is not 32-bits multiple */
+        if ((BufferSize % 2U) != 0U) {
+            *pdestbuff = (uint16_t)((*pSdramAddress) & 0x0000FFFFU);
+        }
+
+        /* Update the SDRAM controller state */
+        hsdram->State = state;
+
+        /* Process Unlocked */
+        __HAL_UNLOCK(hsdram);
+    } else {
+        return HAL_ERROR;
     }
 
-    /* Read last 16-bits if size is not 32-bits multiple */
-    if ((BufferSize % 2U) != 0U)
-    {
-      *pdestbuff = (uint16_t)((*pSdramAddress) & 0x0000FFFFU);
-    }
-
-    /* Update the SDRAM controller state */
-    hsdram->State = state;
-
-    /* Process Unlocked */
-    __HAL_UNLOCK(hsdram);
-  }
-  else
-  {
-    return  HAL_ERROR;
-  }
-
-  return HAL_OK;
+    return HAL_OK;
 }
 
 /**
-  * @brief  Writes 16-bit data buffer to SDRAM memory.
-  * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
-  *                the configuration information for SDRAM module.
-  * @param  pAddress Pointer to write start address
-  * @param  pSrcBuffer Pointer to source buffer to write
-  * @param  BufferSize Size of the buffer to write to memory
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_SDRAM_Write_16b(SDRAM_HandleTypeDef *hsdram, uint32_t *pAddress, uint16_t *pSrcBuffer,
-                                      uint32_t BufferSize)
-{
-  uint32_t size;
-  __IO uint32_t *psdramaddress = pAddress;
-  uint16_t *psrcbuff = pSrcBuffer;
+ * @brief  Writes 16-bit data buffer to SDRAM memory.
+ * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
+ *                the configuration information for SDRAM module.
+ * @param  pAddress Pointer to write start address
+ * @param  pSrcBuffer Pointer to source buffer to write
+ * @param  BufferSize Size of the buffer to write to memory
+ * @retval HAL status
+ */
+HAL_StatusTypeDef HAL_SDRAM_Write_16b(SDRAM_HandleTypeDef* hsdram, uint32_t* pAddress,
+                                      uint16_t* pSrcBuffer, uint32_t BufferSize) {
+    uint32_t size;
+    __IO uint32_t* psdramaddress = pAddress;
+    uint16_t* psrcbuff = pSrcBuffer;
 
-  /* Check the SDRAM controller state */
-  if (hsdram->State == HAL_SDRAM_STATE_BUSY)
-  {
-    return HAL_BUSY;
-  }
-  else if (hsdram->State == HAL_SDRAM_STATE_READY)
-  {
-    /* Process Locked */
-    __HAL_LOCK(hsdram);
+    /* Check the SDRAM controller state */
+    if (hsdram->State == HAL_SDRAM_STATE_BUSY) {
+        return HAL_BUSY;
+    } else if (hsdram->State == HAL_SDRAM_STATE_READY) {
+        /* Process Locked */
+        __HAL_LOCK(hsdram);
 
-    /* Update the SDRAM controller state */
-    hsdram->State = HAL_SDRAM_STATE_BUSY;
+        /* Update the SDRAM controller state */
+        hsdram->State = HAL_SDRAM_STATE_BUSY;
 
-    /* Write data to memory */
-    for (size = BufferSize; size >= 2U ; size -= 2U)
-    {
-      *psdramaddress = (uint32_t)(*psrcbuff);
-      psrcbuff++;
-      *psdramaddress |= ((uint32_t)(*psrcbuff) << 16U);
-      psrcbuff++;
-      psdramaddress++;
+        /* Write data to memory */
+        for (size = BufferSize; size >= 2U; size -= 2U) {
+            *psdramaddress = (uint32_t)(*psrcbuff);
+            psrcbuff++;
+            *psdramaddress |= ((uint32_t)(*psrcbuff) << 16U);
+            psrcbuff++;
+            psdramaddress++;
+        }
+
+        /* Write last 16-bits if size is not 32-bits multiple */
+        if ((BufferSize % 2U) != 0U) {
+            *psdramaddress =
+                ((uint32_t)(*psrcbuff) & 0x0000FFFFU) | ((*psdramaddress) & 0xFFFF0000U);
+        }
+
+        /* Update the SDRAM controller state */
+        hsdram->State = HAL_SDRAM_STATE_READY;
+
+        /* Process Unlocked */
+        __HAL_UNLOCK(hsdram);
+    } else {
+        return HAL_ERROR;
     }
 
-    /* Write last 16-bits if size is not 32-bits multiple */
-    if ((BufferSize % 2U) != 0U)
-    {
-      *psdramaddress = ((uint32_t)(*psrcbuff) & 0x0000FFFFU) | ((*psdramaddress) & 0xFFFF0000U);
-    }
-
-    /* Update the SDRAM controller state */
-    hsdram->State = HAL_SDRAM_STATE_READY;
-
-    /* Process Unlocked */
-    __HAL_UNLOCK(hsdram);
-  }
-  else
-  {
-    return  HAL_ERROR;
-  }
-
-  return HAL_OK;
+    return HAL_OK;
 }
 
 /**
-  * @brief  Reads 32-bit data buffer from the SDRAM memory.
-  * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
-  *                the configuration information for SDRAM module.
-  * @param  pAddress Pointer to read start address
-  * @param  pDstBuffer Pointer to destination buffer
-  * @param  BufferSize Size of the buffer to read from memory
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_SDRAM_Read_32b(SDRAM_HandleTypeDef *hsdram, uint32_t *pAddress, uint32_t *pDstBuffer,
-                                     uint32_t BufferSize)
-{
-  uint32_t size;
-  __IO uint32_t *pSdramAddress = (uint32_t *)pAddress;
-  uint32_t *pdestbuff = pDstBuffer;
-  HAL_SDRAM_StateTypeDef state = hsdram->State;
+ * @brief  Reads 32-bit data buffer from the SDRAM memory.
+ * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
+ *                the configuration information for SDRAM module.
+ * @param  pAddress Pointer to read start address
+ * @param  pDstBuffer Pointer to destination buffer
+ * @param  BufferSize Size of the buffer to read from memory
+ * @retval HAL status
+ */
+HAL_StatusTypeDef HAL_SDRAM_Read_32b(SDRAM_HandleTypeDef* hsdram, uint32_t* pAddress,
+                                     uint32_t* pDstBuffer, uint32_t BufferSize) {
+    uint32_t size;
+    __IO uint32_t* pSdramAddress = (uint32_t*)pAddress;
+    uint32_t* pdestbuff = pDstBuffer;
+    HAL_SDRAM_StateTypeDef state = hsdram->State;
 
-  /* Check the SDRAM controller state */
-  if (state == HAL_SDRAM_STATE_BUSY)
-  {
-    return HAL_BUSY;
-  }
-  else if ((state == HAL_SDRAM_STATE_READY) || (state == HAL_SDRAM_STATE_WRITE_PROTECTED))
-  {
-    /* Process Locked */
-    __HAL_LOCK(hsdram);
+    /* Check the SDRAM controller state */
+    if (state == HAL_SDRAM_STATE_BUSY) {
+        return HAL_BUSY;
+    } else if ((state == HAL_SDRAM_STATE_READY) || (state == HAL_SDRAM_STATE_WRITE_PROTECTED)) {
+        /* Process Locked */
+        __HAL_LOCK(hsdram);
 
-    /* Update the SDRAM controller state */
-    hsdram->State = HAL_SDRAM_STATE_BUSY;
+        /* Update the SDRAM controller state */
+        hsdram->State = HAL_SDRAM_STATE_BUSY;
 
-    /* Read data from source */
-    for (size = BufferSize; size != 0U; size--)
-    {
-      *pdestbuff = *(__IO uint32_t *)pSdramAddress;
-      pdestbuff++;
-      pSdramAddress++;
+        /* Read data from source */
+        for (size = BufferSize; size != 0U; size--) {
+            *pdestbuff = *(__IO uint32_t*)pSdramAddress;
+            pdestbuff++;
+            pSdramAddress++;
+        }
+
+        /* Update the SDRAM controller state */
+        hsdram->State = state;
+
+        /* Process Unlocked */
+        __HAL_UNLOCK(hsdram);
+    } else {
+        return HAL_ERROR;
     }
 
-    /* Update the SDRAM controller state */
-    hsdram->State = state;
-
-    /* Process Unlocked */
-    __HAL_UNLOCK(hsdram);
-  }
-  else
-  {
-    return  HAL_ERROR;
-  }
-
-  return HAL_OK;
+    return HAL_OK;
 }
 
 /**
-  * @brief  Writes 32-bit data buffer to SDRAM memory.
-  * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
-  *                the configuration information for SDRAM module.
-  * @param  pAddress Pointer to write start address
-  * @param  pSrcBuffer Pointer to source buffer to write
-  * @param  BufferSize Size of the buffer to write to memory
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_SDRAM_Write_32b(SDRAM_HandleTypeDef *hsdram, uint32_t *pAddress, uint32_t *pSrcBuffer,
-                                      uint32_t BufferSize)
-{
-  uint32_t size;
-  __IO uint32_t *pSdramAddress = pAddress;
-  uint32_t *psrcbuff = pSrcBuffer;
+ * @brief  Writes 32-bit data buffer to SDRAM memory.
+ * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
+ *                the configuration information for SDRAM module.
+ * @param  pAddress Pointer to write start address
+ * @param  pSrcBuffer Pointer to source buffer to write
+ * @param  BufferSize Size of the buffer to write to memory
+ * @retval HAL status
+ */
+HAL_StatusTypeDef HAL_SDRAM_Write_32b(SDRAM_HandleTypeDef* hsdram, uint32_t* pAddress,
+                                      uint32_t* pSrcBuffer, uint32_t BufferSize) {
+    uint32_t size;
+    __IO uint32_t* pSdramAddress = pAddress;
+    uint32_t* psrcbuff = pSrcBuffer;
 
-  /* Check the SDRAM controller state */
-  if (hsdram->State == HAL_SDRAM_STATE_BUSY)
-  {
-    return HAL_BUSY;
-  }
-  else if (hsdram->State == HAL_SDRAM_STATE_READY)
-  {
-    /* Process Locked */
-    __HAL_LOCK(hsdram);
+    /* Check the SDRAM controller state */
+    if (hsdram->State == HAL_SDRAM_STATE_BUSY) {
+        return HAL_BUSY;
+    } else if (hsdram->State == HAL_SDRAM_STATE_READY) {
+        /* Process Locked */
+        __HAL_LOCK(hsdram);
 
-    /* Update the SDRAM controller state */
-    hsdram->State = HAL_SDRAM_STATE_BUSY;
+        /* Update the SDRAM controller state */
+        hsdram->State = HAL_SDRAM_STATE_BUSY;
 
-    /* Write data to memory */
-    for (size = BufferSize; size != 0U; size--)
-    {
-      *pSdramAddress = *psrcbuff;
-      psrcbuff++;
-      pSdramAddress++;
+        /* Write data to memory */
+        for (size = BufferSize; size != 0U; size--) {
+            *pSdramAddress = *psrcbuff;
+            psrcbuff++;
+            pSdramAddress++;
+        }
+
+        /* Update the SDRAM controller state */
+        hsdram->State = HAL_SDRAM_STATE_READY;
+
+        /* Process Unlocked */
+        __HAL_UNLOCK(hsdram);
+    } else {
+        return HAL_ERROR;
     }
 
-    /* Update the SDRAM controller state */
-    hsdram->State = HAL_SDRAM_STATE_READY;
-
-    /* Process Unlocked */
-    __HAL_UNLOCK(hsdram);
-  }
-  else
-  {
-    return  HAL_ERROR;
-  }
-
-  return HAL_OK;
+    return HAL_OK;
 }
 
 /**
-  * @brief  Reads a Words data from the SDRAM memory using DMA transfer.
-  * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
-  *                the configuration information for SDRAM module.
-  * @param  pAddress Pointer to read start address
-  * @param  pDstBuffer Pointer to destination buffer
-  * @param  BufferSize Size of the buffer to read from memory
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_SDRAM_Read_DMA(SDRAM_HandleTypeDef *hsdram, uint32_t *pAddress, uint32_t *pDstBuffer,
-                                     uint32_t BufferSize)
-{
-  HAL_StatusTypeDef status;
-  HAL_SDRAM_StateTypeDef state = hsdram->State;
+ * @brief  Reads a Words data from the SDRAM memory using DMA transfer.
+ * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
+ *                the configuration information for SDRAM module.
+ * @param  pAddress Pointer to read start address
+ * @param  pDstBuffer Pointer to destination buffer
+ * @param  BufferSize Size of the buffer to read from memory
+ * @retval HAL status
+ */
+HAL_StatusTypeDef HAL_SDRAM_Read_DMA(SDRAM_HandleTypeDef* hsdram, uint32_t* pAddress,
+                                     uint32_t* pDstBuffer, uint32_t BufferSize) {
+    HAL_StatusTypeDef status;
+    HAL_SDRAM_StateTypeDef state = hsdram->State;
 
-  /* Check the SDRAM controller state */
-  if (state == HAL_SDRAM_STATE_BUSY)
-  {
-    status = HAL_BUSY;
-  }
-  else if ((state == HAL_SDRAM_STATE_READY) || (state == HAL_SDRAM_STATE_WRITE_PROTECTED))
-  {
-    /* Process Locked */
-    __HAL_LOCK(hsdram);
+    /* Check the SDRAM controller state */
+    if (state == HAL_SDRAM_STATE_BUSY) {
+        status = HAL_BUSY;
+    } else if ((state == HAL_SDRAM_STATE_READY) || (state == HAL_SDRAM_STATE_WRITE_PROTECTED)) {
+        /* Process Locked */
+        __HAL_LOCK(hsdram);
 
-    /* Update the SDRAM controller state */
-    hsdram->State = HAL_SDRAM_STATE_BUSY;
+        /* Update the SDRAM controller state */
+        hsdram->State = HAL_SDRAM_STATE_BUSY;
 
-    /* Configure DMA user callbacks */
-    if (state == HAL_SDRAM_STATE_READY)
-    {
-      hsdram->hdma->XferCpltCallback = SDRAM_DMACplt;
+        /* Configure DMA user callbacks */
+        if (state == HAL_SDRAM_STATE_READY) {
+            hsdram->hdma->XferCpltCallback = SDRAM_DMACplt;
+        } else {
+            hsdram->hdma->XferCpltCallback = SDRAM_DMACpltProt;
+        }
+        hsdram->hdma->XferErrorCallback = SDRAM_DMAError;
+
+        /* Enable the DMA Stream */
+        status = HAL_DMA_Start_IT(hsdram->hdma, (uint32_t)pAddress, (uint32_t)pDstBuffer,
+                                  (uint32_t)BufferSize);
+
+        /* Process Unlocked */
+        __HAL_UNLOCK(hsdram);
+    } else {
+        status = HAL_ERROR;
     }
-    else
-    {
-      hsdram->hdma->XferCpltCallback = SDRAM_DMACpltProt;
-    }
-    hsdram->hdma->XferErrorCallback = SDRAM_DMAError;
 
-    /* Enable the DMA Stream */
-    status = HAL_DMA_Start_IT(hsdram->hdma, (uint32_t)pAddress, (uint32_t)pDstBuffer, (uint32_t)BufferSize);
-
-    /* Process Unlocked */
-    __HAL_UNLOCK(hsdram);
-  }
-  else
-  {
-    status = HAL_ERROR;
-  }
-
-  return status;
+    return status;
 }
 
 /**
-  * @brief  Writes a Words data buffer to SDRAM memory using DMA transfer.
-  * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
-  *                the configuration information for SDRAM module.
-  * @param  pAddress Pointer to write start address
-  * @param  pSrcBuffer Pointer to source buffer to write
-  * @param  BufferSize Size of the buffer to write to memory
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_SDRAM_Write_DMA(SDRAM_HandleTypeDef *hsdram, uint32_t *pAddress, uint32_t *pSrcBuffer,
-                                      uint32_t BufferSize)
-{
-  HAL_StatusTypeDef status;
+ * @brief  Writes a Words data buffer to SDRAM memory using DMA transfer.
+ * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
+ *                the configuration information for SDRAM module.
+ * @param  pAddress Pointer to write start address
+ * @param  pSrcBuffer Pointer to source buffer to write
+ * @param  BufferSize Size of the buffer to write to memory
+ * @retval HAL status
+ */
+HAL_StatusTypeDef HAL_SDRAM_Write_DMA(SDRAM_HandleTypeDef* hsdram, uint32_t* pAddress,
+                                      uint32_t* pSrcBuffer, uint32_t BufferSize) {
+    HAL_StatusTypeDef status;
 
-  /* Check the SDRAM controller state */
-  if (hsdram->State == HAL_SDRAM_STATE_BUSY)
-  {
-    status = HAL_BUSY;
-  }
-  else if (hsdram->State == HAL_SDRAM_STATE_READY)
-  {
-    /* Process Locked */
-    __HAL_LOCK(hsdram);
+    /* Check the SDRAM controller state */
+    if (hsdram->State == HAL_SDRAM_STATE_BUSY) {
+        status = HAL_BUSY;
+    } else if (hsdram->State == HAL_SDRAM_STATE_READY) {
+        /* Process Locked */
+        __HAL_LOCK(hsdram);
 
-    /* Update the SDRAM controller state */
-    hsdram->State = HAL_SDRAM_STATE_BUSY;
+        /* Update the SDRAM controller state */
+        hsdram->State = HAL_SDRAM_STATE_BUSY;
 
-    /* Configure DMA user callbacks */
-    hsdram->hdma->XferCpltCallback = SDRAM_DMACplt;
-    hsdram->hdma->XferErrorCallback = SDRAM_DMAError;
+        /* Configure DMA user callbacks */
+        hsdram->hdma->XferCpltCallback = SDRAM_DMACplt;
+        hsdram->hdma->XferErrorCallback = SDRAM_DMAError;
 
-    /* Enable the DMA Stream */
-    status = HAL_DMA_Start_IT(hsdram->hdma, (uint32_t)pSrcBuffer, (uint32_t)pAddress, (uint32_t)BufferSize);
+        /* Enable the DMA Stream */
+        status = HAL_DMA_Start_IT(hsdram->hdma, (uint32_t)pSrcBuffer, (uint32_t)pAddress,
+                                  (uint32_t)BufferSize);
 
-    /* Process Unlocked */
-    __HAL_UNLOCK(hsdram);
-  }
-  else
-  {
-    status = HAL_ERROR;
-  }
+        /* Process Unlocked */
+        __HAL_UNLOCK(hsdram);
+    } else {
+        status = HAL_ERROR;
+    }
 
-  return status;
+    return status;
 }
 
 #if (USE_HAL_SDRAM_REGISTER_CALLBACKS == 1)
 /**
-  * @brief  Register a User SDRAM Callback
-  *         To be used instead of the weak (surcharged) predefined callback
-  * @param hsdram : SDRAM handle
-  * @param CallbackId : ID of the callback to be registered
-  *        This parameter can be one of the following values:
-  *          @arg @ref HAL_SDRAM_MSP_INIT_CB_ID       SDRAM MspInit callback ID
-  *          @arg @ref HAL_SDRAM_MSP_DEINIT_CB_ID     SDRAM MspDeInit callback ID
-  *          @arg @ref HAL_SDRAM_REFRESH_ERR_CB_ID    SDRAM Refresh Error callback ID
-  * @param pCallback : pointer to the Callback function
-  * @retval status
-  */
-HAL_StatusTypeDef HAL_SDRAM_RegisterCallback(SDRAM_HandleTypeDef *hsdram, HAL_SDRAM_CallbackIDTypeDef CallbackId,
-                                             pSDRAM_CallbackTypeDef pCallback)
-{
-  HAL_StatusTypeDef status = HAL_OK;
-  HAL_SDRAM_StateTypeDef state;
+ * @brief  Register a User SDRAM Callback
+ *         To be used instead of the weak (surcharged) predefined callback
+ * @param hsdram : SDRAM handle
+ * @param CallbackId : ID of the callback to be registered
+ *        This parameter can be one of the following values:
+ *          @arg @ref HAL_SDRAM_MSP_INIT_CB_ID       SDRAM MspInit callback ID
+ *          @arg @ref HAL_SDRAM_MSP_DEINIT_CB_ID     SDRAM MspDeInit callback ID
+ *          @arg @ref HAL_SDRAM_REFRESH_ERR_CB_ID    SDRAM Refresh Error callback ID
+ * @param pCallback : pointer to the Callback function
+ * @retval status
+ */
+HAL_StatusTypeDef HAL_SDRAM_RegisterCallback(SDRAM_HandleTypeDef* hsdram,
+                                             HAL_SDRAM_CallbackIDTypeDef CallbackId,
+                                             pSDRAM_CallbackTypeDef pCallback) {
+    HAL_StatusTypeDef status = HAL_OK;
+    HAL_SDRAM_StateTypeDef state;
 
-  if (pCallback == NULL)
-  {
-    return HAL_ERROR;
-  }
-
-  /* Process locked */
-  __HAL_LOCK(hsdram);
-
-  state = hsdram->State;
-  if ((state == HAL_SDRAM_STATE_READY) || (state == HAL_SDRAM_STATE_WRITE_PROTECTED))
-  {
-    switch (CallbackId)
-    {
-      case HAL_SDRAM_MSP_INIT_CB_ID :
-        hsdram->MspInitCallback = pCallback;
-        break;
-      case HAL_SDRAM_MSP_DEINIT_CB_ID :
-        hsdram->MspDeInitCallback = pCallback;
-        break;
-      case HAL_SDRAM_REFRESH_ERR_CB_ID :
-        hsdram->RefreshErrorCallback = pCallback;
-        break;
-      default :
-        /* update return status */
-        status =  HAL_ERROR;
-        break;
+    if (pCallback == NULL) {
+        return HAL_ERROR;
     }
-  }
-  else if (hsdram->State == HAL_SDRAM_STATE_RESET)
-  {
-    switch (CallbackId)
-    {
-      case HAL_SDRAM_MSP_INIT_CB_ID :
-        hsdram->MspInitCallback = pCallback;
-        break;
-      case HAL_SDRAM_MSP_DEINIT_CB_ID :
-        hsdram->MspDeInitCallback = pCallback;
-        break;
-      default :
-        /* update return status */
-        status =  HAL_ERROR;
-        break;
-    }
-  }
-  else
-  {
-    /* update return status */
-    status =  HAL_ERROR;
-  }
 
-  /* Release Lock */
-  __HAL_UNLOCK(hsdram);
-  return status;
+    /* Process locked */
+    __HAL_LOCK(hsdram);
+
+    state = hsdram->State;
+    if ((state == HAL_SDRAM_STATE_READY) || (state == HAL_SDRAM_STATE_WRITE_PROTECTED)) {
+        switch (CallbackId) {
+            case HAL_SDRAM_MSP_INIT_CB_ID:
+                hsdram->MspInitCallback = pCallback;
+                break;
+            case HAL_SDRAM_MSP_DEINIT_CB_ID:
+                hsdram->MspDeInitCallback = pCallback;
+                break;
+            case HAL_SDRAM_REFRESH_ERR_CB_ID:
+                hsdram->RefreshErrorCallback = pCallback;
+                break;
+            default:
+                /* update return status */
+                status = HAL_ERROR;
+                break;
+        }
+    } else if (hsdram->State == HAL_SDRAM_STATE_RESET) {
+        switch (CallbackId) {
+            case HAL_SDRAM_MSP_INIT_CB_ID:
+                hsdram->MspInitCallback = pCallback;
+                break;
+            case HAL_SDRAM_MSP_DEINIT_CB_ID:
+                hsdram->MspDeInitCallback = pCallback;
+                break;
+            default:
+                /* update return status */
+                status = HAL_ERROR;
+                break;
+        }
+    } else {
+        /* update return status */
+        status = HAL_ERROR;
+    }
+
+    /* Release Lock */
+    __HAL_UNLOCK(hsdram);
+    return status;
 }
 
 /**
-  * @brief  Unregister a User SDRAM Callback
-  *         SDRAM Callback is redirected to the weak (surcharged) predefined callback
-  * @param hsdram : SDRAM handle
-  * @param CallbackId : ID of the callback to be unregistered
-  *        This parameter can be one of the following values:
-  *          @arg @ref HAL_SDRAM_MSP_INIT_CB_ID       SDRAM MspInit callback ID
-  *          @arg @ref HAL_SDRAM_MSP_DEINIT_CB_ID     SDRAM MspDeInit callback ID
-  *          @arg @ref HAL_SDRAM_REFRESH_ERR_CB_ID    SDRAM Refresh Error callback ID
-  *          @arg @ref HAL_SDRAM_DMA_XFER_CPLT_CB_ID  SDRAM DMA Xfer Complete callback ID
-  *          @arg @ref HAL_SDRAM_DMA_XFER_ERR_CB_ID   SDRAM DMA Xfer Error callback ID
-  * @retval status
-  */
-HAL_StatusTypeDef HAL_SDRAM_UnRegisterCallback(SDRAM_HandleTypeDef *hsdram, HAL_SDRAM_CallbackIDTypeDef CallbackId)
-{
-  HAL_StatusTypeDef status = HAL_OK;
-  HAL_SDRAM_StateTypeDef state;
+ * @brief  Unregister a User SDRAM Callback
+ *         SDRAM Callback is redirected to the weak (surcharged) predefined callback
+ * @param hsdram : SDRAM handle
+ * @param CallbackId : ID of the callback to be unregistered
+ *        This parameter can be one of the following values:
+ *          @arg @ref HAL_SDRAM_MSP_INIT_CB_ID       SDRAM MspInit callback ID
+ *          @arg @ref HAL_SDRAM_MSP_DEINIT_CB_ID     SDRAM MspDeInit callback ID
+ *          @arg @ref HAL_SDRAM_REFRESH_ERR_CB_ID    SDRAM Refresh Error callback ID
+ *          @arg @ref HAL_SDRAM_DMA_XFER_CPLT_CB_ID  SDRAM DMA Xfer Complete callback ID
+ *          @arg @ref HAL_SDRAM_DMA_XFER_ERR_CB_ID   SDRAM DMA Xfer Error callback ID
+ * @retval status
+ */
+HAL_StatusTypeDef HAL_SDRAM_UnRegisterCallback(SDRAM_HandleTypeDef* hsdram,
+                                               HAL_SDRAM_CallbackIDTypeDef CallbackId) {
+    HAL_StatusTypeDef status = HAL_OK;
+    HAL_SDRAM_StateTypeDef state;
 
-  /* Process locked */
-  __HAL_LOCK(hsdram);
+    /* Process locked */
+    __HAL_LOCK(hsdram);
 
-  state = hsdram->State;
-  if ((state == HAL_SDRAM_STATE_READY) || (state == HAL_SDRAM_STATE_WRITE_PROTECTED))
-  {
-    switch (CallbackId)
-    {
-      case HAL_SDRAM_MSP_INIT_CB_ID :
-        hsdram->MspInitCallback = HAL_SDRAM_MspInit;
-        break;
-      case HAL_SDRAM_MSP_DEINIT_CB_ID :
-        hsdram->MspDeInitCallback = HAL_SDRAM_MspDeInit;
-        break;
-      case HAL_SDRAM_REFRESH_ERR_CB_ID :
-        hsdram->RefreshErrorCallback = HAL_SDRAM_RefreshErrorCallback;
-        break;
-      case HAL_SDRAM_DMA_XFER_CPLT_CB_ID :
-        hsdram->DmaXferCpltCallback = HAL_SDRAM_DMA_XferCpltCallback;
-        break;
-      case HAL_SDRAM_DMA_XFER_ERR_CB_ID :
-        hsdram->DmaXferErrorCallback = HAL_SDRAM_DMA_XferErrorCallback;
-        break;
-      default :
+    state = hsdram->State;
+    if ((state == HAL_SDRAM_STATE_READY) || (state == HAL_SDRAM_STATE_WRITE_PROTECTED)) {
+        switch (CallbackId) {
+            case HAL_SDRAM_MSP_INIT_CB_ID:
+                hsdram->MspInitCallback = HAL_SDRAM_MspInit;
+                break;
+            case HAL_SDRAM_MSP_DEINIT_CB_ID:
+                hsdram->MspDeInitCallback = HAL_SDRAM_MspDeInit;
+                break;
+            case HAL_SDRAM_REFRESH_ERR_CB_ID:
+                hsdram->RefreshErrorCallback = HAL_SDRAM_RefreshErrorCallback;
+                break;
+            case HAL_SDRAM_DMA_XFER_CPLT_CB_ID:
+                hsdram->DmaXferCpltCallback = HAL_SDRAM_DMA_XferCpltCallback;
+                break;
+            case HAL_SDRAM_DMA_XFER_ERR_CB_ID:
+                hsdram->DmaXferErrorCallback = HAL_SDRAM_DMA_XferErrorCallback;
+                break;
+            default:
+                /* update return status */
+                status = HAL_ERROR;
+                break;
+        }
+    } else if (hsdram->State == HAL_SDRAM_STATE_RESET) {
+        switch (CallbackId) {
+            case HAL_SDRAM_MSP_INIT_CB_ID:
+                hsdram->MspInitCallback = HAL_SDRAM_MspInit;
+                break;
+            case HAL_SDRAM_MSP_DEINIT_CB_ID:
+                hsdram->MspDeInitCallback = HAL_SDRAM_MspDeInit;
+                break;
+            default:
+                /* update return status */
+                status = HAL_ERROR;
+                break;
+        }
+    } else {
         /* update return status */
-        status =  HAL_ERROR;
-        break;
+        status = HAL_ERROR;
     }
-  }
-  else if (hsdram->State == HAL_SDRAM_STATE_RESET)
-  {
-    switch (CallbackId)
-    {
-      case HAL_SDRAM_MSP_INIT_CB_ID :
-        hsdram->MspInitCallback = HAL_SDRAM_MspInit;
-        break;
-      case HAL_SDRAM_MSP_DEINIT_CB_ID :
-        hsdram->MspDeInitCallback = HAL_SDRAM_MspDeInit;
-        break;
-      default :
-        /* update return status */
-        status =  HAL_ERROR;
-        break;
-    }
-  }
-  else
-  {
-    /* update return status */
-    status =  HAL_ERROR;
-  }
 
-  /* Release Lock */
-  __HAL_UNLOCK(hsdram);
-  return status;
+    /* Release Lock */
+    __HAL_UNLOCK(hsdram);
+    return status;
 }
 
 /**
-  * @brief  Register a User SDRAM Callback for DMA transfers
-  *         To be used instead of the weak (surcharged) predefined callback
-  * @param hsdram : SDRAM handle
-  * @param CallbackId : ID of the callback to be registered
-  *        This parameter can be one of the following values:
-  *          @arg @ref HAL_SDRAM_DMA_XFER_CPLT_CB_ID  SDRAM DMA Xfer Complete callback ID
-  *          @arg @ref HAL_SDRAM_DMA_XFER_ERR_CB_ID   SDRAM DMA Xfer Error callback ID
-  * @param pCallback : pointer to the Callback function
-  * @retval status
-  */
-HAL_StatusTypeDef HAL_SDRAM_RegisterDmaCallback(SDRAM_HandleTypeDef *hsdram, HAL_SDRAM_CallbackIDTypeDef CallbackId,
-                                                pSDRAM_DmaCallbackTypeDef pCallback)
-{
-  HAL_StatusTypeDef status = HAL_OK;
-  HAL_SDRAM_StateTypeDef state;
+ * @brief  Register a User SDRAM Callback for DMA transfers
+ *         To be used instead of the weak (surcharged) predefined callback
+ * @param hsdram : SDRAM handle
+ * @param CallbackId : ID of the callback to be registered
+ *        This parameter can be one of the following values:
+ *          @arg @ref HAL_SDRAM_DMA_XFER_CPLT_CB_ID  SDRAM DMA Xfer Complete callback ID
+ *          @arg @ref HAL_SDRAM_DMA_XFER_ERR_CB_ID   SDRAM DMA Xfer Error callback ID
+ * @param pCallback : pointer to the Callback function
+ * @retval status
+ */
+HAL_StatusTypeDef HAL_SDRAM_RegisterDmaCallback(SDRAM_HandleTypeDef* hsdram,
+                                                HAL_SDRAM_CallbackIDTypeDef CallbackId,
+                                                pSDRAM_DmaCallbackTypeDef pCallback) {
+    HAL_StatusTypeDef status = HAL_OK;
+    HAL_SDRAM_StateTypeDef state;
 
-  if (pCallback == NULL)
-  {
-    return HAL_ERROR;
-  }
-
-  /* Process locked */
-  __HAL_LOCK(hsdram);
-
-  state = hsdram->State;
-  if ((state == HAL_SDRAM_STATE_READY) || (state == HAL_SDRAM_STATE_WRITE_PROTECTED))
-  {
-    switch (CallbackId)
-    {
-      case HAL_SDRAM_DMA_XFER_CPLT_CB_ID :
-        hsdram->DmaXferCpltCallback = pCallback;
-        break;
-      case HAL_SDRAM_DMA_XFER_ERR_CB_ID :
-        hsdram->DmaXferErrorCallback = pCallback;
-        break;
-      default :
-        /* update return status */
-        status =  HAL_ERROR;
-        break;
+    if (pCallback == NULL) {
+        return HAL_ERROR;
     }
-  }
-  else
-  {
-    /* update return status */
-    status =  HAL_ERROR;
-  }
 
-  /* Release Lock */
-  __HAL_UNLOCK(hsdram);
-  return status;
+    /* Process locked */
+    __HAL_LOCK(hsdram);
+
+    state = hsdram->State;
+    if ((state == HAL_SDRAM_STATE_READY) || (state == HAL_SDRAM_STATE_WRITE_PROTECTED)) {
+        switch (CallbackId) {
+            case HAL_SDRAM_DMA_XFER_CPLT_CB_ID:
+                hsdram->DmaXferCpltCallback = pCallback;
+                break;
+            case HAL_SDRAM_DMA_XFER_ERR_CB_ID:
+                hsdram->DmaXferErrorCallback = pCallback;
+                break;
+            default:
+                /* update return status */
+                status = HAL_ERROR;
+                break;
+        }
+    } else {
+        /* update return status */
+        status = HAL_ERROR;
+    }
+
+    /* Release Lock */
+    __HAL_UNLOCK(hsdram);
+    return status;
 }
 #endif /* USE_HAL_SDRAM_REGISTER_CALLBACKS */
 
 /**
-  * @}
-  */
+ * @}
+ */
 
 /** @defgroup SDRAM_Exported_Functions_Group3 Control functions
   *  @brief   management functions
@@ -1003,196 +913,163 @@ HAL_StatusTypeDef HAL_SDRAM_RegisterDmaCallback(SDRAM_HandleTypeDef *hsdram, HAL
   */
 
 /**
-  * @brief  Enables dynamically SDRAM write protection.
-  * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
-  *                the configuration information for SDRAM module.
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_SDRAM_WriteProtection_Enable(SDRAM_HandleTypeDef *hsdram)
-{
-  /* Check the SDRAM controller state */
-  if (hsdram->State == HAL_SDRAM_STATE_BUSY)
-  {
-    return HAL_BUSY;
-  }
-  else if (hsdram->State == HAL_SDRAM_STATE_READY)
-  {
-    /* Update the SDRAM state */
-    hsdram->State = HAL_SDRAM_STATE_BUSY;
+ * @brief  Enables dynamically SDRAM write protection.
+ * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
+ *                the configuration information for SDRAM module.
+ * @retval HAL status
+ */
+HAL_StatusTypeDef HAL_SDRAM_WriteProtection_Enable(SDRAM_HandleTypeDef* hsdram) {
+    /* Check the SDRAM controller state */
+    if (hsdram->State == HAL_SDRAM_STATE_BUSY) {
+        return HAL_BUSY;
+    } else if (hsdram->State == HAL_SDRAM_STATE_READY) {
+        /* Update the SDRAM state */
+        hsdram->State = HAL_SDRAM_STATE_BUSY;
 
-    /* Enable write protection */
-    (void)FMC_SDRAM_WriteProtection_Enable(hsdram->Instance, hsdram->Init.SDBank);
+        /* Enable write protection */
+        (void)FMC_SDRAM_WriteProtection_Enable(hsdram->Instance, hsdram->Init.SDBank);
 
-    /* Update the SDRAM state */
-    hsdram->State = HAL_SDRAM_STATE_WRITE_PROTECTED;
-  }
-  else
-  {
-    return HAL_ERROR;
-  }
-
-  return HAL_OK;
-}
-
-/**
-  * @brief  Disables dynamically SDRAM write protection.
-  * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
-  *                the configuration information for SDRAM module.
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_SDRAM_WriteProtection_Disable(SDRAM_HandleTypeDef *hsdram)
-{
-  HAL_SDRAM_StateTypeDef state = hsdram->State;
-
-  /* Check the SDRAM controller state */
-  if (state == HAL_SDRAM_STATE_BUSY)
-  {
-    return HAL_BUSY;
-  }
-  else if (state == HAL_SDRAM_STATE_WRITE_PROTECTED)
-  {
-    /* Update the SDRAM state */
-    hsdram->State = HAL_SDRAM_STATE_BUSY;
-
-    /* Disable write protection */
-    (void)FMC_SDRAM_WriteProtection_Disable(hsdram->Instance, hsdram->Init.SDBank);
-
-    /* Update the SDRAM state */
-    hsdram->State = HAL_SDRAM_STATE_READY;
-  }
-  else
-  {
-    return HAL_ERROR;
-  }
-
-  return HAL_OK;
-}
-
-/**
-  * @brief  Sends Command to the SDRAM bank.
-  * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
-  *                the configuration information for SDRAM module.
-  * @param  Command SDRAM command structure
-  * @param  Timeout Timeout duration
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_SDRAM_SendCommand(SDRAM_HandleTypeDef *hsdram, FMC_SDRAM_CommandTypeDef *Command,
-                                        uint32_t Timeout)
-{
-  HAL_SDRAM_StateTypeDef state = hsdram->State;
-
-  /* Check the SDRAM controller state */
-  if (state == HAL_SDRAM_STATE_BUSY)
-  {
-    return HAL_BUSY;
-  }
-  else if ((state == HAL_SDRAM_STATE_READY) || (state == HAL_SDRAM_STATE_PRECHARGED))
-  {
-    /* Update the SDRAM state */
-    hsdram->State = HAL_SDRAM_STATE_BUSY;
-
-    /* Send SDRAM command */
-    (void)FMC_SDRAM_SendCommand(hsdram->Instance, Command, Timeout);
-
-    /* Update the SDRAM controller state state */
-    if (Command->CommandMode == FMC_SDRAM_CMD_PALL)
-    {
-      hsdram->State = HAL_SDRAM_STATE_PRECHARGED;
+        /* Update the SDRAM state */
+        hsdram->State = HAL_SDRAM_STATE_WRITE_PROTECTED;
+    } else {
+        return HAL_ERROR;
     }
-    else
-    {
-      hsdram->State = HAL_SDRAM_STATE_READY;
+
+    return HAL_OK;
+}
+
+/**
+ * @brief  Disables dynamically SDRAM write protection.
+ * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
+ *                the configuration information for SDRAM module.
+ * @retval HAL status
+ */
+HAL_StatusTypeDef HAL_SDRAM_WriteProtection_Disable(SDRAM_HandleTypeDef* hsdram) {
+    HAL_SDRAM_StateTypeDef state = hsdram->State;
+
+    /* Check the SDRAM controller state */
+    if (state == HAL_SDRAM_STATE_BUSY) {
+        return HAL_BUSY;
+    } else if (state == HAL_SDRAM_STATE_WRITE_PROTECTED) {
+        /* Update the SDRAM state */
+        hsdram->State = HAL_SDRAM_STATE_BUSY;
+
+        /* Disable write protection */
+        (void)FMC_SDRAM_WriteProtection_Disable(hsdram->Instance, hsdram->Init.SDBank);
+
+        /* Update the SDRAM state */
+        hsdram->State = HAL_SDRAM_STATE_READY;
+    } else {
+        return HAL_ERROR;
     }
-  }
-  else
-  {
-    return HAL_ERROR;
-  }
 
-  return HAL_OK;
+    return HAL_OK;
 }
 
 /**
-  * @brief  Programs the SDRAM Memory Refresh rate.
-  * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
-  *                the configuration information for SDRAM module.
-  * @param  RefreshRate The SDRAM refresh rate value
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_SDRAM_ProgramRefreshRate(SDRAM_HandleTypeDef *hsdram, uint32_t RefreshRate)
-{
-  /* Check the SDRAM controller state */
-  if (hsdram->State == HAL_SDRAM_STATE_BUSY)
-  {
-    return HAL_BUSY;
-  }
-  else if (hsdram->State == HAL_SDRAM_STATE_READY)
-  {
-    /* Update the SDRAM state */
-    hsdram->State = HAL_SDRAM_STATE_BUSY;
+ * @brief  Sends Command to the SDRAM bank.
+ * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
+ *                the configuration information for SDRAM module.
+ * @param  Command SDRAM command structure
+ * @param  Timeout Timeout duration
+ * @retval HAL status
+ */
+HAL_StatusTypeDef HAL_SDRAM_SendCommand(SDRAM_HandleTypeDef* hsdram,
+                                        FMC_SDRAM_CommandTypeDef* Command, uint32_t Timeout) {
+    HAL_SDRAM_StateTypeDef state = hsdram->State;
 
-    /* Program the refresh rate */
-    (void)FMC_SDRAM_ProgramRefreshRate(hsdram->Instance, RefreshRate);
+    /* Check the SDRAM controller state */
+    if (state == HAL_SDRAM_STATE_BUSY) {
+        return HAL_BUSY;
+    } else if ((state == HAL_SDRAM_STATE_READY) || (state == HAL_SDRAM_STATE_PRECHARGED)) {
+        /* Update the SDRAM state */
+        hsdram->State = HAL_SDRAM_STATE_BUSY;
 
-    /* Update the SDRAM state */
-    hsdram->State = HAL_SDRAM_STATE_READY;
-  }
-  else
-  {
-    return HAL_ERROR;
-  }
+        /* Send SDRAM command */
+        (void)FMC_SDRAM_SendCommand(hsdram->Instance, Command, Timeout);
 
-  return HAL_OK;
+        /* Update the SDRAM controller state state */
+        if (Command->CommandMode == FMC_SDRAM_CMD_PALL) {
+            hsdram->State = HAL_SDRAM_STATE_PRECHARGED;
+        } else {
+            hsdram->State = HAL_SDRAM_STATE_READY;
+        }
+    } else {
+        return HAL_ERROR;
+    }
+
+    return HAL_OK;
 }
 
 /**
-  * @brief  Sets the Number of consecutive SDRAM Memory auto Refresh commands.
-  * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
-  *                the configuration information for SDRAM module.
-  * @param  AutoRefreshNumber The SDRAM auto Refresh number
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_SDRAM_SetAutoRefreshNumber(SDRAM_HandleTypeDef *hsdram, uint32_t AutoRefreshNumber)
-{
-  /* Check the SDRAM controller state */
-  if (hsdram->State == HAL_SDRAM_STATE_BUSY)
-  {
-    return HAL_BUSY;
-  }
-  else if (hsdram->State == HAL_SDRAM_STATE_READY)
-  {
-    /* Update the SDRAM state */
-    hsdram->State = HAL_SDRAM_STATE_BUSY;
+ * @brief  Programs the SDRAM Memory Refresh rate.
+ * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
+ *                the configuration information for SDRAM module.
+ * @param  RefreshRate The SDRAM refresh rate value
+ * @retval HAL status
+ */
+HAL_StatusTypeDef HAL_SDRAM_ProgramRefreshRate(SDRAM_HandleTypeDef* hsdram, uint32_t RefreshRate) {
+    /* Check the SDRAM controller state */
+    if (hsdram->State == HAL_SDRAM_STATE_BUSY) {
+        return HAL_BUSY;
+    } else if (hsdram->State == HAL_SDRAM_STATE_READY) {
+        /* Update the SDRAM state */
+        hsdram->State = HAL_SDRAM_STATE_BUSY;
 
-    /* Set the Auto-Refresh number */
-    (void)FMC_SDRAM_SetAutoRefreshNumber(hsdram->Instance, AutoRefreshNumber);
+        /* Program the refresh rate */
+        (void)FMC_SDRAM_ProgramRefreshRate(hsdram->Instance, RefreshRate);
 
-    /* Update the SDRAM state */
-    hsdram->State = HAL_SDRAM_STATE_READY;
-  }
-  else
-  {
-    return HAL_ERROR;
-  }
+        /* Update the SDRAM state */
+        hsdram->State = HAL_SDRAM_STATE_READY;
+    } else {
+        return HAL_ERROR;
+    }
 
-  return HAL_OK;
+    return HAL_OK;
 }
 
 /**
-  * @brief  Returns the SDRAM memory current mode.
-  * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
-  *                the configuration information for SDRAM module.
-  * @retval The SDRAM memory mode.
-  */
-uint32_t HAL_SDRAM_GetModeStatus(SDRAM_HandleTypeDef *hsdram)
-{
-  /* Return the SDRAM memory current mode */
-  return (FMC_SDRAM_GetModeStatus(hsdram->Instance, hsdram->Init.SDBank));
+ * @brief  Sets the Number of consecutive SDRAM Memory auto Refresh commands.
+ * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
+ *                the configuration information for SDRAM module.
+ * @param  AutoRefreshNumber The SDRAM auto Refresh number
+ * @retval HAL status
+ */
+HAL_StatusTypeDef HAL_SDRAM_SetAutoRefreshNumber(SDRAM_HandleTypeDef* hsdram,
+                                                 uint32_t AutoRefreshNumber) {
+    /* Check the SDRAM controller state */
+    if (hsdram->State == HAL_SDRAM_STATE_BUSY) {
+        return HAL_BUSY;
+    } else if (hsdram->State == HAL_SDRAM_STATE_READY) {
+        /* Update the SDRAM state */
+        hsdram->State = HAL_SDRAM_STATE_BUSY;
+
+        /* Set the Auto-Refresh number */
+        (void)FMC_SDRAM_SetAutoRefreshNumber(hsdram->Instance, AutoRefreshNumber);
+
+        /* Update the SDRAM state */
+        hsdram->State = HAL_SDRAM_STATE_READY;
+    } else {
+        return HAL_ERROR;
+    }
+
+    return HAL_OK;
 }
 
 /**
-  * @}
-  */
+ * @brief  Returns the SDRAM memory current mode.
+ * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
+ *                the configuration information for SDRAM module.
+ * @retval The SDRAM memory mode.
+ */
+uint32_t HAL_SDRAM_GetModeStatus(SDRAM_HandleTypeDef* hsdram) {
+    /* Return the SDRAM memory current mode */
+    return (FMC_SDRAM_GetModeStatus(hsdram->Instance, hsdram->Init.SDBank));
+}
+
+/**
+ * @}
+ */
 
 /** @defgroup SDRAM_Exported_Functions_Group4 State functions
   *  @brief   Peripheral State functions
@@ -1210,97 +1087,90 @@ uint32_t HAL_SDRAM_GetModeStatus(SDRAM_HandleTypeDef *hsdram)
   */
 
 /**
-  * @brief  Returns the SDRAM state.
-  * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
-  *                the configuration information for SDRAM module.
-  * @retval HAL state
-  */
-HAL_SDRAM_StateTypeDef HAL_SDRAM_GetState(SDRAM_HandleTypeDef *hsdram)
-{
-  return hsdram->State;
-}
+ * @brief  Returns the SDRAM state.
+ * @param  hsdram pointer to a SDRAM_HandleTypeDef structure that contains
+ *                the configuration information for SDRAM module.
+ * @retval HAL state
+ */
+HAL_SDRAM_StateTypeDef HAL_SDRAM_GetState(SDRAM_HandleTypeDef* hsdram) { return hsdram->State; }
 
 /**
-  * @}
-  */
+ * @}
+ */
 
 /**
-  * @}
-  */
+ * @}
+ */
 
 /**
-  * @brief  DMA SDRAM process complete callback.
-  * @param  hdma : DMA handle
-  * @retval None
-  */
-static void SDRAM_DMACplt(DMA_HandleTypeDef *hdma)
-{
-  SDRAM_HandleTypeDef *hsdram = (SDRAM_HandleTypeDef *)(hdma->Parent);
+ * @brief  DMA SDRAM process complete callback.
+ * @param  hdma : DMA handle
+ * @retval None
+ */
+static void SDRAM_DMACplt(DMA_HandleTypeDef* hdma) {
+    SDRAM_HandleTypeDef* hsdram = (SDRAM_HandleTypeDef*)(hdma->Parent);
 
-  /* Disable the DMA channel */
-  __HAL_DMA_DISABLE(hdma);
+    /* Disable the DMA channel */
+    __HAL_DMA_DISABLE(hdma);
 
-  /* Update the SDRAM controller state */
-  hsdram->State = HAL_SDRAM_STATE_READY;
+    /* Update the SDRAM controller state */
+    hsdram->State = HAL_SDRAM_STATE_READY;
 
 #if (USE_HAL_SDRAM_REGISTER_CALLBACKS == 1)
-  hsdram->DmaXferCpltCallback(hdma);
+    hsdram->DmaXferCpltCallback(hdma);
 #else
-  HAL_SDRAM_DMA_XferCpltCallback(hdma);
+    HAL_SDRAM_DMA_XferCpltCallback(hdma);
 #endif /* USE_HAL_SDRAM_REGISTER_CALLBACKS */
 }
 
 /**
-  * @brief  DMA SRAM process complete callback.
-  * @param  hdma : DMA handle
-  * @retval None
-  */
-static void SDRAM_DMACpltProt(DMA_HandleTypeDef *hdma)
-{
-  SDRAM_HandleTypeDef *hsdram = (SDRAM_HandleTypeDef *)(hdma->Parent);
+ * @brief  DMA SRAM process complete callback.
+ * @param  hdma : DMA handle
+ * @retval None
+ */
+static void SDRAM_DMACpltProt(DMA_HandleTypeDef* hdma) {
+    SDRAM_HandleTypeDef* hsdram = (SDRAM_HandleTypeDef*)(hdma->Parent);
 
-  /* Disable the DMA channel */
-  __HAL_DMA_DISABLE(hdma);
+    /* Disable the DMA channel */
+    __HAL_DMA_DISABLE(hdma);
 
-  /* Update the SDRAM controller state */
-  hsdram->State = HAL_SDRAM_STATE_WRITE_PROTECTED;
+    /* Update the SDRAM controller state */
+    hsdram->State = HAL_SDRAM_STATE_WRITE_PROTECTED;
 
 #if (USE_HAL_SDRAM_REGISTER_CALLBACKS == 1)
-  hsdram->DmaXferCpltCallback(hdma);
+    hsdram->DmaXferCpltCallback(hdma);
 #else
-  HAL_SDRAM_DMA_XferCpltCallback(hdma);
+    HAL_SDRAM_DMA_XferCpltCallback(hdma);
 #endif /* USE_HAL_SDRAM_REGISTER_CALLBACKS */
 }
 
 /**
-  * @brief  DMA SDRAM error callback.
-  * @param  hdma : DMA handle
-  * @retval None
-  */
-static void SDRAM_DMAError(DMA_HandleTypeDef *hdma)
-{
-  SDRAM_HandleTypeDef *hsdram = (SDRAM_HandleTypeDef *)(hdma->Parent);
+ * @brief  DMA SDRAM error callback.
+ * @param  hdma : DMA handle
+ * @retval None
+ */
+static void SDRAM_DMAError(DMA_HandleTypeDef* hdma) {
+    SDRAM_HandleTypeDef* hsdram = (SDRAM_HandleTypeDef*)(hdma->Parent);
 
-  /* Disable the DMA channel */
-  __HAL_DMA_DISABLE(hdma);
+    /* Disable the DMA channel */
+    __HAL_DMA_DISABLE(hdma);
 
-  /* Update the SDRAM controller state */
-  hsdram->State = HAL_SDRAM_STATE_ERROR;
+    /* Update the SDRAM controller state */
+    hsdram->State = HAL_SDRAM_STATE_ERROR;
 
 #if (USE_HAL_SDRAM_REGISTER_CALLBACKS == 1)
-  hsdram->DmaXferErrorCallback(hdma);
+    hsdram->DmaXferErrorCallback(hdma);
 #else
-  HAL_SDRAM_DMA_XferErrorCallback(hdma);
+    HAL_SDRAM_DMA_XferErrorCallback(hdma);
 #endif /* USE_HAL_SDRAM_REGISTER_CALLBACKS */
 }
 
 /**
-  * @}
-  */
+ * @}
+ */
 
 #endif /* HAL_SDRAM_MODULE_ENABLED */
 
 /**
-  * @}
-  */
-
+ * @}
+ */

@@ -1,9 +1,10 @@
 #pragma once
 
+#include <cmath>
+#include <memory>
+
 #include "GenericModule.hpp"
 #include "drivers/FPGA.hpp"
-#include <memory>
-#include <cmath>
 
 /**
  * Module interfacing with FPGA and handling FPGA status

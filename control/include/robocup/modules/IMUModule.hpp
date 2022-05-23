@@ -1,10 +1,10 @@
 #pragma once
 
+#include <cstdio>
+#include <memory>
 
 #include "GenericModule.hpp"
 #include "drivers/ICM42605.hpp"
-#include <memory>
-#include <cstdio>
 
 /**
  * Module interfacing with IMU and handling IMU status

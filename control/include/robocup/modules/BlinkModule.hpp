@@ -1,7 +1,6 @@
 #pragma once
-#include "common.hpp"
-
 #include "GenericModule.hpp"
+#include "common.hpp"
 
 class BlinkModule : public GenericModule {
 public:

@@ -1,9 +1,9 @@
 #pragma once
 
-#include "GenericModule.hpp"
-#include "drivers/KickerBoard.hpp"
 #include <cstdio>
 
+#include "GenericModule.hpp"
+#include "drivers/KickerBoard.hpp"
 
 /**
  * Module interfacing with Kicker and handling Kicker status

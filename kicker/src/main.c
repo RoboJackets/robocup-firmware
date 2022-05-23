@@ -1,8 +1,7 @@
-#include <stdbool.h>
-
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <avr/wdt.h>
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdlib.h>
 #include <util/delay.h>
@@ -14,8 +13,7 @@
 #define MIN_EFFECTIVE_KICK_FET_EN_TIME 0.8f
 #define MAX_EFFECTIVE_KICK_FET_EN_TIME 10.0f
 
-#define KICK_TIME_SLOPE                                                        \
-  (MAX_EFFECTIVE_KICK_FET_EN_TIME - MIN_EFFECTIVE_KICK_FET_EN_TIME)
+#define KICK_TIME_SLOPE (MAX_EFFECTIVE_KICK_FET_EN_TIME - MIN_EFFECTIVE_KICK_FET_EN_TIME)
 
 #define KICK_COOLDOWN_MS 2000
 #define PRE_KICK_SAFETY_MARGIN_MS 5
@@ -30,8 +28,7 @@
 
 // calculate our TIMING_CONSTANT (timer cmp val) from the desired resolution
 #define CLK_FREQ 8000000 // after removing default CLKDIV8 prescale
-#define TIMER_PRESCALE                                                         \
-  8 // set by TCCR0B |= _BV(CS01) which also starts the timer
+#define TIMER_PRESCALE 8  // set by TCCR0B |= _BV(CS01) which also starts the timer
 #define MS_PER_SECOND 1000
 
 #define MAX_TIMER_FREQ (CLK_FREQ / TIMER_PRESCALE)
@@ -121,136 +118,134 @@ void init();
 
 /* Voltage Function */
 uint8_t get_voltage() {
-  // Start conversation by writing to start bit
-  ADCSRA |= _BV(ADSC);
+    // Start conversation by writing to start bit
+    ADCSRA |= _BV(ADSC);
 
-  // Wait for ADSC bit to clear
-  while (ADCSRA & _BV(ADSC))
-    ;
+    // Wait for ADSC bit to clear
+    while (ADCSRA & _BV(ADSC))
+        ;
 
-  // ADHC will range from 0 to 255 corresponding to 0 through VCC
-  return (ADCH << 1);
+    // ADHC will range from 0 to 255 corresponding to 0 through VCC
+    return (ADCH << 1);
 }
 
 int main() {
-  init();
+    init();
 
-  // needs to be int to force voltage_accum calculation to use ints
-  const int kalpha = 64;
+    // needs to be int to force voltage_accum calculation to use ints
+    const int kalpha = 64;
 
-  // We handle voltage readings here
-  while (true) {
+    // We handle voltage readings here
+    while (true) {
+        if (_in_debug_mode) {
+            char kick_db_pressed = !(PIND & _BV(DB_KICK_PIN));
+            char charge_db_pressed = !(PIND & _BV(DB_CHG_PIN));
+            char chip_db_pressed = !(PINB & _BV(DB_CHIP_PIN));
 
-    if (_in_debug_mode) {
-      char kick_db_pressed = !(PIND & _BV(DB_KICK_PIN));
-      char charge_db_pressed = !(PIND & _BV(DB_CHG_PIN));
-      char chip_db_pressed = !(PINB & _BV(DB_CHIP_PIN));
+            if (!kick_db_down_ && kick_db_pressed) {
+                kick_type_is_chip_ = false;
+                kick(255);
+            }
 
-      if (!kick_db_down_ && kick_db_pressed){
-        kick_type_is_chip_ = false;
-        kick(255);
-      }
+            if (!chip_db_down_ && chip_db_pressed) {
+                kick_type_is_chip_ = true;
+                kick(255);
+            }
 
-      if(!chip_db_down_ && chip_db_pressed){
-        kick_type_is_chip_ = true;
-        kick(255);
+            if (!charge_db_down_ && charge_db_pressed) {
+                charge_commanded_ = !charge_commanded_;
+            }
+            kick_db_down_ = kick_db_pressed;
+            chip_db_down_ = chip_db_pressed;
+            charge_db_down_ = charge_db_pressed;
+        } else {
         }
 
-      if (!charge_db_down_ && charge_db_pressed){
-        charge_commanded_ = !charge_commanded_;
-	}
-      kick_db_down_ = kick_db_pressed;
-      chip_db_down_ = chip_db_pressed;
-      charge_db_down_ = charge_db_pressed;
-    } else {
+        if (PINA & _BV(BALL_SENSE_RX))
+            PORTB &= ~(_BV(BALL_SENSE_LED));
+        else
+            PORTB |= _BV(BALL_SENSE_LED);
+
+        if (is_kicking())
+            PORTC &= ~(_BV(MCU_YELLOW));
+        else
+            PORTC |= _BV(MCU_YELLOW);
+        // get a voltage reading by weighing in a new reading, same concept as
+        // TCP RTT estimates (exponentially weighted sum)
+
+        // don't run the adc every loop
+        if (time % 50 == 0) {
+            int voltage_accum = (255 - kalpha) * last_voltage_ + kalpha * (get_voltage());
+            last_voltage_ = voltage_accum / 255;
+
+            int num_lights = ((int)last_voltage_ / 45);
+
+            PORTA |= (0x1F << 1);
+            switch (num_lights) {
+                case 1:
+                    PORTA &= 0b11011111;
+                    break;
+                case 2:
+                    PORTA &= 0b11001111;
+                    break;
+                case 3:
+                    PORTA &= 0b11000111;
+                    break;
+                case 4:
+                    PORTA &= 0b11000011;
+                    break;
+                case 5:
+                    PORTA &= 0b11000001;
+                    break;
+                default:
+                    PORTA &= 0xFF;
+            }
+        }
+        time++;
+
+        // if we dropped below acceptable voltage, then this will catch it
+        // note: these aren't true voltages, just ADC output, but it matches
+        // fairly close
+
+        if (!(PIND & _BV(LT_DONE_N)) || last_voltage_ > 239 || !charge_allowed_ ||
+            !charge_commanded_) {
+            PORTD &= ~(_BV(LT_CHARGE));
+        } else if (last_voltage_ < 232 && charge_allowed_ && charge_commanded_) {
+            PORTD |= _BV(LT_CHARGE);
+        }
+
+        if (PINB & _BV(N_KICK_CS_PIN)) {
+            byte_cnt = 0;
+        }
+
+        bool bs = PINA & _BV(BALL_SENSE_RX);
+        if (ball_sensed_) {
+            if (!bs)
+                ball_sense_change_count_++;  // wrong reading, inc counter
+            else
+                ball_sense_change_count_ = 0;  // correct reading, reset counter
+        } else {
+            if (bs)
+                ball_sense_change_count_++;  // wrong reading, inc counter
+            else
+                ball_sense_change_count_ = 0;  // correct reading, reset counter
+        }
+
+        // counter exceeds maximium, so reset
+        if (ball_sense_change_count_ > BALL_SENSE_MAX_SAMPLES) {
+            ball_sense_change_count_ = 0;
+
+            ball_sensed_ = !ball_sensed_;
+        }
+
+        if (ball_sensed_ && kick_on_breakbeam_) {
+            // pow
+            kick(kick_on_breakbeam_strength_);
+            kick_on_breakbeam_ = false;
+        }
+
+        _delay_us(10);
     }
-
-    if (PINA & _BV(BALL_SENSE_RX))
-      PORTB &= ~(_BV(BALL_SENSE_LED));
-    else
-      PORTB |= _BV(BALL_SENSE_LED);
-
-    if (is_kicking())
-      PORTC &= ~(_BV(MCU_YELLOW));
-    else
-      PORTC |= _BV(MCU_YELLOW);
-    // get a voltage reading by weighing in a new reading, same concept as
-    // TCP RTT estimates (exponentially weighted sum)
-
-    // don't run the adc every loop
-    if (time % 50 == 0) {
-      int voltage_accum =
-        (255 - kalpha) * last_voltage_ + kalpha * (get_voltage());
-      last_voltage_ = voltage_accum / 255;
-
-      int num_lights = ((int) last_voltage_ / 45);
-
-      PORTA |= (0x1F << 1);
-      switch (num_lights) {
-        case 1:
-          PORTA &= 0b11011111;
-          break;
-        case 2:
-          PORTA &= 0b11001111;
-          break;
-        case 3:
-          PORTA &= 0b11000111;
-          break;
-        case 4:
-          PORTA &= 0b11000011;
-          break;
-        case 5:
-          PORTA &= 0b11000001;
-          break;
-        default:
-          PORTA &= 0xFF;
-      }
-    }
-    time++;
-
-    // if we dropped below acceptable voltage, then this will catch it
-    // note: these aren't true voltages, just ADC output, but it matches
-    // fairly close
-
-    if (!(PIND & _BV(LT_DONE_N)) || last_voltage_ > 239 || !charge_allowed_ ||
-        !charge_commanded_) {
-      PORTD &= ~(_BV(LT_CHARGE));
-    } else if (last_voltage_ < 232 && charge_allowed_ && charge_commanded_) {
-      PORTD |= _BV(LT_CHARGE);
-    }
-
-    if (PINB & _BV(N_KICK_CS_PIN)) {
-      byte_cnt = 0;
-    }
-
-    bool bs = PINA & _BV(BALL_SENSE_RX);
-    if (ball_sensed_) {
-      if (!bs)
-        ball_sense_change_count_++; // wrong reading, inc counter
-      else
-        ball_sense_change_count_ = 0; // correct reading, reset counter
-    } else {
-      if (bs)
-        ball_sense_change_count_++; // wrong reading, inc counter
-      else
-        ball_sense_change_count_ = 0; // correct reading, reset counter
-    }
-
-    // counter exceeds maximium, so reset
-    if (ball_sense_change_count_ > BALL_SENSE_MAX_SAMPLES) {
-      ball_sense_change_count_ = 0;
-
-      ball_sensed_ = !ball_sensed_;
-    }
-
-    if (ball_sensed_ && kick_on_breakbeam_) {
-      // pow
-      kick(kick_on_breakbeam_strength_);
-      kick_on_breakbeam_ = false;
-    }
-
-    _delay_us(10);
-  }
 }
 
 void init() {
@@ -340,7 +335,7 @@ void init() {
   ///////////////////////////////////////////////////////////////////////////
 
   // Set low bits corresponding to pin we read from
-  ADMUX |= _BV(ADLAR) | 0x06; // connect PA6 (V_MONITOR_PIN) to ADC
+  ADMUX |= _BV(ADLAR) | 0x06;  // connect PA6 (V_MONITOR_PIN) to ADC
 
   // ensure ADC isn't shut off
   // PRR &= ~_BV(PRADC);
@@ -499,7 +494,6 @@ uint8_t execute_cmd(uint8_t cmd) {
     kick_on_breakbeam_ = false;
     kick_on_breakbeam_strength_ = 0;
   }
-
 
   return (ball_sensed_ << 7) | (VOLTAGE_MASK & (last_voltage_ >> 1));
 }

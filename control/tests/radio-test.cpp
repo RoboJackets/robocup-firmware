@@ -1,6 +1,6 @@
-#include "common.hpp"
 #include <optional>
 
+#include "common.hpp"
 #include "drivers/ISM43340.hpp"
 
 int main() {
@@ -18,8 +18,8 @@ int main() {
 
     printf("[INFO] Finished\r\n");
 
-  while (true) {
-      l1.toggle();
-      HAL_Delay(1000);
-  }
+    while (true) {
+        l1.toggle();
+        HAL_Delay(1000);
+    }
 }

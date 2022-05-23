@@ -1,13 +1,13 @@
 #pragma once
 
-#include "common.hpp"
-#include "AVR910.hpp"
-#include "kicker_commands.h"
-#include "kicker_bin.h"
-
-#include <tuple>
-#include <string>
 #include <cstdio>
+#include <string>
+#include <tuple>
+
+#include "AVR910.hpp"
+#include "common.hpp"
+#include "kicker_bin.h"
+#include "kicker_commands.h"
 
 /**
  * A class for interfacing with the kicker board, which is based on an

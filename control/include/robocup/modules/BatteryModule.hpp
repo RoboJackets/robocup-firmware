@@ -1,7 +1,8 @@
 #pragma once
 
-#include "GenericModule.hpp"
 #include <memory>
+
+#include "GenericModule.hpp"
 #include "drivers/Battery.hpp"
 
 /**

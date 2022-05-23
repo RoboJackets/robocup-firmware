@@ -1,15 +1,15 @@
 #pragma once
 
+#include <algorithm>
 #include <memory>
 #include <vector>
-#include "fpga_bin.h"
+
+#include <stdint.h>
 
 #include "FreeRTOS.h"
-#include "task.h"
-
-#include <algorithm>
-#include <stdint.h>
 #include "common.hpp"
+#include "fpga_bin.h"
+#include "task.h"
 
 class FPGA {
 public:

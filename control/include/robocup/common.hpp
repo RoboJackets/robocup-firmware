@@ -3,14 +3,14 @@
  */
 #pragma once
 
-#include <memory>
-#include <vector>
 #include <cmath>
 #include <cstdio>
 #include <cstring>
+#include <memory>
 #include <string>
+#include <vector>
 
-#include "MicroPackets.hpp"
-#include "mTrain.hpp"
 #include "LockedStruct.hpp"
+#include "MicroPackets.hpp"
 #include "iodefs.hpp"
+#include "mTrain.hpp"

@@ -1,5 +1,5 @@
-#include <avr/io.h>
 #include <avr/interrupt.h>
+#include <avr/io.h>
 #include <avr/wdt.h>
 
 #include "kicker.h"
@@ -27,7 +27,7 @@ void init() {
 }
 
 int main() {
-	init();
+    init();
 
     for (;;) {
     if (PINC & _BV(DB_SWITCH)) {

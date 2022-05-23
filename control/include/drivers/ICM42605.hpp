@@ -1,9 +1,10 @@
 #pragma once
 
-#include "common.hpp"
+#include <cmath>
 #include <memory>
 #include <vector>
-#include <cmath>
+
+#include "common.hpp"
 
 class ICM42605 {
 public:

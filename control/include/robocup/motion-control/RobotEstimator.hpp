@@ -1,9 +1,12 @@
 #pragma once
 
 #include <cstdint>
+
 #include <Eigen/Dense>
-#include "rc-fshare/robot_model.hpp"
+
 #include "common.hpp"
+
+#include "rc-fshare/robot_model.hpp"
 
 /** @class RobotEstimator
  *  This class implements a Kalman Filter in order to estimate a robot's current state.

@@ -7,9 +7,9 @@
  * @param ppxIdleTaskStackBuffer
  * @param pulIdleTaskStackSize
  */
-void vApplicationGetIdleTaskMemory(StaticTask_t **ppxIdleTaskTCBBuffer,
-                                   StackType_t **ppxIdleTaskStackBuffer,
-                                   uint32_t *pulIdleTaskStackSize) {
+void vApplicationGetIdleTaskMemory(StaticTask_t** ppxIdleTaskTCBBuffer,
+                                   StackType_t** ppxIdleTaskStackBuffer,
+                                   uint32_t* pulIdleTaskStackSize) {
     static StaticTask_t idleTaskTCB;
     static StackType_t idleTaskStack[configMINIMAL_STACK_SIZE];
 
@@ -24,9 +24,9 @@ void vApplicationGetIdleTaskMemory(StaticTask_t **ppxIdleTaskTCBBuffer,
  * @param ppxIdleTaskStackBuffer
  * @param pulIdleTaskStackSize
  */
-void vApplicationGetTimerTaskMemory(StaticTask_t **ppxTimerTaskTCBBuffer,
-                                    StackType_t **ppxTimerTaskStackBuffer,
-                                    uint32_t *pulTimerTaskStackSize) {
+void vApplicationGetTimerTaskMemory(StaticTask_t** ppxTimerTaskTCBBuffer,
+                                    StackType_t** ppxTimerTaskStackBuffer,
+                                    uint32_t* pulTimerTaskStackSize) {
     static StaticTask_t timerTaskTCB;
     static StackType_t timerTaskStack[configMINIMAL_STACK_SIZE];
 
@@ -34,4 +34,3 @@ void vApplicationGetTimerTaskMemory(StaticTask_t **ppxTimerTaskTCBBuffer,
     *ppxTimerTaskStackBuffer = timerTaskStack;
     *pulTimerTaskStackSize = configMINIMAL_STACK_SIZE;
 }
-

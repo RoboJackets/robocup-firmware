@@ -1,21 +1,22 @@
-#include "common.hpp"
-#include "FreeRTOS.h"
-#include "task.h"
-#include "core_cm7.h"
+#include <algorithm>
+#include <cstdio>
+#include <vector>
 
-#include "modules/GenericModule.hpp"
+#include <unistd.h>
+
+#include "FreeRTOS.h"
+#include "common.hpp"
+#include "core_cm7.h"
 #include "modules/BatteryModule.hpp"
 #include "modules/FPGAModule.hpp"
+#include "modules/GenericModule.hpp"
 #include "modules/IMUModule.hpp"
 #include "modules/KickerModule.hpp"
 #include "modules/LEDModule.hpp"
 #include "modules/MotionControlModule.hpp"
 #include "modules/RadioModule.hpp"
 #include "modules/RotaryDialModule.hpp"
-#include <vector>
-#include <algorithm>
-#include <cstdio>
-#include <unistd.h>
+#include "task.h"
 
 #define SUPER_LOOP_FREQ 200
 #define SUPER_LOOP_PERIOD (1000000L / SUPER_LOOP_FREQ)
@@ -42,22 +43,22 @@ struct MODULE_META_DATA {
     /**
      * Period and runtime in us
      */
-    MODULE_META_DATA(uint64_t lastRunTime,
-                     uint32_t modulePeriod,
-                     int32_t moduleRunTime,
-                     GenericModule *module)
-            : lastRunTime(lastRunTime),
-              modulePeriod(modulePeriod * DWT_SysTick_To_us()),
-              moduleRunTime(moduleRunTime * DWT_SysTick_To_us()),
-              numCompletions(0),
-              module(module) {}
+    MODULE_META_DATA(uint64_t lastRunTime, uint32_t modulePeriod, int32_t moduleRunTime,
+                     GenericModule* module)
+        : lastRunTime(lastRunTime),
+          modulePeriod(modulePeriod * DWT_SysTick_To_us()),
+          moduleRunTime(moduleRunTime * DWT_SysTick_To_us()),
+          numCompletions(0),
+          module(module) {}
     /**
-    * Period and runtime in us
-    */
-    explicit MODULE_META_DATA(GenericModule *module)
-            : lastRunTime(0),
-            modulePeriod(module->period.count()), moduleRunTime(0), numCompletions(0),
-            module(module) {}
+     * Period and runtime in us
+     */
+    explicit MODULE_META_DATA(GenericModule* module)
+        : lastRunTime(0),
+          modulePeriod(module->period.count()),
+          moduleRunTime(0),
+          numCompletions(0),
+          module(module) {}
 };
 
 [[noreturn]]
@@ -80,14 +81,14 @@ void startModule(void *pvModule) {
 std::vector<const char*> failed_modules;
 size_t free_space;
 // Map name of modules to their metadata
-static std::unordered_map<const char *, MODULE_META_DATA> modules;
+static std::unordered_map<const char*, MODULE_META_DATA> modules;
 
 /**
  * Wrapper for freeRTOS xTaskCreate
  * @param module pointer to the module to create a task for
  * @return whether or not the creation was successful
  */
-bool createModule(GenericModule *module) {
+bool createModule(GenericModule* module) {
     BaseType_t result = xTaskCreate(startModule,
                                     module->name,
                                     module->stackSize,
@@ -136,12 +137,9 @@ int main() {
                          radioError,
                          imuData);
 
-
     static BatteryModule battery(batteryVoltage);
 
-
-    static RotaryDialModule dial(ioExpander,
-                                 robotID);
+    static RotaryDialModule dial(ioExpander, robotID);
 
     static IMUModule imu(sharedSPI, imuData);
 
@@ -158,10 +156,7 @@ int main() {
                                kickerCommand,
                                kickerInfo);
 
-    static FPGAModule fpga(std::move(fpgaSPI),
-                           motorCommand,
-                           fpgaStatus,
-                           motorFeedback);
+    static FPGAModule fpga(std::move(fpgaSPI), motorCommand, fpgaStatus, motorFeedback);
 
     static MotionControlModule motion(batteryVoltage,
                                       imuData,
@@ -170,16 +165,12 @@ int main() {
                                       motorCommand,
                                       debugInfo);
 
-    modules =
-            {{led.name,MODULE_META_DATA(&led)},
-             {dial.name, MODULE_META_DATA(&dial)},
-             {imu.name, MODULE_META_DATA(&imu)},
-             {radio.name, MODULE_META_DATA(&radio)},
-             {kicker.name, MODULE_META_DATA(&kicker)},
-             {fpga.name, MODULE_META_DATA(&fpga)},
-             {motion.name, MODULE_META_DATA(&motion)}};
+    modules = {{led.name, MODULE_META_DATA(&led)},       {dial.name, MODULE_META_DATA(&dial)},
+               {imu.name, MODULE_META_DATA(&imu)},       {radio.name, MODULE_META_DATA(&radio)},
+               {kicker.name, MODULE_META_DATA(&kicker)}, {fpga.name, MODULE_META_DATA(&fpga)},
+               {motion.name, MODULE_META_DATA(&motion)}};
 
-    for (const auto [ name, data ] : modules) {
+    for (const auto [name, data] : modules) {
         if (!createModule(data.module)) {
             printf("[ERROR] Failed to create a module!\r\n");
             printf("Resetting!\r\n");

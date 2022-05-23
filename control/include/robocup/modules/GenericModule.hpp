@@ -1,10 +1,10 @@
 #pragma once
 
-#include <cstdint>
 #include <chrono>
-#include "common.hpp"
+#include <cstdint>
 
 #include "FreeRTOS.h"
+#include "common.hpp"
 #include "task.h"
 
 /** @class GenericModule

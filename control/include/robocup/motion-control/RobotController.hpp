@@ -1,10 +1,13 @@
 #pragma once
 
 #include <cstdint>
-#include <Eigen/Dense>
-#include "rc-fshare/robot_model.hpp"
-#include "common.hpp"
 #include <cstdlib>
+
+#include <Eigen/Dense>
+
+#include "common.hpp"
+
+#include "rc-fshare/robot_model.hpp"
 
 /**
  * Controller for wheel velocities

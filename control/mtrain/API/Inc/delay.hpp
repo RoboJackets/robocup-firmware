@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include  <unistd.h>
+#include <unistd.h>
 
 /**
  * Current tick in sysclock ticks
@@ -26,7 +26,6 @@ extern "C" {
  * @param uint32_t us  Number of microseconds to delay for
  */
 void DWT_Delay(uint32_t us);
-
 
 #ifdef __cplusplus
 }

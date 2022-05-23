@@ -2,10 +2,7 @@
 
 #include "PinDefs.hpp"
 
-typedef enum {
-    PushPull = GPIO_MODE_OUTPUT_PP,
-    OpenDrain = GPIO_MODE_OUTPUT_OD
-} PinMode;
+typedef enum { PushPull = GPIO_MODE_OUTPUT_PP, OpenDrain = GPIO_MODE_OUTPUT_OD } PinMode;
 
 typedef enum {
     Low = GPIO_SPEED_FREQ_LOW,
@@ -24,10 +21,9 @@ public:
      * @param speed GPIO frequency
      * @param inverted Inverts output value of pin
      */
-    DigitalOut(PinName pin, PullType pull = PullType::PullNone,
-        PinMode mode = PinMode::PushPull, PinSpeed speed = PinSpeed::Low,
-        bool inverted = false);
-    
+    DigitalOut(PinName pin, PullType pull = PullType::PullNone, PinMode mode = PinMode::PushPull,
+               PinSpeed speed = PinSpeed::Low, bool inverted = false);
+
     ~DigitalOut();
 
     /** Change output state of pin
@@ -38,23 +34,19 @@ public:
     void write(bool state);
 
     /** Toggle pin output
-     * 
+     *
      */
     void toggle();
-    
+
     /** Read current value of pin
      *
      * @return true (high) or false (low)
      */
     bool read();
-    
-    void operator =(bool rhs) {
-        write(rhs);
-    }
 
-    operator bool() {
-        return read();
-    }
+    void operator=(bool rhs) { write(rhs); }
+
+    operator bool() { return read(); }
 
 protected:
     PinName pin;

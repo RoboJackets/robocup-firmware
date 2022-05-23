@@ -1,15 +1,17 @@
 #pragma once
 
-#include "modules/GenericModule.hpp"
-#include "rc-fshare/robot_model.hpp"
-#include <math.h>
 #include <algorithm>
+
+#include <Eigen/Dense>
+
+#include <math.h>
+
+#include "modules/GenericModule.hpp"
 
 #include "motion-control/DribblerController.hpp"
 #include "motion-control/RobotController.hpp"
 #include "motion-control/RobotEstimator.hpp"
-
-#include <Eigen/Dense>
+#include "rc-fshare/robot_model.hpp"
 
 /**
  * Module handling robot state estimation and motion control for motors

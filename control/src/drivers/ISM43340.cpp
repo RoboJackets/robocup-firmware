@@ -23,7 +23,6 @@ ISM43340::ISM43340(std::unique_ptr<SPI> radioSPI, PinName nCsPin, PinName nReset
       dataReady{dataReadyPin},
       currentSocket(SOCKET_TYPE::SEND),
       cmdStart(nullptr) {
-
     currentState = ISMConstants::State::CommandReady;
     interruptin_init_ex(dataReady, &dataReady_cb, PullDown, INTERRUPT_RISING_FALLING);
 
@@ -314,12 +313,10 @@ void ISM43340::reset() {
         if (isInit) {
             break;
             //return;
-        }
-        else if (i == 4){
+        } else if (i == 4) {
             printf("[ERROR] Failed to initialize radio.\r\n");
             return;
-        }
-        else {
+        } else {
             printf("[INFO] Could not initialize radio. Retrying.\r\n");
         }
     }

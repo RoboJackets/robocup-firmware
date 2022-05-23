@@ -1,11 +1,12 @@
 #pragma once
 
-#include "common.hpp"
-#include "rc-fshare/rtp.hpp"
-#include "drivers/GenericRadio.hpp"
 #include <memory>
+
+#include "common.hpp"
+#include "drivers/GenericRadio.hpp"
 #include "drivers/ISM43340.hpp"
 
+#include "rc-fshare/rtp.hpp"
 
 /**
  * Sends and receives data to/from the radio

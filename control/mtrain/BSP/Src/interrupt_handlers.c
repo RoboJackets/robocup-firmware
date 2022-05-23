@@ -2,8 +2,7 @@
 
 extern void osSystickHandler(void);
 
-void SysTick_Handler(void)
-{
+void SysTick_Handler(void) {
     HAL_IncTick();
     osSystickHandler();
 }
@@ -22,7 +21,4 @@ void OTG_HS_IRQHandler(void)
 
 extern QSPI_HandleTypeDef QSPIHandle;
 
-void QUADSPI_IRQHandler(void)
-{
-    HAL_QSPI_IRQHandler(&QSPIHandle);
-}
+void QUADSPI_IRQHandler(void) { HAL_QSPI_IRQHandler(&QSPIHandle); }

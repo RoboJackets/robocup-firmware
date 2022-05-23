@@ -38,9 +38,10 @@
 
 #pragma once
 
-#include "common.hpp"
-#include <memory>
 #include <cstdio>
+#include <memory>
+
+#include "common.hpp"
 
 // AVR SPI Commands
 #define ATMEL_VENDOR_CODE 0x1E

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "cstdint"
 #include "common.hpp"
+#include "cstdint"
 
 /** @class Battery
  * Interfaces with analog pin to get voltage-related data
@@ -14,7 +14,7 @@ public:
 
     float getBattPercentage(); /**< Returns the last battery percentage read */
 
-    uint8_t getRawVoltage();          /**< Returns battery voltage as a raw 8-bit integer */
+    uint8_t getRawVoltage(); /**< Returns battery voltage as a raw 8-bit integer */
 
     bool isBattCritical();     /**< Returns whether battery is critical (at or below 0%) */
 

@@ -1,4 +1,5 @@
 #include "delay.hpp"
+
 #include "stm32f7xx_hal.h"
 
 [[maybe_unused]] uint32_t DWT_GetTick() {
@@ -7,19 +8,21 @@
 }
 
 [[maybe_unused]] uint32_t DWT_SysTick_To_us() {
-    volatile uint32_t ratio = SystemCoreClock/1000000L;
+    volatile uint32_t ratio = SystemCoreClock / 1000000L;
     return ratio;
 }
 
 [[maybe_unused]] void DWT_Delay_Sys(uint32_t ticks) {
     volatile uint32_t startTick = DWT->CYCCNT;
-    do {} while (DWT->CYCCNT - startTick < ticks);
+    do {
+    } while (DWT->CYCCNT - startTick < ticks);
 }
 
-void DWT_Delay(uint32_t us) // microseconds
+void DWT_Delay(uint32_t us)  // microseconds
 {
-    volatile uint32_t delayTicks = us * (SystemCoreClock/1000000L);
+    volatile uint32_t delayTicks = us * (SystemCoreClock / 1000000L);
     volatile uint32_t startTick = DWT->CYCCNT;
 
-    do {} while (DWT->CYCCNT - startTick < delayTicks);
+    do {
+    } while (DWT->CYCCNT - startTick < delayTicks);
 }

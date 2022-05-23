@@ -1,9 +1,9 @@
 #pragma once
 
+#include <vector>
+
 #include "PinDefs.hpp"
 #include "delay.hpp"
-
-#include <vector>
 
 typedef enum I2CBus {
     I2CBus1,
@@ -24,6 +24,5 @@ public:
     static void recover_bus();
 
 private:
-
     I2C_HandleTypeDef i2cHandle = {};
 };

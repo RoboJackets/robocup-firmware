@@ -1,5 +1,6 @@
-#include "mTrain.hpp"
 #include <vector>
+
+#include "mTrain.hpp"
 
 int main(void) {
     {
@@ -28,5 +29,6 @@ int main(void) {
         spi2.transmit(nums);
     }
 
-    while (true) { }
+    while (true) {
+    }
 }
