@@ -4,8 +4,8 @@
 #include "pin_defs.h"
 
 typedef struct adc_handle {
-  ADC_HandleTypeDef ADC_InitStruct;
-  ADC_ChannelConfTypeDef ADC_ChannelConfig;
+    ADC_HandleTypeDef ADC_InitStruct;
+    ADC_ChannelConfTypeDef ADC_ChannelConfig;
 } adc_handle;
 
 void analogin_init(adc_pin_name pin, adc_handle* handle);

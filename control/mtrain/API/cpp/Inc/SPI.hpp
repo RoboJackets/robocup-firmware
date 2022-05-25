@@ -1,9 +1,9 @@
 #pragma once
 
-#include "PinDefs.hpp"
-
-#include <vector>
 #include <optional>
+#include <vector>
+
+#include "PinDefs.hpp"
 
 typedef enum SpiBus {
     SpiBus2,
@@ -11,7 +11,7 @@ typedef enum SpiBus {
     SpiBus5,
 } SpiBus;
 
-constexpr int fPCLK = 108'000'000; // Hz
+constexpr int fPCLK = 108'000'000;  // Hz
 
 class SPI {
 public:
