@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include  <unistd.h>
+#include <unistd.h>
 
 /**
  * Current tick in sysclock ticks

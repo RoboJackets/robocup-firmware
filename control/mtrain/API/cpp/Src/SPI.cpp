@@ -1,9 +1,10 @@
 #include "SPI.hpp"
+
 #include "stm32f7xx_ll_spi.h"
 
 // TODO: cleanup
-SPI::SPI(SpiBus spiBus, std::optional<PinName> cs, int hz): chipSelect(cs) {
-    GPIO_InitTypeDef  GPIO_InitStruct;
+SPI::SPI(SpiBus spiBus, std::optional<PinName> cs, int hz) : chipSelect(cs) {
+    GPIO_InitTypeDef GPIO_InitStruct;
 
     if (chipSelect) {
         GPIO_InitStruct.Pin = chipSelect->pin;
@@ -22,10 +23,10 @@ SPI::SPI(SpiBus spiBus, std::optional<PinName> cs, int hz): chipSelect(cs) {
             __HAL_RCC_SPI2_CLK_ENABLE();
 
             // Configure SPI2 SCK
-            GPIO_InitStruct.Pin       = GPIO_PIN_12;
-            GPIO_InitStruct.Mode      = GPIO_MODE_AF_PP;
-            GPIO_InitStruct.Pull      = GPIO_PULLDOWN;
-            GPIO_InitStruct.Speed     = GPIO_SPEED_FREQ_HIGH;
+            GPIO_InitStruct.Pin = GPIO_PIN_12;
+            GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+            GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+            GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
             GPIO_InitStruct.Alternate = GPIO_AF5_SPI2;
             HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
@@ -46,10 +47,10 @@ SPI::SPI(SpiBus spiBus, std::optional<PinName> cs, int hz): chipSelect(cs) {
             __HAL_RCC_SPI3_CLK_ENABLE();
 
             // Configure SPI3 SCK
-            GPIO_InitStruct.Pin       = GPIO_PIN_10;
-            GPIO_InitStruct.Mode      = GPIO_MODE_AF_PP;
-            GPIO_InitStruct.Pull      = GPIO_PULLDOWN;
-            GPIO_InitStruct.Speed     = GPIO_SPEED_FREQ_HIGH;
+            GPIO_InitStruct.Pin = GPIO_PIN_10;
+            GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+            GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+            GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
             GPIO_InitStruct.Alternate = GPIO_AF6_SPI3;
             HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
@@ -70,10 +71,10 @@ SPI::SPI(SpiBus spiBus, std::optional<PinName> cs, int hz): chipSelect(cs) {
             __HAL_RCC_SPI5_CLK_ENABLE();
 
             // Configure SPI5 SCK
-            GPIO_InitStruct.Pin       = GPIO_PIN_7;
-            GPIO_InitStruct.Mode      = GPIO_MODE_AF_PP;
-            GPIO_InitStruct.Pull      = GPIO_PULLDOWN;
-            GPIO_InitStruct.Speed     = GPIO_SPEED_FREQ_HIGH;
+            GPIO_InitStruct.Pin = GPIO_PIN_7;
+            GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+            GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+            GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
             GPIO_InitStruct.Alternate = GPIO_AF5_SPI5;
             HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
@@ -93,16 +94,16 @@ SPI::SPI(SpiBus spiBus, std::optional<PinName> cs, int hz): chipSelect(cs) {
     }
 
     spiHandle.Init.BaudRatePrescaler = freqToPrescaler(hz);
-    spiHandle.Init.Mode              = SPI_MODE_MASTER; // TODO: Be able to specify
-    spiHandle.Init.Direction         = SPI_DIRECTION_2LINES;
-    spiHandle.Init.DataSize          = SPI_DATASIZE_8BIT;
-    spiHandle.Init.CLKPolarity       = SPI_POLARITY_LOW;
-    spiHandle.Init.CLKPhase          = SPI_PHASE_1EDGE;
-    spiHandle.Init.NSS               = SPI_NSS_SOFT;
-    spiHandle.Init.FirstBit          = SPI_FIRSTBIT_MSB; // TODO: Be able to specify?
-    spiHandle.Init.TIMode            = SPI_TIMODE_DISABLE;
-    spiHandle.Init.CRCCalculation    = SPI_CRCCALCULATION_DISABLE;
-    spiHandle.Init.CRCPolynomial     = 7;
+    spiHandle.Init.Mode = SPI_MODE_MASTER;  // TODO: Be able to specify
+    spiHandle.Init.Direction = SPI_DIRECTION_2LINES;
+    spiHandle.Init.DataSize = SPI_DATASIZE_8BIT;
+    spiHandle.Init.CLKPolarity = SPI_POLARITY_LOW;
+    spiHandle.Init.CLKPhase = SPI_PHASE_1EDGE;
+    spiHandle.Init.NSS = SPI_NSS_SOFT;
+    spiHandle.Init.FirstBit = SPI_FIRSTBIT_MSB;  // TODO: Be able to specify?
+    spiHandle.Init.TIMode = SPI_TIMODE_DISABLE;
+    spiHandle.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+    spiHandle.Init.CRCPolynomial = 7;
 
     HAL_SPI_Init(&spiHandle);
 }
@@ -155,13 +156,13 @@ SPI::~SPI() {
 }
 
 uint32_t SPI::freqToPrescaler(int hz) {
-    int prescale = fPCLK/hz;
+    int prescale = fPCLK / hz;
     if (spiHandle.Instance == SPI5) {
-        prescale = fPCLK/hz * 2;
+        prescale = fPCLK / hz * 2;
     }
     for (int i = 1; i <= 8; i++) {
         if (prescale <= 1 << i) {
-            return (i-2) << 3;
+            return (i - 2) << 3;
         }
     }
 
@@ -172,16 +173,12 @@ void SPI::frequency(int hz) {
     LL_SPI_SetBaudRatePrescaler(spiHandle.Instance, freqToPrescaler(hz));
 }
 
-void SPI::transmit(const uint8_t data) {
-    transmitReceive(data);
-}
+void SPI::transmit(const uint8_t data) { transmitReceive(data); }
 
-void SPI::transmit(const std::vector<uint8_t>& data) {
-    transmit(data.data(), data.size());
-}
+void SPI::transmit(const std::vector<uint8_t>& data) { transmit(data.data(), data.size()); }
 
 void SPI::transmit(const uint8_t* const data, const size_t size) {
-    for(uint i = 0; i < size; i++) {
+    for (uint i = 0; i < size; i++) {
         transmit(data[i]);
     }
 }
@@ -194,10 +191,12 @@ uint8_t SPI::transmitReceive(const uint8_t data) {
     spiHandle.Instance->CR1 |= SPI_CR1_SPE;
 
     /* Wait for TX queue to empty */
-    while (!LL_SPI_IsActiveFlag_TXE(spiHandle.Instance)) { }
-    *(__IO uint8_t *)&spiHandle.Instance->DR = data;
+    while (!LL_SPI_IsActiveFlag_TXE(spiHandle.Instance)) {
+    }
+    *(__IO uint8_t*)&spiHandle.Instance->DR = data;
     /* Wait for RX queue to fill */
-    while (!LL_SPI_IsActiveFlag_RXNE(spiHandle.Instance)) { }
+    while (!LL_SPI_IsActiveFlag_RXNE(spiHandle.Instance)) {
+    }
     uint8_t recievedData = spiHandle.Instance->DR;
 
     if (chipSelect) {
@@ -216,7 +215,7 @@ std::vector<uint8_t> SPI::transmitReceive(const std::vector<uint8_t>& data) {
 }
 
 void SPI::transmitReceive(const uint8_t* const data, uint8_t* const dataOut, const size_t size) {
-    for(uint i = 0; i < size; i++) {
+    for (uint i = 0; i < size; i++) {
         dataOut[i] = transmitReceive(data[i]);
     }
 }

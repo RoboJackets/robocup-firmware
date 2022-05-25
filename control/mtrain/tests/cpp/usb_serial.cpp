@@ -1,6 +1,5 @@
-#include "mtrain.hpp"
-
 #include "PinDefs.hpp"
+#include "mtrain.hpp"
 
 int main() {
     DigitalOut l1 = DigitalOut(LED2);
@@ -11,9 +10,9 @@ int main() {
 
     for (;;) {
         l1 = 0;
-        
+
         HAL_Delay(50);
-        
+
         l1 = 1;
 
         HAL_Delay(50);
