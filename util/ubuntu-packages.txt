@@ -1,24 +1,23 @@
-# This is the list of all required packages
-# place each package on its own line
-# these get installed using 'apt-get install ______' whenever the ubuntu-setup
-#   script is run
-
 # Build system
 cmake
 ccache
+python3
 
-# C/C++ (and more) code-formatting tool (just use the newest version)
-clang-format
+# Docs
+doxygen
+graphviz
 
 # Arm GCC Toolchain
 gcc-arm-none-eabi
 gdb-multiarch
+libeigen3-dev
 
 # AVR
 avr-libc
 avrdude
 
-python3-pip
+# style
+clang-format-10
+black
+flake8
 python3-setuptools
-
-libeigen3-dev

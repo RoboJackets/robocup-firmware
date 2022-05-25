@@ -60,9 +60,9 @@ struct MODULE_META_DATA {
                      int32_t moduleRunTime,
                      GenericModule *module)
             : lastRunTime(lastRunTime),
-              nextRunTime(lastRunTime + modulePeriod * DWT_SysTick_To_us()),
-              modulePeriod(modulePeriod * DWT_SysTick_To_us()),
-              moduleRunTime(moduleRunTime * DWT_SysTick_To_us()),
+              nextRunTime(lastRunTime + modulePeriod * DWT_us_To_SysTick()),
+              modulePeriod(modulePeriod * DWT_us_To_SysTick()),
+              moduleRunTime(moduleRunTime * DWT_us_To_SysTick()),
               module(module) {}
 };
 
@@ -172,11 +172,11 @@ int main() {
 
     ////////////////////////////////////////////
 
-    printf("Starting scheduler...\r\n");
+    printf("[INFO] Starting scheduler...\r\n");
 
     vTaskStartScheduler();
 
-    printf("Failed to start scheduler!\r\n");
+    printf("[ERROR] Failed to start scheduler!\r\n");
 
     for (;;) {}
 }

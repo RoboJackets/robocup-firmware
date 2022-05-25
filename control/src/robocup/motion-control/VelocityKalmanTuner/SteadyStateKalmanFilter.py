@@ -28,7 +28,9 @@ class SS_KF(Observer):
         self.x_hat = x_hat_init
         self.x = x_hat_init
 
-        A_k, B_k, H_k, D_k, _ = scipy.signal.cont2discrete(system=(A, B, H, D), dt=self.dt)
+        A_k, B_k, H_k, D_k, _ = scipy.signal.cont2discrete(
+            system=(A, B, H, D), dt=self.dt
+        )
         self.dynamics = LinearDynamics(A_k, B_k, H_k, D_k, x_init=x_hat_init, dt=dt)
         self.num_states = self.dynamics.gains.A_k.shape[1]
         self.num_inputs = self.dynamics.gains.B_k.shape[1]
@@ -40,7 +42,9 @@ class SS_KF(Observer):
         Q_k = Q
         R_k = R
 
-        P_ss = scipy.linalg.solve_discrete_are(self.dynamics.gains.A_k.T, self.dynamics.gains.H_k.T, Q_k, R_k)
+        P_ss = scipy.linalg.solve_discrete_are(
+            self.dynamics.gains.A_k.T, self.dynamics.gains.H_k.T, Q_k, R_k
+        )
 
         self.gains = KalmanFilterGains(H_k=H_k, P=P_ss, Q_k=Q_k, R_k=R_k)
         self.step_response = False
@@ -103,13 +107,13 @@ class SS_KF(Observer):
 
     def get_gains(self):
         return {
-            'dt': self.dt,
-            'P_k': self.gains.P,
-            'A_k': self.dynamics.gains.A_k,
-            'B_k': self.dynamics.gains.B_k,
-            'H_k': self.dynamics.gains.H_k,
-            'D_k': self.dynamics.gains.D_k,
-            'K_k': self.gains.K,
-            'Q_k': self.gains.Q_k,
-            'R_k': self.gains.R_k
+            "dt": self.dt,
+            "P_k": self.gains.P,
+            "A_k": self.dynamics.gains.A_k,
+            "B_k": self.dynamics.gains.B_k,
+            "H_k": self.dynamics.gains.H_k,
+            "D_k": self.dynamics.gains.D_k,
+            "K_k": self.gains.K,
+            "Q_k": self.gains.Q_k,
+            "R_k": self.gains.R_k,
         }

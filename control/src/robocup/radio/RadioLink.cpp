@@ -17,6 +17,7 @@ void RadioLink::init() {
                                        RADIO_GLB_RST,
                                        RADIO_R0_INT);
     radioInitialized = radio->isInitialized();
+    radioConnected = radio->isConnected();
 }
 
 // Keep these variables in static memory. We'd rather get link errors if they're too big.
@@ -104,6 +105,7 @@ void RadioLink::send(const BatteryVoltage &batteryVoltage,
     }
 
     radio->send(buffer.data(), buffer_stream.bytes_written);
+    radioConnected = radio->isConnected();
 }
 
 bool RadioLink::receive(KickerCommand &kickerCommand,
@@ -156,5 +158,6 @@ bool RadioLink::receive(KickerCommand &kickerCommand,
     }
 
     cyclesWithoutPackets = 0;
+    radioConnected = radio->isConnected();
     return true;
 }

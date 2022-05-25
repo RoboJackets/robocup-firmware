@@ -83,7 +83,7 @@ struct BatteryVoltage {
     uint32_t lastUpdate;  /**< Time at which BatteryVoltage was last updated (milliseconds) */
 
     uint8_t rawVoltage;   /**< Battery voltage (volts)  */
-    bool isCritical;      /**< Stores whether battery voltage level is critical (nearly dead)  */
+    bool isCritical;      /**< Stores whether battery voltage level is critical (nearly dead (5%)or overcharged (>100%))  */
 };
 
 /** @struct FPGAStatus

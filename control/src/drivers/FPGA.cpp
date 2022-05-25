@@ -86,12 +86,12 @@ bool FPGA::configure() {
 
     // show INIT_B error if it never went low
     if (!fpgaReady) {
-        printf("[SEVERE] FPGA: INIT_B pin timed out\r\n");
+        printf("[ERROR] FPGA: INIT_B pin timed out\r\n");
 
         return false;
     }
 
-    printf("[FPGA] Got INIT_B at tick %ld\r\n", xTaskGetTickCount());
+    printf("[INFO] FPGA: Got INIT_B at tick %ld\r\n", xTaskGetTickCount());
 
     // Configure the FPGA with the bitstream file, this returns false if file
     // can't be opened
@@ -102,8 +102,8 @@ bool FPGA::configure() {
         for (auto i = 0; i < 1000; i++) {
             vTaskDelay(100);
             if (_done == true) {
-                printf("Got done on i=%d, but InitB=%d\r\n", i, _initB.read());
-                configSuccess = _initB;
+                printf("[INFO] Got done on i=%d", i);
+                configSuccess = _done;
                 break;
             }
         }
@@ -114,11 +114,11 @@ bool FPGA::configure() {
             return true;
         }
 
-        printf("[SEVERE] FPGA: DONE pin timed out\r\n");
+        printf("[ERROR] FPGA: DONE pin timed out\r\n");
     }
 
-    printf("[SEVERE] FPGA: FPGA bitstream write error\r\n");
-    printf("[SEVERE] Failure at tick %ld\r\n", xTaskGetTickCount());
+    printf("[ERROR] FPGA: FPGA bitstream write error\r\n");
+    printf("[INFO] Failure at tick %ld\r\n", xTaskGetTickCount());
 
     return false;
 }
@@ -185,7 +185,7 @@ uint8_t FPGA::set_duty_cycles(int16_t* duty_cycles, size_t size) {
     uint8_t status;
 
     if (size != 5) {
-        printf("[WARN] FPGA: set_duty_cycles() requires input buffer to be of size 5\r\n");
+        printf("[WARNING] FPGA: set_duty_cycles() requires input buffer to be of size 5\r\n");
     }
 
     // Check for valid duty cycles values
@@ -213,7 +213,7 @@ uint8_t FPGA::set_duty_get_enc(int16_t* duty_cycles, size_t size_dut,
     uint8_t status;
 
     if (size_dut != 5 || size_enc != 5) {
-        printf("[WARN] FPGA: set_duty_get_enc() requires input buffers to be of size 5\r\n");
+        printf("[WARNING] FPGA: set_duty_get_enc() requires input buffers to be of size 5\r\n");
     }
 
     // Check for valid duty cycles values

@@ -20,7 +20,7 @@ KickerModule::KickerModule(LockedStruct<SPI>& spi,
 
 void KickerModule::start() {
     bool initialized = kicker.flash(false, true);
-    printf("INFO: Kicker initialized\r\n");
+    printf("[INFO] Kicker initialized\r\n");
     {
         kickerInfo.lock()->initialized = initialized;
     }

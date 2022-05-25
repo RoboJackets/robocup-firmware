@@ -1,6 +1,0 @@
-stylize>=0.3.0 # code reformatting and checkstyling
-wheel
-sphinx
-breathe
-sphinx-tabs
-sphinx-rtd-theme

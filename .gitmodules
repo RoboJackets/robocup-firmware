@@ -1,12 +1,8 @@
-[submodule "external/DoCIF"]
-	path = util/DoCIF
-	url = https://github.com/jgkamat/DoCIF.git
 [submodule "control/external/robocup-fshare"]
 	path = control/external/robocup-fshare
 	url = https://github.com/RoboJackets/robocup-fshare.git
-[submodule "control/mtrain"]
-	path = control/mtrain
-	url = https://github.com/RoboJackets/mtrain-firmware.git
+  branch = master
 [submodule "control/external/nanopb"]
 	path = control/external/nanopb
 	url = https://github.com/nanopb/nanopb
+
