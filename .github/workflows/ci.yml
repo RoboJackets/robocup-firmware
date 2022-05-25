@@ -24,12 +24,12 @@ jobs:
       run: make docs
   style:
     runs-on: ubuntu-20.04
-    
+
     steps:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
-        
+
     - name: Install dependencies
       run: sudo ./util/ubuntu-setup && sudo apt install python3-pip && pip install flake8-diff
     - name: Make ${{ github.base_ref }} and ${{ github.head_ref }} branches exist
