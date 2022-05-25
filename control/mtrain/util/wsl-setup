@@ -1,0 +1,7 @@
+#!/bin/bash
+
+export PATH=$PATH:/mnt/c/"Program Files (x86)"/SEGGER/JLink
+alias JLinkExe="JLink.exe"
+
+echo 'export PATH=$PATH:/mnt/c/"Program Files (x86)"/SEGGER/JLink' >> ~/.bashrc
+echo 'alias JLinkExe="JLink.exe"' >> ~/.bashrc
