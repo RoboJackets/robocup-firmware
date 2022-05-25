@@ -6,6 +6,8 @@
 
 # build directories
 /build
+cmake-build-*
+build-*
 */build
 /gmon.out
 *.swp

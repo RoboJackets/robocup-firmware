@@ -1,5 +1,8 @@
 [submodule "control/external/robocup-fshare"]
 	path = control/external/robocup-fshare
 	url = https://github.com/RoboJackets/robocup-fshare.git
-	branch = master
-  
+  branch = master
+[submodule "control/external/nanopb"]
+	path = control/external/nanopb
+	url = https://github.com/nanopb/nanopb
+
