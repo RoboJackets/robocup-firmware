@@ -1,10 +1,12 @@
 #include "modules/MotionControlModule.hpp"
-#include "mtrain.hpp"
-#include "rc-fshare/robot_model.hpp"
-#include <math.h>
-#include "MicroPackets.hpp"
-#include "DigitalOut.hpp"
+
 #include <algorithm>
+
+#include "DigitalOut.hpp"
+#include "MicroPackets.hpp"
+#include "mtrain.hpp"
+
+#include "rc-fshare/robot_model.hpp"
 
 MotionControlModule::MotionControlModule(LockedStruct<BatteryVoltage>& batteryVoltage,
                                          LockedStruct<IMUData>& imuData,
@@ -33,22 +35,22 @@ MotionControlModule::MotionControlModule(LockedStruct<BatteryVoltage>& batteryVo
 }
 
 void MotionControlModule::entry() {
-    auto motionCommandLock = motionCommand.lock();
-    auto motorCommandLock = motorCommand.lock();
-    auto motorFeedbackLock = motorFeedback.lock();
-    auto imuDataLock = imuData.lock();
-    auto batteryVoltageLock = batteryVoltage.lock();
+    auto motion_command = motionCommand.lock().value();
+    auto motor_command = motorCommand.lock().value();
+    auto motor_feedback = motorFeedback.lock().value();
+    auto imu_data = imuData.lock().value();
 
     DebugFrame frame;
     frame.ticks = xTaskGetTickCount();
-    frame.gyro_z = imuDataLock->omegas[2];
-    frame.accel_x = imuDataLock->accelerations[0];
-    frame.accel_y = imuDataLock->accelerations[1];
+    frame.gyro_z = imu_data.omegas[2];
+    frame.accel_x = imu_data.accelerations[0];
+    frame.accel_y = imu_data.accelerations[1];
 
     // No radio comm in a little while. Return and die.
-    if (!motionCommandLock->isValid || !isRecentUpdate(motionCommandLock->lastUpdate)) {
-        motorCommandLock->isValid = false;
-        motorCommandLock->lastUpdate = HAL_GetTick();
+    if (!motor_command.isValid || !isRecentUpdate(motion_command.lastUpdate)) {
+        motor_command.isValid = false;
+        motor_command.lastUpdate = HAL_GetTick();
+        printf("[WARNING] Motion control has not recent update");
     }
 
     // Fill data from shared mem
@@ -57,11 +59,11 @@ void MotionControlModule::entry() {
     measurements << 0, 0, 0, 0, 0;
     currentWheels << 0, 0, 0, 0;
 
-    if (motorFeedbackLock->isValid && isRecentUpdate(motorFeedbackLock->lastUpdate)) {
+    if (motor_feedback.isValid && isRecentUpdate(motor_feedback.lastUpdate)) {
         for (int i = 0; i < 4; i++) {
-            if (!isnan(measurements(i,0))) {
-                measurements(i, 0) = motorFeedbackLock->encoders[i];
-                currentWheels(i, 0) = motorFeedbackLock->encoders[i];
+            if (!std::isnan(measurements(i, 0))) {
+                measurements(i, 0) = motor_feedback.encoders[i];
+                currentWheels(i, 0) = motor_feedback.encoders[i];
             } else {
                 measurements(i, 0) = 0;
                 currentWheels(i, 0) = 0;
@@ -69,18 +71,16 @@ void MotionControlModule::entry() {
         }
     }
 
-    if (imuDataLock->isValid && isRecentUpdate(imuDataLock->lastUpdate)) {
-        measurements(4, 0) = imuDataLock->omegas[2]; // Z gyro
+    if (imu_data.isValid && isRecentUpdate(imu_data.lastUpdate)) {
+        measurements(4, 0) = imu_data.omegas[2];  // Z gyro
     }
 
     // Update targets
     Eigen::Matrix<float, 3, 1> targetState;
     targetState << 0, 0, 0;
 
-    if (motionCommandLock->isValid && isRecentUpdate(motionCommandLock->lastUpdate)) {
-        targetState << motionCommandLock->bodyXVel,
-                       motionCommandLock->bodyYVel,
-                       motionCommandLock->bodyWVel;
+    if (motion_command.isValid && isRecentUpdate(motion_command.lastUpdate)) {
+        targetState << motion_command.bodyXVel, motion_command.bodyYVel, motion_command.bodyWVel;
     }
 
     // Run estimators
@@ -93,12 +93,10 @@ void MotionControlModule::entry() {
     // Leaving this hear until someone can test, then remove
     // this
     // - Joe Aug 2019
-    if (motorFeedbackLock->isValid && // imuData->isValid &&
-        !isnan(measurements(0,0)) &&
-        !isnan(measurements(1,0)) &&
-        !isnan(measurements(2,0)) &&
-        !isnan(measurements(3,0)) &&
-        !isnan(measurements(4,0))) {
+    if (motor_feedback.isValid &&  // imuData->isValid &&
+        !std::isnan(measurements(0, 0)) && !std::isnan(measurements(1, 0)) &&
+        !std::isnan(measurements(2, 0)) && !std::isnan(measurements(3, 0)) &&
+        !std::isnan(measurements(4, 0))) {
         robotEstimator.update(measurements);
     } else {
         // Assume we're stopped.
@@ -114,7 +112,7 @@ void MotionControlModule::entry() {
 
     // Run controllers
     uint8_t dribblerCommand = 0;
-    dribblerController.calculate(motionCommandLock->dribbler, dribblerCommand);
+    dribblerController.calculate(motion_command.dribbler, dribblerCommand);
 
     Eigen::Matrix<float, 4, 1> targetWheels;
     Eigen::Matrix<float, 4, 1> motorCommands;
@@ -124,32 +122,21 @@ void MotionControlModule::entry() {
 
     prevCommand = motorCommands;
 
-    motorCommandLock->isValid = true;
-    motorCommandLock->lastUpdate = HAL_GetTick();
-
-    // Good to run motors
-    // todo Check stall and motor errors?
-    if (batteryVoltageLock->isValid && !batteryVoltageLock->isCritical) {
-
-        // set motors to real targets
-        for (int i = 0; i < 4; i++) {
-            motorCommandLock->wheels[i] = motorCommands(i, 0);
-        }
-        motorCommandLock->dribbler = dribblerCommand;
-    } else {
-
-        // rip battery
-        // stop
-        for (int i = 0; i < 4; i++) {
-            motorCommandLock->wheels[i] = 0.0f;
-        }
-        motorCommandLock->dribbler = 0;
-    }
+    motor_command.isValid = true;
+    motor_command.lastUpdate = HAL_GetTick();
 
     for (int i = 0; i < 4; i++) {
-        frame.motor_outputs[i] = static_cast<int16_t>(motorCommandLock->wheels[i] * 511);
-        frame.encDeltas[i] = static_cast<int16_t>(currentWheels(i));
+        motor_command.wheels[i] = motorCommands(i, 0);
+        }
+        motor_command.dribbler = dribblerCommand;
+
+        for (int i = 0; i < 4; i++) {
+            frame.motor_outputs[i] = static_cast<int16_t>(motor_command.wheels[i] * 511);
+            frame.encDeltas[i] = static_cast<int16_t>(currentWheels(i));
     }
+
+    auto motorCommandLock = motorCommand.lock();
+    motorCommandLock.value() = motor_command;
 
 #if 0
     auto debugInfoLock = debugInfo.lock();
