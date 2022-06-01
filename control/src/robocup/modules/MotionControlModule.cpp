@@ -127,12 +127,12 @@ void MotionControlModule::entry() {
 
     for (int i = 0; i < 4; i++) {
         motor_command.wheels[i] = motorCommands(i, 0);
-        }
-        motor_command.dribbler = dribblerCommand;
+    }
+    motor_command.dribbler = dribblerCommand;
 
-        for (int i = 0; i < 4; i++) {
-            frame.motor_outputs[i] = static_cast<int16_t>(motor_command.wheels[i] * 511);
-            frame.encDeltas[i] = static_cast<int16_t>(currentWheels(i));
+    for (int i = 0; i < 4; i++) {
+        frame.motor_outputs[i] = static_cast<int16_t>(motor_command.wheels[i] * 511);
+        frame.encDeltas[i] = static_cast<int16_t>(currentWheels(i));
     }
 
     auto motorCommandLock = motorCommand.lock();
