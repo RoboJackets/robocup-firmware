@@ -71,24 +71,28 @@ void RadioModule::entry() {
     }
 
     {
-        auto motionCommandLock = motionCommand.lock();
-        auto radioErrorLock = radioError.lock();
-        auto kickerCommandLock = kickerCommand.lock();
+	MotionCommand received_motion_command;
+	KickerCommand received_kicker_command;
 
         // Try read
         // Clear buffer of old packets such that we can get the lastest packet
         // If you don't do this there is a significant lag of 300ms or more
-        while (link.receive(kickerCommandLock.value(), motionCommandLock.value())) {
-            kickerCommandLock->isValid = true;
-            kickerCommandLock->lastUpdate = HAL_GetTick();
+        // while (link.receive(received_kicker_command, received_motion_command)) {}
 
-            motionCommandLock->isValid = true;
-            motionCommandLock->lastUpdate = HAL_GetTick();
-        }
+	if (received_motion_command.isValid) {
+		motionCommand.lock().value() = received_motion_command;
+	}
 
-        radioErrorLock->isValid = true;
-        radioErrorLock->lastUpdate = HAL_GetTick();
-        radioErrorLock->hasConnectionError = link.isRadioConnected();
-        radioErrorLock->hasSoccerConnectionError = link.hasSoccerTimedOut();
+	if (received_kicker_command.isValid) {
+		kickerCommand.lock().value() = received_kicker_command;
+	}
+
+	{
+		auto radioErrorLock = radioError.lock();
+        	radioErrorLock->isValid = true;
+        	radioErrorLock->lastUpdate = HAL_GetTick();
+        	radioErrorLock->hasConnectionError = link.isRadioConnected();
+        	radioErrorLock->hasSoccerConnectionError = link.hasSoccerTimedOut();
+	}
     }
 }
