@@ -14,7 +14,7 @@ public:
     /**
      * Number of times per second (frequency) that RadioModule should run (Hz)
      */
-    static constexpr float kFrequency = 50.0f;
+    static constexpr float kFrequency = 60.0f;
 
     /**
      * Number of seconds elapsed (period) between RadioModule runs (milliseconds)
@@ -24,7 +24,7 @@ public:
     /**
      * Priority used by RTOS
      */
-    static constexpr int kPriority = 3;
+    static constexpr int kPriority = 5;
 
     /**
      * Constructor for RadioModule
