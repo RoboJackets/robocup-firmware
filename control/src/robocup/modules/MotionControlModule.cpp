@@ -1,7 +1,6 @@
 #include "modules/MotionControlModule.hpp"
 #include "mtrain.hpp"
-#include "rc-fshare/robot_model.hpp"
-#include <math.h>
+#include "rc-fshare/robot_model.hpp" 
 #include "MicroPackets.hpp"
 #include "DigitalOut.hpp"
 #include <algorithm>
@@ -33,7 +32,6 @@ MotionControlModule::MotionControlModule(LockedStruct<BatteryVoltage>& batteryVo
 }
 
 void MotionControlModule::entry() {
-    auto battery_voltage_data = batteryVoltage.lock().value();
     auto motion_command = motionCommand.lock().value();
     auto motor_command = motorCommand.lock().value();
     auto motor_feedback = motorFeedback.lock().value();
@@ -49,6 +47,7 @@ void MotionControlModule::entry() {
     if (!motor_command.isValid || !isRecentUpdate(motion_command.lastUpdate)) {
         motor_command.isValid = false;
         motor_command.lastUpdate = HAL_GetTick();
+	printf("[WARNING] Motion control has not recent update");
     }
 
     // Fill data from shared mem
@@ -59,7 +58,7 @@ void MotionControlModule::entry() {
 
     if (motor_feedback.isValid && isRecentUpdate(motor_feedback.lastUpdate)) {
         for (int i = 0; i < 4; i++) {
-            if (!isnan(measurements(i,0))) {
+            if (!std::isnan(measurements(i,0))) {
                 measurements(i, 0) = motor_feedback.encoders[i];
                 currentWheels(i, 0) = motor_feedback.encoders[i];
             } else {
@@ -68,6 +67,7 @@ void MotionControlModule::entry() {
             }
         }
     }
+
 
     if (imu_data.isValid && isRecentUpdate(imu_data.lastUpdate)) {
         measurements(4, 0) = imu_data.omegas[2]; // Z gyro
@@ -94,11 +94,11 @@ void MotionControlModule::entry() {
     // this
     // - Joe Aug 2019
     if (motor_feedback.isValid && // imuData->isValid &&
-        !isnan(measurements(0,0)) &&
-        !isnan(measurements(1,0)) &&
-        !isnan(measurements(2,0)) &&
-        !isnan(measurements(3,0)) &&
-        !isnan(measurements(4,0))) {
+        !std::isnan(measurements(0,0)) &&
+        !std::isnan(measurements(1,0)) &&
+        !std::isnan(measurements(2,0)) &&
+        !std::isnan(measurements(3,0)) &&
+        !std::isnan(measurements(4,0))) {
         robotEstimator.update(measurements);
     } else {
         // Assume we're stopped.
@@ -127,24 +127,11 @@ void MotionControlModule::entry() {
     motor_command.isValid = true;
     motor_command.lastUpdate = HAL_GetTick();
 
-    // Good to run motors
-    // todo Check stall and motor errors?
-    if (battery_voltage_data.isValid && !battery_voltage_data.isCritical) {
-
-        // set motors to real targets
         for (int i = 0; i < 4; i++) {
             motor_command.wheels[i] = motorCommands(i, 0);
         }
         motor_command.dribbler = dribblerCommand;
-    } else {
 
-        // rip battery
-        // stop
-        for (int i = 0; i < 4; i++) {
-            motor_command.wheels[i] = 0.0f;
-        }
-        motor_command.dribbler = 0;
-    }
 
     for (int i = 0; i < 4; i++) {
         frame.motor_outputs[i] = static_cast<int16_t>(motor_command.wheels[i] * 511);
