@@ -81,6 +81,7 @@ bool RadioLink::receive(KickerCommand& kickerCommand,
 
     if (radio->receive(packet.data(), rtp::ForwardSize) != rtp::ForwardSize) {
         // didn't get enough bytes
+	printf("[WARNING] Did not get enough bytes\r\n");
         cyclesWithoutPackets++;
         return false;
     }
@@ -106,5 +107,6 @@ bool RadioLink::receive(KickerCommand& kickerCommand,
 
     cyclesWithoutPackets = 0;
     radioConnected = radio->isConnected();
+    printf("[INFO] Radio Link says we received\r\n");
     return true;
 }
