@@ -1,9 +1,12 @@
 #include "modules/MotionControlModule.hpp"
-#include "mtrain.hpp"
-#include "rc-fshare/robot_model.hpp" 
-#include "MicroPackets.hpp"
-#include "DigitalOut.hpp"
+
 #include <algorithm>
+
+#include "DigitalOut.hpp"
+#include "MicroPackets.hpp"
+#include "mtrain.hpp"
+
+#include "rc-fshare/robot_model.hpp"
 
 MotionControlModule::MotionControlModule(LockedStruct<BatteryVoltage>& batteryVoltage,
                                          LockedStruct<IMUData>& imuData,
@@ -47,7 +50,7 @@ void MotionControlModule::entry() {
     if (!motor_command.isValid || !isRecentUpdate(motion_command.lastUpdate)) {
         motor_command.isValid = false;
         motor_command.lastUpdate = HAL_GetTick();
-	printf("[WARNING] Motion control has not recent update");
+        printf("[WARNING] Motion control has not recent update");
     }
 
     // Fill data from shared mem
@@ -58,7 +61,7 @@ void MotionControlModule::entry() {
 
     if (motor_feedback.isValid && isRecentUpdate(motor_feedback.lastUpdate)) {
         for (int i = 0; i < 4; i++) {
-            if (!std::isnan(measurements(i,0))) {
+            if (!std::isnan(measurements(i, 0))) {
                 measurements(i, 0) = motor_feedback.encoders[i];
                 currentWheels(i, 0) = motor_feedback.encoders[i];
             } else {
@@ -68,9 +71,8 @@ void MotionControlModule::entry() {
         }
     }
 
-
     if (imu_data.isValid && isRecentUpdate(imu_data.lastUpdate)) {
-        measurements(4, 0) = imu_data.omegas[2]; // Z gyro
+        measurements(4, 0) = imu_data.omegas[2];  // Z gyro
     }
 
     // Update targets
@@ -78,9 +80,7 @@ void MotionControlModule::entry() {
     targetState << 0, 0, 0;
 
     if (motion_command.isValid && isRecentUpdate(motion_command.lastUpdate)) {
-        targetState << motion_command.bodyXVel,
-                       motion_command.bodyYVel,
-                       motion_command.bodyWVel;
+        targetState << motion_command.bodyXVel, motion_command.bodyYVel, motion_command.bodyWVel;
     }
 
     // Run estimators
@@ -93,12 +93,10 @@ void MotionControlModule::entry() {
     // Leaving this hear until someone can test, then remove
     // this
     // - Joe Aug 2019
-    if (motor_feedback.isValid && // imuData->isValid &&
-        !std::isnan(measurements(0,0)) &&
-        !std::isnan(measurements(1,0)) &&
-        !std::isnan(measurements(2,0)) &&
-        !std::isnan(measurements(3,0)) &&
-        !std::isnan(measurements(4,0))) {
+    if (motor_feedback.isValid &&  // imuData->isValid &&
+        !std::isnan(measurements(0, 0)) && !std::isnan(measurements(1, 0)) &&
+        !std::isnan(measurements(2, 0)) && !std::isnan(measurements(3, 0)) &&
+        !std::isnan(measurements(4, 0))) {
         robotEstimator.update(measurements);
     } else {
         // Assume we're stopped.
@@ -127,15 +125,14 @@ void MotionControlModule::entry() {
     motor_command.isValid = true;
     motor_command.lastUpdate = HAL_GetTick();
 
-        for (int i = 0; i < 4; i++) {
-            motor_command.wheels[i] = motorCommands(i, 0);
+    for (int i = 0; i < 4; i++) {
+        motor_command.wheels[i] = motorCommands(i, 0);
         }
         motor_command.dribbler = dribblerCommand;
 
-
-    for (int i = 0; i < 4; i++) {
-        frame.motor_outputs[i] = static_cast<int16_t>(motor_command.wheels[i] * 511);
-        frame.encDeltas[i] = static_cast<int16_t>(currentWheels(i));
+        for (int i = 0; i < 4; i++) {
+            frame.motor_outputs[i] = static_cast<int16_t>(motor_command.wheels[i] * 511);
+            frame.encDeltas[i] = static_cast<int16_t>(currentWheels(i));
     }
 
     auto motorCommandLock = motorCommand.lock();

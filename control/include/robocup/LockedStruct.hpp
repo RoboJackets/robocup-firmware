@@ -96,12 +96,12 @@ public:
 private:
     void acquire_mutex() {
         // xSemaphoreTakeRecursive(mutex, 100);
-	taskENTER_CRITICAL();
+        taskENTER_CRITICAL();
     }
 
     void release_mutex() {
         // xSemaphoreGiveRecursive(mutex);
-	taskEXIT_CRITICAL();
+        taskEXIT_CRITICAL();
     }
 
     friend struct Lock;
