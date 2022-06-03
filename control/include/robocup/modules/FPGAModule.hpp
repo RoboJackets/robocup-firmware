@@ -18,7 +18,7 @@ public:
     /**
      * Number of times per second (frequency) that FPGAModule should run (Hz)
      */
-    static constexpr float kFrequency = 200.0f;
+    static constexpr float kFrequency = 100.0f;
 
     /**
      * Number of seconds elapsed (period) between FPGAModule runs (milliseconds)
