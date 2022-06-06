@@ -61,7 +61,7 @@ int main() {
         dial.entry();
         printf("RobotID: %d\r\n", robotIDLock->robotID);
 
-	// calculate reasonable scale factor based on robot id 
+        // calculate reasonable scale factor based on robot id
         float duty = ((robotIDLock->robotID ^ 8) - 8) % 8 / 8.0;
 
         motorCommandLock->isValid = true;
