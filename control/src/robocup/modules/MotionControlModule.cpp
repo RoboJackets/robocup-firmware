@@ -50,7 +50,7 @@ void MotionControlModule::entry() {
     if (!motor_command.isValid || !isRecentUpdate(motion_command.lastUpdate)) {
         motor_command.isValid = false;
         motor_command.lastUpdate = HAL_GetTick();
-        printf("[WARNING] Motion control has not recent update");
+        printf("[WARNING] Motion control has not recently updated\r\n");
     }
 
     // Fill data from shared mem
@@ -72,6 +72,7 @@ void MotionControlModule::entry() {
     }
 
     if (imu_data.isValid && isRecentUpdate(imu_data.lastUpdate)) {
+        printf("[INFO] Valid IMU\r\n");
         measurements(4, 0) = imu_data.omegas[2];  // Z gyro
     }
 
@@ -80,6 +81,7 @@ void MotionControlModule::entry() {
     targetState << 0, 0, 0;
 
     if (motion_command.isValid && isRecentUpdate(motion_command.lastUpdate)) {
+        printf("[INFO] Valid motion command\r\n");
         targetState << motion_command.bodyXVel, motion_command.bodyYVel, motion_command.bodyWVel;
     }
 

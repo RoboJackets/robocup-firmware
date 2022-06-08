@@ -66,10 +66,12 @@ void RadioModule::entry() {
     // Just check to see if our robot id is valid
     // That way we don't conflict with other robots on the network
     // that are working
+#if 0
     if (battery.isValid && fpga.isValid && id.isValid) {
         link.send(battery, fpga, kicker, id, debug);
         printf("\x1B[32m [INFO] Radio sent information \x1B[37m\r\n");
     }
+#endif
 
     {
         MotionCommand received_motion_command;
@@ -78,9 +80,9 @@ void RadioModule::entry() {
         // Try read
         // Clear buffer of old packets such that we can get the lastest packet
         // If you don't do this there is a significant lag of 300ms or more
+#if 0
         while (link.receive(received_kicker_command, received_motion_command)) {
         }
-
         // link.receive(received_kicker_command, received_motion_command);
         printf("\x1B[32m [INFO] Radio probably received information \x1B[37m \r\n");
 
@@ -91,6 +93,17 @@ void RadioModule::entry() {
         if (received_kicker_command.isValid) {
             kickerCommand.lock().value() = received_kicker_command;
         }
+#endif
+
+        motionCommand.lock().value().bodyXVel = 0.5;
+        motionCommand.lock().value().dribbler = 127;
+        motionCommand.lock().value().lastUpdate = HAL_GetTick();
+        motionCommand.lock().value().isValid = true;
+
+        kickerCommand.lock().value().lastUpdate = HAL_GetTick();
+        kickerCommand.lock().value().triggerMode = KickerCommand::TriggerMode::OFF;
+        kickerCommand.lock().value().shootMode = KickerCommand::ShootMode::KICK;
+        kickerCommand.lock().value().isValid = true;
 
         {
             auto radioErrorLock = radioError.lock();
