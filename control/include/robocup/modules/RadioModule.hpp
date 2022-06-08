@@ -43,7 +43,8 @@ public:
                 LockedStruct<KickerCommand>& kickerCommand,
                 LockedStruct<MotionCommand>& motionCommand,
                 LockedStruct<RadioError>& radioError,
-                LockedStruct<DebugInfo>& debugInfo);
+                LockedStruct<DebugInfo>& debugInfo,
+                void(*entry_type)());
 
     /**
      * Code which initializes module
@@ -58,6 +59,10 @@ public:
      */
     void entry() override;
 
+    void entry_real();
+
+    void entry_fake();
+
 private:
     LockedStruct<BatteryVoltage>& batteryVoltage;
     LockedStruct<FPGAStatus>& fpgaStatus;
@@ -69,6 +74,7 @@ private:
     LockedStruct<RadioError>& radioError;
     LockedStruct<DebugInfo>& debugInfo;
 
+    std::function<void()> entry_type;
     /**
      * General radio driver interface acting as a middle man to send and receive radio packets
      */

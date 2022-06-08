@@ -1,4 +1,4 @@
-
+#include "main.hpp"
 #include "mtrain.hpp"
 #include "FreeRTOSConfig.h"
 #include "FreeRTOS.h"
@@ -36,6 +36,7 @@
 // needs to run
 #define MAX_MISS_CNT 5
 
+extern bool fake_radio_flag;
 
 struct MODULE_META_DATA {
     // Time in sysclock ticks of last module execution
@@ -103,7 +104,7 @@ void createModule(GenericModule *module) {
     }
 }
 
-int main() {
+int main::main() {
     static LockedStruct<I2C> sharedI2C(SHARED_I2C_BUS);
     static std::unique_ptr<SPI> fpgaSPI = std::make_unique<SPI>(FPGA_SPI_BUS, std::nullopt, 16'000'000);
     static LockedStruct<SPI> sharedSPI(SHARED_SPI_BUS, std::nullopt, 100'000);
@@ -137,14 +138,15 @@ int main() {
                            motorFeedback);
     createModule(&fpga);
 
-    static RadioModule radio(batteryVoltage,
+    RadioModule radio(batteryVoltage,
                              fpgaStatus,
                              kickerInfo,
                              robotID,
                              kickerCommand,
                              motionCommand,
                              radioError,
-                             debugInfo);
+                             debugInfo,
+                      reinterpret_cast<void (RadioModule::*)(void)>(&RadioModule::entry_real));
     createModule(&radio);
 
     static KickerModule kicker(sharedSPI,

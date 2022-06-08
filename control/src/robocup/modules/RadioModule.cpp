@@ -1,3 +1,5 @@
+#include <functional>
+#include <utility>
 #include "modules/RadioModule.hpp"
 #include "iodefs.h"
 
@@ -8,14 +10,16 @@ RadioModule::RadioModule(LockedStruct<BatteryVoltage>& batteryVoltage,
                          LockedStruct<KickerCommand>& kickerCommand,
                          LockedStruct<MotionCommand>& motionCommand,
                          LockedStruct<RadioError>& radioError,
-                         LockedStruct<DebugInfo>& debugInfo)
+                         LockedStruct<DebugInfo>& debugInfo,
+                         void(*entry_type)())
     : GenericModule(kPeriod, "radio", kPriority),
       batteryVoltage(batteryVoltage), fpgaStatus(fpgaStatus),
       kickerInfo(kickerInfo), robotID(robotID),
       kickerCommand(kickerCommand), motionCommand(motionCommand),
       radioError(radioError),
       debugInfo(debugInfo), link(),
-      secondRadioCS(RADIO_R1_CS) {
+      secondRadioCS(RADIO_R1_CS),
+      entry_type(entry_type) {
 
     secondRadioCS = 1;
 
@@ -49,6 +53,10 @@ void RadioModule::start() {
 }
 
 void RadioModule::entry() {
+    RadioModule::entry_real();
+}
+
+void RadioModule::entry_real() {
     BatteryVoltage battery;
     FPGAStatus fpga;
     RobotID id;

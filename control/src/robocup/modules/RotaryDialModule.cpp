@@ -18,10 +18,10 @@ void RotaryDialModule::start() {
     dial.init();
 }
 
-void RotaryDialModule::entry(void) {
+void RotaryDialModule::entry() {
     int new_robot_id = dial.read();
 
-    //printf("Rotary dial: %d\r\n", new_robot_id);
+    printf("Rotary dial: %d\r\n", new_robot_id);
 
     auto robotIDLock = robotID.lock();
     if (last_robot_id == new_robot_id) {
