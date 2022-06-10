@@ -1,6 +1,7 @@
 #include "modules/RadioModule.hpp"
-#include "test/motor.hpp"
+
 #include "iodefs.h"
+#include "test/motor.hpp"
 
 RadioModule::RadioModule(LockedStruct<BatteryVoltage>& batteryVoltage,
                          LockedStruct<FPGAStatus>& fpgaStatus,
