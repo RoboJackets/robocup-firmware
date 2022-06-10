@@ -74,4 +74,7 @@ private:
      */
     RadioLink link;
     DigitalOut secondRadioCS;
+
+    void fakeEntry();
+    void realEntry();
 };

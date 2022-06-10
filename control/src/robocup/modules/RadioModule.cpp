@@ -1,4 +1,5 @@
 #include "modules/RadioModule.hpp"
+#include "test/motor.hpp"
 #include "iodefs.h"
 
 RadioModule::RadioModule(LockedStruct<BatteryVoltage>& batteryVoltage,
@@ -49,6 +50,14 @@ void RadioModule::start() {
 }
 
 void RadioModule::entry() {
+    if constexpr (run_motor_test) {
+        fakeEntry();
+    } else {
+        realEntry();
+    }
+}
+
+void RadioModule::realEntry() {
     BatteryVoltage battery;
     FPGAStatus fpga;
     RobotID id;
@@ -100,4 +109,22 @@ void RadioModule::entry() {
             radioErrorLock->hasSoccerConnectionError = link.hasSoccerTimedOut();
         }
     }
+}
+
+void RadioModule::fakeEntry() {
+    // TODO: support rotary dial input to change these values
+    MotionCommand motion_command;
+    KickerCommand kicker_command;
+
+    motion_command.bodyXVel = 0.5;
+    motion_command.dribbler = 127;
+    motion_command.lastUpdate = HAL_GetTick();
+    motion_command.isValid = true;
+    motionCommand.lock().value() = motion_command;
+
+    kicker_command.lastUpdate = HAL_GetTick();
+    kicker_command.shootMode = KickerCommand::ShootMode::KICK;
+    kicker_command.triggerMode = KickerCommand::TriggerMode::OFF;
+    kicker_command.isValid = true;
+    kickerCommand.lock().value() = kicker_command;
 }
