@@ -113,12 +113,17 @@ void RadioModule::realEntry() {
 }
 
 void RadioModule::fakeEntry() {
-    // TODO: support rotary dial input to change these values
+    RobotID id;
+
+    {
+        id = robotID.lock().value();
+    }
+
     MotionCommand motion_command;
     KickerCommand kicker_command;
 
-    motion_command.bodyXVel = 0.5;
-    motion_command.dribbler = 127;
+    motion_command.bodyXVel = max_x_vel * calcScaleFactor(id.robotID);
+    motion_command.dribbler = std::abs(max_dribbler_val * id.robotID);
     motion_command.lastUpdate = HAL_GetTick();
     motion_command.isValid = true;
     motionCommand.lock().value() = motion_command;
@@ -128,4 +133,9 @@ void RadioModule::fakeEntry() {
     kicker_command.triggerMode = KickerCommand::TriggerMode::OFF;
     kicker_command.isValid = true;
     kickerCommand.lock().value() = kicker_command;
+}
+
+float RadioModule::calcScaleFactor(int value) {
+    float duty = ((value ^ 8) - 8) % 8 / 8.0;
+    return duty;
 }

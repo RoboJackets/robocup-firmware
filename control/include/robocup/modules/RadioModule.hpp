@@ -77,4 +77,11 @@ private:
 
     void fakeEntry();
     void realEntry();
+
+    /**
+     * Used to generate scale factor, evenly spaced apart based on robot id
+     * @param value input from fakeEntry from rotary dial
+     * @return scale factor, can be positive or negative
+     */
+    static float calcScaleFactor(int value);
 };
