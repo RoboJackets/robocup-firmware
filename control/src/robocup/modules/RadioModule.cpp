@@ -115,9 +115,7 @@ void RadioModule::realEntry() {
 void RadioModule::fakeEntry() {
     RobotID id;
 
-    {
-        id = robotID.lock().value();
-    }
+    { id = robotID.lock().value(); }
 
     MotionCommand motion_command;
     KickerCommand kicker_command;
