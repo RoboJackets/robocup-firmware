@@ -1,5 +1,7 @@
 #include "modules/RadioModule.hpp"
+
 #include "iodefs.h"
+#include "test/motor.hpp"
 
 RadioModule::RadioModule(LockedStruct<BatteryVoltage>& batteryVoltage,
                          LockedStruct<FPGAStatus>& fpgaStatus,
@@ -49,6 +51,14 @@ void RadioModule::start() {
 }
 
 void RadioModule::entry() {
+    if constexpr (run_motor_test) {
+        fakeEntry();
+    } else {
+        realEntry();
+    }
+}
+
+void RadioModule::realEntry() {
     BatteryVoltage battery;
     FPGAStatus fpga;
     RobotID id;
@@ -100,4 +110,32 @@ void RadioModule::entry() {
             radioErrorLock->hasSoccerConnectionError = link.hasSoccerTimedOut();
         }
     }
+}
+
+void RadioModule::fakeEntry() {
+    RobotID id;
+
+    {
+        id = robotID.lock().value();
+    }
+
+    MotionCommand motion_command;
+    KickerCommand kicker_command;
+
+    motion_command.bodyXVel = max_x_vel * calcScaleFactor(id.robotID);
+    motion_command.dribbler = std::abs(max_dribbler_val * id.robotID);
+    motion_command.lastUpdate = HAL_GetTick();
+    motion_command.isValid = true;
+    motionCommand.lock().value() = motion_command;
+
+    kicker_command.lastUpdate = HAL_GetTick();
+    kicker_command.shootMode = KickerCommand::ShootMode::KICK;
+    kicker_command.triggerMode = KickerCommand::TriggerMode::OFF;
+    kicker_command.isValid = true;
+    kickerCommand.lock().value() = kicker_command;
+}
+
+float RadioModule::calcScaleFactor(int value) {
+    float duty = ((value ^ 8) - 8) % 8 / 8.0;
+    return duty;
 }
