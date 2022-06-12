@@ -24,7 +24,7 @@ public:
     /**
      * Priority used by RTOS
      */
-    static constexpr int kPriority = 3;
+    static constexpr int kPriority = 5;
 
     /**
      * Constructor for RadioModule
@@ -74,4 +74,7 @@ private:
      */
     RadioLink link;
     DigitalOut secondRadioCS;
+
+    void fakeEntry();
+    void realEntry();
 };
