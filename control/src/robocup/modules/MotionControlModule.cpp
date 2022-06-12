@@ -50,7 +50,7 @@ void MotionControlModule::entry() {
     if (!motor_command.isValid || !isRecentUpdate(motion_command.lastUpdate)) {
         motor_command.isValid = false;
         motor_command.lastUpdate = HAL_GetTick();
-        printf("[WARNING] Motion control has not recent update");
+        //printf("[WARNING] Motion control has not recent update, %d %lu \r\n", motor_command.isValid, motion_command.lastUpdate);
     }
 
     // Fill data from shared mem

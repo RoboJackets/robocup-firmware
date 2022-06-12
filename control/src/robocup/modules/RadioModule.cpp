@@ -92,7 +92,6 @@ void RadioModule::realEntry() {
         }
 
         // link.receive(received_kicker_command, received_motion_command);
-        printf("\x1B[32m [INFO] Radio probably received information \x1B[37m \r\n");
 
         if (received_motion_command.isValid) {
             motionCommand.lock().value() = received_motion_command;

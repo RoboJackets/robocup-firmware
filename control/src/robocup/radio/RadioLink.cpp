@@ -107,6 +107,6 @@ bool RadioLink::receive(KickerCommand& kickerCommand,
 
     cyclesWithoutPackets = 0;
     radioConnected = radio->isConnected();
-    printf("[INFO] Radio Link says we received\r\n");
+    printf("[INFO] Radio Link says we received, %f\r\n", motionCommand.bodyXVel);
     return true;
 }
