@@ -120,8 +120,11 @@ void RadioModule::fakeEntry() {
     MotionCommand motion_command;
     KickerCommand kicker_command;
 
-    motion_command.bodyXVel = max_x_vel * calcScaleFactor(id.robotID);
-    motion_command.dribbler = std::abs(max_dribbler_val * id.robotID);
+    float scale = ((id.robotID ^ 8) - 8) % 8 / 8.0;
+    motion_command.bodyXVel = max_vel * scale;
+    motion_command.bodyYVel = 0.0;
+    motion_command.bodyWVel = 0.0;
+    motion_command.dribbler = std::abs(max_dribbler_val * scale);
     motion_command.lastUpdate = HAL_GetTick();
     motion_command.isValid = true;
     motionCommand.lock().value() = motion_command;
@@ -131,9 +134,4 @@ void RadioModule::fakeEntry() {
     kicker_command.triggerMode = KickerCommand::TriggerMode::OFF;
     kicker_command.isValid = true;
     kickerCommand.lock().value() = kicker_command;
-}
-
-float RadioModule::calcScaleFactor(int value) {
-    float duty = ((value ^ 8) - 8) % 8 / 8.0;
-    return duty;
 }
