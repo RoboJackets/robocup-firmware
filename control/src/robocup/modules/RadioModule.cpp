@@ -69,7 +69,6 @@ void RadioModule::realEntry() {
         battery = batteryVoltage.lock().value();
         fpga = fpgaStatus.lock().value();
         id = robotID.lock().value();
-        kicker = kickerInfo.lock().value();
         std::swap(debug, debugInfo.lock().value());
     }
 
@@ -77,6 +76,9 @@ void RadioModule::realEntry() {
     // That way we don't conflict with other robots on the network
     // that are working
     if (battery.isValid && fpga.isValid && id.isValid) {
+        {
+            kicker = kickerInfo.lock().value();
+        }
         link.send(battery, fpga, kicker, id, debug);
         printf("\x1B[32m [INFO] Radio sent information \x1B[37m\r\n");
     }
@@ -90,8 +92,6 @@ void RadioModule::realEntry() {
         // If you don't do this there is a significant lag of 300ms or more
         while (link.receive(received_kicker_command, received_motion_command)) {
         }
-
-        // link.receive(received_kicker_command, received_motion_command);
 
         if (received_motion_command.isValid) {
             motionCommand.lock().value() = received_motion_command;

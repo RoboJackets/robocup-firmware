@@ -73,6 +73,7 @@ bool RadioLink::receive(KickerCommand& kickerCommand,
                        MotionCommand& motionCommand) {
     // Make sure there is actually data to read
     if (!radio->isAvailable()) {
+        printf("[WARNING] Radio is not available\r\n");
         cyclesWithoutPackets++;
         return false;
     }

@@ -82,6 +82,8 @@ bool ISM43340::isAvailable() {
         }
     }
 
+    printf("%d %d", !matchNoData, !matchErr);
+
     return !matchNoData && !matchErr;
 }
 
