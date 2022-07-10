@@ -20,8 +20,12 @@ void RadioLink::send(const BatteryVoltage& batteryVoltage,
                      const KickerInfo& kickerInfo,
                      const RobotID& robotID,
                      DebugInfo& debugInfo) {
-    std::array<uint8_t, rtp::ReverseSize> packet;
-    rtp::Header* header = reinterpret_cast<rtp::Header*>(&packet[0]);
+    std::array<uint8_t, rtp::ReverseSize> packet; // The packet we're going to send
+    rtp::Header* header = reinterpret_cast<rtp::Header*>(&packet[0]); // The header for the packet.
+
+    /* The robot status information we want to send with the packet.Don't confuse
+     * this with the send method from the ISM43340 driver
+     */
     rtp::RobotStatusMessage* status = reinterpret_cast<rtp::RobotStatusMessage*>(&packet[rtp::HeaderSize]);
 
     header->address = rtp::BASE_STATION_ADDRESS;
