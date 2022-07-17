@@ -306,15 +306,15 @@ void ISM43340::pingRouter() {
 void ISM43340::reset() {
     for(int i = 0; i < 5; i++) {
         nReset = ISMConstants::RESET_TURN_OFF;
-        vTaskDelay(ISMConstants::RESET_DELAY);
+        DWT_Delay(ISMConstants::RESET_DELAY * 1000);
         nReset = ISMConstants::RESET_TURN_ON;
-        vTaskDelay(ISMConstants::RESET_DELAY);
+        DWT_Delay(ISMConstants::RESET_DELAY * 1000);
 
         radioSPI->frequency(ISMConstants::SPI_FREQ);
 
         // Wait for device to turn on
         for (int counter = 0; counter < 1500; counter++) {
-            vTaskDelay(10);
+		DWT_Delay(1000 * 10);
             if (interruptin_read(dataReady)) {
                 break;
             }
