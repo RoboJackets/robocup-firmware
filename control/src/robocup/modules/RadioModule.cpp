@@ -69,6 +69,10 @@ void RadioModule::realEntry() {
         battery = batteryVoltage.lock().value();
         fpga = fpgaStatus.lock().value();
         id = robotID.lock().value();
+    }
+    auto kickCommandLock = kickerCommand.lock();
+    {
+        kicker = kickerInfo.lock().value();
         std::swap(debug, debugInfo.lock().value());
     }
 
@@ -76,9 +80,6 @@ void RadioModule::realEntry() {
     // That way we don't conflict with other robots on the network
     // that are working
     if (battery.isValid && fpga.isValid && id.isValid) {
-        {
-            kicker = kickerInfo.lock().value();
-        }
         link.send(battery, fpga, kicker, id, debug);
         printf("\x1B[32m [INFO] Radio sent information \x1B[37m\r\n");
     }
@@ -98,8 +99,9 @@ void RadioModule::realEntry() {
         }
 
         if (received_kicker_command.isValid) {
-            kickerCommand.lock().value() = received_kicker_command;
+            kickCommandLock.value() = received_kicker_command;
         }
+        // kickCommandLock.~Lock();
 
         {
             auto radioErrorLock = radioError.lock();
