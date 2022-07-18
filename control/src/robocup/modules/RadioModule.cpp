@@ -1,5 +1,7 @@
 #include "modules/RadioModule.hpp"
+
 #include "iodefs.h"
+#include "test/motor.hpp"
 
 RadioModule::RadioModule(LockedStruct<BatteryVoltage>& batteryVoltage,
                          LockedStruct<FPGAStatus>& fpgaStatus,
@@ -49,6 +51,14 @@ void RadioModule::start() {
 }
 
 void RadioModule::entry() {
+    if constexpr (run_motor_test) {
+        fakeEntry();
+    } else {
+        realEntry();
+    }
+}
+
+void RadioModule::realEntry() {
     BatteryVoltage battery;
     FPGAStatus fpga;
     RobotID id;
@@ -59,7 +69,6 @@ void RadioModule::entry() {
         battery = batteryVoltage.lock().value();
         fpga = fpgaStatus.lock().value();
         id = robotID.lock().value();
-        kicker = kickerInfo.lock().value();
         std::swap(debug, debugInfo.lock().value());
     }
 
@@ -67,28 +76,61 @@ void RadioModule::entry() {
     // That way we don't conflict with other robots on the network
     // that are working
     if (battery.isValid && fpga.isValid && id.isValid) {
+        {
+            kicker = kickerInfo.lock().value();
+        }
         link.send(battery, fpga, kicker, id, debug);
+        printf("\x1B[32m [INFO] Radio sent information \x1B[37m\r\n");
     }
 
     {
-        auto motionCommandLock = motionCommand.lock();
-        auto radioErrorLock = radioError.lock();
-        auto kickerCommandLock = kickerCommand.lock();
+        MotionCommand received_motion_command;
+        KickerCommand received_kicker_command;
 
         // Try read
         // Clear buffer of old packets such that we can get the lastest packet
         // If you don't do this there is a significant lag of 300ms or more
-        while (link.receive(kickerCommandLock.value(), motionCommandLock.value())) {
-            kickerCommandLock->isValid = true;
-            kickerCommandLock->lastUpdate = HAL_GetTick();
-
-            motionCommandLock->isValid = true;
-            motionCommandLock->lastUpdate = HAL_GetTick();
+        while (link.receive(received_kicker_command, received_motion_command)) {
         }
 
-        radioErrorLock->isValid = true;
-        radioErrorLock->lastUpdate = HAL_GetTick();
-        radioErrorLock->hasConnectionError = link.isRadioConnected();
-        radioErrorLock->hasSoccerConnectionError = link.hasSoccerTimedOut();
+        if (received_motion_command.isValid) {
+            motionCommand.lock().value() = received_motion_command;
+        }
+
+        if (received_kicker_command.isValid) {
+            kickerCommand.lock().value() = received_kicker_command;
+        }
+
+        {
+            auto radioErrorLock = radioError.lock();
+            radioErrorLock->isValid = true;
+            radioErrorLock->lastUpdate = HAL_GetTick();
+            radioErrorLock->hasConnectionError = link.isRadioConnected();
+            radioErrorLock->hasSoccerConnectionError = link.hasSoccerTimedOut();
+        }
     }
+}
+
+void RadioModule::fakeEntry() {
+    RobotID id;
+
+    { id = robotID.lock().value(); }
+
+    MotionCommand motion_command;
+    KickerCommand kicker_command;
+
+    float scale = ((id.robotID ^ 8) - 8) % 8 / 8.0;
+    motion_command.bodyXVel = max_vel * scale;
+    motion_command.bodyYVel = 0.0;
+    motion_command.bodyWVel = 0.0;
+    motion_command.dribbler = std::abs(max_dribbler_val * scale);
+    motion_command.lastUpdate = HAL_GetTick();
+    motion_command.isValid = true;
+    motionCommand.lock().value() = motion_command;
+
+    kicker_command.lastUpdate = HAL_GetTick();
+    kicker_command.shootMode = KickerCommand::ShootMode::KICK;
+    kicker_command.triggerMode = KickerCommand::TriggerMode::OFF;
+    kicker_command.isValid = true;
+    kickerCommand.lock().value() = kicker_command;
 }

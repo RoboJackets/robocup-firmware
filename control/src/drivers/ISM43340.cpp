@@ -3,9 +3,9 @@
 #include <cstring>
 #include "interrupt_in.h"
 
-
 #include "FreeRTOS.h"
 #include "task.h"
+#include "macro.hpp"
 #include <string>
 #include <cstdio>
 
@@ -81,6 +81,8 @@ bool ISM43340::isAvailable() {
             break;
         }
     }
+
+    printf("noData: %s", noData.c_str());
 
     return !matchNoData && !matchErr;
 }
@@ -304,15 +306,14 @@ void ISM43340::pingRouter() {
 void ISM43340::reset() {
     for(int i = 0; i < 5; i++) {
         nReset = ISMConstants::RESET_TURN_OFF;
-        vTaskDelay(ISMConstants::RESET_DELAY);
+        delay_from_tick(ISMConstants::RESET_DELAY);
         nReset = ISMConstants::RESET_TURN_ON;
-        vTaskDelay(ISMConstants::RESET_DELAY);
-
+        delay_from_tick(ISMConstants::RESET_DELAY);
         radioSPI->frequency(ISMConstants::SPI_FREQ);
 
         // Wait for device to turn on
         for (int counter = 0; counter < 1500; counter++) {
-            vTaskDelay(10);
+            DWT_Delay(1000 * 10);
             if (interruptin_read(dataReady)) {
                 break;
             }
@@ -322,8 +323,7 @@ void ISM43340::reset() {
 
         if (isInit) {
             break;
-            //return;
-        } 
+        }
         else if (i == 4){
             printf("[ERROR] Failed to initialize radio.\r\n");
         }

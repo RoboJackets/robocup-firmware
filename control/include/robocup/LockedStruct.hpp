@@ -72,9 +72,11 @@ public:
      * Lock this struct.
      * @param first_lock [optional] output parameter to determine whether or
      *      not this is the only current lock on this struct.
+     * @param debug_string [optional] output parameter used for keeping track of where the
+     *      lock method was called from
      * @return a lock on this struct.
      */
-    Lock lock(bool *first_lock = nullptr) {
+    Lock lock(bool *first_lock = nullptr, const char* debug_string = nullptr) {
         return Lock(this, first_lock);
     }
 

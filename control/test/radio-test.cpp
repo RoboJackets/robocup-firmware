@@ -1,30 +1,30 @@
-#include "mtrain.hpp"
-#include "SPI.hpp"
 #include <optional>
 
-#include "drivers/ISM43340.hpp"
+#include "SPI.hpp"
 #include "bsp.h"
+#include "delay.h"
+#include "drivers/ISM43340.hpp"
+#include "mtrain.hpp"
+#include "radio/RadioLink.hpp"
+#include "macro.hpp"
+
+#undef USING_RTOS
 
 int main() {
-  //   DigitalOut l1 = DigitalOut(LED1);
+    std::unique_ptr radioSPI = std::make_unique<SPI>(SpiBus5, std::nullopt, 16'000'000);
+    auto radioDriver =
+        std::make_unique<ISM43340>(std::move(radioSPI), RADIO_R0_CS, RADIO_GLB_RST, RADIO_R0_INT);
 
-  //   l1 = 1;
+    const char* data = "hello world";
+    const unsigned int num_bytes = strlen(data);
 
-  //   LOG(LOG_INFO, LOG_MAIN, "Starting\r\n");
+    char buffer[1024];
 
-
-  //   fflush(stdout);
-
-  //   std::shared_ptr<SPI> radioSPI = std::make_shared<SPI>(SpiBus5, std::nullopt, 1'000'000);
-  //   ISM43340 radioDriver(radioSPI, p17, p19, p30);
-
-  //   radioDriver.pingRouter();
-  //   radioDriver.testPrint();
-
-  //   LOG(LOG_INFO, LOG_MAIN, "Finished\r\n");
-
-  // while (true) {
-  //     l1.toggle();
-  //     HAL_Delay(100);
-  // }
+    while (true) {
+        delay_from_microseconds(1000);
+        if (radioDriver->isAvailable()) {
+            int num = radioDriver->receive((unsigned char*)buffer, 1024);
+            radioDriver->send((uint8_t*)buffer, num);
+        }
+    }
 }
