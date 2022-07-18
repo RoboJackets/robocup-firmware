@@ -314,7 +314,7 @@ void ISM43340::reset() {
 
         // Wait for device to turn on
         for (int counter = 0; counter < 1500; counter++) {
-		DWT_Delay(1000 * 10);
+            DWT_Delay(1000 * 10);
             if (interruptin_read(dataReady)) {
                 break;
             }
