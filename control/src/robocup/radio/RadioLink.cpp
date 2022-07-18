@@ -73,6 +73,7 @@ bool RadioLink::receive(KickerCommand& kickerCommand,
                        MotionCommand& motionCommand) {
     // Make sure there is actually data to read
     if (!radio->isAvailable()) {
+        printf("[WARNING] Radio is not available\r\n");
         cyclesWithoutPackets++;
         return false;
     }
@@ -81,6 +82,7 @@ bool RadioLink::receive(KickerCommand& kickerCommand,
 
     if (radio->receive(packet.data(), rtp::ForwardSize) != rtp::ForwardSize) {
         // didn't get enough bytes
+        printf("[WARNING] Did not get enough bytes\r\n");
         cyclesWithoutPackets++;
         return false;
     }
@@ -106,5 +108,6 @@ bool RadioLink::receive(KickerCommand& kickerCommand,
 
     cyclesWithoutPackets = 0;
     radioConnected = radio->isConnected();
+    printf("[INFO] Radio Link says we received, %f\r\n", motionCommand.bodyXVel);
     return true;
 }
