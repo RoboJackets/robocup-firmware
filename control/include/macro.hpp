@@ -1,11 +1,11 @@
 #ifndef CONTROL_MACRO_HPP
 #define CONTROL_MACRO_HPP
-#include "robocup.hpp"
-#include "mtrain.hpp"
 #include "FreeRTOS.h"
 #include "FreeRTOSConfig.h"
-#include "task.h"
 #include "delay.h"
+#include "mtrain.hpp"
+#include "robocup.hpp"
+#include "task.h"
 
 /**
  * @def delay wrapper that considers whether or not the rtos is running
@@ -30,4 +30,4 @@ static inline void delay_from_microseconds(uint32_t time) {
     DWT_Delay(time);
 #endif
 }
-#endif //CONTROL_MACRO_HPP
+#endif  // CONTROL_MACRO_HPP

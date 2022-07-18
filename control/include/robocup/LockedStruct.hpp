@@ -76,7 +76,7 @@ public:
      *      lock method was called from
      * @return a lock on this struct.
      */
-    Lock lock(bool *first_lock = nullptr, const char* debug_string = nullptr) {
+    Lock lock(bool* first_lock = nullptr, const char* debug_string = nullptr) {
         return Lock(this, first_lock);
     }
 
