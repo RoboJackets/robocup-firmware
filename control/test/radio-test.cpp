@@ -4,9 +4,9 @@
 #include "bsp.h"
 #include "delay.h"
 #include "drivers/ISM43340.hpp"
+#include "macro.hpp"
 #include "mtrain.hpp"
 #include "radio/RadioLink.hpp"
-#include "macro.hpp"
 
 #undef USING_RTOS
 

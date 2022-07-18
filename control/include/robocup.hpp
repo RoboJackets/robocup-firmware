@@ -11,4 +11,4 @@
  */
 #define USING_RTOS
 
-#endif //CONTROL_ROBOCUP_HPP
+#endif  // CONTROL_ROBOCUP_HPP

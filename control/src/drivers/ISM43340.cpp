@@ -1,13 +1,14 @@
 #include "drivers/ISM43340.hpp"
-#include "delay.h"
+
+#include <cstdio>
 #include <cstring>
-#include "interrupt_in.h"
+#include <string>
 
 #include "FreeRTOS.h"
-#include "task.h"
+#include "delay.h"
+#include "interrupt_in.h"
 #include "macro.hpp"
-#include <string>
-#include <cstdio>
+#include "task.h"
 
 volatile ISMConstants::State currentState;
 
@@ -323,11 +324,9 @@ void ISM43340::reset() {
 
         if (isInit) {
             break;
-        }
-        else if (i == 4){
+        } else if (i == 4) {
             printf("[ERROR] Failed to initialize radio.\r\n");
-        }
-        else {
+        } else {
             printf("[INFO] Could not initialize radio. Retrying.\r\n");
         }
     }

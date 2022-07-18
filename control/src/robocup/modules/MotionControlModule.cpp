@@ -158,6 +158,6 @@ void MotionControlModule::entry() {
     }
 #endif
 }
- bool MotionControlModule::isRecentUpdate(uint32_t lastUpdateTime) {
+bool MotionControlModule::isRecentUpdate(uint32_t lastUpdateTime) {
     return (HAL_GetTick() - lastUpdateTime) < COMMAND_TIMEOUT;
 }
