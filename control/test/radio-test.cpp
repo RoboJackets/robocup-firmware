@@ -6,6 +6,9 @@
 #include "drivers/ISM43340.hpp"
 #include "mtrain.hpp"
 #include "radio/RadioLink.hpp"
+#include "macro.hpp"
+
+#undef USING_RTOS
 
 int main() {
     std::unique_ptr radioSPI = std::make_unique<SPI>(SpiBus5, std::nullopt, 16'000'000);
@@ -18,7 +21,7 @@ int main() {
     char buffer[1024];
 
     while (true) {
-        DWT_Delay(1000);  // microseconds
+        delay_from_microseconds(1000);
         if (radioDriver->isAvailable()) {
             int num = radioDriver->receive((unsigned char*)buffer, 1024);
             radioDriver->send((uint8_t*)buffer, num);

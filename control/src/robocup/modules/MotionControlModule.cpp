@@ -35,6 +35,7 @@ MotionControlModule::MotionControlModule(LockedStruct<BatteryVoltage>& batteryVo
 }
 
 void MotionControlModule::entry() {
+    auto battery = batteryVoltage.lock().value();
     auto motion_command = motionCommand.lock().value();
     auto motor_command = motorCommand.lock().value();
     auto motor_feedback = motorFeedback.lock().value();
@@ -50,8 +51,6 @@ void MotionControlModule::entry() {
     if (!motor_command.isValid || !isRecentUpdate(motion_command.lastUpdate)) {
         motor_command.isValid = false;
         motor_command.lastUpdate = HAL_GetTick();
-        // printf("[WARNING] Motion control has not recent update, %d %lu \r\n",
-        // motor_command.isValid, motion_command.lastUpdate);
     }
 
     // Fill data from shared mem
@@ -126,8 +125,20 @@ void MotionControlModule::entry() {
     motor_command.isValid = true;
     motor_command.lastUpdate = HAL_GetTick();
 
-    for (int i = 0; i < 4; i++) {
-        motor_command.wheels[i] = motorCommands(i, 0);
+    // Good to run motors
+    if (battery.isValid && !battery.isCritical) {
+        // set motors to real targets
+        for (int i = 0; i < 4; i++) {
+            motor_command.wheels[i] = motorCommands(i, 0);
+        }
+        motor_command.dribbler = dribblerCommand;
+    } else {
+        // rip battery
+        // stop
+        for (int i = 0; i < 4; i++) {
+            motor_command.wheels[i] = 0.0f;
+        }
+        motor_command.dribbler = 0;
     }
     motor_command.dribbler = dribblerCommand;
 
@@ -147,7 +158,6 @@ void MotionControlModule::entry() {
     }
 #endif
 }
-
-bool MotionControlModule::isRecentUpdate(uint32_t lastUpdateTime) {
+ bool MotionControlModule::isRecentUpdate(uint32_t lastUpdateTime) {
     return (HAL_GetTick() - lastUpdateTime) < COMMAND_TIMEOUT;
 }
