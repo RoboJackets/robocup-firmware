@@ -15,14 +15,15 @@ MotionControlModule::MotionControlModule(LockedStruct<BatteryVoltage>& batteryVo
                                          LockedStruct<MotorCommand>& motorCommand,
                                          LockedStruct<DebugInfo>& debugInfo)
     : GenericModule(kPeriod, "motion", kPriority, 1024),
-      batteryVoltage(batteryVoltage), imuData(imuData),
-      motionCommand(motionCommand), motorFeedback(motorFeedback),
+      batteryVoltage(batteryVoltage),
+      imuData(imuData),
+      motionCommand(motionCommand),
+      motorFeedback(motorFeedback),
       motorCommand(motorCommand),
       debugInfo(debugInfo),
       dribblerController(kPeriod.count()),
       robotController(kPeriod.count() * 1000),
       robotEstimator(kPeriod.count() * 1000) {
-
     prevCommand << 0, 0, 0, 0;
 
     auto motorCommandLock = motorCommand.unsafe_value();
@@ -85,7 +86,6 @@ void MotionControlModule::entry() {
 
     // Run estimators
     robotEstimator.predict(prevCommand);
-
 
     // Only use the feedback if we have good inputs
     // NAN's most likely came from the divide by dt in the fpga

@@ -20,9 +20,9 @@ void dataReady_cb() {
     // In all seriousness, this is just a state machine where we always
     // increment to the next state whenever there is an edge trigger
     // This is basically the `++x % y` that you see
-    currentState =  static_cast<ISMConstants::State>(
-                        (static_cast<uint8_t>(currentState) + 1) %
-                         static_cast<uint8_t>(ISMConstants::State::NumStates));
+    currentState =
+        static_cast<ISMConstants::State>((static_cast<uint8_t>(currentState) + 1) %
+                                         static_cast<uint8_t>(ISMConstants::State::NumStates));
 }
 
 ISM43340::ISM43340(std::unique_ptr<SPI> radioSPI, PinName nCsPin, PinName nResetPin,
@@ -33,7 +33,6 @@ ISM43340::ISM43340(std::unique_ptr<SPI> radioSPI, PinName nCsPin, PinName nReset
       dataReady{dataReadyPin.port, dataReadyPin.pin},
       currentSocket(SOCKET_TYPE::SEND),
       cmdStart(nullptr) {
-
     currentState = ISMConstants::State::CommandReady;
     interruptin_init_ex(dataReady, &dataReady_cb, PULL_DOWN, INTERRUPT_RISING_FALLING);
 
@@ -47,8 +46,7 @@ ISM43340::ISM43340(std::unique_ptr<SPI> radioSPI, PinName nCsPin, PinName nReset
 bool ISM43340::isAvailable() {
     // See if we are already on the correct socket before doing stuff
     if (currentSocket != SOCKET_TYPE::RECEIVE) {
-        sendCommand(ISMConstants::CMD_SET_COMMUNICATION_SOCKET,
-                    ISMConstants::RECEIVE_SOCKET);
+        sendCommand(ISMConstants::CMD_SET_COMMUNICATION_SOCKET, ISMConstants::RECEIVE_SOCKET);
         currentSocket = SOCKET_TYPE::RECEIVE;
     }
 
@@ -106,7 +104,8 @@ unsigned int ISM43340::send(const uint8_t* data, const unsigned int numBytes) {
     uint8_t arg[argSize];
 
     // Num digits written, not including null termination
-    unsigned int numDigitsWritten = snprintf(reinterpret_cast<char*>(&arg[0]), maxNumDigits, "%d", numBytes);
+    unsigned int numDigitsWritten =
+        snprintf(reinterpret_cast<char*>(&arg[0]), maxNumDigits, "%d", numBytes);
 
     // Copy delimiter
     memcpy(&arg[numDigitsWritten], &ISMConstants::ODD_DELIMITER[0], oddDelimiterSize);
@@ -147,10 +146,11 @@ unsigned int ISM43340::receive(uint8_t* data, const unsigned int maxNumBytes) {
  * Let it run for a minute or so to see if it breaks eventually
  */
 void ISM43340::writeToSpi(uint8_t* command, int length) {
-    while (currentState != ISMConstants::State::CommandReady);
+    while (currentState != ISMConstants::State::CommandReady)
+        ;
 
     nCs = ISMConstants::CHIP_SELECT;
-    DWT_Delay(100); // Must be 50 us or more. Measure first response on logic analyzer
+    DWT_Delay(100);  // Must be 50 us or more. Measure first response on logic analyzer
 
     for (int i = 0; i < length; i += 2) {
         uint8_t c1 = command[i];
@@ -167,7 +167,8 @@ void ISM43340::writeToSpi(uint8_t* command, int length) {
     nCs = ISMConstants::CHIP_DESELECT;
 
     // Wait till data ready goes to 0
-    while (currentState != ISMConstants::State::CommandAck);
+    while (currentState != ISMConstants::State::CommandAck)
+        ;
 }
 
 uint32_t ISM43340::readFromSpi() {
@@ -176,10 +177,11 @@ uint32_t ISM43340::readFromSpi() {
     readBuffer.clear();
 
     // Wait till data ready goes to 1
-    while (currentState != ISMConstants::State::ResponseReady);
+    while (currentState != ISMConstants::State::ResponseReady)
+        ;
 
     nCs = ISMConstants::CHIP_SELECT;
-    DWT_Delay(100); // Must be 50 us or more. Measure first response on logic analyzer
+    DWT_Delay(100);  // Must be 50 us or more. Measure first response on logic analyzer
 
     // Once we find any data on the bus
     // 0x25 0x25 is a valid character combination in the packet
@@ -191,11 +193,8 @@ uint32_t ISM43340::readFromSpi() {
 
         // If we read two nacks and we haven't found data yet, quit out
         // otherwise, check if the buffer is full and read it in
-        if (!(data1 == ISMConstants::NACK &&
-              data2 == ISMConstants::NACK &&
-              !foundAnyData) &&
+        if (!(data1 == ISMConstants::NACK && data2 == ISMConstants::NACK && !foundAnyData) &&
             readBuffer.size() < ISMConstants::RECEIVE_BUFF_SIZE) {
-
             // Swap endianess so readBuff is correct order
             readBuffer.push_back(data2);
             readBuffer.push_back(data1);
@@ -210,7 +209,8 @@ uint32_t ISM43340::readFromSpi() {
     return bytesRead;
 }
 
-void ISM43340::sendCommand(const std::string& command, const uint8_t *arg, const unsigned int argSize) {
+void ISM43340::sendCommand(const std::string& command, const uint8_t* arg,
+                           const unsigned int argSize) {
     unsigned int totalLength = 0;
 
     // Add to the cmd struct backwards so the end of the cmd touches the arg
@@ -242,13 +242,11 @@ void ISM43340::sendCommand(const std::string& command, const uint8_t *arg, const
     // "XX=XXXX<CR>" or "XX<CR>"
     if (command.compare("S3=") != 0) {
         if (totalLength % 2 == 0) {
-            memcpy(&cmdStart[totalLength],
-                   &ISMConstants::EVEN_DELIMITER[0],
+            memcpy(&cmdStart[totalLength], &ISMConstants::EVEN_DELIMITER[0],
                    ISMConstants::EVEN_DELIMITER.length());
             totalLength += ISMConstants::EVEN_DELIMITER.length();
         } else {
-            memcpy(&cmdStart[totalLength],
-                   &ISMConstants::ODD_DELIMITER[0],
+            memcpy(&cmdStart[totalLength], &ISMConstants::ODD_DELIMITER[0],
                    ISMConstants::ODD_DELIMITER.length());
             totalLength += ISMConstants::ODD_DELIMITER.length();
         }
@@ -259,14 +257,12 @@ void ISM43340::sendCommand(const std::string& command, const uint8_t *arg, const
 }
 
 void ISM43340::sendCommand(const std::string& command, const std::string& arg) {
-    sendCommand(command,
-                reinterpret_cast<const uint8_t*>(arg.data()),
-                arg.length());
+    sendCommand(command, reinterpret_cast<const uint8_t*>(arg.data()), arg.length());
 }
 
 int32_t ISM43340::testPrint() {
     for (unsigned int i = 0; i < readBuffer.size(); i++) {
-        printf("[INFO] %c", (char) readBuffer[i]);
+        printf("[INFO] %c", (char)readBuffer[i]);
         vTaskDelay(10);
     }
     printf("\r\n");
@@ -305,7 +301,7 @@ void ISM43340::pingRouter() {
 }
 
 void ISM43340::reset() {
-    for(int i = 0; i < 5; i++) {
+    for (int i = 0; i < 5; i++) {
         nReset = ISMConstants::RESET_TURN_OFF;
         delay_from_tick(ISMConstants::RESET_DELAY);
         nReset = ISMConstants::RESET_TURN_ON;
@@ -331,7 +327,6 @@ void ISM43340::reset() {
         }
     }
 
-
     nCs = ISMConstants::CHIP_SELECT;
     DWT_Delay(500);
 
@@ -345,38 +340,30 @@ void ISM43340::reset() {
 
     sendCommand(ISMConstants::CMD_POWER_MANAGEMENT, "0");
 
-
     // Configure Network
 
     // Disconnect from a network if power doesn't toggle
     sendCommand(ISMConstants::CMD_DISCONNECT_NETWORK);
 
-    sendCommand(ISMConstants::CMD_SET_NETWORK_SSID,
-                ISMConstants::NETWORK_SSID);
+    sendCommand(ISMConstants::CMD_SET_NETWORK_SSID, ISMConstants::NETWORK_SSID);
 
-    sendCommand(ISMConstants::CMD_SET_NETWORK_PASSWORD,
-                ISMConstants::NETWORK_PASSWORD);
+    sendCommand(ISMConstants::CMD_SET_NETWORK_PASSWORD, ISMConstants::NETWORK_PASSWORD);
 
     sendCommand(ISMConstants::CMD_SET_NETWORK_SECURITY_TYPE,
                 ISMConstants::TYPE_NETWORK_SECURITY::WPA2_AES);
 
-    sendCommand(ISMConstants::CMD_SET_NETWORK_DHCP,
-                ISMConstants::TYPE_NETWORK_DHCP::ENABLED);
+    sendCommand(ISMConstants::CMD_SET_NETWORK_DHCP, ISMConstants::TYPE_NETWORK_DHCP::ENABLED);
 
     sendCommand(ISMConstants::CMD_SET_NETWORK_IP_VERSION,
                 ISMConstants::TYPE_NETWORK_IP_VERSION::IPV4);
 
-    sendCommand(ISMConstants::CMD_SET_NETWORK_GATEWAY,
-                ISMConstants::ROUTER_IP);
+    sendCommand(ISMConstants::CMD_SET_NETWORK_GATEWAY, ISMConstants::ROUTER_IP);
 
-    sendCommand(ISMConstants::CMD_SET_NETWORK_PRIMARY_DNS,
-                ISMConstants::ROUTER_IP);
+    sendCommand(ISMConstants::CMD_SET_NETWORK_PRIMARY_DNS, ISMConstants::ROUTER_IP);
 
-    sendCommand(ISMConstants::CMD_SET_NETWORK_SECONDARY_DNS,
-                ISMConstants::ROUTER_IP);
+    sendCommand(ISMConstants::CMD_SET_NETWORK_SECONDARY_DNS, ISMConstants::ROUTER_IP);
 
-    sendCommand(ISMConstants::CMD_SET_NETWORK_JOIN_RETRY_COUNT,
-                "3");
+    sendCommand(ISMConstants::CMD_SET_NETWORK_JOIN_RETRY_COUNT, "3");
 
     sendCommand(ISMConstants::CMD_NETWORK_AUTO_CONNECT,
                 ISMConstants::TYPE_NETWORK_AUTO_CONNECT::AUTO_JOIN_RECONNECT);
@@ -394,8 +381,7 @@ void ISM43340::reset() {
     // Port initialization
     // UDP receive
 
-    sendCommand(ISMConstants::CMD_SET_COMMUNICATION_SOCKET,
-                ISMConstants::RECEIVE_SOCKET);
+    sendCommand(ISMConstants::CMD_SET_COMMUNICATION_SOCKET, ISMConstants::RECEIVE_SOCKET);
 
     sendCommand(ISMConstants::CMD_SET_TRANSPORT_PROTOCOL,
                 ISMConstants::TYPE_TRANSPORT_PROTOCOL::UDP_ENABLED);
@@ -403,8 +389,7 @@ void ISM43340::reset() {
     sendCommand(ISMConstants::CMD_SET_TRANSPORT_REMOTE_HOST_IP_ADDRESS,
                 ISMConstants::BASE_STATION_IP);
 
-    sendCommand(ISMConstants::CMD_SET_TRANSPORT_REMOTE_PORT_NUMBER,
-                ISMConstants::LOCAL_PORT);
+    sendCommand(ISMConstants::CMD_SET_TRANSPORT_REMOTE_PORT_NUMBER, ISMConstants::LOCAL_PORT);
 
     sendCommand(ISMConstants::CMD_SET_READ_TRANSPORT_PACKET_SIZE, "12");
 
@@ -415,11 +400,9 @@ void ISM43340::reset() {
     sendCommand(ISMConstants::CMD_START_STOP_TRANSPORT_CLIENT,
                 ISMConstants::TYPE_TRANSPORT_CLIENT::ENABLE);
 
-
     // UDP send
 
-    sendCommand(ISMConstants::CMD_SET_COMMUNICATION_SOCKET,
-                ISMConstants::SEND_SOCKET);
+    sendCommand(ISMConstants::CMD_SET_COMMUNICATION_SOCKET, ISMConstants::SEND_SOCKET);
 
     sendCommand(ISMConstants::CMD_SET_TRANSPORT_PROTOCOL,
                 ISMConstants::TYPE_TRANSPORT_PROTOCOL::UDP_ENABLED);

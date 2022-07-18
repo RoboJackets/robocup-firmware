@@ -58,4 +58,3 @@ CLANG_FORMAT_BINARY=clang-format-10
 # run locally before committing
 pretty-lines:
 	@git diff $(DIFFBASE) -U0 --no-color | python3 util/style/clang-format-diff.py -binary $(CLANG_FORMAT_BINARY) -i -p1
-	@git diff -U0 --no-color $(DIFFBASE) | black . --exclude "control/mtrain/"
