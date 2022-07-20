@@ -2,6 +2,7 @@
 
 #include "iodefs.h"
 #include "test/motor.hpp"
+#include "FreeRTOS.h"
 
 RadioModule::RadioModule(LockedStruct<BatteryVoltage>& batteryVoltage,
                          LockedStruct<FPGAStatus>& fpgaStatus,
@@ -59,18 +60,19 @@ void RadioModule::entry() {
 }
 
 void RadioModule::realEntry() {
+    printf("\x1B[32m [INFO] Radio entry success \x1B[37m\r\n");
+
     BatteryVoltage battery;
     FPGAStatus fpga;
     RobotID id;
     KickerInfo kicker;
     DebugInfo debug;
-
     {
         battery = batteryVoltage.lock().value();
         fpga = fpgaStatus.lock().value();
         id = robotID.lock().value();
     }
-    auto kickCommandLock = kickerCommand.lock();
+        auto kickerCommandLock = kickerCommand.lock();
     {
         kicker = kickerInfo.lock().value();
         std::swap(debug, debugInfo.lock().value());
@@ -80,8 +82,10 @@ void RadioModule::realEntry() {
     // That way we don't conflict with other robots on the network
     // that are working
     if (battery.isValid && fpga.isValid && id.isValid) {
+        vTaskSuspendAll();
         link.send(battery, fpga, kicker, id, debug);
         printf("\x1B[32m [INFO] Radio sent information \x1B[37m\r\n");
+        xTaskResumeAll();
     }
 
     {
@@ -91,17 +95,19 @@ void RadioModule::realEntry() {
         // Try read
         // Clear buffer of old packets such that we can get the lastest packet
         // If you don't do this there is a significant lag of 300ms or more
+        vTaskSuspendAll();
         while (link.receive(received_kicker_command, received_motion_command)) {
         }
+        xTaskResumeAll();
 
         if (received_motion_command.isValid) {
+            printf("\x1B[32m [INFO] Radio received valid motion command \x1B[37m\r\n");
             motionCommand.lock().value() = received_motion_command;
         }
 
         if (received_kicker_command.isValid) {
-            kickCommandLock.value() = received_kicker_command;
+            kickerCommandLock.value() = received_kicker_command;
         }
-        // kickCommandLock.~Lock();
 
         {
             auto radioErrorLock = radioError.lock();

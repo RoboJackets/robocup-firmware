@@ -53,6 +53,7 @@ bool ISM43340::isAvailable() {
     // Try to read data from device
     // If there is no data, device returns "\r\n\r\nOK\r\n> "
     // If there is data, device returns raw data
+    printf("Is there stuff to read? ");
     sendCommand(ISMConstants::CMD_READ_TRANSPORT_DATA);
 
     // Check to see if it's the normal prompt
@@ -63,9 +64,11 @@ bool ISM43340::isAvailable() {
     for (unsigned int i = 0; i < noData.size(); i++) {
         if (i >= readBuffer.size()) {
             matchNoData = false;
+            printf("1\r\n");
             break;
         } else if (readBuffer.at(i) != noData.at(i)) {
             matchNoData = false;
+            printf("2\r\n");
             break;
         }
     }
@@ -74,14 +77,14 @@ bool ISM43340::isAvailable() {
     for (unsigned int i = 0; i < err.size(); i++) {
         if (i >= readBuffer.size()) {
             matchErr = false;
+            printf("3\r\n");
             break;
         } else if (readBuffer.at(i) != err.at(i)) {
             matchErr = false;
+            printf("4\r\n");
             break;
         }
     }
-
-    printf("noData: %s", noData.c_str());
 
     return !matchNoData && !matchErr;
 }

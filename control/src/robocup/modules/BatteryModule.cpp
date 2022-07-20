@@ -21,7 +21,7 @@ BatteryModule::BatteryModule(LockedStruct<BatteryVoltage>& batteryVoltage)
 void BatteryModule::entry(void) {
     auto batteryLock = batteryVoltage.lock();
     battery.update();
-    printf("[INFO] Battery Voltage Percentage: %f\r\n", 100*battery.getBattPercentage());
+    printf("[INFO] Battery Voltage Percentage: %f\r\n", 100 * battery.getBattPercentage());
 
     batteryLock->isValid = true;
     batteryLock->lastUpdate = HAL_GetTick();
