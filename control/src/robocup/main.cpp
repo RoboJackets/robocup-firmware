@@ -122,14 +122,14 @@ int main() {
 
     static LockedStruct<MCP23017> ioExpander(MCP23017{sharedI2C, 0x42});
 
-    static LEDModule led(ioExpander,
+    /*static LEDModule led(ioExpander,
                          sharedSPI,
                          batteryVoltage,
                          fpgaStatus,
                          kickerInfo,
                          radioError,
                          imuData);
-    createModule(&led);
+    createModule(&led);*/
 
     static FPGAModule fpga(std::move(fpgaSPI),
                            motorCommand,
