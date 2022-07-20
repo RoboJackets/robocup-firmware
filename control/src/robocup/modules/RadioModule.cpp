@@ -64,13 +64,13 @@ void RadioModule::realEntry() {
 
     BatteryVoltage battery;
     FPGAStatus fpga;
-    RobotID id;
+    RobotID* id;
     KickerInfo kicker;
     DebugInfo debug;
     {
         battery = batteryVoltage.lock().value();
         fpga = fpgaStatus.lock().value();
-        id = robotID.lock().value();
+        id = robotID.unsafe_value();
     }
     auto kickerCommandLock = kickerCommand.lock();
     {
@@ -81,11 +81,11 @@ void RadioModule::realEntry() {
     // Just check to see if our robot id is valid
     // That way we don't conflict with other robots on the network
     // that are working
-    if (battery.isValid && fpga.isValid && id.isValid) {
-        vTaskSuspendAll();
-        link.send(battery, fpga, kicker, id, debug);
+    if (battery.isValid && fpga.isValid && id->isValid) {
+        //vTaskSuspendAll();
+        link.send(battery, fpga, kicker, *id, debug);
         printf("\x1B[32m [INFO] Radio sent information \x1B[37m\r\n");
-        xTaskResumeAll();
+        //xTaskResumeAll();
     }
 
     {
@@ -120,14 +120,14 @@ void RadioModule::realEntry() {
 }
 
 void RadioModule::fakeEntry() {
-    RobotID id;
+    RobotID* id;
 
-    { id = robotID.lock().value(); }
+    { id = robotID.unsafe_value(); }
 
     MotionCommand motion_command;
     KickerCommand kicker_command;
 
-    float scale = ((id.robotID ^ 8) - 8) % 8 / 8.0;
+    float scale = ((id->robotID ^ 8) - 8) % 8 / 8.0;
     motion_command.bodyXVel = max_vel * scale;
     motion_command.bodyYVel = 0.0;
     motion_command.bodyWVel = 0.0;
