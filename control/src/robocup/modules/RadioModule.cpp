@@ -1,8 +1,8 @@
 #include "modules/RadioModule.hpp"
 
+#include "FreeRTOS.h"
 #include "iodefs.h"
 #include "test/motor.hpp"
-#include "FreeRTOS.h"
 
 RadioModule::RadioModule(LockedStruct<BatteryVoltage>& batteryVoltage,
                          LockedStruct<FPGAStatus>& fpgaStatus,
@@ -72,7 +72,7 @@ void RadioModule::realEntry() {
         fpga = fpgaStatus.lock().value();
         id = robotID.lock().value();
     }
-        auto kickerCommandLock = kickerCommand.lock();
+    auto kickerCommandLock = kickerCommand.lock();
     {
         kicker = kickerInfo.lock().value();
         std::swap(debug, debugInfo.lock().value());
