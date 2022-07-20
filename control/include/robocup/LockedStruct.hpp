@@ -72,9 +72,7 @@ public:
      *      lock method was called from
      * @return a lock on this struct.
      */
-    Lock lock(bool* first_lock = nullptr) {
-        return Lock(this, first_lock);
-    }
+    Lock lock(bool* first_lock = nullptr) { return Lock(this, first_lock); }
 
     /**
      * Bypass the locking system to directly get a pointer to the underlying

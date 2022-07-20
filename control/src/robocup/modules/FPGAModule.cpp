@@ -109,17 +109,15 @@ void FPGAModule::entry() {
         motorFeedbackLock->lastUpdate = HAL_GetTick();
     }
 
-
     {
         auto motorCommandLock = motorCommand.lock();
         // Make sure commands are valid
         // If they are not valid, we automatically send a 0 duty cycle
         if (motorCommandLock->isValid &&
             (HAL_GetTick() - motorCommandLock->lastUpdate) < COMMAND_TIMEOUT) {
-
             for (int i = 0; i < 4; i++) {
-                dutyCycles.at(i) = static_cast<int16_t>(
-                        motorCommandLock->wheels[i] * fpga.MAX_DUTY_CYCLE / 2);
+                dutyCycles.at(i) =
+                    static_cast<int16_t>(motorCommandLock->wheels[i] * fpga.MAX_DUTY_CYCLE / 2);
                 if (dutyCycles.at(i) > fpga.MAX_DUTY_CYCLE) {
                     dutyCycles.at(i) = fpga.MAX_DUTY_CYCLE;
                 } else if (dutyCycles.at(i) < -fpga.MAX_DUTY_CYCLE) {

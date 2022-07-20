@@ -82,10 +82,10 @@ void RadioModule::realEntry() {
     // That way we don't conflict with other robots on the network
     // that are working
     if (battery.isValid && fpga.isValid && id->isValid) {
-        //vTaskSuspendAll();
+        // vTaskSuspendAll();
         link.send(battery, fpga, kicker, *id, debug);
         printf("\x1B[32m [INFO] Radio sent information \x1B[37m\r\n");
-        //xTaskResumeAll();
+        // xTaskResumeAll();
     }
 
     {

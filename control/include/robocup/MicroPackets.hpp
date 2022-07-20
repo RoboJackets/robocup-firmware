@@ -1,8 +1,9 @@
 #pragma once
 
-#include "cstdint"
 #include <array>
 #include <atomic>
+
+#include "cstdint"
 
 // Micropackets are shared memory locations for values
 // where only the latest matters.
@@ -123,9 +124,9 @@ struct RadioError {
  */
 struct RobotID {
     std::atomic_bool isValid = false; /**< Stores whether given data is valid  */
-    std::atomic_uint32_t  lastUpdate;  /**< Time at which RobotID was last updated (milliseconds) */
+    std::atomic_uint32_t lastUpdate;  /**< Time at which RobotID was last updated (milliseconds) */
 
-    std::atomic_uint8_t robotID;      /**< RobotID selected */
+    std::atomic_uint8_t robotID; /**< RobotID selected */
 };
 
 /** @struct KickerCommand
