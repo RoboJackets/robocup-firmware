@@ -18,7 +18,7 @@ public:
     /**
      * Number of times per second (frequency) that FPGAModule should run (Hz)
      */
-    static constexpr float kFrequency = 200.0f;
+    static constexpr float kFrequency = 250.0f;
 
     /**
      * Number of seconds elapsed (period) between FPGAModule runs (milliseconds)
@@ -28,7 +28,7 @@ public:
     /**
      * Priority used by RTOS
      */
-    static constexpr int kPriority = 3;
+    static constexpr int kPriority = 5;
 
     /**
     * Constructor for FPGAModule

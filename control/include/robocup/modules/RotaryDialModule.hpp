@@ -21,11 +21,10 @@ public:
      * Number of seconds elapsed (period) between RotaryDialModule runs (milliseconds)
      */
     static constexpr std::chrono::milliseconds kPeriod{static_cast<int>(1000 / kFrequency)};
-
     /**
      * Priority used by RTOS
      */
-    static constexpr int kPriority = 3;
+    static constexpr int kPriority = 2;
 
     /**
      * Constructor for RotaryDialModule

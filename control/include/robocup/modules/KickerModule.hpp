@@ -24,7 +24,7 @@ public:
     /**
      * Priority used by RTOS
      */
-    static constexpr int kPriority = 2;
+    static constexpr int kPriority = 3;
 
     /**
      * Constructor for KickerModule
