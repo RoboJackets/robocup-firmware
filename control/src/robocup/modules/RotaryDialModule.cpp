@@ -19,15 +19,15 @@ void RotaryDialModule::start() {
 }
 
 void RotaryDialModule::entry(void) {
-    auto robotIDLock = robotID.lock();
+    auto robotIDLock = robotID.unsafe_value();
     int new_robot_id = dial.read();
 
     printf("Rotary dial: %d\r\n", new_robot_id);
 
     if (last_robot_id == new_robot_id) {
-        robotIDLock->isValid = true;
-        robotIDLock->lastUpdate = HAL_GetTick();
         robotIDLock->robotID = new_robot_id;
+        robotIDLock->isValid = true;
+        // robotIDLock->lastUpdate = HAL_GetTick();
     } else {
         robotIDLock->isValid = false;
     }

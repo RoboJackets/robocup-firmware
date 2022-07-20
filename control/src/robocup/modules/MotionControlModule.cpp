@@ -38,20 +38,25 @@ MotionControlModule::MotionControlModule(LockedStruct<BatteryVoltage>& batteryVo
 void MotionControlModule::entry() {
     auto battery = batteryVoltage.lock().value();
     auto motion_command = motionCommand.lock().value();
-    auto motor_command = motorCommand.lock().value();
     auto motor_feedback = motorFeedback.lock().value();
+    auto motor_command = motorCommand.lock().value();
     auto imu_data = imuData.lock().value();
 
+#if 0
     DebugFrame frame;
     frame.ticks = xTaskGetTickCount();
     frame.gyro_z = imu_data.omegas[2];
     frame.accel_x = imu_data.accelerations[0];
     frame.accel_y = imu_data.accelerations[1];
+#endif
 
     // No radio comm in a little while. Return and die.
     if (!motor_command.isValid || !isRecentUpdate(motion_command.lastUpdate)) {
         motor_command.isValid = false;
         motor_command.lastUpdate = HAL_GetTick();
+        auto motorCommandLock = motorCommand.lock();
+        motorCommandLock.value() = motor_command;
+        return;
     }
 
     // Fill data from shared mem
@@ -106,9 +111,11 @@ void MotionControlModule::entry() {
     Eigen::Matrix<float, 3, 1> currentState;
     robotEstimator.getState(currentState);
 
+#if 0
     for (int i = 0; i < 3; i++) {
         frame.filtered_velocity[i] = currentState(i);
     }
+#endif
 
     // Run controllers
     uint8_t dribblerCommand = 0;
@@ -142,10 +149,12 @@ void MotionControlModule::entry() {
     }
     motor_command.dribbler = dribblerCommand;
 
+#if 0
     for (int i = 0; i < 4; i++) {
         frame.motor_outputs[i] = static_cast<int16_t>(motor_command.wheels[i] * 511);
         frame.encDeltas[i] = static_cast<int16_t>(currentWheels(i));
     }
+#endif
 
     auto motorCommandLock = motorCommand.lock();
     motorCommandLock.value() = motor_command;

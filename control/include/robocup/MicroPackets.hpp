@@ -2,10 +2,11 @@
 
 #include "cstdint"
 #include <array>
+#include <atomic>
 
 // Micropackets are shared memory locations for values
-// where only the latest matters. There is no guarantee that
-// data is not lost between reads.
+// where only the latest matters.
+// There may be data loss between reads.
 //
 // The "producer" of the data must initialize the micropacket
 // The "consumer" of the data must check if it's valid and
@@ -121,10 +122,10 @@ struct RadioError {
  * Passed from @ref RotaryDialModule to @ref RadioModule
  */
 struct RobotID {
-    bool isValid = false; /**< Stores whether given data is valid  */
-    uint32_t lastUpdate;  /**< Time at which RobotID was last updated (milliseconds) */
+    std::atomic_bool isValid = false; /**< Stores whether given data is valid  */
+    std::atomic_uint32_t  lastUpdate;  /**< Time at which RobotID was last updated (milliseconds) */
 
-    uint8_t robotID;      /**< RobotID selected */
+    std::atomic_uint8_t robotID;      /**< RobotID selected */
 };
 
 /** @struct KickerCommand
