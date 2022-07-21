@@ -54,9 +54,6 @@ void MotionControlModule::entry() {
     if (!motor_command.isValid || !isRecentUpdate(motion_command.lastUpdate)) {
         motor_command.isValid = false;
         motor_command.lastUpdate = HAL_GetTick();
-        auto motorCommandLock = motorCommand.lock();
-        motorCommandLock.value() = motor_command;
-        return;
     }
 
     // Fill data from shared mem
