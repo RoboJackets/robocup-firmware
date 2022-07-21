@@ -160,7 +160,7 @@ int main() {
     createModule(&dial);
 
     static IMUModule imu(sharedSPI, imuData);
-    createModule(&imu);
+    // createModule(&imu);
 
     static MotionControlModule motion(batteryVoltage, imuData, motionCommand, motorFeedback,
                                       motorCommand, debugInfo, imu);
