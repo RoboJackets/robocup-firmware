@@ -159,16 +159,12 @@ int main() {
                                  robotID);
     createModule(&dial);
 
-    static MotionControlModule motion(batteryVoltage,
-                                      imuData,
-                                      motionCommand,
-                                      motorFeedback,
-                                      motorCommand,
-                                      debugInfo);
-    createModule(&motion);
-
     static IMUModule imu(sharedSPI, imuData);
     createModule(&imu);
+
+    static MotionControlModule motion(batteryVoltage, imuData, motionCommand, motorFeedback,
+                                      motorCommand, debugInfo, imu);
+    createModule(&motion);
 
     ////////////////////////////////////////////
 

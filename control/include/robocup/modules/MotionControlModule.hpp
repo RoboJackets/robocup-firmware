@@ -1,14 +1,15 @@
 #pragma once
 
-#include "modules/GenericModule.hpp"
+#include <Eigen/Dense>
+
+#include "LockedStruct.hpp"
 #include "MicroPackets.hpp"
+#include "modules/GenericModule.hpp"
+#include "modules/IMUModule.hpp"
 
 #include "motion-control/DribblerController.hpp"
 #include "motion-control/RobotController.hpp"
 #include "motion-control/RobotEstimator.hpp"
-
-#include <Eigen/Dense>
-#include "LockedStruct.hpp"
 
 /**
  * Module handling robot state estimation and motion control for motors
@@ -18,7 +19,7 @@ public:
     /**
      * Number of times per second (frequency) that MotionControlModule should run (Hz)
      */
-    static constexpr float kFrequency = 300.0f;
+    static constexpr float kFrequency = 330.0f;
 
     /**
      * Number of seconds elapsed (period) between MotionControlModule runs (milliseconds)
@@ -28,7 +29,7 @@ public:
     /**
      * Priority used by RTOS
      */
-    static constexpr int kPriority = 6;
+    static constexpr int kPriority = 5;
 
     /**
      * Constructor for MotionControlModule
@@ -39,11 +40,10 @@ public:
      * @param motorCommand Shared memory location containing wheel motor duty cycles and dribbler rotation speed
      */
     MotionControlModule(LockedStruct<BatteryVoltage>& batteryVoltage,
-                        LockedStruct<IMUData>& imuData,
-                        LockedStruct<MotionCommand>& motionCommand,
+                        LockedStruct<IMUData>& imuData, LockedStruct<MotionCommand>& motionCommand,
                         LockedStruct<MotorFeedback>& motorFeedback,
                         LockedStruct<MotorCommand>& motorCommand,
-                        LockedStruct<DebugInfo>& debugInfo);
+                        LockedStruct<DebugInfo>& debugInfo, IMUModule& imuModule);
 
     /**
      * Code to run when called by RTOS once per system tick (`kperiod`)
@@ -52,6 +52,8 @@ public:
      * and motor controllers.
      */
     void entry() override;
+
+    void start() override;
 
 private:
     /**
@@ -80,4 +82,5 @@ private:
      * if the motion control dies
      */
     static constexpr uint32_t COMMAND_TIMEOUT = 250;
+    IMUModule& imuModule;
 };

@@ -13,7 +13,7 @@ MotionControlModule::MotionControlModule(LockedStruct<BatteryVoltage>& batteryVo
                                          LockedStruct<MotionCommand>& motionCommand,
                                          LockedStruct<MotorFeedback>& motorFeedback,
                                          LockedStruct<MotorCommand>& motorCommand,
-                                         LockedStruct<DebugInfo>& debugInfo)
+                                         LockedStruct<DebugInfo>& debugInfo, IMUModule& imuModule)
     : GenericModule(kPeriod, "motion", kPriority, 1024),
       batteryVoltage(batteryVoltage),
       imuData(imuData),
@@ -23,7 +23,8 @@ MotionControlModule::MotionControlModule(LockedStruct<BatteryVoltage>& batteryVo
       debugInfo(debugInfo),
       dribblerController(kPeriod.count()),
       robotController(kPeriod.count() * 1000),
-      robotEstimator(kPeriod.count() * 1000) {
+      robotEstimator(kPeriod.count() * 1000),
+      imuModule(imuModule) {
     prevCommand << 0, 0, 0, 0;
 
     auto motorCommandLock = motorCommand.unsafe_value();
@@ -35,11 +36,14 @@ MotionControlModule::MotionControlModule(LockedStruct<BatteryVoltage>& batteryVo
     motorCommandLock->dribbler = 0;
 }
 
+void MotionControlModule::start() { imuModule.start(); }
+
 void MotionControlModule::entry() {
     auto battery = batteryVoltage.lock().value();
     auto motion_command = motionCommand.lock().value();
     auto motor_feedback = motorFeedback.lock().value();
     auto motor_command = motorCommand.lock().value();
+    imuModule.entry();
     auto imu_data = imuData.lock().value();
 
 #if 0
@@ -54,9 +58,6 @@ void MotionControlModule::entry() {
     if (!motor_command.isValid || !isRecentUpdate(motion_command.lastUpdate)) {
         motor_command.isValid = false;
         motor_command.lastUpdate = HAL_GetTick();
-        auto motorCommandLock = motorCommand.lock();
-        motorCommandLock.value() = motor_command;
-        return;
     }
 
     // Fill data from shared mem
