@@ -18,9 +18,8 @@ print(f"UDP server up and listening at {local_ip}@{local_port}")
 send_to_addr = "172.16.1.10"
 send_to_port = 25566
 
-while (True):
+while True:
     udp_socket.sendto(bytes_to_send, (send_to_addr, send_to_port))
 
     msg, addr = udp_socket.recvfrom(buf_size)
     print(f"received {msg} from {addr}")
-
