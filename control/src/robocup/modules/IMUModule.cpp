@@ -23,9 +23,9 @@ void IMUModule::start() {
 }
 
 void IMUModule::entry(void) {
+    auto imuDataLock = imuData.lock();
     float rate = imu.gyro_z();
 
-    auto imuDataLock = imuData.lock();
     imuDataLock->isValid = true;
     imuDataLock->lastUpdate = xTaskGetTickCount();
 
