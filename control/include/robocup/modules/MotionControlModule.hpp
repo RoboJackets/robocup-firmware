@@ -9,13 +9,19 @@
 
 #include <Eigen/Dense>
 #include "LockedStruct.hpp"
+#include "modules/IMUModule.hpp"
 
 /**
  * Module handling robot state estimation and motion control for motors
  */
 class MotionControlModule : public GenericModule {
 public:
-    /**
+    MotionControlModule(LockedStruct<BatteryVoltage> &batteryVoltage, LockedStruct<IMUData> &imuData,
+                        LockedStruct<MotionCommand> &motionCommand, LockedStruct<MotorFeedback> &motorFeedback,
+                        LockedStruct<MotorCommand> &motorCommand, LockedStruct<DebugInfo> &debugInfo,
+                        IMUModule &imuModule);
+
+/**
      * Number of times per second (frequency) that MotionControlModule should run (Hz)
      */
     static constexpr float kFrequency = 200.0f;
@@ -38,12 +44,6 @@ public:
      * @param motorFeedback Shared memory location containing encoder counts and currents to each wheel motor
      * @param motorCommand Shared memory location containing wheel motor duty cycles and dribbler rotation speed
      */
-    MotionControlModule(LockedStruct<BatteryVoltage>& batteryVoltage,
-                        LockedStruct<IMUData>& imuData,
-                        LockedStruct<MotionCommand>& motionCommand,
-                        LockedStruct<MotorFeedback>& motorFeedback,
-                        LockedStruct<MotorCommand>& motorCommand,
-                        LockedStruct<DebugInfo>& debugInfo);
 
     /**
      * Code to run when called by RTOS once per system tick (`kperiod`)
@@ -52,6 +52,8 @@ public:
      * and motor controllers.
      */
     void entry() override;
+
+    void start() override;
 
 private:
     /**
@@ -71,6 +73,8 @@ private:
     RobotEstimator robotEstimator;
 
     Eigen::Matrix<float, 4, 1> prevCommand;
+
+    IMUModule& imuModule;
 
     /**
      * Max amount of time that can elapse from the latest
