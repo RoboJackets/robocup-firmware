@@ -16,6 +16,10 @@ RotaryDialModule::RotaryDialModule(LockedStruct<MCP23017>& ioExpander, LockedStr
 
 void RotaryDialModule::start() {
     dial.init();
+    auto robotIDLock = robotID.lock();
+    robotIDLock->isValid = true;
+    robotIDLock->lastUpdate = HAL_GetTick();
+    robotIDLock->robotID = dial.read();
 }
 
 void RotaryDialModule::entry(void) {
