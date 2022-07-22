@@ -82,10 +82,10 @@ void RadioModule::realEntry() {
     // That way we don't conflict with other robots on the network
     // that are working
     if (battery.isValid && fpga.isValid && id.isValid) {
-        //vTaskSuspendAll();
+        // vTaskSuspendAll();
         link.send(battery, fpga, kicker, id, debug);
-        //printf("\x1B[32m [INFO] Radio sent information \x1B[37m\r\n");
-        //xTaskResumeAll();
+        // printf("\x1B[32m [INFO] Radio sent information \x1B[37m\r\n");
+        // xTaskResumeAll();
     }
 
     {
@@ -95,12 +95,12 @@ void RadioModule::realEntry() {
         // Try read
         // Clear buffer of old packets such that we can get the lastest packet
         // If you don't do this there is a significant lag of 300ms or more
-        //vTaskSuspendAll();
+        // vTaskSuspendAll();
         link.receive(received_kicker_command, received_motion_command);
-        //xTaskResumeAll();
+        // xTaskResumeAll();
 
         if (received_motion_command.isValid) {
-            //printf("\x1B[32m [INFO] Radio received valid motion command \x1B[37m\r\n");
+            // printf("\x1B[32m [INFO] Radio received valid motion command \x1B[37m\r\n");
             motionCommand.lock().value() = received_motion_command;
         }
 
