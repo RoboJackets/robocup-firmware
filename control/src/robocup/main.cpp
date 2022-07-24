@@ -161,13 +161,8 @@ int main() {
 
     static IMUModule imu(sharedSPI, imuData);
 
-    static MotionControlModule motion(batteryVoltage,
-                                      imuData,
-                                      motionCommand,
-                                      motorFeedback,
-                                      motorCommand,
-                                      debugInfo,
-                                      imu);
+    static MotionControlModule motion(batteryVoltage, imuData, motionCommand, motorFeedback,
+                                      motorCommand, debugInfo, imu);
     createModule(&motion);
 
     ////////////////////////////////////////////

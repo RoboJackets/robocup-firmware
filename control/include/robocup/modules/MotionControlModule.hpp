@@ -1,27 +1,28 @@
 #pragma once
 
-#include "modules/GenericModule.hpp"
+#include <Eigen/Dense>
+
+#include "LockedStruct.hpp"
 #include "MicroPackets.hpp"
+#include "modules/GenericModule.hpp"
+#include "modules/IMUModule.hpp"
 
 #include "motion-control/DribblerController.hpp"
 #include "motion-control/RobotController.hpp"
 #include "motion-control/RobotEstimator.hpp"
-
-#include <Eigen/Dense>
-#include "LockedStruct.hpp"
-#include "modules/IMUModule.hpp"
 
 /**
  * Module handling robot state estimation and motion control for motors
  */
 class MotionControlModule : public GenericModule {
 public:
-    MotionControlModule(LockedStruct<BatteryVoltage> &batteryVoltage, LockedStruct<IMUData> &imuData,
-                        LockedStruct<MotionCommand> &motionCommand, LockedStruct<MotorFeedback> &motorFeedback,
-                        LockedStruct<MotorCommand> &motorCommand, LockedStruct<DebugInfo> &debugInfo,
-                        IMUModule &imuModule);
+    MotionControlModule(LockedStruct<BatteryVoltage>& batteryVoltage,
+                        LockedStruct<IMUData>& imuData, LockedStruct<MotionCommand>& motionCommand,
+                        LockedStruct<MotorFeedback>& motorFeedback,
+                        LockedStruct<MotorCommand>& motorCommand,
+                        LockedStruct<DebugInfo>& debugInfo, IMUModule& imuModule);
 
-/**
+    /**
      * Number of times per second (frequency) that MotionControlModule should run (Hz)
      */
     static constexpr float kFrequency = 200.0f;

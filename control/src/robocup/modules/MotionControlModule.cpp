@@ -8,11 +8,12 @@
 
 #include "rc-fshare/robot_model.hpp"
 
-MotionControlModule::MotionControlModule(LockedStruct<BatteryVoltage> &batteryVoltage, LockedStruct<IMUData> &imuData,
-                                         LockedStruct<MotionCommand> &motionCommand,
-                                         LockedStruct<MotorFeedback> &motorFeedback,
-                                         LockedStruct<MotorCommand> &motorCommand, LockedStruct<DebugInfo> &debugInfo,
-                                         IMUModule& imuModule)
+MotionControlModule::MotionControlModule(LockedStruct<BatteryVoltage>& batteryVoltage,
+                                         LockedStruct<IMUData>& imuData,
+                                         LockedStruct<MotionCommand>& motionCommand,
+                                         LockedStruct<MotorFeedback>& motorFeedback,
+                                         LockedStruct<MotorCommand>& motorCommand,
+                                         LockedStruct<DebugInfo>& debugInfo, IMUModule& imuModule)
     : GenericModule(kPeriod, "motion", kPriority, 1024),
       batteryVoltage(batteryVoltage),
       imuData(imuData),
@@ -35,9 +36,7 @@ MotionControlModule::MotionControlModule(LockedStruct<BatteryVoltage> &batteryVo
     motorCommandLock->dribbler = 0;
 }
 
-void MotionControlModule::start() {
-    imuModule.start();
-}
+void MotionControlModule::start() { imuModule.start(); }
 
 void MotionControlModule::entry() {
     auto battery = batteryVoltage.lock().value();
