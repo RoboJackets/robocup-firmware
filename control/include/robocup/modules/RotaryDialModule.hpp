@@ -25,7 +25,7 @@ public:
     /**
      * Priority used by RTOS
      */
-    static constexpr int kPriority = 0;
+    static constexpr int kPriority = 3;
 
     /**
      * Constructor for RotaryDialModule
