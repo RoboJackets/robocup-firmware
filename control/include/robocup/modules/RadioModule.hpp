@@ -14,7 +14,7 @@ public:
     /**
      * Number of times per second (frequency) that RadioModule should run (Hz)
      */
-    static constexpr float kFrequency = 50.0f;
+    static constexpr float kFrequency = 40.0f;
 
     /**
      * Number of seconds elapsed (period) between RadioModule runs (milliseconds)
@@ -74,4 +74,7 @@ private:
      */
     RadioLink link;
     DigitalOut secondRadioCS;
+
+    void fakeEntry();
+    void realEntry();
 };

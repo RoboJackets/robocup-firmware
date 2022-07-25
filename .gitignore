@@ -10,6 +10,8 @@
 /gmon.out
 *.swp
 /.settings
+*/cmake-*
+
 # ignore the generated docs note the CI system force adds these
 /generated-docs
 *~

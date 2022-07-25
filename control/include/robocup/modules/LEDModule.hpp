@@ -79,7 +79,7 @@ public:
      *
      * Uses the default priority of 1.
      */
-    static constexpr int kPriority = 1;
+    static constexpr int kPriority = 0;
 
     /**
      * Constructor for LEDModule
