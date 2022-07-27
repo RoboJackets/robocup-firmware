@@ -18,7 +18,9 @@ RadioModule::RadioModule(LockedStruct<BatteryVoltage>& batteryVoltage,
       kickerCommand(kickerCommand), motionCommand(motionCommand),
       radioError(radioError),
       debugInfo(debugInfo), link(),
-      secondRadioCS(RADIO_R1_CS) {
+      secondRadioCS(RADIO_R1_CS),
+      current_mode(0)
+      {
 
     secondRadioCS = 1;
 
@@ -61,61 +63,12 @@ void RadioModule::entry() {
 
 void RadioModule::realEntry() {
     printf("\x1B[32m [INFO] Radio entry success \x1B[37m\r\n");
-
-    BatteryVoltage battery;
-    FPGAStatus fpga;
-    RobotID id;
-    KickerInfo kicker;
-    DebugInfo debug;
-    {
-        battery = batteryVoltage.lock().value();
-        fpga = fpgaStatus.lock().value();
-        id = robotID.lock().value();
-    }
-    auto kickerCommandLock = kickerCommand.lock();
-    {
-        kicker = kickerInfo.lock().value();
-        std::swap(debug, debugInfo.lock().value());
-    }
-
-    // Just check to see if our robot id is valid
-    // That way we don't conflict with other robots on the network
-    // that are working
-    if (battery.isValid && fpga.isValid && id.isValid) {
-        // vTaskSuspendAll();
-        link.send(battery, fpga, kicker, id, debug);
-        printf("\x1B[32m [INFO] Radio sent information \x1B[37m\r\n");
-        // xTaskResumeAll();
-    }
-
-    {
-        MotionCommand received_motion_command;
-        KickerCommand received_kicker_command;
-
-        // Try read
-        // Clear buffer of old packets such that we can get the lastest packet
-        // If you don't do this there is a significant lag of 300ms or more
-        // vTaskSuspendAll();
-        while (link.receive(received_kicker_command, received_motion_command))
-            ;
-        // xTaskResumeAll();
-
-        if (received_motion_command.isValid) {
-            // printf("\x1B[32m [INFO] Radio received valid motion command \x1B[37m\r\n");
-            motionCommand.lock().value() = received_motion_command;
-        }
-
-        if (received_kicker_command.isValid) {
-            kickerCommandLock.value() = received_kicker_command;
-        }
-
-        {
-            auto radioErrorLock = radioError.lock();
-            radioErrorLock->isValid = true;
-            radioErrorLock->lastUpdate = HAL_GetTick();
-            radioErrorLock->hasConnectionError = link.isRadioConnected();
-            radioErrorLock->hasSoccerConnectionError = link.hasSoccerTimedOut();
-        }
+    const auto which_mode = [this]() {return ++this->current_mode % mode_divisor; };
+    const auto is_turn_to_send = [&which_mode]() {return which_mode() % 2 != 0;};
+    if (is_turn_to_send()) {
+        send();
+    } else {
+        receive();
     }
 }
 
@@ -141,4 +94,61 @@ void RadioModule::fakeEntry() {
     kicker_command.triggerMode = KickerCommand::TriggerMode::OFF;
     kicker_command.isValid = true;
     kickerCommand.lock().value() = kicker_command;
+}
+
+void RadioModule::send() {
+    BatteryVoltage battery;
+    FPGAStatus fpga;
+    RobotID id;
+    KickerInfo kicker;
+    DebugInfo debug;
+    {
+        battery = batteryVoltage.lock().value();
+        fpga = fpgaStatus.lock().value();
+        id = robotID.lock().value();
+        kicker = kickerInfo.lock().value();
+        std::swap(debug, debugInfo.lock().value());
+    }
+
+    // Just check to see if our robot id is valid
+    // That way we don't conflict with other robots on the network
+    // that are working
+    if (battery.isValid && fpga.isValid && id.isValid) {
+        // vTaskSuspendAll();
+        link.send(battery, fpga, kicker, id, debug);
+        printf("\x1B[32m [INFO] Radio sent information \x1B[37m\r\n");
+        // xTaskResumeAll();
+    }
+
+}
+
+void RadioModule::receive() {
+    {
+        MotionCommand received_motion_command;
+        KickerCommand received_kicker_command;
+
+        // Try read
+        // Clear buffer of old packets such that we can get the latest packet
+        // If you don't do this there is a significant lag of 300ms or more
+        // vTaskSuspendAll();
+        while (link.receive(received_kicker_command, received_motion_command))
+            ;
+        // xTaskResumeAll();
+
+        if (received_motion_command.isValid) {
+            motionCommand.lock().value() = received_motion_command;
+        }
+
+        if (received_kicker_command.isValid) {
+            kickerCommand.lock().value() = received_kicker_command;
+        }
+
+        {
+            auto radioErrorLock = radioError.lock();
+            radioErrorLock->isValid = true;
+            radioErrorLock->lastUpdate = HAL_GetTick();
+            radioErrorLock->hasConnectionError = link.isRadioConnected();
+            radioErrorLock->hasSoccerConnectionError = link.hasSoccerTimedOut();
+        }
+    }
 }

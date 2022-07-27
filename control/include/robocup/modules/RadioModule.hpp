@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cmath>
 #include "LockedStruct.hpp"
 #include "GenericModule.hpp"
 #include "MicroPackets.hpp" 
@@ -14,7 +15,7 @@ public:
     /**
      * Number of times per second (frequency) that RadioModule should run (Hz)
      */
-    static constexpr float kFrequency = 40.0f;
+    static constexpr float kFrequency = 90.0f;
 
     /**
      * Number of seconds elapsed (period) between RadioModule runs (milliseconds)
@@ -75,6 +76,24 @@ private:
     RadioLink link;
     DigitalOut secondRadioCS;
 
+    /**
+     * Send when this mode is even. Receive when it is odd.
+     */
+    uint8_t current_mode;
+
+    /**
+     * Choose an odd divisor to receive more than send.
+     */
+    static constexpr uint8_t mode_divisor = 3;
+
+    // not necessary,
+    // but let's impose that the divisor evenly divides the frequency
+    static_assert((int) kFrequency %  mode_divisor == 0,
+            "The mode divisor should evenly divide the radio module's frequency");
+
     void fakeEntry();
     void realEntry();
+
+    void send();
+    void receive();
 };
