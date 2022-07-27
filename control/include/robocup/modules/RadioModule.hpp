@@ -1,7 +1,5 @@
 #pragma once
 
-#include <cmath>
-
 #include "DigitalOut.hpp"
 #include "GenericModule.hpp"
 #include "LockedStruct.hpp"
