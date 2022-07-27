@@ -1,11 +1,12 @@
 #pragma once
 
 #include <cmath>
-#include "LockedStruct.hpp"
-#include "GenericModule.hpp"
-#include "MicroPackets.hpp" 
-#include "radio/RadioLink.hpp"
+
 #include "DigitalOut.hpp"
+#include "GenericModule.hpp"
+#include "LockedStruct.hpp"
+#include "MicroPackets.hpp"
+#include "radio/RadioLink.hpp"
 
 /**
  * Module interfacing with Radio and handling Radio status
@@ -88,8 +89,8 @@ private:
 
     // not necessary,
     // but let's impose that the divisor evenly divides the frequency
-    static_assert((int) kFrequency %  mode_divisor == 0,
-            "The mode divisor should evenly divide the radio module's frequency");
+    static_assert((int)kFrequency % mode_divisor == 0,
+                  "The mode divisor should evenly divide the radio module's frequency");
 
     void fakeEntry();
     void realEntry();

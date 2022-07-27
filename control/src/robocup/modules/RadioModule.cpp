@@ -5,23 +5,22 @@
 #include "test/motor.hpp"
 
 RadioModule::RadioModule(LockedStruct<BatteryVoltage>& batteryVoltage,
-                         LockedStruct<FPGAStatus>& fpgaStatus,
-                         LockedStruct<KickerInfo>& kickerInfo,
-                         LockedStruct<RobotID>& robotID,
-                         LockedStruct<KickerCommand>& kickerCommand,
+                         LockedStruct<FPGAStatus>& fpgaStatus, LockedStruct<KickerInfo>& kickerInfo,
+                         LockedStruct<RobotID>& robotID, LockedStruct<KickerCommand>& kickerCommand,
                          LockedStruct<MotionCommand>& motionCommand,
-                         LockedStruct<RadioError>& radioError,
-                         LockedStruct<DebugInfo>& debugInfo)
+                         LockedStruct<RadioError>& radioError, LockedStruct<DebugInfo>& debugInfo)
     : GenericModule(kPeriod, "radio", kPriority),
-      batteryVoltage(batteryVoltage), fpgaStatus(fpgaStatus),
-      kickerInfo(kickerInfo), robotID(robotID),
-      kickerCommand(kickerCommand), motionCommand(motionCommand),
+      batteryVoltage(batteryVoltage),
+      fpgaStatus(fpgaStatus),
+      kickerInfo(kickerInfo),
+      robotID(robotID),
+      kickerCommand(kickerCommand),
+      motionCommand(motionCommand),
       radioError(radioError),
-      debugInfo(debugInfo), link(),
+      debugInfo(debugInfo),
+      link(),
       secondRadioCS(RADIO_R1_CS),
-      current_mode(0)
-      {
-
+      current_mode(0) {
     secondRadioCS = 1;
 
     // todo fill out more kicker stuff
@@ -63,8 +62,8 @@ void RadioModule::entry() {
 
 void RadioModule::realEntry() {
     printf("\x1B[32m [INFO] Radio entry success \x1B[37m\r\n");
-    const auto which_mode = [this]() {return ++this->current_mode % mode_divisor; };
-    const auto is_turn_to_send = [&which_mode]() {return which_mode() % 2 != 0;};
+    const auto which_mode = [this]() { return ++this->current_mode % mode_divisor; };
+    const auto is_turn_to_send = [&which_mode]() { return which_mode() % 2 != 0; };
     if (is_turn_to_send()) {
         send();
     } else {
@@ -119,7 +118,6 @@ void RadioModule::send() {
         printf("\x1B[32m [INFO] Radio sent information \x1B[37m\r\n");
         // xTaskResumeAll();
     }
-
 }
 
 void RadioModule::receive() {
