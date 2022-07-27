@@ -62,7 +62,10 @@ void RadioModule::entry() {
 
 void RadioModule::realEntry() {
     printf("\x1B[32m [INFO] Radio entry success \x1B[37m\r\n");
-    const auto which_mode = [this]() { return ++this->current_mode % mode_divisor; };
+    const auto which_mode = [this]() { 
+    this->current_mode = (this->current_mode + 1) % mode_divisor; 
+    return this->current_mode;
+    };
     const auto is_turn_to_send = [&which_mode]() { return which_mode() % 2 != 0; };
     if (is_turn_to_send()) {
         send();
