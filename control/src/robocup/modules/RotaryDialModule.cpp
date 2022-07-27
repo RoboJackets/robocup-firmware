@@ -7,6 +7,9 @@ RotaryDialModule::RotaryDialModule(LockedStruct<MCP23017>& ioExpander, LockedStr
             IOExpanderDigitalInOut(ioExpander, HEX_SWITCH_BIT1, MCP23017::DIR_INPUT),
             IOExpanderDigitalInOut(ioExpander, HEX_SWITCH_BIT2, MCP23017::DIR_INPUT),
             IOExpanderDigitalInOut(ioExpander, HEX_SWITCH_BIT3, MCP23017::DIR_INPUT)}) {
+    auto ioExpanderLock = ioExpander.lock();
+    ioExpanderLock->init();
+    ioExpanderLock->config(0x00FF, 0x00FF, 0x00FF);
 
     auto robotLock = robotID.unsafe_value();
     robotLock->isValid = false;
@@ -21,9 +24,9 @@ void RotaryDialModule::start() {
 void RotaryDialModule::entry(void) {
     int new_robot_id = dial.read();
 
-    //printf("Rotary dial: %d\r\n", new_robot_id);
-
+    printf("Rotary dial: %d\r\n", new_robot_id);
     auto robotIDLock = robotID.lock();
+
     if (last_robot_id == new_robot_id) {
         robotIDLock->isValid = true;
         robotIDLock->lastUpdate = HAL_GetTick();
