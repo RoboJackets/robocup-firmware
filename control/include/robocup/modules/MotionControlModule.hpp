@@ -35,7 +35,7 @@ public:
     /**
      * Priority used by RTOS
      */
-    static constexpr int kPriority = 3;
+    static constexpr int kPriority = 4;
 
     /**
      * Constructor for MotionControlModule
