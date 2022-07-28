@@ -149,7 +149,8 @@ void ISM43340::writeToSpi(uint8_t* command, int length) {
         ;
 
     nCs = ISMConstants::CHIP_SELECT;
-    delay_from_microseconds(100);  // Must be 50 us or more. Measure first response on logic analyzer
+    delay_from_microseconds(
+        100);  // Must be 50 us or more. Measure first response on logic analyzer
 
     for (int i = 0; i < length; i += 2) {
         uint8_t c1 = command[i];
@@ -180,7 +181,8 @@ uint32_t ISM43340::readFromSpi() {
         ;
 
     nCs = ISMConstants::CHIP_SELECT;
-    delay_from_microseconds(100);  // Must be 50 us or more. Measure first response on logic analyzer
+    delay_from_microseconds(
+        100);  // Must be 50 us or more. Measure first response on logic analyzer
 
     // Once we find any data on the bus
     // 0x25 0x25 is a valid character combination in the packet
