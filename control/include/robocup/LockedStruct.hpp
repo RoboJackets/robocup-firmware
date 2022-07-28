@@ -72,7 +72,7 @@ public:
      *      lock method was called from
      * @return a lock on this struct.
      */
-    Lock lock(bool* first_lock = nullptr, const char* debug_string = nullptr) {
+    Lock lock(bool* first_lock = nullptr) {
         return Lock(this, first_lock);
     }
 
@@ -90,7 +90,7 @@ public:
     T* unsafe_value() { return &value; }
 
 private:
-    void acquire_mutex() { xSemaphoreTakeRecursive(mutex, 100); }
+    void acquire_mutex() { xSemaphoreTakeRecursive(mutex, 300); }
 
     void release_mutex() { xSemaphoreGiveRecursive(mutex); }
 
