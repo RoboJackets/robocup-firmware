@@ -114,10 +114,10 @@ void RadioModule::send() {
     // That way we don't conflict with other robots on the network
     // that are working
     if (battery.isValid && fpga.isValid && id.isValid) {
-        // vTaskSuspendAll();
+        vTaskPrioritySet(nullptr, kPriority + 1);
         link.send(battery, fpga, kicker, id, debug);
         printf("\x1B[32m [INFO] Radio sent information \x1B[37m\r\n");
-        // xTaskResumeAll();
+        vTaskPrioritySet(nullptr, kPriority);
     }
 
 }
@@ -130,10 +130,9 @@ void RadioModule::receive() {
         // Try read
         // Clear buffer of old packets such that we can get the latest packet
         // If you don't do this there is a significant lag of 300ms or more
-        // vTaskSuspendAll();
+        vTaskPrioritySet(nullptr, kPriority + 1);
         while (link.receive(received_kicker_command, received_motion_command))
             ;
-        // xTaskResumeAll();
 
         if (received_motion_command.isValid) {
             motionCommand.lock().value() = received_motion_command;
@@ -150,5 +149,6 @@ void RadioModule::receive() {
             radioErrorLock->hasConnectionError = link.isRadioConnected();
             radioErrorLock->hasSoccerConnectionError = link.hasSoccerTimedOut();
         }
+        vTaskPrioritySet(nullptr, kPriority);
     }
 }
