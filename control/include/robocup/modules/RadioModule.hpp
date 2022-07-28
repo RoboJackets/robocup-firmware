@@ -83,11 +83,11 @@ private:
     /**
      * Choose an odd divisor to receive more than send.
      */
-    static constexpr uint8_t mode_divisor = 3;
+    static constexpr uint8_t MODE_DIVISOR = 3;
 
     // not necessary,
     // but let's impose that the divisor evenly divides the frequency
-    static_assert((int)kFrequency % mode_divisor == 0,
+    static_assert((int)kFrequency % MODE_DIVISOR == 0,
                   "The mode divisor should evenly divide the radio module's frequency");
 
     void fakeEntry();

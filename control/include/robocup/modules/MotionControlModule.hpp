@@ -25,7 +25,7 @@ public:
     /**
      * Number of times per second (frequency) that MotionControlModule should run (Hz)
      */
-    static constexpr float kFrequency = 200.0f;
+    static constexpr float kFrequency = 250.0f;
 
     /**
      * Number of seconds elapsed (period) between MotionControlModule runs (milliseconds)
