@@ -1,5 +1,5 @@
 import socket
-import time # noqa: F401
+import time  # noqa: F401
 
 # field computer
 local_ip = "172.16.1.76"
