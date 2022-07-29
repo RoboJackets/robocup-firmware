@@ -127,7 +127,8 @@ void MotionControlModule::entry() {
     prevCommand = motorCommands;
 
     motor_command.isValid = true;
-    // printf("MotionControlOld: %lu, MotionControlDiff: %lu\r\n", motor_command.lastUpdate, HAL_GetTick() - motor_command.lastUpdate);
+    // printf("MotionControlOld: %lu, MotionControlDiff: %lu\r\n", motor_command.lastUpdate,
+    // HAL_GetTick() - motor_command.lastUpdate);
     motor_command.lastUpdate = HAL_GetTick();
 
     // Good to run motors

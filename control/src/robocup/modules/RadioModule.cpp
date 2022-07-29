@@ -117,7 +117,7 @@ void RadioModule::send() {
     if (battery.isValid && fpga.isValid && id.isValid) {
         vTaskSuspendAll();
         link.send(battery, fpga, kicker, id, debug);
-        //printf("\x1B[32m [INFO] Radio sent information \x1B[37m\r\n");
+        // printf("\x1B[32m [INFO] Radio sent information \x1B[37m\r\n");
         xTaskResumeAll();
     }
 }
@@ -135,7 +135,6 @@ void RadioModule::receive() {
             ;
         printf("RadioRaw: %lu\r\n", HAL_GetTick());
         xTaskResumeAll();
-
 
         if (received_motion_command.isValid) {
             motionCommand.lock().value() = received_motion_command;
