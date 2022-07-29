@@ -67,6 +67,7 @@ void FPGAModule::entry() {
 
     {
         auto motorCommandLock = motorCommand.lock();
+        //printf("FPGAOld: %lu, FPGADiff: %lu\r\n", motorCommandLock->lastUpdate, HAL_GetTick() - motorCommandLock->lastUpdate);
         // Make sure commands are valid
         // If they are not valid, we automatically send a 0 duty cycle
         if (motorCommandLock->isValid &&

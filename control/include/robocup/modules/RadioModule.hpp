@@ -14,7 +14,7 @@ public:
     /**
      * Number of times per second (frequency) that RadioModule should run (Hz)
      */
-    static constexpr float kFrequency = 90.0f;
+    static constexpr float kFrequency = 120.0f;
 
     /**
      * Number of seconds elapsed (period) between RadioModule runs (milliseconds)
@@ -24,7 +24,7 @@ public:
     /**
      * Priority used by RTOS
      */
-    static constexpr int kPriority = 3;
+    static constexpr int kPriority = 5;
 
     /**
      * Constructor for RadioModule
@@ -83,7 +83,7 @@ private:
     /**
      * Choose an odd divisor to receive more than send.
      */
-    static constexpr uint8_t mode_divisor = 3;
+    static constexpr uint8_t mode_divisor = 2;
 
     // not necessary,
     // but let's impose that the divisor evenly divides the frequency

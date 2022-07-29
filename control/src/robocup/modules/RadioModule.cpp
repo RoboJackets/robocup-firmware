@@ -61,7 +61,6 @@ void RadioModule::entry() {
 }
 
 void RadioModule::realEntry() {
-    printf("\x1B[32m [INFO] Radio entry success \x1B[37m\r\n");
     const auto which_mode = [this]() {
         this->current_mode = (this->current_mode + 1) % mode_divisor;
         return this->current_mode;
@@ -118,7 +117,7 @@ void RadioModule::send() {
     if (battery.isValid && fpga.isValid && id.isValid) {
         vTaskSuspendAll();
         link.send(battery, fpga, kicker, id, debug);
-        printf("\x1B[32m [INFO] Radio sent information \x1B[37m\r\n");
+        //printf("\x1B[32m [INFO] Radio sent information \x1B[37m\r\n");
         xTaskResumeAll();
     }
 }
@@ -134,7 +133,9 @@ void RadioModule::receive() {
         vTaskSuspendAll();
         while (link.receive(received_kicker_command, received_motion_command))
             ;
+        printf("RadioRaw: %lu\r\n", HAL_GetTick());
         xTaskResumeAll();
+
 
         if (received_motion_command.isValid) {
             motionCommand.lock().value() = received_motion_command;
