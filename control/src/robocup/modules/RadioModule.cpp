@@ -133,7 +133,7 @@ void RadioModule::receive() {
         vTaskSuspendAll();
         while (link.receive(received_kicker_command, received_motion_command))
             ;
-        printf("RadioRaw: %lu\r\n", HAL_GetTick());
+        // printf("RadioRaw: %lu\r\n", HAL_GetTick());
         xTaskResumeAll();
 
         if (received_motion_command.isValid) {

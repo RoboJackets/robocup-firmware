@@ -94,7 +94,7 @@ void MotionControlModule::entry() {
     // Only use the feedback if we have good inputs
     // NAN's most likely came from the divide by dt in the fpga
     // which was 0, resulting in bad behavior
-    // Leaving this hear until someone can test, then remove
+    // Leaving this here until someone can test, then remove
     // this
     // - Joe Aug 2019
     if (motor_feedback.isValid &&  // imuData->isValid &&
