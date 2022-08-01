@@ -1,5 +1,4 @@
 import socket
-import time
 
 # field computer
 local_ip = "172.16.1.76"
