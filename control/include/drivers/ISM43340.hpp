@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include "robocup.hpp"
 
 namespace ISMConstants {
     // Hardware/driver config values
@@ -34,9 +35,14 @@ namespace ISMConstants {
     static const std::string RECEIVE_SOCKET = "0";
     static const std::string LOCAL_PORT = "25566";
     static const std::string SEND_SOCKET = "1";
+
+#undef NORMAL_BASESTATION_PORT
+
+#if NORMAL_BASESTATION_PORT
     static const std::string BASE_STATION_PORT = "25565";
-
-
+#else
+    static const std::string BASE_STATION_PORT = "25564";
+#endif
 
     // RETURN VALUES (Not including error)
     static const std::string OK     = "OK\r\n> ";
