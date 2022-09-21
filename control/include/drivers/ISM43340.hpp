@@ -1,12 +1,13 @@
 #pragma once
 
-#include "mtrain.hpp"
-#include "SPI.hpp"
-#include "GenericRadio.hpp"
-#include "pin_defs.h"
+#include <memory>
 #include <string>
 #include <vector>
-#include <memory>
+
+#include "GenericRadio.hpp"
+#include "SPI.hpp"
+#include "mtrain.hpp"
+#include "pin_defs.h"
 #include "robocup.hpp"
 
 namespace ISMConstants {
