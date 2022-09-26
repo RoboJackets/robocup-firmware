@@ -21,7 +21,7 @@ namespace ISMConstants {
     static const uint8_t RESET_TURN_OFF = 0;
     static const uint8_t RESET_TURN_ON  = 1;
 
-    static const unsigned int SPI_FREQ = 1'000'000;
+    static const unsigned int SPI_FREQ = 20'000'000;
 
     static const unsigned int RESET_DELAY = 500;
 

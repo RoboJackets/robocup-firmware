@@ -114,12 +114,11 @@ void RadioModule::send() {
     // Just check to see if our robot id is valid
     // That way we don't conflict with other robots on the network
     // that are working
+    vTaskSuspendAll();
     if (battery.isValid && fpga.isValid && id.isValid) {
-        vTaskSuspendAll();
         link.send(battery, fpga, kicker, id, debug);
-        // printf("\x1B[32m [INFO] Radio sent information \x1B[37m\r\n");
-        xTaskResumeAll();
     }
+    xTaskResumeAll();
 }
 
 void RadioModule::receive() {
@@ -133,8 +132,8 @@ void RadioModule::receive() {
         vTaskSuspendAll();
         while (link.receive(received_kicker_command, received_motion_command))
             ;
-        // printf("RadioRaw: %lu\r\n", HAL_GetTick());
         xTaskResumeAll();
+        // printf("RadioRaw: %lu\r\n", HAL_GetTick());
 
         if (received_motion_command.isValid) {
             motionCommand.lock().value() = received_motion_command;
