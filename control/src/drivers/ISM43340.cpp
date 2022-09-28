@@ -6,10 +6,10 @@
 
 #include "FreeRTOS.h"
 #include "delay.h"
+#include "digital_in.h"
 #include "interrupt_in.h"
 #include "macro.hpp"
 #include "task.h"
-#include "digital_in.h"
 
 volatile ISMConstants::State currentState;
 
@@ -21,13 +21,13 @@ void dataReady_cb() {
     // In all seriousness, this is just a state machine where we always
     // increment to the next state whenever there is an edge trigger
     // This is basically the `++x % y` that you see
-    //vTaskSuspendAll();
+    // vTaskSuspendAll();
     // TODO : fix this
-    //printf("read_in:%d\r\n", digitalin_read(*staticDataReadyPtr));
+    // printf("read_in:%d\r\n", digitalin_read(*staticDataReadyPtr));
     currentState =
         static_cast<ISMConstants::State>((static_cast<uint8_t>(currentState) + 1) %
                                          static_cast<uint8_t>(ISMConstants::State::NumStates));
-    //xTaskResumeAll();
+    // xTaskResumeAll();
 }
 
 ISM43340::ISM43340(std::unique_ptr<SPI> radioSPI, PinName nCsPin, PinName nResetPin,
