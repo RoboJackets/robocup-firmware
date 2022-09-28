@@ -1,12 +1,14 @@
 #pragma once
 
-#include "mtrain.hpp"
-#include "SPI.hpp"
-#include "GenericRadio.hpp"
-#include "pin_defs.h"
+#include <memory>
 #include <string>
 #include <vector>
-#include <memory>
+
+#include "GenericRadio.hpp"
+#include "SPI.hpp"
+#include "mtrain.hpp"
+#include "pin_defs.h"
+#include "robocup.hpp"
 
 namespace ISMConstants {
     // Hardware/driver config values
@@ -19,7 +21,7 @@ namespace ISMConstants {
     static const uint8_t RESET_TURN_OFF = 0;
     static const uint8_t RESET_TURN_ON  = 1;
 
-    static const unsigned int SPI_FREQ = 1'000'000;
+    static const unsigned int SPI_FREQ = 20'000'000;
 
     static const unsigned int RESET_DELAY = 500;
 
@@ -34,9 +36,12 @@ namespace ISMConstants {
     static const std::string RECEIVE_SOCKET = "0";
     static const std::string LOCAL_PORT = "25566";
     static const std::string SEND_SOCKET = "1";
+
+#ifdef NORMAL_BASESTATION_PORT
     static const std::string BASE_STATION_PORT = "25565";
-
-
+#else
+    static const std::string BASE_STATION_PORT = "25564";
+#endif
 
     // RETURN VALUES (Not including error)
     static const std::string OK     = "OK\r\n> ";
@@ -328,6 +333,8 @@ namespace ISMConstants {
         NumStates = 4 // DONT USE
     };
 };
+
+static pin_name* staticDataReadyPtr;
 
 class ISM43340 : public GenericRadio {
 public:

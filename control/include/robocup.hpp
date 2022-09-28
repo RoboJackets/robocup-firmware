@@ -11,4 +11,6 @@
  */
 #define USING_RTOS
 
+#define NORMAL_BASESTATION_PORT
+
 #endif  // CONTROL_ROBOCUP_HPP
