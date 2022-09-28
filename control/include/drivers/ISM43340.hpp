@@ -334,6 +334,8 @@ namespace ISMConstants {
     };
 };
 
+static pin_name* staticDataReadyPtr;
+
 class ISM43340 : public GenericRadio {
 public:
 

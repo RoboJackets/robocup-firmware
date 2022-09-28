@@ -114,11 +114,11 @@ void RadioModule::send() {
     // Just check to see if our robot id is valid
     // That way we don't conflict with other robots on the network
     // that are working
-    vTaskSuspendAll();
     if (battery.isValid && fpga.isValid && id.isValid) {
+        vTaskSuspendAll();
         link.send(battery, fpga, kicker, id, debug);
+        xTaskResumeAll();
     }
-    xTaskResumeAll();
 }
 
 void RadioModule::receive() {
