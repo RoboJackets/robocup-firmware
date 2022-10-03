@@ -124,24 +124,19 @@ void RadioModule::send() {
 
 void RadioModule::receive() {
     {
-        MotionCommand received_motion_command;
-        KickerCommand received_kicker_command;
+
+        auto motionCommandLock = motionCommand.lock();
+        auto kickerCommandLock = kickerCommand.lock();
 
         // Try read
         // Clear buffer of old packets such that we can get the latest packet
         // If you don't do this there is a significant lag of 300ms or more
-        vTaskSuspendAll();
-        while (link.receive(received_kicker_command, received_motion_command))
-            ;
-        // printf("RadioRaw: %lu\r\n", HAL_GetTick());
-        xTaskResumeAll();
+        while (link.receive(kickerCommandLock.value(), motionCommandLock.value())) {
+            kickerCommandLock->isValid = true;
+            kickerCommandLock->lastUpdate = HAL_GetTick();
 
-        if (received_motion_command.isValid) {
-            motionCommand.lock().value() = received_motion_command;
-        }
-
-        if (received_kicker_command.isValid) {
-            kickerCommand.lock().value() = received_kicker_command;
+            motionCommandLock->isValid = true;
+            motionCommandLock->lastUpdate = HAL_GetTick();
         }
 
         {
