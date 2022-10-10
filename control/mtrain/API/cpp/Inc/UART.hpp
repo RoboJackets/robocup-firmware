@@ -11,8 +11,8 @@
     unique data for transmission with that device, like which pins the
 */
 typedef enum UARTBus {
-    UARTBus1,
-    UARTBus2,
+    UARTBus7,
+    UARTBus4,
 } UARTBus;
 
 // PinDefs includes the HAl Configuration File, which in turn includes the UART HAL file
