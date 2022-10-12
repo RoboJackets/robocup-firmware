@@ -14,7 +14,7 @@ public:
     /**
      * Number of times per second (frequency) that RadioModule should run (Hz)
      */
-    static constexpr float kFrequency = 120.0f;
+    static constexpr float kFrequency = 90.0f;
 
     /**
      * Number of seconds elapsed (period) between RadioModule runs (milliseconds)

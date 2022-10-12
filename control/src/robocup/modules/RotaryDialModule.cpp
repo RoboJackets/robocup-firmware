@@ -22,10 +22,12 @@ void RotaryDialModule::start() {
 }
 
 void RotaryDialModule::entry(void) {
+    auto robotIDLock = robotID.lock();
+    taskENTER_CRITICAL();
     int new_robot_id = dial.read();
+    taskEXIT_CRITICAL();
 
     printf("Rotary dial: %d\r\n", new_robot_id);
-    auto robotIDLock = robotID.lock();
 
     if (last_robot_id == new_robot_id) {
         robotIDLock->isValid = true;
