@@ -323,11 +323,11 @@ namespace ISMConstants {
         CommandAck = 1,
         ResponseReady = 2,
         ResponseDone = 3,
-
-
         NumStates = 4 // DONT USE
     };
 };
+    static int* prevData;
+    static pin_name* dataReadyPtr;
 
 class ISM43340 : public GenericRadio {
 public:

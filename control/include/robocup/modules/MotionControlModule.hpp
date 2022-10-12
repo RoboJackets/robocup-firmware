@@ -35,7 +35,7 @@ public:
     /**
      * Priority used by RTOS
      */
-    static constexpr int kPriority = 3;
+    static constexpr int kPriority = 4;
 
     /**
      * Constructor for MotionControlModule
@@ -84,5 +84,5 @@ private:
      * This is a safety feature to prevent the motors from moving
      * if the motion control dies
      */
-    static constexpr uint32_t COMMAND_TIMEOUT = 250;
+    static constexpr uint32_t COMMAND_TIMEOUT = 1000;
 };
