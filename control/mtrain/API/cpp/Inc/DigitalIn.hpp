@@ -9,7 +9,7 @@ public:
      * @param pin Pin def external to board
      * @param pull Pin pull type
      */
-    DigitalIn(PinName pin, PullType pull = PullType::PullNone);
+    explicit DigitalIn(PinName pin, PullType pull = PullType::PullNone);
 
     ~DigitalIn();
 
@@ -17,7 +17,7 @@ public:
      *
      * @return true (high) or false (low)
      */
-    bool read();
+    volatile bool read();
 
     operator bool() { return read(); }
 

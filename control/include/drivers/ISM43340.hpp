@@ -1,12 +1,14 @@
 #pragma once
 
-#include "mtrain.hpp"
-#include "SPI.hpp"
-#include "GenericRadio.hpp"
-#include "pin_defs.h"
+#include <memory>
 #include <string>
 #include <vector>
-#include <memory>
+
+#include "GenericRadio.hpp"
+#include "SPI.hpp"
+#include "mtrain.hpp"
+#include "pin_defs.h"
+#include "robocup.hpp"
 
 namespace ISMConstants {
     // Hardware/driver config values
@@ -34,9 +36,12 @@ namespace ISMConstants {
     static const std::string RECEIVE_SOCKET = "0";
     static const std::string LOCAL_PORT = "25566";
     static const std::string SEND_SOCKET = "1";
+
+#ifdef NORMAL_BASESTATION_PORT
     static const std::string BASE_STATION_PORT = "25565";
-
-
+#else
+    static const std::string BASE_STATION_PORT = "25564";
+#endif
 
     // RETURN VALUES (Not including error)
     static const std::string OK     = "OK\r\n> ";
