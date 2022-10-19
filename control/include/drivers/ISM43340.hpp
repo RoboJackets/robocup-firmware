@@ -331,8 +331,8 @@ namespace ISMConstants {
         NumStates = 4 // DONT USE
     };
 };
-    static int* prevData;
-    static pin_name* dataReadyPtr;
+static int* prevData;
+static pin_name* dataReadyPtr;
 
 class ISM43340 : public GenericRadio {
 public:

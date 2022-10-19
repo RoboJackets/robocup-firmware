@@ -8,8 +8,8 @@
 #include "delay.h"
 #include "interrupt_in.h"
 #include "macro.hpp"
-#include "task.h"
 #include "mtrain.h"
+#include "task.h"
 
 volatile ISMConstants::State currentState;
 
@@ -25,15 +25,17 @@ void dataReady_cb() {
     uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
     int data = digitalin_read(*dataReadyPtr);
     if (*prevData == 0 && data == 1 &&
-        (currentState == ISMConstants::State::ResponseDone || currentState == ISMConstants::State::CommandAck)) {
+        (currentState == ISMConstants::State::ResponseDone ||
+         currentState == ISMConstants::State::CommandAck)) {
         currentState =
-                static_cast<ISMConstants::State>((static_cast<uint8_t>(currentState) + 1) %
-                                                 static_cast<uint8_t>(ISMConstants::State::NumStates));
-    } else if (*prevData == 1 && data == 0 && (currentState == ISMConstants::State::ResponseReady ||
-                                               currentState == ISMConstants::State::CommandReady)) {
+            static_cast<ISMConstants::State>((static_cast<uint8_t>(currentState) + 1) %
+                                             static_cast<uint8_t>(ISMConstants::State::NumStates));
+    } else if (*prevData == 1 && data == 0 &&
+               (currentState == ISMConstants::State::ResponseReady ||
+                currentState == ISMConstants::State::CommandReady)) {
         currentState =
-                static_cast<ISMConstants::State>((static_cast<uint8_t>(currentState) + 1) %
-                                                 static_cast<uint8_t>(ISMConstants::State::NumStates));
+            static_cast<ISMConstants::State>((static_cast<uint8_t>(currentState) + 1) %
+                                             static_cast<uint8_t>(ISMConstants::State::NumStates));
     }
     *prevData = data;
     taskEXIT_CRITICAL_FROM_ISR(uxSavedInterruptStatus);
