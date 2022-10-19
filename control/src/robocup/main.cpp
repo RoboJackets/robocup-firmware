@@ -81,7 +81,8 @@ void startModule(void *pvModule) {
 
     while (true) {
         module->entry();
-        vTaskDelayUntil(&last_wait_time, increment);
+        vTaskDelay(increment);
+        //vTaskDelayUntil(&last_wait_time, increment);
     }
 }
 

@@ -73,7 +73,7 @@ bool RadioLink::receive(KickerCommand& kickerCommand,
                        MotionCommand& motionCommand) {
     // Make sure there is actually data to read
     if (!radio->isAvailable()) {
-        printf("[WARNING] Radio says nothing to read\r\n");
+        //printf("[WARNING] Radio says nothing to read\r\n");
         cyclesWithoutPackets++;
         return false;
     }
@@ -108,6 +108,6 @@ bool RadioLink::receive(KickerCommand& kickerCommand,
 
     cyclesWithoutPackets = 0;
     radioConnected = radio->isConnected();
-    printf("[INFO] Radio Link says we received, %f\r\n", motionCommand.bodyXVel);
+    // printf("[INFO] Radio Link says we received, %f\r\n", motionCommand.bodyXVel);
     return true;
 }

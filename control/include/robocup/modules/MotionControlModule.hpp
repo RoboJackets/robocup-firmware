@@ -75,6 +75,10 @@ private:
 
     Eigen::Matrix<float, 4, 1> prevCommand;
 
+    uint32_t period_avg = 0.0;
+    uint32_t period_start = 0.0;
+    uint32_t period_count = 0;
+
     IMUModule& imuModule;
 
     /**

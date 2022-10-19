@@ -7,6 +7,7 @@
 #include "mtrain.hpp"
 
 #include "rc-fshare/robot_model.hpp"
+#include "delay.h"
 
 MotionControlModule::MotionControlModule(LockedStruct<BatteryVoltage>& batteryVoltage,
                                          LockedStruct<IMUData>& imuData,
@@ -39,12 +40,25 @@ MotionControlModule::MotionControlModule(LockedStruct<BatteryVoltage>& batteryVo
 void MotionControlModule::start() { imuModule.start(); }
 
 void MotionControlModule::entry() {
+    u_int32_t curr_time = DWT_Get_us() / 1000;
+
     auto battery = batteryVoltage.lock().value();
     auto motion_command = motionCommand.lock().value();
     auto motor_command = motorCommand.lock().value();
     auto motor_feedback = motorFeedback.lock().value();
     imuModule.entry();
     auto imu_data = imuData.lock().value();
+    if (period_count != 0)
+        period_avg = ((period_avg * (period_count - 1)) + (curr_time - period_start)) / period_count;
+
+    if ((uint) period_count % 100 == 0) {
+        printf("motion control curr time: %lu  \r\n", curr_time);
+        printf("motion control start time: %lu  \r\n", period_start);
+        printf("motion control period avg: %lu  \r\n", period_avg);
+        printf("motion control period DIFF: %lu  \r\n", (curr_time - period_start));
+        printf("motion control count: %lu  \r\n", period_count);
+    }
+    period_count++;
 
     DebugFrame frame;
     frame.ticks = xTaskGetTickCount();
@@ -163,6 +177,7 @@ void MotionControlModule::entry() {
         debugInfoLock->num_debug_frames++;
     }
 #endif
+    period_start = DWT_Get_us() / 1000;
 }
 bool MotionControlModule::isRecentUpdate(uint32_t lastUpdateTime) {
     return (HAL_GetTick() - lastUpdateTime) < COMMAND_TIMEOUT;
