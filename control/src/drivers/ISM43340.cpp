@@ -9,6 +9,7 @@
 #include "interrupt_in.h"
 #include "macro.hpp"
 #include "task.h"
+#include "mtrain.h"
 
 volatile ISMConstants::State currentState;
 
@@ -20,9 +21,22 @@ void dataReady_cb() {
     // In all seriousness, this is just a state machine where we always
     // increment to the next state whenever there is an edge trigger
     // This is basically the `++x % y` that you see
-    currentState =
-        static_cast<ISMConstants::State>((static_cast<uint8_t>(currentState) + 1) %
-                                         static_cast<uint8_t>(ISMConstants::State::NumStates));
+    UBaseType_t uxSavedInterruptStatus;
+    uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
+    int data = digitalin_read(*dataReadyPtr);
+    if (*prevData == 0 && data == 1 &&
+        (currentState == ISMConstants::State::ResponseDone || currentState == ISMConstants::State::CommandAck)) {
+        currentState =
+                static_cast<ISMConstants::State>((static_cast<uint8_t>(currentState) + 1) %
+                                                 static_cast<uint8_t>(ISMConstants::State::NumStates));
+    } else if (*prevData == 1 && data == 0 && (currentState == ISMConstants::State::ResponseReady ||
+                                               currentState == ISMConstants::State::CommandReady)) {
+        currentState =
+                static_cast<ISMConstants::State>((static_cast<uint8_t>(currentState) + 1) %
+                                                 static_cast<uint8_t>(ISMConstants::State::NumStates));
+    }
+    *prevData = data;
+    taskEXIT_CRITICAL_FROM_ISR(uxSavedInterruptStatus);
 }
 
 ISM43340::ISM43340(std::unique_ptr<SPI> radioSPI, PinName nCsPin, PinName nResetPin,
@@ -35,7 +49,8 @@ ISM43340::ISM43340(std::unique_ptr<SPI> radioSPI, PinName nCsPin, PinName nReset
       cmdStart(nullptr) {
     currentState = ISMConstants::State::CommandReady;
     interruptin_init_ex(dataReady, &dataReady_cb, PULL_DOWN, INTERRUPT_RISING_FALLING);
-
+    dataReadyPtr = &dataReady;
+    *prevData = 0;
     nCs = ISMConstants::CHIP_DESELECT;
 
     readBuffer.reserve(ISMConstants::RECEIVE_BUFF_SIZE);
@@ -145,8 +160,9 @@ unsigned int ISM43340::receive(uint8_t* data, const unsigned int maxNumBytes) {
  * Let it run for a minute or so to see if it breaks eventually
  */
 void ISM43340::writeToSpi(uint8_t* command, int length) {
-    while (currentState != ISMConstants::State::CommandReady)
-        ;
+    while (currentState != ISMConstants::State::CommandReady) {
+        printf("1\r\n");
+    }
 
     nCs = ISMConstants::CHIP_SELECT;
     DWT_Delay(100);  // Must be 50 us or more. Measure first response on logic analyzer
@@ -166,8 +182,10 @@ void ISM43340::writeToSpi(uint8_t* command, int length) {
     nCs = ISMConstants::CHIP_DESELECT;
 
     // Wait till data ready goes to 0
-    while (currentState != ISMConstants::State::CommandAck)
-        ;
+    while (currentState != ISMConstants::State::CommandAck) {
+        printf("2\r\n");
+        printf("dataReady %d\r\n", 69);
+    }
 }
 
 uint32_t ISM43340::readFromSpi() {
@@ -176,8 +194,9 @@ uint32_t ISM43340::readFromSpi() {
     readBuffer.clear();
 
     // Wait till data ready goes to 1
-    while (currentState != ISMConstants::State::ResponseReady)
-        ;
+    while (currentState != ISMConstants::State::ResponseReady) {
+        printf("3\r\n");
+    }
 
     nCs = ISMConstants::CHIP_SELECT;
     DWT_Delay(100);  // Must be 50 us or more. Measure first response on logic analyzer
@@ -187,6 +206,8 @@ uint32_t ISM43340::readFromSpi() {
     bool foundAnyData = false;
 
     while (currentState != ISMConstants::State::ResponseDone) {
+        printf("4\r\n");
+
         uint8_t data1 = radioSPI->transmitReceive(ISMConstants::READ);
         uint8_t data2 = radioSPI->transmitReceive(ISMConstants::READ);
 
@@ -201,6 +222,7 @@ uint32_t ISM43340::readFromSpi() {
 
             foundAnyData = true;
         }
+        printf("5\r\n");
     }
 
     nCs = ISMConstants::CHIP_DESELECT;

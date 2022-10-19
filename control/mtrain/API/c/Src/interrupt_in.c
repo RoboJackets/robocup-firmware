@@ -13,7 +13,7 @@ static void (*interrupt12)() = NULL;
 static void (*interrupt14)() = NULL;
 static void (*interrupt15)() = NULL;
 
-static int interrupt_priority = 10;
+static int interrupt_priority = 4;
 
 static void NVIC_config(IRQn_Type IRQn) {
     HAL_NVIC_SetPriority(IRQn, interrupt_priority, interrupt_priority);

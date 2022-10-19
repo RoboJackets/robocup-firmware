@@ -69,7 +69,7 @@ private:
      * This is a safety feature to prevent the motors from moving
      * if the motion control dies
      */
-    static constexpr uint32_t COMMAND_TIMEOUT = 250; // ms
+    static constexpr uint32_t COMMAND_TIMEOUT = 1000; // ms
 
     /**
      * Number of enc ticks per revolution of the wheel
