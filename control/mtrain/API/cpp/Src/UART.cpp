@@ -60,6 +60,7 @@ UART::UART(UARTBus ub) {
             break;
     }
     HAL_UART_Init(&uartHandle); // Initializes UART given the previously specified settings
+}
 
     UART::~UART() {
     if (uartHandle.Instance == UART7) {
@@ -73,5 +74,4 @@ UART::UART(UARTBus ub) {
     } else if (uartHandle.Instance == UART4) {
         // No case where this is applicable yet
     }
-}
 }
