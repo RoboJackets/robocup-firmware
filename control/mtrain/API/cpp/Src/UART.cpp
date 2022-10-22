@@ -8,7 +8,8 @@ using namespace std;
     - Write transmit and receive functions
     - Write recover bus function
 */
-
+/// @brief Constructor for UART object
+/// @param ub: Must specify the UART bus on the STM32f769NI that you are attempting to use
 UART::UART(UARTBus ub) {
     RCC_PeriphCLKInitTypeDef RCC_PeriphCLKInitStruct;
     GPIO_InitTypeDef GPIO_InitStruct;
@@ -59,10 +60,11 @@ UART::UART(UARTBus ub) {
             // Idk what pins these would be, would probably need to look this up
             break;
     }
-    HAL_UART_Init(&uartHandle); // Initializes UART given the previously specified settings
+    HAL_UART_Init(&uartHandle);  // Initializes UART given the previously specified settings.
+                                 // Already enables device.
 }
 
-    UART::~UART() {
+UART::~UART() {
     if (uartHandle.Instance == UART7) {
         __HAL_RCC_UART7_CLK_DISABLE();
 
@@ -74,4 +76,18 @@ UART::UART(UARTBus ub) {
     } else if (uartHandle.Instance == UART4) {
         // No case where this is applicable yet
     }
+}
+
+/// @brief Abstracted transmit function
+/// @param data: The data you want to transmit
+void UART::transmit(uint8_t data) {
+    HAL_UART_Transmit(&uartHandle, &data, (uint16_t)sizeof(data),
+                      (uint32_t)HAL_MAX_DELAY);  // TODO: Figure out a proper timeout time
+}
+
+/// @brief Abstracted receive function. TODO: Maybe? Change this to just return the data received.
+/// @param pData: Pointer to a buffer where you want to store the received data
+/// @param dataSize: One must specify the size of the data they are expecting to receive
+void UART::receive(uint8_t* pData, uint16_t dataSize) {
+    HAL_UART_Receive(&uartHandle, pData, dataSize, (uint32_t)HAL_MAX_DELAY);
 }
