@@ -22,6 +22,7 @@
 #include "modules/KickerModule.hpp"
 #include "modules/LEDModule.hpp"
 #include "modules/MotionControlModule.hpp"
+#include "modules/NewRadioModule.hpp"
 #include "modules/RadioModule.hpp"
 #include "modules/RotaryDialModule.hpp"
 #include "LockedStruct.hpp"
@@ -154,6 +155,9 @@ int main() {
 
     static BatteryModule battery(batteryVoltage);
     createModule(&battery);
+
+    static NewRadioModule uart();
+    createModule(&uart);
 
     static RotaryDialModule dial(ioExpander,
                                  robotID);
