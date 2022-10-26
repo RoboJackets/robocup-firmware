@@ -156,8 +156,9 @@ int main() {
     static BatteryModule battery(batteryVoltage);
     createModule(&battery);
 
-    static NewRadioModule uart();
-    createModule(&uart);
+
+    static NewRadioModule newRadio(batteryVoltage);
+    createModule(&newRadio);
 
     static RotaryDialModule dial(ioExpander,
                                  robotID);

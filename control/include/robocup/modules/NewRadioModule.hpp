@@ -32,7 +32,12 @@ public:
      * Constructor for NewRadioModule
      *
      */
-    explicit NewRadioModule();
+    NewRadioModule(LockedStruct<BatteryVoltage>& batteryVoltage);
+
+    /**
+     * Code which initializes module
+     */
+    void start() override;
 
     /**
      * Code to run when called by RTOS once per system tick (`kperiod`)
@@ -41,5 +46,7 @@ public:
     void entry() override;
 
 private:
-    UART uart(UARTBus UARTBus7);
+    LockedStruct<BatteryVoltage>& batteryVoltage;
+    UART uart;
+    uint8_t dataBuff = -1;
 };
