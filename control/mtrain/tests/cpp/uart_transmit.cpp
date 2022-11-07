@@ -1,5 +1,5 @@
-#include "mtrain.hpp"
 #include "UART.hpp"
+#include "mtrain.hpp"
 
 /**
  *
@@ -27,4 +27,3 @@ int main(void) {
         id += forward ? 1 : -1;
     }
 }
-
