@@ -1,9 +1,9 @@
 #pragma once
 
 #include <LockedStruct.hpp>
-#include "GenericModule.hpp"
-#include "MicroPackets.hpp" 
 
+#include "GenericModule.hpp"
+#include "MicroPackets.hpp"
 #include "UART.hpp"
 
 /**
@@ -41,7 +41,7 @@ public:
 
     /**
      * Code to run when called by RTOS once per system tick (`kperiod`)
-     * 
+     *
      */
     void entry() override;
 

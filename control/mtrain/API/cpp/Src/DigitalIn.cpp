@@ -10,4 +10,4 @@ DigitalIn::DigitalIn(PinName pin, PullType pull) : pin(pin) {
 }
 DigitalIn::~DigitalIn() { HAL_GPIO_DeInit(pin.port, pin.pin); }
 
-bool DigitalIn::read() { return HAL_GPIO_ReadPin(pin.port, pin.pin); }
+volatile bool DigitalIn::read() { return HAL_GPIO_ReadPin(pin.port, pin.pin); }
