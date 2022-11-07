@@ -21,7 +21,7 @@ public:
     UART(UARTBus ub);  // Constructor
     ~UART();           // Destructor
 
-    void transmit(uint8_t data);                      // Abstracted transmit function
+    bool transmit(uint8_t* data);                      // Abstracted transmit function
     void receive(uint8_t* pData, uint16_t dataSize);  // Abstracted receive function
 
     void recoverBus();  // This will be used to reset things in case something goes wrong during a

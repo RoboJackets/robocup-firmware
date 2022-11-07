@@ -1,6 +1,6 @@
 .PHONY: all mtrain tests docs clean
 
-CPP_FIRMWARE_TESTS = blink gpio spi usb_serial i2c i2c_bus_recovery
+CPP_FIRMWARE_TESTS = blink gpio spi usb_serial i2c i2c_bus_recovery uart
 
 all : mtrain
 
