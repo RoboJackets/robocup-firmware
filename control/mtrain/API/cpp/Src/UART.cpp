@@ -14,12 +14,7 @@ UART::UART(UARTBus ub) {
     RCC_PeriphCLKInitTypeDef RCC_PeriphCLKInitStruct;
     GPIO_InitTypeDef GPIO_InitStruct;
 
-    uartHandle.AdvancedInit.AutoBaudRateEnable =
-        UART_ADVFEATURE_AUTOBAUDRATE_ENABLE;  // Enables auto baud rate detection. Alternatively, a
-                                              // particular baud rate can be set.
-    uartHandle.AdvancedInit.AutoBaudRateMode =
-        UART_ADVFEATURE_AUTOBAUDRATE_ONSTARTBIT;  // Attempts to automatically determine baud rate
-                                                  // on start bit. Can be changed.
+    uartHandle.Init.BaudRate = 115200;
     uartHandle.Init.WordLength =
         UART_WORDLENGTH_8B;                      // Assumes 8 bit word length. Can also be 7 or 9
     uartHandle.Init.StopBits = UART_STOPBITS_1;  // Assumes 1 UART stop bit Can also be 2
@@ -27,6 +22,8 @@ UART::UART(UARTBus ub) {
     uartHandle.Init.HwFlowCtl = UART_HWCONTROL_NONE;  // No hardware flow control
     uartHandle.Init.Mode =
         UART_MODE_TX_RX;  // We're both transmitting and receiving with UART on this device.
+    uartHandle.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+
 
     switch (ub) {
         // What radio would actually be connected to on the STM32F76
@@ -82,7 +79,7 @@ UART::~UART() {
 /// @param data: The data you want to transmit
 bool UART::transmit(uint8_t* data) {
     return HAL_StatusTypeDef::HAL_OK == HAL_UART_Transmit(&uartHandle, data, (uint16_t)sizeof(data),
-                      (uint32_t)1000);  // TODO: Figure out a proper timeout time
+                      (uint32_t)HAL_MAX_DELAY);  // TODO: Figure out a proper timeout time
 }
 
 /// @brief Abstracted receive function. TODO: Maybe? Change this to just return the data received.

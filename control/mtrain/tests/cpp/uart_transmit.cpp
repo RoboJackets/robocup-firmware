@@ -11,7 +11,7 @@ int main(void) {
     int id = 0;
     bool forward = true;
     uint8_t data[1];
-    data[0] = 1;
+    data[0] = 0b1010;
     while (true) {
         auto status = uart7.transmit(data);
         printf("worked?: %d", status);
