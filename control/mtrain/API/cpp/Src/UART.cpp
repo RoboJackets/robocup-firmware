@@ -81,8 +81,9 @@ UART::~UART() {
 /// @brief Abstracted transmit function
 /// @param data: The data you want to transmit
 bool UART::transmit(uint8_t* data) {
-    return HAL_StatusTypeDef::HAL_OK == HAL_UART_Transmit(&uartHandle, data, (uint16_t)sizeof(data),
-                      (uint32_t)1000);  // TODO: Figure out a proper timeout time
+    return HAL_StatusTypeDef::HAL_OK ==
+           HAL_UART_Transmit(&uartHandle, data, (uint16_t)sizeof(data),
+                             (uint32_t)1000);  // TODO: Figure out a proper timeout time
 }
 
 /// @brief Abstracted receive function. TODO: Maybe? Change this to just return the data received.
