@@ -24,7 +24,6 @@ UART::UART(UARTBus ub) {
         UART_MODE_TX_RX;  // We're both transmitting and receiving with UART on this device.
     uartHandle.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
 
-
     switch (ub) {
         // What radio would actually be connected to on the STM32F76
 
@@ -78,8 +77,9 @@ UART::~UART() {
 /// @brief Abstracted transmit function
 /// @param data: The data you want to transmit
 bool UART::transmit(uint8_t* data) {
-    return HAL_StatusTypeDef::HAL_OK == HAL_UART_Transmit(&uartHandle, data, (uint16_t)sizeof(data),
-                      (uint32_t)HAL_MAX_DELAY);  // TODO: Figure out a proper timeout time
+    return HAL_StatusTypeDef::HAL_OK ==
+           HAL_UART_Transmit(&uartHandle, data, (uint16_t)sizeof(data),
+                             (uint32_t)HAL_MAX_DELAY);  // TODO: Figure out a proper timeout time
 }
 
 /// @brief Abstracted receive function. TODO: Maybe? Change this to just return the data received.
