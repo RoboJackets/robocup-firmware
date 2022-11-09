@@ -11,8 +11,9 @@ int main(void) {
     int id = 0;
     bool forward = true;
     uint8_t data[1];
-    data[0] = 0b1010;
+    data[0] = 0;
     while (true) {
+        printf("data = %d", data[0]);
         uart7.receive(data, 1);
         printf("data = %d", data[0]);
         leds[id].toggle();
