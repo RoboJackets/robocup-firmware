@@ -131,8 +131,7 @@ void RadioModule::receive() {
         // Clear buffer of old packets such that we can get the latest packet
         // If you don't do this there is a significant lag of 300ms or more
         vTaskSuspendAll();
-        while (link.receive(received_kicker_command, received_motion_command))
-            ;
+        link.receive(received_kicker_command, received_motion_command);
         // printf("RadioRaw: %lu\r\n", HAL_GetTick());
         xTaskResumeAll();
 
