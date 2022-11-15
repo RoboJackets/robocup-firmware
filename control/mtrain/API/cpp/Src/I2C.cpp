@@ -1,5 +1,4 @@
 #include "I2C.hpp"
-
 #include "delay.h"
 
 #define I2C_TIMING 0x10A60D20
@@ -89,6 +88,14 @@ void I2C::recover_bus() {
     GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
     GPIO_InitStruct.Alternate = GPIO_AF4_I2C1;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+}
+
+void I2C::transmit(uint8_t address, uint8_t data){
+    HAL_StatusTypeDef ret = HAL_I2C_Master_Transmit(&i2cHandle, address,  &data, 1, 5);
+
+    if (ret != HAL_OK) {
+        recover_bus();
+    }
 }
 
 void I2C::transmit(uint8_t address, uint8_t regAddr, uint8_t data) {

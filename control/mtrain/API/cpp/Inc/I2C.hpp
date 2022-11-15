@@ -14,6 +14,7 @@ public:
     I2C(I2CBus i2cBus);
     ~I2C();
 
+    void transmit(uint8_t address, uint8_t data);
     void transmit(uint8_t address, uint8_t regAddr, uint8_t data);
     void transmit(uint8_t address, uint8_t regAddr, const std::vector<uint8_t>& data);
 
