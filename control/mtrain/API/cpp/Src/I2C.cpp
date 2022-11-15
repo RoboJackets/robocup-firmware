@@ -121,6 +121,17 @@ void I2C::transmit(uint8_t address, uint8_t regAddr, const std::vector<uint8_t>&
     }
 }
 
+uint8_t I2C::receive(uint8_t address){
+    uint8_t data = 0;
+    HAL_StatusTypeDef ret = HAL_I2C_Master_Receive(&i2cHandle, address, &data, 1, 5);
+
+    if (ret != HAL_OK) {
+        recover_bus();
+    }
+
+    return data;
+}
+
 uint8_t I2C::receive(uint8_t address, uint8_t regAddr) {
     uint8_t data = 0;
     HAL_StatusTypeDef ret = HAL_I2C_Mem_Read(&i2cHandle, address, regAddr, 1, &data, 1, 5);
