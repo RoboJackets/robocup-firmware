@@ -18,6 +18,7 @@ public:
     void transmit(uint8_t address, uint8_t regAddr, uint8_t data);
     void transmit(uint8_t address, uint8_t regAddr, const std::vector<uint8_t>& data);
 
+    uint8_t slaveReceive();
     uint8_t receive(uint8_t address);
     uint8_t receive(uint8_t address, uint8_t regAddr);
     std::vector<uint8_t> receive(uint8_t address, uint8_t regAddr, size_t count);
