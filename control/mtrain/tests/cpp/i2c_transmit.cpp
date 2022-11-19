@@ -6,6 +6,10 @@ int main() {
     I2C i2c1(I2CBus1);
     fflush(stdout);
     while (true) {
-        i2c1.transmit(0xE2, 0b00000010);
+        HAL_StatusTypeDef ret = i2c1.transmit(0x08, 0b00000010);
+        HAL_Delay(500);
+        printf("%X", ret);
+        printf("\r\n");
+        HAL_Delay(500);
     }
 }
