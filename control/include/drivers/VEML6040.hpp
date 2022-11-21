@@ -16,6 +16,9 @@ public :
     
     VEML6040(LockedStruct<I2C>& sharedI2C);
 
+    //read command that reads the value of Red Green and Blue
+    uint16_t read();
+    //read command that will take in a specific code to only read a certain color
     uint16_t read(VEML::CommandCode);
     void write(std::vector uint8_t data);
     void init();
