@@ -6,6 +6,7 @@
 
 # build directories
 /build
+/control/mtrain/build/*
 */build
 /gmon.out
 *.swp
