@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+
 #include "I2C.hpp"
 #include "LockedStruct.hpp"
 
@@ -84,8 +85,7 @@ public:
      * @param   pullup_config      100k pullup value (1 = enabled, 0 = disabled)
      * @param   polarity_config    polarity value (1 = flip, 0 = normal)
      */
-    void config(uint16_t dir_config, uint16_t pullup_config,
-                uint16_t polarity_config);
+    void config(uint16_t dir_config, uint16_t pullup_config, uint16_t polarity_config);
 
     void writeRegister(MCP23017::Register regAddress, uint16_t val);
     uint16_t readRegister(MCP23017::Register regAddress);
