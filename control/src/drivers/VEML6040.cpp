@@ -28,7 +28,7 @@ uint16_t read(VEML::CommandCode colorCode) {
 
     //new receive function being written to get the red green and blue values
 
-    std::vector<uint_8> values = i2c_lock->transmit(colorCode);//this is where new recieve function will go
+    std::vector<uint_8> values = i2c_lock->recieve(colorCode);//this is where new recieve function will go
 
     return (uint16_t)(values[0] | (values[1] << 8));
 }
@@ -46,7 +46,6 @@ uint16_t read() {
     to try and normalize the results by dividing by the sum of the red green and blue values
     but I dont think this is going to fully work because the actual high for each color is going
     to be different and certain colors are going to be biased more than others? */
-
     int sum = red + blue + green;
     red = red / sum;
     green = green / sum;

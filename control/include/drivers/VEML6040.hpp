@@ -4,7 +4,7 @@
 #include "LockedStruct.hpp"
 
 class VEML6040 {
-public :
+public:
     typedef enum {
         RED = 0x08,
         GREEN = 0x09,
@@ -23,8 +23,7 @@ public :
     void write(std::vector uint8_t data);
     void init();
 
-    private:
-
+private:
     LockedStruct<I2C>& _i2c;
     int _i2cAddress;
 }
