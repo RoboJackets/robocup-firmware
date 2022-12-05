@@ -18,7 +18,7 @@ void VEML6040A3OG::read(int sensorNum, uint8_t RGBColors[3])
     //send to both the 2nd and the 6th channel (the channels are from right to left). So, to send something only to the channel lookups[sensorNum],
     //you need a binary number with a 1 only in the lookups[sensorNum]-th position. Essentially, since each digit in binary is 2^n, doing
     //2^lookups[sensorNum] will give a binary number where the only 1 is at lookups[sensorNum]
-    _i2c.transmit(226, 2^lookups[sensorNum]);
+    _i2c.transmit(226, 2^lookups[sensorNum]); //Hexadecimal address was E2, which is (?) 226 is decimals
 
     //requesting and recieving red
     _i2c.transmit(16, 8); //address is 10h which is 16, data is 08h which is 8
