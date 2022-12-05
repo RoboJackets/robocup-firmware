@@ -34,8 +34,7 @@ typedef enum
 }VEML6040A3OGIntegrationTime_t;
 
 VEML6040A3OG(int32_t sensorID, I2C &sharedI2C);
-void writeRegister(uint8_t data);
-uint8_t readRegister();
+void read(int sensorNum, uint8_t RGBColors[3]);
 bool init();
 
 private:
