@@ -36,3 +36,42 @@ void VEML6040A3OG::read(int sensorNum, uint8_t RGBColors[3])
     RGBColors[1] = green;
     RGBColors[2] = blue;
 }
+
+//Scales the largest value of RGBColors to 255 and scales the other two by the same factor
+void scaleTo255(uint8_t RGBColors[3])
+{
+    int max = -1;
+    for(int i = 0; i < 3; i++)
+    {
+        if (RGBColors[i] > max)
+        {
+            max = RGBColors[i];
+        }     
+    }
+
+    for(int i = 0; i < 3; i++)
+    {
+        RGBColors[i] = RGBColors[i]/max * 255;
+    }
+}
+
+//Scales each value (see scaleTo255) and then rounds to 0, 127, or 255
+void scaleAndRound(uint8_t RGBColors[3])
+{
+    scaleTo255(RGBColors);
+    for(int i = 0; i < 3; i++)
+    {
+        if (RGBColors[i] < 64)
+        {
+            RGBColors[i] = 0;
+        } 
+        else if (RGBColors[i] < 192)
+        {
+            RGBColors[i] = 127;
+        }
+        else
+        {
+            RGBColors[i] = 255;
+        }
+    }
+}
