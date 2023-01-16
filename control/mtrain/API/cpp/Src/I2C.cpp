@@ -1,5 +1,4 @@
 #include "I2C.hpp"
-
 #include "delay.h"
 
 #define I2C_TIMING 0x10A60D20
@@ -91,6 +90,16 @@ void I2C::recover_bus() {
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 }
 
+HAL_StatusTypeDef I2C::transmit(uint8_t address, uint8_t data) {
+    HAL_StatusTypeDef ret = HAL_I2C_Master_Transmit(&i2cHandle, address, &data, 1, 5);
+
+    if (ret != HAL_OK) {
+        recover_bus();
+    }
+
+    return ret;
+}
+
 void I2C::transmit(uint8_t address, uint8_t regAddr, uint8_t data) {
     HAL_StatusTypeDef ret = HAL_I2C_Mem_Write(&i2cHandle, address, regAddr, 1, &data, 1, 5);
 
@@ -112,6 +121,27 @@ void I2C::transmit(uint8_t address, uint8_t regAddr, const std::vector<uint8_t>&
     if (ret != HAL_OK) {
         recover_bus();
     }
+}
+
+uint8_t I2C::slaveReceive() {
+    uint8_t data = 0;
+    HAL_StatusTypeDef ret = HAL_I2C_Slave_Receive(&i2cHandle, &data, 1, 5);
+    if (ret != HAL_OK) {
+        recover_bus();
+    }
+
+    return data;
+}
+
+uint8_t I2C::receive(uint8_t address) {
+    uint8_t data = 0;
+    HAL_StatusTypeDef ret = HAL_I2C_Master_Receive(&i2cHandle, address, &data, 1, 5);
+
+    if (ret != HAL_OK) {
+        recover_bus();
+    }
+
+    return data;
 }
 
 uint8_t I2C::receive(uint8_t address, uint8_t regAddr) {
