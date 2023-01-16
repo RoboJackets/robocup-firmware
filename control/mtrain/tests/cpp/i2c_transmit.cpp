@@ -9,16 +9,13 @@ int main() {
         HAL_Delay(500);
         printf("Transmitting values");
         printf("\r\n");
-        if (ret == 0x00){
+        if (ret == 0x00) {
             printf("HAL_OK");
-        }
-        else if (ret == 0x01){
+        } else if (ret == 0x01) {
             printf("HAL_ERROR");
-        }
-        else if (ret == 0x02){
+        } else if (ret == 0x02) {
             printf("HAL_BUSY");
-        }
-        else{
+        } else {
             printf("TIMEOUT");
         }
         printf("\r\n");
