@@ -8,19 +8,22 @@ RadioModule::RadioModule(LockedStruct<BatteryVoltage>& batteryVoltage,
                          LockedStruct<FPGAStatus>& fpgaStatus, LockedStruct<KickerInfo>& kickerInfo,
                          LockedStruct<RobotID>& robotID, LockedStruct<KickerCommand>& kickerCommand,
                          LockedStruct<MotionCommand>& motionCommand,
-                         LockedStruct<RadioError>& radioError, LockedStruct<DebugInfo>& debugInfo)
-    : GenericModule(kPeriod, "radio", kPriority),
-      batteryVoltage(batteryVoltage),
-      fpgaStatus(fpgaStatus),
-      kickerInfo(kickerInfo),
-      robotID(robotID),
-      kickerCommand(kickerCommand),
-      motionCommand(motionCommand),
-      radioError(radioError),
-      debugInfo(debugInfo),
-      link(),
-      secondRadioCS(RADIO_R1_CS),
-      current_mode(0) {
+                         LockedStruct<RadioError>& radioError, LockedStruct<DebugInfo>& debugInfo,
+                         LockedStruct<LEDCommand> &ledCommand)
+        : GenericModule(kPeriod, "radio", kPriority),
+          batteryVoltage(batteryVoltage),
+          fpgaStatus(fpgaStatus),
+          kickerInfo(kickerInfo),
+          robotID(robotID),
+          kickerCommand(kickerCommand),
+          motionCommand(motionCommand),
+          radioError(radioError),
+          debugInfo(debugInfo),
+          ledCommand(ledCommand),
+          link(),
+          secondRadioCS(RADIO_R1_CS),
+          current_mode(0) {
+
     secondRadioCS = 1;
 
     // todo fill out more kicker stuff
@@ -126,6 +129,7 @@ void RadioModule::receive() {
     {
         MotionCommand received_motion_command;
         KickerCommand received_kicker_command;
+        LEDCommand received_led_command;
 
         // Try read
         // Clear buffer of old packets such that we can get the latest packet
@@ -133,7 +137,7 @@ void RadioModule::receive() {
         auto cont = true;
         while (cont) {
             vTaskSuspendAll();
-            cont = link.receive(received_kicker_command, received_motion_command);
+            cont = link.receive(received_kicker_command, received_motion_command, received_led_command);
             xTaskResumeAll();
         }
         // printf("RadioRaw: %lu\r\n", HAL_GetTick());
@@ -145,6 +149,8 @@ void RadioModule::receive() {
         if (received_kicker_command.isValid) {
             kickerCommand.lock().value() = received_kicker_command;
         }
+
+        ledCommand.lock().value() = received_led_command;
 
         {
             auto radioErrorLock = radioError.lock();

@@ -5,32 +5,31 @@ bool operator==(const Error& e1, const Error& e2) {
     return e1.led0 == e2.led0 && e1.led1 == e2.led1 && e1.led2 == e2.led2;
 }
 
-LEDModule::LEDModule(LockedStruct<MCP23017>& ioExpander,
-                     LockedStruct<SPI>& sharedSPI,
-                     LockedStruct<BatteryVoltage>& batteryVoltage,
-                     LockedStruct<FPGAStatus>& fpgaStatus,
-                     LockedStruct<KickerInfo>& kickerInfo,
-                     LockedStruct<RadioError>& radioError,
-                     LockedStruct<IMUData>& imuData)
+LEDModule::LEDModule(LockedStruct<MCP23017> &ioExpander, LockedStruct<SPI> &dotStarSPI,
+                     LockedStruct<BatteryVoltage> &batteryVoltage, LockedStruct<FPGAStatus> &fpgaStatus,
+                     LockedStruct<KickerInfo> &kickerInfo, LockedStruct<RadioError> &radioError,
+                     LockedStruct<IMUData> &imuData, LockedStruct<LEDCommand> &ledCommand)
     : GenericModule(kPeriod, "led", kPriority),
       batteryVoltage(batteryVoltage), fpgaStatus(fpgaStatus),
       kickerInfo(kickerInfo), radioError(radioError),
       imuData(imuData),
       ioExpander(ioExpander),
-      dotStarSPI(sharedSPI),
+      dotStarSPI(dotStarSPI),
+      ledCommand(ledCommand),
       dotStarNCS(DOT_STAR_CS),
       leds({LED1, LED2, LED3, LED4}),
       missedSuperLoopToggle(false), missedModuleRunToggle(false) {
+    auto ioExpanderLock = ioExpander.lock();
+    ioExpanderLock->init();
+    ioExpanderLock->config(0x00FF, 0x00FF, 0x00FF);
     dotStarNCS.write(true);
 }
 
 void LEDModule::start() {
     auto ioExpanderLock = ioExpander.lock();
-    ioExpanderLock->init();
     setColor(0xFFFFFF, 0xFFFFFF, 0xFFFFFF);
     errToggles.fill(false);
     index = 0;
-    ioExpanderLock->config(0x00FF, 0x00FF, 0x00FF);
     ioExpanderLock->writeMask(static_cast<uint16_t>(~IOExpanderErrorLEDMask), IOExpanderErrorLEDMask);
 }
 
@@ -38,93 +37,29 @@ extern std::vector<const char*> failed_modules;
 extern size_t free_space;
 
 void LEDModule::entry() {
-    for (const char* c : failed_modules) {
-        printf("[ERROR] Module failed to initialize: %s (initial heap size: %d)\r\n", c, free_space);
+    auto led_command = ledCommand.lock().value();
+    Colors color;
+    auto role = led_command.role;
+    if (!led_command.isValid) {
+        color = Colors::PURPLE;
+        goto end;
     }
-    // update battery, fpga, and radio status leds
-    uint16_t errors = 0;
-    int motors[5] = {ERR_LED_M1, ERR_LED_M2, ERR_LED_M3, ERR_LED_M4, ERR_LED_DRIB};
-
-    {
-        auto fpgaLock = fpgaStatus.lock();
-
-        if (fpgaLock->initialized) {
-            fpgaInitialized();
-            setError(ERR_FPGA_BOOT_FAIL, false);
-        } else {
-            setError(ERR_FPGA_BOOT_FAIL, true);
-        }
-
-        if (!fpgaLock->isValid || fpgaLock->FPGAHasError) {
-            for (int i = 0; i < 5; i++) {
-                errors |= (1 << motors[i]);
-            }
-        } else {
-            for (int i = 0; i < 5; i++) {
-                errors |= (fpgaLock->motorHasErrors[i] << motors[i]);
-            }
-        }
+    switch (role) {
+        case 0:
+            color = Colors::GREEN;
+            break;
+        case 1:
+            color = Colors::BLUE;
+            break;
+        case 2:
+            color = Colors::RED;
+            break;
+        default:
+            color = Colors::WHITE;
+            break;
     }
-
-    {
-        auto radioLock = radioError.lock();
-
-        if (radioLock->initialized) {
-            radioInitialized();
-            setError(ERR_RADIO_BOOT_FAIL, false);
-        } else {
-            setError(ERR_RADIO_BOOT_FAIL, true);
-        }
-
-        if (!radioLock->isValid || radioLock->hasConnectionError || radioLock->hasSoccerConnectionError) {
-            errors |= (1 << ERR_LED_RADIO);
-        }
-
-        if (radioLock->hasConnectionError) {
-            setError(ERR_RADIO_WIFI_FAIL, false);
-        } else {
-            setError(ERR_RADIO_WIFI_FAIL, true);
-        }
-
-        if (radioLock->hasSoccerConnectionError) {
-            setError(ERR_RADIO_SOCCER_FAIL, false);
-        } else {
-            setError(ERR_RADIO_SOCCER_FAIL, true);
-        }
-    }
-
-    {
-        auto kickerLock = kickerInfo.lock();
-
-        if (kickerLock->initialized) {
-            kickerInitialized();
-            setError(ERR_KICKER_BOOT_FAIL, false);
-        } else {
-            setError(ERR_KICKER_BOOT_FAIL, true);
-        }
-
-        if (kickerLock->isValid || kickerLock->kickerHasError) {
-            errors |= (1 << ERR_LED_KICK);
-        }
-    }
-
-    {
-        auto imuLock = imuData.lock();
-
-        if(imuLock->initialized) {
-            setError(ERR_IMU_BOOT_FAIL, false);
-        } else {
-            setError(ERR_IMU_BOOT_FAIL, true);
-        }
-    }
-
-    //ioExpander->writeMask(errors, IOExpanderErrorLEDMask);
-//    leds[0].toggle();
-    static bool state = true;
-    state = !state;
-    leds[0].write(state);
-
-    displayErrors();
+    end:
+        setColor(color, color, color);
 }
 
 void LEDModule::fpgaInitialized() {

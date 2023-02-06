@@ -39,8 +39,7 @@ public:
      *
      * @return true if it returned a valid packet, false if there is no packet to return
      */
-    bool receive(KickerCommand& kickerCommand,
-                 MotionCommand& motionCommand);
+    bool receive(KickerCommand &kickerCommand, MotionCommand &motionCommand, LEDCommand& ledCommand);
 
     bool isRadioConnected() { return radioConnected; }
     bool isRadioInitialized() { return radioInitialized; }

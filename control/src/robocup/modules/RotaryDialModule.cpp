@@ -7,9 +7,6 @@ RotaryDialModule::RotaryDialModule(LockedStruct<MCP23017>& ioExpander, LockedStr
             IOExpanderDigitalInOut(ioExpander, HEX_SWITCH_BIT1, MCP23017::DIR_INPUT),
             IOExpanderDigitalInOut(ioExpander, HEX_SWITCH_BIT2, MCP23017::DIR_INPUT),
             IOExpanderDigitalInOut(ioExpander, HEX_SWITCH_BIT3, MCP23017::DIR_INPUT)}) {
-    auto ioExpanderLock = ioExpander.lock();
-    ioExpanderLock->init();
-    ioExpanderLock->config(0x00FF, 0x00FF, 0x00FF);
 
     auto robotLock = robotID.unsafe_value();
     robotLock->isValid = false;
