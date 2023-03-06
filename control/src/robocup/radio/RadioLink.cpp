@@ -69,8 +69,7 @@ void RadioLink::send(const BatteryVoltage& batteryVoltage,
     radioConnected = radio->isConnected();
 }
 
-bool RadioLink::receive(KickerCommand& kickerCommand,
-                       MotionCommand& motionCommand) {
+bool RadioLink::receive(KickerCommand &kickerCommand, MotionCommand &motionCommand, LEDCommand& ledCommand) {
     // Make sure there is actually data to read
     if (!radio->isAvailable()) {
         printf("[WARNING] Radio says nothing to read\r\n");
@@ -105,6 +104,8 @@ bool RadioLink::receive(KickerCommand& kickerCommand,
     motionCommand.bodyYVel = static_cast<float>(control->bodyY) / rtp::ControlMessage::VELOCITY_SCALE_FACTOR;
     motionCommand.bodyWVel = static_cast<float>(control->bodyW) / rtp::ControlMessage::VELOCITY_SCALE_FACTOR;
     motionCommand.dribbler = control->dribbler;
+    ledCommand.role = control->role;
+    ledCommand.isValid = true;
 
     cyclesWithoutPackets = 0;
     radioConnected = radio->isConnected();

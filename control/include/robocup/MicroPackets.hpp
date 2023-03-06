@@ -42,6 +42,11 @@ struct MotorCommand {
                           @note **This is limited from 0-128** */
 };
 
+struct LEDCommand {
+    unsigned int role : 2; /**< robot role! used to select LED colors */
+    bool isValid;
+};
+
 /** @struct MotorFeedback
  * Contains current and encoder data for each motor
  *

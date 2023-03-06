@@ -119,17 +119,21 @@ int main() {
     static LockedStruct<KickerCommand> kickerCommand{};
     static LockedStruct<KickerInfo> kickerInfo{};
     static LockedStruct<DebugInfo> debugInfo{};
+    static LockedStruct<LEDCommand> ledCommand;
 
     static LockedStruct<MCP23017> ioExpander(MCP23017{sharedI2C, 0x42});
 
-    /*static LEDModule led(ioExpander,
+    static LEDModule led(ioExpander,
                          sharedSPI,
                          batteryVoltage,
                          fpgaStatus,
                          kickerInfo,
                          radioError,
-                         imuData);
-    createModule(&led);*/
+                         imuData,
+                         ledCommand);
+    createModule(&led);
+
+    static IMUModule imu(sharedSPI, imuData);
 
     static FPGAModule fpga(std::move(fpgaSPI),
                            motorCommand,
@@ -144,7 +148,8 @@ int main() {
                              kickerCommand,
                              motionCommand,
                              radioError,
-                             debugInfo);
+                             debugInfo,
+                             ledCommand);
     createModule(&radio);
 
     static KickerModule kicker(sharedSPI,
@@ -158,8 +163,6 @@ int main() {
     static RotaryDialModule dial(ioExpander,
                                  robotID);
     createModule(&dial);
-
-    static IMUModule imu(sharedSPI, imuData);
 
     static MotionControlModule motion(batteryVoltage, imuData, motionCommand, motorFeedback,
                                       motorCommand, debugInfo, imu);

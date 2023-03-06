@@ -11,7 +11,7 @@
  */
 class RadioModule : public GenericModule {
 public:
-    /**
+/**
      * Number of times per second (frequency) that RadioModule should run (Hz)
      */
     static constexpr float kFrequency = 90.0f;
@@ -43,7 +43,8 @@ public:
                 LockedStruct<KickerCommand>& kickerCommand,
                 LockedStruct<MotionCommand>& motionCommand,
                 LockedStruct<RadioError>& radioError,
-                LockedStruct<DebugInfo>& debugInfo);
+                LockedStruct<DebugInfo>& debugInfo,
+                LockedStruct<LEDCommand>& ledCommand);
 
     /**
      * Code which initializes module
@@ -68,6 +69,7 @@ private:
     LockedStruct<MotionCommand>& motionCommand;
     LockedStruct<RadioError>& radioError;
     LockedStruct<DebugInfo>& debugInfo;
+    LockedStruct<LEDCommand>& ledCommand;
 
     /**
      * General radio driver interface acting as a middle man to send and receive radio packets

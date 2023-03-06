@@ -12,6 +12,16 @@
 #include "MicroPackets.hpp"
 #include "drivers/MCP23017.hpp"
 
+enum Colors : uint32_t {
+    RED = 0xFF0000,  // RED
+    GREEN = 0xFFFF00,    // GREEN
+    BLUE = 0x0000FF, // BLUE
+    PURPLE = 0xFF00FF,
+    YELLOW = 0x00FFFF,
+    BROWN = 0xFFFF00,
+    BLACK = 0x000000,
+    WHITE = 0xFFFFFF  // WHITE
+};
 
 /**
  * Constants for DotStar LEDs (RGB)
@@ -67,7 +77,7 @@ public:
     /**
      * Number of times per second (frequency) that LEDModule should run (Hz)
      */
-    static constexpr float kFrequency = 10.0f;
+    static constexpr float kFrequency = 1.0f;
 
     /**
      * Number of seconds elapsed (period) between LEDModule runs (milliseconds)
@@ -79,7 +89,7 @@ public:
      *
      * Uses the default priority of 1.
      */
-    static constexpr int kPriority = 0;
+    static constexpr int kPriority = 1;
 
     /**
      * Constructor for LEDModule
@@ -91,13 +101,10 @@ public:
      * @param kickerInfo Shared memory location containing kicker status
      * @param radioError Shared memory location containing whether radio has an error
      */
-    LEDModule(LockedStruct<MCP23017>& ioExpander,
-              LockedStruct<SPI>& dotStarSPI,
-              LockedStruct<BatteryVoltage>& batteryVoltage,
-              LockedStruct<FPGAStatus>& fpgaStatus,
-              LockedStruct<KickerInfo>& kickerInfo,
-              LockedStruct<RadioError>& radioError,
-              LockedStruct<IMUData>& imuData);
+    LEDModule(LockedStruct<MCP23017> &ioExpander, LockedStruct<SPI> &dotStarSPI,
+              LockedStruct<BatteryVoltage> &batteryVoltage, LockedStruct<FPGAStatus> &fpgaStatus,
+              LockedStruct<KickerInfo> &kickerInfo, LockedStruct<RadioError> &radioError,
+              LockedStruct<IMUData> &imuData, LockedStruct<LEDCommand> &ledCommand);
 
     /**
      * Code which initializes module
@@ -182,6 +189,7 @@ private:
     LockedStruct<KickerInfo>& kickerInfo;
     LockedStruct<RadioError>& radioError;
     LockedStruct<IMUData>& imuData;
+    LockedStruct<LEDCommand>& ledCommand;
 
     DigitalOut dotStarNCS;
 
