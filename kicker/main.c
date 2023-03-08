@@ -245,13 +245,12 @@ void main() {
     // BALL_SENSE_RX = 0 when breakbeam is open
     bool instantaneous_ball_sense = false;
     if (PINA & _BV(BALL_SENSE_RX)) {
-      PORTB &= ~(_BV(BALL_SENSE_LED));
-      instantaneous_ball_sense = true;
+        PORTB &= ~(_BV(BALL_SENSE_LED));
+        instantaneous_ball_sense = true;
 
-    }
-    else {
-      PORTB |= _BV(BALL_SENSE_LED);
-      instantaneous_ball_sense = false;
+    } else {
+        PORTB |= _BV(BALL_SENSE_LED);
+        instantaneous_ball_sense = false;
     }
 
     // if instantaneous_ball_sense is true for a certain number of ticks
@@ -328,7 +327,7 @@ void init() {
   // PORTD &= ~(_BV(BALL_SENSE_TX));
   PORTB |= _BV(BALL_SENSE_LED);
   PORTD |= _BV(BALL_SENSE_TX);
-  DDRA &= ~(_BV(BALL_SENSE_RX)); // configure DDRA register to read @ ball_sense pin
+  DDRA &= ~(_BV(BALL_SENSE_RX));  // configure DDRA register to read @ ball_sense pin
 
   // configure debug
   DDRC &= ~(_BV(DB_SWITCH));
