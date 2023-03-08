@@ -78,7 +78,7 @@ volatile uint8_t kick_on_breakbeam_strength_ = 0;
 
 volatile bool _in_debug_mode = false;
 
-unsigned ball_sense_change_count_ = 0;
+unsigned ball_sense_counter = 0;
 
 uint32_t time = 0;
 
@@ -146,6 +146,7 @@ uint8_t get_voltage() {
 }
 
 /* Breakbeam Function */
+// we are moving away from this to use BALL_SENSE_RX (which is digital)
 uint8_t get_breakbeam() {
   ADMUX |= _BV(ADLAR) | BALL_SENSE_RX; // connect PA0 (BALL_SENSE_RX) to ADC
 
@@ -184,11 +185,6 @@ void main() {
       charge_db_down_ = charge_db_pressed;
     } else {
     }
-
-    if (PINA & _BV(BALL_SENSE_RX))
-      PORTB &= ~(_BV(BALL_SENSE_LED));
-    else
-      PORTB |= _BV(BALL_SENSE_LED);
 
     if (is_kicking())
       PORTC &= ~(_BV(MCU_YELLOW));
@@ -243,39 +239,45 @@ void main() {
       byte_cnt = 0;
     }
 
-    last_breakbeam_ = get_breakbeam();
+    /** KICK ON BALL SENSE **/
+    // read BALL_SENSE_RX from PINA register
+    // BALL_SENSE_RX = 1 when ball BLOCKS the breakbeam
+    // BALL_SENSE_RX = 0 when breakbeam is open
+    bool instantaneous_ball_sense = false;
+    if (PINA & _BV(BALL_SENSE_RX)) {
+        PORTB &= ~(_BV(BALL_SENSE_LED));
+        instantaneous_ball_sense = true;
 
-    bool bs;
-    if(last_breakbeam_ > BREAKBEAM_HIGH) {
-        bs = true;
-    } else if (last_breakbeam_ < BREAKBEAM_LOW) {
-        bs = false;
-    }
-
-    if ((last_breakbeam_ > BREAKBEAM_HIGH || last_breakbeam_ < BREAKBEAM_LOW) && ball_sensed_) {
-      if (!bs)
-        ball_sense_change_count_++; // wrong reading, inc counter
-      else
-        ball_sense_change_count_ = 0; // correct reading, reset counter
     } else {
-      if (bs)
-        ball_sense_change_count_++; // wrong reading, inc counter
-      else
-        ball_sense_change_count_ = 0; // correct reading, reset counter
+        PORTB |= _BV(BALL_SENSE_LED);
+        instantaneous_ball_sense = false;
     }
 
-    // counter exceeds maximium, so reset
-    if (ball_sense_change_count_ > BALL_SENSE_MAX_SAMPLES) {
-      ball_sense_change_count_ = 0;
+    // if instantaneous_ball_sense is true for a certain number of ticks
+    // set ball_sensed_ to true
+    // this sends msg to SW stack, triggers kick if kick_on_breakbeam_ asserted
+    // (see below)
+    if (instantaneous_ball_sense) {
+        ball_sense_counter++;
+    } else {
+        // otherwise, if we lose ball before kick, reset counter
+        ball_sense_counter = 0;
+    }
 
-      ball_sensed_ = !ball_sensed_;
+    // if BALL_SENSE_MAX_SAMPLES ticks have passed, clear
+    if (ball_sense_counter > BALL_SENSE_MAX_SAMPLES) {
+        ball_sensed_ = true;
+        ball_sense_counter = 0;
     }
 
     if (ball_sensed_ && kick_on_breakbeam_) {
       // pow
       kick(kick_on_breakbeam_strength_);
+      // clear both flags
       kick_on_breakbeam_ = false;
+      ball_sensed_ = false;
     }
+    /** END KICK ON BALL SENSE **/
 
     _delay_us(10);
   }
@@ -325,7 +327,7 @@ void init() {
   // PORTD &= ~(_BV(BALL_SENSE_TX));
   PORTB |= _BV(BALL_SENSE_LED);
   PORTD |= _BV(BALL_SENSE_TX);
-  DDRA &= ~(_BV(BALL_SENSE_RX));
+  DDRA &= ~(_BV(BALL_SENSE_RX));  // configure DDRA register to read @ ball_sense pin
 
   // configure debug
   DDRC &= ~(_BV(DB_SWITCH));
