@@ -1,12 +1,17 @@
-# What on the robot isn’t working? (Error LED guide)
+# LED guide
 
-|Color | LED1 (Module) | LED2 (Level) | LED3 (Info)|
-|------|---------------|--------------|------------|
-|Green | FPGA          | Error        | Soccer Connect Fail |
-|Blue  | Kicker        | Warning      | WiFi Connect Fail |
-|White | IMU           | Info         | |
-|Red   | Radio         | Fatal (very bad) |Boot Fail |
+From left to right
 
+| Color | LED1 (Software Role) | LED2 | LED3 (Connection Status) |
+|-------|----------------------|--------------|--------------------------|
+| White | Goalie               | |                          |
+| Blue  | Defense              | |                          |
+| Mauve | Offense              | |                          |
+| Black | Undefined            | |                          |
+| Red   | Undefined            | | Not connected            |
+| Green | Undefined            | | Connected                |
+
+Below this point is not currently used.
 ## Mtrain Initialization LED Guide
 |Led #| Module |
 |----|----|
