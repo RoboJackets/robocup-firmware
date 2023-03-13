@@ -38,45 +38,38 @@ extern size_t free_space;
 
 void LEDModule::entry() {
     auto led_command = ledCommand.lock().value();
-    Colors color;
+    Color color;
     auto role = led_command.role;
+    Color connection_status = Color::GREEN;
     if (!led_command.isValid) {
-        color = Colors::PURPLE;
-        goto end;
+        color = Color::BLACK;
+        connection_status = Color::DARKRED;
+    } else {
+        switch (role) {
+            case 0:
+                color = Color::WHITE;
+                break;
+            case 1:
+                color = Color::BLUE;
+                break;
+            case 2:
+                color = Color::MAUVE;
+                break;
+            default:
+                color = Color::BLACK;
+                break;
+        }
     }
-    switch (role) {
-        case 0:
-            color = Colors::GREEN;
-            break;
-        case 1:
-            color = Colors::BLUE;
-            break;
-        case 2:
-            color = Colors::RED;
-            break;
-        default:
-            color = Colors::WHITE;
-            break;
-    }
-    end:
-        setColor(color, color, color);
+    setColor(connection_status, Color::BLACK, color);
 }
 
-void LEDModule::fpgaInitialized() {
-    leds[0] = 1;
-}
+void LEDModule::fpgaInitialized() { leds[0] = 1; }
 
-void LEDModule::radioInitialized() {
-    leds[1] = 1;
-}
+void LEDModule::radioInitialized() { leds[1] = 1; }
 
-void LEDModule::kickerInitialized() {
-    leds[2] = 1;
-}
+void LEDModule::kickerInitialized() { leds[2] = 1; }
 
-void LEDModule::fullyInitialized() {
-    leds[3] = 1;
-}
+void LEDModule::fullyInitialized() { leds[3] = 1; }
 
 void LEDModule::missedSuperLoop() {
     for (int i = 1; i < 4; i++) {
@@ -102,13 +95,26 @@ void LEDModule::setColor(uint32_t led0, uint32_t led1, uint32_t led2) {
     // 0 - 31
     uint8_t brightness = 2 | 0xE0;
 
-    std::vector<uint8_t> data = {
-        0x00, 0x00, 0x00, 0x00,
-        brightness, (led0 >> 0) & 0xFF, (led0 >> 8) & 0xFF, (led0 >> 16) & 0xFF,
-        brightness, (led1 >> 0) & 0xFF, (led1 >> 8) & 0xFF, (led1 >> 16) & 0xFF,
-        brightness, (led2 >> 0) & 0xFF, (led2 >> 8) & 0xFF, (led2 >> 16) & 0xFF,
-        0xFF, 0xFF, 0xFF, 0xFF
-    };
+    std::vector<uint8_t> data = {0x00,
+                                 0x00,
+                                 0x00,
+                                 0x00,
+                                 brightness,
+                                 (led0 >> 0) & 0xFF,
+                                 (led0 >> 8) & 0xFF,
+                                 (led0 >> 16) & 0xFF,
+                                 brightness,
+                                 (led1 >> 0) & 0xFF,
+                                 (led1 >> 8) & 0xFF,
+                                 (led1 >> 16) & 0xFF,
+                                 brightness,
+                                 (led2 >> 0) & 0xFF,
+                                 (led2 >> 8) & 0xFF,
+                                 (led2 >> 16) & 0xFF,
+                                 0xFF,
+                                 0xFF,
+                                 0xFF,
+                                 0xFF};
     {
         auto dotStarSPILock = dotStarSPI.lock();
         dotStarSPILock->frequency(200'000);
