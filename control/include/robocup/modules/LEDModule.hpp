@@ -12,15 +12,17 @@
 #include "MicroPackets.hpp"
 #include "drivers/MCP23017.hpp"
 
-enum Colors : uint32_t {
+enum Color : uint32_t {
     RED = 0xFF0000,  // RED
-    GREEN = 0xFFFF00,    // GREEN
-    BLUE = 0x0000FF, // BLUE
-    PURPLE = 0xFF00FF,
-    YELLOW = 0x00FFFF,
-    BROWN = 0xFFFF00,
+    DARKRED = 0x660000,
+    GREEN = 0x336700,  // GREEN
+    BLUE = 0x000066,   // BLUE
+    MAUVE = 0x4C0099,
+    YELLOW = 0xFFFFFF,
+    BROWN = 0x331900,
     BLACK = 0x000000,
-    WHITE = 0xFFFFFF  // WHITE
+    WHITE = 0xFFFFFF,  // WHITE
+    PINK = 0xFF99FF
 };
 
 /**
