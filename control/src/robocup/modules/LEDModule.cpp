@@ -140,7 +140,7 @@ void LEDModule::displayErrors() {
         lightsOn = false;
         setColor(0x000000, 0x000000, 0x000000);
     } else if (!lightsOn && framesOffCounter >= framesOff) {
-        // If error lights have been off long enough, switch them back on to next error role_color
+        // If error lights have been off long enough, switch them back on to next error color
         framesOffCounter = 0;
         lightsOn = true;
 
