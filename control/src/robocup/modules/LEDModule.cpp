@@ -27,10 +27,12 @@ LEDModule::LEDModule(LockedStruct<MCP23017> &ioExpander, LockedStruct<SPI> &dotS
 
 void LEDModule::start() {
     auto ioExpanderLock = ioExpander.lock();
-    setColor(0xFFFFFF, 0xFFFFFF, 0xFFFFFF);
+    setColor(Color::WHITE, Color::WHITE, Color::WHITE);
     errToggles.fill(false);
     index = 0;
     ioExpanderLock->writeMask(static_cast<uint16_t>(~IOExpanderErrorLEDMask), IOExpanderErrorLEDMask);
+    middle_led_color = Color::YELLOW;
+    setColor(Color::WHITE, middle_led_color, Color::WHITE);
 }
 
 extern std::vector<const char*> failed_modules;
@@ -38,29 +40,33 @@ extern size_t free_space;
 
 void LEDModule::entry() {
     auto led_command = ledCommand.lock().value();
-    Color color;
+
+    // toggle middle led color
+    middle_led_color =  middle_led_color == Color::BLACK ? Color::YELLOW : Color::BLACK;
+
+    Color role_color;
     auto role = led_command.role;
     Color connection_status = Color::GREEN;
     if (!led_command.isValid) {
-        color = Color::BLACK;
+        role_color = Color::BLACK;
         connection_status = Color::DARKRED;
     } else {
         switch (role) {
             case 0:
-                color = Color::WHITE;
+                role_color = Color::WHITE;
                 break;
             case 1:
-                color = Color::BLUE;
+                role_color = Color::BLUE;
                 break;
             case 2:
-                color = Color::MAUVE;
+                role_color = Color::MAUVE;
                 break;
             default:
-                color = Color::BLACK;
+                role_color = Color::BLACK;
                 break;
         }
     }
-    setColor(connection_status, Color::BLACK, color);
+    setColor(connection_status, middle_led_color, role_color);
 }
 
 void LEDModule::fpgaInitialized() { leds[0] = 1; }
@@ -134,7 +140,7 @@ void LEDModule::displayErrors() {
         lightsOn = false;
         setColor(0x000000, 0x000000, 0x000000);
     } else if (!lightsOn && framesOffCounter >= framesOff) {
-        // If error lights have been off long enough, switch them back on to next error color
+        // If error lights have been off long enough, switch them back on to next error role_color
         framesOffCounter = 0;
         lightsOn = true;
 
