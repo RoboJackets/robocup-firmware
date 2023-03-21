@@ -42,7 +42,7 @@ void LEDModule::entry() {
     auto led_command = ledCommand.lock().value();
 
     // toggle middle led color
-    middle_led_color =  middle_led_color == Color::BLACK ? Color::YELLOW : Color::BLACK;
+    middle_led_color = middle_led_color == Color::BLACK ? Color::YELLOW : Color::BLACK;
 
     Color role_color;
     auto role = led_command.role;

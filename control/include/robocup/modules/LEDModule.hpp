@@ -261,7 +261,7 @@ private:
     bool missedModuleRunToggle;
 
     /**
-    * Middle led color. Toggles between yellow and off.
-    */
+     * Middle led color. Toggles between yellow and off.
+     */
     Color middle_led_color;
 };
