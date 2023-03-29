@@ -18,7 +18,7 @@ enum Color : uint32_t {
     GREEN = 0x336700,  // GREEN
     BLUE = 0x000066,   // BLUE
     MAUVE = 0x4C0099,
-    YELLOW = 0xFFFFFF,
+    YELLOW = 0x666600,
     BROWN = 0x331900,
     BLACK = 0x000000,
     WHITE = 0xFFFFFF,  // WHITE
