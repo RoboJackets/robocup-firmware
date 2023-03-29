@@ -259,4 +259,9 @@ private:
     std::array<DigitalOut, 4> leds;
     bool missedSuperLoopToggle;
     bool missedModuleRunToggle;
+
+    /**
+     * Middle led color. Toggles between yellow and off.
+     */
+    Color middle_led_color;
 };
