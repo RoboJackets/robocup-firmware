@@ -3,7 +3,7 @@
 
 #include "MicroPackets.hpp"
 
-RadioLink::RadioLink() {}
+RadioLink::RadioLink(const ResetModule& resetModule) {}
 
 void RadioLink::init() {
     std::unique_ptr radioSPI = std::make_unique<SPI>(SpiBus5, std::nullopt, 16'000'000);

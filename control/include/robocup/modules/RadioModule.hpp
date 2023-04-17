@@ -5,6 +5,7 @@
 #include "LockedStruct.hpp"
 #include "MicroPackets.hpp"
 #include "radio/RadioLink.hpp"
+#include "ResetModule.hpp"
 
 /**
  * Module interfacing with Radio and handling Radio status
@@ -44,7 +45,8 @@ public:
                 LockedStruct<MotionCommand>& motionCommand,
                 LockedStruct<RadioError>& radioError,
                 LockedStruct<DebugInfo>& debugInfo,
-                LockedStruct<LEDCommand>& ledCommand);
+                LockedStruct<LEDCommand>& ledCommand,
+                ResetModule& resetModule);
 
     /**
      * Code which initializes module
@@ -71,6 +73,7 @@ private:
     LockedStruct<DebugInfo>& debugInfo;
     LockedStruct<LEDCommand>& ledCommand;
 
+    ResetModule& resetModule;
     /**
      * General radio driver interface acting as a middle man to send and receive radio packets
      */

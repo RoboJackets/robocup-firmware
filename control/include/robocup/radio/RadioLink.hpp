@@ -5,6 +5,7 @@
 #include "drivers/GenericRadio.hpp"
 #include "MicroPackets.hpp"
 #include "iodefs.h"
+#include "modules/ResetModule.hpp"
 #include <memory>
 
 
@@ -15,7 +16,7 @@
  */
 class RadioLink {
 public:
-    RadioLink();
+    explicit RadioLink(const ResetModule& resetModule);
 
     /**
      * Initialize the radio.

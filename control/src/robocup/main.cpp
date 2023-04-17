@@ -25,6 +25,7 @@
 #include "modules/RadioModule.hpp"
 #include "modules/RotaryDialModule.hpp"
 #include "LockedStruct.hpp"
+#include "modules/ResetModule.hpp"
 #include <vector>
 #include <algorithm>
 #include <cstdio>
@@ -141,6 +142,10 @@ int main() {
                            motorFeedback);
     createModule(&fpga);
 
+    static ResetModule reset;
+
+    createModule(&reset);
+
     static RadioModule radio(batteryVoltage,
                              fpgaStatus,
                              kickerInfo,
@@ -149,7 +154,8 @@ int main() {
                              motionCommand,
                              radioError,
                              debugInfo,
-                             ledCommand);
+                             ledCommand,
+                                reset);
     createModule(&radio);
 
     static KickerModule kicker(sharedSPI,

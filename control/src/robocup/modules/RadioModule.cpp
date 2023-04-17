@@ -1,5 +1,7 @@
 #include "modules/RadioModule.hpp"
 
+#include <utility>
+
 #include "FreeRTOS.h"
 #include "iodefs.h"
 #include "test/motor.hpp"
@@ -9,7 +11,7 @@ RadioModule::RadioModule(LockedStruct<BatteryVoltage>& batteryVoltage,
                          LockedStruct<RobotID>& robotID, LockedStruct<KickerCommand>& kickerCommand,
                          LockedStruct<MotionCommand>& motionCommand,
                          LockedStruct<RadioError>& radioError, LockedStruct<DebugInfo>& debugInfo,
-                         LockedStruct<LEDCommand> &ledCommand)
+                         LockedStruct<LEDCommand> &ledCommand, ResetModule& resetModule)
         : GenericModule(kPeriod, "radio", kPriority),
           batteryVoltage(batteryVoltage),
           fpgaStatus(fpgaStatus),
@@ -20,7 +22,8 @@ RadioModule::RadioModule(LockedStruct<BatteryVoltage>& batteryVoltage,
           radioError(radioError),
           debugInfo(debugInfo),
           ledCommand(ledCommand),
-          link(),
+          resetModule(resetModule),
+          link(resetModule),
           secondRadioCS(RADIO_R1_CS),
           current_mode(0) {
 
