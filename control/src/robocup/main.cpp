@@ -1,6 +1,3 @@
-
-#include "mtrain.hpp"
-#include "FreeRTOSConfig.h"
 #include "FreeRTOS.h"
 #include "task.h"
 
@@ -9,7 +6,7 @@
 #include "SPI.hpp"
 #include "I2C.hpp"
 #include "delay.h"
-#include "DigitalOut.hpp"
+#include "timer.h"
 
 #include <unistd.h>
 
@@ -167,6 +164,9 @@ int main() {
     static MotionControlModule motion(batteryVoltage, imuData, motionCommand, motorFeedback,
                                       motorCommand, debugInfo, imu);
     createModule(&motion);
+
+    MX_TIM3_Init();
+    Start_TIM6();
 
     ////////////////////////////////////////////
 
