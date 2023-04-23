@@ -1,30 +1,27 @@
-#include "FreeRTOS.h"
-#include "task.h"
-
-#include "modules/GenericModule.hpp"
-
-#include "SPI.hpp"
-#include "I2C.hpp"
-#include "delay.h"
-#include "timer.h"
+#include <algorithm>
+#include <cstdio>
+#include <vector>
 
 #include <unistd.h>
 
+#include "FreeRTOS.h"
+#include "I2C.hpp"
+#include "LockedStruct.hpp"
 #include "MicroPackets.hpp"
+#include "SPI.hpp"
+#include "delay.h"
 #include "iodefs.h"
-
 #include "modules/BatteryModule.hpp"
 #include "modules/FPGAModule.hpp"
+#include "modules/GenericModule.hpp"
 #include "modules/IMUModule.hpp"
 #include "modules/KickerModule.hpp"
 #include "modules/LEDModule.hpp"
 #include "modules/MotionControlModule.hpp"
 #include "modules/RadioModule.hpp"
 #include "modules/RotaryDialModule.hpp"
-#include "LockedStruct.hpp"
-#include <vector>
-#include <algorithm>
-#include <cstdio>
+#include "task.h"
+#include "timer.h"
 
 #define SUPER_LOOP_FREQ 200
 #define SUPER_LOOP_PERIOD (1000000L / SUPER_LOOP_FREQ)
