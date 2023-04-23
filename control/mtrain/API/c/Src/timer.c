@@ -5,7 +5,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htimer)
 {
     if (htimer->Instance == TIM3) {
         // Timer interrupt code here
-        NVIC_SystemReset();
+        printf("Timer");
     }
 }
 
@@ -51,10 +51,10 @@ void MX_TIM3_Init(void)
 
     /* USER CODE END TIM3_Init 1 */
     htim.Instance = TIM3;
-    uint32_t seconds = SystemCoreClock / (10000 / 8);
-    htim.Init.Prescaler = seconds;
+    // these numbers are based on 8 seconds delay
+    htim.Init.Prescaler = 41648;
     htim.Init.CounterMode = TIM_COUNTERMODE_UP;
-    htim.Init.Period = 0x1;
+    htim.Init.Period = 415999;
     htim.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
     htim.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
     if (HAL_TIM_Base_Init(&htim) == HAL_OK)
@@ -74,11 +74,11 @@ void MX_TIM3_Init(void)
         // idk
     }
     /* USER CODE BEGIN TIM3_Init 2 */
-    HAL_NVIC_SetPriority(TIM3_IRQn, 10, 0);
-    HAL_NVIC_EnableIRQ(TIM3_IRQn);
     if (HAL_TIM_Base_Init(&htim) != HAL_OK) {
         // idk
     }
+    HAL_NVIC_SetPriority(TIM3_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(TIM3_IRQn);
 
     /* USER CODE END TIM3_Init 2 */
 
@@ -92,6 +92,7 @@ void TIM3_IRQHandler(void)
     /* USER CODE BEGIN TIM3_IRQn 0 */
 
     /* USER CODE END TIM3_IRQn 0 */
+    printf("Timer2");
     HAL_TIM_IRQHandler(&htim);
     /* USER CODE BEGIN TIM3_IRQn 1 */
 
