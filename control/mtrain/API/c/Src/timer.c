@@ -1,17 +1,19 @@
 #include "timer.h"
 TIM_HandleTypeDef htim;
-int skip_initial_callback = 0;
+int callback_count = 0;
+uint8_t current_num_callbacks = 1;
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htimer) {
     if (htimer->Instance == TIM3) {
         // Timer interrupt code here
-        if (skip_initial_callback++ >= 1) {
+        if (callback_count++ >= current_num_callbacks) {
             NVIC_SystemReset();
         }
     }
 }
 
-void Start_TIM3() {
+void Start_TIM3(uint8_t num_callbacks) {
+    current_num_callbacks = num_callbacks;
     __HAL_TIM_SET_COUNTER(&htim, 0);
     HAL_TIM_Base_Start_IT(&htim);
 }

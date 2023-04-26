@@ -51,7 +51,7 @@ RadioModule::RadioModule(LockedStruct<BatteryVoltage>& batteryVoltage,
 }
 
 void RadioModule::start() {
-    Start_TIM3();
+    Start_TIM3(4);
     link.init();
     Stop_TIM3();
     printf("[INFO] Radio initialized\r\n");
@@ -141,7 +141,7 @@ void RadioModule::receive() {
         int num_packets = 0;
         while (cont && num_packets < 300) {
             vTaskSuspendAll();
-            Start_TIM3();
+            Start_TIM3(1);
             cont = link.receive(received_kicker_command, received_motion_command, received_led_command);
             Stop_TIM3();
             num_packets++;
