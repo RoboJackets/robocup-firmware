@@ -16,9 +16,7 @@ void Start_TIM3() {
     HAL_TIM_Base_Start_IT(&htim);
 }
 
-void Stop_TIM3() {
-    HAL_TIM_Base_Stop_IT(&htim);
-}
+void Stop_TIM3() { HAL_TIM_Base_Stop_IT(&htim); }
 
 /**
  * @brief TIM3 Initialization Function
