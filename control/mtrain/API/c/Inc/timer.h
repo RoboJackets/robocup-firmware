@@ -8,8 +8,8 @@ extern "C" {
 void MX_TIM6_Init();
 void MX_TIM3_Init();
 
-void Start_TIM6();
-void Stop_TIM6();
+void Start_TIM3();
+void Stop_TIM3();
 #ifdef __cplusplus
 }
 #endif

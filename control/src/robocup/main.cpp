@@ -163,7 +163,6 @@ int main() {
     createModule(&motion);
 
     MX_TIM3_Init();
-    Start_TIM6();
 
     ////////////////////////////////////////////
 

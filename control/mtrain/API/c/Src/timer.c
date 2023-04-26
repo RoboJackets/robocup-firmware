@@ -1,31 +1,24 @@
 #include "timer.h"
 TIM_HandleTypeDef htim;
+int skip_initial_callback = 0;
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htimer) {
     if (htimer->Instance == TIM3) {
         // Timer interrupt code here
-        printf("Timer");
+        if (skip_initial_callback++ >= 1) {
+            NVIC_SystemReset();
+        }
     }
 }
 
-void MX_TIM6_Init() {
-    htim.Instance = TIM3;
-    htim.Init.Prescaler = 0;
-    htim.Init.CounterMode = TIM_COUNTERMODE_UP;
-    htim.Init.Period = 80000000;  // Set timer period to 8 seconds
-    htim.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
-    __HAL_TIM_ENABLE(&htim);
-    /* Enable the TIM6 interrupt. This must execute at the lowest interrupt priority. */
-    HAL_NVIC_SetPriority(TIM3_IRQn, 10, 0);
-    HAL_NVIC_EnableIRQ(TIM3_IRQn);
-    if (HAL_TIM_Base_Init(&htim) != HAL_OK) {
-        // idk
-    }
+void Start_TIM3() {
+    __HAL_TIM_SET_COUNTER(&htim, 0);
+    HAL_TIM_Base_Start_IT(&htim);
 }
 
-void Start_TIM6() { HAL_TIM_Base_Start_IT(&htim); }
-
-void Stop_TIM6() { HAL_TIM_Base_Stop_IT(&htim); }
+void Stop_TIM3() {
+    HAL_TIM_Base_Stop_IT(&htim);
+}
 
 /**
  * @brief TIM3 Initialization Function
@@ -80,7 +73,7 @@ void TIM3_IRQHandler(void) {
     /* USER CODE BEGIN TIM3_IRQn 0 */
 
     /* USER CODE END TIM3_IRQn 0 */
-    printf("Timer2");
+    // printf("Timer2");
     HAL_TIM_IRQHandler(&htim);
     /* USER CODE BEGIN TIM3_IRQn 1 */
 
