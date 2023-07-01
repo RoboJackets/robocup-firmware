@@ -3,6 +3,7 @@
 #include "FreeRTOS.h"
 #include "iodefs.h"
 #include "test/motor.hpp"
+#include "timer.h"
 
 RadioModule::RadioModule(LockedStruct<BatteryVoltage>& batteryVoltage,
                          LockedStruct<FPGAStatus>& fpgaStatus, LockedStruct<KickerInfo>& kickerInfo,
@@ -50,7 +51,9 @@ RadioModule::RadioModule(LockedStruct<BatteryVoltage>& batteryVoltage,
 }
 
 void RadioModule::start() {
+    Start_TIM3(4);
     link.init();
+    Stop_TIM3();
     printf("[INFO] Radio initialized\r\n");
     radioError.lock()->initialized = link.isRadioInitialized();
 }
@@ -135,9 +138,13 @@ void RadioModule::receive() {
         // Clear buffer of old packets such that we can get the latest packet
         // If you don't do this there is a significant lag of 300ms or more
         auto cont = true;
-        while (cont) {
+        int num_packets = 0;
+        while (cont && num_packets < 300) {
             vTaskSuspendAll();
+            Start_TIM3(1);
             cont = link.receive(received_kicker_command, received_motion_command, received_led_command);
+            Stop_TIM3();
+            num_packets++;
             xTaskResumeAll();
         }
         // printf("RadioRaw: %lu\r\n", HAL_GetTick());

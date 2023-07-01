@@ -21,6 +21,7 @@ void bsp_config(void) {
   __HAL_RCC_GPIOG_CLK_ENABLE();
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOI_CLK_ENABLE();
+  __HAL_RCC_TIM3_CLK_ENABLE();
 
   USBD_Init(&USBD_Device, &VCP_Desc, 0);
   USBD_RegisterClass(&USBD_Device, USBD_CDC_CLASS);
