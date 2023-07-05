@@ -274,7 +274,7 @@ void main() {
       // pow
       kick(kick_on_breakbeam_strength_);
       // clear both flags
-      kick_on_breakbeam_ = false;
+      kick_on_breakbeam_ = true;
       ball_sensed_ = false;
     }
     /** END KICK ON BALL SENSE **/
@@ -511,7 +511,7 @@ uint8_t execute_cmd(uint8_t cmd) {
   // an acknowledgement.
   bool allow_charge = !!(cmd & (1 << 4));
   uint8_t kick_power = (cmd & 0xF) << 4;
-  uint8_t kick_activation = KICK_ON_BREAKBEAM;
+  uint8_t kick_activation = cmd & (3 << 5);
   kick_type_is_chip_ = !!(cmd & (1 << 7));
 
   if (allow_charge) {
