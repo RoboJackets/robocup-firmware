@@ -511,7 +511,7 @@ uint8_t execute_cmd(uint8_t cmd) {
   // an acknowledgement.
   bool allow_charge = !!(cmd & (1 << 4));
   uint8_t kick_power = (cmd & 0xF) << 4;
-  uint8_t kick_activation = cmd & (3 << 5);
+  uint8_t kick_activation = KICK_ON_BREAKBEAM;
   kick_type_is_chip_ = !!(cmd & (1 << 7));
 
   if (allow_charge) {
