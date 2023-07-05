@@ -26,12 +26,12 @@ namespace ISMConstants {
     static const unsigned int RESET_DELAY = 500;
 
     // Network config
-    static const std::string NETWORK_SSID = "T3_SSL_RBC23";
-    static const std::string NETWORK_PASSWORD = "1fNrzxtSHG5o9";
+    static const std::string NETWORK_SSID = "T2_SSL_RBC23";
+    static const std::string NETWORK_PASSWORD = "chMSoUy38Jtg0";
 
-    static const std::string ROUTER_IP = "10.193.12.1";
+    static const std::string ROUTER_IP = "10.192.12.1";
 
-    static const std::string BASE_STATION_IP = "10.193.15.182";  // 48//27//36
+    static const std::string BASE_STATION_IP = "10.192.12.61";  // 48//27//36
 
     static const std::string RECEIVE_SOCKET = "0";
     static const std::string LOCAL_PORT = "25566";
