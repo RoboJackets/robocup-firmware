@@ -29,9 +29,9 @@ namespace ISMConstants {
     static const std::string NETWORK_SSID = "rj-rc-field";
     static const std::string NETWORK_PASSWORD = "robojackets";
 
-    static const std::string ROUTER_IP = "172.16.1.1";
+    static const std::string ROUTER_IP = "10.193.12.1";
 
-    static const std::string BASE_STATION_IP = "172.16.1.76";  // 48//27//36
+    static const std::string BASE_STATION_IP = "10.193.15.182";  // 48//27//36
 
     static const std::string RECEIVE_SOCKET = "0";
     static const std::string LOCAL_PORT = "25566";
