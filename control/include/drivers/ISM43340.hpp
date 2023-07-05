@@ -26,8 +26,8 @@ namespace ISMConstants {
     static const unsigned int RESET_DELAY = 500;
 
     // Network config
-    static const std::string NETWORK_SSID = "rj-rc-field";
-    static const std::string NETWORK_PASSWORD = "robojackets";
+    static const std::string NETWORK_SSID = "T3_SSL_RBC23";
+    static const std::string NETWORK_PASSWORD = "1fNrzxtSHG5o9";
 
     static const std::string ROUTER_IP = "10.193.12.1";
 
