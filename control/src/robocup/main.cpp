@@ -67,14 +67,18 @@ void startModule(void *pvModule) {
     GenericModule *module = static_cast<GenericModule *>(pvModule);
 
     printf("[INFO] Starting module %s\r\n", module->name);
+    Start_TIM3(7);
     module->start();
+    Stop_TIM3();
     printf("[INFO] Finished starting module %s\r\n", module->name);
 
     TickType_t last_wait_time = xTaskGetTickCount();
     TickType_t increment = module->period.count();
 
     while (true) {
+        Start_TIM3(1);
         module->entry();
+        Stop_TIM3();
         vTaskDelayUntil(&last_wait_time, increment);
     }
 }
