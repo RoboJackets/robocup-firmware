@@ -38,7 +38,7 @@ void MX_TIM3_Init(void) {
     /* USER CODE END TIM3_Init 1 */
     htim.Instance = TIM3;
     // these numbers are based on 8 seconds delay
-    htim.Init.Prescaler = 41648;
+    htim.Init.Prescaler = 21648;
     htim.Init.CounterMode = TIM_COUNTERMODE_UP;
     htim.Init.Period = 415999;
     htim.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
