@@ -67,7 +67,7 @@ void startModule(void *pvModule) {
     GenericModule *module = static_cast<GenericModule *>(pvModule);
 
     printf("[INFO] Starting module %s\r\n", module->name);
-    Start_TIM3(7);
+    Start_TIM3(9);
     module->start();
     Stop_TIM3();
     printf("[INFO] Finished starting module %s\r\n", module->name);
