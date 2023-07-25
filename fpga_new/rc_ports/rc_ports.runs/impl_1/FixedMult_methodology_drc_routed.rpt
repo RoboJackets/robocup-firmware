@@ -1,0 +1,55 @@
+Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2019.2 (win64) Build 2708876 Wed Nov  6 21:40:23 MST 2019
+| Date         : Tue Feb 18 14:00:03 2020
+| Host         : DESKTOP-8GBCOGE running 64-bit major release  (build 9200)
+| Command      : report_methodology -file FixedMult_methodology_drc_routed.rpt -pb FixedMult_methodology_drc_routed.pb -rpx FixedMult_methodology_drc_routed.rpx
+| Design       : FixedMult
+| Device       : xc7a50tcsg324-3
+| Speed File   : -3
+| Design State : Fully Routed
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Report Methodology
+
+Table of Contents
+-----------------
+1. REPORT SUMMARY
+2. REPORT DETAILS
+
+1. REPORT SUMMARY
+-----------------
+            Netlist: netlist
+          Floorplan: design_1
+      Design limits: <entire design considered>
+             Max violations: <unlimited>
+             Violations found: 4
++----------+----------+-----------------+------------+
+| Rule     | Severity | Description     | Violations |
++----------+----------+-----------------+------------+
+| SYNTH-10 | Warning  | Wide multiplier | 4          |
++----------+----------+-----------------+------------+
+
+2. REPORT DETAILS
+-----------------
+SYNTH-10#1 Warning
+Wide multiplier  
+Detected multiplier at result0 of size 16x18, it is decomposed from a wide multipler into 4 DSP blocks.
+Related violations: <none>
+
+SYNTH-10#2 Warning
+Wide multiplier  
+Detected multiplier at result0__0 of size 16x16, it is decomposed from a wide multipler into 4 DSP blocks.
+Related violations: <none>
+
+SYNTH-10#3 Warning
+Wide multiplier  
+Detected multiplier at result0__1 of size 18x18, it is decomposed from a wide multipler into 4 DSP blocks.
+Related violations: <none>
+
+SYNTH-10#4 Warning
+Wide multiplier  
+Detected multiplier at result0__2 of size 18x16, it is decomposed from a wide multipler into 4 DSP blocks.
+Related violations: <none>
+
+
