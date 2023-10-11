@@ -62,33 +62,37 @@ void FPGAModule::entry() {
     */
 
     // FPGA initialized so we all good
-    std::array<int16_t, 5> dutyCycles{0, 0, 0, 0, 0};
+    std::array<int16_t, 5> dutyCycles{64, 64, 64, 64, 64};
     std::array<int16_t, 5> encDeltas{};
 
-    {
-        auto motorCommandLock = motorCommand.lock();
-        // Make sure commands are valid
-        // If they are not valid, we automatically send a 0 duty cycle
-        if (motorCommandLock->isValid &&
-            (HAL_GetTick() - motorCommandLock->lastUpdate) < COMMAND_TIMEOUT) {
+    // {
+    //     auto motorCommandLock = motorCommand.lock();
+    //     // Make sure commands are valid
+    //     // If they are not valid, we automatically send a 0 duty cycle
+    //     if (motorCommandLock->isValid &&
+    //         (HAL_GetTick() - motorCommandLock->lastUpdate) < COMMAND_TIMEOUT) {
 
-            for (int i = 0; i < 4; i++) {
-                dutyCycles.at(i) = static_cast<int16_t>(
-                        motorCommandLock->wheels[i] * fpga.MAX_DUTY_CYCLE / 2);
-                if (dutyCycles.at(i) > fpga.MAX_DUTY_CYCLE) {
-                    dutyCycles.at(i) = fpga.MAX_DUTY_CYCLE;
-                } else if (dutyCycles.at(i) < -fpga.MAX_DUTY_CYCLE) {
-                    dutyCycles.at(i) = -fpga.MAX_DUTY_CYCLE;
-                }
-            }
-            dutyCycles.at(4) = static_cast<int16_t>(motorCommandLock->dribbler);
-        }
-    }
+    //         for (int i = 0; i < 4; i++) {
+    //             dutyCycles.at(i) = static_cast<int16_t>(
+    //                     motorCommandLock->wheels[i] * fpga.MAX_DUTY_CYCLE / 2);
+    //             if (dutyCycles.at(i) > fpga.MAX_DUTY_CYCLE) {
+    //                 dutyCycles.at(i) = fpga.MAX_DUTY_CYCLE;
+    //             } else if (dutyCycles.at(i) < -fpga.MAX_DUTY_CYCLE) {
+    //                 dutyCycles.at(i) = -fpga.MAX_DUTY_CYCLE;
+    //             }
+    //         }
+    //         dutyCycles.at(4) = static_cast<int16_t>(motorCommandLock->dribbler);
+    //     }
+    // }
+
+    // DEBUG PRINT
+    printf("Sending duty cycles...");
 
     // Communicate with FPGA
     uint8_t status = fpga.set_duty_get_enc(
         dutyCycles.data(), dutyCycles.size(),
         encDeltas.data(), encDeltas.size());
+    
 
     /*
      * The time since the last update is derived with the value of
@@ -114,20 +118,23 @@ void FPGAModule::entry() {
      */
     float dt = static_cast<float>(encDeltas[4]) * (1 / 18.432e6) * 2 * 128;
 
-    {
-        auto motorFeedbackLock = motorFeedback.lock();
+    // DEBUG PRINT FOR FPGA STATUS MESSAGE
+    printf("STATUS: %x", status);
 
-        // Convert encoders to rad/sec from enc ticks since last reading
-        for (int i = 0; i < 4; i++) {
-            // (rad / s) = (enc) * (rev / enc) * (rad / rev) * (1 / sec)
-            motorFeedbackLock->encoders[i] =
-                    static_cast<float>(encDeltas[i]) / ENC_TICK_PER_REV
-                    * 2 * M_PI * kFrequency;
-        }
+    // {
+    //     auto motorFeedbackLock = motorFeedback.lock();
 
-        motorFeedbackLock->isValid = true;
-        motorFeedbackLock->lastUpdate = HAL_GetTick();
-    }
+    //     // Convert encoders to rad/sec from enc ticks since last reading
+    //     for (int i = 0; i < 4; i++) {
+    //         // (rad / s) = (enc) * (rev / enc) * (rad / rev) * (1 / sec)
+    //         motorFeedbackLock->encoders[i] =
+    //                 static_cast<float>(encDeltas[i]) / ENC_TICK_PER_REV
+    //                 * 2 * M_PI * kFrequency;
+    //     }
+
+    //     motorFeedbackLock->isValid = true;
+    //     motorFeedbackLock->lastUpdate = HAL_GetTick();
+    // }
 
     {
         auto fpgaStatusLock = fpgaStatus.lock();
