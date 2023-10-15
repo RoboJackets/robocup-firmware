@@ -1,6 +1,6 @@
 .PHONY : all flash kicker kicker-test control docs clean $(ROBOT_TESTS:%=%)
 
-ROBOT_TESTS = rtos icm-42605-angle icm-20498-rate icm-20498-angle radio-test
+ROBOT_TESTS = rtos icm-42605-angle icm-20498-rate icm-20498-angle radio-test fpga-test
 
 all: control flash
 
