@@ -1,4 +1,4 @@
-`include "Phase_Driver.vh"
+//`include "Phase_Driver.vh"
 
 module Motor_Driver_tb;
 
@@ -10,7 +10,7 @@ initial begin
 
 reg clock;
 reg [2:0] h;
-reg [`DUTY_CYCLE_WIDTH - 1 : 0] duty_cycle;
+reg [2:0] duty_cycle;//[`DUTY_CYCLE_WIDTH - 1 : 0] duty_cycle;
 
 
 wire [2:0] phaseHInv, phaseLInv;

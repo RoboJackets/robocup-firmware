@@ -7,7 +7,7 @@
 `define _ROBOCUP_HEADER_
 
 /**
- * Enable/Disable the module for the dribbler motor.
+ * Enable/Disable the module for the dribbler motor. Enabled if Defined
  */
 // `define DRIBBLER_MOTOR_DISABLE
 

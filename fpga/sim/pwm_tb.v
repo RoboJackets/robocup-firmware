@@ -1,6 +1,6 @@
 //`timescale 1ns/100ps //timescale / operation precision /**Borked
 
-`include "Phase_Driver.vh"
+//`include "Phase_Driver.vh"
 
 module pwm_tb;
 
@@ -12,7 +12,7 @@ initial
  end
 
 /*inputs to DUT*/
- reg [`DUTY_CYCLE_WIDTH - 1:0] duty_cycle;
+ reg [2:0] duty_cycle;//[`DUTY_CYCLE_WIDTH - 1:0] duty_cycle;
  reg clock;
  reg high_z = 0;
 

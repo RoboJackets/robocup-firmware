@@ -234,6 +234,8 @@ initial begin
     spi_off();
 
     // Set hall counts
+    // not a thing right now?
+    /*
     #100 spi_on();
     spi(8'h12);
     spi(8'h08);
@@ -242,6 +244,7 @@ initial begin
     spi(8'h05);
     spi(8'h03);
     spi_off();
+    */
 
     // Now read them back
     #100 spi_on();

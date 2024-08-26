@@ -12,7 +12,7 @@
 `include "ClkDivide.v"
 
 `ifndef __SIMULATION__
-`include "git_version.vh"
+//`include "git_version.vh"
 `endif
 
 
@@ -442,7 +442,13 @@ begin : SPI_SLAVE_LOAD_RESPONSE_BUFFER
                 // Send the encoder counts
                 CMD_UPDATE_MTRS :
                 begin
+
+                    // WNG Changed 8/25/2024
+                    // Commented out the following SPI response
+                    // changing to reply with the current phase
+
                     // Encoder inputs are latched here so all readings are from the same time
+                    /*
                     for (j = 0; j < NUM_ENCODERS; j = j + 1)
                     begin : LATCH_ENC_COUNTS_ON_UPDATE
                         spi_slave_res_buf[2*j+1]    <=  enc_count[j][ENCODER_COUNT_WIDTH-1:SPI_SLAVE_DATA_WIDTH];
@@ -452,6 +458,21 @@ begin : SPI_SLAVE_LOAD_RESPONSE_BUFFER
                     spi_slave_res_buf[2*NUM_ENCODERS+1] <= watchdog_timer[1][WATCHDOG_TIMER_WIDTH - 1 : (WATCHDOG_TIMER_WIDTH - SPI_SLAVE_DATA_WIDTH )];
                     spi_slave_res_buf[2*NUM_ENCODERS+2] <= watchdog_timer[1][(WATCHDOG_TIMER_WIDTH - SPI_SLAVE_DATA_WIDTH - 1) : 0];
                     motor_update_flag <= 1;
+                    */
+
+                
+                    for (j = 0; j < NUM_MOTORS; j = j+1)
+                    begin : LATCH_PHASES_ON_UPDATE
+                        spi_slave_res_buf[2*j+1]      <=    duty_cycle[j][SPI_SLAVE_DATA_WIDTH-1:0];
+                        spi_slave_res_buf[2*J+2]      <=    duty_cycle[j][DUTY_CYCLE_WIDTH-1:SPI_SLAVE_DATA_WIDTH];
+                    end
+                    
+                    // kept the watchdog timer count
+                    spi_slave_res_buf[2*NUM_MOTORS+1] <= watchdog_timer[1][WATCHDOG_TIMER_WIDTH - 1 : (WATCHDOG_TIMER_WIDTH - SPI_SLAVE_DATA_WIDTH )];
+                    spi_slave_res_buf[2*NUM_MOTORS+2] <= watchdog_timer[1][(WATCHDOG_TIMER_WIDTH - SPI_SLAVE_DATA_WIDTH - 1) : 0];
+                    motor_update_flag <= 1;
+                    
+
                 end
 
                 CMD_ENCODER_COUNT :
@@ -596,7 +617,8 @@ end     // SPI_SORT_REQUEST_BUFFER
 // Signal that is active when the watchdog timer should be reset
 reg [1:0] motors_en_sr = 0; always @(posedge sysclk) motors_en_sr <= { motors_en_sr[0], motors_en };
 // Toggle the motors on/off, off/on, or set the motor_update_flag to reset the watchdog timer
-wire watchdog_timer_reset_flag = (( motors_en_sr == 2'b01 ) && ( motors_en_sr == 2'b10 ) ) || ( motor_update_flag == 1 );
+wire watchdog_timer_reset_flag = (( motors_en_sr == 2'b01 ) && ( motors_en_sr == 2'b10 ) ) || ( motor_update_flag == 1 ); // watchdog reset flag seems messed up, check what it should be doing
+                                                                                                                          // SHOULD PROBABLY BE ANOTHER OR, NOT AN AND. Will actually reset the watchdog timer
 
 // Watchdog timer
 always @( posedge sysclk )
