@@ -1,13 +1,13 @@
 # RoboJackets RoboCup — 2027 Control Board Firmware
 
-Firmware bring-up and peripheral testing for the **RoboJackets RoboCup Small Size League (SSL)** autonomous soccer robots. See `/docs` for the hardware reference manuals and STM32CubeMX pinout reports. 
+Firmware bring-up and peripheral testing for the **RoboJackets RoboCup Small Size League (SSL)** autonomous soccer robots. See `/docs` for the hardware reference manuals and STM32CubeMX pin-out reports. 
 
 > [!WARNING]
 > **Early hardware proof of concept — not competition-ready firmware.**
 > The code currently being pushed is intentionally quick, experimental, and sometimes messy. Its purpose is to confirm that the newly assembled 2027 control board's electrical interfaces and peripherals work. It is **not** a production architecture, a complete robot controller, or a formal automated unit-test suite. Expect blocking HAL calls, temporary diagnostics, and test logic living together in `main.c`. We will refactor after hardware bring-up.
 
 > [!NOTE]
-> Please slack message Krish Shajpaul if this guide is inadequate and you need help (or do yourself :D). This guide is useful for all the new STM32 boards we have, but is focused on the 2027 Control Board specfically.
+> Please slack message Krish Shajpaul if this guide is inadequate and you need help (or do yourself :D). This guide is useful for all the new STM32 boards we have, but is focused on the 2027 Control Board specifically.
 
 ## Hardware
 
