@@ -1,0 +1,69 @@
+
+# ==========================================
+# RoboJackets RoboCup Firmware
+# STM32CubeMX + CMake + GCC + VS Code
+# ==========================================
+
+# Build directories
+/build/
+/Debug/
+/Release/
+/RelWithDebInfo/
+/MinSizeRel/
+
+# CMake-generated files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+compile_commands.json
+CMakeUserPresets.json
+build.ninja
+.ninja_deps
+.ninja_log
+
+# Compiled firmware and object files
+*.elf
+*.bin
+*.hex
+*.map
+*.lst
+*.o
+*.obj
+*.d
+*.su
+
+# STM32CubeMX temporary files
+mx.scratch
+.mx.scratch/
+
+# VS Code local configuration
+.vscode/settings.json
+.vscode/ipch/
+.vscode/.browse.c_cpp.db*
+
+# STM32CubeIDE / Eclipse local metadata
+.settings/
+.metadata/
+.project
+.cproject
+
+# Other IDE metadata
+.idea/
+*.code-workspace
+
+# Temporary editor files
+*~
+*.swp
+*.swo
+*.tmp
+*.bak
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# Python test environment (if used)
+__pycache__/
+.pytest_cache/
+.venv/
+*.pyc
