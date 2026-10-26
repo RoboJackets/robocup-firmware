@@ -1,4 +1,4 @@
-# RoboJackets RoboCup — 2027 Control Board Firmware
+# RoboJackets RoboCup — 2027 Firmware
 
 Firmware bring-up and peripheral testing for the **RoboJackets RoboCup Small Size League (SSL)** autonomous soccer robots. See `/docs` for the hardware reference manuals and STM32CubeMX pin-out reports. 
 
