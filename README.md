@@ -32,7 +32,7 @@ The board uses a **25 MHz HSE crystal**. The current CubeMX clock plan targets a
 | Power-source sense | PA2, PA3 | Powerboard-supplied 5 V / 3.3 V status |
 | SWD | PA13 SWDIO, PA14 SWCLK, NRST | External debugger/programmer header |
 
-**Hardware source of truth:** The final schematics take precedence over planning documents. The firmware-facing specifications are `ControlBoard2027_SPEC.md` and `RadioBoard2027_SPEC.md` (add them under `docs/` if they are not yet in this repository). Earlier CubeMX/test planning PDFs may have outdated pin assignments.
+**Hardware source of truth:** The final schematics take precedence over planning documents. The firmware-facing specifications are `ControlBoard2027_SPEC.md` and `RadioBoard2027_SPEC.md` (add them under `Control_Board/docs/` if they are not yet in this repository). Earlier CubeMX/test planning PDFs may have outdated pin assignments.
 
 ## Bring-up status
 
@@ -92,7 +92,7 @@ Further investigation is happening. Priority checks: microSD socket 3.3 V, card 
 - **STM32CubeIDE for Visual Studio Code**
    - VSCode Extension that allows us to compile STM firmware binaries right on VSCode.
    - Make sure you install the bundle, not just the Core, Debugger, etc.
-![](docs/readme_images/STM32_VSCode.png)
+![](Control_Board/docs/readme_images/STM32_VSCode.png)
 
 ### Clone and build
 
@@ -115,7 +115,7 @@ cmake --build build/Debug
 
 3. When the STM32 VSCode extension is done loading with your project, you will see a "build" button on the bottom left. This is used to compile your code and output an ELF (compiled binary) similar to `build/Debug/ControlBoard_Testing.elf`. The exact output path may change with the preset or project name.
 
-![](docs/readme_images/Build_Button.png)
+![](Control_Board/docs/readme_images/Build_Button.png)
 <p style="text-align: center;">
    Successful build: <code>exit code 0</code>; the ELF is written to <code>build/Debug</code>.
 </p>
@@ -132,7 +132,7 @@ STM32CubeMX code (when not using RTOS) is structured kind of similar to a classi
 #### Caveat #1: You can only write code in defined `USER CODE` sections.
 There are explicit sections in the code where you can actually write code in the `Core/Src` folder (which is where pretty much all your code will be written). Wherever you see a ``/* USER CODE BEGIN ...*/``, you can write code up until you see a ``/* USER CODE END ... */``. Each user code section is for specific types of code (includes, private variables, hardware interrupt handlers, etc.). Look through `main.c` to find where you should put your code.
 
-![](docs/readme_images/USER_CODE_EX.png)
+![](Control_Board/docs/readme_images/USER_CODE_EX.png)
 <p style="text-align: center;">
    Example of user code sections in <code>main.c</code>. In this example section, should only put private macros here.
 </p>
@@ -157,7 +157,7 @@ Sorry guys :\\. when we start making driver files for peripherals, you are going
 1. Verify the control board's power jumpers and use a data-capable USB-C cable. **ENSURE THERE IS ONLY ONCE POWER SOURCE TO THE BOARD AT ALL TIMES (FOR NOW).** This means when USB is connected, only USB power should be connected to the Control Board (Radio daughterboard power MUX has not been verified). No external power like batteries should be on the lines.
 
 For now, the jumpers should be arranged as so for USB power:
-![](docs/readme_images/Jumper_Config_PWR_USB.jpg)
+![](Control_Board/docs/readme_images/Jumper_Config_PWR_USB.jpg)
 
 > [!WARNING]
 > JTAG has a direct line to 3V3, fully bypassing power circuitry. **PLEASE** ensure this is the only 3V3 being supplied when used (so no USB & JTAG at the same time atm).
@@ -172,14 +172,14 @@ For now, the jumpers should be arranged as so for USB power:
 
 4. Open **STM32CubeProgrammer**, change the connection interface from **ST-LINK** to **USB**, and connect to the detected DFU port.
 
-![](docs/readme_images/Cube_Programmer_Menu.png)
+![](Control_Board/docs/readme_images/Cube_Programmer_Menu.png)
 
 > [!NOTE]
 > The STM will not show up as a connectable device unless it is in bootmode. Select the port dropdown to select the USB port.
 
 5. Under **Erasing & Programming**, select the built `.elf`, enable **Verify programming**, and start programming. Confirm the log reports **Download verified successfully**.
 
-![](docs/readme_images/Cube_Programmer_Program.png)
+![](Control_Board/docs/readme_images/Cube_Programmer_Program.png)
 
 6. Disconnect from CubeProgrammer and press RESET (maybe a few times) to boot the application on the STM board.
 
@@ -190,7 +190,7 @@ For now, the jumpers should be arranged as so for USB power:
 
 Now use your favorite serial monitor tool set to 115200 baude and you should see the STM outputting to the serial monitor with your new firmware!
 
-![](docs/readme_images/Serial_Monitor.png)
+![](Control_Board/docs/readme_images/Serial_Monitor.png)
 
 ## Firmware and hardware notes
 
