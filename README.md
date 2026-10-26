@@ -157,7 +157,7 @@ Sorry guys :\\. when we start making driver files for peripherals, you are going
 1. Verify the control board's power jumpers and use a data-capable USB-C cable. **ENSURE THERE IS ONLY ONCE POWER SOURCE TO THE BOARD AT ALL TIMES (FOR NOW).** This means when USB is connected, only USB power should be connected to the Control Board (Radio daughterboard power MUX has not been verified). No external power like batteries should be on the lines.
 
 For now, the jumpers should be arranged as so for USB power:
-![](readme_images/Jumper_Config_PWR_USB.jpg)
+![](docs/readme_images/Jumper_Config_PWR_USB.jpg)
 
 > [!WARNING]
 > JTAG has a direct line to 3V3, fully bypassing power circuitry. **PLEASE** ensure this is the only 3V3 being supplied when used (so no USB & JTAG at the same time atm).
