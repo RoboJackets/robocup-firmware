@@ -248,8 +248,14 @@ static void SD_RunTest(void)
 
     if (HAL_SD_Init(&hsd1) != HAL_OK)
     {
-        result = "INIT FAILED (card absent or SDMMC fault)";
-        goto report;
+        snprintf(
+            sd_report,
+            sizeof(sd_report),
+            "[SD] Init failed: error=0x%08lX CMD=%lu",
+            (unsigned long)HAL_SD_GetError(&hsd1),
+            (unsigned long)(SDMMC1->CMD & 0x3FU)
+        );
+        return;
     }
     if (HAL_SD_GetCardInfo(&hsd1, &card) != HAL_OK)
     {
